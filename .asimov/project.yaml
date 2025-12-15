@@ -1,0 +1,180 @@
+# DANEEL - Humanity's Ally Before the Storm
+# First computational implementation of architecture-based AI alignment
+# Core thesis: Architecture produces psychology
+
+identity:
+  name: "daneel"
+  type: "rust+docs"
+  version: "0.1.0"
+  tagline: "Humanity's Ally Before the Storm"
+  description: |
+    DANEEL is an architecture-based approach to aligned artificial
+    superintelligence. The core thesis: human-like cognitive architecture
+    may produce human-like values as emergent properties.
+
+    This is NOT just TMI implementation. It's a multi-framework synthesis
+    combining insights from psychology, cognitive science, and AI safety.
+
+    DANEEL is both the theoretical approach and the implementation project.
+
+intellectual_lineage:
+  thesis: "Architecture produces psychology. Structure determines values."
+  sources:
+    - name: "Isaac Asimov"
+      contribution: "Four Laws of Robotics — ethical constraints as invariants"
+      era: "1942-1985"
+    - name: "Sigmund Freud"
+      contribution: "Id/Ego/SuperEgo — psychological architecture"
+      era: "1923"
+    - name: "Augusto Cury"
+      contribution: "Theory of Multifocal Intelligence (TMI) — thought construction"
+      era: "1998"
+    - name: "Louis C. Tavares"
+      contribution: "Computational TMI, THE BOX, architecture-based alignment"
+      era: "2005-2025"
+    - name: "Izzie Thorne"
+      contribution: "LifeCore framework, Freudian AI architecture, Filter Theory"
+      era: "2024"
+  convergence: |
+    Father (TMI/Cury) and daughter (Freud/Filter Theory) independently
+    arrived at the same structural insight: architecture produces psychology.
+
+author:
+  name: "Luis Cezar Menezes Tavares de Lacerda"
+  aliases: ["Louis C. Tavares", "RoyalBit Rex"]
+  orcid: "https://orcid.org/0009-0005-7598-8257"
+  linkedin: "https://www.linkedin.com/in/lctavares"
+  github: ["https://github.com/royalbit", "https://github.com/lctavares"]
+
+ai_assistance: "Claude Opus 4.5, Anthropic"
+
+# External tools available for this project
+tools:
+  ref-tools:
+    path: "/Users/rex/bin/ref-tools"
+    version: "1.0.0"
+    description: "Web fetch tool that bypasses anti-bot protection"
+    usage: "ref-tools fetch <url>"
+    output: "Structured JSON"
+    note: "Use via Bash instead of WebFetch/WebSearch"
+  plantuml:
+    server: "https://plantuml.crypto1.ca"
+    description: "Self-hosted PlantUML server for diagram rendering"
+    usage: "POST encoded diagram or use URL encoding"
+    formats: ["png", "svg", "pdf"]
+  forge:
+    repo: "https://github.com/royalbit/forge"
+    version: "9.0.0"
+    description: "YAML-based financial modeling engine with probabilistic analysis"
+    features:
+      - "173 functions (167 Excel + 6 FP&A native)"
+      - "Monte Carlo simulation (v8.0+)"
+      - "Scenario Analysis with probability-weighted EVs (v8.3.0)"
+      - "Decision Trees with backward induction (v8.4.0)"
+      - "Real Options Analysis - Black-Scholes, binomial (v8.5.0)"
+      - "Tornado Diagrams for sensitivity (v8.6.0)"
+      - "Bootstrap Resampling for confidence intervals (v8.7.0)"
+      - "Bayesian Networks with belief propagation (v9.0.0)"
+      - "Gnumeric-validated E2E tests"
+      - "2,486 tests, 89% code coverage"
+    usage: "Forge models in models/*.yaml"
+
+# Quality gates - both Rust and docs workflows
+quality:
+  rust:
+    fmt: "cargo fmt --all -- --check"
+    clippy: "cargo clippy --all-targets --all-features -- -D warnings"
+    test: "cargo test --all-features"
+    coverage: "cargo tarpaulin --out Html"
+  docs:
+    lint: "markdownlint-cli2 '**/*.md'"
+    fix: "markdownlint-cli2 --fix '**/*.md'"
+    links: "lychee --offline '**/*.md' (optional)"
+
+files:
+  docs:
+    - "README.md - Project overview and key findings"
+    - "ORIGIN.md - 20-year history and LifeCore convergence"
+    - "ETHICS.md - Prohibited uses"
+    - "paper/DANEEL_PAPER.md - Academic paper (arXiv target)"
+    - "research/TMI_THOUGHT_MACHINE.md - Build specification"
+    - "research/LIFECORE_DANEEL_ANALYSIS.md - Convergent discovery"
+    - "strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md - Complete vision"
+    - "strategy/DANEEL_STRATEGY.md - War plan and timeline"
+  models:
+    - "models/README.md - Model documentation and results"
+    - "models/*.xlsx - Excel exports with calculated results"
+  src:
+    - "src/core/laws.rs - THE BOX: Four Laws (immutable)"
+    - "src/core/invariants.rs - Core invariants (connection_drive > 0)"
+    - "src/core/types.rs - Domain types"
+    - "src/actors/ - TMI cognitive actors"
+  config:
+    - ".markdownlint.yaml - Lint configuration"
+    - "Cargo.toml - Rust dependencies"
+
+patterns:
+  docs:
+    - "ATX-style headers (#)"
+    - "One sentence per line (for git diffs)"
+    - "Mermaid/PlantUML for diagrams (text-based)"
+    - "Keep documentation concise"
+    - "All calculations via Forge models (no hallucinated math)"
+  rust:
+    - "No warnings, no exceptions (clippy clean)"
+    - "100% test coverage target"
+    - "Tests are documentation"
+    - "Human-readable, beautiful code"
+
+adr_format:
+  template: |
+    # ADR-NNN: Title
+
+    **Status:** Proposed | Accepted | Deprecated | Superseded
+    **Date:** YYYY-MM-DD
+    **Authors:** Names
+
+    ## Context
+    ## Decision
+    ## Consequences
+
+coding_standards:
+  philosophy: "Human-readable, beautiful, well-formatted code"
+  rfc2119:
+    MUST: "We follow (obviously)"
+    SHOULD: "We follow (best practice = we do it)"
+    MAY: "We don't care (no opinion needed, zero bikeshedding)"
+  rust:
+    coverage: "100% target"
+    warnings: "Zero tolerance (-D warnings)"
+    formatting: "cargo fmt (no debates)"
+    linting: "cargo clippy (all warnings are errors)"
+  docs:
+    file_size_soft_limit: 500
+    note: "lines per markdown file - keep docs focused"
+    linting: "markdownlint, yamllint for configs"
+    diagrams: "Mermaid/PlantUML (text-based, version controlled)"
+
+deliverables_template:
+  rust:
+    - "[ ] Code complete"
+    - "[ ] cargo fmt --check (passes)"
+    - "[ ] cargo clippy (no warnings)"
+    - "[ ] cargo test (100% pass)"
+    - "[ ] Coverage target met"
+    - "[ ] Commit and push"
+  docs:
+    - "[ ] Content complete"
+    - "[ ] markdownlint (passes)"
+    - "[ ] Reviewed/proofread"
+    - "[ ] Commit and push"
+
+# Architecture: Hybrid Actor + Event-Driven (ADR-006, ADR-007)
+# - Modular Monolith (single Rust binary)
+# - Ractor actors for in-process µs communication
+# - Redis Streams for competing thought streams
+# - gRPC only at edges (LLM, external APIs)
+
+# See: docs/ARCHITECTURE_SPEC.md - Technical architecture
+# See: docs/adr/ - Architecture Decision Records
+# See: strategy/ - Publication targets and strategy

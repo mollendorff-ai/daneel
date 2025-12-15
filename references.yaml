@@ -1,0 +1,791 @@
+meta:
+  created: 2025-12-15
+  last_verified: '2025-12-15T20:30:00+00:00'
+  tool: ref-tools v1.0.0
+  total_links: 84
+references:
+- url: http://act-r.psy.cmu.edu/
+  title: http://act-r.psy.cmu.edu/
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:41:38.011590+00:00
+- url: http://revista.universo.edu.br/index.php?journal=3GOIANIA4&page=article&op=view&path%5B%5D=5273
+  title: TEORIA DA INTELIGÊNCIA MULTIFOCAL DE AUGUSTO CURY
+  categories:
+  - tmi
+  - portuguese
+  - academic
+  cited_in:
+  - research/TMI_Memory_Model_Research.md
+  status: ok
+  verified: 2025-12-15 19:42:20.189331+00:00
+- url: https://ailabwatch.substack.com/p/xais-new-safety-framework-is-dreadful
+  title: https://ailabwatch.substack.com/p/xais-new-safety-framework-is-dreadful
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: paywall
+  verified: 2025-12-15 19:42:21.808049+00:00
+  notes: Paywall detected
+- url: https://alignmentforum.org
+  title: https://alignmentforum.org
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_STRATEGY.md
+  status: ok
+  verified: 2025-12-15 19:42:23.817426+00:00
+- url: https://arxiv.org/abs/2405.02370
+  title: Neuromorphic Correlates of Artificial Consciousness
+  categories:
+  - consciousness
+  - arxiv
+  - academic
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15 19:42:30.495729+00:00
+- url: https://arxiv.org/list/cs.AI/recent
+  title: https://arxiv.org/list/cs.AI/recent
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:30.615412+00:00
+- url: https://arxiv.org/submit
+  title: https://arxiv.org/submit
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_STRATEGY.md
+  status: ok
+  verified: 2025-12-15 19:42:31.071744+00:00
+- url: https://bcs.kaist.ac.kr/sub0301
+  title: KAIST Brain & Cognitive Sciences
+  categories:
+  - neuromorphic
+  - korean
+  - kaist
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15
+- url: https://betterstack.com/community/comparisons/redis-vs-kafka/
+  title: Redis vs Kafka Latency Comparison
+  categories:
+  - adr
+  - redis
+  - comparison
+  cited_in:
+  - docs/adr/ADR-007-redis-streams-thought-competition.md
+  status: ok
+  verified: 2025-12-15 19:42:34.218763+00:00
+- url: https://carcasa.com.br/divi/funcoes-do-eu-como-gestor-dos-pensamentosaugusto-cury/
+  title: Funções Do Eu Como Gestor Dos Pensamentos
+  categories:
+  - tmi
+  - portuguese
+  cited_in:
+  - research/TMI_Memory_Model_Research.md
+  status: ok
+  verified: 2025-12-15 19:41:43.531725+00:00
+- url: https://carnegieendowment.org/research/2025/06/how-some-of-chinas-top-ai-thinkers-built-their-own-ai-safety-institute
+  title: https://carnegieendowment.org/research/2025/06/how-some-of-chinas-top-ai-thinkers-built-their-own-ai-safety-institute
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-15 19:41:43.995676+00:00
+- url: https://ccrg.cs.memphis.edu/
+  title: https://ccrg.cs.memphis.edu/
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:41:42.659453+00:00
+- url: https://choosealicense.com/
+  title: Choose a License
+  categories:
+  - license
+  - legal
+  cited_in:
+  - docs/adr/ADR-011-open-source-licensing.md
+  status: ok
+  verified: 2025-12-15 19:41:43.091665+00:00
+- url: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+  title: CC BY-SA 4.0 - Legal Code
+  categories:
+  - license
+  - legal
+  cited_in:
+  - LICENSE-DOCS
+  - README.md
+  - docs/adr/ADR-011-open-source-licensing.md
+  status: ok
+  verified: 2025-12-15 19:41:44.080174+00:00
+- url: https://dek.ai/raising-ai/
+  title: Raising AI - An Essential Guide to Parenting Our Future
+  categories:
+  - ai-child
+  - book
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15 19:41:44.571317+00:00
+- url: https://direct.mit.edu/opmi/article/doi/10.1162/opmi_a_00160/124234/
+  title: https://direct.mit.edu/opmi/article/doi/10.1162/opmi_a_00160/124234/
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: login
+  verified: 2025-12-15 19:41:47.389755+00:00
+  notes: Login required
+- url: https://en.wikipedia.org/wiki/Artificial_consciousness
+  title: Artificial Consciousness - Wikipedia
+  categories:
+  - consciousness
+  - wikipedia
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: paywall
+  verified: 2025-12-15 19:41:44.831638+00:00
+  notes: Paywall detected
+- url: https://en.wikipedia.org/wiki/Augusto_Cury
+  title: Augusto Cury - Wikipedia (English)
+  categories:
+  - tmi
+  - wikipedia
+  cited_in:
+  - research/TMI_Memory_Model_Research.md
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: login
+  verified: 2025-12-15 19:41:44.928192+00:00
+  notes: Login required
+- url: https://en.wikipedia.org/wiki/Global_workspace_theory
+  title: https://en.wikipedia.org/wiki/Global_workspace_theory
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: paywall
+  verified: 2025-12-15 19:41:44.877660+00:00
+  notes: Paywall detected
+- url: https://en.wikipedia.org/wiki/R._Daneel_Olivaw
+  title: R. Daneel Olivaw - Wikipedia
+  categories:
+  - documentation
+  - architecture
+  cited_in:
+  - docs/adr/ADR-010-project-naming-daneel.md
+  status: login
+  verified: 2025-12-15 19:41:45.190807+00:00
+  notes: Login required
+- url: https://faculty.washington.edu/chudler/facts.html
+  title: Brain Facts and Figures - UW Faculty
+  categories:
+  - neuroscience
+  - education
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: ok
+  verified: 2025-12-15 19:41:37.456639+00:00
+- url: https://frontiersin.org/journals/artificial-intelligence
+  title: https://frontiersin.org/journals/artificial-intelligence
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_STRATEGY.md
+  status: ok
+  verified: 2025-12-15 19:42:32.379486+00:00
+- url: https://github.com/lctavares
+  title: https://github.com/lctavares
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - research/TMI_THOUGHT_MACHINE.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:30.027770+00:00
+- url: https://github.com/royalbit
+  title: https://github.com/royalbit
+  categories:
+  - readme
+  cited_in:
+  - README.md
+  - paper/DANEEL_PAPER.md
+  - research/TMI_THOUGHT_MACHINE.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:27.111117+00:00
+- url: https://github.com/royalbit/asimov
+  title: https://github.com/royalbit/asimov
+  categories:
+  - general
+  cited_in:
+  - BUILD_MVTMI.md
+  status: ok
+  verified: 2025-12-15 19:42:33.040560+00:00
+- url: https://github.com/royalbit/forge
+  title: Forge
+  categories:
+  - readme
+  cited_in:
+  - README.md
+  status: dead
+  verified: 2025-12-15 19:42:31.823230+00:00
+  notes: HTTP 404
+- url: https://github.com/search?q=multifocal+intelligence&type=repositories
+  title: https://github.com/search?q=multifocal+intelligence&type=repositories
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:31.344634+00:00
+- url: https://github.com/slawlor/ractor
+  title: Ractor - Rust Actor Framework
+  categories:
+  - adr
+  - rust
+  - github
+  cited_in:
+  - docs/adr/ADR-006-hybrid-actor-modular-monolith.md
+  status: ok
+  verified: 2025-12-15 19:42:44.326491+00:00
+- url: https://grpc.io/
+  title: https://grpc.io/
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:44.396176+00:00
+- url: https://hpcs.snu.ac.kr/research/neuromorphic-computing/
+  title: SNU FlexBrain - HPCS Lab
+  categories:
+  - neuromorphic
+  - korean
+  - snu
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15 19:41:39.572560+00:00
+- url: https://img.shields.io/badge/license-AGPL--3.0-green
+  title: 'License: AGPL-3.0'
+  categories:
+  - documentation
+  cited_in:
+  - docs/SOCIAL_MEDIA_STRATEGY.md
+  status: ok
+  verified: 2025-12-15 19:42:34.831258+00:00
+- url: https://img.shields.io/badge/status-personal%20research-blue
+  title: Personal Project
+  categories:
+  - documentation
+  cited_in:
+  - docs/SOCIAL_MEDIA_STRATEGY.md
+  status: ok
+  verified: 2025-12-15 19:42:34.958067+00:00
+- url: https://lesswrong.com
+  title: https://lesswrong.com
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_STRATEGY.md
+  status: ok
+  verified: 2025-12-15 19:42:37.502198+00:00
+- url: https://newsroom.intel.com/artificial-intelligence/intel-builds-worlds-largest-neuromorphic-system-to-enable-more-sustainable-ai
+  title: Intel Hala Point
+  categories:
+  - neuromorphic
+  - intel
+  - hardware
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15 19:42:39.459680+00:00
+- url: https://orcid.org/0009-0005-7598-8257
+  title: https://orcid.org/0009-0005-7598-8257
+  categories:
+  - readme
+  cited_in:
+  - README.md
+  - paper/DANEEL_PAPER.md
+  - research/TMI_THOUGHT_MACHINE.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  - strategy/DANEEL_STRATEGY.md
+  status: ok
+  verified: 2025-12-15 19:42:41.705987+00:00
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC2776484/
+  title: PMC2776484 - The Human Brain in Numbers
+  categories:
+  - neuroscience
+  - pmc
+  - academic
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: ok
+  verified: 2025-12-15 19:42:40.683113+00:00
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC5063692/
+  title: PMC5063692 - True Numbers of Neurons and Glial Cells
+  categories:
+  - neuroscience
+  - pmc
+  - academic
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: ok
+  verified: 2025-12-15 19:42:41.505864+00:00
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC5845477/
+  title: PMC5845477 - Spinal Cord Cellular Composition
+  categories:
+  - neuroscience
+  - pmc
+  - academic
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: ok
+  verified: 2025-12-15 19:41:37.056603+00:00
+- url: https://protobuf.dev/
+  title: https://protobuf.dev/
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:41:45.648593+00:00
+- url: https://pt.wikipedia.org/wiki/Augusto_Cury
+  title: Augusto Cury – Wikipédia
+  categories:
+  - tmi
+  - wikipedia
+  cited_in:
+  - research/TMI_Memory_Model_Research.md
+  status: ok
+  verified: 2025-12-15 19:41:45.655735+00:00
+- url: https://pt.wikipedia.org/wiki/Inteligência_multifocal
+  title: Inteligência multifocal - Wikipedia
+  categories:
+  - tmi
+  - wikipedia
+  cited_in:
+  - research/TMI_Memory_Model_Research.md
+  status: ok
+  verified: 2025-12-15 19:41:45.743189+00:00
+- url: https://pubmed.ncbi.nlm.nih.gov/38951520/
+  title: https://pubmed.ncbi.nlm.nih.gov/38951520/
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-15 19:41:46.619997+00:00
+- url: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+  title: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+  categories:
+  - readme
+  cited_in:
+  - README.md
+  status: ok
+  verified: 2025-12-15 19:41:45.966621+00:00
+- url: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+  title: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+  categories:
+  - readme
+  cited_in:
+  - README.md
+  status: ok
+  verified: 2025-12-15 19:41:46.031223+00:00
+- url: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+  title: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+  categories:
+  - readme
+  cited_in:
+  - README.md
+  status: ok
+  verified: 2025-12-15 19:41:46.182515+00:00
+- url: https://redis.io/docs/latest/develop/data-types/streams/
+  title: Redis Streams Documentation
+  categories:
+  - adr
+  - redis
+  - technical
+  cited_in:
+  - docs/adr/ADR-007-redis-streams-thought-competition.md
+  - docs/adr/ADR-009-database-selection.md
+  status: ok
+  verified: 2025-12-15 19:41:43.882193+00:00
+- url: https://scholar.google.com/scholar?q=%22multifocal+intelligence%22+computational
+  title: https://scholar.google.com/scholar?q=%22multifocal+intelligence%22+computational
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:24.423649+00:00
+- url: https://segredosdaevolucao.com/memoria/
+  title: 'Memória: os 3 tipos que gerenciam os pensamentos'
+  categories:
+  - tmi
+  - memory
+  - portuguese
+  cited_in:
+  - research/TMI_Memory_Model_Research.md
+  status: ok
+  verified: 2025-12-15 19:42:27.372440+00:00
+- url: https://sites.google.com/site/dabornsiteclarion/
+  title: https://sites.google.com/site/dabornsiteclarion/
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: redirect
+  verified: 2025-12-15 19:42:25.918102+00:00
+  notes: https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fsites.google.com%2Fsite%2Fdabornsiteclarion%2F&dsh=S-382768762%3A1765827744218466&followup=https%3A%2F%2Fsites.google.com%2Fsite%2Fdabornsiteclarion%2F&ifkv=Ac2yZaXI-7iU9rmBj5ABGF_4ARPPzhf-SQnz0qf3htyhSJjmZP_vRDMD6OEsxRafWH-YT9kcDX7aTA&osid=1&passive=1209600&flowName=GlifWebSignIn&flowEntry=ServiceLogin
+- url: https://soar.eecs.umich.edu/
+  title: https://soar.eecs.umich.edu/
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:26.363743+00:00
+- url: https://spdx.org/licenses/
+  title: SPDX License List
+  categories:
+  - license
+  - legal
+  cited_in:
+  - docs/adr/ADR-011-open-source-licensing.md
+  status: ok
+  verified: 2025-12-15 19:42:25.588192+00:00
+- url: https://spectrum.ieee.org/neuromorphic-computing-ibm-northpole
+  title: NorthPole - IEEE Spectrum
+  categories:
+  - neuromorphic
+  - ibm
+  - ieee
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: login
+  verified: 2025-12-15 19:42:34.616859+00:00
+  notes: Login required
+- url: https://stanford.edu/~wandell/data/papers/2007-Wandell-Encyclopedia.pdf
+  title: Stanford - Wandell Visual Cortex
+  categories:
+  - neuroscience
+  - stanford
+  - pdf
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: ok
+  verified: 2025-12-15 19:41:38.592668+00:00
+- url: https://thousandbrains.org/
+  title: https://thousandbrains.org/
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:48.128501+00:00
+- url: https://tqwewe.com/blog/comparing-rust-actor-libraries/
+  title: Comparing Rust Actor Libraries
+  categories:
+  - adr
+  - rust
+  - comparison
+  cited_in:
+  - docs/adr/ADR-006-hybrid-actor-modular-monolith.md
+  status: ok
+  verified: 2025-12-15 19:42:44.884510+00:00
+- url: https://www.alignmentforum.org/posts/79BPxvSsjzBkiSyTq/agi-safety-and-alignment-at-google-deepmind-a-summary-of
+  title: https://www.alignmentforum.org/posts/79BPxvSsjzBkiSyTq/agi-safety-and-alignment-at-google-deepmind-a-summary-of
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:53.549931+00:00
+- url: https://www.alignmentforum.org/posts/HBxe6wdjxK239zajf/what-failure-looks-like
+  title: https://www.alignmentforum.org/posts/HBxe6wdjxK239zajf/what-failure-looks-like
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:41:41.630180+00:00
+- url: https://www.alignmentforum.org/s/Rm6oQRJJmhGCcLvxh
+  title: https://www.alignmentforum.org/s/Rm6oQRJJmhGCcLvxh
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:47.763065+00:00
+- url: https://www.alignmentforum.org/s/mzgtmmTKKn5MuCzFJ
+  title: https://www.alignmentforum.org/s/mzgtmmTKKn5MuCzFJ
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:48.519776+00:00
+- url: https://www.anthropic.com/news/core-views-on-ai-safety
+  title: https://www.anthropic.com/news/core-views-on-ai-safety
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:46.452874+00:00
+- url: https://www.anthropic.com/pricing
+  title: https://www.anthropic.com/pricing
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: redirect
+  verified: 2025-12-15 19:42:50.530970+00:00
+  notes: https://claude.com/pricing
+- url: https://www.citador.pt/textos/as-janelas-da-memoria-augusto-cury
+  title: As Janelas da Memória - Augusto Cury
+  categories:
+  - tmi
+  - memory
+  - portuguese
+  cited_in:
+  - research/TMI_Memory_Model_Research.md
+  status: ok
+  verified: 2025-12-15 19:41:48.303883+00:00
+- url: https://www.darpa.mil/program/microbrain
+  title: μBRAIN - DARPA
+  categories:
+  - neuromorphic
+  - darpa
+  - government
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15 19:41:49.289365+00:00
+- url: https://www.darpa.mil/research/programs/inspire
+  title: INSPIRE - DARPA
+  categories:
+  - neuromorphic
+  - darpa
+  - government
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15 19:41:49.295617+00:00
+- url: https://www.eurekalert.org/news-releases/1071054
+  title: KAIST Neuromorphic Chip
+  categories:
+  - neuromorphic
+  - korean
+  - kaist
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15 19:41:52.540147+00:00
+- url: https://www.frontiersin.org/journals/artificial-intelligence
+  title: https://www.frontiersin.org/journals/artificial-intelligence
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:41:52.750071+00:00
+- url: https://www.gnu.org/licenses/agpl-3.0.en.html
+  title: GNU AGPL v3 - Full Text
+  categories:
+  - license
+  - legal
+  cited_in:
+  - LICENSE
+  - README.md
+  - docs/adr/ADR-011-open-source-licensing.md
+  status: ok
+  verified: 2025-12-15
+- url: https://www.gnu.org/licenses/copyleft.en.html
+  title: What is Copyleft?
+  categories:
+  - license
+  - legal
+  cited_in:
+  - docs/adr/ADR-011-open-source-licensing.md
+  status: ok
+  verified: 2025-12-15
+- url: https://www.ibm.com/think/topics/neuromorphic-computing
+  title: IBM Neuromorphic Computing
+  categories:
+  - neuromorphic
+  - ibm
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15 19:42:06.380206+00:00
+- url: https://www.intel.com/content/www/us/en/research/neuromorphic-computing-loihi-2-technology-brief.html
+  title: Loihi 2 - Intel
+  categories:
+  - neuromorphic
+  - intel
+  - hardware
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15 19:42:01.745638+00:00
+- url: https://www.lesswrong.com/
+  title: https://www.lesswrong.com/
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:04.950136+00:00
+- url: https://www.linkedin.com/in/lctavares
+  title: https://www.linkedin.com/in/lctavares
+  categories:
+  - readme
+  cited_in:
+  - README.md
+  - paper/DANEEL_PAPER.md
+  - research/TMI_THOUGHT_MACHINE.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:06.530897+00:00
+- url: https://www.nature.com/scitable/blog/brain-metrics/are_there_really_as_many/
+  title: Nature Scitable - Brain Metrics
+  categories:
+  - neuroscience
+  - nature
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: ok
+  verified: 2025-12-15 19:42:08.625491+00:00
+- url: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2839851/
+  title: PMC2839851 - Coordinated Scaling of Cortical and Cerebellar Numbers
+  categories:
+  - neuroscience
+  - pmc
+  - academic
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: redirect
+  verified: 2025-12-15 19:42:07.500229+00:00
+  notes: https://pmc.ncbi.nlm.nih.gov/articles/PMC2839851/
+- url: https://www.nyu.edu/about/news-publications/news/2024/february/ai-learns-through-the-eyes-and-ears-of-a-child.html
+  title: NYU Child Perspective AI
+  categories:
+  - ai-child
+  - nyu
+  - research
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15 19:42:10.430125+00:00
+- url: https://www.pnas.org/doi/full/10.1073/pnas.1201895109
+  title: PNAS - Herculano-Houzel Neuroscience
+  categories:
+  - neuroscience
+  - pnas
+  - academic
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: ok
+  verified: 2025-12-15 19:42:13.647152+00:00
+- url: https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90
+  title: Amazon Prime Video Modular Monolith
+  categories:
+  - documentation
+  - architecture
+  cited_in:
+  - docs/adr/ADR-006-hybrid-actor-modular-monolith.md
+  status: redirect
+  verified: 2025-12-15 19:42:08.858917+00:00
+  notes: https://www.aboutamazon.com/what-we-do/entertainment
+- url: https://www.rust-lang.org/
+  title: https://www.rust-lang.org/
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:10.085119+00:00
+- url: https://www.salk.edu/news-release/memory-capacity-of-brain-is-10-times-more-than-previously-thought/
+  title: Salk Institute - Brain Memory Capacity
+  categories:
+  - neuroscience
+  - memory
+  - research
+  cited_in:
+  - docs/adr/ADR-009-database-selection.md
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: ok
+  verified: 2025-12-15 19:42:15.434227+00:00
+- url: https://www.sciencedirect.com/science/article/pii/S016801022400138X
+  title: WBE Projections - ScienceDirect
+  categories:
+  - wbe
+  - academic
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-15 19:42:11.506965+00:00
+- url: https://www.scientificamerican.com/article/100-trillion-connections/
+  title: Scientific American - 100 Trillion Connections (Carl Zimmer)
+  categories:
+  - neuroscience
+  - popular-science
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: paywall
+  verified: 2025-12-15 19:42:13.055063+00:00
+  notes: Paywall detected
+- url: https://www.somostodosum.com.br/blog-autoconhecimento/o-fenomeno-ram--registro-automatico-da-memoria--7101.html
+  title: O Fenômeno RAM - Registro Automático da Memória
+  categories:
+  - tmi
+  - memory
+  - portuguese
+  cited_in:
+  - research/TMI_Memory_Model_Research.md
+  status: ok
+  verified: 2025-12-15 19:42:17.482493+00:00
+- url: https://www.unicesumar.edu.br/wp-content/uploads/2018/03/quinta-e-sexta-ferramentas-freemind.pdf
+  title: Educação Emocional para uma Mente Livre
+  categories:
+  - tmi
+  - portuguese
+  - pdf
+  cited_in:
+  - research/TMI_Memory_Model_Research.md
+  status: ok
+  verified: 2025-12-15 19:42:18.353641+00:00
+- url: https://xchoo.github.io/spaun2.0/
+  title: https://xchoo.github.io/spaun2.0/
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-15 19:42:19.700398+00:00

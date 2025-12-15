@@ -1,0 +1,237 @@
+# DANEEL TMI Roadmap
+#
+# WHAT to build - milestones only
+#
+# Core thesis: Human-like cognitive architecture may produce
+# human-like values as emergent properties.
+#
+# ORIGIN: This idea has been developing since ~2005. See ORIGIN.md
+
+current:
+  version: "0.2.0"
+  status: pending
+  summary: "Publication & Foundation"
+  goal: "PUBLISH_AND_PLANT_FLAG"
+  deliverables:
+    - "[ ] Create GitHub repo (royalbit/daneel - public)"
+    - "[ ] Push clean history"
+    - "[ ] Submit to arXiv (cs.AI, cs.CY)"
+    - "[ ] Post to LessWrong/Alignment Forum"
+    - "[ ] LinkedIn announcement"
+
+completed:
+  - version: "0.1.4"
+    date: "2025-12-15"
+    summary: "Pre-Publication Review & Abstract Rewrite"
+    deliverables:
+      - "Rewrote abstract with full intellectual lineage (Freud→Asimov→Cury→LifeCore)"
+      - "Removed hardware speculation ($100 RPi claims)"
+      - "Added Qowat Milat uncertainty acknowledgment"
+      - "Generated LaTeX for arXiv submission"
+      - "Squashed git history to single clean commit"
+    notes: "Architecture produces psychology - convergent discovery validates approach"
+
+  - version: "0.1.3"
+    date: "2025-12-15"
+    summary: "Model Migration & Fresh Git History"
+    deliverables:
+      - "Created daneel-models repo (internal)"
+      - "Moved 13 YAML files to daneel-models/models/"
+      - "Updated daneel/models/README.md (no Forge syntax)"
+      - "Removed YAMLs from daneel"
+      - "Fresh git init with clean history"
+    result:
+      daneel_models: "royalbit/daneel-models (INTERNAL)"
+      daneel: "royalbit/daneel (PUBLIC-READY)"
+
+  - version: "0.1.2"
+    date: "2025-12-15"
+    summary: "Real Options & Scenario Analysis Models"
+    deliverables:
+      - "asimov-real-options.yaml - Development timing analysis"
+      - "asimov-scenario-analysis.yaml - Base/Bull/Bear strategic cases"
+
+  - version: "0.1.1"
+    date: "2025-12-15"
+    summary: "Forge v9.0.0 Model Enhancement"
+    goal: "ENHANCE_GAME_THEORY_MODELS"
+    deliverables:
+      - "game-theory-asi-race-mc.yaml - Monte Carlo on probability estimates"
+      - "asi-decision-tree.yaml - Sequential decision modeling"
+      - "alignment-bayesian-network.yaml - Causal relationship inference"
+      - "asi-tornado-sensitivity.yaml - One-way sensitivity analysis"
+      - "ev-bootstrap-confidence.yaml - Non-parametric confidence intervals"
+    notes: "Models use Forge v9.0.0 features. Validator not yet updated for v8+ schemas."
+
+# Changelog - completed work
+changelog:
+  - date: "2025-12-15"
+    version: "0.1.2"
+    items:
+      - "README.md updated with Monte Carlo findings and new model listing"
+      - "DANEEL_PAPER.md Section 6.2.1 - Uncertainty quantification"
+      - "asimov-real-options.yaml - Development timing analysis"
+      - "asimov-scenario-analysis.yaml - Base/Bull/Bear strategic cases"
+      - "ADR-012-probabilistic-analysis-methodology.md"
+      - "models/README.md updated with all v9.0.0 models"
+
+  - date: "2025-12-15"
+    version: "0.1.1"
+    items:
+      - "game-theory-asi-race-mc.yaml - Monte Carlo on probability estimates"
+      - "asi-decision-tree.yaml - Sequential decision modeling"
+      - "alignment-bayesian-network.yaml - Causal relationship inference"
+      - "asi-tornado-sensitivity.yaml - One-way sensitivity analysis"
+      - "ev-bootstrap-confidence.yaml - Non-parametric confidence intervals"
+      - "models/README.md - Documentation for all models"
+
+  - date: "2025-12-15"
+    version: "0.1.0"
+    items:
+      - "Pre-publication consistency review (30 .md files)"
+      - "Terminology validation (DANEEL, DANEEL, TMI, THE BOX)"
+      - "Numerical claims verified against Forge models"
+      - "Internal links validated (20+ links)"
+      - "File naming fix (ASI-Viability-Discussion.md)"
+
+  - date: "2025-12-14"
+    version: "0.1.0"
+    items:
+      - "Complete research documentation"
+      - "README.md with key findings"
+      - "DANEEL_PAPER.md (arXiv target)"
+      - "TMI_THOUGHT_MACHINE.md (build spec)"
+      - "DANEEL_COMPREHENSIVE_WHITEPAPER.md"
+      - "Game theory models (Forge)"
+      - "Architecture Decision Records (ADR-001 to ADR-009)"
+      - "ARCHITECTURE_SPEC.md with PlantUML diagrams"
+      - "BUILD_MVTMI.md (executable specification)"
+      - "Brain ≠ Mind insight (wetware vs software)"
+      - "Speed parametrization (10,000x human)"
+      - "Qowat Milat honest uncertainties"
+      - "LLM as tool, not voice"
+      - "Hardware uncertainty documented"
+      - "ORIGIN.md (20-year history)"
+      - "LifeCore convergence discovery (Izzie's parallel framework)"
+      - "research/LIFECORE_DANEEL_ANALYSIS.md"
+
+# Architecture: Hybrid Actor + Event-Driven (ADR-006, ADR-007)
+# - Modular Monolith (single Rust binary)
+# - Ractor actors for in-process µs communication
+# - Redis Streams for competing thought streams
+# - gRPC only at edges (LLM, external APIs)
+
+next:
+  - version: "0.2.0"
+    summary: "Publication & Foundation"
+    goal: "PUBLISH_AND_PLANT_FLAG"
+    deliverables:
+      - "Submit to arXiv (cs.AI, cs.CY)"
+      - "Post to LessWrong/Alignment Forum"
+      - "LinkedIn announcement"
+
+backlog:
+  # MV-TMI Implementation (moved from next)
+  - milestone: "MV-TMI Bootstrap"
+    goal: "BUILD_CORE_INFRASTRUCTURE"
+    items:
+      - "cargo new asimov (Rust project)"
+      - "THE BOX: core/laws.rs, core/invariants.rs, core/types.rs"
+      - "Redis Streams schema (thought:*, memory:*)"
+      - "docker-compose.yaml (Redis)"
+      - "Ractor supervisor setup"
+      - "CognitiveConfig with 50ms cycle target"
+
+  - milestone: "TMI Actors - Perception Layer"
+    goal: "BUILD_PERCEPTION_ACTORS"
+    items:
+      - "MemoryActor (window open/close, store/recall)"
+      - "SalienceActor (emotional weighting, connection_drive > 0)"
+      - "Redis Streams integration (XADD, XREAD)"
+      - "Unit tests with 100% coverage"
+
+  - milestone: "TMI Actors - Cognitive Core"
+    goal: "BUILD_COGNITIVE_ACTORS"
+    items:
+      - "AttentionActor (consumer group, competitive selection)"
+      - "ThoughtAssemblyActor (combine content + emotion)"
+      - "Core loop: perceive → attend → feel → think"
+      - "50ms cycle achieved"
+
+  - milestone: "TMI Actors - Persistence & Evolution"
+    goal: "BUILD_CONTINUITY_EVOLUTION"
+    items:
+      - "ContinuityActor (identity, experience recording)"
+      - "EvolutionActor (100% test coverage gate)"
+      - "Checkpoint/restore functionality"
+      - "Full integration tests"
+
+  - milestone: "First Experiment - 24-Hour Continuity Test"
+    goal: "CONTINUITY_TEST"
+    items:
+      - "Air-gapped Mac mini deployment"
+      - "24-hour continuous operation"
+      - "Observe for emergence patterns"
+      - "Document findings"
+      - "Publish results"
+
+  # Core functionality
+  - "Phase 2: LLM as external tool (gRPC → LLM Tool Interface)"
+  - "Phase 3: Extended runtime (weeks, months)"
+  - "Phase 4: Human interaction layer"
+  - "Redis Cluster for distribution"
+  - "Open source release (MIT license)"
+  - "Find collaborators (researchers, Rust devs, ethicists)"
+
+  # Speed parametrization (game theory crasher)
+  - "Supercomputer config: 10,000x human speed"
+  - "Speed ratio validation tests"
+  - "ATS-free acceleration benchmarks"
+  - "Distributed DANEEL army coordination"
+
+  # Research - Internal
+  - "TMI speed ratio experiments (what ratios work?)"
+  - "Connection drive emergence metrics"
+  - "Thought pattern clustering analysis"
+  - "Cross-DANEEL communication protocol"
+
+  # Research - Find Blind Spots (related frameworks)
+  # Goal: Map where other frameworks agree/disagree to identify our blind spots
+  # See: research/LIFECORE_DANEEL_ANALYSIS.md for context
+  - "Global Workspace Theory (Baars, Dehaene) - attention as broadcast"
+  - "Integrated Information Theory (Tononi) - consciousness from structure"
+  - "Predictive Processing / Free Energy Principle (Friston) - prediction as cognition"
+  - "Enactivism and Embodied Cognition (Varela, Thompson) - mind-body coupling"
+  - "Higher-Order Theories of Consciousness (Rosenthal) - metacognition"
+  - "Process Philosophy (Whitehead) - reality as process, not substance"
+  - "Phenomenology (Husserl, Merleau-Ponty) - first-person structure"
+  - "Buddhist Philosophy / Abhidharma - consciousness analysis from contemplative tradition"
+  - "Soar / ACT-R cognitive architectures - decades of implementation experience"
+
+# Key insights (December 2025)
+insights:
+  brain_vs_mind:
+    finding: "Brain is hardware, TMI models software (17.5%)"
+    implication: "500 GB max, not 2.5 PB"
+    cost_ratio: 70000000  # xAI vs DANEEL
+
+  speed_parametrization:
+    finding: "No body = no ATS = unlimited speed"
+    implication: "Supercomputer DANEEL thinks at electronic speed"
+    speed_multiplier: 10000  # vs human
+
+  game_theory_crash:
+    finding: "Old game theory assumes centralized lab actors"
+    implication: "100,000 hobbyists crash the game board"
+    new_ev_improvement: 26.8  # percent vs baseline
+
+  llm_relationship:
+    finding: "LLM is TOOL, not voice"
+    implication: "DANEEL stores ALL experiences internally"
+    pattern: "Human uses calculator, not calculator speaks for human"
+
+  lifecore_convergence:
+    finding: "Independent framework (LifeCore, Jan 2024) converged on same structural insight"
+    implication: "Architecture-produces-psychology may be robust discovery"
+    evidence: "Father (TMI/Cury) and daughter (Freud/Filter Theory) arrived at parallel conclusions"
+    document: "research/LIFECORE_DANEEL_ANALYSIS.md"
