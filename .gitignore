@@ -1,0 +1,5 @@
+.DS_Store
+.claude_checkpoint.yaml
+*.pdf
+*.aux
+*.log
