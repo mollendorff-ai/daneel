@@ -110,21 +110,25 @@ SHOW_LEGEND()
 ```
 daneel/                       # Research & Documentation (this repo)
 ├── paper/                    # Academic paper for publication
-│   └── DANEEL_PAPER.md      # Main paper (arXiv target)
+│   ├── DANEEL_PAPER.md      # Main paper (arXiv target)
+│   └── arxiv/               # LaTeX conversion for arXiv
 ├── models/                   # Game theory analysis results
 │   ├── README.md            # Model documentation and findings
 │   └── *.xlsx               # Excel exports with results
 ├── research/                 # Background research and theory
 │   ├── TMI_THOUGHT_MACHINE.md
 │   ├── LIFECORE_DANEEL_ANALYSIS.md  # Convergent discovery analysis
-│   ├── The LifeCore (LC-core).pdf   # Izzie's original document
-│   └── ASI-Viability-Discussion.md
+│   └── The LifeCore (LC-core).pdf   # Izzie's original document
 ├── strategy/                 # Strategic planning documents
 │   ├── DANEEL_STRATEGY.md
 │   └── DANEEL_COMPREHENSIVE_WHITEPAPER.md
-└── docs/                     # Architecture documentation
-    ├── ARCHITECTURE_SPEC.md  # Technical architecture
-    └── adr/                  # Architecture Decision Records (ADR-001 to ADR-012)
+├── docs/                     # Architecture documentation
+│   ├── ARCHITECTURE_SPEC.md  # Technical architecture
+│   ├── BUILD_GUIDE.md       # Executable build specification
+│   └── adr/                  # Architecture Decision Records (ADR-001 to ADR-012)
+└── origins/                  # The human story behind the project
+    ├── Rex-Claude-Dialogues.md  # Intellectual exploration
+    └── FOR_KANTIA.md        # Plain-language explanation
 ```
 
 ## Key Findings (Verified Data)
