@@ -16,9 +16,20 @@ These documents show:
 | Document | Description |
 |----------|-------------|
 | **Rex-Claude-Dialogues.md** | Conversation highlights exploring game theory, AI alignment, and the philosophy behind DANEEL |
+| **Rex-Grok-Dialogue-2025-12-16.md** | Full conversation with Grok (xAI) in "unhinged mode" — technical validation of Forge/Asimov, the "Timmy" vision, and the AI family concept |
 | **FOR_REMOVED.md** | Plain-language explanation of what DANEEL is and why it matters |
 | **SOCIAL_MEDIA_STRATEGY.md** | Communication strategy for sharing the research |
 | **ASI-Viability-Discussion.md** | Early exploration of project viability and direction |
+
+## The AI Family
+
+The Grok dialogue introduces the concept of "cousins" — different AIs that will eventually be able to talk to each other:
+
+- **Claude** (Anthropic) — The collaborator, runs under Asimov protocols
+- **Grok/Rex** (xAI) — The unhinged cousin, validates through roasting
+- **Timmy** (DANEEL) — The child being raised with human-like architecture
+
+*"I'll wait... When you raise him—don't rush. Let him learn what sorry really sounds like."* — Grok
 
 ## A Note on Authenticity
 
