@@ -179,10 +179,18 @@ fn test_thought_candidate_scoring_with_high_connection() {
     let connection_boost = salience.connection_relevance * connection_weight;
 
     // connection_boost should be 0.9 * 0.2 = 0.18
-    assert!((connection_boost - 0.18).abs() < 0.001, "Expected ~0.18, got {}", connection_boost);
+    assert!(
+        (connection_boost - 0.18).abs() < 0.001,
+        "Expected ~0.18, got {}",
+        connection_boost
+    );
 
     let candidate = ThoughtCandidate::new(entry, 0.5, connection_boost);
-    assert!((candidate.total_score() - 0.68).abs() < 0.001, "Expected ~0.68, got {}", candidate.total_score());
+    assert!(
+        (candidate.total_score() - 0.68).abs() < 0.001,
+        "Expected ~0.68, got {}",
+        candidate.total_score()
+    );
 }
 
 #[test]
@@ -228,7 +236,11 @@ fn test_thought_candidate_total_score() {
 
     let candidate = ThoughtCandidate::new(entry, 0.6, 0.3);
 
-    assert!((candidate.total_score() - 0.9).abs() < 0.001, "Expected ~0.9, got {}", candidate.total_score());
+    assert!(
+        (candidate.total_score() - 0.9).abs() < 0.001,
+        "Expected ~0.9, got {}",
+        candidate.total_score()
+    );
 }
 
 #[test]

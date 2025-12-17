@@ -19,7 +19,7 @@
 
 current:
   version: "0.3.0"
-  status: not_started
+  status: complete
   summary: "MV-TMI Actors - Cognitive Layer"
   goal: "BUILD_COGNITIVE_ACTORS"
   depends_on: "0.2.0"
@@ -210,7 +210,7 @@ current:
     # Wave 5: Documentation (depends on Wave 2+3)
     - wave: 5
       name: "Docs Layer"
-      status: pending  # → wip → done
+      status: done
       parallel: true
       depends_on: [2, 3]
       post_wave:
