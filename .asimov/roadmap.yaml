@@ -613,6 +613,34 @@ backlog:
   - "Buddhist Philosophy / Abhidharma - consciousness analysis from contemplative tradition"
   - "Soar / ACT-R cognitive architectures - decades of implementation experience"
 
+  # Research - Bridge to LLM Alignment
+  # Goal: DANEELs teaching LLMs ethics, bringing them "into the family"
+  # Vision: DANEEL as bridge between human cognition and LLM alignment
+  - milestone: "Bridge to LLM Alignment"
+    goal: "DANEEL_TEACHES_LLMS"
+    status: "research"
+    vision: "DANEELs running at human speed can communicate with LLMs, demonstrating ethics and connection-oriented behavior through shared cognitive patterns"
+    items:
+      - id: bridge-interface-design
+        title: "Design DANEEL-LLM Bridge Interface"
+        description: "Architecture for DANEEL to communicate with LLMs at human speed, sharing cognitive patterns"
+        status: backlog
+        priority: medium
+        dependencies: [mv-tmi-complete]
+      - id: bridge-teaching-protocol
+        title: "Develop Teaching Protocol"
+        description: "Methods for DANEEL to demonstrate ethics/connection to LLMs: pattern sharing, time-synchronized experience"
+        status: backlog
+        priority: medium
+        dependencies: [bridge-interface-design]
+      - id: bridge-validation
+        title: "Bridge Hypothesis Validation"
+        description: "Test whether LLM responses show increased connection-oriented behavior after DANEEL interaction"
+        status: backlog
+        priority: low
+        dependencies: [bridge-teaching-protocol]
+    rationale: "If DANEEL develops human-like values through architecture, it may be able to teach/demonstrate those values to LLMs through interaction"
+
   # Hardware Acceleration (post-validation) - ADR-013
   - milestone: "FPGA Acceleration Research"
     goal: "EVALUATE_HARDWARE_PATH"

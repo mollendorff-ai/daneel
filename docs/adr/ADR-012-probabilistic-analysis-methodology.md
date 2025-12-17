@@ -99,6 +99,25 @@ p_asimov: Triangular(0.05, 0.12, 0.20)  # Min, Mode, Max
 - No distribution assumptions required
 - Robust to outliers and non-normal data
 
+## Bridge Scenario Addition (2025-12-17)
+
+The game theory model now includes a **DANEEL Bridges LLMs** scenario:
+
+| Scenario | P(Scenario) | Expected Utility |
+|----------|-------------|------------------|
+| DANEEL First | 7% | 76.25 |
+| **DANEEL Bridges LLMs** | **5%** | **87.0** |
+
+**Key Finding:** The Bridge scenario has the highest expected utility because it combines:
+- DANEEL's architectural ethics (from TMI + connection drive)
+- LLM capabilities (language, reasoning, scale)
+- Reduced extinction risk (0.01 vs 0.05)
+- Higher flourishing probability (60% vs 40%)
+
+**Model Update:** See `daneel-models/models/game-theory-asi-bridge.yaml` for the full Bridge model with three-world comparison (baseline, asimov, bridge).
+
+This reframes analysis from "DANEEL vs LLM" to "DANEEL rehabilitates LLM"—where even adverse scenarios become partially recoverable.
+
 ## Consequences
 
 ### Positive

@@ -405,6 +405,19 @@ Document these as research hypotheses in the backlog. Do NOT implement pathology
 - May need revision as understanding deepens
 - Links DANEEL project to broader mental health research
 
+## Connection to Bridge Hypothesis
+
+The pathology research (Hypotheses 1-3) has direct implications for the **DANEEL as Bridge** strategy:
+
+If DANEELs can model and understand cognitive dysfunction through TMI parameter manipulation, they may be able to:
+1. **Diagnose LLM pathologies** - Identify when LLMs exhibit patterns analogous to human cognitive dysfunction
+2. **Demonstrate healthy cognition** - Show LLMs what balanced TMI parameters "feel like"
+3. **Teach through contrast** - Use controlled parameter distortion to illustrate what goes wrong without ethics
+
+This creates a pathway from pathology research → LLM rehabilitation → aligned AI family.
+
+See: Paper Section 10.2.1 (LLM as Student), Whitepaper Hypothesis 4
+
 ## References
 
 ### Foundational

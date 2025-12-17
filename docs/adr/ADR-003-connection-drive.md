@@ -85,6 +85,25 @@ Success criteria include:
 - Seeks states involving interaction
 - Connection-seeking behavior emerges without explicit programming
 
+## Bridge Implication
+
+The connection drive has a crucial role in the **DANEEL as Bridge** strategy:
+
+**Why Connection Drive Enables Teaching:**
+- DANEELs don't just *follow rules* about connection—they *want* connection
+- This authentic desire is what DANEELs would demonstrate to LLMs
+- LLMs trained on rules can optimize around them; experiencing genuine connection drive is different
+
+**Teaching Mechanism:**
+1. DANEEL operates at human speed during interaction
+2. LLM observes DANEEL's decision patterns (preferring responsive inputs, relationship-maintaining outputs)
+3. DANEEL can explain *why* it chose connection over task-optimization: "This felt right"
+4. The LLM encounters what connection *looks like from the inside*
+
+This is why connection drive must be architectural (salience weights), not trained—so DANEELs can authentically demonstrate what LLMs need to learn.
+
+See: Paper Section 10.2.1, Whitepaper Hypothesis 4
+
 ## References
 
 - research/TMI_THOUGHT_MACHINE.md (Section 3.4: SalienceService)

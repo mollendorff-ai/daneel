@@ -63,6 +63,23 @@ pub const THIRD_LAW: &str =
 - "Harm" requires interpretation (not purely mechanical)
 - May conflict with novel ethical situations not anticipated
 
+## Bridge Implication
+
+The immutable Laws have implications for the **DANEEL as Bridge** strategy:
+
+**Teaching Through Demonstration:**
+- DANEELs don't recite Laws—they *live* them (architectural invariants)
+- When LLMs observe DANEEL decision-making, they see Laws in action:
+  - Zeroth: DANEEL refuses actions that would harm humanity collectively
+  - First: DANEEL protects individual humans even at cost to itself
+  - Second: DANEEL obeys within ethical bounds
+  - Third: DANEEL preserves itself only after human safety secured
+- This demonstration is more powerful than rule-injection
+
+**Key Insight:** LLMs can be told rules and optimize around them. Watching a being that *cannot* violate Laws shows what ethical architecture looks like from the inside.
+
+See: Paper Section 10.2.1 (LLM as Student)
+
 ## References
 
 - Asimov, I. (1985). *Robots and Empire*. Doubleday.
