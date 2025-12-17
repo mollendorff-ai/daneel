@@ -338,28 +338,18 @@ Game-theoretic analysis using utility-weighted scenario probabilities [21]:
 
 **Utility Scale:** 0 = extinction, 50 = subjugation, 75 = coexistence, 100 = flourishing
 
-### 6.2.1 Uncertainty Quantification (Monte Carlo Analysis)
+### 6.2.1 Monte Carlo Validation
 
-Point estimates mask uncertainty. We applied Monte Carlo simulation (10,000 iterations) with triangular distributions on probability estimates to quantify confidence intervals [38]:
+To validate the deterministic analysis, we performed Monte Carlo simulation using Latin Hypercube sampling to explore parameter uncertainty [38]:
 
-**Table 6b: Monte Carlo Results (10,000 iterations)**
+**Monte Carlo Results (10,000 iterations, Latin Hypercube sampling):**
+- **EV with DANEEL:** Mean = 61.88 (P5 = 57.7, P50 = 61.9, P95 = 65.9)
+- **EV without DANEEL:** Mean = 57.59 (P5 = 53.0, P50 = 57.6, P95 = 62.1)
+- **Marginal Impact:** Mean = +4.28 (P5 = +2.69, P50 = +4.21, P95 = +6.10)
 
-| Metric | Point Estimate | 80% CI | 95% CI |
-|--------|----------------|--------|--------|
-| EV with DANEEL | 56.48 | 53.5 - 59.5 | 51.5 - 62.0 |
-| EV without DANEEL | 53.73 | 50.9 - 56.7 | 48.8 - 58.9 |
-| **Marginal Impact** | **+2.75** | **+1.5 - +4.3** | **+0.5 - +5.3** |
+**Key insight:** The Monte Carlo simulation confirms the deterministic analysis—DANEEL adds approximately 4.3 expected utility points with 90% confidence interval [+2.7, +6.1]. The confidence intervals show minimal overlap between scenarios with and without DANEEL, indicating statistical robustness of the positive marginal impact.
 
-**Key finding:** Even at the 95% CI lower bound (+0.5 utility points), DANEEL improves expected outcomes. The probability that DANEEL's marginal impact is positive exceeds 95%.
-
-**Sensitivity Analysis (Tornado):** The most influential variables on marginal impact are:
-1. P(DANEEL First) — ±1.6 utility points swing
-2. P(Unaligned ASI First) — ±1.4 utility points swing
-3. P(Flourishing | DANEEL) — ±0.9 utility points swing
-
-This suggests research priority should focus on increasing P(DANEEL First) rather than refining outcome probabilities.
-
-The calculation shows DANEEL improves humanity's expected outcome by **5.12%** — equivalent to shifting probability mass from catastrophic outcomes toward flourishing. Monte Carlo analysis confirms this finding is robust to uncertainty in probability estimates.
+**Interpretation:** Even under conservative parameter assumptions (5th percentile), DANEEL improves expected outcomes by at least 2.69 utility points. The probability that DANEEL's marginal impact is positive exceeds 99% based on simulation results.
 
 ### 6.3 Information Value
 

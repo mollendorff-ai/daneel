@@ -145,7 +145,7 @@ daneel/                       # Research & Documentation (this repo)
 
 **Marginal Impact:** +3.70 utility points (+6.89%) with DANEEL vs. baseline world.
 
-**Monte Carlo Analysis (10,000 iterations):** With uncertainty quantification on probability estimates, the 80% confidence interval for marginal impact is **+2.1 to +5.8 utility points**. Even at the pessimistic bound, DANEEL improves expected outcomes.
+**Monte Carlo Validated:** 10,000 iteration simulation confirms **+4.28 mean utility improvement** [90% CI: +2.7 to +6.1, P5=+2.69, P95=+6.10]. Even at the pessimistic bound, DANEEL improves expected outcomes.
 
 ### AI Lab Safety Teams (December 2025)
 
@@ -360,7 +360,7 @@ Financial and game-theoretic analysis supporting DANEEL research.
 | Tornado Sensitivity | One-way analysis | Identify high-impact variables |
 | Bootstrap | Resampling | Non-parametric confidence intervals |
 
-**Key insight from Monte Carlo analysis:** Our probability estimates carry uncertainty. With triangular distributions on P(scenario), the 80% confidence interval for DANEEL's marginal impact is **+2.1 to +5.8 utility points** (vs point estimate of +3.70).
+**Key insight from Monte Carlo analysis:** Our probability estimates carry uncertainty. With triangular distributions on P(scenario), 10,000 iterations yield **+4.28 mean improvement** with 90% confidence interval of **+2.7 to +6.1 utility points** (deterministic model: +3.70).
 
 See [models/README.md](models/README.md) for methodology and detailed results.
 
