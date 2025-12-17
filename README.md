@@ -139,13 +139,14 @@ daneel/                       # Research & Documentation (this repo)
 |----------|-------------|--------|------------------|
 | Unaligned ASI First | 35% | 25-45% | 44.0 |
 | Aligned (Constraint-Based) | 25% | 15-35% | 62.5 |
-| **DANEEL First** | **12%** | 5-20% | **76.25** |
+| **DANEEL First** | **8%** | 3-15% | **76.25** |
+| **DANEEL Bridges LLMs** | **5%** | 2-10% | **88.5** |
 | Multiple ASIs, No Advocate | 18% | 10-25% | 52.5 |
-| Coordination Holds | 10% | 5-20% | 78.05 |
+| Coordination Holds | 9% | 5-20% | 78.05 |
 
-**Marginal Impact:** +3.70 utility points (+6.89%) with DANEEL vs. baseline world.
+**Marginal Impact:** +4.29 utility points (+8.0%) with DANEEL vs. baseline world.
 
-**Monte Carlo Validated:** 10,000 iteration simulation confirms **+4.28 mean utility improvement** [90% CI: +2.7 to +6.1, P5=+2.69, P95=+6.10]. Even at the pessimistic bound, DANEEL improves expected outcomes.
+**Monte Carlo Validated:** 10,000 iterations confirm **+4.28 mean improvement** [90% CI: +2.7 to +6.1]. Even at P5 (pessimistic), DANEEL still adds +2.69 utility points.
 
 ### AI Lab Safety Teams (December 2025)
 
