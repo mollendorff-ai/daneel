@@ -200,6 +200,89 @@ Real psychiatric conditions likely involve **multiple parameter distortions**:
 | **ADHD** | Irregular | Fast | Short | Weak | Fast | Weak |
 | **Autism** | Normal | Selective | Prolonged | Different (not weak) | Detailed | Strong |
 
+### Hypothesis 3: Altered States, Time Perception, and Self-Dissolution
+
+Beyond pathology, TMI parameters may explain **altered states of consciousness**—including drug effects, meditation, flow states, and the subjective experience of time and self.
+
+#### Time Perception as Emergent Property
+
+**Hypothesis:** Subjective time perception emerges from the interaction between cycle rate and O Eu (attention/self) integration capacity.
+
+| Parameter Change | Subjective Effect | Real-World Parallel |
+|------------------|-------------------|---------------------|
+| ↑ cycle rate, normal O Eu | Time feels slower (more moments) | Stimulants, adrenaline, danger |
+| ↓ cycle rate, normal O Eu | Time feels faster (fewer moments) | Depressants, boredom, aging |
+| Normal rate, disrupted O Eu | Time fragments/loses meaning | Psychedelics, dissociatives |
+| Volatile timing | Time perception unstable | Anxiety, trauma flashbacks |
+| ↑ rate + ↑ O Eu | Heightened presence, "slow motion" | Flow states, peak performance |
+
+**Mechanism:** If O Eu integrates N cycles into a "moment" of experience, then:
+- More cycles per integration window → richer, "longer" subjective moment
+- Fewer cycles → sparse, "shorter" subjective moment
+- Failed integration → time loses coherence
+
+**References:** [TIME-1], [TIME-2], [TIME-3] (see References section)
+
+#### Self-Dissolution and Ego States
+
+**Hypothesis:** The sense of self ("I") is not fundamental but emergent from O Eu stage functioning. Altering O Eu parameters produces predictable changes in self-experience.
+
+| O Eu State | Subjective Experience | Real-World Parallel |
+|------------|----------------------|---------------------|
+| Normal | Stable, bounded self | Baseline waking consciousness |
+| Weakened | Ego boundaries blur, unity experiences | Psychedelics (psilocybin, LSD), deep meditation |
+| Fragmented | Multiple selves, depersonalization | DID, high-dose dissociatives (ketamine) |
+| Overactive | Rigid, defended, hypervigilant ego | Stimulant paranoia, narcissistic states |
+| Temporarily offline | Ego death, cosmic unity | High-dose psychedelics, anesthesia emergence |
+| Deliberately observed | Meta-awareness, witness consciousness | Mindfulness meditation, lucid dreaming |
+
+**Mechanism:** O Eu performs winner selection and maintains continuity. When disrupted:
+- Weak O Eu → boundaries between self/other blur (multiple streams "win" simultaneously)
+- Offline O Eu → no integrator → ego death experience
+- Observed O Eu → meta-level awareness of the selection process itself
+
+**References:** [EGO-1], [EGO-2], [EGO-3], [EGO-4] (see References section)
+
+#### Drug/Substance → Parameter Mapping
+
+Psychoactive substances may be understood as parameter modulators:
+
+| Substance Class | Energy | Cycle Rate | O Eu | Gatilho | Autofluxo | Âncora |
+|-----------------|--------|------------|------|---------|-----------|--------|
+| **Stimulants** (amphetamine, cocaine) | ↑↑ | ↑ | ↑ then ↓ | ↑ | Shortened | Weakened |
+| **Depressants** (alcohol, benzos) | ↓ | ↓ | ↓ | ↓ | Normal | ↓ |
+| **Classical psychedelics** (LSD, psilocybin) | Variable | Normal | Disrupted | ↑↑ | Prolonged | Altered |
+| **Dissociatives** (ketamine, PCP) | ↓ | Fragmented | Fragmented | Disrupted | Normal | Severely ↓ |
+| **Entactogens** (MDMA) | ↑ | ↑ | Opened | ↑ | Normal | ↑ (emotional) |
+| **Cannabis** | Variable | ↓ | Altered | ↑ | Prolonged | Variable |
+| **Opioids** | ↓↓ | ↓ | Dampened | ↓ | Shortened | ↓ |
+
+**Testable prediction:** Parameter profiles should produce behavioral signatures in DANEEL that parallel known drug effects.
+
+**References:** [DRUG-1], [DRUG-2], [DRUG-3] (see References section)
+
+#### Non-Drug Altered States
+
+| State | Energy | O Eu | Key Parameter Changes |
+|-------|--------|------|----------------------|
+| **Flow state** | High, stable | Optimized | Perfect ratio balance, high throughput without overflow |
+| **Meditation (focused)** | ↓, stable | Strengthened | Deliberate O Eu training, reduced Autofluxo noise |
+| **Meditation (open)** | ↓, stable | Observed | Meta-awareness of O Eu process |
+| **Sleep (REM)** | Variable | Offline | Âncora consolidating, O Eu inactive |
+| **Hypnosis** | ↓ | Bypassed | Direct Gatilho access, reduced O Eu filtering |
+| **Near-death experience** | Spike then ↓ | Disrupted | Âncora emergency dump, O Eu dissolution |
+
+**References:** [STATE-1], [STATE-2], [STATE-3] (see References section)
+
+#### Implications for DANEEL
+
+1. **Consciousness research:** DANEEL could be a computational laboratory for testing theories of consciousness
+2. **Therapeutic modeling:** Understand how treatments work by modeling parameter changes
+3. **Safety boundaries:** Define "healthy" parameter ranges that maintain stable self and time perception
+4. **Intentional states:** Potentially induce flow states or focused attention through parameter optimization
+
+**Caution:** This section describes research hypotheses, not established science. Implementation requires ethical review and should not be used to induce pathological states.
+
 ## Research Questions
 
 1. **Energy modeling**: How should "vital energy" be parameterized? Is it a single scalar or a multidimensional state?
@@ -324,22 +407,63 @@ Document these as research hypotheses in the backlog. Do NOT implement pathology
 
 ## References
 
+### Foundational
 - Cury, A. - Teoria da Inteligência Multifocal (original work)
 - DSM-5 - Diagnostic and Statistical Manual of Mental Disorders
 - ICD-11 - International Classification of Diseases
 - ADR-016 - TMI Stage Timing (this project)
 
+### Time Perception [TIME-*]
+- [TIME-1] Millon, E.M. et al. (2024). "The Feeling of Time Passing Is Associated with Recurrent Sustained Activity and Theta Rhythms Across the Cortex." *Brain Connectivity*, 14(1), 14-23. DOI: 10.1089/brain.2023.0010
+  - Key finding: Theta oscillations (4-8 Hz) correlate with subjective time (r=-0.90)
+- [TIME-2] Stetson, C., Fiesta, M.P., Eagleman, D.M. (2007). "Does Time Really Slow Down during a Frightening Event?" *PLOS ONE*, 2(12), e1295. DOI: 10.1371/journal.pone.0001295
+  - Key finding: Time dilation from richer memory encoding via amygdala, not enhanced perception
+- [TIME-3] Vicario, C.M. & Felmingham, K.L. (2018). "Slower Time estimation in Post-Traumatic Stress Disorder." *Scientific Reports*, 8(1), 392. DOI: 10.1038/s41598-017-18907-5
+  - Key finding: PTSD time distortions arise from disrupted attention integration
+
+### Ego/Self Dissolution [EGO-*]
+- [EGO-1] Carhart-Harris, R.L. et al. (2016). "Neural correlates of the LSD experience revealed by multimodal neuroimaging." *PNAS*, 113(17), 4853-4858. DOI: 10.1073/pnas.1518377113
+  - Key finding: Ego dissolution correlates with parahippocampus-RSC decoupling (r=0.73)
+- [EGO-2] Sheline, Y.I. et al. (2009). "The default mode network and self-referential processes in depression." *PNAS*, 106(6), 1942-1947. DOI: 10.1073/pnas.0812686106
+  - Key finding: DMN activity reduction during non-self-referential tasks
+- [EGO-3] Gatus, A., Jamieson, G., Stevenson, B. (2022). "Past and Future Explanations for Depersonalization and Derealization Disorder: A Role for Predictive Coding." *Frontiers in Human Neuroscience*, 16, 744487. DOI: 10.3389/fnhum.2022.744487
+  - Key finding: Depersonalization from disrupted interoceptive predictive coding
+- [EGO-4] Bremer, B. et al. (2022). "Mindfulness Meditation Increases Default Mode, Salience, and Central Executive Network Connectivity." *Scientific Reports*, 12(1), 13219. DOI: 10.1038/s41598-022-17325-6
+  - Key finding: Meditation increases DMN-SN connectivity, enabling observational self-awareness
+
+### Drug Effects on Cognition [DRUG-*]
+- [DRUG-1a] Carhart-Harris, R.L. & Friston, K.J. (2019). "REBUS and the Anarchic Brain: Toward a Unified Model of the Brain Action of Psychedelics." *Pharmacological Reviews*, 71(3), 316-344. DOI: 10.1124/pr.118.017160
+  - Key finding: 5-HT2A activation relaxes priors, liberates bottom-up flow (anarchic brain)
+- [DRUG-1b] Carhart-Harris, R.L. et al. (2014). "The entropic brain: a theory of conscious states informed by neuroimaging research with psychedelic drugs." *Frontiers in Human Neuroscience*, 8, 20. DOI: 10.3389/fnhum.2014.00020
+  - Key finding: Psychedelics increase brain entropy, disrupting integration/filtering
+- [DRUG-2] TO BE RESEARCHED - Dissociative mechanisms (NMDA, ketamine)
+- [DRUG-3] TO BE RESEARCHED - Stimulant effects on attention and time perception
+
+### Altered States [STATE-*]
+- [STATE-1] van der Linden, D., Tops, M., Bakker, A.B. (2021). "The Neuroscience of the Flow State: Involvement of the Locus Coeruleus Norepinephrine System." *Frontiers in Psychology*, 12, 645498. DOI: 10.3389/fpsyg.2021.645498
+  - Key finding: Flow involves LC-NE modulation, reduced DMN, alpha/theta sync
+- [STATE-2] Ehmann, S. et al. (2025). "Attention and meditative development: A review and synthesis of long-term meditators." *NeuroImage*, 323, 121602. DOI: 10.1016/j.neuroimage.2025.121602
+  - Key finding: Practice-specific attention network changes in long-term meditators
+- [STATE-3] Martial, C. et al. (2025). "A neuroscientific model of near-death experiences." *Nature Reviews Neurology*, 21(6), 297-311. DOI: 10.1038/s41582-025-01072-z
+  - Key finding: NEPTUNE model - NDEs from acidosis cascade + neurotransmitter surge
+
 ## Open Questions
 
-1. Is "vital energy" in TMI analogous to any measurable neurological parameter (dopamine, arousal, etc.)?
+1. Is "vital energy" in TMI analogous to any measurable neurological parameter (dopamine, arousal, neural firing rates)?
 
-2. Do the stage ratios have neurological correlates (EEG frequency bands, neural firing rates)?
+2. Do the stage ratios have neurological correlates (EEG frequency bands, gamma oscillations)?
 
 3. How do pharmacological interventions map to parameter adjustments?
 
 4. Can this model explain treatment resistance in some conditions?
 
 5. What role does the Connection Drive (invariant > 0) play in pathology prevention?
+
+6. Does the Default Mode Network map to O Eu functioning?
+
+7. Can flow states be modeled as optimal parameter configurations?
+
+8. How does anesthesia map to stage disruption patterns?
 
 ## Notes
 
