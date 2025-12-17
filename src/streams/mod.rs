@@ -24,6 +24,8 @@
 //!
 //! See ADR-007 for full rationale.
 
+pub mod client;
+pub mod consumer;
 pub mod types;
 
 /// Stream names

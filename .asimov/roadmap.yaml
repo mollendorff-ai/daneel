@@ -126,7 +126,7 @@ current:
     # Wave 3: Streams client/consumer (depends on Wave 1)
     - wave: 3
       name: "Streams Layer"
-      status: pending  # → wip → done
+      status: done
       parallel: true
       depends_on: [1]
       post_wave:
