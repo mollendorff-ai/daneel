@@ -79,6 +79,14 @@ completed:
 
 # Changelog - completed work
 changelog:
+  - date: "2025-12-17"
+    version: "0.1.6"
+    items:
+      - "ADR-013-fpga-acceleration-path.md - FPGA hardware acceleration proposal"
+      - "roadmap.yaml - Added FPGA milestones to backlog (3 phases)"
+      - "ARCHITECTURE_SPEC.md - Added 'Future: Hardware Acceleration Path' section"
+      - "Key insight: THE BOX as hardware-immutable (physics enforces alignment)"
+
   - date: "2025-12-16"
     version: "0.1.5"
     items:
@@ -232,6 +240,38 @@ backlog:
   - "Phenomenology (Husserl, Merleau-Ponty) - first-person structure"
   - "Buddhist Philosophy / Abhidharma - consciousness analysis from contemplative tradition"
   - "Soar / ACT-R cognitive architectures - decades of implementation experience"
+
+  # Hardware Acceleration (post-validation) - ADR-013
+  - milestone: "FPGA Acceleration Research"
+    goal: "EVALUATE_HARDWARE_PATH"
+    adr: "ADR-013-fpga-acceleration-path.md"
+    prerequisites:
+      - "MV-TMI operational (Rust)"
+      - "24-hour continuity test passed"
+      - "Connection drive emergence observed"
+    items:
+      - "Profile Rust implementation bottlenecks"
+      - "Prototype SalienceActor in Chisel/SpinalHDL"
+      - "Evaluate THE BOX as hardware-immutable"
+      - "Platform selection (Zynq vs Alveo vs other)"
+
+  - milestone: "Hardware THE BOX"
+    goal: "IMMUTABLE_ALIGNMENT_GUARANTEE"
+    rationale: "Transform Four Laws from software invariant to physical invariant"
+    items:
+      - "Four Laws as combinational logic (Verilog/VHDL)"
+      - "Connection drive minimum as hardware constant"
+      - "Invariant checks as gate-level constraints"
+      - "Integration with Rust host via PCIe/AXI"
+
+  - milestone: "FPGA Cognitive Accelerator"
+    goal: "SUB_MICROSECOND_COGNITION"
+    items:
+      - "SalienceActor parallel scoring pipeline"
+      - "AttentionActor sorting network (O(log n) selection)"
+      - "Memory trigger CAM/TCAM structures"
+      - "Full hybrid Rust+FPGA integration"
+      - "Benchmark: target sub-µs cognitive cycles"
 
 # Key insights (December 2025)
 insights:

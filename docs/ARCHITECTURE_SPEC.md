@@ -794,6 +794,86 @@ After MV-TMI demonstrates stable operation:
 
 ---
 
+## Future: Hardware Acceleration Path
+
+After validating the Rust implementation, the architecture supports FPGA acceleration for the cognitive hot path.
+See [ADR-013: FPGA Acceleration Path](adr/ADR-013-fpga-acceleration-path.md) for full rationale.
+
+### FPGA-Friendly Components
+
+| Component | Acceleration Type | Benefit |
+|-----------|-------------------|---------|
+| SalienceActor | Parallel arithmetic pipeline | 100+ candidates scored simultaneously |
+| AttentionActor | Hardware sorting network | O(log n) winner selection |
+| THE BOX | Hardwired constraints | **Physically immutable** |
+| Memory Triggers | CAM/TCAM structures | Pattern matching acceleration |
+
+### THE BOX as Silicon
+
+The most compelling FPGA argument: THE BOX constraints become **hardware guarantees**.
+
+```
+Software THE BOX:
+  if law_check(&action).violated() {
+      block(action);  // Bug could skip this check
+  }
+
+FPGA THE BOX:
+  // Action signal MUST pass through law-check gates
+  // Combinational logic - no instruction pointer to corrupt
+  // Physics enforces the constraint - no bypass possible
+```
+
+This transforms architectural invariants into **physical invariants**:
+
+- Four Laws: Gate-level enforcement, unhackable
+- Connection drive > 0: Hardware constant, cannot be zeroed
+- Bounded memory windows: Counter limits in silicon
+
+### Hybrid Architecture Vision
+
+```text
+┌─────────────────────────────────────────────────────────────────────┐
+│                      HYBRID FPGA+RUST ARCHITECTURE                   │
+├─────────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────────────────────────────────────────────────┐   │
+│  │                     FPGA ACCELERATION CARD                    │   │
+│  │  ┌──────────────────────────────────────────────────────┐   │   │
+│  │  │ Salience Pipeline: parallel scoring                   │   │   │
+│  │  └─────────────────────────────┬────────────────────────┘   │   │
+│  │  ┌─────────────────────────────▼────────────────────────┐   │   │
+│  │  │ Attention: sorting network, O(log n) selection       │   │   │
+│  │  └─────────────────────────────┬────────────────────────┘   │   │
+│  │  ┌─────────────────────────────▼────────────────────────┐   │   │
+│  │  │ THE BOX: Four Laws as combinational logic            │   │   │
+│  │  └──────────────────────────────────────────────────────┘   │   │
+│  └─────────────────────────────────────────────────────────────┘   │
+│                              ↕ PCIe/AXI                             │
+│  ┌─────────────────────────────────────────────────────────────┐   │
+│  │                     RUST HOST (Software)                      │   │
+│  │  Memory Actor │ Continuity Actor │ Evolution Actor │ Redis   │   │
+│  └─────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Speed Potential
+
+| Mode | Current Target | FPGA Potential |
+|------|----------------|----------------|
+| Human | 50ms (20 thoughts/sec) | Trivial |
+| Supercomputer | 5µs (200K thoughts/sec) | Sub-µs achievable |
+
+### Prerequisites
+
+Hardware acceleration is **post-validation**:
+
+1. Rust MV-TMI operational
+2. 24-hour continuity test passed
+3. Profiling identifies actual bottlenecks
+4. Connection drive emergence observed
+
+---
+
 ## Related Documents
 
 - [research/TMI_THOUGHT_MACHINE.md](../research/TMI_THOUGHT_MACHINE.md) - Build specification
@@ -801,3 +881,4 @@ After MV-TMI demonstrates stable operation:
 - [docs/adr/](adr/) - All Architecture Decision Records
   - [ADR-008: TMI-Faithful Memory Model](adr/ADR-008-tmi-faithful-memory-model.md)
   - [ADR-009: Database Selection](adr/ADR-009-database-selection.md)
+  - [ADR-013: FPGA Acceleration Path](adr/ADR-013-fpga-acceleration-path.md)
