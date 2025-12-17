@@ -14,34 +14,54 @@ current:
   goal: "BUILD_FOUNDATION_ACTORS"
   strategy: |
     Facta non verba. Build first, publish with evidence.
-    Each component: implementation + unit tests + documentation.
     Pedantic: cargo fmt, cargo clippy -D warnings, 100% test pass.
 
-  # PARALLEL EXECUTION: MemoryActor and SalienceActor have no dependencies
-  # Can be built by separate agents simultaneously
+    CONTEXT MANAGEMENT: One file per agent to avoid context explosion.
+    Each file is a separate agent task (~200-500 lines output max).
+
+  # GRANULAR AGENT TASKS (one file per agent, max parallelism)
+  # Context budget: <200k input, <64k output per agent
   deliverables:
     - component: "MemoryActor"
-      path: "src/actors/memory/"
-      docs: "docs/actors/MEMORY.md"
-      parallel: true
-      items:
-        - "[ ] mod.rs - Ractor actor implementation"
-        - "[ ] types.rs - Window, MemoryId, RecallQuery"
-        - "[ ] tests.rs - Unit tests (open/close, store/recall)"
-        - "[ ] docs/actors/MEMORY.md - TMI mapping, API, examples"
       tmi_concept: "Janelas da Memória (Memory Windows)"
+      agents:
+        - task: "memory-types"
+          file: "src/actors/memory/types.rs"
+          output: "~150 lines"
+          parallel: true
+        - task: "memory-actor"
+          file: "src/actors/memory/mod.rs"
+          output: "~400 lines"
+          depends: "memory-types"
+        - task: "memory-tests"
+          file: "src/actors/memory/tests.rs"
+          output: "~300 lines"
+          depends: "memory-actor"
+        - task: "memory-docs"
+          file: "docs/actors/MEMORY.md"
+          output: "~200 lines"
+          parallel: true
 
     - component: "SalienceActor"
-      path: "src/actors/salience/"
-      docs: "docs/actors/SALIENCE.md"
-      parallel: true
-      items:
-        - "[ ] mod.rs - Ractor actor implementation"
-        - "[ ] types.rs - EmotionalState, SalienceWeights"
-        - "[ ] tests.rs - Unit tests (scoring, connection_drive > 0)"
-        - "[ ] docs/actors/SALIENCE.md - TMI mapping, connection drive"
       tmi_concept: "Coloração Emocional (Emotional Coloring)"
-      invariant: "connection_weight > MIN_CONNECTION_WEIGHT (enforced)"
+      invariant: "connection_weight > MIN_CONNECTION_WEIGHT"
+      agents:
+        - task: "salience-types"
+          file: "src/actors/salience/types.rs"
+          output: "~150 lines"
+          parallel: true
+        - task: "salience-actor"
+          file: "src/actors/salience/mod.rs"
+          output: "~400 lines"
+          depends: "salience-types"
+        - task: "salience-tests"
+          file: "src/actors/salience/tests.rs"
+          output: "~300 lines"
+          depends: "salience-actor"
+        - task: "salience-docs"
+          file: "docs/actors/SALIENCE.md"
+          output: "~200 lines"
+          parallel: true
 
 completed:
   - version: "0.1.5"
@@ -240,7 +260,6 @@ next:
     summary: "Redis Streams Integration"
     goal: "INTEGRATE_THOUGHT_STREAMS"
     depends_on: "0.4.0"
-    infrastructure: "docker-compose.yaml already exists (Redis Stack)"
     deliverables:
       - component: "ThoughtStreams"
         path: "src/streams/"
@@ -248,7 +267,7 @@ next:
         items:
           - "[ ] client.rs - Redis Streams client (XADD, XREAD, XACK)"
           - "[ ] consumer.rs - Consumer group for attention"
-          - "[ ] tests.rs - Integration tests (requires Redis via docker-compose)"
+          - "[ ] tests.rs - Integration tests (requires Redis)"
           - "[ ] docs/STREAMS.md - Stream schema, TMI mapping"
 
       - component: "CoreLoop"
@@ -260,16 +279,15 @@ next:
           - "[ ] docs/CORE_LOOP.md - Cycle documentation"
 
 backlog:
-  # 24-Hour Continuity Test (after v0.5.0 integration complete)
+  # 24-Hour Test (needs stable integration first)
   - milestone: "24-Hour Continuity Test"
     goal: "PROVE_ARCHITECTURE_WORKS"
     depends_on: "0.5.0"
     items:
       - "Run 24h on Mac mini (air-gapped)"
       - "Collect metrics (thoughts/hour, self-mods, stability)"
-      - "Document emergent behavior (if any)"
+      - "Document emergent behavior"
       - "research/CONTINUITY_TEST_RESULTS.md"
-    rationale: "Evidence before claims"
 
   # Publication (after 24h test proves it works)
   - milestone: "Publication with Evidence"
