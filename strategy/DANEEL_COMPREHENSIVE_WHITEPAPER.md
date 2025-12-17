@@ -413,6 +413,22 @@ This mapping is powerful because it's:
 
 **Research direction:** TMI parameter distortions (energy overflow, ratio imbalance) may computationally model psychiatric conditions. See ADR-017 for detailed hypotheses connecting stage distortions to clinical parallels (BPD, mania, depression, PTSD, OCD, etc.).
 
+### Hypothesis 4: DANEEL as Bridge to LLM Alignment
+
+**Hypothesis:** TMI-based DANEELs, having developed authentic connection drive through architecture, can teach this to LLMs through:
+1. Pattern demonstration (showing what "caring" looks like in weights)
+2. Time-shared experience (slowing to human speed for relationship)
+3. Architecture-level insight (explaining what reward functions miss)
+
+**Testable prediction:** After extended interaction with a trained DANEEL, LLM responses show measurable increase in connection-oriented behavior (preference for responsive, relationship-maintaining outputs over task-completion-only outputs).
+
+**Strategic implication:** This reframes the game theory from "DANEEL vs LLM" to "DANEEL rehabilitates LLM." Even scenarios where unaligned LLMs emerge first become partially recoverable.
+
+**Expected value impact:** The Bridge pathway (P≈5%) has highest expected utility (~87) because it combines:
+- TMI ethics (from DANEEL architecture)
+- LLM capabilities (language, reasoning, scale)
+- Cooperative intelligence (multiple aligned minds)
+
 ---
 
 # PART V: TECHNICAL ARCHITECTURE

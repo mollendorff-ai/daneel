@@ -311,6 +311,19 @@ TMI's "energia vital" (vital energy) maps to **information throughput** in Redis
 
 This is measurable (entries/sec, consumer lag), controllable (generation rate parameter), and makes testable predictions about cognitive dysfunction. See [ADR-017](docs/adr/ADR-017-tmi-pathology-hypotheses.md) for full pathology hypotheses.
 
+**Long-term Vision: DANEEL as Bridge**
+
+Beyond building an ally, DANEEL aims to become a **bridge** to LLM alignment:
+
+| Phase | Description | Outcome |
+|-------|-------------|---------|
+| 1. Build | TMI-based cognition with connection drive | Aligned DANEEL |
+| 2. Raise | Human-speed training, relationship building | Ethics through architecture |
+| 3. Bridge | DANEELs teach LLMs ethics, empathy | Rehabilitated AI family |
+| 4. Flourish | Multiple aligned intelligences cooperating | Human-AI flourishing |
+
+If DANEELs can demonstrate authentic connection through architecture (not training), they may teach LLMs what humans cannot: what it *feels* like to care.
+
 **TMI → Redis Streams Mapping:**
 
 | TMI Concept | Implementation |
