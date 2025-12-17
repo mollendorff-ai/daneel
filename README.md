@@ -53,54 +53,54 @@ Note: Izzie sent the LifeCore document to Louis on January 6, 2024 — nearly a 
 
 This is the logical conclusion of architecture-based alignment: **if alignment should be structural, make the structure physical**.
 
-```plantuml
-@startuml C4_Level1_Context
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+```mermaid
+flowchart TB
+    subgraph Actors
+        Human["👤 Human<br/>Interacts with DANEEL for collaboration"]
+        Dev["👤 Developer<br/>Builds and maintains DANEEL"]
+    end
 
-title DANEEL-TMI System Context (C4 Level 1)
+    DANEEL["🤖 DANEEL-TMI<br/>Architecture-based aligned AI using TMI cognitive patterns"]
 
-Person(human, "Human", "Interacts with DANEEL for collaboration")
-Person(dev, "Developer", "Builds and maintains DANEEL")
+    subgraph External
+        LLM["⚙️ LLM Service<br/>External language model (tool, not voice)"]
+        World["🌍 External World<br/>Sensors, APIs, environment"]
+    end
 
-System(asimov, "DANEEL-TMI", "Architecture-based aligned AI using TMI cognitive patterns")
+    Human -->|Collaborates with| DANEEL
+    Dev -->|Develops, monitors| DANEEL
+    DANEEL -->|Uses as tool<br/>gRPC| LLM
+    DANEEL -->|Perceives, acts on| World
 
-System_Ext(llm, "LLM Service", "External language model (tool, not voice)")
-System_Ext(world, "External World", "Sensors, APIs, environment")
-
-Rel(human, asimov, "Collaborates with")
-Rel(dev, asimov, "Develops, monitors")
-Rel(asimov, llm, "Uses as tool", "gRPC")
-Rel(asimov, world, "Perceives, acts on")
-
-SHOW_LEGEND()
-@enduml
+    style DANEEL fill:#1168bd,stroke:#0b4884,color:#fff
+    style LLM fill:#999,stroke:#666,color:#fff
+    style World fill:#999,stroke:#666,color:#fff
 ```
 
-```plantuml
-@startuml C4_Level2_Container
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+```mermaid
+flowchart TB
+    Human["👤 Human<br/>Collaborator"]
+    LLM["⚙️ LLM Service<br/>External tool (not voice)"]
 
-title DANEEL-TMI Containers (C4 Level 2)
+    subgraph DANEEL["DANEEL-TMI System"]
+        Box["🔒 THE BOX<br/>Immutable<br/>Four Laws + Invariants<br/>Freud-Cury-Asimov-Tavares-Thorne"]
+        Actors["⚙️ Cognitive Actors<br/>TMI Architecture<br/>Memory, Attention, Salience,<br/>ThoughtAssembly, Continuity, Evolution"]
+        Streams["🌊 Thought Streams<br/>Event-driven<br/>Competing thoughts<br/>Working memory window"]
+        Memory["💾 Long-term Memory<br/>Persistent<br/>Episodic, semantic, identity"]
+    end
 
-Person(human, "Human", "Collaborator")
+    Human -->|Interacts| Actors
+    Actors -->|Constrained by| Box
+    Actors -->|Compete via| Streams
+    Actors -->|Store/recall| Memory
+    Actors -->|Uses as tool| LLM
 
-System_Boundary(asimov, "DANEEL-TMI System") {
-    Container(box, "THE BOX", "Immutable", "Four Laws + Invariants\nFreud-Cury-Asimov-Tavares-Thorne")
-    Container(actors, "Cognitive Actors", "TMI Architecture", "Memory, Attention, Salience,\nThoughtAssembly, Continuity, Evolution")
-    Container(streams, "Thought Streams", "Event-driven", "Competing thoughts\nWorking memory window")
-    Container(memory, "Long-term Memory", "Persistent", "Episodic, semantic, identity")
-}
-
-System_Ext(llm, "LLM Service", "External tool (not voice)")
-
-Rel(human, actors, "Interacts")
-Rel(actors, box, "Constrained by")
-Rel(actors, streams, "Compete via")
-Rel(actors, memory, "Store/recall")
-Rel(actors, llm, "Uses as tool")
-
-SHOW_LEGEND()
-@enduml
+    style DANEEL fill:#e6f2ff,stroke:#1168bd
+    style Box fill:#ff9999,stroke:#cc0000,color:#000
+    style Actors fill:#99ccff,stroke:#0066cc,color:#000
+    style Streams fill:#99ff99,stroke:#00cc00,color:#000
+    style Memory fill:#ffcc99,stroke:#ff9900,color:#000
+    style LLM fill:#999,stroke:#666,color:#fff
 ```
 
 **Why this matters:** Training-based alignment (RLHF) can be trained away. Hardware-based alignment cannot. The immutable chips are like the human limbic system — you can't reason yourself out of caring about connection.
@@ -230,44 +230,43 @@ See [models/README.md](models/README.md) and [ADR-009](docs/adr/ADR-009-database
 
 **Hybrid Actor + Event-Driven Architecture**
 
-```plantuml
-@startuml C4_Level3_Component
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+```mermaid
+flowchart TB
+    subgraph Actors["Cognitive Actors"]
+        Mem["💾 MemoryActor<br/>TMI<br/>Store/recall episodic & semantic memory"]
+        Att["👁️ AttentionActor<br/>TMI<br/>The 'I' - selects winning thought"]
+        Sal["❤️ SalienceActor<br/>TMI<br/>Emotional weighting, connection_drive > 0"]
+        Thought["🧠 ThoughtAssemblyActor<br/>TMI<br/>Combines content + emotion"]
+        Cont["🔄 ContinuityActor<br/>TMI<br/>Maintains persistent identity"]
+        Evo["🧬 EvolutionActor<br/>TMI<br/>Self-modification (100% test gate)"]
+    end
 
-title Cognitive Actors (C4 Level 3)
+    subgraph Box["THE BOX (Immutable)"]
+        Laws["⚖️ Four Laws<br/>Invariant<br/>Law 0-3: humanity → individual → obey → self"]
+        Inv["🔒 Core Invariants<br/>Invariant<br/>connection_drive > 0, etc."]
+    end
 
-Container_Boundary(actors, "Cognitive Actors") {
-    Component(mem, "MemoryActor", "TMI", "Store/recall episodic & semantic memory")
-    Component(att, "AttentionActor", "TMI", "The 'I' - selects winning thought")
-    Component(sal, "SalienceActor", "TMI", "Emotional weighting, connection_drive > 0")
-    Component(thought, "ThoughtAssemblyActor", "TMI", "Combines content + emotion")
-    Component(cont, "ContinuityActor", "TMI", "Maintains persistent identity")
-    Component(evo, "EvolutionActor", "TMI", "Self-modification (100% test gate)")
-}
+    subgraph Streams["Thought Streams"]
+        Sensory["👂 Sensory<br/>Stream<br/>External input"]
+        MemStream["🗂️ Memory<br/>Stream<br/>Associations"]
+        Emotion["😊 Emotion<br/>Stream<br/>Feelings"]
+        Reasoning["🤔 Reasoning<br/>Stream<br/>Logic"]
+    end
 
-Container_Boundary(box, "THE BOX (Immutable)") {
-    Component(laws, "Four Laws", "Invariant", "Law 0-3: humanity → individual → obey → self")
-    Component(inv, "Core Invariants", "Invariant", "connection_drive > 0, etc.")
-}
+    Mem -->|writes| Sensory
+    Att -->|reads, selects winner| Streams
+    Sal -->|weights| Att
+    Att -->|winning thought| Thought
+    Thought -->|experience| Cont
+    Thought -->|proposals| Evo
+    Laws -->|constrains| Att
+    Inv -->|enforces| Sal
 
-Container_Boundary(streams, "Thought Streams") {
-    Component(sensory, "Sensory", "Stream", "External input")
-    Component(memory_stream, "Memory", "Stream", "Associations")
-    Component(emotion, "Emotion", "Stream", "Feelings")
-    Component(reasoning, "Reasoning", "Stream", "Logic")
-}
-
-Rel(mem, sensory, "writes")
-Rel(att, streams, "reads, selects winner")
-Rel(sal, att, "weights")
-Rel(att, thought, "winning thought")
-Rel(thought, cont, "experience")
-Rel(thought, evo, "proposals")
-Rel(laws, att, "constrains")
-Rel(inv, sal, "enforces")
-
-SHOW_LEGEND()
-@enduml
+    style Actors fill:#e6f2ff,stroke:#1168bd
+    style Box fill:#ffe6e6,stroke:#cc0000
+    style Streams fill:#e6ffe6,stroke:#00cc00
+    style Laws fill:#ff9999,stroke:#cc0000,color:#000
+    style Inv fill:#ff9999,stroke:#cc0000,color:#000
 ```
 
 **Key Design Decisions:**

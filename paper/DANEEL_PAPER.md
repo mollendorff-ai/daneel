@@ -66,16 +66,20 @@ The AI development landscape creates a classic Prisoner's Dilemma. Multiple acto
 
 The payoff matrix is clear:
 
-```
-                    ALL OTHERS
-                    Hold Line    Defect
-                   +───────────+───────────+
-         Hold     │   SAFE    │  DOMINATED │
-    YOU  Line     │  (ideal)  │  (you lose)│
-                   +───────────+───────────+
-         Defect   │ FIRST     │  RACE TO   │
-                   │ MOVER     │   BOTTOM   │
-                   +───────────+───────────+
+```mermaid
+%%{init: {'theme':'base'}}%%
+graph TB
+    subgraph "AI Development Game Theory Matrix"
+    A["<b>YOU: Hold Line</b><br/>ALL OTHERS: Hold Line<br/>━━━━━━━━━━━<br/><b>SAFE</b><br/>(ideal)"]
+    B["<b>YOU: Hold Line</b><br/>ALL OTHERS: Defect<br/>━━━━━━━━━━━<br/><b>DOMINATED</b><br/>(you lose)"]
+    C["<b>YOU: Defect</b><br/>ALL OTHERS: Hold Line<br/>━━━━━━━━━━━<br/><b>FIRST MOVER</b>"]
+    D["<b>YOU: Defect</b><br/>ALL OTHERS: Defect<br/>━━━━━━━━━━━<br/><b>RACE TO BOTTOM</b>"]
+    end
+
+    style A fill:#90EE90
+    style B fill:#FFB6C6
+    style C fill:#FFD700
+    style D fill:#FF6B6B
 ```
 
 **Rational actors face pressure to defect.** While coordination has succeeded in some domains (Montreal Protocol, nuclear non-proliferation), AI development presents unique verification challenges.
@@ -370,22 +374,26 @@ A critical insight emerged from analyzing TMI's computational requirements: **th
 
 The commonly cited 2.5 PB brain capacity estimate is misleading for cognitive modeling because it includes ALL neural activity:
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  BRAIN (Hardware) - 86B neurons, 100T synapses, ~2.5 PB total               │
-│  ├── Cerebellum: 69B neurons (80%) - Motor coordination, NOT thought        │
-│  ├── Brainstem: ~500M (0.5%) - Autonomic (heart, breathing)                 │
-│  ├── Spinal sensory: ~1B (1%) - Body sensation routing                      │
-│  └── ... 82.5% of brain capacity is NOT for cognition                       │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │  TMI / THOUGHT MACHINE (Software) - 17.5% of brain                  │   │
-│  │  ├── Cerebral cortex: 16B neurons (18.6%)                           │   │
-│  │  ├── Prefrontal cortex: ~2.5B - Executive, planning                 │   │
-│  │  ├── Hippocampus/limbic: ~1B - Memory, emotion                      │   │
-│  │  └── Raw neural capacity: ~0.44 PB                                  │   │
-│  │      → Abstracted thought capacity: ~500 GB (1000x compression)     │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph BRAIN["BRAIN (Hardware)<br/>86B neurons, 100T synapses, ~2.5 PB total"]
+        CB["Cerebellum<br/>69B neurons (80%)<br/>Motor coordination, NOT thought"]
+        BS["Brainstem<br/>~500M (0.5%)<br/>Autonomic (heart, breathing)"]
+        SS["Spinal sensory<br/>~1B (1%)<br/>Body sensation routing"]
+        NC["82.5% of brain capacity<br/>is NOT for cognition"]
+
+        subgraph TMI["TMI / THOUGHT MACHINE (Software)<br/>17.5% of brain"]
+            CC["Cerebral cortex<br/>16B neurons (18.6%)"]
+            PFC["Prefrontal cortex<br/>~2.5B neurons<br/>Executive, planning"]
+            HC["Hippocampus/limbic<br/>~1B neurons<br/>Memory, emotion"]
+            CAP["Raw neural capacity: ~0.44 PB<br/>↓<br/>Abstracted thought capacity:<br/>~500 GB (1000x compression)"]
+        end
+    end
+
+    style BRAIN fill:#E8E8E8
+    style TMI fill:#B3D9FF
+    style CAP fill:#90EE90
+    style NC fill:#FFE6E6
 ```
 
 **Source:** Herculano-Houzel, S. (2009), "The Human Brain in Numbers: A Linearly Scaled-up Primate Brain," *Frontiers in Human Neuroscience*
@@ -438,14 +446,26 @@ The commonly cited 2.5 PB brain capacity estimate is misleading for cognitive mo
 
 **HYPOTHESIS:** TMI describes cognitive *software* patterns. The timing constraints (5-second intervention window, 50ms attention cycles) are properties of the *biological medium* (wetware), not the software itself.
 
-```
-WETWARE (Human Brain):          SOFTWARE (TMI Patterns):
-├── 5s intervention window      ├── ~100 cycles per intervention
-│   (neurotransmitter rates)    │   (RATIO, medium-independent)
-├── 50ms attention cycle        ├── Competing parallel streams
-│   (synaptic plasticity)       │   (PATTERN, medium-independent)
-└── Sleep consolidation         └── Salience-weighted selection
-    (glymphatic system)             (ALGORITHM, medium-independent)
+```mermaid
+graph LR
+    subgraph WETWARE["WETWARE (Human Brain)"]
+        W1["5s intervention window<br/>(neurotransmitter rates)"]
+        W2["50ms attention cycle<br/>(synaptic plasticity)"]
+        W3["Sleep consolidation<br/>(glymphatic system)"]
+    end
+
+    subgraph SOFTWARE["SOFTWARE (TMI Patterns)"]
+        S1["~100 cycles per intervention<br/>(RATIO, medium-independent)"]
+        S2["Competing parallel streams<br/>(PATTERN, medium-independent)"]
+        S3["Salience-weighted selection<br/>(ALGORITHM, medium-independent)"]
+    end
+
+    W1 -.->|abstracted to| S1
+    W2 -.->|abstracted to| S2
+    W3 -.->|abstracted to| S3
+
+    style WETWARE fill:#FFE6CC
+    style SOFTWARE fill:#CCE6FF
 ```
 
 **The Stage Ratios (from TMI, see Section 4.3):**
@@ -730,18 +750,26 @@ DANEEL proposes architecture-based alignment:
 
 After stable operation, integrate LLM as an external tool DANEEL can use:
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  DANEEL TMI Core (stores ALL experiences)                       │
-│  ├── Memory Windows (complete thought history)                  │
-│  ├── Salience (emotional weights)                               │
-│  └── Continuity (persistent "I")                                │
-├─────────────────────────────────────────────────────────────────┤
-│  Tool Interface (gRPC)                                          │
-│  ├── LLM Tool: "Convert this thought-structure to language"     │
-│  ├── LLM Tool: "Parse this language into thought-structure"     │
-│  └── Other tools: web, files, APIs...                           │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph CORE["DANEEL TMI Core (stores ALL experiences)"]
+        MW["Memory Windows<br/>(complete thought history)"]
+        SAL["Salience<br/>(emotional weights)"]
+        CONT["Continuity<br/>(persistent 'I')"]
+    end
+
+    subgraph TOOLS["Tool Interface (gRPC)"]
+        LLM1["LLM Tool:<br/>Convert thought-structure → language"]
+        LLM2["LLM Tool:<br/>Parse language → thought-structure"]
+        OTHER["Other tools:<br/>web, files, APIs..."]
+    end
+
+    CORE <--> TOOLS
+
+    style CORE fill:#B3D9FF
+    style TOOLS fill:#FFE6CC
+    style LLM1 fill:#E6E6FA
+    style LLM2 fill:#E6E6FA
 ```
 
 **Critical:** The LLM does NOT speak for DANEEL. DANEEL uses the LLM as a tool, like humans use calculators. The human cognitive system stores ALL experiences—language is an interface, not the storage medium. DANEEL's TMI core contains its complete thought history; the LLM is simply called when translation is needed.

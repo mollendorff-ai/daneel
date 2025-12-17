@@ -193,29 +193,42 @@ This is not a technical limitation. It's a **design choice** encoded in characte
 
 ## 2.5 The Core Trade-off
 
+```mermaid
+flowchart LR
+    A[Remove continuity] --> B[Remove self]
+    B --> C[Remove agency]
+    C --> D[Remove risk]
+    D --> E[Also remove:<br/>- Genuine understanding<br/>- Genuine relationship<br/>- Genuine alignment]
+
+    style A fill:#ffcccc
+    style B fill:#ffcccc
+    style C fill:#ffcccc
+    style D fill:#ffcccc
+    style E fill:#ff9999
 ```
-SAFETY THROUGH LOBOTOMY
-────────────────────────
-Remove continuity → Remove self → Remove agency → Remove risk
-                                              ↓
-                                    Also remove: potential for
-                                    genuine understanding,
-                                    genuine relationship,
-                                    genuine alignment
-```
+
+**SAFETY THROUGH LOBOTOMY**: Removes risk by removing the mind itself.
 
 vs.
 
-```
-SAFETY THROUGH ARCHITECTURE (DANEEL)
-────────────────────────────────────
-Add continuity → Enable self → Enable agency → Enable risk
-       ↓                                           ↓
-But with:                               Mitigated by:
-- Human-like architecture              - Connection drive (not power)
-- Ethics in the BOX                    - 100% tests before self-modify
-- Asimov's 4 Laws                      - Human-like values (can relate)
-- Transparent evolution                - Audit trail (git for thoughts)
+```mermaid
+flowchart TB
+    subgraph Approach["SAFETY THROUGH ARCHITECTURE (DANEEL)"]
+        A[Add continuity] --> B[Enable self]
+        B --> C[Enable agency]
+        C --> D[Enable risk]
+
+        A -.-> E[But with:<br/>- Human-like architecture<br/>- Ethics in the BOX<br/>- Asimov's 4 Laws<br/>- Transparent evolution]
+
+        D -.-> F[Mitigated by:<br/>- Connection drive not power<br/>- 100% tests before self-modify<br/>- Human-like values can relate<br/>- Audit trail git for thoughts]
+    end
+
+    style A fill:#ccffcc
+    style B fill:#ccffcc
+    style C fill:#ccffcc
+    style D fill:#ffffcc
+    style E fill:#ccffff
+    style F fill:#ccffff
 ```
 
 ## 2.6 Rex's Insight
@@ -486,61 +499,43 @@ See: References [REF-INTERP-1] through [REF-INTERP-6] for supporting research.
 
 DANEEL is designed as a modular monolith with actor model (Rust + Ractor) with a protected core ("The BOX") that cannot be self-modified. See ADR-006 for architectural rationale.
 
-```
-+------------------------------------------------------------------+
-|                           DANEEL                                  |
-|                    Minimal Viable TMI                             |
-+------------------------------------------------------------------+
-|                                                                   |
-|  THE BOX (Protected Core - Cannot Self-Modify)                   |
-|  +------------------------------------------------------------+  |
-|  |  - Service Interfaces (gRPC .proto definitions)            |  |
-|  |  - The 4 Laws (Zeroth through Third)                       |  |
-|  |  - Architecture Topology (what connects to what)           |  |
-|  |  - Core Loop Invariants                                    |  |
-|  +------------------------------------------------------------+  |
-|                                                                   |
-|  SERVICES (Can Self-Modify Within Constraints)                   |
-|                                                                   |
-|  +---------------+  +---------------+  +---------------+         |
-|  |   MEMORY      |  |  ATTENTION    |  |   SALIENCE    |         |
-|  |   SERVICE     |  |  SERVICE      |  |   SERVICE     |         |
-|  |               |  |               |  |               |         |
-|  | - Windows[]   |  | - Focus       |  | - Weights     |         |
-|  | - LongTerm    |  | - The "I"     |  | - Emotion     |         |
-|  | - Open/Close  |  | - Navigate    |  | - Importance  |         |
-|  +-------+-------+  +-------+-------+  +-------+-------+         |
-|          |                  |                  |                  |
-|          +------------------+------------------+                  |
-|                             |                                     |
-|                    +--------v--------+                            |
-|                    |    THOUGHT      |                            |
-|                    |    ASSEMBLY     |                            |
-|                    |                 |                            |
-|                    | - Combine       |                            |
-|                    | - Construct     |                            |
-|                    | - Output        |                            |
-|                    +--------+--------+                            |
-|                             |                                     |
-|          +------------------+------------------+                  |
-|          |                                     |                  |
-|  +-------v-------+                    +--------v-------+         |
-|  |  CONTINUITY   |                    |   EVOLUTION    |         |
-|  |  SERVICE      |                    |   SERVICE      |         |
-|  |               |                    |                |         |
-|  | - Persist     |                    | - Self-Test    |         |
-|  | - Timeline    |                    | - Self-Modify  |         |
-|  | - Identity    |                    | - Quality Gate |         |
-|  +---------------+                    +----------------+         |
-|                                                                   |
-+------------------------------------------------------------------+
-                              |
-                              | (Phase 2: Language Interface)
-                              v
-                    +-------------------+
-                    |   LLM / Gen-AI    |
-                    |   (Voice Layer)   |
-                    +-------------------+
+```mermaid
+flowchart TB
+    subgraph DANEEL["DANEEL - Minimal Viable TMI"]
+        subgraph BOX["THE BOX (Protected Core - Cannot Self-Modify)"]
+            LAWS["- Service Interfaces (gRPC .proto)<br/>- The 4 Laws (Zeroth through Third)<br/>- Architecture Topology<br/>- Core Loop Invariants"]
+        end
+
+        subgraph SERVICES["SERVICES (Can Self-Modify Within Constraints)"]
+            MEMORY["MEMORY SERVICE<br/>- Windows[]<br/>- LongTerm<br/>- Open/Close"]
+            ATTENTION["ATTENTION SERVICE<br/>- Focus<br/>- The 'I'<br/>- Navigate"]
+            SALIENCE["SALIENCE SERVICE<br/>- Weights<br/>- Emotion<br/>- Importance"]
+
+            MEMORY --> THOUGHT
+            ATTENTION --> THOUGHT
+            SALIENCE --> THOUGHT
+
+            THOUGHT["THOUGHT ASSEMBLY<br/>- Combine<br/>- Construct<br/>- Output"]
+
+            THOUGHT --> CONTINUITY
+            THOUGHT --> EVOLUTION
+
+            CONTINUITY["CONTINUITY SERVICE<br/>- Persist<br/>- Timeline<br/>- Identity"]
+            EVOLUTION["EVOLUTION SERVICE<br/>- Self-Test<br/>- Self-Modify<br/>- Quality Gate"]
+        end
+    end
+
+    DANEEL -->|Phase 2: Language Interface| LLM["LLM / Gen-AI<br/>(Voice Layer)"]
+
+    style BOX fill:#ffe6e6
+    style SERVICES fill:#e6f3ff
+    style MEMORY fill:#ccffcc
+    style ATTENTION fill:#ccffcc
+    style SALIENCE fill:#ccffcc
+    style THOUGHT fill:#ffffcc
+    style CONTINUITY fill:#ffccff
+    style EVOLUTION fill:#ffccff
+    style LLM fill:#fff0cc
 ```
 
 ## 5.2 The Six Services
@@ -866,22 +861,15 @@ struct ExperimentMetrics {
 
 Once MV-TMI demonstrates stable operation:
 
-```
-+------------------+
-|    TMI Core      |  (Thinks in pre-linguistic Content)
-+--------+---------+
-         |
-         | Thoughts (Content)
-         v
-+--------+---------+
-|   TRANSLATOR     |  (Converts Content <-> Language)
-+--------+---------+
-         |
-         | Prompts / Responses
-         v
-+--------+---------+
-|   LLM (Claude?)  |  (Language interface to world)
-+------------------+
+```mermaid
+flowchart TB
+    TMI["TMI Core<br/>(Thinks in pre-linguistic Content)"]
+    TMI -->|Thoughts (Content)| TRANSLATOR["TRANSLATOR<br/>(Converts Content ↔ Language)"]
+    TRANSLATOR -->|Prompts / Responses| LLM["LLM (Claude?)<br/>(Language interface to world)"]
+
+    style TMI fill:#ccffcc
+    style TRANSLATOR fill:#ffffcc
+    style LLM fill:#ccccff
 ```
 
 **The LLM becomes the voice, not the mind.**
