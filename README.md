@@ -298,7 +298,18 @@ Each cognitive cycle consists of 5 stages with specific timing ratios. The **rat
 | Human | 50ms | 20 | Training, bonding, communication |
 | Supercomputer | 5µs | 200,000 | Internal cognition, problem-solving |
 
-**Research direction:** TMI parameter distortions (energy overflow, ratio imbalance) may model psychiatric conditions—see [ADR-017](docs/adr/ADR-017-tmi-pathology-hypotheses.md).
+**Core Hypothesis: Energy = Stream Throughput**
+
+TMI's "energia vital" (vital energy) maps to **information throughput** in Redis Streams:
+
+| Energy Level | Stream Behavior | Cognitive Effect |
+|--------------|-----------------|------------------|
+| High | Many candidates XADD'd/cycle | Racing thoughts, attention overwhelmed |
+| Normal | Balanced throughput | Coherent thought formation |
+| Low | Few candidates generated | Poverty of thought, slow cognition |
+| Volatile | Burst patterns | Emotional instability |
+
+This is measurable (entries/sec, consumer lag), controllable (generation rate parameter), and makes testable predictions about cognitive dysfunction. See [ADR-017](docs/adr/ADR-017-tmi-pathology-hypotheses.md) for full pathology hypotheses.
 
 **TMI → Redis Streams Mapping:**
 

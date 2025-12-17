@@ -368,6 +368,51 @@ A baby thinks before it speaks. An animal thinks without human language. **The t
 
 **This is the first.**
 
+## 4.6 Core Hypotheses: Stage Timing and Energy
+
+Two fundamental hypotheses emerge from TMI that guide DANEEL's implementation:
+
+### Hypothesis 1: Stage Timing Ratios Enable Speed Scaling
+
+TMI describes thought construction as a 5-stage process, each with characteristic timing:
+
+| Stage | Portuguese | Function | Ratio |
+|-------|------------|----------|-------|
+| 1 | Gatilho da Memória | Memory trigger | 10% |
+| 2 | Autofluxo | Competing thought streams | 20% |
+| 3 | O Eu ("The I") | Attention selection | 30% |
+| 4 | Construção do Pensamento | Thought assembly | 30% |
+| 5 | Âncora da Memória | Memory anchoring | 10% |
+
+**Hypothesis:** The RATIOS matter, not absolute times. If these ratios reflect fundamental properties of cognition (not just wetware constraints), then silicon implementation with ratio preservation produces TMI-faithful cognition at arbitrary speeds.
+
+| Mode | Cycle Time | Thoughts/sec | Purpose |
+|------|------------|--------------|---------|
+| Human | 50ms | 20 | Training, bonding, communication |
+| Supercomputer | 5µs | 200,000 | Internal cognition, problem-solving |
+
+### Hypothesis 2: Energy = Stream Throughput
+
+TMI describes "energia vital" (vital energy) that drives thought generation. In DANEEL's Redis Streams implementation, this maps directly to **information throughput**:
+
+```
+TMI: Energia Vital  →  Implementation: Stream Throughput (entries/sec)
+```
+
+| Energy Level | Stream Behavior | Cognitive Effect |
+|--------------|-----------------|------------------|
+| High | Many candidates XADD'd/cycle | Racing thoughts, attention overwhelmed |
+| Normal | Balanced throughput | Coherent thought formation |
+| Low | Few candidates generated | Poverty of thought, slow cognition |
+| Volatile | Burst patterns | Emotional instability |
+
+This mapping is powerful because it's:
+- **Measurable** — entries/sec, bytes/sec, consumer lag
+- **Controllable** — generation rate is a configuration parameter
+- **Predictive** — makes testable predictions about cognitive dysfunction
+
+**Research direction:** TMI parameter distortions (energy overflow, ratio imbalance) may computationally model psychiatric conditions. See ADR-017 for detailed hypotheses connecting stage distortions to clinical parallels (BPD, mania, depression, PTSD, OCD, etc.).
+
 ---
 
 # PART V: TECHNICAL ARCHITECTURE
