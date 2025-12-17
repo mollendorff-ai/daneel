@@ -757,18 +757,24 @@ This is analogous to how a human's brain stores experiences, and language is a t
 
 TMI provides not only a model of healthy cognition but also a framework for understanding cognitive dysfunction. Two research directions emerge:
 
-**Hypothesis A: Energy Overflow**
+**Hypothesis A: Energy Overflow (Energy = Stream Throughput)**
 
-TMI describes a "vital energy" (energia vital) that drives thought generation. Cury observes that excessive energy can overwhelm the cognitive system, producing pathological patterns.
+TMI describes a "vital energy" (energia vital) that drives thought generation. In DANEEL's implementation, this maps directly to **stream throughput**—the rate of information flow through Redis Streams:
 
-| Energy Pattern | Predicted Manifestation | Clinical Parallel |
-|---------------|------------------------|-------------------|
-| Volatile spikes | Emotional flooding | Borderline PD |
-| Sustained high | Racing thoughts | Mania |
-| Chronic elevation | Persistent rumination | Anxiety disorders |
-| Acute spikes | Thought cascades | Panic attacks |
+```
+TMI: Energia Vital  →  Implementation: Stream Throughput (entries/sec)
+```
 
-**Testable prediction:** Parameter `energy_level` above threshold X produces measurably chaotic thought patterns in DANEEL.
+| Energy Level | Stream Behavior | Cognitive Effect | Clinical Parallel |
+|--------------|-----------------|------------------|-------------------|
+| High | Many XADD'd/cycle | Racing thoughts | Mania |
+| Normal | Balanced throughput | Coherent thought | Healthy |
+| Low | Few candidates | Poverty of thought | Depression |
+| Volatile | Burst patterns | Emotional flooding | BPD |
+
+This mapping is powerful because it's **measurable** (entries/sec, consumer lag), **controllable** (generation rate parameter), and makes **testable predictions**.
+
+**Testable prediction:** When `candidates_per_cycle > overflow_threshold`, attention selection degrades measurably (increased selection time, winner instability, consumer lag).
 
 **Hypothesis B: Ratio Distortion**
 

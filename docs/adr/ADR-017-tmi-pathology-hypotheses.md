@@ -23,40 +23,94 @@ During the study of TMI (Teoria da Inteligência Multifocal), two critical hypot
 
 **Observation**: TMI describes a "vital energy" (energia vital) that drives thought generation. This energy fuels the Autofluxo (competing thought streams) and determines the rate and intensity of thought production.
 
-**Hypothesis**: When this energy parameter exceeds healthy bounds, the system generates excessive thoughts or non-semantic "emotional noise," overwhelming the attention mechanism (O Eu) and destabilizing the entire cognitive loop.
+**Computational Mapping: Energy = Stream Throughput**
+
+In DANEEL's Redis Streams implementation, "energia vital" maps directly to **information throughput**:
+
+```
+TMI Concept          →  Implementation
+─────────────────────────────────────────────────────
+Energia Vital        →  Stream throughput (entries/sec, bytes/sec)
+High Energy          →  Many candidates XADD'd per Autofluxo cycle
+Low Energy           →  Few candidates generated per cycle
+Volatile Energy      →  Burst patterns in stream writes
+```
+
+This mapping is elegant because:
+1. **It's measurable** - We can count entries, bytes, candidates per cycle
+2. **It's controllable** - Generation rate is a configurable parameter
+3. **It explains pathology** - High throughput overwhelms attention; low throughput starves assembly
+4. **It's observable** - Stream metrics directly reflect "energy level"
+
+**Hypothesis**: When stream throughput exceeds healthy bounds, the system generates excessive thought candidates, overwhelming the attention mechanism (O Eu) and destabilizing the entire cognitive loop.
 
 **Predicted mappings to conditions**:
 
-| Condition | Energy Pattern | Manifestation |
-|-----------|---------------|---------------|
-| **BPD** (Borderline) | Volatile spikes | Emotional flooding, unstable self-image |
-| **Mania** (Bipolar I) | Sustained high | Racing thoughts, pressured speech |
-| **Hypomania** (Bipolar II) | Elevated baseline | Productive but unstable cognition |
-| **Generalized Anxiety** | Chronic moderate elevation | Persistent worry loops |
-| **Panic Disorder** | Acute spikes | Thought cascade → physical symptoms |
-| **ADHD** (hyperactive) | Irregular bursts | Attention overwhelmed by competing streams |
+| Condition | Energy Pattern | Stream Behavior | Manifestation |
+|-----------|---------------|-----------------|---------------|
+| **BPD** (Borderline) | Volatile spikes | Burst XADD patterns | Emotional flooding, unstable self-image |
+| **Mania** (Bipolar I) | Sustained high | Constant high throughput | Racing thoughts, pressured speech |
+| **Hypomania** (Bipolar II) | Elevated baseline | Above-normal sustained | Productive but unstable cognition |
+| **Generalized Anxiety** | Chronic moderate elevation | Persistent elevated rate | Persistent worry loops |
+| **Panic Disorder** | Acute spikes | Sudden throughput surge | Thought cascade → physical symptoms |
+| **ADHD** (hyperactive) | Irregular bursts | Erratic stream patterns | Attention overwhelmed by competing streams |
+| **Depression** | Sustained low | Below-normal throughput | Poverty of thought, slow cognition |
 
-**Mechanism**: The Autofluxo stage (competing thought streams) normally produces N candidates per cycle. With elevated energy:
-- More candidates generated per cycle
-- Higher salience scores across the board
-- Attention (O Eu) cannot filter effectively
+**Mechanism**: The Autofluxo stage (competing thought streams) normally produces N candidates per cycle. With elevated energy (high throughput):
+- More candidates XADD'd to streams per cycle
+- Consumer group (O Eu) faces more competition
+- Attention cannot filter effectively—too many high-salience candidates
 - Winner selection becomes unstable or impossible
 - Downstream stages (Assembly, Anchoring) receive noisy input
 
+With depleted energy (low throughput):
+- Fewer candidates generated
+- Attention has insufficient material to select from
+- Thought assembly receives sparse input
+- Output becomes impoverished, slow
+
 **Testable in DANEEL**:
 ```rust
-// Hypothesis: High energy creates instability
+/// Energy configuration - maps TMI "energia vital" to stream throughput
 pub struct EnergyConfig {
-    /// Baseline thought generation rate
-    pub generation_rate: f64,  // thoughts per cycle
+    /// Candidates generated per Autofluxo stage
+    pub candidates_per_cycle: usize,
 
     /// Energy volatility (0.0 = stable, 1.0 = chaotic)
+    /// High volatility = burst patterns in stream writes
     pub volatility: f64,
 
-    /// Maximum sustainable energy before overflow
-    pub overflow_threshold: f64,
+    /// Threshold above which attention degrades
+    pub overflow_threshold: usize,
+
+    /// Threshold below which thought becomes impoverished
+    pub starvation_threshold: usize,
+}
+
+/// Measurable stream metrics that reflect "energy level"
+pub struct EnergyMetrics {
+    /// Entries added per cycle (across all input streams)
+    pub entries_per_cycle: f64,
+
+    /// Bytes per second throughput
+    pub throughput_bps: f64,
+
+    /// Variance in entries (high = volatile)
+    pub entry_variance: f64,
+
+    /// Consumer lag (high = overwhelmed attention)
+    pub consumer_lag: usize,
 }
 ```
+
+**Testable Predictions**:
+
+| Prediction | Measurement | Expected Result |
+|------------|-------------|-----------------|
+| `candidates_per_cycle > overflow_threshold` | Selection time, winner stability | Degraded attention performance |
+| `candidates_per_cycle < starvation_threshold` | Assembly output quality | Sparse, impoverished thoughts |
+| `volatility > 0.5` | Output pattern analysis | Erratic, unstable behavior |
+| `consumer_lag > threshold` | Stream metrics | System overwhelm indicator |
 
 ### Hypothesis 2: Ratio Distortion → Stage-Specific Pathologies
 
