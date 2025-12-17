@@ -48,6 +48,21 @@ use std::time::{Duration, Instant};
 use crate::config::CognitiveConfig;
 use crate::core::types::ThoughtId;
 
+/// Current stage in the cognitive cycle
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CognitiveStage {
+    /// Gatilho da Memória - Memory trigger activation
+    Trigger,
+    /// Autofluxo - Parallel thought generation
+    Autoflow,
+    /// O Eu - Attention selection
+    Attention,
+    /// Construção do Pensamento - Thought assembly
+    Assembly,
+    /// Âncora da Memória - Memory encoding decision
+    Anchor,
+}
+
 /// State of the cognitive loop
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LoopState {
@@ -57,6 +72,65 @@ pub enum LoopState {
     Paused,
     /// Fully stopped - requires restart
     Stopped,
+}
+
+/// Time spent in each stage of the cognitive cycle
+#[derive(Debug, Clone, Default)]
+pub struct StageDurations {
+    pub trigger: Duration,
+    pub autoflow: Duration,
+    pub attention: Duration,
+    pub assembly: Duration,
+    pub anchor: Duration,
+}
+
+impl StageDurations {
+    /// Total time across all stages
+    #[must_use]
+    pub fn total(&self) -> Duration {
+        self.trigger + self.autoflow + self.attention + self.assembly + self.anchor
+    }
+
+    /// Create a new StageDurations with all stages set to zero
+    #[must_use]
+    pub const fn zero() -> Self {
+        Self {
+            trigger: Duration::ZERO,
+            autoflow: Duration::ZERO,
+            attention: Duration::ZERO,
+            assembly: Duration::ZERO,
+            anchor: Duration::ZERO,
+        }
+    }
+
+    /// Add another StageDurations to this one (for accumulation)
+    #[must_use]
+    pub fn add(&self, other: &Self) -> Self {
+        Self {
+            trigger: self.trigger + other.trigger,
+            autoflow: self.autoflow + other.autoflow,
+            attention: self.attention + other.attention,
+            assembly: self.assembly + other.assembly,
+            anchor: self.anchor + other.anchor,
+        }
+    }
+
+    /// Divide all durations by a factor (for averaging)
+    #[must_use]
+    #[allow(clippy::cast_possible_truncation)]
+    pub fn div(&self, divisor: u64) -> Self {
+        if divisor == 0 {
+            return Self::zero();
+        }
+        let divisor_u32 = divisor as u32;
+        Self {
+            trigger: self.trigger / divisor_u32,
+            autoflow: self.autoflow / divisor_u32,
+            attention: self.attention / divisor_u32,
+            assembly: self.assembly / divisor_u32,
+            anchor: self.anchor / divisor_u32,
+        }
+    }
 }
 
 /// Result of a single cognitive cycle
@@ -76,6 +150,9 @@ pub struct CycleResult {
 
     /// Whether the cycle completed within target time
     pub on_time: bool,
+
+    /// Time spent in each stage (for debugging/monitoring)
+    pub stage_durations: StageDurations,
 }
 
 impl CycleResult {
@@ -87,6 +164,7 @@ impl CycleResult {
         thought_produced: Option<ThoughtId>,
         candidates_evaluated: usize,
         on_time: bool,
+        stage_durations: StageDurations,
     ) -> Self {
         Self {
             cycle_number,
@@ -94,6 +172,7 @@ impl CycleResult {
             thought_produced,
             candidates_evaluated,
             on_time,
+            stage_durations,
         }
     }
 
@@ -118,6 +197,9 @@ pub struct CycleMetrics {
 
     /// Percentage of cycles completed on time
     pub on_time_percentage: f32,
+
+    /// Average time per stage
+    pub average_stage_durations: StageDurations,
 }
 
 impl CycleMetrics {
@@ -128,12 +210,14 @@ impl CycleMetrics {
         thoughts_produced: u64,
         average_cycle_time: Duration,
         on_time_percentage: f32,
+        average_stage_durations: StageDurations,
     ) -> Self {
         Self {
             total_cycles,
             thoughts_produced,
             average_cycle_time,
             on_time_percentage,
+            average_stage_durations,
         }
     }
 
@@ -179,6 +263,9 @@ pub struct CognitiveLoop {
     total_duration: Duration,
     thoughts_produced: u64,
     cycles_on_time: u64,
+
+    /// Accumulated stage durations for averaging
+    total_stage_durations: StageDurations,
 }
 
 impl CognitiveLoop {
@@ -199,6 +286,7 @@ impl CognitiveLoop {
             total_duration: Duration::ZERO,
             thoughts_produced: 0,
             cycles_on_time: 0,
+            total_stage_durations: StageDurations::default(),
         }
     }
 
@@ -260,11 +348,11 @@ impl CognitiveLoop {
     ///
     /// This implements TMI's thought competition algorithm:
     ///
-    /// 1. Read from multiple thought streams (parallel autoflow)
-    /// 2. Score candidates by salience (connection drive weighted)
-    /// 3. Select winner for attention ("O Eu" selects)
-    /// 4. Assemble into conscious thought
-    /// 5. Check timing against target
+    /// 1. Trigger - Memory trigger activation (Gatilho da Memória)
+    /// 2. Autoflow - Parallel thought generation (Autofluxo)
+    /// 3. Attention - Select winning thought (O Eu)
+    /// 4. Assembly - Assemble conscious thought (Construção do Pensamento)
+    /// 5. Anchor - Memory encoding decision (Âncora da Memória)
     ///
     /// # Returns
     ///
@@ -274,12 +362,12 @@ impl CognitiveLoop {
     /// - Thought produced (if any)
     /// - Number of candidates evaluated
     /// - Whether cycle was on time
+    /// - Stage durations for each stage
     ///
     /// # Note
     ///
     /// This is a STUB implementation. Stream integration comes in Wave 3.
-    /// For now, it focuses on timing and structure.
-    #[allow(clippy::unused_async)] // Will use async when Redis streams integrated
+    /// For now, it focuses on timing and structure with stage delays.
     pub async fn run_cycle(&mut self) -> CycleResult {
         let cycle_start = Instant::now();
         let cycle_number = self.cycle_count;
@@ -290,13 +378,33 @@ impl CognitiveLoop {
         // Get target cycle time
         let target_duration = Duration::from_secs_f64(self.config.cycle_ms() / 1000.0);
 
-        // TODO: Phase 1 - Stream Reading
-        // Read from multiple thought streams using XREAD
+        // Track stage durations
+        let mut stage_durations = StageDurations::default();
+
+        // Stage 1: Trigger (Gatilho da Memória)
+        // Memory trigger activation - associative recall based on context
+        let stage_start = Instant::now();
+        // TODO: Trigger memory associations from recent experience
+        // - Query memory for recent context
+        // - Activate associative networks
+        // - Prime relevant memory streams
+        tokio::time::sleep(self.config.trigger_delay()).await;
+        stage_durations.trigger = stage_start.elapsed();
+
+        // Stage 2: Autoflow (Autofluxo)
+        // Read from multiple thought streams in parallel
+        let stage_start = Instant::now();
+        // TODO: Read from multiple thought streams using XREAD
         // let streams = vec!["thought:sensory", "thought:memory", "thought:emotion", "thought:reasoning"];
         // let entries = redis.xread_options(&streams, ...).await?;
         let candidates_evaluated = 0; // Placeholder
+        tokio::time::sleep(self.config.autoflow_interval()).await;
+        stage_durations.autoflow = stage_start.elapsed();
 
-        // TODO: Phase 2 - Salience Scoring
+        // Stage 3: Attention (O Eu)
+        // Score candidates by salience and select winner
+        let stage_start = Instant::now();
+        // TODO: Salience Scoring
         // Score each candidate by composite salience
         // let scores: Vec<(f64, StreamEntry)> = entries
         //     .into_iter()
@@ -307,25 +415,38 @@ impl CognitiveLoop {
         //         (score, e)
         //     })
         //     .collect();
-
-        // TODO: Phase 3 - Winner Selection
+        //
+        // TODO: Winner Selection
         // Sort by score and select highest
         // scores.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap());
         // let winner = scores.remove(0);
+        tokio::time::sleep(self.config.attention_delay()).await;
+        stage_durations.attention = stage_start.elapsed();
 
-        // TODO: Phase 4 - Thought Assembly
+        // Stage 4: Assembly (Construção do Pensamento)
+        // Assemble the winning entry into a conscious thought
+        let stage_start = Instant::now();
+        // TODO: Thought Assembly
         // Assemble the winning entry into a Thought
         // let thought = Thought::from_entry(winner.1);
         // redis.xack(&winner.stream, "attention", &[&winner.id]).await?;
         let thought_produced = None; // Placeholder
+        tokio::time::sleep(self.config.assembly_delay()).await;
+        stage_durations.assembly = stage_start.elapsed();
 
-        // TODO: Phase 5 - Forgetting
-        // Delete entries below salience threshold
+        // Stage 5: Anchor (Âncora da Memória)
+        // Decide whether to persist or forget the thought
+        let stage_start = Instant::now();
+        // TODO: Memory Encoding Decision
+        // Decide whether to anchor this thought in long-term memory
+        // Delete entries below salience threshold (forgetting)
         // for (score, loser) in scores {
         //     if score < self.config.forget_threshold {
         //         redis.xdel(&loser.stream, &[&loser.id]).await?;
         //     }
         // }
+        tokio::time::sleep(self.config.anchor_delay()).await;
+        stage_durations.anchor = stage_start.elapsed();
 
         // Update thought counter if we produced one
         if thought_produced.is_some() {
@@ -336,6 +457,9 @@ impl CognitiveLoop {
         let duration = cycle_start.elapsed();
         self.last_cycle = Instant::now();
         self.total_duration += duration;
+
+        // Accumulate stage durations for averaging
+        self.total_stage_durations = self.total_stage_durations.add(&stage_durations);
 
         // Check if we met the target
         let on_time = duration <= target_duration;
@@ -349,6 +473,7 @@ impl CognitiveLoop {
             thought_produced,
             candidates_evaluated,
             on_time,
+            stage_durations,
         )
     }
 
@@ -368,11 +493,14 @@ impl CognitiveLoop {
             0.0
         };
 
+        let average_stage_durations = self.total_stage_durations.div(self.cycle_count);
+
         CycleMetrics::new(
             self.cycle_count,
             self.thoughts_produced,
             average_cycle_time,
             on_time_percentage,
+            average_stage_durations,
         )
     }
 
@@ -384,6 +512,7 @@ impl CognitiveLoop {
         self.total_duration = Duration::ZERO;
         self.thoughts_produced = 0;
         self.cycles_on_time = 0;
+        self.total_stage_durations = StageDurations::default();
         self.last_cycle = Instant::now();
     }
 
@@ -603,10 +732,18 @@ mod cognitive_loop_tests {
             Some(ThoughtId::new()),
             5,
             true,
+            StageDurations::default(),
         );
         assert!(result_with_thought.produced_thought());
 
-        let result_without_thought = CycleResult::new(0, Duration::from_millis(10), None, 5, true);
+        let result_without_thought = CycleResult::new(
+            0,
+            Duration::from_millis(10),
+            None,
+            5,
+            true,
+            StageDurations::default(),
+        );
         assert!(!result_without_thought.produced_thought());
     }
 
@@ -617,6 +754,7 @@ mod cognitive_loop_tests {
             80,                        // thoughts produced
             Duration::from_millis(50), // average time
             95.0,                      // on time percentage
+            StageDurations::default(), // average stage durations
         );
 
         // Success rate: 80/100 = 0.8
@@ -663,5 +801,111 @@ mod cognitive_loop_tests {
 
         let metrics = loop_instance.get_metrics();
         assert_eq!(metrics.on_time_percentage, 100.0);
+    }
+
+    #[tokio::test]
+    async fn stages_execute_in_order() {
+        let mut loop_instance = CognitiveLoop::new();
+        loop_instance.start();
+
+        let result = loop_instance.run_cycle().await;
+
+        // All stages should have non-zero durations
+        assert!(result.stage_durations.trigger > Duration::ZERO);
+        assert!(result.stage_durations.autoflow > Duration::ZERO);
+        assert!(result.stage_durations.attention > Duration::ZERO);
+        assert!(result.stage_durations.assembly > Duration::ZERO);
+        assert!(result.stage_durations.anchor > Duration::ZERO);
+
+        // Total stage time should approximately equal total cycle time
+        let stage_total = result.stage_durations.total();
+        let difference = result.duration.abs_diff(stage_total);
+
+        // Allow some overhead for execution (should be small)
+        assert!(
+            difference < Duration::from_millis(5),
+            "Stage total ({:?}) should approximately equal cycle duration ({:?})",
+            stage_total,
+            result.duration
+        );
+    }
+
+    #[tokio::test]
+    async fn cycle_time_equals_sum_of_stage_delays() {
+        let config = CognitiveConfig::human();
+        let mut loop_instance = CognitiveLoop::with_config(config);
+        loop_instance.start();
+
+        let result = loop_instance.run_cycle().await;
+
+        // Calculate expected total from config delays
+        let expected_total = loop_instance.config().trigger_delay()
+            + loop_instance.config().autoflow_interval()
+            + loop_instance.config().attention_delay()
+            + loop_instance.config().assembly_delay()
+            + loop_instance.config().anchor_delay();
+
+        // Actual cycle time should be close to sum of delays
+        // Allow 10ms tolerance for execution overhead
+        let difference = result.duration.abs_diff(expected_total);
+
+        assert!(
+            difference < Duration::from_millis(10),
+            "Cycle duration ({:?}) should approximately equal sum of stage delays ({:?})",
+            result.duration,
+            expected_total
+        );
+    }
+
+    #[tokio::test]
+    async fn stage_durations_accumulate_in_metrics() {
+        let mut loop_instance = CognitiveLoop::new();
+        loop_instance.start();
+
+        // Run multiple cycles
+        for _ in 0..3 {
+            let _result = loop_instance.run_cycle().await;
+        }
+
+        let metrics = loop_instance.get_metrics();
+
+        // Average stage durations should be non-zero
+        assert!(metrics.average_stage_durations.trigger > Duration::ZERO);
+        assert!(metrics.average_stage_durations.autoflow > Duration::ZERO);
+        assert!(metrics.average_stage_durations.attention > Duration::ZERO);
+        assert!(metrics.average_stage_durations.assembly > Duration::ZERO);
+        assert!(metrics.average_stage_durations.anchor > Duration::ZERO);
+    }
+
+    #[test]
+    fn stage_durations_helper_methods() {
+        let durations = StageDurations {
+            trigger: Duration::from_millis(1),
+            autoflow: Duration::from_millis(2),
+            attention: Duration::from_millis(3),
+            assembly: Duration::from_millis(4),
+            anchor: Duration::from_millis(5),
+        };
+
+        // Test total
+        assert_eq!(durations.total(), Duration::from_millis(15));
+
+        // Test zero
+        let zero = StageDurations::zero();
+        assert_eq!(zero.total(), Duration::ZERO);
+
+        // Test add
+        let doubled = durations.add(&durations);
+        assert_eq!(doubled.trigger, Duration::from_millis(2));
+        assert_eq!(doubled.total(), Duration::from_millis(30));
+
+        // Test div
+        let halved = doubled.div(2);
+        assert_eq!(halved.trigger, Duration::from_millis(1));
+        assert_eq!(halved.total(), Duration::from_millis(15));
+
+        // Test div by zero
+        let zero_div = durations.div(0);
+        assert_eq!(zero_div.total(), Duration::ZERO);
     }
 }

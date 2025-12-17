@@ -8,30 +8,57 @@
 # ORIGIN: This idea has been developing since ~2005. See ORIGIN.md
 
 # =============================================================================
-# CURRENT SPRINT: v0.3.0 - v0.5.0 (Agent-Based Build)
+# CURRENT SPRINT: v0.3.1 - TMI Stage Timing (CRITICAL)
 # =============================================================================
-# CONTEXT MANAGEMENT RULES (learned from v0.2.0):
-# - ONE FILE per agent (~200-500 lines output max)
-# - Agents run in WAVES (dependency order)
-# - Each agent gets MINIMAL context (only what it needs)
-# - Total: 19 files across 5 waves
+# Hypothesis: Maintaining RATIOS between cognitive stages allows overclocking
+# while preserving TMI-faithful behavior.
 # =============================================================================
 
 current:
-  version: "0.3.0"
-  status: complete
-  summary: "MV-TMI Actors - Cognitive Layer"
-  goal: "BUILD_COGNITIVE_ACTORS"
-  depends_on: "0.2.0"
+  version: "0.3.1"
+  status: not_started
+  priority: CRITICAL
+  name: "TMI Stage Timing"
+  summary: "Add per-stage delays to cognitive cycle"
+  depends_on: "0.3.0"
 
-  # Agent execution waves (run agents within each wave in parallel)
-  # WORKFLOW PER WAVE:
-  #   1. Run agents in parallel
-  #   2. cargo fmt && cargo clippy -D warnings && cargo test
-  #   3. git commit -m "Wave N: <name>"
-  #   4. git push
-  #   5. Update wave status: wip → done
-  waves:
+  deliverables:
+    - "ADR-016: TMI Stage Timing"
+    - "CognitiveConfig stage delay parameters"
+    - "CognitiveLoop stage-aware execution"
+    - "Tests for timing ratios"
+
+  tmi_stages:
+    - name: "Gatilho da Memória"
+      delay_ms: 5
+      purpose: "Memory trigger activation"
+    - name: "Autofluxo"
+      delay_ms: 10
+      purpose: "Parallel thought generation"
+    - name: "O Eu"
+      delay_ms: 15
+      purpose: "Attention selection"
+    - name: "Construção do Pensamento"
+      delay_ms: 15
+      purpose: "Thought assembly"
+    - name: "Âncora da Memória"
+      delay_ms: 5
+      purpose: "Persistence decision"
+
+  hypothesis: "If ratios are preserved, cognition can be overclocked 10,000x while maintaining TMI fidelity"
+
+# =============================================================================
+# v0.3.0 - MV-TMI Actors - Cognitive Layer (COMPLETED)
+# =============================================================================
+# Agent-based build with wave execution model
+# WORKFLOW PER WAVE:
+#   1. Run agents in parallel
+#   2. cargo fmt && cargo clippy -D warnings && cargo test
+#   3. git commit -m "Wave N: <name>"
+#   4. git push
+#   5. Update wave status: wip → done
+
+v0_3_0_waves:
     # Wave 1: All types.rs files (can run in parallel)
     - wave: 1
       name: "Types Layer"
@@ -278,7 +305,24 @@ current:
                "streams-tests", "streams-docs", "loop-mod", "loop-tests"]
       goal: "Redis Streams + CoreLoop"
 
+# =============================================================================
+# COMPLETED VERSIONS
+# =============================================================================
+
 completed:
+  - version: "0.3.0"
+    date: "2025-12-17"
+    summary: "MV-TMI Actors - Cognitive Layer"
+    goal: "BUILD_COGNITIVE_ACTORS"
+    deliverables:
+      - "AttentionActor: types.rs, mod.rs, tests.rs, docs"
+      - "ThoughtAssemblyActor: types.rs, mod.rs, tests.rs, docs"
+      - "ContinuityActor: types.rs, mod.rs, tests.rs, docs"
+      - "Redis Streams: client.rs, consumer.rs, tests.rs, docs"
+      - "CognitiveLoop: core implementation and tests"
+      - "19 agents across 5 waves completed"
+    notes: "Agent-based build with wave execution model. 6600+ lines of code generated."
+
   - version: "0.2.0"
     date: "2025-12-17"
     summary: "MV-TMI Actors - Foundation Layer"
@@ -350,6 +394,18 @@ completed:
 
 # Changelog - completed work
 changelog:
+  - date: "2025-12-17"
+    version: "0.3.0"
+    items:
+      - "AttentionActor: O Eu (The 'I') - competitive window selection"
+      - "ThoughtAssemblyActor: Construção do Pensamento - thought assembly"
+      - "ContinuityActor: Âncora da Memória + Identity persistence"
+      - "Redis Streams: XADD, XREAD, XACK for thought streams"
+      - "CognitiveLoop: 50ms cognitive cycle with attention competition"
+      - "19 agents across 5 waves: Types, Actor, Streams, Tests, Docs"
+      - "6600+ lines of code generated with wave-based approach"
+      - "All tests passing, clippy -D warnings clean"
+
   - date: "2025-12-17"
     version: "0.2.0"
     items:

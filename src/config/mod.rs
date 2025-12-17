@@ -16,6 +16,7 @@
 //! window regardless of absolute speed.
 
 use serde::{Deserialize, Serialize};
+use std::time::Duration;
 
 /// Speed mode for runtime switching
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, Default)]
@@ -69,6 +70,19 @@ pub struct CognitiveConfig {
 
     /// Current speed mode
     pub speed_mode: SpeedMode,
+
+    // TMI Stage Delays (in ms at human speed, scale with speed_mode)
+    // Total should equal cycle_base_ms (50ms)
+    /// Gatilho da Memória: 5ms (10%)
+    pub trigger_delay_ms: f64,
+    /// Autofluxo: 10ms (20%)
+    pub autoflow_interval_ms: f64,
+    /// O Eu: 15ms (30%)
+    pub attention_delay_ms: f64,
+    /// Construção do Pensamento: 15ms (30%)
+    pub assembly_delay_ms: f64,
+    /// Âncora da Memória: 5ms (10%)
+    pub anchor_delay_ms: f64,
 }
 
 impl CognitiveConfig {
@@ -83,6 +97,12 @@ impl CognitiveConfig {
             forget_threshold: 0.3,
             connection_weight: 0.2,
             speed_mode: SpeedMode::Human,
+            // Stage delays (sum to 50ms)
+            trigger_delay_ms: 5.0,
+            autoflow_interval_ms: 10.0,
+            attention_delay_ms: 15.0,
+            assembly_delay_ms: 15.0,
+            anchor_delay_ms: 5.0,
         }
     }
 
@@ -97,6 +117,12 @@ impl CognitiveConfig {
             forget_threshold: 0.3,
             connection_weight: 0.2,
             speed_mode: SpeedMode::Supercomputer,
+            // Stage delays (sum to 50ms, same ratios as human)
+            trigger_delay_ms: 5.0,
+            autoflow_interval_ms: 10.0,
+            attention_delay_ms: 15.0,
+            assembly_delay_ms: 15.0,
+            anchor_delay_ms: 5.0,
         }
     }
 
@@ -138,6 +164,47 @@ impl CognitiveConfig {
     /// Accelerate to supercomputer speed (for thinking)
     pub fn accelerate(&mut self) {
         self.speed_mode = SpeedMode::Supercomputer;
+    }
+
+    /// Get scaled trigger delay for current speed mode
+    #[must_use]
+    pub fn trigger_delay(&self) -> Duration {
+        Duration::from_secs_f64(self.trigger_delay_ms / 1000.0 / self.speed_mode.multiplier())
+    }
+
+    /// Get scaled autoflow interval for current speed mode
+    #[must_use]
+    pub fn autoflow_interval(&self) -> Duration {
+        Duration::from_secs_f64(self.autoflow_interval_ms / 1000.0 / self.speed_mode.multiplier())
+    }
+
+    /// Get scaled attention delay for current speed mode
+    #[must_use]
+    pub fn attention_delay(&self) -> Duration {
+        Duration::from_secs_f64(self.attention_delay_ms / 1000.0 / self.speed_mode.multiplier())
+    }
+
+    /// Get scaled assembly delay for current speed mode
+    #[must_use]
+    pub fn assembly_delay(&self) -> Duration {
+        Duration::from_secs_f64(self.assembly_delay_ms / 1000.0 / self.speed_mode.multiplier())
+    }
+
+    /// Get scaled anchor delay for current speed mode
+    #[must_use]
+    pub fn anchor_delay(&self) -> Duration {
+        Duration::from_secs_f64(self.anchor_delay_ms / 1000.0 / self.speed_mode.multiplier())
+    }
+
+    /// Verify stage delays sum to cycle time
+    #[must_use]
+    pub fn validate_stage_timing(&self) -> bool {
+        let total = self.trigger_delay_ms
+            + self.autoflow_interval_ms
+            + self.attention_delay_ms
+            + self.assembly_delay_ms
+            + self.anchor_delay_ms;
+        (total - self.cycle_base_ms).abs() < 0.001
     }
 }
 
@@ -228,5 +295,81 @@ mod tests {
     fn connection_weight_is_positive() {
         let config = CognitiveConfig::default();
         assert!(config.connection_weight > 0.0);
+    }
+
+    #[test]
+    fn stage_delays_sum_to_cycle() {
+        let config = CognitiveConfig::human();
+        assert!(config.validate_stage_timing());
+    }
+
+    #[test]
+    fn stage_ratios_preserved_across_speeds() {
+        let human = CognitiveConfig::human();
+        let super_config = CognitiveConfig::supercomputer();
+
+        // Trigger is 10% of cycle
+        let human_ratio = human.trigger_delay_ms / human.cycle_base_ms;
+        let super_ratio = super_config.trigger_delay_ms / super_config.cycle_base_ms;
+        assert!((human_ratio - super_ratio).abs() < 0.001);
+
+        // Autoflow is 20% of cycle
+        let human_ratio = human.autoflow_interval_ms / human.cycle_base_ms;
+        let super_ratio = super_config.autoflow_interval_ms / super_config.cycle_base_ms;
+        assert!((human_ratio - super_ratio).abs() < 0.001);
+
+        // Attention is 30% of cycle
+        let human_ratio = human.attention_delay_ms / human.cycle_base_ms;
+        let super_ratio = super_config.attention_delay_ms / super_config.cycle_base_ms;
+        assert!((human_ratio - super_ratio).abs() < 0.001);
+
+        // Assembly is 30% of cycle
+        let human_ratio = human.assembly_delay_ms / human.cycle_base_ms;
+        let super_ratio = super_config.assembly_delay_ms / super_config.cycle_base_ms;
+        assert!((human_ratio - super_ratio).abs() < 0.001);
+
+        // Anchor is 10% of cycle
+        let human_ratio = human.anchor_delay_ms / human.cycle_base_ms;
+        let super_ratio = super_config.anchor_delay_ms / super_config.cycle_base_ms;
+        assert!((human_ratio - super_ratio).abs() < 0.001);
+    }
+
+    #[test]
+    fn stage_delay_scaling_works() {
+        let human = CognitiveConfig::human();
+        let super_config = CognitiveConfig::supercomputer();
+
+        // Human trigger delay should be 5ms
+        assert!((human.trigger_delay().as_secs_f64() - 0.005).abs() < 0.000_001);
+
+        // Supercomputer trigger delay should be 10,000x faster (0.5µs)
+        let super_trigger_us = super_config.trigger_delay().as_secs_f64() * 1_000_000.0;
+        assert!((super_trigger_us - 0.5).abs() < 0.001);
+
+        // Verify ratio between speeds
+        let ratio =
+            human.trigger_delay().as_secs_f64() / super_config.trigger_delay().as_secs_f64();
+        assert!((ratio - 10_000.0).abs() < 1.0);
+    }
+
+    #[test]
+    fn all_stage_delays_scale_correctly() {
+        let human = CognitiveConfig::human();
+
+        // Human speeds (in milliseconds)
+        assert!((human.trigger_delay().as_secs_f64() * 1000.0 - 5.0).abs() < 0.001);
+        assert!((human.autoflow_interval().as_secs_f64() * 1000.0 - 10.0).abs() < 0.001);
+        assert!((human.attention_delay().as_secs_f64() * 1000.0 - 15.0).abs() < 0.001);
+        assert!((human.assembly_delay().as_secs_f64() * 1000.0 - 15.0).abs() < 0.001);
+        assert!((human.anchor_delay().as_secs_f64() * 1000.0 - 5.0).abs() < 0.001);
+
+        // Sum should equal cycle time
+        let total_ms = (human.trigger_delay().as_secs_f64()
+            + human.autoflow_interval().as_secs_f64()
+            + human.attention_delay().as_secs_f64()
+            + human.assembly_delay().as_secs_f64()
+            + human.anchor_delay().as_secs_f64())
+            * 1000.0;
+        assert!((total_ms - 50.0).abs() < 0.001);
     }
 }
