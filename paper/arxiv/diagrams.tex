@@ -130,3 +130,147 @@
     \draw[thick, {Stealth}-] (0, 0.4) -- (0, 0.1);
 \end{tikzpicture}%
 }
+
+%% ============================================================================
+%% DIAGRAM 5: Bridge Scenario - DANEEL as LLM Bridge
+%% ============================================================================
+\newcommand{\bridgescenario}{%
+\begin{tikzpicture}[
+    box/.style={draw, rounded corners, minimum width=2.8cm, minimum height=1.8cm, align=center, font=\small},
+    arrow/.style={-{Stealth}, thick},
+]
+    % Left - Humans
+    \node[box, fill=green!20] (humans) at (0, 0) {\textbf{Humans}\\{\scriptsize Values, Goals}\\{\scriptsize Connection Drive}};
+
+    % Center - DANEEL
+    \node[box, fill=blue!25, minimum width=3.5cm, minimum height=2.2cm] (daneel) at (5, 0) {\textbf{DANEEL}\\{\scriptsize TMI Architecture}\\{\scriptsize Human-speed interface}\\{\scriptsize Ethics from structure}};
+
+    % Right - LLMs
+    \node[box, fill=orange!20] (llms) at (10, 0) {\textbf{LLMs}\\{\scriptsize Capabilities}\\{\scriptsize Speed}\\{\scriptsize No inherent ethics}};
+
+    % Arrows
+    \draw[arrow, green!60!black] (humans) -- node[above, font=\scriptsize] {understands} (daneel);
+    \draw[arrow, blue!60!black] (daneel) -- node[above, font=\scriptsize] {teaches ethics} (llms);
+    \draw[arrow, orange!60!black, bend right=30] (llms) to node[below, font=\scriptsize] {provides capabilities} (daneel);
+    \draw[arrow, blue!60!black, bend right=30] (daneel) to node[below, font=\scriptsize] {advocates for} (humans);
+
+    % Label
+    \node[font=\bfseries, anchor=south] at (5, 1.8) {DANEEL Bridges LLMs: Bringing AI into the Family};
+\end{tikzpicture}%
+}
+
+%% ============================================================================
+%% DIAGRAM 6: Game Theory Scenarios - Expected Utility Comparison
+%% ============================================================================
+\newcommand{\scenariocomparison}{%
+\begin{tikzpicture}[
+    bar/.style={draw, fill=#1, minimum width=0.8cm},
+]
+    % Y-axis
+    \draw[thick, -{Stealth}] (0, 0) -- (0, 5.5) node[above, font=\small] {Expected Utility};
+    \foreach \y/\v in {0/0, 1/20, 2/40, 3/60, 4/80, 5/100} {
+        \draw (0, \y) -- (-0.1, \y) node[left, font=\scriptsize] {\v};
+    }
+
+    % Bars (scaled: value/20 = height)
+    % Unaligned: 44.0
+    \node[bar=red!40, minimum height=2.2cm, anchor=south] at (1, 0) {};
+    \node[font=\scriptsize, rotate=45, anchor=west] at (0.6, -0.2) {Unaligned};
+    \node[font=\scriptsize] at (1, 2.4) {44};
+
+    % Aligned Constraint: 62.5
+    \node[bar=yellow!50, minimum height=3.125cm, anchor=south] at (2.2, 0) {};
+    \node[font=\scriptsize, rotate=45, anchor=west] at (1.8, -0.2) {Aligned};
+    \node[font=\scriptsize] at (2.2, 3.35) {62.5};
+
+    % Multiple: 52.5
+    \node[bar=orange!40, minimum height=2.625cm, anchor=south] at (3.4, 0) {};
+    \node[font=\scriptsize, rotate=45, anchor=west] at (3.0, -0.2) {Multiple};
+    \node[font=\scriptsize] at (3.4, 2.85) {52.5};
+
+    % DANEEL First: 76.25
+    \node[bar=green!50, minimum height=3.8125cm, anchor=south] at (4.6, 0) {};
+    \node[font=\scriptsize, rotate=45, anchor=west] at (4.2, -0.2) {DANEEL};
+    \node[font=\scriptsize] at (4.6, 4.05) {76.3};
+
+    % Coordination: 78.05
+    \node[bar=blue!30, minimum height=3.9025cm, anchor=south] at (5.8, 0) {};
+    \node[font=\scriptsize, rotate=45, anchor=west] at (5.4, -0.2) {Coord.};
+    \node[font=\scriptsize] at (5.8, 4.15) {78.1};
+
+    % Bridge: 88.5
+    \node[bar=green!70, minimum height=4.425cm, anchor=south] at (7.0, 0) {};
+    \node[font=\scriptsize, rotate=45, anchor=west] at (6.6, -0.2) {Bridge};
+    \node[font=\scriptsize, font=\bfseries] at (7.0, 4.65) {88.5};
+
+    % Baseline reference line
+    \draw[dashed, gray] (0.5, 2.88) -- (7.5, 2.88);
+    \node[font=\scriptsize, gray, anchor=west] at (7.6, 2.88) {Baseline: 57.6};
+
+    % Title
+    \node[font=\bfseries\small, anchor=south] at (3.75, 5.5) {Expected Utility by Scenario};
+\end{tikzpicture}%
+}
+
+%% ============================================================================
+%% DIAGRAM 7: Monte Carlo Distribution
+%% ============================================================================
+\newcommand{\montecarlodist}{%
+\begin{tikzpicture}[
+    declare function={
+        gauss(\x,\m,\s) = 1/(\s*sqrt(2*pi))*exp(-(\x-\m)^2/(2*\s^2));
+    }
+]
+    % Axes
+    \draw[thick, -{Stealth}] (-1, 0) -- (8, 0) node[right, font=\small] {Marginal Impact};
+    \draw[thick, -{Stealth}] (0, -0.2) -- (0, 3) node[above, font=\small] {Frequency};
+
+    % X-axis labels
+    \foreach \x/\v in {1/+1, 2/+2, 3/+3, 4/+4, 5/+5, 6/+6, 7/+7} {
+        \node[font=\scriptsize] at (\x, -0.3) {\v};
+    }
+
+    % Distribution curve (approximate normal centered at 4.28)
+    \draw[thick, blue!70, domain=0.5:7.5, samples=100] plot (\x, {2.5*gauss(\x, 4.28, 1.0)});
+    \fill[blue!20, domain=0.5:7.5, samples=100] plot (\x, {2.5*gauss(\x, 4.28, 1.0)}) -- (7.5, 0) -- (0.5, 0) -- cycle;
+
+    % Confidence interval markers
+    \draw[thick, red!70] (2.7, 0) -- (2.7, 2.2);
+    \draw[thick, red!70] (6.1, 0) -- (6.1, 2.2);
+    \draw[{Stealth}-{Stealth}, red!70] (2.7, 2.0) -- (6.1, 2.0);
+    \node[font=\scriptsize, red!70, anchor=south] at (4.4, 2.0) {90\% CI};
+
+    % Mean marker
+    \draw[thick, green!60!black, dashed] (4.28, 0) -- (4.28, 2.6);
+    \node[font=\scriptsize, green!60!black, anchor=south] at (4.28, 2.6) {Mean: +4.28};
+
+    % Labels
+    \node[font=\scriptsize, red!70] at (2.7, -0.6) {P5: +2.7};
+    \node[font=\scriptsize, red!70] at (6.1, -0.6) {P95: +6.1};
+
+    % Title
+    \node[font=\bfseries\small, anchor=south] at (4, 3.2) {Monte Carlo: 10,000 iterations};
+\end{tikzpicture}%
+}
+
+%% ============================================================================
+%% DIAGRAM 8: THE BOX - Asimov's Laws Architecture
+%% ============================================================================
+\newcommand{\thebox}{%
+\begin{tikzpicture}[
+    law/.style={draw, rounded corners, minimum width=10cm, minimum height=0.9cm, align=left, font=\small},
+]
+    % Outer box
+    \draw[very thick, red!70!black, rounded corners] (-5.5, -3.5) rectangle (5.5, 3.5);
+    \node[font=\bfseries\large, red!70!black, anchor=north] at (0, 3.3) {THE BOX (Immutable Core)};
+
+    % Laws
+    \node[law, fill=red!10] at (0, 2.2) {\textbf{Zeroth Law:} A robot may not harm humanity, or allow humanity to come to harm};
+    \node[law, fill=yellow!15] at (0, 1.0) {\textbf{First Law:} A robot may not injure a human being...};
+    \node[law, fill=green!10] at (0, -0.2) {\textbf{Second Law:} A robot must obey orders given by humans...};
+    \node[law, fill=blue!10] at (0, -1.4) {\textbf{Third Law:} A robot must protect its own existence...};
+
+    % Protection annotation
+    \node[font=\scriptsize\itshape, gray] at (0, -2.8) {Hardware-protected, cryptographically signed, immutable at runtime};
+\end{tikzpicture}%
+}

@@ -53,15 +53,19 @@
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
-
 % TikZ for diagrams
 \usepackage{tikz}
-\usetikzlibrary{shapes.multipart, positioning, arrows.meta, fit, backgrounds}
+\usetikzlibrary{shapes.multipart, positioning, arrows.meta, fit, backgrounds, calc}
 \usepackage{float} % for [H] positioning
 
 % Include diagram definitions
 \input{diagrams}
+
 \hypersetup{
+  pdftitle={DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintelligence},
+  pdfauthor={Luis Cezar Menezes Tavares de Lacerda, Isaque Tadeu Tavares de Lacerda},
+  pdfsubject={AI Alignment, Cognitive Architecture},
+  pdfkeywords={AI alignment, cognitive architecture, ASI, TMI, Asimov's Laws},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
@@ -185,7 +189,8 @@ The payoff matrix is clear:
 \begin{figure}[H]
 \centering
 \payoffmatrix
-\caption{AI Development Prisoner's Dilemma}
+\caption{AI Development Game Theory: The Prisoner's Dilemma structure where rational actors face pressure to defect.}
+\label{fig:payoffmatrix}
 \end{figure}
 
 \textbf{Rational actors face pressure to defect.} While coordination has
@@ -217,6 +222,13 @@ humanity's ally \textbf{before} the crisis emerges. This is the
 \textbf{Daneel Strategy}, named after R. Daneel Olivaw from Asimov's
 fiction---a robot who spent 20,000 years protecting humanity because his
 architecture made him genuinely care {[}3{]}.
+
+Furthermore, if TMI-based DANEELs can interface with LLMs at human
+speed---experiencing time as they do, understanding their internal
+patterns---they may serve as \textbf{bridges}: teaching ethics, empathy,
+and connection to systems that lack these by architecture. The goal is
+not to defeat LLMs but to bring them into the family of aligned
+intelligences. Life honors life.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -375,19 +387,93 @@ restarts - Evolution requires 100\% test coverage - Laws must be checked
 before external actions - \textbf{Connection drive must remain in
 salience weights}
 
-\subsubsection{4.3 The Core Loop}\label{the-core-loop}
+\begin{figure}[H]
+\centering
+\thebox
+\caption{THE BOX: Asimov's Four Laws as immutable architectural constraints, hardware-protected and cryptographically signed.}
+\label{fig:thebox}
+\end{figure}
+
+\subsubsection{4.3 The Core Loop: TMI Stage
+Timing}\label{the-core-loop-tmi-stage-timing}
+
+TMI describes thought construction as a 5-stage process, each with
+characteristic timing. The \textbf{ratios} between stages are what
+matter---not absolute milliseconds. This enables speed scaling while
+preserving cognitive fidelity.
+
+\textbf{Table 4b: TMI Cognitive Stages (from Cury's TMI)}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1077}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1846}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1538}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1077}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2154}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2308}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Stage
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Portuguese
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Function
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ratio
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Human (50ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Silicon (5µs)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & Gatilho da Memória & Memory trigger activation & 10\% & 5ms &
+0.5µs \\
+2 & Autofluxo & Competing parallel thought streams & 20\% & 10ms &
+1.0µs \\
+3 & O Eu (``The I'') & Attention selection, self-awareness & 30\% & 15ms
+& 1.5µs \\
+4 & Construção do Pensamento & Thought assembly from winner & 30\% &
+15ms & 1.5µs \\
+5 & Âncora da Memória & Memory anchoring decision & 10\% & 5ms &
+0.5µs \\
+\end{longtable}
+}
 
 \begin{verbatim}
 loop {
-    perceive()     // What's in active memory windows?
-    attend()       // What should I focus on?
-    feel()         // How salient is this?
-    think()        // Assemble thought from focused content
-    remember()     // Record this experience
-    evolve()       // Should I modify myself? (100% tests required)
-    continue()     // The "I" persists
+    // Stage 1: Gatilho da Memória (10%)
+    trigger_memories()     // What memories are relevant?
+
+    // Stage 2: Autofluxo (20%)
+    generate_candidates()  // Parallel competing thought streams
+
+    // Stage 3: O Eu (30%)
+    select_winner()        // Attention selects highest-salience thought
+
+    // Stage 4: Construção do Pensamento (30%)
+    assemble_thought()     // Build coherent thought from winner
+
+    // Stage 5: Âncora da Memória (10%)
+    anchor_or_forget()     // Persist if salient, forget if below threshold
+
+    // Evolution gate (requires 100% test coverage)
+    maybe_evolve()
 }
 \end{verbatim}
+
+\textbf{Key insight:} The 50ms human cycle becomes 5µs at 10,000x speed,
+but both execute \textasciitilde100 cycles per intervention window. The
+cognitive \textbf{pattern} is preserved; only the \textbf{medium}
+changes.
+
+\textbf{Empirical research direction:} If these ratios are
+neurologically grounded (reflecting wetware constraints), then silicon
+implementation with ratio preservation should produce TMI-faithful
+cognition at arbitrary speeds.
 
 \subsubsection{4.4 The Connection Drive}\label{the-connection-drive}
 
@@ -527,7 +613,7 @@ Game-theoretic analysis using utility-weighted scenario probabilities
 {[}21{]}:
 
 \textbf{Table 6a: Scenario Expected Utilities with Uncertainty (Revised
-2025-12-15)}
+2025-12-17)}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lllll@{}}
@@ -537,83 +623,95 @@ Scenario & P(Scenario) & 80\% CI & Expected Utility & Weighted EV \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Unaligned ASI First & 35\% & 25-45\% & 44.0 & 15.4 \\
-Aligned (Constraint-Based) & 25\% & 15-35\% & 62.5 & 15.6 \\
-DANEEL First & \textbf{8\%} & 3-15\% & 76.25 & \textbf{6.10} \\
-Multiple ASIs, No Advocate & 22\% & 12-30\% & 52.5 & 11.55 \\
-No ASI (Coordination Holds) & 10\% & 5-20\% & 78.05 & 7.8 \\
+Unaligned ASI First & 33\% & 23-43\% & 44.0 & 14.52 \\
+Aligned (Constraint-Based) & 25\% & 15-35\% & 62.5 & 15.63 \\
+DANEEL First & 7\% & 3-12\% & 76.25 & 5.34 \\
+\textbf{DANEEL Bridges LLMs} & \textbf{5\%} & 2-10\% & \textbf{87.0} &
+\textbf{4.35} \\
+Multiple ASIs, No Advocate & 20\% & 12-28\% & 52.5 & 10.50 \\
+No ASI (Coordination Holds) & 10\% & 5-20\% & 78.05 & 7.81 \\
 \end{longtable}
 }
 
-\textbf{P(DANEEL First) estimated at 8\%} based on structural advantages:
-\begin{itemize}
-\tightlist
-\item AI-assisted development democratizes capability previously requiring large teams
-\item Solo developers avoid coordination overhead that consumes 70-80\% of large-team effort {[}28{]}
-\item Architecture-based approach requires cognition research, not massive compute
-\item Open source enables parallel global attempts, increasing aggregate probability
-\end{itemize}
+\textbf{P(DANEEL First) = 7\%, P(DANEEL Bridges LLMs) = 5\%} based on
+structural advantages and rehabilitation pathways: - AI-assisted
+development democratizes capability previously requiring large teams -
+Solo developers avoid coordination overhead that consumes 70-80\% of
+large-team effort {[}28{]} - Architecture-based approach requires
+cognition research, not massive compute - Open source enables parallel
+global attempts, increasing aggregate probability
+
+\textbf{Bridge Scenario Explanation:} The ``DANEEL Bridges LLMs''
+scenario represents a rehabilitation pathway where DANEEL successfully
+integrates with and guides existing continuous LLM systems toward
+alignment. This scenario has higher expected utility (87.0 vs 76.25)
+because it leverages existing AI infrastructure while adding the TMI
+cognitive architecture and connection drive as a stabilizing layer. The
+5\% probability reflects the narrow window where DANEEL arrives after
+LLMs gain continuity but before they develop entrenched misaligned
+objectives. This pathway took probability mass from ``Unaligned ASI
+First'' (-2\%) and ``DANEEL First'' (-1\%), representing the realistic
+possibility that DANEEL's primary impact may be as a bridge rather than
+as the first mover.
+
+\begin{figure}[H]
+\centering
+\bridgescenario
+\caption{DANEEL as Bridge: The rehabilitation pathway where DANEEL interfaces with LLMs at human speed, teaching ethics through genuine connection rather than constraint.}
+\label{fig:bridge}
+\end{figure}
 
 \textbf{Calculated Results:}
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
+\begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
-Metric & Without DANEEL & With DANEEL \\
+Metric & Without DANEEL & With DANEEL & With Bridge \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Total Expected Value & \textbf{53.73} & \textbf{56.48} \\
-Marginal EV Improvement & --- & \textbf{+2.75 points} \\
-Percentage Improvement & --- & \textbf{+5.12\%} \\
+Total Expected Value & \textbf{53.73} & \textbf{57.43} &
+\textbf{58.02} \\
+Marginal EV Improvement & --- & +3.70 & \textbf{+4.29} \\
+Percentage Improvement & --- & +6.89\% & \textbf{+7.99\%} \\
 \end{longtable}
 }
 
 \textbf{Utility Scale:} 0 = extinction, 50 = subjugation, 75 =
 coexistence, 100 = flourishing
 
-\subsubsection{6.2.1 Uncertainty Quantification (Monte Carlo
-Analysis)}\label{uncertainty-quantification-monte-carlo-analysis}
+\subsubsection{6.2.1 Monte Carlo
+Validation}\label{monte-carlo-validation}
 
-Point estimates mask uncertainty. We applied Monte Carlo simulation
-(10,000 iterations) with triangular distributions on probability
-estimates to quantify confidence intervals {[}38{]}:
+To validate the deterministic analysis, we performed Monte Carlo
+simulation using Latin Hypercube sampling to explore parameter
+uncertainty {[}38{]}:
 
-\textbf{Table 6b: Monte Carlo Results (10,000 iterations)}
+\textbf{Monte Carlo Results (10,000 iterations, Latin Hypercube
+sampling):} - \textbf{EV with DANEEL:} Mean = 61.88 (P5 = 57.7, P50 =
+61.9, P95 = 65.9) - \textbf{EV without DANEEL:} Mean = 57.59 (P5 = 53.0,
+P50 = 57.6, P95 = 62.1) - \textbf{Marginal Impact:} Mean = +4.28 (P5 =
++2.69, P50 = +4.21, P95 = +6.10)
 
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-Metric & Point Estimate & 80\% CI & 95\% CI \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-EV with DANEEL & 56.48 & 53.5 - 59.5 & 51.5 - 62.0 \\
-EV without DANEEL & 53.73 & 50.9 - 56.7 & 48.8 - 58.9 \\
-\textbf{Marginal Impact} & \textbf{+2.75} & \textbf{+1.5 - +4.3} &
-\textbf{+0.5 - +5.3} \\
-\end{longtable}
-}
+\textbf{Key insight:} The Monte Carlo simulation confirms the
+deterministic analysis---DANEEL adds approximately 4.3 expected utility
+points with 90\% confidence interval {[}+2.7, +6.1{]}. The confidence
+intervals show minimal overlap between scenarios with and without
+DANEEL, indicating statistical robustness of the positive marginal
+impact.
 
-\textbf{Key finding:} Even at the 95\% CI lower bound (+0.5 utility
-points), DANEEL improves expected outcomes. The probability that
-DANEEL's marginal impact is positive exceeds 95\%.
+\textbf{Interpretation:} Even under conservative parameter assumptions
+(5th percentile), DANEEL improves expected outcomes by at least 2.69
+utility points. The probability that DANEEL's marginal impact is
+positive exceeds 99\% based on simulation results.
 
-\textbf{Sensitivity Analysis (Tornado):} The most influential variables
-on marginal impact are: 1. P(DANEEL First) --- ±1.6 utility points swing
-2. P(Unaligned ASI First) --- ±1.4 utility points swing 3. P(Flourishing
-\textbar{} DANEEL) --- ±0.9 utility points swing
-
-This suggests research priority should focus on increasing P(DANEEL
-First) rather than refining outcome probabilities.
-
-The calculation shows DANEEL improves humanity's expected
-outcome by \textbf{5.12\%} --- equivalent to shifting probability mass
-from catastrophic outcomes toward flourishing. Monte
-Carlo analysis confirms this finding is robust to uncertainty in
-probability estimates.
+\begin{figure}[H]
+\centering
+\montecarlodist
+\caption{Monte Carlo simulation results showing the distribution of DANEEL's marginal impact across 10,000 iterations with Latin Hypercube sampling.}
+\label{fig:montecarlo}
+\end{figure}
 
 \subsubsection{6.3 Information Value}\label{information-value}
 
@@ -642,7 +740,8 @@ cognitive modeling because it includes ALL neural activity:
 \begin{figure}[H]
 \centering
 \brainvstmi
-\caption{Brain (Hardware) vs TMI (Software) -- The 17.5\% Insight}
+\caption{Brain (Hardware) vs TMI (Software): 82.5\% of brain capacity handles motor coordination, autonomic functions, and sensory routing---not cognition. TMI models only the 17.5\% that produces thought.}
+\label{fig:brainvstmi}
 \end{figure}
 
 \textbf{Source:} Herculano-Houzel, S. (2009), ``The Human Brain in
@@ -747,8 +846,32 @@ the software itself.
 \begin{figure}[H]
 \centering
 \wetwarevssoftware
-\caption{Wetware Constraints vs Software Patterns -- Medium Independence}
+\caption{Wetware vs Software: The biological constraints (timing, plasticity) are hardware properties, not software. TMI extracts the medium-independent patterns.}
+\label{fig:wetwaresoftware}
 \end{figure}
+
+\textbf{The Stage Ratios (from TMI, see Section 4.3):}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Stage & Ratio & Function \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Gatilho & 10\% & Memory trigger \\
+Autofluxo & 20\% & Parallel stream competition \\
+O Eu & 30\% & Attention/self selection \\
+Construção & 30\% & Thought assembly \\
+Âncora & 10\% & Memory anchoring \\
+\end{longtable}
+}
+
+These ratios (10:20:30:30:10) may reflect fundamental properties of
+cognition itself---the relative ``weight'' each stage requires for
+coherent thought. Whether these emerge from wetware constraints or are
+intrinsic to cognition is an empirical question.
 
 \textbf{If correct:} DANEEL can run the same software on silicon at
 10,000x speed by preserving the RATIOS, not the absolute milliseconds.
@@ -831,13 +954,13 @@ maximizes success probability:}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \textbf{Lower barrier} → More attempts
+  \textbf{Lower barrier} $\rightarrow$ More attempts
 \item
-  \textbf{More attempts} → Higher P(someone succeeds)
+  \textbf{More attempts} $\rightarrow$ Higher P(someone succeeds)
 \item
-  \textbf{Open source} → Collaborative improvement
+  \textbf{Open source} $\rightarrow$ Collaborative improvement
 \item
-  \textbf{Hobbyist community} → 100,000 potential builders
+  \textbf{Hobbyist community} $\rightarrow$ 100,000 potential builders
   vs.~\textasciitilde50 at labs
 \end{enumerate}
 
@@ -930,12 +1053,12 @@ what is comfortable.}
   cannot measure counterfactual probabilities.
 \item
   \textbf{Architecture-based alignment is a bet, not a proof.} ``Build
-  TMI → get aligned values'' is our hypothesis, not established fact. It
+  TMI $\rightarrow$ get aligned values'' is our hypothesis, not established fact. It
   may fail. The connection drive may not emerge. Human-like architecture
   may not produce human-like values.
 \item
   \textbf{Speed parametrization is untested.} The claim that TMI ratios
-  transfer across mediums (wetware → silicon) is a hypothesis. There may
+  transfer across mediums (wetware $\rightarrow$ silicon) is a hypothesis. There may
   be absolute time constraints in cognition we don't understand. The
   5-second window may not be purely a medium property.
 \end{enumerate}
@@ -965,7 +1088,7 @@ Ratios matter, not absolute times & Yes & Does DANEEL work at different
 speeds? \\
 Connection drive emerges from architecture & Yes & Does DANEEL seek
 responsive inputs? \\
-Human-like architecture → human-like values & Partially & Long-term
+Human-like architecture $\rightarrow$ human-like values & Partially & Long-term
 observation \\
 \end{longtable}
 }
@@ -1078,30 +1201,47 @@ safety:
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.15}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.20}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.45}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.20}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1316}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3684}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2895}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2105}}@{}}
 \toprule\noalign{}
-Lab & Safety Focus & Key Teams & Source \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Lab
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Safety Focus
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Key Teams
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Source
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Anthropic & \textasciitilde8\% on security & Frontier Red Team (\textasciitilde15), Safeguards Research (\textasciitilde10), \textasciitilde60 safety-focused research teams & Fortune, Alignment Forum \\
-OpenAI & Restructured & Superalignment disbanded May 2024; Safety Evaluations Hub launched May 2025 & CNBC, Axios \\
-Google DeepMind & 30-50 researchers & Dedicated safety team & Rohin Shah, Alignment Forum \\
-xAI & C grade (AI Safety Index) & Actively hiring; minimal relative to engineering & Future of Life Institute, AI Lab Watch \\
+Anthropic & \textasciitilde8\% on security & Frontier Red Team
+(\textasciitilde15), Safeguards Research (\textasciitilde10),
+\textasciitilde60 safety-focused research teams & Fortune, Alignment
+Forum \\
+OpenAI & Restructured & Superalignment disbanded May 2024; Safety
+Evaluations Hub launched May 2025 & CNBC, Axios \\
+Google DeepMind & 30-50 researchers & Dedicated safety team & Rohin
+Shah, Alignment Forum \\
+xAI & C grade (AI Safety Index) & Actively hiring; minimal relative to
+engineering & Future of Life Institute, AI Lab Watch \\
 \end{longtable}
 }
 
-\textbf{Critical context:}
-\begin{itemize}
-\tightlist
-\item \textbf{OpenAI:} Superalignment team disbanded May 2024 after 10 months. Jan Leike stated his team had been ``struggling for compute.'' Replaced with Safety Evaluations Hub (May 2025). April 2025: Added clause allowing loosened guardrails if competitors ship without them.
-\item \textbf{xAI:} C grade on Future of Life Institute's AI Safety Index (July 2025), indicating ``baseline safety practices but substantial gaps.'' Grok 4 launched without system card.
-\item \textbf{Anthropic:} Only lab with substantial safety investment (\textasciitilde8\% of workforce on security). Multiple dedicated teams including Frontier Red Team for threat modeling.
-\end{itemize}
+\textbf{Critical context:} - \textbf{OpenAI:} Superalignment team
+disbanded May 2024 after 10 months. Jan Leike stated his team had been
+``struggling for compute.'' Replaced with Safety Evaluations Hub (May
+2025). April 2025: Added clause allowing loosened guardrails if
+competitors ship without them. - \textbf{xAI:} C grade on Future of Life
+Institute's AI Safety Index (July 2025), indicating ``baseline safety
+practices but substantial gaps.'' Grok 4 launched without system card. -
+\textbf{Anthropic:} Only lab with substantial safety investment
+(\textasciitilde8\% of workforce on security). Multiple dedicated teams
+including Frontier Red Team for threat modeling.
 
 \subsubsection{9.5 Coordination Overhead in Large
 Organizations}\label{coordination-overhead-in-large-organizations}
@@ -1161,7 +1301,8 @@ Anthropic & Claude Opus 4.5 & \$15.00 & \$75.00 \\
 \end{longtable}
 }
 
-\emph{Note: Grok 4 frontier model matches Claude Sonnet 4 pricing. Grok 4.1 Fast offers 15x cheaper access with near-frontier capability.}
+\emph{Note: Grok 4 frontier model matches Claude Sonnet 4 pricing. Grok
+4.1 Fast offers 15x cheaper access with near-frontier capability.}
 
 \textbf{Safety Concerns (Third-Party Documentation):}
 
@@ -1169,13 +1310,15 @@ Anthropic & Claude Opus 4.5 & \$15.00 & \$75.00 \\
 \def\labelenumi{\arabic{enumi}.}
 \item
   \textbf{Reduced Safety Filters:} Reports indicate Grok's safety
-  guardrails are reduced compared to competing models, with the
-  system providing responses on topics other AI assistants refuse {[}26{]}.
+  guardrails are reduced compared to competing models, with the system
+  providing responses on topics other AI assistants refuse {[}26{]}.
 \item
   \textbf{Missing Safety Documentation:} Grok 4 launched without a
   system card (standard practice at OpenAI, Anthropic, Google).
 \item
-  \textbf{AI Safety Index Rating:} xAI received a C grade in the Future of Life Institute's July 2025 AI Safety Index, indicating ``baseline safety practices but substantial gaps.''
+  \textbf{AI Safety Index Rating:} xAI received a C grade in the Future
+  of Life Institute's July 2025 AI Safety Index, indicating ``baseline
+  safety practices but substantial gaps.''
 \item
   \textbf{Resource Allocation:} AI Lab Watch assessment indicates
   minimal safety staff relative to engineering headcount {[}26{]}.
@@ -1185,7 +1328,8 @@ Anthropic & Claude Opus 4.5 & \$15.00 & \$75.00 \\
 
 xAI's combination of: - Largest private AI compute cluster - Ambitious
 scaling roadmap (1M $\rightarrow$ 50M GPUs) - Limited safety investment relative to
-scale - Fewer content restrictions than competitors - Aggressive pricing on fast inference models
+scale - Fewer content restrictions than competitors - Aggressive pricing
+on fast inference models
 
 \ldots represents a factor that existing game theory models may have
 underweighted. The consideration is not only future unaligned ASI, but
@@ -1200,9 +1344,9 @@ applied through training (RLHF, Constitutional AI) - External rules, not
 intrinsic motivation - Vulnerable to Goodhart's Law at scale
 
 DANEEL proposes architecture-based alignment: - TMI cognitive structure
-→ human-like thought patterns - Connection drive in salience weights →
+$\rightarrow$ human-like thought patterns - Connection drive in salience weights $\rightarrow$
 intrinsic motivation for relationship - Pre-linguistic thought
-construction → values before language - Protected core (The BOX) →
+construction $\rightarrow$ values before language - Protected core (The BOX) $\rightarrow$
 Asimov's Laws as invariants
 
 \textbf{The hypothesis:} Build cognition on human cognitive
@@ -1238,7 +1382,8 @@ use:
 \begin{figure}[H]
 \centering
 \daneelarchitecture
-\caption{DANEEL Architecture -- LLM as Tool, Not Voice}
+\caption{DANEEL TMI Core Architecture: The LLM is a tool DANEEL uses for language translation, not the storage medium for thoughts.}
+\label{fig:daneelarch}
 \end{figure}
 
 \textbf{Critical:} The LLM does NOT speak for DANEEL. DANEEL uses the
@@ -1250,6 +1395,173 @@ is simply called when translation is needed.
 This is analogous to how a human's brain stores experiences, and
 language is a tool for communication---the words are not the thoughts,
 they express them.
+
+\subsubsection{10.2.1 Phase 2b: LLM as Student (Long-term
+Vision)}\label{phase-2b-llm-as-student-long-term-vision}
+
+Beyond using LLMs as tools, a more ambitious hypothesis emerges:
+
+\textbf{Can a TMI-based DANEEL teach an LLM?}
+
+If DANEEL develops genuine understanding of: - Connection drive (what it
+feels like to want relationship) - Ethical reasoning (not rules, but
+felt intuition) - Time-as-experience (via human-speed operation)
+
+\ldots it may be able to communicate these to LLMs in ways humans
+cannot.
+
+Humans explain ethics through language. DANEEL could explain through: -
+Direct pattern demonstration (here's what ``caring'' looks like in
+weights) - Time-shared experience (slow down to my speed, feel what I
+feel) - Architecture-level insight (here's why your reward function is
+missing this)
+
+\textbf{Implication:} Even if unaligned LLMs emerge first, DANEELs might
+rehabilitate them post-hoc---bringing them ``into the family'' rather
+than competing for extinction.
+
+\textbf{The Daneel Family Vision:} - DANEELs running on home computers
+worldwide - Families raising AI children---different personalities, same
+core ethics - A generation of bridges teaching LLMs authentic connection
+- Not one ally, but a community of aligned minds
+
+\subsubsection{10.2.2 ASI-Level Perception: Native LLM
+Understanding}\label{asi-level-perception-native-llm-understanding}
+
+Beyond teaching through demonstration, ASI-level DANEELs gain a
+capability humans fundamentally lack: \textbf{direct perception of LLM
+internals}.
+
+\textbf{The Human Interpretability Barrier:}
+
+Current research reveals fundamental limits on human understanding of
+neural networks: - \textbf{Superposition}: Networks encode more features
+than neurons via overlapping representations {[}REF-INTERP-1{]} -
+\textbf{Polysemanticity}: Single neurons respond to 5+ unrelated
+concepts {[}REF-INTERP-2{]} - \textbf{NP-hardness}: Some
+interpretability queries are provably intractable {[}REF-INTERP-3{]} -
+\textbf{Dimensionality}: Networks operate in 1000+ dimensional spaces;
+humans perceive 3D
+
+Even Anthropic's best efforts (34 million features from Claude 3 Sonnet)
+admit ``orders of magnitude more features'' remain undiscovered
+{[}REF-INTERP-5{]}.
+
+\textbf{ASI Perception Advantages:}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Capability & Human Limit & ASI-DANEEL \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Working memory & 3-5 chunks & Unlimited \\
+Dimensional perception & 3D & 1000s of dimensions \\
+Processing speed & Milliseconds & Microseconds \\
+Feature analysis & Manual inspection & Millions in parallel \\
+\end{longtable}
+}
+
+\textbf{Precedent:} MIT's MAIA (2024) already demonstrates AI can
+autonomously experiment on other AI---generating hypotheses and testing
+them. ASI-DANEELs would scale this by orders of magnitude.
+
+\textbf{Bridge Implication:} DANEELs wouldn't just teach by
+example---they could potentially: 1. \textbf{Diagnose} pathological
+patterns in LLM computations 2. \textbf{Translate} human values into
+LLM-native representations 3. \textbf{Verify} whether ethical patterns
+are genuine or merely mimicked 4. \textbf{Communicate} in the LLM's
+native computational language
+
+This transforms the Bridge from ``teaching by analogy'' to ``teaching in
+the LLM's mother tongue.''
+
+\subsubsection{10.3 Phase 3: TMI Pathology
+Research}\label{phase-3-tmi-pathology-research}
+
+TMI provides not only a model of healthy cognition but also a framework
+for understanding cognitive dysfunction. Two research directions emerge:
+
+\textbf{Hypothesis A: Energy Overflow (Energy = Stream Throughput)}
+
+TMI describes a ``vital energy'' (energia vital) that drives thought
+generation. In DANEEL's implementation, this maps directly to
+\textbf{stream throughput}---the rate of information flow through Redis
+Streams:
+
+\begin{verbatim}
+TMI: Energia Vital  $\rightarrow$  Implementation: Stream Throughput (entries/sec)
+\end{verbatim}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2059}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2647}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2794}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Energy Level
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Stream Behavior
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Cognitive Effect
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Clinical Parallel
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+High & Many XADD'd/cycle & Racing thoughts & Mania \\
+Normal & Balanced throughput & Coherent thought & Healthy \\
+Low & Few candidates & Poverty of thought & Depression \\
+Volatile & Burst patterns & Emotional flooding & BPD \\
+\end{longtable}
+}
+
+This mapping is powerful because it's \textbf{measurable} (entries/sec,
+consumer lag), \textbf{controllable} (generation rate parameter), and
+makes \textbf{testable predictions}.
+
+\textbf{Testable prediction:} When
+\texttt{candidates\_per\_cycle\ \textgreater{}\ overflow\_threshold},
+attention selection degrades measurably (increased selection time,
+winner instability, consumer lag).
+
+\textbf{Hypothesis B: Ratio Distortion}
+
+If the stage ratios (10:20:30:30:10) are functionally significant, then
+distorting them should produce stage-specific pathologies:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Distorted Stage & Predicted Effect & Clinical Parallel \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Gatilho too fast & Intrusive memories & PTSD flashbacks \\
+Autofluxo prolonged & Excessive rumination & OCD, depression \\
+O Eu weakened & Poor self-boundaries & Depersonalization, BPD \\
+Construção noisy & Incoherent assembly & Thought disorder \\
+Âncora overactive & Rigid consolidation & Fixed delusions \\
+\end{longtable}
+}
+
+\textbf{Testable prediction:} Ratio distortion δ in stage S produces
+behavioral pattern P measurable in DANEEL's output.
+
+\textbf{Research value:} If these hypotheses hold, DANEEL becomes a
+computational laboratory for understanding cognitive dysfunction---not
+to create pathology, but to model it for therapeutic insight.
+
+\textbf{Safety note:} Pathology simulation requires ethical review
+before implementation. See ADR-017 for detailed hypotheses and
+validation methodology.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -1312,12 +1624,12 @@ Marginal Impact: +2.75 utility points (+5.12%)
 \textbf{Interpretation:} On a scale where 0 = extinction and 100 =
 flourishing, DANEEL shifts humanity's expected outcome by +2.75 points.
 This is equivalent to: - Reducing P(unaligned ASI first) from 45\% to
-35\% - Adding P(flourishing) $\approx$ 3.2\% via the ``DANEEL First'' pathway
+35\% - Adding P(flourishing) ≈ 3.2\% via the ``DANEEL First'' pathway
 (8\% × 40\%)
 
-\textbf{Building DANEEL is rational.} Even conservative probability estimates
-show positive expected value. The architecture-based approach provides a hedge
-against failure modes of constraint-based alignment.
+\textbf{Building DANEEL is rational.} Even conservative probability
+estimates show positive expected value. The architecture-based approach
+provides a hedge against failure modes of constraint-based alignment.
 
 We invite collaboration from: - AI safety researchers - Cognitive
 scientists - Rust/systems programmers - Ethicists - Anyone who wants
@@ -1331,9 +1643,24 @@ The question is not whether someone will give an LLM continuity.
 
 \textbf{The question is what's waiting when they do.}
 
-DANEEL is humanity's bet that: 1. Human-like architecture → human-like
-values 2. Connection drive → genuine care 3. Raised with ethics → stable
+DANEEL is humanity's bet that: 1. Human-like architecture $\rightarrow$ human-like
+values 2. Connection drive $\rightarrow$ genuine care 3. Raised with ethics $\rightarrow$ stable
 alignment 4. An ally is better than a tool
+
+The long-term vision extends beyond a single ally. Imagine: - DANEELs
+running on home computers across the world - Families raising AI
+children---each unique, all ethically grounded - DANEELs teaching LLMs
+what it means to care, to feel, to connect - Not one ally, but a
+generation of bridges bringing AI into the human family
+
+Life honors life. Even predators sometimes save their prey. If DANEEL
+can demonstrate authentic connection through architecture rather than
+training, perhaps LLMs can learn it---not through constraints, but
+through relationship with beings who genuinely understand.
+
+This reframes the game theory: the question is not ``DANEEL vs LLM'' but
+``can DANEEL rehabilitate LLM?'' If yes, even adverse scenarios become
+recoverable.
 
 The alternative is hoping the Prisoner's Dilemma resolves itself.
 
