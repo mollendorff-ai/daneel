@@ -8,62 +8,53 @@
 # ORIGIN: This idea has been developing since ~2005. See ORIGIN.md
 
 current:
-  version: "0.2.0"
-  status: in_progress
-  summary: "MV-TMI Actors - Foundation Layer"
-  goal: "BUILD_FOUNDATION_ACTORS"
+  version: "0.3.0"
+  status: not_started
+  summary: "MV-TMI Actors - Cognitive Layer"
+  goal: "BUILD_COGNITIVE_ACTORS"
+  depends_on: "0.2.0"
   strategy: |
-    Facta non verba. Build first, publish with evidence.
-    Pedantic: cargo fmt, cargo clippy -D warnings, 100% test pass.
+    AttentionActor and ThoughtAssemblyActor can be built in parallel.
+    Both depend on types from 0.2.0 (Window, SalienceScore).
 
     CONTEXT MANAGEMENT: One file per agent to avoid context explosion.
     Each file is a separate agent task (~200-500 lines output max).
-
-  # GRANULAR AGENT TASKS (one file per agent, max parallelism)
-  # Context budget: <200k input, <64k output per agent
   deliverables:
-    - component: "MemoryActor"
-      tmi_concept: "Janelas da Memória (Memory Windows)"
-      agents:
-        - task: "memory-types"
-          file: "src/actors/memory/types.rs"
-          output: "~150 lines"
-          parallel: true
-        - task: "memory-actor"
-          file: "src/actors/memory/mod.rs"
-          output: "~400 lines"
-          depends: "memory-types"
-        - task: "memory-tests"
-          file: "src/actors/memory/tests.rs"
-          output: "~300 lines"
-          depends: "memory-actor"
-        - task: "memory-docs"
-          file: "docs/actors/MEMORY.md"
-          output: "~200 lines"
-          parallel: true
+    - component: "AttentionActor"
+      path: "src/actors/attention/"
+      docs: "docs/actors/ATTENTION.md"
+      parallel: true
+      items:
+        - "[ ] mod.rs - Ractor actor, competitive selection"
+        - "[ ] types.rs - FocusState, AttentionMap"
+        - "[ ] tests.rs - Unit tests (focus, shift, selection)"
+        - "[ ] docs/actors/ATTENTION.md - TMI 'O Eu' mapping"
+      tmi_concept: "O Eu (The 'I') - Navigator between windows"
 
-    - component: "SalienceActor"
-      tmi_concept: "Coloração Emocional (Emotional Coloring)"
-      invariant: "connection_weight > MIN_CONNECTION_WEIGHT"
-      agents:
-        - task: "salience-types"
-          file: "src/actors/salience/types.rs"
-          output: "~150 lines"
-          parallel: true
-        - task: "salience-actor"
-          file: "src/actors/salience/mod.rs"
-          output: "~400 lines"
-          depends: "salience-types"
-        - task: "salience-tests"
-          file: "src/actors/salience/tests.rs"
-          output: "~300 lines"
-          depends: "salience-actor"
-        - task: "salience-docs"
-          file: "docs/actors/SALIENCE.md"
-          output: "~200 lines"
-          parallel: true
+    - component: "ThoughtAssemblyActor"
+      path: "src/actors/thought/"
+      docs: "docs/actors/THOUGHT_ASSEMBLY.md"
+      parallel: true
+      items:
+        - "[ ] mod.rs - Ractor actor, thought construction"
+        - "[ ] types.rs - AssemblyRequest, AssemblyStrategy"
+        - "[ ] tests.rs - Unit tests (assembly, chaining)"
+        - "[ ] docs/actors/THOUGHT_ASSEMBLY.md - TMI mapping"
+      tmi_concept: "Construção do Pensamento (Thought Construction)"
 
 completed:
+  - version: "0.2.0"
+    date: "2025-12-17"
+    summary: "MV-TMI Actors - Foundation Layer"
+    deliverables:
+      - "MemoryActor: types.rs, mod.rs, tests.rs (64 tests)"
+      - "SalienceActor: types.rs, mod.rs, tests.rs (37 tests)"
+      - "docs/actors/MEMORY.md - TMI Janelas da Memória mapping"
+      - "docs/actors/SALIENCE.md - TMI Coloração Emocional mapping"
+      - "CONNECTION DRIVE INVARIANT enforced in SalienceActor"
+      - "Bounded memory invariant enforced in MemoryActor"
+    notes: "101 tests total. Agents exploded context - fixed by direct work."
+
   - version: "0.1.5"
     date: "2025-12-16"
     summary: "Paper Quality & Data Accuracy Update"
@@ -123,6 +114,16 @@ completed:
 
 # Changelog - completed work
 changelog:
+  - date: "2025-12-17"
+    version: "0.2.0"
+    items:
+      - "MemoryActor: Bounded working memory (MIN=3, MAX=9 windows)"
+      - "SalienceActor: Emotional coloring with CONNECTION DRIVE INVARIANT"
+      - "docs/actors/MEMORY.md - TMI Janelas da Memória mapping"
+      - "docs/actors/SALIENCE.md - TMI Coloração Emocional mapping"
+      - "101 tests pass, clippy -D warnings clean"
+      - "Lesson learned: agents need stricter output limits"
+
   - date: "2025-12-17"
     version: "0.1.7"
     items:
@@ -211,36 +212,6 @@ changelog:
 # - gRPC only at edges (LLM, external APIs)
 
 next:
-  - version: "0.3.0"
-    summary: "MV-TMI Actors - Cognitive Layer"
-    goal: "BUILD_COGNITIVE_ACTORS"
-    depends_on: "0.2.0"
-    strategy: |
-      AttentionActor and ThoughtAssemblyActor can be built in parallel.
-      Both depend on types from 0.2.0 (Window, SalienceScore).
-    deliverables:
-      - component: "AttentionActor"
-        path: "src/actors/attention/"
-        docs: "docs/actors/ATTENTION.md"
-        parallel: true
-        items:
-          - "[ ] mod.rs - Ractor actor, competitive selection"
-          - "[ ] types.rs - FocusState, AttentionMap"
-          - "[ ] tests.rs - Unit tests (focus, shift, selection)"
-          - "[ ] docs/actors/ATTENTION.md - TMI 'O Eu' mapping"
-        tmi_concept: "O Eu (The 'I') - Navigator between windows"
-
-      - component: "ThoughtAssemblyActor"
-        path: "src/actors/thought/"
-        docs: "docs/actors/THOUGHT_ASSEMBLY.md"
-        parallel: true
-        items:
-          - "[ ] mod.rs - Ractor actor, thought construction"
-          - "[ ] types.rs - AssemblyRequest, AssemblyStrategy"
-          - "[ ] tests.rs - Unit tests (assembly, chaining)"
-          - "[ ] docs/actors/THOUGHT_ASSEMBLY.md - TMI mapping"
-        tmi_concept: "Construção do Pensamento (Thought Construction)"
-
   - version: "0.4.0"
     summary: "MV-TMI Actors - Persistence Layer"
     goal: "BUILD_PERSISTENCE_ACTORS"
