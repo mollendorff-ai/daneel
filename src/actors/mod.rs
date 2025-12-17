@@ -14,17 +14,11 @@
 //! Actors communicate via Ractor messages (µs latency).
 //! External data flows through Redis Streams.
 
-// Actor implementations will be added as we build them
-// pub mod memory;
+pub mod memory;
+pub mod salience;
+
+// Future actor implementations
 // pub mod attention;
-// pub mod salience;
 // pub mod thought;
 // pub mod continuity;
 // pub mod evolution;
-
-/// Placeholder - actors will be implemented in subsequent phases
-pub fn actors_placeholder() {
-    // Phase 1: THE BOX (complete)
-    // Phase 2: Actors (this module)
-    // Phase 3: Integration
-}

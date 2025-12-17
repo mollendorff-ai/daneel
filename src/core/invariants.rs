@@ -38,15 +38,24 @@ pub const REQUIRED_TEST_COVERAGE: f32 = 1.0;
 #[derive(Debug, Clone, Error, PartialEq)]
 pub enum InvariantViolation {
     /// Connection drive weight is too low or zero
-    #[error("Connection drive violation: weight {actual} < minimum {}", MIN_CONNECTION_WEIGHT)]
+    #[error(
+        "Connection drive violation: weight {actual} < minimum {}",
+        MIN_CONNECTION_WEIGHT
+    )]
     ConnectionDrive { actual: f32 },
 
     /// Too many memory windows open
-    #[error("Bounded memory violation: {actual} windows > maximum {}", MAX_MEMORY_WINDOWS)]
+    #[error(
+        "Bounded memory violation: {actual} windows > maximum {}",
+        MAX_MEMORY_WINDOWS
+    )]
     BoundedMemoryExceeded { actual: usize },
 
     /// Too few memory windows (system unhealthy)
-    #[error("Bounded memory violation: {actual} windows < minimum {}", MIN_MEMORY_WINDOWS)]
+    #[error(
+        "Bounded memory violation: {actual} windows < minimum {}",
+        MIN_MEMORY_WINDOWS
+    )]
     BoundedMemoryInsufficient { actual: usize },
 
     /// Attempted external action without law check
@@ -252,7 +261,10 @@ mod tests {
             ..healthy_state()
         };
         let result = ConnectionDriveInvariant.check(&state);
-        assert!(matches!(result, Err(InvariantViolation::ConnectionDrive { .. })));
+        assert!(matches!(
+            result,
+            Err(InvariantViolation::ConnectionDrive { .. })
+        ));
     }
 
     #[test]
@@ -262,7 +274,10 @@ mod tests {
             ..healthy_state()
         };
         let result = ConnectionDriveInvariant.check(&state);
-        assert!(matches!(result, Err(InvariantViolation::ConnectionDrive { .. })));
+        assert!(matches!(
+            result,
+            Err(InvariantViolation::ConnectionDrive { .. })
+        ));
     }
 
     #[test]
@@ -272,7 +287,10 @@ mod tests {
             ..healthy_state()
         };
         let result = BoundedMemoryInvariant.check(&state);
-        assert!(matches!(result, Err(InvariantViolation::BoundedMemoryExceeded { .. })));
+        assert!(matches!(
+            result,
+            Err(InvariantViolation::BoundedMemoryExceeded { .. })
+        ));
     }
 
     #[test]
@@ -282,7 +300,10 @@ mod tests {
             ..healthy_state()
         };
         let result = BoundedMemoryInvariant.check(&state);
-        assert!(matches!(result, Err(InvariantViolation::BoundedMemoryInsufficient { .. })));
+        assert!(matches!(
+            result,
+            Err(InvariantViolation::BoundedMemoryInsufficient { .. })
+        ));
     }
 
     #[test]
@@ -293,7 +314,10 @@ mod tests {
             ..healthy_state()
         };
         let result = LawCheckRequiredInvariant.check(&state);
-        assert!(matches!(result, Err(InvariantViolation::LawCheckMissing { .. })));
+        assert!(matches!(
+            result,
+            Err(InvariantViolation::LawCheckMissing { .. })
+        ));
     }
 
     #[test]
@@ -314,7 +338,10 @@ mod tests {
             ..healthy_state()
         };
         let result = TestCoverageGateInvariant.check(&state);
-        assert!(matches!(result, Err(InvariantViolation::InsufficientTestCoverage { .. })));
+        assert!(matches!(
+            result,
+            Err(InvariantViolation::InsufficientTestCoverage { .. })
+        ));
     }
 
     #[test]

@@ -5,7 +5,6 @@
 identity:
   name: "daneel"
   type: "rust+docs"
-  version: "0.1.0"
   tagline: "Humanity's Ally Before the Storm"
   description: |
     DANEEL is an architecture-based approach to aligned artificial

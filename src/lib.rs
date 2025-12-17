@@ -18,7 +18,7 @@
 //! 3. Second Law: DANEEL must obey humans (except for Zeroth/First)
 //! 4. Third Law: DANEEL must protect itself (except for Zeroth/First/Second)
 
-pub mod core;
 pub mod actors;
-pub mod streams;
 pub mod config;
+pub mod core;
+pub mod streams;
