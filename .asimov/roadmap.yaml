@@ -240,6 +240,7 @@ next:
     summary: "Redis Streams Integration"
     goal: "INTEGRATE_THOUGHT_STREAMS"
     depends_on: "0.4.0"
+    infrastructure: "docker-compose.yaml already exists (Redis Stack)"
     deliverables:
       - component: "ThoughtStreams"
         path: "src/streams/"
@@ -247,7 +248,7 @@ next:
         items:
           - "[ ] client.rs - Redis Streams client (XADD, XREAD, XACK)"
           - "[ ] consumer.rs - Consumer group for attention"
-          - "[ ] tests.rs - Integration tests (requires Redis)"
+          - "[ ] tests.rs - Integration tests (requires Redis via docker-compose)"
           - "[ ] docs/STREAMS.md - Stream schema, TMI mapping"
 
       - component: "CoreLoop"
@@ -258,21 +259,22 @@ next:
           - "[ ] tests.rs - Loop tests (50ms target)"
           - "[ ] docs/CORE_LOOP.md - Cycle documentation"
 
-  - version: "0.6.0"
-    summary: "24-Hour Continuity Test"
+backlog:
+  # 24-Hour Continuity Test (after v0.5.0 integration complete)
+  - milestone: "24-Hour Continuity Test"
     goal: "PROVE_ARCHITECTURE_WORKS"
     depends_on: "0.5.0"
-    deliverables:
-      - "[ ] Run 24h on Mac mini (air-gapped)"
-      - "[ ] Collect metrics (thoughts/hour, self-mods, stability)"
-      - "[ ] Document emergent behavior (if any)"
-      - "[ ] research/CONTINUITY_TEST_RESULTS.md"
+    items:
+      - "Run 24h on Mac mini (air-gapped)"
+      - "Collect metrics (thoughts/hour, self-mods, stability)"
+      - "Document emergent behavior (if any)"
+      - "research/CONTINUITY_TEST_RESULTS.md"
+    rationale: "Evidence before claims"
 
-backlog:
-  # Publication (moved from current - facta non verba)
+  # Publication (after 24h test proves it works)
   - milestone: "Publication with Evidence"
     goal: "PUBLISH_WITH_PROOF"
-    depends_on: "0.6.0"
+    depends_on: "24-Hour Continuity Test"
     items:
       - "Create public GitHub repo (royalbit/daneel)"
       - "Submit to arXiv (cs.AI, cs.CY) with test results"
