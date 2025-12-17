@@ -50,9 +50,8 @@
 
 pub mod types;
 
-// TODO: Create tests module
-// #[cfg(test)]
-// mod tests;
+#[cfg(test)]
+mod tests;
 
 use crate::core::types::{SalienceScore, Thought, ThoughtId};
 use ractor::{Actor, ActorProcessingErr, ActorRef};

@@ -28,6 +28,9 @@ pub mod client;
 pub mod consumer;
 pub mod types;
 
+#[cfg(test)]
+mod tests;
+
 /// Stream names
 pub mod names {
     // Working memory streams (5-second TTL)

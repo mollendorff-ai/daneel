@@ -53,9 +53,8 @@
 
 pub mod types;
 
-// TODO: Create tests module
-// #[cfg(test)]
-// mod tests;
+#[cfg(test)]
+mod tests;
 
 use chrono::{DateTime, Utc};
 use ractor::{Actor, ActorProcessingErr, ActorRef};
