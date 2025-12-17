@@ -1,0 +1,48 @@
+[package]
+name = "daneel"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "DANEEL - Architecture-based AI alignment through TMI cognitive architecture"
+authors = ["Louis C. Tavares <louis@royalbit.io>"]
+repository = "https://github.com/royalbit/daneel"
+keywords = ["ai", "alignment", "cognitive-architecture", "tmi"]
+categories = ["science", "simulation"]
+
+[dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Actor framework (Erlang-style supervision)
+ractor = "0.13"
+
+# Redis Streams
+redis = { version = "0.27", features = ["tokio-comp", "streams", "json"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Types
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
+
+# Logging / Tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dev-dependencies]
+tokio-test = "0.4"
+pretty_assertions = "1"
+
+[profile.release]
+lto = true
+codegen-units = 1
+
+[[bin]]
+name = "daneel"
+path = "src/main.rs"

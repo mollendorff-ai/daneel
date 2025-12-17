@@ -1,5 +1,23 @@
+# OS
 .DS_Store
+
+# Claude
 .claude_checkpoint.yaml
+
+# LaTeX
 *.pdf
 *.aux
 *.log
+
+# Rust
+/target/
+**/*.rs.bk
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Redis data (local dev)
+redis_data/

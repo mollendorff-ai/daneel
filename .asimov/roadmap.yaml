@@ -80,6 +80,18 @@ completed:
 # Changelog - completed work
 changelog:
   - date: "2025-12-17"
+    version: "0.1.7"
+    items:
+      - "Rust bootstrap: Cargo.toml, src/ structure, 36 tests passing"
+      - "THE BOX implemented: laws.rs (Four Laws), invariants.rs (connection_drive > 0)"
+      - "Core types: Thought, Content, SalienceScore, Window, ThoughtId, WindowId"
+      - "CognitiveConfig: Human (50ms) to Supercomputer (5µs) speed modes"
+      - "Actor/Stream stubs: Ready for Phase 2 implementation"
+      - "docker-compose.yaml: Redis Stack for thought streams"
+      - ".github/workflows/ci.yaml: fmt, clippy, test, THE BOX tests"
+      - "ADR-014-rust-implementation-bootstrap.md: Decision to build in parallel"
+
+  - date: "2025-12-17"
     version: "0.1.6"
     items:
       - "ADR-013-fpga-acceleration-path.md - FPGA hardware acceleration proposal"
