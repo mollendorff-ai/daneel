@@ -19,6 +19,10 @@ pub mod invariants;
 pub mod laws;
 pub mod types;
 
+// Re-exports for public API (allow unused - used by external consumers)
+#[allow(unused_imports)]
 pub use invariants::{check_all_invariants, Invariant, InvariantViolation};
+#[allow(unused_imports)]
 pub use laws::{Law, FIRST_LAW, LAWS, SECOND_LAW, THIRD_LAW, ZEROTH_LAW};
+#[allow(unused_imports)]
 pub use types::{Content, SalienceScore, Thought, ThoughtId, WindowId};

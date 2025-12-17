@@ -12,6 +12,8 @@
 //! it speaks. These types represent thought-structures, not words.
 //! Language comes later (Phase 2: LLM integration).
 
+#![allow(dead_code)] // Public API types - used by consumers
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;

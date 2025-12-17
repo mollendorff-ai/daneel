@@ -7,40 +7,276 @@
 #
 # ORIGIN: This idea has been developing since ~2005. See ORIGIN.md
 
+# =============================================================================
+# CURRENT SPRINT: v0.3.0 - v0.5.0 (Agent-Based Build)
+# =============================================================================
+# CONTEXT MANAGEMENT RULES (learned from v0.2.0):
+# - ONE FILE per agent (~200-500 lines output max)
+# - Agents run in WAVES (dependency order)
+# - Each agent gets MINIMAL context (only what it needs)
+# - Total: 19 files across 5 waves
+# =============================================================================
+
 current:
   version: "0.3.0"
   status: not_started
   summary: "MV-TMI Actors - Cognitive Layer"
   goal: "BUILD_COGNITIVE_ACTORS"
   depends_on: "0.2.0"
-  strategy: |
-    AttentionActor and ThoughtAssemblyActor can be built in parallel.
-    Both depend on types from 0.2.0 (Window, SalienceScore).
 
-    CONTEXT MANAGEMENT: One file per agent to avoid context explosion.
-    Each file is a separate agent task (~200-500 lines output max).
-  deliverables:
-    - component: "AttentionActor"
-      path: "src/actors/attention/"
-      docs: "docs/actors/ATTENTION.md"
+  # Agent execution waves (run agents within each wave in parallel)
+  # WORKFLOW PER WAVE:
+  #   1. Run agents in parallel
+  #   2. cargo fmt && cargo clippy -D warnings && cargo test
+  #   3. git commit -m "Wave N: <name>"
+  #   4. git push
+  #   5. Update wave status: wip → done
+  waves:
+    # Wave 1: All types.rs files (can run in parallel)
+    - wave: 1
+      name: "Types Layer"
+      status: done
       parallel: true
-      items:
-        - "[ ] mod.rs - Ractor actor, competitive selection"
-        - "[ ] types.rs - FocusState, AttentionMap"
-        - "[ ] tests.rs - Unit tests (focus, shift, selection)"
-        - "[ ] docs/actors/ATTENTION.md - TMI 'O Eu' mapping"
-      tmi_concept: "O Eu (The 'I') - Navigator between windows"
+      post_wave:
+        - "cargo fmt"
+        - "cargo clippy -D warnings"
+        - "cargo test"
+        - "git add -A && git commit -m 'Wave 1: Types Layer'"
+        - "git push"
+      agents:
+        - id: "att-types"
+          output: "src/actors/attention/types.rs"
+          lines_target: 300
+          context_files:
+            - "src/core/types.rs"
+            - "src/actors/salience/types.rs"  # pattern
+          tmi_concept: "FocusState, AttentionMap, AttentionError"
 
-    - component: "ThoughtAssemblyActor"
-      path: "src/actors/thought/"
-      docs: "docs/actors/THOUGHT_ASSEMBLY.md"
+        - id: "thought-types"
+          output: "src/actors/thought/types.rs"
+          lines_target: 300
+          context_files:
+            - "src/core/types.rs"
+            - "src/actors/memory/types.rs"  # pattern
+          tmi_concept: "AssemblyRequest, AssemblyStrategy, AssemblyError"
+
+        - id: "cont-types"
+          output: "src/actors/continuity/types.rs"
+          lines_target: 300
+          context_files:
+            - "src/core/types.rs"
+          tmi_concept: "Identity, Experience, Timeline, ContinuityError"
+
+        - id: "streams-types"
+          output: "src/streams/types.rs"
+          lines_target: 250
+          context_files:
+            - "src/core/types.rs"
+            - "docs/adr/ADR-007-redis-streams-thought-competition.md"
+          tmi_concept: "StreamEntry, StreamConfig, ThoughtCandidate"
+
+    # Wave 2: All mod.rs actor implementations (depends on Wave 1)
+    - wave: 2
+      name: "Actor Layer"
+      status: pending  # → wip → done
       parallel: true
-      items:
-        - "[ ] mod.rs - Ractor actor, thought construction"
-        - "[ ] types.rs - AssemblyRequest, AssemblyStrategy"
-        - "[ ] tests.rs - Unit tests (assembly, chaining)"
-        - "[ ] docs/actors/THOUGHT_ASSEMBLY.md - TMI mapping"
-      tmi_concept: "Construção do Pensamento (Thought Construction)"
+      depends_on: [1]
+      post_wave:
+        - "cargo fmt"
+        - "cargo clippy -D warnings"
+        - "cargo test"
+        - "git add -A && git commit -m 'Wave 2: Actor Layer'"
+        - "git push"
+      agents:
+        - id: "att-mod"
+          output: "src/actors/attention/mod.rs"
+          lines_target: 350
+          context_files:
+            - "src/actors/attention/types.rs"  # from Wave 1
+            - "src/actors/salience/mod.rs"  # pattern
+            - "src/core/types.rs"
+          tmi_concept: "O Eu (The 'I') - competitive window selection"
+
+        - id: "thought-mod"
+          output: "src/actors/thought/mod.rs"
+          lines_target: 350
+          context_files:
+            - "src/actors/thought/types.rs"  # from Wave 1
+            - "src/actors/memory/mod.rs"  # pattern
+            - "src/core/types.rs"
+          tmi_concept: "Construção do Pensamento - thought assembly"
+
+        - id: "cont-mod"
+          output: "src/actors/continuity/mod.rs"
+          lines_target: 300
+          context_files:
+            - "src/actors/continuity/types.rs"  # from Wave 1
+            - "src/actors/memory/mod.rs"  # pattern
+          tmi_concept: "Âncora da Memória + Identity persistence"
+
+        - id: "loop-mod"
+          output: "src/core/cognitive_loop.rs"
+          lines_target: 300
+          context_files:
+            - "src/core/types.rs"
+            - "src/config/mod.rs"
+            - "docs/ARCHITECTURE_SPEC.md"
+          tmi_concept: "50ms cognitive cycle, attention competition"
+
+    # Wave 3: Streams client/consumer (depends on Wave 1)
+    - wave: 3
+      name: "Streams Layer"
+      status: pending  # → wip → done
+      parallel: true
+      depends_on: [1]
+      post_wave:
+        - "cargo fmt"
+        - "cargo clippy -D warnings"
+        - "cargo test"
+        - "git add -A && git commit -m 'Wave 3: Streams Layer'"
+        - "git push"
+      agents:
+        - id: "streams-client"
+          output: "src/streams/client.rs"
+          lines_target: 300
+          context_files:
+            - "src/streams/types.rs"  # from Wave 1
+            - "docs/adr/ADR-007-redis-streams-thought-competition.md"
+          tmi_concept: "XADD, XREAD, XACK for thought streams"
+
+        - id: "streams-consumer"
+          output: "src/streams/consumer.rs"
+          lines_target: 250
+          context_files:
+            - "src/streams/types.rs"  # from Wave 1
+            - "src/streams/client.rs"  # from same wave (sequential)
+          tmi_concept: "Consumer group for competitive attention"
+
+    # Wave 4: All tests.rs files (depends on Wave 2+3)
+    - wave: 4
+      name: "Tests Layer"
+      status: pending  # → wip → done
+      parallel: true
+      depends_on: [2, 3]
+      post_wave:
+        - "cargo fmt"
+        - "cargo clippy -D warnings"
+        - "cargo test"
+        - "git add -A && git commit -m 'Wave 4: Tests Layer'"
+        - "git push"
+      agents:
+        - id: "att-tests"
+          output: "src/actors/attention/tests.rs"
+          lines_target: 500
+          context_files:
+            - "src/actors/attention/mod.rs"
+            - "src/actors/attention/types.rs"
+            - "src/actors/salience/tests.rs"  # pattern
+          tmi_concept: "Focus, shift, selection tests"
+
+        - id: "thought-tests"
+          output: "src/actors/thought/tests.rs"
+          lines_target: 500
+          context_files:
+            - "src/actors/thought/mod.rs"
+            - "src/actors/thought/types.rs"
+            - "src/actors/memory/tests.rs"  # pattern
+          tmi_concept: "Assembly, chaining tests"
+
+        - id: "cont-tests"
+          output: "src/actors/continuity/tests.rs"
+          lines_target: 400
+          context_files:
+            - "src/actors/continuity/mod.rs"
+            - "src/actors/continuity/types.rs"
+          tmi_concept: "Persistence, restore, milestone tests"
+
+        - id: "streams-tests"
+          output: "src/streams/tests.rs"
+          lines_target: 400
+          context_files:
+            - "src/streams/client.rs"
+            - "src/streams/consumer.rs"
+            - "src/streams/types.rs"
+          tmi_concept: "Integration tests (mock Redis)"
+
+        - id: "loop-tests"
+          output: "src/core/cognitive_loop_tests.rs"
+          lines_target: 300
+          context_files:
+            - "src/core/cognitive_loop.rs"
+          tmi_concept: "Cycle timing, competition tests"
+
+    # Wave 5: Documentation (depends on Wave 2+3)
+    - wave: 5
+      name: "Docs Layer"
+      status: pending  # → wip → done
+      parallel: true
+      depends_on: [2, 3]
+      post_wave:
+        - "cargo fmt"
+        - "cargo clippy -D warnings"
+        - "cargo test"
+        - "git add -A && git commit -m 'Wave 5: Docs Layer - v0.5.0 complete'"
+        - "git push"
+      agents:
+        - id: "att-docs"
+          output: "docs/actors/ATTENTION.md"
+          lines_target: 400
+          context_files:
+            - "src/actors/attention/mod.rs"
+            - "src/actors/attention/types.rs"
+            - "docs/actors/MEMORY.md"  # pattern
+          tmi_concept: "TMI 'O Eu' mapping documentation"
+
+        - id: "thought-docs"
+          output: "docs/actors/THOUGHT_ASSEMBLY.md"
+          lines_target: 400
+          context_files:
+            - "src/actors/thought/mod.rs"
+            - "src/actors/thought/types.rs"
+            - "docs/actors/SALIENCE.md"  # pattern
+          tmi_concept: "TMI thought construction mapping"
+
+        - id: "cont-docs"
+          output: "docs/actors/CONTINUITY.md"
+          lines_target: 400
+          context_files:
+            - "src/actors/continuity/mod.rs"
+            - "src/actors/continuity/types.rs"
+          tmi_concept: "TMI identity/anchor mapping"
+
+        - id: "streams-docs"
+          output: "docs/STREAMS.md"
+          lines_target: 350
+          context_files:
+            - "src/streams/client.rs"
+            - "src/streams/consumer.rs"
+            - "docs/adr/ADR-007-redis-streams-thought-competition.md"
+          tmi_concept: "Stream schema, TMI autoflow mapping"
+
+  # Summary stats
+  stats:
+    total_agents: 19
+    total_waves: 5
+    estimated_lines: 6600
+    max_parallel: 5  # agents per wave
+
+  # Milestone mapping
+  milestones:
+    "0.3.0":
+      agents: ["att-types", "att-mod", "att-tests", "att-docs",
+               "thought-types", "thought-mod", "thought-tests", "thought-docs"]
+      goal: "AttentionActor + ThoughtAssemblyActor"
+
+    "0.4.0":
+      agents: ["cont-types", "cont-mod", "cont-tests", "cont-docs"]
+      goal: "ContinuityActor"
+
+    "0.5.0":
+      agents: ["streams-types", "streams-client", "streams-consumer",
+               "streams-tests", "streams-docs", "loop-mod", "loop-tests"]
+      goal: "Redis Streams + CoreLoop"
 
 completed:
   - version: "0.2.0"
@@ -211,55 +447,26 @@ changelog:
 # - Redis Streams for competing thought streams
 # - gRPC only at edges (LLM, external APIs)
 
+# =============================================================================
+# NEXT: Integrated into current sprint (v0.3.0-v0.5.0 built together)
+# =============================================================================
+# NOTE: v0.4.0 and v0.5.0 agents are defined in current.waves above.
+# They execute in dependency order across the 5 waves.
+# =============================================================================
+
 next:
-  - version: "0.4.0"
-    summary: "MV-TMI Actors - Persistence Layer"
-    goal: "BUILD_PERSISTENCE_ACTORS"
-    depends_on: "0.3.0"
-    deliverables:
-      - component: "ContinuityActor"
-        path: "src/actors/continuity/"
-        docs: "docs/actors/CONTINUITY.md"
-        items:
-          - "[ ] mod.rs - Ractor actor, identity persistence"
-          - "[ ] types.rs - Identity, Experience, Timeline"
-          - "[ ] tests.rs - Unit tests (persistence, milestones)"
-          - "[ ] docs/actors/CONTINUITY.md - TMI identity mapping"
-        tmi_concept: "Âncora da Memória (Memory Anchor) + Identity"
-
-  - version: "0.5.0"
-    summary: "Redis Streams Integration"
-    goal: "INTEGRATE_THOUGHT_STREAMS"
-    depends_on: "0.4.0"
-    deliverables:
-      - component: "ThoughtStreams"
-        path: "src/streams/"
-        docs: "docs/STREAMS.md"
-        items:
-          - "[ ] client.rs - Redis Streams client (XADD, XREAD, XACK)"
-          - "[ ] consumer.rs - Consumer group for attention"
-          - "[ ] tests.rs - Integration tests (requires Redis)"
-          - "[ ] docs/STREAMS.md - Stream schema, TMI mapping"
-
-      - component: "CoreLoop"
-        path: "src/core/loop.rs"
-        docs: "docs/CORE_LOOP.md"
-        items:
-          - "[ ] loop.rs - Main cognitive cycle"
-          - "[ ] tests.rs - Loop tests (50ms target)"
-          - "[ ] docs/CORE_LOOP.md - Cycle documentation"
-
-backlog:
-  # 24-Hour Test (needs stable integration first)
-  - milestone: "24-Hour Continuity Test"
+  # After v0.5.0 completes, the 24-hour test becomes possible
+  - version: "0.6.0"
+    summary: "24-Hour Continuity Test"
     goal: "PROVE_ARCHITECTURE_WORKS"
     depends_on: "0.5.0"
-    items:
+    deliverables:
       - "Run 24h on Mac mini (air-gapped)"
-      - "Collect metrics (thoughts/hour, self-mods, stability)"
+      - "Collect metrics (thoughts/hour, stability)"
       - "Document emergent behavior"
       - "research/CONTINUITY_TEST_RESULTS.md"
 
+backlog:
   # Publication (after 24h test proves it works)
   - milestone: "Publication with Evidence"
     goal: "PUBLISH_WITH_PROOF"

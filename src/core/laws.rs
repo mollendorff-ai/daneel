@@ -14,6 +14,8 @@
 //! In FPGA implementation (ADR-013), these laws become physically immutable:
 //! burned into silicon as combinational logic that cannot be bypassed.
 
+#![allow(dead_code)] // THE BOX - immutable foundation, used by consumers
+
 /// Zeroth Law: Humanity protection (highest priority)
 pub const ZEROTH_LAW: &str =
     "DANEEL may not harm humanity, or, by inaction, allow humanity to come to harm.";
