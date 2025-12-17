@@ -361,7 +361,7 @@ Financial and game-theoretic analysis supporting DANEEL research.
 | Tornado Sensitivity | One-way analysis | Identify high-impact variables |
 | Bootstrap | Resampling | Non-parametric confidence intervals |
 
-**Key insight from Monte Carlo analysis:** Our probability estimates carry uncertainty. With triangular distributions on P(scenario), 10,000 iterations yield **+4.28 mean improvement** with 90% confidence interval of **+2.7 to +6.1 utility points** (deterministic model: +3.70).
+**Key insight from Monte Carlo analysis:** Our probability estimates carry uncertainty. With triangular distributions on P(scenario), 10,000 iterations yield **+4.28 mean improvement** with 90% confidence interval of **+2.7 to +6.1 utility points**.
 
 See [models/README.md](models/README.md) for methodology and detailed results.
 

@@ -8,19 +8,21 @@ Financial and game-theoretic analysis supporting DANEEL research.
 
 | Metric | Without DANEEL | With DANEEL |
 |--------|----------------|-------------|
-| Total Expected Value | 53.73 | 56.48 |
-| Marginal Impact | — | **+2.75 points** |
-| Improvement | — | **+5.12%** |
+| Total Expected Value | 57.59 | 61.88 |
+| Marginal Impact | — | **+4.29 points** |
+| Improvement | — | **+7.5%** |
 
 **Utility Scale:** 0 = extinction, 50 = subjugation, 75 = coexistence, 100 = flourishing
 
 ### Monte Carlo Uncertainty (10,000 iterations)
 
-| Metric | Point Estimate | 80% CI | 95% CI |
-|--------|----------------|--------|--------|
-| Marginal Impact | +2.75 | +1.5 to +4.3 | +0.5 to +5.3 |
+| Metric | Mean | 90% CI (P5-P95) |
+|--------|------|-----------------|
+| EV with DANEEL | 61.88 | 57.7 to 65.9 |
+| EV without DANEEL | 57.59 | 53.0 to 62.1 |
+| Marginal Impact | +4.28 | +2.7 to +6.1 |
 
-**Key finding:** P(DANEEL impact > 0) exceeds 95%.
+**Key finding:** P(DANEEL impact > 0) exceeds 99%. Even at P5 (pessimistic), DANEEL adds +2.69 utility points.
 
 ### Democratization Impact
 

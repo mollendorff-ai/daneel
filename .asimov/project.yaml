@@ -92,7 +92,7 @@ models:
   files:
     # Core game theory
     - file: "game-theory-asi-race.yaml"
-      desc: "Prisoner's dilemma between AI labs, EV with/without DANEEL (+3.70 points)"
+      desc: "Prisoner's dilemma between AI labs, EV with/without DANEEL (+4.29 points)"
     - file: "game-theory-asi-race-mc.yaml"
       desc: "Monte Carlo (10K iterations) - P(DANEEL impact > 0) > 99%"
     - file: "game-theory-democratized-asi.yaml"

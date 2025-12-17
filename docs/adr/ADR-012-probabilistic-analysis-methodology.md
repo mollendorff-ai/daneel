@@ -154,7 +154,7 @@ This reframes analysis from "DANEEL vs LLM" to "DANEEL rehabilitates LLM"—wher
 
 ### Neutral
 
-1. **Point estimates remain valid:** Monte Carlo confirms +3.70 is reasonable (within all CIs)
+1. **Point estimates remain valid:** Monte Carlo confirms +4.28 is reasonable (within all CIs)
 2. **Methodology documented:** Future analysts can verify/challenge assumptions
 
 ## References
