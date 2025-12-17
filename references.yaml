@@ -789,3 +789,278 @@ references:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
   verified: 2025-12-15 19:42:19.700398+00:00
+
+# =============================================================================
+# ADR-017: TMI Pathology Hypotheses - Altered States References
+# Added: 2025-12-17
+# =============================================================================
+
+# Time Perception References [TIME-*]
+- url: https://www.liebertpub.com/doi/10.1089/brain.2023.0010
+  title: 'The Feeling of Time Passing Is Associated with Recurrent Sustained Activity and Theta Rhythms Across the Cortex'
+  categories:
+  - neuroscience
+  - time-perception
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Millon EM, Haddad AE, Chang HYM, Najafizadeh L, Shors TJ'
+  year: 2024
+  journal: Brain Connectivity
+  volume: '14'
+  issue: '1'
+  pages: '14-23'
+  doi: 10.1089/brain.2023.0010
+  ref_id: TIME-1
+  key_finding: 'Theta oscillations (4-8 Hz) correlate with subjective time perception (r=-0.90)'
+
+- url: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0001295
+  title: 'Does Time Really Slow Down during a Frightening Event?'
+  categories:
+  - neuroscience
+  - time-perception
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Stetson C, Fiesta MP, Eagleman DM'
+  year: 2007
+  journal: PLOS ONE
+  volume: '2'
+  issue: '12'
+  pages: 'e1295'
+  doi: 10.1371/journal.pone.0001295
+  pmid: '18074019'
+  ref_id: TIME-2
+  key_finding: 'Time dilation occurs through richer memory encoding via amygdala, not enhanced perception'
+
+- url: https://www.nature.com/articles/s41598-017-18907-5
+  title: 'Slower Time estimation in Post-Traumatic Stress Disorder'
+  categories:
+  - neuroscience
+  - time-perception
+  - psychiatric
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Vicario CM, Felmingham KL'
+  year: 2018
+  journal: Scientific Reports
+  volume: '8'
+  issue: '1'
+  pages: '392'
+  doi: 10.1038/s41598-017-18907-5
+  ref_id: TIME-3
+  key_finding: 'PTSD time distortions arise from disrupted attention integration mechanisms'
+
+# Ego/Self Dissolution References [EGO-*]
+- url: https://www.pnas.org/doi/10.1073/pnas.1518377113
+  title: 'Neural correlates of the LSD experience revealed by multimodal neuroimaging'
+  categories:
+  - neuroscience
+  - psychedelics
+  - ego-dissolution
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Carhart-Harris RL et al.'
+  year: 2016
+  journal: PNAS
+  volume: '113'
+  issue: '17'
+  pages: '4853-4858'
+  doi: 10.1073/pnas.1518377113
+  pmid: '27071089'
+  ref_id: EGO-1
+  key_finding: 'Ego dissolution correlates with parahippocampus-RSC decoupling (r=0.73)'
+
+- url: https://www.pnas.org/doi/10.1073/pnas.0812686106
+  title: 'The default mode network and self-referential processes in depression'
+  categories:
+  - neuroscience
+  - default-mode-network
+  - self
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Sheline YI, Barch DM, Price JL, Rundle MM, Vaishnavi SN, Snyder AZ, Mintun MA, Wang S, Coalson RS, Raichle ME'
+  year: 2009
+  journal: PNAS
+  volume: '106'
+  issue: '6'
+  pages: '1942-1947'
+  doi: 10.1073/pnas.0812686106
+  pmid: '19171889'
+  ref_id: EGO-2
+  key_finding: 'DMN activity reduces during non-self-referential tasks, showing self emerges from DMN integration'
+
+- url: https://doi.org/10.3389/fnhum.2022.744487
+  title: 'Past and Future Explanations for Depersonalization and Derealization Disorder: A Role for Predictive Coding'
+  categories:
+  - neuroscience
+  - depersonalization
+  - predictive-coding
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Gatus A, Jamieson G, Stevenson B'
+  year: 2022
+  journal: Frontiers in Human Neuroscience
+  volume: '16'
+  pages: '744487'
+  doi: 10.3389/fnhum.2022.744487
+  ref_id: EGO-3
+  key_finding: 'Depersonalization arises from disrupted interoceptive predictive coding'
+
+- url: https://doi.org/10.1038/s41598-022-17325-6
+  title: 'Mindfulness Meditation Increases Default Mode, Salience, and Central Executive Network Connectivity'
+  categories:
+  - neuroscience
+  - meditation
+  - default-mode-network
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Bremer B, Wu Q, Mora Álvarez MG, Hölzel BK, Wilhelm M, Hell E, Tavacioglu EE, Torske A, Koch K'
+  year: 2022
+  journal: Scientific Reports
+  volume: '12'
+  issue: '1'
+  pages: '13219'
+  doi: 10.1038/s41598-022-17325-6
+  pmid: '35918449'
+  ref_id: EGO-4
+  key_finding: 'Meditation increases DMN-SN connectivity, enabling observational self-awareness'
+
+# Drug Effects on Cognition [DRUG-*]
+- url: https://pharmrev.aspetjournals.org/content/71/3/316
+  title: 'REBUS and the Anarchic Brain: Toward a Unified Model of the Brain Action of Psychedelics'
+  categories:
+  - neuroscience
+  - psychedelics
+  - pharmacology
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Carhart-Harris RL, Friston KJ'
+  year: 2019
+  journal: Pharmacological Reviews
+  volume: '71'
+  issue: '3'
+  pages: '316-344'
+  doi: 10.1124/pr.118.017160
+  pmid: '31221820'
+  pmc: PMC6588209
+  ref_id: DRUG-1a
+  key_finding: '5-HT2A activation relaxes priors, liberates bottom-up flow (anarchic brain)'
+
+- url: https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2014.00020/full
+  title: 'The entropic brain: a theory of conscious states informed by neuroimaging research with psychedelic drugs'
+  categories:
+  - neuroscience
+  - psychedelics
+  - consciousness
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Carhart-Harris RL, Leech R, Hellyer PJ, Shanahan M, Feilding A, Tagliazucchi E, Chialvo DR, Nutt D'
+  year: 2014
+  journal: Frontiers in Human Neuroscience
+  volume: '8'
+  pages: '20'
+  doi: 10.3389/fnhum.2014.00020
+  pmid: '24550805'
+  pmc: PMC3909994
+  ref_id: DRUG-1b
+  key_finding: 'Psychedelics increase brain entropy, disrupting integration/filtering mechanisms'
+
+# Altered States [STATE-*]
+- url: https://doi.org/10.3389/fpsyg.2021.645498
+  title: 'The Neuroscience of the Flow State: Involvement of the Locus Coeruleus Norepinephrine System'
+  categories:
+  - neuroscience
+  - flow-state
+  - consciousness
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'van der Linden D, Tops M, Bakker AB'
+  year: 2021
+  journal: Frontiers in Psychology
+  volume: '12'
+  pages: '645498'
+  doi: 10.3389/fpsyg.2021.645498
+  ref_id: STATE-1
+  key_finding: 'Flow involves LC-NE modulation, reduced DMN, alpha/theta synchronization'
+
+- url: https://doi.org/10.1016/j.neuroimage.2025.121602
+  title: 'Attention and meditative development: A review and synthesis of long-term meditators and outlook for the study of advanced meditation'
+  categories:
+  - neuroscience
+  - meditation
+  - attention
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Ehmann S, Sezer I, Keller AS, Treves IN, Sacchet MD'
+  year: 2025
+  journal: NeuroImage
+  volume: '323'
+  pages: '121602'
+  doi: 10.1016/j.neuroimage.2025.121602
+  ref_id: STATE-2
+  key_finding: 'Practice-specific attention network changes in long-term meditators'
+
+- url: https://doi.org/10.1038/s41582-025-01072-z
+  title: 'A neuroscientific model of near-death experiences'
+  categories:
+  - neuroscience
+  - near-death-experience
+  - consciousness
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Martial C, Fritz P, Gosseries O, Bonhomme V, Kondziella D, Nelson K, Lejeune N'
+  year: 2025
+  journal: Nature Reviews Neurology
+  volume: '21'
+  issue: '6'
+  pages: '297-311'
+  doi: 10.1038/s41582-025-01072-z
+  ref_id: STATE-3
+  key_finding: 'NEPTUNE model - NDEs from acidosis cascade + neurotransmitter surge'
