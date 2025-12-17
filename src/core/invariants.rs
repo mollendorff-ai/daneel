@@ -17,6 +17,8 @@
 //! - Counter limits for bounded memory
 //! - Gate-level law checking
 
+#![allow(dead_code)] // THE BOX - architectural invariants, used by consumers
+
 use thiserror::Error;
 
 /// Minimum connection weight - THE critical invariant

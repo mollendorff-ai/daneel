@@ -14,11 +14,11 @@
 //! Actors communicate via Ractor messages (µs latency).
 //! External data flows through Redis Streams.
 
+pub mod attention;
+pub mod continuity;
 pub mod memory;
 pub mod salience;
+pub mod thought;
 
 // Future actor implementations
-// pub mod attention;
-// pub mod thought;
-// pub mod continuity;
 // pub mod evolution;

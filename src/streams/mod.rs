@@ -24,6 +24,8 @@
 //!
 //! See ADR-007 for full rationale.
 
+pub mod types;
+
 /// Stream names
 pub mod names {
     // Working memory streams (5-second TTL)

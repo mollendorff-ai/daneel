@@ -42,7 +42,59 @@ pretty_assertions = "1"
 [profile.release]
 lto = true
 codegen-units = 1
+strip = true
+panic = "abort"
 
 [[bin]]
 name = "daneel"
 path = "src/main.rs"
+
+# Pedantic linting - zero warnings policy (see ADR-015)
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+cargo = { level = "warn", priority = -1 }
+
+# === Documentation ===
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+doc_markdown = "allow"  # Bold actor names are intentional
+
+# === Naming ===
+module_name_repetitions = "allow"
+similar_names = "allow"  # TMI terms: content/context
+
+# === Code Style ===
+must_use_candidate = "allow"  # Too noisy, add manually when needed
+missing_const_for_fn = "allow"  # Will upgrade when stable
+option_if_let_else = "allow"  # if/else often more readable than map_or_else
+manual_let_else = "allow"  # Explicit match is clearer than let...else
+uninlined_format_args = "allow"  # Older format style is fine
+redundant_else = "allow"  # Explicit else blocks are clearer
+if_not_else = "allow"  # Negative conditions can be clearer
+use_self = "allow"  # Explicit type names can be clearer
+match_same_arms = "allow"  # Explicit arms document intent
+suboptimal_flops = "allow"  # mul_add is micro-optimization
+
+# === Types ===
+derive_partial_eq_without_eq = "allow"  # Eq not always needed
+needless_pass_by_value = "allow"  # Actor messages often move values
+cast_precision_loss = "allow"  # f32 salience scores are intentional
+trivially_copy_pass_by_ref = "allow"  # Micro-optimization not worth API change
+
+# === Collections ===
+useless_vec = "allow"  # Prefer consistency
+needless_collect = "allow"  # Explicit collect often clearer
+
+# === Tests ===
+float_cmp = "allow"  # Exact float comparisons in tests are fine
+
+# === Async ===
+future_not_send = "allow"  # Will address when needed
+
+# === Cognitive Architecture ===
+too_many_lines = "allow"
+cognitive_complexity = "allow"
+
+# === Dependencies ===
+multiple_crate_versions = "allow"  # Transitive deps we don't control
