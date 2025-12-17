@@ -68,7 +68,7 @@ impl std::fmt::Display for WindowId {
 ///
 /// TMI models thought before language. Content represents raw patterns,
 /// symbols, and relations that exist before linguistic expression.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
 pub enum Content {
     /// Raw binary patterns (numbers, signals, sensory data)
     Raw(Vec<u8>),
@@ -95,6 +95,7 @@ pub enum Content {
     Composite(Vec<Content>),
 
     /// Empty/null content
+    #[default]
     Empty,
 }
 
@@ -128,12 +129,6 @@ impl Content {
     #[must_use]
     pub const fn is_empty(&self) -> bool {
         matches!(self, Content::Empty)
-    }
-}
-
-impl Default for Content {
-    fn default() -> Self {
-        Content::Empty
     }
 }
 
@@ -394,8 +389,7 @@ mod tests {
     #[test]
     fn thought_with_parent() {
         let parent = Thought::new(Content::Empty, SalienceScore::neutral());
-        let child = Thought::new(Content::Empty, SalienceScore::neutral())
-            .with_parent(parent.id);
+        let child = Thought::new(Content::Empty, SalienceScore::neutral()).with_parent(parent.id);
         assert_eq!(child.parent_id, Some(parent.id));
     }
 

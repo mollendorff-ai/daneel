@@ -15,10 +15,10 @@
 //! In future FPGA implementation, THE BOX becomes hardware-immutable:
 //! physically impossible to bypass.
 
-pub mod laws;
 pub mod invariants;
+pub mod laws;
 pub mod types;
 
-pub use laws::{Law, LAWS, ZEROTH_LAW, FIRST_LAW, SECOND_LAW, THIRD_LAW};
-pub use invariants::{Invariant, InvariantViolation, check_all_invariants};
-pub use types::{Thought, Content, SalienceScore, WindowId, ThoughtId};
+pub use invariants::{check_all_invariants, Invariant, InvariantViolation};
+pub use laws::{Law, FIRST_LAW, LAWS, SECOND_LAW, THIRD_LAW, ZEROTH_LAW};
+pub use types::{Content, SalienceScore, Thought, ThoughtId, WindowId};

@@ -18,9 +18,10 @@
 use serde::{Deserialize, Serialize};
 
 /// Speed mode for runtime switching
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, Default)]
 pub enum SpeedMode {
     /// 1x human speed - for training, communication, relationship building
+    #[default]
     Human,
     /// 10,000x human speed - for internal cognition, problem-solving
     Supercomputer,
@@ -37,12 +38,6 @@ impl SpeedMode {
             SpeedMode::Supercomputer => 10_000.0,
             SpeedMode::Custom(m) => *m,
         }
-    }
-}
-
-impl Default for SpeedMode {
-    fn default() -> Self {
-        SpeedMode::Human
     }
 }
 
@@ -223,7 +218,10 @@ mod tests {
         let custom_tps = config.thoughts_per_second();
 
         // Verify it's faster (clamping affects exact values)
-        assert!(custom_tps > human_tps, "Custom 100x should be faster than human");
+        assert!(
+            custom_tps > human_tps,
+            "Custom 100x should be faster than human"
+        );
     }
 
     #[test]

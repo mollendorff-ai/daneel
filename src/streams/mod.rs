@@ -46,10 +46,7 @@ pub mod names {
     ];
 
     /// All long-term memory streams
-    pub const LONGTERM_STREAMS: &[&str] = &[
-        MEMORY_EPISODIC,
-        MEMORY_SEMANTIC,
-    ];
+    pub const LONGTERM_STREAMS: &[&str] = &[MEMORY_EPISODIC, MEMORY_SEMANTIC];
 }
 
 /// Stream configuration
