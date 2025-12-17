@@ -78,7 +78,7 @@ current:
     # Wave 2: All mod.rs actor implementations (depends on Wave 1)
     - wave: 2
       name: "Actor Layer"
-      status: pending  # → wip → done
+      status: done
       parallel: true
       depends_on: [1]
       post_wave:
