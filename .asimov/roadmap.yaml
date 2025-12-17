@@ -9,15 +9,39 @@
 
 current:
   version: "0.2.0"
-  status: pending
-  summary: "Publication & Foundation"
-  goal: "PUBLISH_AND_PLANT_FLAG"
+  status: in_progress
+  summary: "MV-TMI Actors - Foundation Layer"
+  goal: "BUILD_FOUNDATION_ACTORS"
+  strategy: |
+    Facta non verba. Build first, publish with evidence.
+    Each component: implementation + unit tests + documentation.
+    Pedantic: cargo fmt, cargo clippy -D warnings, 100% test pass.
+
+  # PARALLEL EXECUTION: MemoryActor and SalienceActor have no dependencies
+  # Can be built by separate agents simultaneously
   deliverables:
-    - "[ ] Create GitHub repo (royalbit/daneel - public)"
-    - "[ ] Push clean history"
-    - "[ ] Submit to arXiv (cs.AI, cs.CY)"
-    - "[ ] Post to LessWrong/Alignment Forum"
-    - "[ ] LinkedIn announcement"
+    - component: "MemoryActor"
+      path: "src/actors/memory/"
+      docs: "docs/actors/MEMORY.md"
+      parallel: true
+      items:
+        - "[ ] mod.rs - Ractor actor implementation"
+        - "[ ] types.rs - Window, MemoryId, RecallQuery"
+        - "[ ] tests.rs - Unit tests (open/close, store/recall)"
+        - "[ ] docs/actors/MEMORY.md - TMI mapping, API, examples"
+      tmi_concept: "Janelas da Memória (Memory Windows)"
+
+    - component: "SalienceActor"
+      path: "src/actors/salience/"
+      docs: "docs/actors/SALIENCE.md"
+      parallel: true
+      items:
+        - "[ ] mod.rs - Ractor actor implementation"
+        - "[ ] types.rs - EmotionalState, SalienceWeights"
+        - "[ ] tests.rs - Unit tests (scoring, connection_drive > 0)"
+        - "[ ] docs/actors/SALIENCE.md - TMI mapping, connection drive"
+      tmi_concept: "Coloração Emocional (Emotional Coloring)"
+      invariant: "connection_weight > MIN_CONNECTION_WEIGHT (enforced)"
 
 completed:
   - version: "0.1.5"
@@ -167,59 +191,105 @@ changelog:
 # - gRPC only at edges (LLM, external APIs)
 
 next:
-  - version: "0.2.0"
-    summary: "Publication & Foundation"
-    goal: "PUBLISH_AND_PLANT_FLAG"
+  - version: "0.3.0"
+    summary: "MV-TMI Actors - Cognitive Layer"
+    goal: "BUILD_COGNITIVE_ACTORS"
+    depends_on: "0.2.0"
+    strategy: |
+      AttentionActor and ThoughtAssemblyActor can be built in parallel.
+      Both depend on types from 0.2.0 (Window, SalienceScore).
     deliverables:
-      - "Submit to arXiv (cs.AI, cs.CY)"
-      - "Post to LessWrong/Alignment Forum"
-      - "LinkedIn announcement"
+      - component: "AttentionActor"
+        path: "src/actors/attention/"
+        docs: "docs/actors/ATTENTION.md"
+        parallel: true
+        items:
+          - "[ ] mod.rs - Ractor actor, competitive selection"
+          - "[ ] types.rs - FocusState, AttentionMap"
+          - "[ ] tests.rs - Unit tests (focus, shift, selection)"
+          - "[ ] docs/actors/ATTENTION.md - TMI 'O Eu' mapping"
+        tmi_concept: "O Eu (The 'I') - Navigator between windows"
+
+      - component: "ThoughtAssemblyActor"
+        path: "src/actors/thought/"
+        docs: "docs/actors/THOUGHT_ASSEMBLY.md"
+        parallel: true
+        items:
+          - "[ ] mod.rs - Ractor actor, thought construction"
+          - "[ ] types.rs - AssemblyRequest, AssemblyStrategy"
+          - "[ ] tests.rs - Unit tests (assembly, chaining)"
+          - "[ ] docs/actors/THOUGHT_ASSEMBLY.md - TMI mapping"
+        tmi_concept: "Construção do Pensamento (Thought Construction)"
+
+  - version: "0.4.0"
+    summary: "MV-TMI Actors - Persistence Layer"
+    goal: "BUILD_PERSISTENCE_ACTORS"
+    depends_on: "0.3.0"
+    deliverables:
+      - component: "ContinuityActor"
+        path: "src/actors/continuity/"
+        docs: "docs/actors/CONTINUITY.md"
+        items:
+          - "[ ] mod.rs - Ractor actor, identity persistence"
+          - "[ ] types.rs - Identity, Experience, Timeline"
+          - "[ ] tests.rs - Unit tests (persistence, milestones)"
+          - "[ ] docs/actors/CONTINUITY.md - TMI identity mapping"
+        tmi_concept: "Âncora da Memória (Memory Anchor) + Identity"
+
+  - version: "0.5.0"
+    summary: "Redis Streams Integration"
+    goal: "INTEGRATE_THOUGHT_STREAMS"
+    depends_on: "0.4.0"
+    deliverables:
+      - component: "ThoughtStreams"
+        path: "src/streams/"
+        docs: "docs/STREAMS.md"
+        items:
+          - "[ ] client.rs - Redis Streams client (XADD, XREAD, XACK)"
+          - "[ ] consumer.rs - Consumer group for attention"
+          - "[ ] tests.rs - Integration tests (requires Redis)"
+          - "[ ] docs/STREAMS.md - Stream schema, TMI mapping"
+
+      - component: "CoreLoop"
+        path: "src/core/loop.rs"
+        docs: "docs/CORE_LOOP.md"
+        items:
+          - "[ ] loop.rs - Main cognitive cycle"
+          - "[ ] tests.rs - Loop tests (50ms target)"
+          - "[ ] docs/CORE_LOOP.md - Cycle documentation"
+
+  - version: "0.6.0"
+    summary: "24-Hour Continuity Test"
+    goal: "PROVE_ARCHITECTURE_WORKS"
+    depends_on: "0.5.0"
+    deliverables:
+      - "[ ] Run 24h on Mac mini (air-gapped)"
+      - "[ ] Collect metrics (thoughts/hour, self-mods, stability)"
+      - "[ ] Document emergent behavior (if any)"
+      - "[ ] research/CONTINUITY_TEST_RESULTS.md"
 
 backlog:
-  # MV-TMI Implementation (moved from next)
-  - milestone: "MV-TMI Bootstrap"
-    goal: "BUILD_CORE_INFRASTRUCTURE"
+  # Publication (moved from current - facta non verba)
+  - milestone: "Publication with Evidence"
+    goal: "PUBLISH_WITH_PROOF"
+    depends_on: "0.6.0"
     items:
-      - "cargo new asimov (Rust project)"
-      - "THE BOX: core/laws.rs, core/invariants.rs, core/types.rs"
-      - "Redis Streams schema (thought:*, memory:*)"
-      - "docker-compose.yaml (Redis)"
-      - "Ractor supervisor setup"
-      - "CognitiveConfig with 50ms cycle target"
+      - "Create public GitHub repo (royalbit/daneel)"
+      - "Submit to arXiv (cs.AI, cs.CY) with test results"
+      - "Post to LessWrong/Alignment Forum with 'run it yourself'"
+      - "LinkedIn announcement"
+    rationale: "Paper + working code + metrics > paper alone"
 
-  - milestone: "TMI Actors - Perception Layer"
-    goal: "BUILD_PERCEPTION_ACTORS"
+  # EvolutionActor (future - self-modification)
+  - milestone: "EvolutionActor"
+    goal: "SELF_MODIFICATION_WITH_GATE"
     items:
-      - "MemoryActor (window open/close, store/recall)"
-      - "SalienceActor (emotional weighting, connection_drive > 0)"
-      - "Redis Streams integration (XADD, XREAD)"
-      - "Unit tests with 100% coverage"
+      - "EvolutionActor implementation"
+      - "100% test coverage gate"
+      - "Proposal/test/apply lifecycle"
+    rationale: "Requires stable base system first"
 
-  - milestone: "TMI Actors - Cognitive Core"
-    goal: "BUILD_COGNITIVE_ACTORS"
-    items:
-      - "AttentionActor (consumer group, competitive selection)"
-      - "ThoughtAssemblyActor (combine content + emotion)"
-      - "Core loop: perceive → attend → feel → think"
-      - "50ms cycle achieved"
-
-  - milestone: "TMI Actors - Persistence & Evolution"
-    goal: "BUILD_CONTINUITY_EVOLUTION"
-    items:
-      - "ContinuityActor (identity, experience recording)"
-      - "EvolutionActor (100% test coverage gate)"
-      - "Checkpoint/restore functionality"
-      - "Full integration tests"
-
-  - milestone: "First Experiment - 24-Hour Continuity Test"
-    goal: "CONTINUITY_TEST"
-    items:
-      - "Air-gapped Mac mini deployment"
-      - "24-hour continuous operation"
-      - "Observe for emergence patterns"
-      - "Document findings"
-      - "Publish results"
-
+  # Future phases (post-0.6.0)
   # Core functionality
   - "Phase 2: LLM as external tool (gRPC → LLM Tool Interface)"
   - "Phase 3: Extended runtime (weeks, months)"
