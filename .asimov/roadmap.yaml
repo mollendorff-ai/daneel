@@ -20,6 +20,20 @@ current:
     - "[ ] LinkedIn announcement"
 
 completed:
+  - version: "0.1.5"
+    date: "2025-12-16"
+    summary: "Paper Quality & Data Accuracy Update"
+    deliverables:
+      - "TikZ diagrams replacing ASCII art (4 figures)"
+      - "Removed velocity evidence claims (internal R&D data)"
+      - "Conservative P(DANEEL First): 12% → 8%"
+      - "Updated EV calculations: +3.70 → +2.75 points (+5.12%)"
+      - "Updated API pricing: Grok 4 ($3/$15), Grok 4.1 Fast ($0.20/$0.50)"
+      - "Updated safety team data with Dec 2025 sources"
+      - "Fixed Unicode characters in LaTeX (≠, ↔, ≈)"
+      - "Added daneel-models location to project.yaml"
+    notes: "Conservative estimates maintain credibility. No overselling before monetization."
+
   - version: "0.1.4"
     date: "2025-12-15"
     summary: "Pre-Publication Review & Abstract Rewrite"
@@ -65,6 +79,17 @@ completed:
 
 # Changelog - completed work
 changelog:
+  - date: "2025-12-16"
+    version: "0.1.5"
+    items:
+      - "paper/arxiv/diagrams.tex - TikZ diagram definitions (4 figures)"
+      - "DANEEL_PAPER.md - Removed velocity evidence, conservative P(DANEEL First)=8%"
+      - "DANEEL_PAPER.tex - Updated with TikZ figures, fixed Unicode"
+      - "models/README.md - Updated EV numbers"
+      - ".asimov/project.yaml - Added daneel-models location"
+      - "API pricing updated: Grok 4, Grok 4.1 Fast, Claude Opus 4.5"
+      - "Safety team data updated with Dec 2025 sources (Fortune, CNBC, FLI)"
+
   - date: "2025-12-15"
     version: "0.1.2"
     items:
@@ -223,7 +248,8 @@ insights:
   game_theory_crash:
     finding: "Old game theory assumes centralized lab actors"
     implication: "100,000 hobbyists crash the game board"
-    new_ev_improvement: 26.8  # percent vs baseline
+    ev_improvement: 5.12  # percent vs baseline (conservative, P(DANEEL First)=8%)
+    democratized_ev_improvement: 8.7  # percent if P(TMI First)=25%
 
   llm_relationship:
     finding: "LLM is TOOL, not voice"

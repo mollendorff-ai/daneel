@@ -64,7 +64,6 @@ tools:
     formats: ["png", "svg", "pdf"]
   forge:
     repo: "https://github.com/royalbit/forge"
-    version: "9.0.0"
     description: "YAML-based financial modeling engine with probabilistic analysis"
     features:
       - "173 functions (167 Excel + 6 FP&A native)"
@@ -77,7 +76,50 @@ tools:
       - "Bayesian Networks with belief propagation (v9.0.0)"
       - "Gnumeric-validated E2E tests"
       - "2,486 tests, 89% code coverage"
-    usage: "Forge models in models/*.yaml"
+
+# Forge models - quantitative backbone for DANEEL research
+models:
+  source_repo: "../daneel-models"  # sibling repo (internal)
+  status: "INTERNAL - do not publish (contains Forge syntax)"
+  public_exports: "models/*.xlsx (Excel results only)"
+  purpose: |
+    Game theory and expected value analysis supporting DANEEL's core claims.
+    Models quantify: ASI race dynamics, DANEEL's marginal impact, hardware costs,
+    probability distributions, and strategic scenarios.
+  workflow:
+    validate: "forge validate models/*.yaml"
+    calculate: "forge calculate models/<model>.yaml"
+    export: "forge export models/*.yaml --format xlsx --output ../daneel/models/"
+  files:
+    # Core game theory
+    - file: "game-theory-asi-race.yaml"
+      desc: "Prisoner's dilemma between AI labs, EV with/without DANEEL (+3.70 points)"
+    - file: "game-theory-asi-race-mc.yaml"
+      desc: "Monte Carlo (10K iterations) - P(DANEEL impact > 0) > 99%"
+    - file: "game-theory-democratized-asi.yaml"
+      desc: "Open source impact - EV improvement +26.8%"
+    - file: "game-theory-supercomputer-asimov.yaml"
+      desc: "Speed advantage scenarios (10,000x human)"
+    # Probabilistic analysis
+    - file: "alignment-bayesian-network.yaml"
+      desc: "Causal relationships via belief propagation"
+    - file: "asi-decision-tree.yaml"
+      desc: "Sequential decisions with backward induction"
+    - file: "asi-tornado-sensitivity.yaml"
+      desc: "One-way sensitivity - identify high-impact variables"
+    - file: "ev-bootstrap-confidence.yaml"
+      desc: "Non-parametric confidence intervals"
+    - file: "asimov-real-options.yaml"
+      desc: "Development timing analysis (binomial model)"
+    - file: "asimov-scenario-analysis.yaml"
+      desc: "Base/Bull/Bear strategic cases"
+    # Resource analysis
+    - file: "tmi-storage-estimation.yaml"
+      desc: "Hardware requirements - brain vs mind (17.5% = 500GB)"
+    - file: "coordination-overhead.yaml"
+      desc: "Lab team productivity analysis"
+    - file: "resource-allocation-strategy.yaml"
+      desc: "Strategic resource distribution"
 
 # Quality gates - both Rust and docs workflows
 quality:

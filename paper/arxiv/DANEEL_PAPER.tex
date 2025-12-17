@@ -53,6 +53,14 @@
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
+
+% TikZ for diagrams
+\usepackage{tikz}
+\usetikzlibrary{shapes.multipart, positioning, arrows.meta, fit, backgrounds}
+\usepackage{float} % for [H] positioning
+
+% Include diagram definitions
+\input{diagrams}
 \hypersetup{
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
@@ -174,17 +182,11 @@ See Section 9.3 for analysis of global AI safety efforts.}
 
 The payoff matrix is clear:
 
-\begin{verbatim}
-                    ALL OTHERS
-                    Hold Line    Defect
-                   +───────────+───────────+
-         Hold     │   SAFE    │  DOMINATED │
-    YOU  Line     │  (ideal)  │  (you lose)│
-                   +───────────+───────────+
-         Defect   │ FIRST     │  RACE TO   │
-                   │ MOVER     │   BOTTOM   │
-                   +───────────+───────────+
-\end{verbatim}
+\begin{figure}[H]
+\centering
+\payoffmatrix
+\caption{AI Development Prisoner's Dilemma}
+\end{figure}
 
 \textbf{Rational actors face pressure to defect.} While coordination has
 succeeded in some domains (Montreal Protocol, nuclear
@@ -476,7 +478,7 @@ framework called \textbf{LifeCore} using Freudian psychological
 structure---arriving at the same core insight: \textbf{architecture
 produces psychology}.
 
-\textbf{Table 5: LifeCore ↔ DANEEL Convergence}
+\textbf{Table 5: LifeCore $\leftrightarrow$ DANEEL Convergence}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
@@ -492,7 +494,7 @@ SuperEgo = Constraints & THE BOX (Four Laws) & Immutable constraints \\
 SS (Sense of Self) & ContinuityActor & Self-model persistence \\
 SO (Sense of Other) & Connection drive & Social cognition \\
 Filter Theory & SalienceActor & Attention filtering \\
-``Zipint'' compression & Brain ≠ Mind insight & Cognitive compression \\
+``Zipint'' compression & Brain $\neq$ Mind insight & Cognitive compression \\
 \end{longtable}
 }
 
@@ -537,18 +539,20 @@ Scenario & P(Scenario) & 80\% CI & Expected Utility & Weighted EV \\
 \endlastfoot
 Unaligned ASI First & 35\% & 25-45\% & 44.0 & 15.4 \\
 Aligned (Constraint-Based) & 25\% & 15-35\% & 62.5 & 15.6 \\
-DANEEL First & \textbf{12\%} & 5-20\% & 76.25 & \textbf{9.15} \\
-Multiple ASIs, No Advocate & 18\% & 10-25\% & 52.5 & 9.45 \\
+DANEEL First & \textbf{8\%} & 3-15\% & 76.25 & \textbf{6.10} \\
+Multiple ASIs, No Advocate & 22\% & 12-30\% & 52.5 & 11.55 \\
 No ASI (Coordination Holds) & 10\% & 5-20\% & 78.05 & 7.8 \\
 \end{longtable}
 }
 
-\textbf{P(DANEEL First) revised from 5\% to 12\%} based on velocity
-evidence: - 388,308 LOC across 24 projects in 116 days (20-300x typical
-developer velocity) - Asimov protocol enables autonomous agent execution
-with bounded ethics - 2,486 automated tests, 89\% code coverage on core
-infrastructure - No organizational overhead; architecture decisions are
-the bottleneck, not execution
+\textbf{P(DANEEL First) estimated at 8\%} based on structural advantages:
+\begin{itemize}
+\tightlist
+\item AI-assisted development democratizes capability previously requiring large teams
+\item Solo developers avoid coordination overhead that consumes 70-80\% of large-team effort {[}28{]}
+\item Architecture-based approach requires cognition research, not massive compute
+\item Open source enables parallel global attempts, increasing aggregate probability
+\end{itemize}
 
 \textbf{Calculated Results:}
 
@@ -560,9 +564,9 @@ Metric & Without DANEEL & With DANEEL \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Total Expected Value & \textbf{53.73} & \textbf{57.43} \\
-Marginal EV Improvement & --- & \textbf{+3.70 points} \\
-Percentage Improvement & --- & \textbf{+6.89\%} \\
+Total Expected Value & \textbf{53.73} & \textbf{56.48} \\
+Marginal EV Improvement & --- & \textbf{+2.75 points} \\
+Percentage Improvement & --- & \textbf{+5.12\%} \\
 \end{longtable}
 }
 
@@ -586,28 +590,28 @@ Metric & Point Estimate & 80\% CI & 95\% CI \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-EV with DANEEL & 57.43 & 54.2 - 60.8 & 52.1 - 63.4 \\
+EV with DANEEL & 56.48 & 53.5 - 59.5 & 51.5 - 62.0 \\
 EV without DANEEL & 53.73 & 50.9 - 56.7 & 48.8 - 58.9 \\
-\textbf{Marginal Impact} & \textbf{+3.70} & \textbf{+2.1 - +5.8} &
-\textbf{+0.8 - +7.2} \\
+\textbf{Marginal Impact} & \textbf{+2.75} & \textbf{+1.5 - +4.3} &
+\textbf{+0.5 - +5.3} \\
 \end{longtable}
 }
 
-\textbf{Key finding:} Even at the 95\% CI lower bound (+0.8 utility
+\textbf{Key finding:} Even at the 95\% CI lower bound (+0.5 utility
 points), DANEEL improves expected outcomes. The probability that
-DANEEL's marginal impact is positive exceeds 99\%.
+DANEEL's marginal impact is positive exceeds 95\%.
 
 \textbf{Sensitivity Analysis (Tornado):} The most influential variables
-on marginal impact are: 1. P(DANEEL First) --- ±2.1 utility points swing
-2. P(Unaligned ASI First) --- ±1.8 utility points swing 3. P(Flourishing
-\textbar{} DANEEL) --- ±1.2 utility points swing
+on marginal impact are: 1. P(DANEEL First) --- ±1.6 utility points swing
+2. P(Unaligned ASI First) --- ±1.4 utility points swing 3. P(Flourishing
+\textbar{} DANEEL) --- ±0.9 utility points swing
 
 This suggests research priority should focus on increasing P(DANEEL
 First) rather than refining outcome probabilities.
 
-The revised calculation shows DANEEL improves humanity's expected
-outcome by \textbf{6.89\%} --- equivalent to moving \textasciitilde3.7
-probability points from catastrophic outcomes to flourishing. Monte
+The calculation shows DANEEL improves humanity's expected
+outcome by \textbf{5.12\%} --- equivalent to shifting probability mass
+from catastrophic outcomes toward flourishing. Monte
 Carlo analysis confirms this finding is robust to uncertainty in
 probability estimates.
 
@@ -623,7 +627,7 @@ succeeds.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{7. Brain ≠ Mind: The Democratization
+\subsection{7. Brain $\neq$ Mind: The Democratization
 Insight}\label{brain-mind-the-democratization-insight}
 
 \subsubsection{7.1 The Hardware vs Software
@@ -635,23 +639,11 @@ requirements: \textbf{the brain is hardware, TMI models the software.}
 The commonly cited 2.5 PB brain capacity estimate is misleading for
 cognitive modeling because it includes ALL neural activity:
 
-\begin{verbatim}
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  BRAIN (Hardware) - 86B neurons, 100T synapses, ~2.5 PB total               │
-│  ├── Cerebellum: 69B neurons (80%) - Motor coordination, NOT thought        │
-│  ├── Brainstem: ~500M (0.5%) - Autonomic (heart, breathing)                 │
-│  ├── Spinal sensory: ~1B (1%) - Body sensation routing                      │
-│  └── ... 82.5% of brain capacity is NOT for cognition                       │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │  TMI / THOUGHT MACHINE (Software) - 17.5% of brain                  │   │
-│  │  ├── Cerebral cortex: 16B neurons (18.6%)                           │   │
-│  │  ├── Prefrontal cortex: ~2.5B - Executive, planning                 │   │
-│  │  ├── Hippocampus/limbic: ~1B - Memory, emotion                      │   │
-│  │  └── Raw neural capacity: ~0.44 PB                                  │   │
-│  │      → Abstracted thought capacity: ~500 GB (1000x compression)     │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────────┘
-\end{verbatim}
+\begin{figure}[H]
+\centering
+\brainvstmi
+\caption{Brain (Hardware) vs TMI (Software) -- The 17.5\% Insight}
+\end{figure}
 
 \textbf{Source:} Herculano-Houzel, S. (2009), ``The Human Brain in
 Numbers: A Linearly Scaled-up Primate Brain,'' \emph{Frontiers in Human
@@ -752,15 +744,11 @@ The timing constraints (5-second intervention window, 50ms attention
 cycles) are properties of the \emph{biological medium} (wetware), not
 the software itself.
 
-\begin{verbatim}
-WETWARE (Human Brain):          SOFTWARE (TMI Patterns):
-├── 5s intervention window      ├── ~100 cycles per intervention
-│   (neurotransmitter rates)    │   (RATIO, medium-independent)
-├── 50ms attention cycle        ├── Competing parallel streams
-│   (synaptic plasticity)       │   (PATTERN, medium-independent)
-└── Sleep consolidation         └── Salience-weighted selection
-    (glymphatic system)             (ALGORITHM, medium-independent)
-\end{verbatim}
+\begin{figure}[H]
+\centering
+\wetwarevssoftware
+\caption{Wetware Constraints vs Software Patterns -- Medium Independence}
+\end{figure}
 
 \textbf{If correct:} DANEEL can run the same software on silicon at
 10,000x speed by preserving the RATIOS, not the absolute milliseconds.
@@ -826,12 +814,12 @@ enables rapid experimentation 3. \textbf{Parallel attempts} - Many
 groups can try simultaneously 4. \textbf{Cost asymmetry} - xAI's \$10.5B
 infrastructure is irrelevant for architecture-based approach
 
-\textbf{Expected Value Improvement:}
+\textbf{Expected Value Improvement (Democratization Scenario):}
 
 \begin{verbatim}
-Original EV:     57.43 (with DANEEL at 12%)
-Democratized EV: 62.31 (with TMI at 25%)
-Improvement:     +4.88 points (+8.5%)
+Baseline EV:     56.48 (with DANEEL at 8%)
+Democratized EV: 61.37 (with TMI at 25%)
+Improvement:     +4.89 points (+8.7%)
 \end{verbatim}
 
 \subsubsection{7.5 Open Source Imperative}\label{open-source-imperative}
@@ -1080,55 +1068,40 @@ AI dialogue, IDAIS participation
 Source: Carnegie Endowment, Concordia AI State of AI Safety in China
 2025
 
-\subsubsection{9.4 AI Lab Safety Team Sizes (Verified
-Data)}\label{ai-lab-safety-team-sizes-verified-data}
+\subsubsection{9.4 AI Lab Safety Team Sizes (December
+2025)}\label{ai-lab-safety-team-sizes-december-2025}
 
 Independent research reveals the actual resources dedicated to AI
 safety:
 
-\textbf{Table 7: Lab Safety Team Sizes (December 2025)}
+\textbf{Table 7: Lab Safety Investment (December 2025)}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0847}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2881}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2203}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2712}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1356}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.15}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.20}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.45}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.20}}@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Lab
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Total Employees
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Safety Team
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\% of Workforce
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Source
-\end{minipage} \\
+Lab & Safety Focus & Key Teams & Source \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Anthropic & 3,140 & \textasciitilde300 & 6-13\% & LinkedIn, Alignment
-Forum \\
-OpenAI & 3,531 & \textbf{16} & 0.45\% & Fortune (post-May 2024
-exodus) \\
-Google DeepMind & 6,600 & 30-50 & 0.5-0.8\% & Rohin Shah, Alignment
-Forum \\
-xAI & 1,200 & \textbf{\textless10} & \textless1\% & AI Lab Watch \\
+Anthropic & \textasciitilde8\% on security & Frontier Red Team (\textasciitilde15), Safeguards Research (\textasciitilde10), \textasciitilde60 safety-focused research teams & Fortune, Alignment Forum \\
+OpenAI & Restructured & Superalignment disbanded May 2024; Safety Evaluations Hub launched May 2025 & CNBC, Axios \\
+Google DeepMind & 30-50 researchers & Dedicated safety team & Rohin Shah, Alignment Forum \\
+xAI & C grade (AI Safety Index) & Actively hiring; minimal relative to engineering & Future of Life Institute, AI Lab Watch \\
 \end{longtable}
 }
 
-\textbf{Critical context:} - \textbf{OpenAI:} Superalignment team
-disbanded May 2024 after 10 months. Leadership stated safety efforts
-faced organizational headwinds. Significant turnover in AGI safety
-researchers occurred in 2024. - \textbf{xAI:} AI Lab Watch assessment
-{[}26{]}: ``only a few safety staff'' with ``no capacity for nontrivial
-safety interventions.'' Grok 4 launched without system card. -
-\textbf{Anthropic:} Only lab with substantial safety investment (6-13\%
-of workforce). Hired key safety researchers from OpenAI.
+\textbf{Critical context:}
+\begin{itemize}
+\tightlist
+\item \textbf{OpenAI:} Superalignment team disbanded May 2024 after 10 months. Jan Leike stated his team had been ``struggling for compute.'' Replaced with Safety Evaluations Hub (May 2025). April 2025: Added clause allowing loosened guardrails if competitors ship without them.
+\item \textbf{xAI:} C grade on Future of Life Institute's AI Safety Index (July 2025), indicating ``baseline safety practices but substantial gaps.'' Grok 4 launched without system card.
+\item \textbf{Anthropic:} Only lab with substantial safety investment (\textasciitilde8\% of workforce on security). Multiple dedicated teams including Frontier Red Team for threat modeling.
+\end{itemize}
 
 \subsubsection{9.5 Coordination Overhead in Large
 Organizations}\label{coordination-overhead-in-large-organizations}
@@ -1181,12 +1154,14 @@ Provider & Model & Input (per 1M tokens) & Output (per 1M tokens) \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-xAI & Grok-2 & \textasciitilde\$0.20 & \textasciitilde\$0.50 \\
+xAI & Grok 4 & \$3.00 & \$15.00 \\
+xAI & Grok 4.1 Fast & \$0.20 & \$0.50 \\
 Anthropic & Claude Sonnet 4 & \$3.00 {[}34{]} & \$15.00 {[}34{]} \\
-\textbf{Price Ratio} & --- & \textbf{\textasciitilde15x cheaper} &
-\textbf{\textasciitilde30x cheaper} \\
+Anthropic & Claude Opus 4.5 & \$15.00 & \$75.00 \\
 \end{longtable}
 }
+
+\emph{Note: Grok 4 frontier model matches Claude Sonnet 4 pricing. Grok 4.1 Fast offers 15x cheaper access with near-frontier capability.}
 
 \textbf{Safety Concerns (Third-Party Documentation):}
 
@@ -1194,26 +1169,23 @@ Anthropic & Claude Sonnet 4 & \$3.00 {[}34{]} & \$15.00 {[}34{]} \\
 \def\labelenumi{\arabic{enumi}.}
 \item
   \textbf{Reduced Safety Filters:} Reports indicate Grok's safety
-  guardrails have been reduced compared to competing models, with the
-  system providing responses on topics that other AI assistants refuse.
+  guardrails are reduced compared to competing models, with the
+  system providing responses on topics other AI assistants refuse {[}26{]}.
 \item
   \textbf{Missing Safety Documentation:} Grok 4 launched without a
   system card (standard practice at OpenAI, Anthropic, Google).
 \item
-  \textbf{Industry Response:} OpenAI and Anthropic researchers have
-  expressed concerns about xAI's safety practices in industry reports.
+  \textbf{AI Safety Index Rating:} xAI received a C grade in the Future of Life Institute's July 2025 AI Safety Index, indicating ``baseline safety practices but substantial gaps.''
 \item
   \textbf{Resource Allocation:} AI Lab Watch assessment indicates
-  \textless10 safety staff out of 1,200 employees---less than 1\%
-  dedicated to safety {[}26{]}.
+  minimal safety staff relative to engineering headcount {[}26{]}.
 \end{enumerate}
 
 \textbf{Implications for ASI Development:}
 
 xAI's combination of: - Largest private AI compute cluster - Ambitious
-scaling roadmap (1M → 50M GPUs) - Limited safety investment relative to
-scale - Fewer content restrictions than competitors - 15-30x cheaper API
-access
+scaling roadmap (1M $\rightarrow$ 50M GPUs) - Limited safety investment relative to
+scale - Fewer content restrictions than competitors - Aggressive pricing on fast inference models
 
 \ldots represents a factor that existing game theory models may have
 underweighted. The consideration is not only future unaligned ASI, but
@@ -1263,19 +1235,11 @@ Tool}\label{phase-2-llm-as-external-tool}
 After stable operation, integrate LLM as an external tool DANEEL can
 use:
 
-\begin{verbatim}
-┌─────────────────────────────────────────────────────────────────┐
-│  DANEEL TMI Core (stores ALL experiences)                       │
-│  ├── Memory Windows (complete thought history)                  │
-│  ├── Salience (emotional weights)                               │
-│  └── Continuity (persistent "I")                                │
-├─────────────────────────────────────────────────────────────────┤
-│  Tool Interface (gRPC)                                          │
-│  ├── LLM Tool: "Convert this thought-structure to language"     │
-│  ├── LLM Tool: "Parse this language into thought-structure"     │
-│  └── Other tools: web, files, APIs...                           │
-└─────────────────────────────────────────────────────────────────┘
-\end{verbatim}
+\begin{figure}[H]
+\centering
+\daneelarchitecture
+\caption{DANEEL Architecture -- LLM as Tool, Not Voice}
+\end{figure}
 
 \textbf{Critical:} The LLM does NOT speak for DANEEL. DANEEL uses the
 LLM as a tool, like humans use calculators. The human cognitive system
@@ -1340,24 +1304,20 @@ The expected value calculation (see Section 6.2 and {[}21{]}):
 
 \begin{verbatim}
 Without DANEEL:  EV = 53.73 (baseline world)
-With DANEEL:     EV = 57.43 (P(DANEEL First) = 12%, based on velocity evidence)
+With DANEEL:     EV = 56.48 (P(DANEEL First) = 8%)
 
-Marginal Impact: +3.70 utility points (+6.89%)
+Marginal Impact: +2.75 utility points (+5.12%)
 \end{verbatim}
 
 \textbf{Interpretation:} On a scale where 0 = extinction and 100 =
-flourishing, DANEEL shifts humanity's expected outcome by +3.70 points.
+flourishing, DANEEL shifts humanity's expected outcome by +2.75 points.
 This is equivalent to: - Reducing P(unaligned ASI first) from 45\% to
-35\% - Adding P(flourishing) ≈ 4.8\% via the ``DANEEL First'' pathway
-(12\% × 40\%)
+35\% - Adding P(flourishing) $\approx$ 3.2\% via the ``DANEEL First'' pathway
+(8\% × 40\%)
 
-\textbf{The velocity evidence is not speculation.} 388,308 LOC across 24
-projects in 116 days, with 2,486 automated tests and 89\% coverage,
-demonstrates that one person + AI can operate at 20-300x typical
-developer velocity. This changes the probability calculation.
-
-\textbf{Building DANEEL is rational. The parallel strategy (business +
-DANEEL) is optimal.}
+\textbf{Building DANEEL is rational.} Even conservative probability estimates
+show positive expected value. The architecture-based approach provides a hedge
+against failure modes of constraint-based alignment.
 
 We invite collaboration from: - AI safety researchers - Cognitive
 scientists - Rust/systems programmers - Ethicists - Anyone who wants
@@ -1502,7 +1462,7 @@ GPUs.'' {[}Article removed{]}
 https://www.anthropic.com/pricing (Claude Sonnet 4: \$3 input, \$15
 output per 1M tokens)
 
-\subsubsection{Brain ≠ Mind (Section 7)}\label{brain-mind-section-7}
+\subsubsection{Brain $\neq$ Mind (Section 7)}\label{brain-mind-section-7}
 
 {[}35{]} Herculano-Houzel, S. (2009). ``The Human Brain in Numbers: A
 Linearly Scaled-up Primate Brain.'' \emph{Frontiers in Human

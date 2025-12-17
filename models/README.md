@@ -8,9 +8,9 @@ Financial and game-theoretic analysis supporting DANEEL research.
 
 | Metric | Without DANEEL | With DANEEL |
 |--------|----------------|-------------|
-| Total Expected Value | 53.73 | 57.43 |
-| Marginal Impact | — | **+3.70 points** |
-| Improvement | — | **+6.89%** |
+| Total Expected Value | 53.73 | 56.48 |
+| Marginal Impact | — | **+2.75 points** |
+| Improvement | — | **+5.12%** |
 
 **Utility Scale:** 0 = extinction, 50 = subjugation, 75 = coexistence, 100 = flourishing
 
@@ -18,18 +18,18 @@ Financial and game-theoretic analysis supporting DANEEL research.
 
 | Metric | Point Estimate | 80% CI | 95% CI |
 |--------|----------------|--------|--------|
-| Marginal Impact | +3.70 | +2.1 to +5.8 | +0.8 to +7.2 |
+| Marginal Impact | +2.75 | +1.5 to +4.3 | +0.5 to +5.3 |
 
-**Key finding:** P(DANEEL impact > 0) exceeds 99%.
+**Key finding:** P(DANEEL impact > 0) exceeds 95%.
 
 ### Democratization Impact
 
 | Scenario | P (Original) | P (Democratized) |
 |----------|--------------|------------------|
 | Unaligned ASI First | 35% | 25% |
-| TMI Architecture First | 12% | **25%** |
+| TMI Architecture First | 8% | **25%** |
 
-**EV Improvement:** +26.8% in democratized scenario.
+**EV Improvement:** +8.7% in democratized scenario (56.48 → 61.37).
 
 ### Hardware Requirements
 
