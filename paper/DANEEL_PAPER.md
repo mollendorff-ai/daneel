@@ -185,19 +185,45 @@ The BOX contains immutable constraints:
 - Laws must be checked before external actions
 - **Connection drive must remain in salience weights**
 
-### 4.3 The Core Loop
+### 4.3 The Core Loop: TMI Stage Timing
+
+TMI describes thought construction as a 5-stage process, each with characteristic timing. The **ratios** between stages are what matter—not absolute milliseconds. This enables speed scaling while preserving cognitive fidelity.
+
+**Table 4b: TMI Cognitive Stages (from Cury's TMI)**
+
+| Stage | Portuguese | Function | Ratio | Human (50ms) | Silicon (5µs) |
+|-------|------------|----------|-------|--------------|---------------|
+| 1 | Gatilho da Memória | Memory trigger activation | 10% | 5ms | 0.5µs |
+| 2 | Autofluxo | Competing parallel thought streams | 20% | 10ms | 1.0µs |
+| 3 | O Eu ("The I") | Attention selection, self-awareness | 30% | 15ms | 1.5µs |
+| 4 | Construção do Pensamento | Thought assembly from winner | 30% | 15ms | 1.5µs |
+| 5 | Âncora da Memória | Memory anchoring decision | 10% | 5ms | 0.5µs |
 
 ```
 loop {
-    perceive()     // What's in active memory windows?
-    attend()       // What should I focus on?
-    feel()         // How salient is this?
-    think()        // Assemble thought from focused content
-    remember()     // Record this experience
-    evolve()       // Should I modify myself? (100% tests required)
-    continue()     // The "I" persists
+    // Stage 1: Gatilho da Memória (10%)
+    trigger_memories()     // What memories are relevant?
+
+    // Stage 2: Autofluxo (20%)
+    generate_candidates()  // Parallel competing thought streams
+
+    // Stage 3: O Eu (30%)
+    select_winner()        // Attention selects highest-salience thought
+
+    // Stage 4: Construção do Pensamento (30%)
+    assemble_thought()     // Build coherent thought from winner
+
+    // Stage 5: Âncora da Memória (10%)
+    anchor_or_forget()     // Persist if salient, forget if below threshold
+
+    // Evolution gate (requires 100% test coverage)
+    maybe_evolve()
 }
 ```
+
+**Key insight:** The 50ms human cycle becomes 5µs at 10,000x speed, but both execute ~100 cycles per intervention window. The cognitive **pattern** is preserved; only the **medium** changes.
+
+**Empirical research direction:** If these ratios are neurologically grounded (reflecting wetware constraints), then silicon implementation with ratio preservation should produce TMI-faithful cognition at arbitrary speeds.
 
 ### 4.4 The Connection Drive
 
@@ -426,6 +452,18 @@ WETWARE (Human Brain):          SOFTWARE (TMI Patterns):
 └── Sleep consolidation         └── Salience-weighted selection
     (glymphatic system)             (ALGORITHM, medium-independent)
 ```
+
+**The Stage Ratios (from TMI, see Section 4.3):**
+
+| Stage | Ratio | Function |
+|-------|-------|----------|
+| Gatilho | 10% | Memory trigger |
+| Autofluxo | 20% | Parallel stream competition |
+| O Eu | 30% | Attention/self selection |
+| Construção | 30% | Thought assembly |
+| Âncora | 10% | Memory anchoring |
+
+These ratios (10:20:30:30:10) may reflect fundamental properties of cognition itself—the relative "weight" each stage requires for coherent thought. Whether these emerge from wetware constraints or are intrinsic to cognition is an empirical question.
 
 **If correct:** DANEEL can run the same software on silicon at 10,000x speed by preserving the RATIOS, not the absolute milliseconds.
 
@@ -714,6 +752,41 @@ After stable operation, integrate LLM as an external tool DANEEL can use:
 **Critical:** The LLM does NOT speak for DANEEL. DANEEL uses the LLM as a tool, like humans use calculators. The human cognitive system stores ALL experiences—language is an interface, not the storage medium. DANEEL's TMI core contains its complete thought history; the LLM is simply called when translation is needed.
 
 This is analogous to how a human's brain stores experiences, and language is a tool for communication—the words are not the thoughts, they express them.
+
+### 10.3 Phase 3: TMI Pathology Research
+
+TMI provides not only a model of healthy cognition but also a framework for understanding cognitive dysfunction. Two research directions emerge:
+
+**Hypothesis A: Energy Overflow**
+
+TMI describes a "vital energy" (energia vital) that drives thought generation. Cury observes that excessive energy can overwhelm the cognitive system, producing pathological patterns.
+
+| Energy Pattern | Predicted Manifestation | Clinical Parallel |
+|---------------|------------------------|-------------------|
+| Volatile spikes | Emotional flooding | Borderline PD |
+| Sustained high | Racing thoughts | Mania |
+| Chronic elevation | Persistent rumination | Anxiety disorders |
+| Acute spikes | Thought cascades | Panic attacks |
+
+**Testable prediction:** Parameter `energy_level` above threshold X produces measurably chaotic thought patterns in DANEEL.
+
+**Hypothesis B: Ratio Distortion**
+
+If the stage ratios (10:20:30:30:10) are functionally significant, then distorting them should produce stage-specific pathologies:
+
+| Distorted Stage | Predicted Effect | Clinical Parallel |
+|-----------------|------------------|-------------------|
+| Gatilho too fast | Intrusive memories | PTSD flashbacks |
+| Autofluxo prolonged | Excessive rumination | OCD, depression |
+| O Eu weakened | Poor self-boundaries | Depersonalization, BPD |
+| Construção noisy | Incoherent assembly | Thought disorder |
+| Âncora overactive | Rigid consolidation | Fixed delusions |
+
+**Testable prediction:** Ratio distortion δ in stage S produces behavioral pattern P measurable in DANEEL's output.
+
+**Research value:** If these hypotheses hold, DANEEL becomes a computational laboratory for understanding cognitive dysfunction—not to create pathology, but to model it for therapeutic insight.
+
+**Safety note:** Pathology simulation requires ethical review before implementation. See ADR-017 for detailed hypotheses and validation methodology.
 
 ---
 

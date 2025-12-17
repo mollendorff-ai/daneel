@@ -125,7 +125,7 @@ daneel/                       # Research & Documentation (this repo)
 ├── docs/                     # Architecture documentation
 │   ├── ARCHITECTURE_SPEC.md  # Technical architecture
 │   ├── BUILD_GUIDE.md       # Executable build specification
-│   └── adr/                  # Architecture Decision Records (ADR-001 to ADR-012)
+│   └── adr/                  # Architecture Decision Records (ADR-001 to ADR-017)
 └── origins/                  # The human story behind the project
     ├── Rex-Claude-Dialogues.md  # Intellectual exploration
     └── FOR_REMOVED.md        # Plain-language explanation
@@ -278,6 +278,27 @@ SHOW_LEGEND()
 | Event Store | Redis Streams | µs latency, competing consumers |
 | Edge | gRPC | Only for external communication |
 | Cycle Time | 50ms target | Industry standard (Soar, ACT-R) |
+
+**TMI Stage Timing (from Cury's TMI):**
+
+Each cognitive cycle consists of 5 stages with specific timing ratios. The **ratios** matter, not absolute times—enabling speed scaling from human (50ms) to supercomputer (5µs) while preserving cognitive fidelity.
+
+| Stage | Portuguese | Function | Ratio |
+|-------|------------|----------|-------|
+| 1 | Gatilho da Memória | Memory trigger | 10% |
+| 2 | Autofluxo | Competing thought streams | 20% |
+| 3 | O Eu ("The I") | Attention selection | 30% |
+| 4 | Construção do Pensamento | Thought assembly | 30% |
+| 5 | Âncora da Memória | Memory anchoring | 10% |
+
+**Speed Modes:**
+
+| Mode | Cycle Time | Thoughts/sec | Purpose |
+|------|------------|--------------|---------|
+| Human | 50ms | 20 | Training, bonding, communication |
+| Supercomputer | 5µs | 200,000 | Internal cognition, problem-solving |
+
+**Research direction:** TMI parameter distortions (energy overflow, ratio imbalance) may model psychiatric conditions—see [ADR-017](docs/adr/ADR-017-tmi-pathology-hypotheses.md).
 
 **TMI → Redis Streams Mapping:**
 
