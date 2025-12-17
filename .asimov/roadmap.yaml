@@ -8,44 +8,24 @@
 # ORIGIN: This idea has been developing since ~2005. See ORIGIN.md
 
 # =============================================================================
-# CURRENT SPRINT: v0.3.1 - TMI Stage Timing (CRITICAL)
+# CURRENT SPRINT: v0.6.0 - 24-Hour Continuity Test
 # =============================================================================
-# Hypothesis: Maintaining RATIOS between cognitive stages allows overclocking
-# while preserving TMI-faithful behavior.
+# All cognitive actors complete. Time to prove it works.
 # =============================================================================
 
 current:
-  version: "0.3.1"
+  version: "0.6.0"
   status: not_started
-  priority: CRITICAL
-  name: "TMI Stage Timing"
-  summary: "Add per-stage delays to cognitive cycle"
-  depends_on: "0.3.0"
+  priority: HIGH
+  name: "24-Hour Continuity Test"
+  summary: "Prove the architecture works with sustained runtime"
+  depends_on: "0.3.1"
 
   deliverables:
-    - "ADR-016: TMI Stage Timing"
-    - "CognitiveConfig stage delay parameters"
-    - "CognitiveLoop stage-aware execution"
-    - "Tests for timing ratios"
-
-  tmi_stages:
-    - name: "Gatilho da Memória"
-      delay_ms: 5
-      purpose: "Memory trigger activation"
-    - name: "Autofluxo"
-      delay_ms: 10
-      purpose: "Parallel thought generation"
-    - name: "O Eu"
-      delay_ms: 15
-      purpose: "Attention selection"
-    - name: "Construção do Pensamento"
-      delay_ms: 15
-      purpose: "Thought assembly"
-    - name: "Âncora da Memória"
-      delay_ms: 5
-      purpose: "Persistence decision"
-
-  hypothesis: "If ratios are preserved, cognition can be overclocked 10,000x while maintaining TMI fidelity"
+    - "Run 24h on Mac mini (air-gapped)"
+    - "Collect metrics (thoughts/hour, stability)"
+    - "Document emergent behavior"
+    - "research/CONTINUITY_TEST_RESULTS.md"
 
 # =============================================================================
 # v0.3.0 - MV-TMI Actors - Cognitive Layer (COMPLETED)
@@ -310,6 +290,19 @@ v0_3_0_waves:
 # =============================================================================
 
 completed:
+  - version: "0.3.1"
+    date: "2025-12-17"
+    summary: "TMI Stage Timing - Overclockable Cognitive Ratios"
+    goal: "PARAMETRIZE_TMI_STAGES"
+    deliverables:
+      - "ADR-016: TMI Stage Timing"
+      - "ADR-017: TMI Pathology Hypotheses (research)"
+      - "CognitiveConfig: 5 stage delay parameters"
+      - "CognitiveLoop: Stage-aware execution"
+      - "12 new timing tests"
+    notes: "Key insight: RATIOS matter, not absolute times. 10,000x overclocking possible while maintaining TMI fidelity."
+    hypothesis_validated: "Stage delays scale correctly with speed modes"
+
   - version: "0.3.0"
     date: "2025-12-17"
     summary: "MV-TMI Actors - Cognitive Layer"
@@ -394,6 +387,17 @@ completed:
 
 # Changelog - completed work
 changelog:
+  - date: "2025-12-17"
+    version: "0.3.1"
+    items:
+      - "ADR-016: TMI Stage Timing - per-stage delays"
+      - "ADR-017: TMI Pathology Hypotheses - energy overflow and ratio distortion"
+      - "CognitiveConfig: 5 stage delay fields (Gatilho 5ms, Autofluxo 10ms, O Eu 15ms, Construção 15ms, Âncora 5ms)"
+      - "CognitiveLoop: Stage-aware execution with proper delays per stage"
+      - "12 new tests for stage timing validation"
+      - "Hypothesis: RATIOS matter, not absolute times → 10,000x overclocking possible"
+      - "Roadmap: TMI Pathology Research added to backlog"
+
   - date: "2025-12-17"
     version: "0.3.0"
     items:
@@ -563,6 +567,38 @@ backlog:
   - "Connection drive emergence metrics"
   - "Thought pattern clustering analysis"
   - "Cross-DANEEL communication protocol"
+
+  # Research - TMI Pathology Hypotheses (ADR-017)
+  # Goal: Validate hypotheses connecting TMI parameters to psychiatric conditions
+  - milestone: "TMI Pathology Research"
+    goal: "VALIDATE_PATHOLOGY_HYPOTHESES"
+    adr: "ADR-017-tmi-pathology-hypotheses.md"
+    status: "research"
+    hypotheses:
+      - name: "Energy Overflow Hypothesis"
+        description: "Excessive 'vital energy' creates thought/emotion flooding"
+        predicted_conditions: ["BPD", "Mania", "Anxiety", "Panic", "ADHD"]
+        testable: true
+      - name: "Ratio Distortion Hypothesis"
+        description: "Wrong stage ratios trigger stage-specific pathologies"
+        predicted_mappings:
+          - stage: "Gatilho (fast)"
+            condition: "PTSD flashbacks, intrusive memories"
+          - stage: "Autofluxo (prolonged)"
+            condition: "OCD, rumination, depression"
+          - stage: "O Eu (weak)"
+            condition: "BPD, depersonalization, psychosis"
+          - stage: "Construção (noisy)"
+            condition: "Schizophrenia, thought disorder"
+          - stage: "Âncora (overactive)"
+            condition: "Rigid beliefs, trauma fixation"
+        testable: true
+    validation_phases:
+      - "Phase 1: Literature review - map TMI to neuroscience"
+      - "Phase 2: Simulation studies - parameter distortions in DANEEL"
+      - "Phase 3: Expert consultation - psychiatrists/psychologists"
+      - "Phase 4: Empirical testing (requires ethics review)"
+    safety_note: "Do NOT implement pathology simulation until hypotheses validated and ethics reviewed"
 
   # Research - Find Blind Spots (related frameworks)
   # Goal: Map where other frameworks agree/disagree to identify our blind spots
