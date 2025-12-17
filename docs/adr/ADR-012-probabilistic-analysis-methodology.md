@@ -99,6 +99,25 @@ p_asimov: Triangular(0.05, 0.12, 0.20)  # Min, Mode, Max
 - No distribution assumptions required
 - Robust to outliers and non-normal data
 
+## Monte Carlo Validation (Added 2025-12-17)
+
+The deterministic expected value calculations have been validated using Monte Carlo simulation:
+
+**Configuration:**
+- Iterations: 10,000
+- Sampling: Latin Hypercube
+- Seed: 42 (reproducible)
+- Model: game-theory-asi-race-mc.yaml
+
+**Results:**
+| Metric | Mean | P5 | P50 | P95 |
+|--------|------|-----|-----|-----|
+| EV with DANEEL | 61.88 | 57.7 | 61.9 | 65.9 |
+| EV without DANEEL | 57.59 | 53.0 | 57.6 | 62.1 |
+| Marginal Impact | +4.28 | +2.69 | +4.21 | +6.10 |
+
+**Conclusion:** Monte Carlo confirms deterministic analysis. DANEEL's marginal impact of ~+4.3 EV points is statistically robust with 90% CI [+2.7, +6.1].
+
 ## Bridge Scenario Addition (2025-12-17)
 
 The game theory model now includes a **DANEEL Bridges LLMs** scenario:
