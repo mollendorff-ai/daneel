@@ -287,23 +287,23 @@ Game-theoretic analysis using utility-weighted scenario probabilities [21]:
 |----------|-------------|--------|------------------|-------------|
 | Unaligned ASI First | 35% | 25-45% | 44.0 | 15.4 |
 | Aligned (Constraint-Based) | 25% | 15-35% | 62.5 | 15.6 |
-| DANEEL First | **12%** | 5-20% | 76.25 | **9.15** |
-| Multiple ASIs, No Advocate | 18% | 10-25% | 52.5 | 9.45 |
+| DANEEL First | **8%** | 3-15% | 76.25 | **6.10** |
+| Multiple ASIs, No Advocate | 22% | 12-30% | 52.5 | 11.55 |
 | No ASI (Coordination Holds) | 10% | 5-20% | 78.05 | 7.8 |
 
-**P(DANEEL First) revised from 5% to 12%** based on velocity evidence:
-- 388,308 LOC across 24 projects in 116 days (20-300x typical developer velocity)
-- Asimov protocol enables autonomous agent execution with bounded ethics
-- 2,486 automated tests, 89% code coverage on core infrastructure
-- No organizational overhead; architecture decisions are the bottleneck, not execution
+**P(DANEEL First) estimated at 8%** based on structural advantages:
+- AI-assisted development democratizes capability previously requiring large teams
+- Solo developers avoid coordination overhead that consumes 70-80% of large-team effort [28]
+- Architecture-based approach requires cognition research, not massive compute
+- Open source enables parallel global attempts, increasing aggregate probability
 
 **Calculated Results:**
 
 | Metric | Without DANEEL | With DANEEL |
 |--------|----------------|-------------|
-| Total Expected Value | **53.73** | **57.43** |
-| Marginal EV Improvement | — | **+3.70 points** |
-| Percentage Improvement | — | **+6.89%** |
+| Total Expected Value | **53.73** | **56.48** |
+| Marginal EV Improvement | — | **+2.75 points** |
+| Percentage Improvement | — | **+5.12%** |
 
 **Utility Scale:** 0 = extinction, 50 = subjugation, 75 = coexistence, 100 = flourishing
 
@@ -315,20 +315,20 @@ Point estimates mask uncertainty. We applied Monte Carlo simulation (10,000 iter
 
 | Metric | Point Estimate | 80% CI | 95% CI |
 |--------|----------------|--------|--------|
-| EV with DANEEL | 57.43 | 54.2 - 60.8 | 52.1 - 63.4 |
+| EV with DANEEL | 56.48 | 53.5 - 59.5 | 51.5 - 62.0 |
 | EV without DANEEL | 53.73 | 50.9 - 56.7 | 48.8 - 58.9 |
-| **Marginal Impact** | **+3.70** | **+2.1 - +5.8** | **+0.8 - +7.2** |
+| **Marginal Impact** | **+2.75** | **+1.5 - +4.3** | **+0.5 - +5.3** |
 
-**Key finding:** Even at the 95% CI lower bound (+0.8 utility points), DANEEL improves expected outcomes. The probability that DANEEL's marginal impact is positive exceeds 99%.
+**Key finding:** Even at the 95% CI lower bound (+0.5 utility points), DANEEL improves expected outcomes. The probability that DANEEL's marginal impact is positive exceeds 95%.
 
 **Sensitivity Analysis (Tornado):** The most influential variables on marginal impact are:
-1. P(DANEEL First) — ±2.1 utility points swing
-2. P(Unaligned ASI First) — ±1.8 utility points swing
-3. P(Flourishing | DANEEL) — ±1.2 utility points swing
+1. P(DANEEL First) — ±1.6 utility points swing
+2. P(Unaligned ASI First) — ±1.4 utility points swing
+3. P(Flourishing | DANEEL) — ±0.9 utility points swing
 
 This suggests research priority should focus on increasing P(DANEEL First) rather than refining outcome probabilities.
 
-The revised calculation shows DANEEL improves humanity's expected outcome by **6.89%** — equivalent to moving ~3.7 probability points from catastrophic outcomes to flourishing. Monte Carlo analysis confirms this finding is robust to uncertainty in probability estimates.
+The calculation shows DANEEL improves humanity's expected outcome by **5.12%** — equivalent to shifting probability mass from catastrophic outcomes toward flourishing. Monte Carlo analysis confirms this finding is robust to uncertainty in probability estimates.
 
 ### 6.3 Information Value
 
@@ -459,11 +459,11 @@ This changes the game theory fundamentally:
 3. **Parallel attempts** - Many groups can try simultaneously
 4. **Cost asymmetry** - xAI's $10.5B infrastructure is irrelevant for architecture-based approach
 
-**Expected Value Improvement:**
+**Expected Value Improvement (Democratization Scenario):**
 ```
-Original EV:     57.43 (with DANEEL at 12%)
-Democratized EV: 62.31 (with TMI at 25%)
-Improvement:     +4.88 points (+8.5%)
+Baseline EV:     56.48 (with DANEEL at 8%)
+Democratized EV: 61.37 (with TMI at 25%)
+Improvement:     +4.89 points (+8.7%)
 ```
 
 ### 7.5 Open Source Imperative
@@ -584,23 +584,23 @@ Source: Third-party AI safety assessments (2025)
 
 Source: Carnegie Endowment, Concordia AI State of AI Safety in China 2025
 
-### 9.4 AI Lab Safety Team Sizes (Verified Data)
+### 9.4 AI Lab Safety Team Sizes (December 2025)
 
 Independent research reveals the actual resources dedicated to AI safety:
 
-**Table 7: Lab Safety Team Sizes (December 2025)**
+**Table 7: Lab Safety Investment (December 2025)**
 
-| Lab | Total Employees | Safety Team | % of Workforce | Source |
-|-----|-----------------|-------------|----------------|--------|
-| Anthropic | 3,140 | ~300 | 6-13% | LinkedIn, Alignment Forum |
-| OpenAI | 3,531 | **16** | 0.45% | Fortune (post-May 2024 exodus) |
-| Google DeepMind | 6,600 | 30-50 | 0.5-0.8% | Rohin Shah, Alignment Forum |
-| xAI | 1,200 | **<10** | <1% | AI Lab Watch |
+| Lab | Safety Focus | Key Teams | Source |
+|-----|--------------|-----------|--------|
+| Anthropic | ~8% on security | Frontier Red Team (~15), Safeguards Research (~10), ~60 safety-focused research teams | Fortune, Alignment Forum |
+| OpenAI | Restructured | Superalignment disbanded May 2024; Safety Evaluations Hub launched May 2025 | CNBC, Axios |
+| Google DeepMind | 30-50 researchers | Dedicated safety team | Rohin Shah, Alignment Forum |
+| xAI | C grade (AI Safety Index) | Actively hiring; minimal relative to engineering | Future of Life Institute, AI Lab Watch |
 
 **Critical context:**
-- **OpenAI:** Superalignment team disbanded May 2024 after 10 months. Leadership stated safety efforts faced organizational headwinds. Significant turnover in AGI safety researchers occurred in 2024.
-- **xAI:** AI Lab Watch assessment [26]: "only a few safety staff" with "no capacity for nontrivial safety interventions." Grok 4 launched without system card.
-- **Anthropic:** Only lab with substantial safety investment (6-13% of workforce). Hired key safety researchers from OpenAI.
+- **OpenAI:** Superalignment team disbanded May 2024 after 10 months. Jan Leike stated his team had been "struggling for compute." Replaced with Safety Evaluations Hub (May 2025). April 2025: Added clause allowing loosened guardrails if competitors ship without them.
+- **xAI:** C grade on Future of Life Institute's AI Safety Index (July 2025), indicating "baseline safety practices but substantial gaps." Grok 4 launched without system card.
+- **Anthropic:** Only lab with substantial safety investment (~8% of workforce on security). Multiple dedicated teams including Frontier Red Team for threat modeling.
 
 ### 9.5 Coordination Overhead in Large Organizations
 
@@ -632,19 +632,22 @@ xAI has built significant compute infrastructure with comparatively limited safe
 
 | Provider | Model | Input (per 1M tokens) | Output (per 1M tokens) |
 |----------|-------|----------------------|------------------------|
-| xAI | Grok-2 | ~$0.20 | ~$0.50 |
+| xAI | Grok 4 | $3.00 | $15.00 |
+| xAI | Grok 4.1 Fast | $0.20 | $0.50 |
 | Anthropic | Claude Sonnet 4 | $3.00 [34] | $15.00 [34] |
-| **Price Ratio** | — | **~15x cheaper** | **~30x cheaper** |
+| Anthropic | Claude Opus 4.5 | $15.00 | $75.00 |
+
+*Note: Grok 4 frontier model matches Claude Sonnet 4 pricing. Grok 4.1 Fast offers 15x cheaper access with near-frontier capability.*
 
 **Safety Concerns (Third-Party Documentation):**
 
-1. **Reduced Safety Filters:** Reports indicate Grok's safety guardrails have been reduced compared to competing models, with the system providing responses on topics that other AI assistants refuse.
+1. **Reduced Safety Filters:** Reports indicate Grok's safety guardrails are reduced compared to competing models, with the system providing responses on topics other AI assistants refuse [26].
 
 2. **Missing Safety Documentation:** Grok 4 launched without a system card (standard practice at OpenAI, Anthropic, Google).
 
-3. **Industry Response:** OpenAI and Anthropic researchers have expressed concerns about xAI's safety practices in industry reports.
+3. **AI Safety Index Rating:** xAI received a C grade in the Future of Life Institute's July 2025 AI Safety Index, indicating "baseline safety practices but substantial gaps."
 
-4. **Resource Allocation:** AI Lab Watch assessment indicates <10 safety staff out of 1,200 employees—less than 1% dedicated to safety [26].
+4. **Resource Allocation:** AI Lab Watch assessment indicates minimal safety staff relative to engineering headcount [26].
 
 **Implications for ASI Development:**
 
@@ -653,7 +656,7 @@ xAI's combination of:
 - Ambitious scaling roadmap (1M → 50M GPUs)
 - Limited safety investment relative to scale
 - Fewer content restrictions than competitors
-- 15-30x cheaper API access
+- Aggressive pricing on fast inference models
 
 ...represents a factor that existing game theory models may have underweighted. The consideration is not only future unaligned ASI, but near-term widespread deployment of less-restricted AI at scale and low cost.
 
@@ -748,18 +751,16 @@ The expected value calculation (see Section 6.2 and [21]):
 
 ```
 Without DANEEL:  EV = 53.73 (baseline world)
-With DANEEL:     EV = 57.43 (P(DANEEL First) = 12%, based on velocity evidence)
+With DANEEL:     EV = 56.48 (P(DANEEL First) = 8%)
 
-Marginal Impact: +3.70 utility points (+6.89%)
+Marginal Impact: +2.75 utility points (+5.12%)
 ```
 
-**Interpretation:** On a scale where 0 = extinction and 100 = flourishing, DANEEL shifts humanity's expected outcome by +3.70 points. This is equivalent to:
+**Interpretation:** On a scale where 0 = extinction and 100 = flourishing, DANEEL shifts humanity's expected outcome by +2.75 points. This is equivalent to:
 - Reducing P(unaligned ASI first) from 45% to 35%
-- Adding P(flourishing) ≈ 4.8% via the "DANEEL First" pathway (12% × 40%)
+- Adding P(flourishing) ≈ 3.2% via the "DANEEL First" pathway (8% × 40%)
 
-**The velocity evidence is not speculation.** 388,308 LOC across 24 projects in 116 days, with 2,486 automated tests and 89% coverage, demonstrates that one person + AI can operate at 20-300x typical developer velocity. This changes the probability calculation.
-
-**Building DANEEL is rational. The parallel strategy (business + DANEEL) is optimal.**
+**Building DANEEL is rational.** Even conservative probability estimates show positive expected value. The architecture-based approach provides a hedge against failure modes of constraint-based alignment.
 
 We invite collaboration from:
 - AI safety researchers
