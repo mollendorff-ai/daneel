@@ -1064,3 +1064,158 @@ references:
   doi: 10.1038/s41582-025-01072-z
   ref_id: STATE-3
   key_finding: 'NEPTUNE model - NDEs from acidosis cascade + neurotransmitter surge'
+
+# =============================================================================
+# Neural Network Interpretability References
+# Added: 2025-12-17
+# =============================================================================
+
+# Neural Network Interpretability [INTERP-*]
+- url: https://doi.org/10.1073/pnas.2506316122
+  title: 'Sparse autoencoders uncover biologically interpretable features in protein language model representations'
+  categories:
+  - interpretability
+  - neural-networks
+  - academic
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Gujral, O., Bafna, M., Alm, E., & Berger, B.'
+  year: 2025
+  journal: Proceedings of the National Academy of Sciences
+  volume: '122'
+  issue: '34'
+  doi: 10.1073/pnas.2506316122
+  ref_id: INTERP-1
+  key_finding: 'Networks store more features than neurons via superposition - overlapping directions in high-dimensional space'
+  relevance: 'Explains why individual neurons are uninterpretable to humans'
+
+- url: https://doi.org/10.23915/distill.00024.001
+  title: 'Zoom In: An Introduction to Circuits'
+  categories:
+  - interpretability
+  - neural-networks
+  - academic
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Olah, C., Cammarata, N., Schubert, L., Goh, G., Petrov, M., & Carter, S.'
+  year: 2020
+  journal: Distill
+  volume: '5'
+  issue: '3'
+  doi: 10.23915/distill.00024.001
+  ref_id: INTERP-2
+  key_finding: 'Polysemantic neurons respond to multiple unrelated concepts (e.g., cat faces, car fronts, cat legs)'
+  relevance: '5 meanings × 5 meanings = 25 connections that cannot be individually understood'
+
+- url: https://doi.org/10.5555/3495724.3497023
+  title: 'Model Interpretability through the Lens of Computational Complexity'
+  categories:
+  - interpretability
+  - neural-networks
+  - complexity-theory
+  - academic
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Barceló, P., Monet, M., Pérez, J., & Subercaseaux, B.'
+  year: 2020
+  journal: NeurIPS 2020
+  doi: 10.5555/3495724.3497023
+  ref_id: INTERP-3
+  key_finding: 'Many neural network explainability queries are provably NP-hard'
+  relevance: 'Mathematical proof that some aspects of network behavior are impossible to efficiently explain'
+
+- url: https://arxiv.org/abs/2310.06825
+  title: 'Understanding Emergent Abilities of Language Models from the Loss Perspective'
+  categories:
+  - interpretability
+  - neural-networks
+  - emergent-abilities
+  - arxiv
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Du, M., Liu, Z., Tang, J., et al.'
+  year: 2024
+  journal: NeurIPS 2024
+  arxiv: '2310.06825'
+  ref_id: INTERP-4
+  key_finding: 'Emergent abilities appear suddenly and unpredictably at scale thresholds'
+  relevance: 'Behaviors arise from billions of parameter interactions humans cannot trace'
+
+- url: https://transformer-circuits.pub/2024/scaling-monosemanticity/
+  title: 'Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet'
+  categories:
+  - interpretability
+  - neural-networks
+  - anthropic
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Templeton, Conerly, Marcus, et al.'
+  year: 2024
+  source: Anthropic Transformer Circuits Thread
+  ref_id: INTERP-5
+  key_finding: 'Extracted 34 million features from Claude 3 Sonnet; orders of magnitude more remain'
+  relevance: 'Even with massive effort, most features remain unknown to humans'
+
+- url: https://arxiv.org/abs/2501.16496
+  title: 'Open Problems in Mechanistic Interpretability'
+  categories:
+  - interpretability
+  - neural-networks
+  - mechanistic-interpretability
+  - arxiv
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Sharkey, Braun, Millidge, et al.'
+  year: 2025
+  arxiv: '2501.16496'
+  ref_id: INTERP-6
+  key_finding: 'Mechanistic interpretability is pre-paradigmatic with multiple unsolved foundational problems'
+  relevance: 'May be intractable to explain terabyte-sized models succinctly enough for humans to grasp'
+
+- url: https://news.mit.edu/2024/mit-researchers-advance-automated-interpretability-ai-models-maia-0723
+  title: 'MAIA: Multimodal Automated Interpretability Agent'
+  categories:
+  - interpretability
+  - neural-networks
+  - mit
+  - automated-interpretability
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'MIT CSAIL'
+  year: 2024
+  source: MIT News
+  ref_id: INTERP-7
+  key_finding: 'AI system that autonomously experiments on other AI systems'
+  relevance: 'Demonstrates AI can already perceive AI in ways humans cannot'
+
+- url: https://www.anthropic.com/research/introspection
+  title: 'Introspection: Can AI Systems Perceive Their Own Internal States?'
+  categories:
+  - interpretability
+  - neural-networks
+  - introspection
+  - anthropic
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-17
+  authors: 'Anthropic'
+  year: 2025
+  source: Anthropic Research
+  ref_id: INTERP-8
+  key_finding: 'LLMs can detect injected concept vectors in their own activations (~20% success rate)'
+  relevance: 'More capable models show greater introspective awareness'
