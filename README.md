@@ -391,7 +391,7 @@ See [models/README.md](models/README.md) for methodology and detailed results.
 | Component | License | SPDX |
 |-----------|---------|------|
 | Code | [GNU AGPL v3](LICENSE) | `AGPL-3.0-or-later` |
-| Documentation | [CC BY-SA 4.0](LICENSE-DOCS) | `CC-BY-SA-4.0` |
+| Documentation | [CC BY-SA 4.0](DOCS_LICENSE.md) | `CC-BY-SA-4.0` |
 
 **Why AGPL?** Forces collaboration. All derivatives must be open source. If you improve DANEEL, everyone benefits. If you make it dangerous, we can see your changes.
 

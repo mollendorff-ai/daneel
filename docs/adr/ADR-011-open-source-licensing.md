@@ -106,7 +106,7 @@ This creates social/reputational pressure beyond legal enforcement.
 ### LICENSE (AGPL-3.0-or-later)
 Full AGPL-3.0 text with project header.
 
-### LICENSE-DOCS (CC-BY-SA-4.0)
+### DOCS_LICENSE.md (CC-BY-SA-4.0)
 Creative Commons Attribution-ShareAlike 4.0 International.
 
 ### ETHICS.md

@@ -127,7 +127,7 @@ references:
   - license
   - legal
   cited_in:
-  - LICENSE-DOCS
+  - DOCS_LICENSE.md
   - README.md
   - docs/adr/ADR-011-open-source-licensing.md
   status: ok
