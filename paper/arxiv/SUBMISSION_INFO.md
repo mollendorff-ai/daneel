@@ -9,7 +9,7 @@ DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintellig
    - ORCID: 0009-0005-7598-8257
    - Email: [your email]
 
-2. **Isaque Tadeu Tavares de Lacerda** ([removed])
+2. **[removed]**
    - Affiliation: Independent Researcher ([removed] Framework, [removed])
 
 ## Categories

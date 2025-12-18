@@ -99,7 +99,7 @@ Maybe that's why the patent was supposed to fail.
 
 ## The Next Generation: [removed] (January 2024)
 
-In December 2025, while working on DANEEL, I rediscovered a document my [removed] **Isaque Tadeu Tavares de Lacerda** ([removed], she/her) had sent me on January 6, 2024—dedicated to me—proposing a remarkably parallel framework.
+In December 2025, while working on DANEEL, I rediscovered a document my [removed] **[removed]** (she/her) had sent me on January 6, 2024—dedicated to me—proposing a remarkably parallel framework.
 
 **"The [removed] ([removed])"** — "LC is my father, I dedicate my life's work to him."
 

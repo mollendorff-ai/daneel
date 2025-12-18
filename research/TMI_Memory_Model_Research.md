@@ -562,7 +562,7 @@ The DANEEL architecture adds several concepts not present in Cury's original TMI
 - **Not in TMI:** Cury's theory has no equivalent constraint system
 
 **3. [removed] Parallel (Freudian Mapping)**
-- **Origin:** Isaque Tadeu Tavares de Lacerda ([removed]), January 2024
+- **Origin:** [removed], January 2024
 - **Purpose:** Maps TMI concepts to Freudian structure (Id/Ego/SuperEgo)
 - **See:** [[removed]_DANEEL_ANALYSIS.md]([removed]_DANEEL_ANALYSIS.md)
 

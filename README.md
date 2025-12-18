@@ -379,7 +379,7 @@ See [models/README.md](models/README.md) for methodology and detailed results.
 - LinkedIn: https://www.linkedin.com/in/lctavares
 - GitHub: https://github.com/royalbit
 
-**[removed]** (Isaque Tadeu Tavares de Lacerda)
+**[removed]**
 - [removed] framework, Freudian architecture mapping, [removed]
 - Independent convergent discovery (January 2024)
 

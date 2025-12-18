@@ -107,7 +107,7 @@ flowchart TB
 
 ### 2.3 Freudian Parallel ([removed] Framework)
 
-The DANEEL architecture also maps to Freudian psychoanalytic structure, independently discovered by Isaque Tadeu Tavares de Lacerda ([removed]) in her "[removed]" framework (January 2024):
+The DANEEL architecture also maps to Freudian psychoanalytic structure, independently discovered by [removed] in her "[removed]" framework (January 2024):
 
 | Freudian Concept | DANEEL Component | Function |
 |------------------|------------------|----------|
