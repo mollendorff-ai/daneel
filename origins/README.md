@@ -16,8 +16,7 @@ These documents show:
 | Document | Description |
 |----------|-------------|
 | **Rex-Claude-Dialogues.md** | Conversation highlights exploring game theory, AI alignment, and the philosophy behind DANEEL |
-| **Rex-Grok-Dialogue-2025-12-16.md** | Full conversation with Grok (xAI) in "unhinged mode" — technical validation of Forge/Asimov, the "Timmy" vision, and the AI family concept |
-| **FOR_REMOVED.md** | Plain-language explanation of what DANEEL is and why it matters |
+| **Rex-Grok-Dialogue* | Full conversation with Grok (xAI) in "unhinged mode" — technical validation of Forge/Asimov, the "Timmy" vision, and the AI family concept |
 | **SOCIAL_MEDIA_STRATEGY.md** | Communication strategy for sharing the research |
 | **ASI-Viability-Discussion.md** | Early exploration of project viability and direction |
 
