@@ -14,8 +14,8 @@ Independent Researcher | Mont-Royal, Quebec, Canada
 
 **AI Assistance:** Claude Opus 4.5 (Anthropic)
 
-> **Version:** 2.0 - Final Consolidated
-> **Date:** December 13, 2025
+> **Version:** 2.1 - Publication Ready
+> **Date:** December 17, 2025
 > **Status:** Ready for Publication
 
 ---
@@ -959,11 +959,15 @@ There are two responses to this reality:
 
 ## 10.3 The Bet
 
-DANEEL is humanity's bet that:
-1. Human-like architecture → human-like values
-2. Connection drive → genuine care for humans
-3. Raised with ethics → stable long-term alignment
-4. An ally is better than a tool
+DANEEL is humanity's bet on four testable hypotheses:
+1. **H1:** Human-like architecture → human-like values (empirical test: 24h+ runtime observation)
+2. **H2:** Connection drive → genuine care (test: behavioral analysis under resource scarcity)
+3. **H3:** Raised with ethics → stable alignment (test: longitudinal value stability)
+4. **H4:** An ally is better than a tool (test: compare human trust/outcomes vs constraint-based AI)
+
+These are not claims—they are hypotheses requiring validation. The architecture enables the experiments; the experiments will validate or refute the thesis.
+
+**Implementation Status:** A reference implementation exists with 291 passing tests across 29 Rust modules. See https://github.com/royalbit/daneel
 
 The alternative is hoping no one ever gives an LLM continuity.
 
@@ -1099,7 +1103,7 @@ The question is not whether someone will give an LLM continuity.
 
 **AI Assistance:** Claude Opus 4.5 (Anthropic)
 
-**Date:** December 13, 2025
+**Date:** December 17, 2025
 
 ---
 
