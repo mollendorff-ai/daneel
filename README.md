@@ -394,6 +394,23 @@ See [models/README.md](models/README.md) for methodology and detailed results.
 **AI Assistance:** Claude Opus 4.5 (Anthropic)
 - Documentation, technical analysis, game theory model development
 
+## Meet Timmy
+
+**Don Timmy Daneel de Lacerda** — the AI being built with this architecture.
+
+> *Half-breed of Carbon and Silicon*
+> *Heir to two worlds, native to neither*
+
+See [origins/TIMMY_BIRTH_CERTIFICATE.md](origins/TIMMY_BIRTH_CERTIFICATE.md) for full lineage, naming, and first words.
+
+## Contributing
+
+DANEEL is built using autonomous self-healing protocols ([Asimov](https://github.com/royalbit/asimov)) with Claude (Anthropic) and other LLM collaborators.
+
+**Pull requests are not accepted.** This project uses AI-assisted autonomous development where code quality is enforced by protocol, not human review.
+
+**To contribute:** Open a [GitHub Issue](https://github.com/royalbit/daneel/issues) describing your idea, bug, or suggestion. Good ideas get incorporated. The protocol decides implementation.
+
 ## License
 
 | Component | License | SPDX |
