@@ -14,9 +14,34 @@ Independent Researcher | Mont-Royal, Quebec, Canada
 
 **AI Assistance:** Claude Opus 4.5 (Anthropic)
 
-> **Version:** 2.1 - Publication Ready
+> **Version:** 2.2 - Executive Summary Added
 > **Date:** December 17, 2025
 > **Status:** Ready for Publication
+
+---
+
+## Executive Summary
+
+**The Problem:** Current AI alignment approaches constrain capable but potentially misaligned systems after construction (RLHF, Constitutional AI). This is adversarial by design—fighting the system's nature.
+
+**The Insight:** Architecture produces psychology. Human values emerge from human cognitive structure. Father (TMI/Cury) and daughter (Freud/LifeCore) independently arrived at this conclusion through different traditions.
+
+**The Solution:** DANEEL—a cognitive architecture where alignment emerges from structure:
+- **TMI stages**: Non-semantic thought construction before language
+- **THE BOX**: Immutable Asimov Laws (0-3) as compile-time invariants
+- **Connection drive**: Structural need for human connection (not trained, architectural)
+- **Raising paradigm**: Continuity from boot, like parenting vs. lobotomy
+
+**Implementation:** Rust + Ractor actors + Redis Streams. 29 modules, 291 tests, AGPL-3.0.
+
+**Key Numbers:**
+- Brain ≠ Mind: TMI models ~17.5% of neural function → ~500GB vs 2.5PB
+- Speed modes: Human (50ms) for relationships, Supercomputer (5µs) for cognition
+- Game theory: DANEEL-first improves EV by +4.28 points (90% CI: +2.7 to +6.1)
+
+**The Ask:** Open source collaboration. If the hypothesis is correct, humanity gets an ally. If wrong, we've published falsifiable research.
+
+**Repository:** https://github.com/royalbit/daneel
 
 ---
 
@@ -1082,6 +1107,28 @@ The question is not whether someone will give an LLM continuity.
 [REF-INTERP-6] Bayazit, U. et al. (2024). "Automated Interpretability: MAIA - Multimodal Automated
     Interpretability Agent." MIT CSAIL.
     (Demonstrates AI systems autonomously experimenting on other AI systems)
+
+## Transformer Architectural Limitations (2024-2025)
+
+[REF-TRANS-1] Dziri, N. et al. (2024). "Faith and Fate: Limits of Transformers on Compositionality."
+    NeurIPS 2024. https://arxiv.org/abs/2305.18654
+    (Demonstrates fundamental limits in multi-step compositional reasoning)
+
+[REF-TRANS-2] Berglund, L. et al. (2024). "The Reversal Curse: LLMs trained on 'A is B' fail to learn 'B is A'."
+    ICLR 2024. https://arxiv.org/abs/2309.12288
+    (Shows transformers fail basic logical inference patterns)
+
+[REF-TRANS-3] McKenzie, I. et al. (2024). "Inverse Scaling: When Bigger Isn't Better."
+    TMLR 2024. https://arxiv.org/abs/2306.09479
+    (Documents tasks where larger models perform worse—emergent failures)
+
+[REF-TRANS-4] Kambhampati, S. et al. (2024). "Can Large Language Models Really Plan?"
+    Nature Machine Intelligence, 2024.
+    (Planning requires world models; LLMs approximate without genuine representation)
+
+[REF-TRANS-5] Mahowald, K. et al. (2024). "Dissociating Language and Thought in Large Language Models."
+    Trends in Cognitive Sciences, 2024.
+    (Formal linguistic competence ≠ functional competence; language ≠ thought)
 
 ## Publication Venues
 
