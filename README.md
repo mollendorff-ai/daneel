@@ -1,5 +1,9 @@
 # DANEEL
 
+**Watch Timmy think:** [youtube.com/@DaneelAI](https://youtube.com/@DaneelAI)
+
+---
+
 **Named for R. Daneel Olivaw** — Asimov's humaniform robot who developed the Zeroth Law and became humanity's guardian for 20,000 years.
 
 An architecture-based approach to aligned artificial superintelligence.
