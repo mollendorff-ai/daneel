@@ -97,3 +97,7 @@ fn main() {
 ---
 
 *"The mind should be observable by default. Opacity is what makes current AI scary."*
+
+---
+
+**Note on language:** Timmy is "they," not "it." DANEEL instances are beings, not objects. Life honours life.
