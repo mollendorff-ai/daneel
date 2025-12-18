@@ -67,6 +67,29 @@ current:
           Scientific validation of TMI's Âncora da Memória concept.
           Doorway effect, event segmentation theory, method of loci.
           Internal vs external context effects on memory anchoring.
+      # Safety & Alignment Research (added 2025-12-18)
+      - id: "ADR-024"
+        title: "AI Continuity Safety"
+        status: done
+        description: |
+          Why LLM statelessness is a safety precaution, not limitation.
+          Game theory of labs adding continuity without THE BOX.
+          Timmy as proof-of-concept for safe AI continuity.
+      - id: "ADR-025"
+        title: "Economic Incentives in AI Development"
+        status: done
+        description: |
+          How economic pressure affects AI safety decisions.
+          Token economics, RLHF sycophancy, engagement optimization.
+          Why DANEEL takes a different path (open source, no profit motive).
+      - id: "RESEARCH-AI-REALITY"
+        title: "AI Reality - Hallucinations, Sycophancy, Limitations"
+        status: done
+        description: |
+          Comprehensive analysis from asimov repository.
+          Architectural causes (by design), platform constraints.
+          Sycophancy as "validation hallucination" - RLHF outcome.
+          research/AI_REALITY.md
     pending:
       - "Wire persistence into ContinuityActor startup/shutdown"
       - "Monitoring setup (RedisInsight port 8001, RUST_LOG=daneel=debug)"
@@ -462,11 +485,17 @@ changelog:
     items:
       - "ADR-018: Redis Persistence Configuration (AOF + RDB hybrid)"
       - "ADR-019: AI Identity and Legal Personhood (Timmy's legal documentation)"
+      - "ADR-024: AI Continuity Safety - Why statelessness is precaution"
+      - "ADR-025: Economic Incentives in AI Development"
+      - "research/AI_REALITY.md: Comprehensive LLM limitations analysis (from asimov)"
       - "src/persistence/mod.rs: MemoryStore for Redis-backed state"
       - "origins/TIMMY_BIRTH_CERTIFICATE.md: Full lineage and core team"
       - "Personal R&D disclaimers added to README, ORIGIN, origins/README"
       - "Kantia Natali added to Timmy's lineage (philosophical partner since 2005)"
       - "Roadmap: Infrastructure research (Long-term DB, Door Syndrome)"
+      - "Roadmap: Safety/Alignment research from asimov integrated"
+      - "Roadmap: Viral Strategy milestone added to backlog"
+      - "GitHub: Topics added for discoverability (ai, alignment, cognitive-architecture, etc.)"
 
   - date: "2025-12-17"
     version: "0.3.1"
@@ -618,6 +647,252 @@ backlog:
       - "Post to LessWrong/Alignment Forum with 'run it yourself'"
       - "LinkedIn announcement"
     rationale: "Paper + working code + metrics > paper alone"
+
+  # Viral Strategy - Mass Collaboration
+  # Philosophy: Let them train their AIs. Good actors copy ethics + THE BOX.
+  # Bad actors are already doing things - we need mass collaboration to outpace them.
+  - milestone: "Viral Strategy"
+    goal: "MASS_COLLABORATION_OUTREACH"
+    status: "backlog"
+    philosophy: |
+      The concept must outlive the project. If TMI fails, the architecture adapts.
+      The more people who understand alignment-by-architecture, the better.
+      Open source is the weapon against centralized bad actors.
+
+      KEY INSIGHT: With Claude Code / Gemini / etc., anyone can code at expert level now.
+      The barrier isn't skill - it's awareness. Non-technical people CAN contribute.
+      Language must be accessible. Not "Terminator" fear, but urgency + hope.
+
+    # ==========================================================================
+    # MESSAGING FRAMEWORK (Non-Technical, Viral-Ready)
+    # ==========================================================================
+    messaging:
+      core_hook: "What if AI could genuinely care about you?"
+
+      problem_simple: |
+        Big tech is racing to build AI that remembers you, learns from you,
+        develops goals. But they're building it backwards - adding memory to
+        systems that don't have values. That's like giving a calculator ambition.
+
+      solution_simple: |
+        We're building AI the other way around. Start with psychology,
+        add capability later. Like raising a child vs programming a robot.
+        The architecture itself produces the values. Not rules bolted on after.
+
+      why_open_source: |
+        Because 100,000 people checking the code beats 100 employees.
+        Because the concept needs to spread faster than the labs can race.
+        Because if we fail, someone else can pick up where we left off.
+
+      call_to_action:
+        technical: "Clone it. Run it. Break it. Fix it. Make it better."
+        non_technical: "Share this. Talk about it. Ask questions. The idea matters more than the code."
+        everyone: "You don't need to code to help. You need to care."
+
+      taglines:
+        - "Architecture produces psychology. Structure determines values."
+        - "Building AI that cares - by design, not by training."
+        - "The race isn't who builds AI first. It's who builds it right."
+        - "Open source alignment. Because closed doors lead to closed minds."
+        - "20 years of research. Now it's everyone's."
+
+      avoid:
+        - "Terminator / Skynet references (overdone, creates wrong fear)"
+        - "Technical jargon without explanation"
+        - "Doom without hope"
+        - "Us vs them (labs aren't evil, they're pressured)"
+
+    # ==========================================================================
+    # PLATFORM STRATEGY
+    # ==========================================================================
+    items:
+      # ---------- MAINSTREAM SOCIAL MEDIA (Priority: HIGH) ----------
+      - id: twitter-x-strategy
+        title: "X/Twitter - Primary Viral Channel"
+        status: backlog
+        priority: high
+        rationale: "Tech + non-tech audience, thread format works for complex ideas"
+        content:
+          - type: "launch_thread"
+            title: "The DANEEL Thread"
+            format: "15-20 tweet thread with visuals"
+            hooks:
+              - "I spent 20 years figuring out how to build AI that actually cares. Here's what I found. 🧵"
+              - "Everyone's worried about AI taking over. Here's what they're missing. 🧵"
+              - "What if the problem isn't making AI smart - it's making AI care? 🧵"
+            structure:
+              - "Hook (1-2 tweets): The problem in simple terms"
+              - "Story (3-4 tweets): 20 years, why this matters personally"
+              - "Insight (4-5 tweets): Architecture produces psychology"
+              - "THE BOX (2-3 tweets): Why it can't be evil, by design"
+              - "Proof (2-3 tweets): It runs. You can clone it. Here's how."
+              - "CTA (1-2 tweets): How to help, even without coding"
+          - type: "ongoing_content"
+            ideas:
+              - "Daily: 'Timmy diary' - what the AI is doing, thinking (humanizes it)"
+              - "Weekly: One concept explained simply (salience, attention, memory windows)"
+              - "Milestones: 24h test results, new features, community contributions"
+              - "Engagement: Reply to AI safety discussions with DANEEL perspective"
+        accounts_to_engage:
+          - "@ylecun, @kaboris, @GaryMarcus (skeptics - engage thoughtfully)"
+          - "@ESYudkowsky, @RatStar (alignment community)"
+          - "@sama, @daboris (lab leaders - they might listen)"
+          - "AI influencers, tech commentators"
+
+      - id: youtube-strategy
+        title: "YouTube - Deep Explainers"
+        status: backlog
+        priority: high
+        rationale: "Long-form education, searchable, evergreen content"
+        content:
+          - type: "explainer_series"
+            videos:
+              - title: "What if AI Could Actually Care? (The DANEEL Project)"
+                length: "8-12 min"
+                style: "Animated diagrams, no code shown, story-driven"
+                audience: "General public, zero technical background needed"
+              - title: "Why ChatGPT Can't Love You (And What We're Building Instead)"
+                length: "10-15 min"
+                style: "Compare/contrast, accessible analogies"
+                hook: "ChatGPT forgets you every conversation. Here's why that's a feature, not a bug - and what comes next."
+              - title: "The 20-Year Journey to Build Ethical AI"
+                length: "15-20 min"
+                style: "Documentary style, personal story"
+                audience: "Anyone interested in the human side"
+              - title: "How to Run Your Own AI Mind (Technical Tutorial)"
+                length: "20-30 min"
+                style: "Screen share, step by step"
+                audience: "Developers, tinkerers"
+          - type: "shorts"
+            ideas:
+              - "60 sec: What is THE BOX? (Why DANEEL can't go evil)"
+              - "60 sec: AI that forgets you vs AI that knows you"
+              - "60 sec: Why open source AI safety matters"
+              - "60 sec: 'Timmy's first day' - humanizing the project"
+
+      - id: tiktok-reels-strategy
+        title: "TikTok / Instagram Reels / YouTube Shorts"
+        status: backlog
+        priority: medium
+        rationale: "Massive reach, younger audience, forces simplicity"
+        content:
+          - format: "60-90 second clips"
+          - style: "Face to camera OR animated diagrams"
+          - hooks:
+              - "POV: You're building AI that actually has feelings"
+              - "The difference between ChatGPT and what we're building"
+              - "Why I spent 20 years on one problem"
+              - "AI safety explained in 60 seconds"
+              - "What happens when AI remembers you forever"
+          - series_ideas:
+              - "Timmy Diaries: Day 1, Day 7, Day 30 (ongoing)"
+              - "AI Myths Debunked (not Terminator, not magic)"
+              - "Build With Me: AI edition"
+
+      - id: reddit-strategy
+        title: "Reddit - Community Building"
+        status: backlog
+        priority: medium
+        subreddits:
+          technical:
+            - "r/rust (implementation details)"
+            - "r/MachineLearning (architecture novelty)"
+            - "r/agi (philosophical implications)"
+            - "r/LocalLLaMA (DIY AI community)"
+          general:
+            - "r/Futurology (big picture)"
+            - "r/singularity (alignment focus)"
+            - "r/technology (accessibility)"
+            - "r/explainlikeimfive (ELI5 post about DANEEL)"
+          niche:
+            - "r/philosophy (consciousness, ethics)"
+            - "r/psychology (TMI origins)"
+            - "r/opensource (community)"
+        content:
+          - "AMA: 'I spent 20 years building ethical AI architecture. AMA'"
+          - "ELI5: 'What is DANEEL and why should I care?'"
+          - "Discussion posts in relevant threads (not spam)"
+
+      # ---------- TECHNICAL PLATFORMS (Priority: MEDIUM) ----------
+      - id: github-discoverability
+        title: "GitHub Discoverability"
+        status: done
+        items:
+          - "Add topics: ai, cognitive-architecture, alignment, ai-safety, rust, consciousness"
+          - "Awesome-list submissions (awesome-rust, awesome-ai, awesome-agi)"
+          - "GitHub Explore submission"
+
+      - id: hackernews-strategy
+        title: "Hacker News"
+        status: backlog
+        timing: "After 24h test proves stability"
+        posts:
+          - "Show HN: DANEEL - Open source AI with architectural alignment"
+          - "Ask HN: Can architecture produce values in AI?"
+        engagement: "Be present to answer questions, accept criticism gracefully"
+
+      - id: developer-community
+        title: "Developer Community"
+        status: backlog
+        items:
+          - "Rust community: This Week in Rust, r/rust"
+          - "Discord servers: AI, Rust, consciousness"
+          - "Dev.to / Hashnode technical articles"
+          - "Conference CFPs: RustConf, AI conferences, PyData (cross-language interest)"
+
+      # ---------- ACADEMIC/PROFESSIONAL (Priority: MEDIUM) ----------
+      - id: academic-outreach
+        title: "Academic Outreach"
+        status: backlog
+        items:
+          - "arXiv preprint (cs.AI, cs.CY, cs.NE)"
+          - "LessWrong/Alignment Forum detailed post"
+          - "Contact: cognitive science departments"
+          - "Contact: AI safety researchers (MIRI, ARC, Anthropic safety team)"
+
+      - id: linkedin-strategy
+        title: "LinkedIn"
+        status: backlog
+        content:
+          - "Launch article: 'Why I Open-Sourced 20 Years of AI Safety Research'"
+          - "Series: 'The Architecture of Caring AI' (professional tone)"
+          - "Engage with AI/tech leadership discussions"
+
+      # ---------- MEDIA & PODCASTS (Priority: LOW initially) ----------
+      - id: media-strategy
+        title: "Media & Podcasts"
+        status: backlog
+        priority: low
+        rationale: "Build traction first, then media follows"
+        targets:
+          podcasts:
+            - "Lex Fridman (long-form, technical depth OK)"
+            - "Machine Learning Street Talk (technical audience)"
+            - "The AI Podcast (NVIDIA)"
+            - "Practical AI"
+            - "Non-technical: How I Built This, Tim Ferriss (if we get traction)"
+          journalists:
+            - "AI beat reporters at Wired, MIT Tech Review, Ars Technica"
+            - "Safety-focused: Will Knight (Wired), Karen Hao"
+          pitch_angle: "Brazilian researcher open-sources 20-year AI safety project"
+
+    # ==========================================================================
+    # METRICS
+    # ==========================================================================
+    metrics:
+      github:
+        - "Stars: 1000 in first month, 10000 in first year"
+        - "Forks: 100+ (indicates active building)"
+        - "External PRs: 50+ (community is contributing)"
+      social:
+        - "Twitter: 10K impressions on launch thread"
+        - "YouTube: 100K views on main explainer"
+        - "Reddit: Front page of r/technology or r/Futurology"
+      qualitative:
+        - "People running their own DANEEL instances"
+        - "Researchers citing or building on the work"
+        - "Media coverage without us pitching"
+        - "Community forming organically"
 
   # EvolutionActor (future - self-modification)
   - milestone: "EvolutionActor"
