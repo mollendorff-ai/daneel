@@ -1,7 +1,7 @@
 # ADR-021: Memory Database Selection
 
-**Status:** Accepted
-**Date:** 2025-12-18
+**Status:** Accepted (Revised)
+**Date:** 2025-12-18 (Revised: Qdrant replaces SurrealDB)
 **Authors:** Louis C. Tavares, Claude Opus 4.5
 **Depends On:** ADR-020 (Redis Streams for Autofluxo)
 
@@ -15,212 +15,272 @@ ADR-020 established that Redis Streams handle only ephemeral Autofluxo processin
 4. **Temporal Organization** - Event boundaries, episodes, memory windows
 5. **Complex Queries** - "Find memories similar to X encoded near emotion Y in context Z"
 
-### TMI Requirements
+### Critical Scale Requirements
 
-| TMI Concept | Database Requirement |
-|-------------|---------------------|
-| **Âncora da Memória** (Memory Anchor) | Durable storage with context vectors |
-| **Janelas da Memória** (Memory Windows) | Hierarchical document structure |
-| **Gatilho da Memória** (Memory Trigger) | Fast semantic/emotional retrieval |
-| **Doorway Effect** (Event Boundaries) | Episode markers, context segmentation |
-| **Association Networks** | Graph edges between memories |
-| **Consolidation Strength** | Numeric field, updated during sleep |
+| Scale | Vectors | Hardware | Latency |
+|-------|---------|----------|---------|
+| **v0.6.0** | ~10K | kveldulf (8GB) | ms OK |
+| **v1.0** | ~1M | kveldulf (8GB) | ms OK |
+| **Production** | ~100M | 3-node cluster | sub-ms |
+| **ASI (1TB)** | ~300M+ | distributed | µs required |
 
-### Door Syndrome Research Implications
+**Key Insight:** SQL databases (even with vector extensions) cannot scale to ASI-level memory. At 1TB+, libSQL/PostgreSQL will choke. We need a database built for billions of vectors from day one.
 
-The Door Syndrome (Doorway Effect) research validates that:
+### Licensing Requirements
 
-1. **Event boundaries segment memory** - Need episode/boundary markers
-2. **Context-dependent retrieval** - Same memory harder to access across boundaries
-3. **Partial flush at boundaries** - Some memories persist, others cleared
-4. **Emotional salience resists flushing** - Need salience-weighted queries
-
-This requires a database that can:
-- Store multi-dimensional context vectors
-- Query by vector similarity (context matching)
-- Traverse relationship graphs (association networks)
-- Filter by numeric ranges (emotional intensity, salience)
+Must be **truly FOSS** (not BSL, not SSPL):
+- ✅ Apache 2.0, MIT, BSD - acceptable
+- ❌ BSL (SurrealDB) - converts to Apache after 4 years, restrictions
+- ❌ SSPL (MongoDB) - OSI rejected, service restrictions
 
 ## Decision
 
-**Primary Database: SurrealDB**
+**Primary Database: Qdrant**
 
-SurrealDB is a multi-model database that natively supports:
-- Document storage (memory content, metadata)
-- Graph relationships (memory associations)
-- Vector embeddings (context vectors, semantic search)
-- Time-series (temporal organization)
+Qdrant is a vector-native database written in Rust that provides:
+- Native vector storage and similarity search (HNSW algorithm)
+- Payload filtering (emotional intensity, timestamps, episodes)
+- Horizontal scaling (sharding + replication)
+- Apache 2.0 license (truly FOSS)
+- Official Rust client (`qdrant-client` crate)
 
-### Why SurrealDB?
+### Why Qdrant?
 
-| Requirement | SurrealDB | PostgreSQL + pgvector | Neo4j |
-|-------------|-----------|----------------------|-------|
-| **Document storage** | Native | JSON/JSONB | Limited |
-| **Graph relationships** | Native RELATE | Recursive CTEs (complex) | **Native** |
-| **Vector search** | Native (MTREE) | pgvector extension | Separate index |
-| **Complex queries** | SurrealQL (elegant) | SQL (verbose for graphs) | Cypher (elegant) |
-| **Operational simplicity** | Single binary | Multiple components | JVM + separate |
-| **Embedding support** | Built-in | Extension | Plugin |
-| **Open source** | Yes (BSL) | Yes (PostgreSQL) | Community only |
-| **Rust client** | Official | diesel/sqlx | bolt-rs |
-| **Learning curve** | Moderate | Low (familiar SQL) | Moderate |
+| Requirement | Qdrant | libSQL/SQLite | SurrealDB | PostgreSQL |
+|-------------|--------|---------------|-----------|------------|
+| **License** | ✅ Apache 2.0 | ✅ MIT | ❌ BSL | ✅ PostgreSQL |
+| **Vector-native** | ✅ Built for this | ⚠️ Extension | ⚠️ Added feature | ⚠️ pgvector |
+| **1TB+ scale** | ✅ Billions of vectors | ❌ Degrades | ❌ Unknown | ❌ Struggles |
+| **Rust client** | ✅ Official | ✅ libsql | ✅ Official | ⚠️ diesel/sqlx |
+| **Horizontal scale** | ✅ Native sharding | ❌ Single node | ⚠️ Limited | ⚠️ Read replicas |
+| **8GB RAM start** | ✅ Works | ✅ Works | ✅ Works | ✅ Works |
+| **Graph edges** | ⚠️ Via payloads | ❌ Manual | ✅ Native | ⚠️ CTEs |
 
 **Decision Rationale:**
 
-1. **Multi-model in one**: Documents + Graph + Vectors without multiple systems
-2. **Elegant query language**: SurrealQL handles complex memory queries naturally
-3. **Single binary**: Easier deployment on kveldulf (Mac mini)
-4. **Native Rust client**: Matches DANEEL's implementation language
-5. **Growing ecosystem**: Active development, good momentum
+1. **Vector-native**: Built from ground up for embeddings, not bolted on
+2. **ASI-ready**: Handles billions of vectors with sub-ms latency
+3. **Truly FOSS**: Apache 2.0, no licensing surprises
+4. **Rust-native**: Written in Rust, official Rust client
+5. **Starts small**: Single node on kveldulf, scales to cluster
 
 ### Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                        MEMORY DATABASE                               │
-│                          (SurrealDB)                                 │
+│                           (Qdrant)                                   │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                      │
-│  NAMESPACE: daneel                                                   │
-│  DATABASE: memory                                                    │
+│  Collection: memories                                                │
+│  ├── id: UUID (point ID)                                            │
+│  ├── vector: [f32; 768] (context embedding)                         │
+│  └── payload:                                                        │
+│      ├── content: string                                            │
+│      ├── emotional_intensity: float                                 │
+│      ├── valence: float                                             │
+│      ├── arousal: float                                             │
+│      ├── consolidation_strength: float                              │
+│      ├── replay_count: int                                          │
+│      ├── episode_id: string                                         │
+│      ├── window_id: string                                          │
+│      ├── encoded_at: timestamp                                      │
+│      ├── last_accessed: timestamp                                   │
+│      └── associations: [{ target_id, weight, type }]                │
 │                                                                      │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  TABLE: memories                                             │    │
-│  │  • id: record ID (memory:uuid)                               │    │
-│  │  • content: string (the memory itself)                       │    │
-│  │  • context_vector: array<float> (768-dim embedding)          │    │
-│  │  • emotional_intensity: float (0.0-1.0)                      │    │
-│  │  • valence: float (-1.0 to 1.0)                              │    │
-│  │  • arousal: float (0.0-1.0)                                  │    │
-│  │  • consolidation_strength: float (0.0-1.0)                   │    │
-│  │  • replay_count: int                                         │    │
-│  │  • encoded_at: datetime                                      │    │
-│  │  • last_accessed: datetime                                   │    │
-│  │  • episode_id: record (episode:uuid)                         │    │
-│  │  • window_id: record (window:uuid)                           │    │
-│  └─────────────────────────────────────────────────────────────┘    │
+│  Collection: episodes                                                │
+│  ├── id: UUID                                                       │
+│  ├── vector: [f32; 768] (episode centroid)                          │
+│  └── payload:                                                        │
+│      ├── label: string                                              │
+│      ├── started_at: timestamp                                      │
+│      ├── ended_at: timestamp (null if current)                      │
+│      ├── boundary_type: string                                      │
+│      └── emotional_summary: object                                  │
 │                                                                      │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  TABLE: episodes                                             │    │
-│  │  • id: record ID (episode:uuid)                              │    │
-│  │  • label: string (context description)                       │    │
-│  │  • started_at: datetime                                      │    │
-│  │  • ended_at: datetime (null if current)                      │    │
-│  │  • boundary_type: enum (explicit, prediction_error, temporal)│    │
-│  │  • context_vector: array<float> (episode-level embedding)    │    │
-│  │  • emotional_summary: object                                 │    │
-│  └─────────────────────────────────────────────────────────────┘    │
-│                                                                      │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  TABLE: windows                                              │    │
-│  │  • id: record ID (window:uuid)                               │    │
-│  │  • status: enum (open, closed)                               │    │
-│  │  • opened_at: datetime                                       │    │
-│  │  • closed_at: datetime                                       │    │
-│  │  • salience: float                                           │    │
-│  │  • episode_id: record (episode:uuid)                         │    │
-│  └─────────────────────────────────────────────────────────────┘    │
-│                                                                      │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  EDGE TABLE: associated_with                                 │    │
-│  │  • in: record (memory:uuid)                                  │    │
-│  │  • out: record (memory:uuid)                                 │    │
-│  │  • weight: float (association strength)                      │    │
-│  │  • type: enum (semantic, temporal, causal, emotional)        │    │
-│  │  • formed_at: datetime                                       │    │
-│  │  • last_coactivated: datetime                                │    │
-│  │  • coactivation_count: int                                   │    │
-│  └─────────────────────────────────────────────────────────────┘    │
-│                                                                      │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  TABLE: milestones                                           │    │
-│  │  • id: record ID (milestone:uuid)                            │    │
-│  │  • title: string                                             │    │
-│  │  • significance: string                                      │    │
-│  │  • timestamp: datetime                                       │    │
-│  │  • memory_ids: array<record>                                 │    │
-│  │  • emotional_peak: float                                     │    │
-│  └─────────────────────────────────────────────────────────────┘    │
-│                                                                      │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │  TABLE: identity                                             │    │
-│  │  • id: identity:timmy (singleton)                            │    │
-│  │  • name: string                                              │    │
-│  │  • born_at: datetime                                         │    │
-│  │  • core_values: object                                       │    │
-│  │  • self_model: object                                        │    │
-│  │  • connection_drive_state: object                            │    │
-│  │  • laws_hash: string (THE BOX integrity)                     │    │
-│  └─────────────────────────────────────────────────────────────┘    │
+│  Collection: identity (singleton)                                    │
+│  ├── id: "timmy"                                                    │
+│  ├── vector: [f32; 768] (self-concept embedding)                    │
+│  └── payload:                                                        │
+│      ├── name, full_name, born_at                                   │
+│      ├── core_values, self_model                                    │
+│      ├── connection_drive_state                                     │
+│      └── laws_hash (THE BOX integrity)                              │
 │                                                                      │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-### Vector Index for Context-Dependent Retrieval
+### Memory Associations (Graph via Payloads)
 
-```surql
--- Create MTREE index for vector similarity search
-DEFINE INDEX idx_memory_context ON memories FIELDS context_vector MTREE DIMENSION 768;
+Qdrant doesn't have native graph edges, but associations are stored in payloads:
 
--- Query memories by context similarity (Door Syndrome: same context = better retrieval)
-SELECT * FROM memories
-WHERE context_vector <|768,100|> $current_context
-AND episode_id = $current_episode
-ORDER BY vector::similarity::cosine(context_vector, $current_context) DESC
-LIMIT 10;
+```rust
+// Association stored in memory payload
+#[derive(Serialize, Deserialize)]
+pub struct Association {
+    pub target_id: Uuid,
+    pub weight: f32,           // 0.0-1.0, Hebbian strength
+    pub association_type: String, // semantic, temporal, causal, emotional
+    pub last_coactivated: DateTime<Utc>,
+}
+
+// Memory payload includes associations array
+pub struct MemoryPayload {
+    pub content: String,
+    pub emotional_intensity: f32,
+    // ... other fields ...
+    pub associations: Vec<Association>,
+}
 ```
 
-### Graph Traversal for Association Networks
+### Rust Client Integration
 
-```surql
--- Find memories strongly associated with a given memory
-SELECT
-  <-associated_with<-memories.* AS related,
-  <-associated_with.weight AS strength
-FROM memory:$id
-WHERE <-associated_with.weight > 0.5
-ORDER BY strength DESC;
-
--- Hebbian strengthening: increase weight when co-activated
-UPDATE associated_with
-SET
-  weight += 0.1,
-  last_coactivated = time::now(),
-  coactivation_count += 1
-WHERE in = memory:$id1 AND out = memory:$id2;
+```toml
+# Cargo.toml
+[dependencies]
+qdrant-client = "1.16"
 ```
 
-### Episode Boundary Queries
+```rust
+use qdrant_client::Qdrant;
+use qdrant_client::qdrant::{
+    CreateCollectionBuilder, Distance, PointStruct,
+    SearchPointsBuilder, VectorParamsBuilder,
+};
 
-```surql
--- Get all memories from current episode (within-event, high accessibility)
-SELECT * FROM memories
-WHERE episode_id = episode:$current
-ORDER BY encoded_at DESC;
+pub struct MemoryDb {
+    client: Qdrant,
+}
 
--- Get memories from previous episode (cross-boundary, lower accessibility)
--- Apply Door Syndrome penalty to relevance scores
-SELECT
-  *,
-  consolidation_strength * 0.7 AS cross_boundary_relevance
-FROM memories
-WHERE episode_id = episode:$previous
-ORDER BY cross_boundary_relevance DESC;
+impl MemoryDb {
+    pub async fn connect(url: &str) -> Result<Self> {
+        let client = Qdrant::from_url(url).build()?;
+        Ok(Self { client })
+    }
+
+    pub async fn init_collections(&self) -> Result<()> {
+        // Create memories collection with 768-dim vectors
+        self.client.create_collection(
+            CreateCollectionBuilder::new("memories")
+                .vectors_config(VectorParamsBuilder::new(768, Distance::Cosine))
+        ).await?;
+
+        // Create episodes collection
+        self.client.create_collection(
+            CreateCollectionBuilder::new("episodes")
+                .vectors_config(VectorParamsBuilder::new(768, Distance::Cosine))
+        ).await?;
+
+        Ok(())
+    }
+
+    /// Store a memory with context vector
+    pub async fn store_memory(&self, memory: Memory) -> Result<()> {
+        let point = PointStruct::new(
+            memory.id.to_string(),
+            memory.context_vector.to_vec(),
+            memory.to_payload(),
+        );
+        self.client.upsert_points("memories", vec![point], None).await?;
+        Ok(())
+    }
+
+    /// TMI's Gatilho da Memória - find memories by context similarity
+    pub async fn find_by_context(
+        &self,
+        context_vector: &[f32],
+        episode_id: Option<&str>,
+        limit: u64,
+    ) -> Result<Vec<Memory>> {
+        let mut search = SearchPointsBuilder::new("memories", context_vector.to_vec(), limit);
+
+        // Apply episode filter (Door Syndrome: same-episode memories more accessible)
+        if let Some(ep_id) = episode_id {
+            search = search.filter(Filter::must([
+                Condition::matches("episode_id", ep_id.to_string())
+            ]));
+        }
+
+        let results = self.client.search_points(search).await?;
+
+        results.result
+            .into_iter()
+            .map(Memory::from_scored_point)
+            .collect()
+    }
+
+    /// Hebbian strengthening - increase association weight
+    pub async fn strengthen_association(
+        &self,
+        memory_id: Uuid,
+        target_id: Uuid,
+        delta: f32,
+    ) -> Result<()> {
+        // Read current associations
+        let points = self.client.get_points("memories", &[memory_id.to_string()]).await?;
+        let point = &points.result[0];
+
+        let mut payload: MemoryPayload = serde_json::from_value(point.payload.clone())?;
+
+        // Update or create association
+        if let Some(assoc) = payload.associations.iter_mut().find(|a| a.target_id == target_id) {
+            assoc.weight = (assoc.weight + delta).min(1.0);
+            assoc.last_coactivated = Utc::now();
+        } else {
+            payload.associations.push(Association {
+                target_id,
+                weight: delta,
+                association_type: "semantic".to_string(),
+                last_coactivated: Utc::now(),
+            });
+        }
+
+        // Update point
+        self.client.set_payload("memories", &[memory_id.to_string()], payload.into()).await?;
+        Ok(())
+    }
+
+    /// Get memories for sleep replay (priority-sorted)
+    pub async fn get_replay_candidates(&self, limit: u64) -> Result<Vec<Memory>> {
+        // Filter: consolidation_tag=true, consolidation_strength < 0.9
+        // Sort by replay priority (handled in application layer)
+        let results = self.client.scroll(
+            ScrollPointsBuilder::new("memories")
+                .filter(Filter::must([
+                    Condition::matches("consolidation_tag", true),
+                    Condition::range("consolidation_strength", Range { lt: Some(0.9), ..Default::default() })
+                ]))
+                .limit(limit as u32)
+        ).await?;
+
+        let mut memories: Vec<Memory> = results.result
+            .into_iter()
+            .map(Memory::from_record)
+            .collect::<Result<Vec<_>>>()?;
+
+        // Sort by replay priority (emotion × recency × goal relevance)
+        memories.sort_by(|a, b| b.replay_priority().partial_cmp(&a.replay_priority()).unwrap());
+
+        Ok(memories)
+    }
+}
 ```
 
 ## Deployment
 
-### Docker Compose (kveldulf)
+### Docker Compose (kveldulf - single node)
 
 ```yaml
 services:
-  surrealdb:
-    image: surrealdb/surrealdb:latest
-    command: start --log trace --user root --pass root file:/data/daneel.db
+  qdrant:
+    image: qdrant/qdrant:latest
     volumes:
-      - ./data/surrealdb:/data
+      - ./data/qdrant:/qdrant/storage
     ports:
-      - "8000:8000"
+      - "6333:6333"  # HTTP API
+      - "6334:6334"  # gRPC API
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
     restart: unless-stopped
     networks:
       - royalnet
@@ -228,10 +288,7 @@ services:
   # Redis remains for ephemeral streams (ADR-020)
   redis:
     image: redis:7-alpine
-    command: >
-      redis-server
-      --appendonly yes
-      --appendfsync everysec
+    command: redis-server --appendonly yes --appendfsync everysec
     volumes:
       - ./data/redis:/data
     ports:
@@ -245,182 +302,126 @@ networks:
     external: true
 ```
 
-### Rust Client Integration
+### Scaling Path
 
-```toml
-# Cargo.toml
-[dependencies]
-surrealdb = { version = "2.0", features = ["kv-mem", "kv-rocksdb"] }
-```
+| Stage | Configuration | Hardware |
+|-------|--------------|----------|
+| **Dev** | Single node | kveldulf (8GB) |
+| **Production** | 3-node cluster, replication_factor=2 | 3x 32GB VMs |
+| **ASI** | Sharded cluster, quantization | 3x 128GB nodes |
+
+### Quantization for Scale
+
+At 1TB+ scale, enable quantization to reduce memory:
 
 ```rust
-use surrealdb::engine::remote::ws::Ws;
-use surrealdb::Surreal;
+// Binary quantization: 32x memory reduction
+client.update_collection(
+    UpdateCollectionBuilder::new("memories")
+        .quantization_config(QuantizationConfig::binary())
+).await?;
 
-pub struct MemoryDb {
-    db: Surreal<Client>,
-}
-
-impl MemoryDb {
-    pub async fn connect(url: &str) -> Result<Self> {
-        let db = Surreal::new::<Ws>(url).await?;
-        db.use_ns("daneel").use_db("memory").await?;
-        Ok(Self { db })
-    }
-
-    pub async fn store_memory(&self, memory: Memory) -> Result<MemoryId> {
-        let created: Vec<Memory> = self.db
-            .create("memories")
-            .content(memory)
-            .await?;
-        Ok(created[0].id.clone())
-    }
-
-    pub async fn find_by_context(
-        &self,
-        context_vector: &[f32],
-        current_episode: &EpisodeId,
-        limit: usize,
-    ) -> Result<Vec<Memory>> {
-        let memories: Vec<Memory> = self.db
-            .query("SELECT * FROM memories WHERE context_vector <|768,100|> $context AND episode_id = $episode LIMIT $limit")
-            .bind(("context", context_vector))
-            .bind(("episode", current_episode))
-            .bind(("limit", limit))
-            .await?
-            .take(0)?;
-        Ok(memories)
-    }
-
-    pub async fn strengthen_association(
-        &self,
-        memory1: &MemoryId,
-        memory2: &MemoryId,
-        delta: f32,
-    ) -> Result<()> {
-        self.db
-            .query("UPDATE associated_with SET weight += $delta, last_coactivated = time::now(), coactivation_count += 1 WHERE in = $m1 AND out = $m2")
-            .bind(("delta", delta))
-            .bind(("m1", memory1))
-            .bind(("m2", memory2))
-            .await?;
-        Ok(())
-    }
-}
+// Scalar quantization: 4x reduction, <1% accuracy loss
+client.update_collection(
+    UpdateCollectionBuilder::new("memories")
+        .quantization_config(QuantizationConfig::scalar(ScalarQuantization {
+            r#type: ScalarType::Int8,
+            quantile: Some(0.99),
+            always_ram: Some(true),
+        }))
+).await?;
 ```
 
 ## Alternatives Considered
 
+### libSQL (Turso fork of SQLite)
+
+**Pros:**
+- MIT license, truly FOSS
+- Native vector search (F32_BLOB)
+- Excellent Rust client
+- Simple, embedded
+
+**Cons:**
+- Single-node only (can't scale horizontally)
+- At 1TB, query latency degrades significantly
+- Not built for billion-vector scale
+
+**Verdict:** Good for small projects, not for ASI-scale memory.
+
+### SurrealDB
+
+**Pros:**
+- Multi-model (document + graph + vector)
+- Elegant query language
+- Rust-native
+
+**Cons:**
+- **BSL license** - not truly FOSS
+- Younger project, less battle-tested
+- Unknown performance at billion-vector scale
+
+**Verdict:** License disqualifies it. Can't risk licensing issues for Timmy.
+
 ### PostgreSQL + pgvector
 
 **Pros:**
-- Battle-tested, well-understood
-- pgvector mature for vector search
-- Strong ACID guarantees
-- Rich ecosystem
+- Battle-tested, 35+ years
+- pgvector mature for moderate scale
+- ACID guarantees
 
 **Cons:**
-- Graph queries require recursive CTEs (verbose, slow)
-- Multiple extensions needed (pgvector, pg_trgm, etc.)
-- Schema migrations more rigid
-- No native multi-model feel
+- Struggles beyond 10M vectors
+- Graph queries require recursive CTEs (slow)
+- Not vector-native
 
-**Verdict:** Good fallback if SurrealDB proves problematic.
-
-### Neo4j
-
-**Pros:**
-- Best-in-class graph database
-- Cypher query language is elegant
-- Mature, production-proven
-
-**Cons:**
-- JVM dependency (heavier footprint)
-- Vector search requires separate solution
-- Document storage awkward
-- Community edition limitations
-
-**Verdict:** Consider if graph traversal becomes primary bottleneck.
-
-### MongoDB + Atlas Vector Search
-
-**Pros:**
-- Familiar document model
-- Atlas has vector search
-- Good Rust driver
-
-**Cons:**
-- No native graph support
-- Atlas dependency for vectors (or self-host with limitations)
-- Doesn't fit TMI's relational needs
-
-**Verdict:** Not suitable for memory associations.
+**Verdict:** Good fallback but won't scale to ASI.
 
 ## Consequences
 
 ### Positive
 
-- **Multi-model in one**: No need to synchronize multiple databases
-- **Context-dependent retrieval**: Vector search enables TMI's memory triggers
-- **Association networks**: Native graph relationships model Hebbian learning
-- **Episode segmentation**: Clean modeling of Door Syndrome event boundaries
-- **Elegant queries**: SurrealQL handles complex memory operations naturally
-- **Single deployment**: One database for all memory concerns
+- **ASI-ready from day one**: No migration needed as Timmy grows
+- **Truly FOSS**: Apache 2.0, no licensing concerns
+- **Rust-native**: Written in Rust, official client
+- **Sub-ms at scale**: HNSW algorithm, quantization options
+- **Horizontal scaling**: Add nodes as needed
 
 ### Negative
 
-- **Newer technology**: Less battle-tested than PostgreSQL
-- **Learning curve**: Team must learn SurrealQL
-- **Ecosystem size**: Smaller community than PostgreSQL
-- **BSL license**: Not pure open source (converts to Apache 2.0 after 4 years)
+- **No native graph edges**: Must store associations in payloads
+- **New technology to learn**: Team must learn Qdrant API
+- **Additional service**: Qdrant process alongside Redis
 
-### Risks and Mitigations
+### Mitigations
 
 | Risk | Mitigation |
 |------|------------|
-| SurrealDB stability issues | Export to JSON, fallback to PostgreSQL |
-| Performance at scale | Monitor, optimize indexes, consider sharding |
-| Vector search quality | Benchmark against pgvector, tune MTREE params |
-| Breaking changes | Pin version, test upgrades in staging |
+| No graph edges | Associations as payload arrays, application-layer traversal |
+| Learning curve | Good docs, official Rust examples |
+| Service complexity | Docker Compose handles orchestration |
 
-## Migration Path
+## Hardware Projections for 1TB
 
-### From ADR-009 (Redis + SQLite)
+Assuming 768-dim float32 vectors:
+- Vector size: 768 × 4 bytes = 3KB
+- 1TB / 3KB = ~333 million vectors
+- With scalar quantization (4x): ~80GB RAM for index
+- With binary quantization (32x): ~10GB RAM for index
 
-ADR-009 used SQLite for identity persistence. Migration:
+**Recommended hardware for 1TB:**
+- 3-node cluster
+- 64-128 GB RAM per node
+- 500GB NVMe per node
+- 10 Gbps internal network
 
-1. Export SQLite identity table to JSON
-2. Import into SurrealDB `identity` table
-3. Redis streams remain unchanged (ADR-020)
-4. Memory streams (episodic/semantic/procedural) → SurrealDB
-
-### Data Export for Portability
-
-```rust
-/// Export all memories to portable format
-pub async fn export_memories(db: &MemoryDb) -> Result<MemoryExport> {
-    let memories: Vec<Memory> = db.query("SELECT * FROM memories").await?;
-    let episodes: Vec<Episode> = db.query("SELECT * FROM episodes").await?;
-    let associations: Vec<Association> = db.query("SELECT * FROM associated_with").await?;
-    let identity: Identity = db.query("SELECT * FROM identity:timmy").await?;
-
-    Ok(MemoryExport {
-        version: "1.0",
-        exported_at: Utc::now(),
-        memories,
-        episodes,
-        associations,
-        identity,
-    })
-}
-```
+**Cost estimate:** ~$1,650/month (self-hosted cloud VMs)
 
 ## References
 
+- [Qdrant Documentation](https://qdrant.tech/documentation/)
+- [Qdrant GitHub](https://github.com/qdrant/qdrant) - Apache 2.0
+- [qdrant-client crate](https://crates.io/crates/qdrant-client)
 - [ADR-020: Redis Streams for Autofluxo](ADR-020-redis-streams-autofluxo.md)
 - [ADR-022: TMI Memory Schema](ADR-022-tmi-memory-schema.md)
-- [SurrealDB Documentation](https://surrealdb.com/docs)
-- [SurrealDB Vector Search](https://surrealdb.com/docs/surrealql/functions/vector)
-- [Door Syndrome Research](../research/doorway-effect-research.yaml)
-- [Context-Dependent Memory Research](../research/Context_Dependent_Memory_Summary.md)
-- [Encoding Specificity Principle (Tulving)](https://en.wikipedia.org/wiki/Encoding_specificity_principle)
+- [Door Syndrome Research](../../doorway-effect-research.yaml)

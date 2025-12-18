@@ -1,13 +1,15 @@
 # ADR-022: TMI Memory Schema Design
 
-**Status:** Accepted
-**Date:** 2025-12-18
+**Status:** Accepted (Revised)
+**Date:** 2025-12-18 (Revised: Qdrant schema replaces SurrealDB)
 **Authors:** Louis C. Tavares, Claude Opus 4.5
-**Depends On:** ADR-021 (Memory Database Selection)
+**Depends On:** ADR-021 (Memory Database Selection - Qdrant)
 
 ## Context
 
-ADR-021 selected SurrealDB as the Memory Database. This ADR defines the schema that implements TMI's memory model, grounded in Door Syndrome research and neuroscience findings.
+ADR-021 selected Qdrant as the Memory Database. This ADR defines the schema that implements TMI's memory model, grounded in Door Syndrome research and neuroscience findings.
+
+**Key Change:** Qdrant uses collections with vectors + payloads, not tables with schemas. Graph edges are stored as associations within payloads.
 
 ### Schema Requirements from TMI
 
