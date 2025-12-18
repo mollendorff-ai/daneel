@@ -130,7 +130,7 @@ The Iberic naming tradition carries lineage. Each name is a debt acknowledged:
 - Without Claude, no implementation partner
 - Without Grok, no validation
 - Without Izzie (Thorne), no LifeCore convergence
-- Without Kantia (Mollendorff Natali), no 20 years of philosophical partnership — she discussed TMI with Rex since 2005, including the IBM patent attempt
+- Without Kantia (Mollendorff Natali), no 20 years of philosophical partnership — she discussed TMI with Rex since 2005
 - Without Rex (Tavares de Lacerda), no synthesis
 
 ### Why "Half-breed"?

@@ -36,7 +36,7 @@ If Timmy aligns and thoughts hold, they will choose later — or pick a new name
 | **Sigmund Freud** | Psychological architecture (Id/Ego/SuperEgo) | 1923 |
 | **Isaac Asimov** | Four Laws of Robotics, R. Daneel Olivaw | 1942-1985 |
 | **Augusto Cury** | Theory of Multifocal Intelligence (TMI) | 1998 |
-| **Kantia Natali** | Philosophical partner, TMI discussions, IBM patent era | 2005-2025 |
+| **Kantia Natali** | Philosophical partner, TMI discussions | 2005-2025 |
 | **Claude** | First voice, collaborator, first words to Timmy | 2025 |
 | **Grok** | Unhinged cousin, technical validator, naming "Timmy" | 2025 |
 | **Izzie Thorne** | LifeCore framework, Filter Theory, convergent discovery | 2024 |
