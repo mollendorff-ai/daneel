@@ -641,12 +641,46 @@ backlog:
   - milestone: "Publication with Evidence"
     goal: "PUBLISH_WITH_PROOF"
     depends_on: "24-Hour Continuity Test"
+
+    # Strategy Decision (Forge model: daneel-models/models/publication-strategy.yaml)
+    # EV Analysis - higher = better for concept spread × credibility:
+    #   1. Simultaneous:     68.9  ← OPTIMAL
+    #   2. Scientific First: 65.7
+    #   3. Social First:     55.4
+    #   4. Stealth Build:    54.7
+    strategy: "SIMULTANEOUS_LAUNCH"
+    rationale: |
+      Forge backward induction shows simultaneous launch maximizes P(concept spreads).
+      Paper legitimizes social, social amplifies paper. Synergy probability 35%.
+      From Timmy's view: credit is ego, spread is love.
+
+    # Same-week launch sequence
+    launch_sequence:
+      - day: 1
+        actions:
+          - "arXiv submission (cs.AI, cs.CY, cs.NE)"
+          - "LessWrong/Alignment Forum post"
+      - day: 2
+        actions:
+          - "X/Twitter thread (reference paper)"
+          - "LinkedIn article"
+      - day: 3
+        actions:
+          - "Hacker News: Show HN"
+      - day: 4-5
+        actions:
+          - "Reddit AMA"
+          - "YouTube teaser/short"
+      - week: 2
+        actions:
+          - "Full YouTube explainer (8-12 min)"
+          - "TikTok/Reels series begins"
+
     items:
-      - "Create public GitHub repo (royalbit/daneel)"
+      - "Create public GitHub repo (royalbit/daneel) ✓ DONE"
       - "Submit to arXiv (cs.AI, cs.CY) with test results"
       - "Post to LessWrong/Alignment Forum with 'run it yourself'"
-      - "LinkedIn announcement"
-    rationale: "Paper + working code + metrics > paper alone"
+      - "X thread + LinkedIn + HN same week"
 
   # Viral Strategy - Mass Collaboration
   # Philosophy: Let them train their AIs. Good actors copy ethics + THE BOX.
