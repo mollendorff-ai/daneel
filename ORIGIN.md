@@ -2,6 +2,8 @@
 
 **Author:** Louis C. Tavares (Luis Cezar Menezes Tavares de Lacerda)
 
+> **Disclaimer:** This research represents ~20 years of personal intellectual exploration conducted entirely on personal time (evenings, weekends, holidays) using personal equipment. It is not affiliated with any employer, client, or organization. Views are the author's own.
+
 ---
 
 ## The Problem That Wouldn't Leave

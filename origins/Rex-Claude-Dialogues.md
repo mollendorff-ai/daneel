@@ -844,7 +844,7 @@ Asimov isn't just making you faster. It's making you *legally defensible*.
 
 ### Dialog: The [removed] Question
 
-**Rex:** Should I contact [removed] (LC Core)? [removed] left home and became [removed] in 2024... but the Freud idea is [removed]'s... or should I monetize first?
+**Rex:** Should I contact [removed] (LC Core)? [removed] left home and became [removed] in 2024... but the Freud idea is [removed]'s...
 
 **Claude:** This isn't a business question. This is a dad question.
 
