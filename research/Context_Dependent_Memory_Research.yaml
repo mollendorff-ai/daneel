@@ -1,0 +1,1130 @@
+---
+# Context-Dependent Memory: Scientific Framework for DANEEL's TMI Implementation
+# Research Date: 2025-12-18
+# Purpose: Define the scientific basis for "context" in DANEEL's Âncora da Memória
+
+metadata:
+  status: "Comprehensive Analysis"
+  relevance: "Core Memory Architecture"
+  tmi_mapping: "Âncora da Memória (Memory Anchor)"
+  sources: "Wikipedia, Academic Psychology Literature"
+  retrieved_via: "ref-tools fetch (2025-12-18)"
+
+framework:
+  name: "Context-Dependent Memory"
+
+  core_principle: |
+    Memory retrieval is more effective when the context at retrieval matches
+    the context at encoding. Context serves as a retrieval cue that facilitates
+    access to encoded information.
+
+  key_researchers:
+    - name: "Endel Tulving"
+      contribution: "Encoding Specificity Principle"
+      affiliation: "University of Toronto"
+      lifespan: "1927-2023"
+      nationality: "Estonian-Canadian"
+      significance: "Distinguished between episodic and semantic memory; developed encoding specificity theory"
+
+    - name: "Donald R. Godden"
+      contribution: "Underwater Memory Experiment (1975)"
+      affiliation: "University of Stirling"
+      significance: "Demonstrated environmental context effects on memory"
+
+    - name: "Alan D. Baddeley"
+      contribution: "Working Memory Model & Context Effects"
+      affiliation: "University of York"
+      significance: "Showed recognition unaffected by context (free recall is)"
+
+    - name: "Robert S. Lockhart"
+      contribution: "Transfer-Appropriate Processing"
+      affiliation: "University of Toronto"
+      significance: "Extended encoding specificity to processing types"
+
+    - name: "Fergus I. M. Craik"
+      contribution: "Levels of Processing & Encoding Studies"
+      affiliation: "University of Toronto"
+      significance: "Demonstrated depth of processing affects memory"
+
+  historical_development:
+    - year: 1972
+      event: "Tulving & Thomson propose Encoding Specificity Principle"
+      significance: "Established that retrieval cues must match encoding context"
+
+    - year: 1975
+      event: "Godden & Baddeley underwater experiment"
+      significance: "Demonstrated environmental context effects empirically"
+
+    - year: 1977
+      event: "Transfer-Appropriate Processing developed"
+      significance: "Showed processing type at encoding must match retrieval"
+
+types:
+  external_context:
+    description: "Environmental and situational cues present during encoding"
+
+    definition: |
+      External context refers to the physical and environmental conditions
+      surrounding the learner at the time of encoding. These cues become
+      associated with the memory trace and can facilitate retrieval when
+      reinstated.
+
+    examples:
+      location:
+        - description: "Physical place where encoding occurred"
+        - instances: ["classroom", "underwater", "home", "laboratory"]
+
+      environmental_sounds:
+        - description: "Auditory background during encoding"
+        - instances: ["background noise", "silence", "music", "ambient sounds"]
+        - research: "Grant et al. (1998) - matching study/test auditory environment"
+
+      visual_environment:
+        - description: "Visual surroundings and stimuli"
+        - instances: ["room appearance", "lighting", "visual cues"]
+
+      olfactory_cues:
+        - description: "Smells present during encoding"
+        - instances: ["perfume", "coffee", "environmental odors"]
+
+      temporal_context:
+        - description: "Time of day and temporal associations"
+        - instances: ["morning", "evening", "season"]
+
+    classic_studies:
+      godden_baddeley_1975:
+        title: "Context-Dependent Memory in Two Natural Environments"
+        design: "2x2 between-subjects design"
+
+        procedure: |
+          - Group 1: Study underwater → Test underwater
+          - Group 2: Study underwater → Test on land
+          - Group 3: Study on land → Test on land
+          - Group 4: Study on land → Test underwater
+          - Task: Learn and recall word lists while in scuba gear
+
+        results: |
+          Participants recalled words better when tested in the same environment
+          where they learned them. Context match improved recall regardless of
+          whether that context was underwater or on dry land.
+
+        key_finding: |
+          Memory tested through FREE RECALL was affected by context.
+          Memory tested through RECOGNITION was NOT affected (outshining hypothesis).
+
+        implication: "Physical environment serves as retrieval cue when better cues unavailable"
+
+      outshining_hypothesis:
+        principle: |
+          Context is only useful as a retrieval cue when stronger cues are absent.
+          In recognition tests, the item itself is a strong cue, so context doesn't help.
+          In free recall, context is the primary available cue, so it matters significantly.
+
+        practical_meaning: "Context effects strongest for hardest retrieval tasks"
+
+    practical_implications:
+      study_exam_environment:
+        recommendation: "Study in same room as exam when possible"
+        rationale: "Environmental cues will be reinstated during test"
+        effectiveness: "Moderate effect size in free recall tasks"
+
+      mental_context_reinstatement:
+        recommendation: "Mentally recreate study environment during retrieval"
+        rationale: "Imagining context can partially restore cues"
+        technique: "Fisher & Craik (1977) - context reinstatement"
+
+  internal_context:
+    description: "Physiological and psychological state during encoding"
+
+    definition: |
+      Internal context (state-dependent memory) refers to the learner's
+      internal physiological, emotional, and cognitive state at encoding.
+      Matching this internal state at retrieval facilitates memory access.
+
+    types:
+      pharmacological_state:
+        description: "Effects of substances on memory state"
+
+        substances_studied:
+          alcohol:
+            effect: "State-dependent memory effect"
+            finding: |
+              Information learned while intoxicated is better recalled when
+              intoxicated again. However, intoxication impairs encoding overall.
+
+            classic_anecdote: |
+              Dr. Abel's Irish porter (reported by John Elliotson, 1835):
+              "An Irish porter to a warehouse, who forgot when sober what he had
+              done when drunk: but, being drunk, again recollected the transactions
+              of his former state of intoxication. On one occasion, being drunk,
+              he had lost a parcel of some value, and in his sober moments could
+              give no account of it. Next time he was intoxicated, he recollected
+              that he had left the parcel at a certain house."
+
+            research:
+              - "Hoine, Bremer, & Stern (1969) - vodka study/test matching"
+              - "Stronger effect in free recall than recognition"
+              - "Alcoholics show larger state-dependent effects"
+
+          stimulants:
+            substances: ["methylphenidate (Ritalin)", "caffeine"]
+
+            methylphenidate:
+              population: "Children with ADHD"
+              effect: "State-dependent learning"
+              finding: |
+                Children with hyperactivity learn better on medication and
+                retain information better when tested on medication.
+              specificity: "Effect only in hyperactive children, not neurotypical"
+
+            caffeine:
+              effect: "Minimal state-dependent effect"
+              finding: "No significant context effect for caffeine in word recall"
+              phobia_therapy: "Consistent caffeine state improves phobia treatment outcomes"
+
+          sedatives:
+            substances: ["sodium pentobarbital", "morphine"]
+            research: |
+              - Overton (1964): Rats learned maze escape under sodium pentobarbital
+              - Zarrindast & Rezayof (2004): Mice showed state-dependent learning with morphine
+              - Information learned under drug recalled best in same drug state
+
+          cannabis:
+            substance: "THC (tetrahydrocannabinol)"
+            effect: "Unclear/inconsistent results"
+            finding: "Insufficient evidence for strong state-dependent memory claims"
+
+      mood_state:
+        description: "Emotional mood as internal context"
+
+        mood_dependent_memory:
+          definition: |
+            The phenomenon where individuals recall information better when their
+            mood at retrieval matches their mood at encoding.
+
+          controversy: |
+            Mood-dependent memory is controversial. Early studies showed effects,
+            but later research suggested results might be due to MOOD-CONGRUENT
+            memory (recalling mood-matching content) rather than true state-dependency.
+
+          mood_congruent_vs_mood_dependent:
+            mood_congruent: |
+              Recalling information that matches current mood content
+              (e.g., sad person recalls sad memories)
+
+            mood_dependent: |
+              Recalling ANY information better when mood at retrieval matches
+              mood at encoding (regardless of content)
+
+          research:
+            bipolar_disorder_studies:
+              - year: 1977
+                finding: "Bipolar patients performed better on verbal associations when mood matched"
+
+              - year: 2011
+                finding: |
+                  Better recall of inkblots when mood matched encoding mood.
+                  NO effect found for verbal tasks (contradicts 1977 study).
+                note: "Further research needed due to contradictory findings"
+
+            depression_study:
+              researchers: "Reus, Post, & Weingartner (1979)"
+              finding: |
+                Depressed individuals find it nearly impossible to recall happy
+                memories. The longer the depression, the harder the task becomes.
+              interpretation: "Mood state restricts access to opposite-valence memories"
+
+      physiological_state:
+        description: "Physical condition as context"
+
+        pain_state:
+          research: "Pain induction via ice water immersion"
+          finding: |
+            Subjects who submerged hand in ice water after memorizing words
+            showed better recall of PAIN-RELATED words than warm-water controls.
+
+          interpretation: "Pain state facilitates access to pain-associated memories"
+
+          clinical_implication: |
+            State-dependent pain memories may contribute to:
+            - Dissociative amnesia
+            - Trauma-related memory fragmentation
+            - PTSD symptomatology
+
+        arousal_state:
+          description: "Physiological arousal level"
+          components: ["heart rate", "cortisol", "adrenaline"]
+          effect: "High arousal at encoding creates arousal-dependent retrieval advantage"
+
+        fatigue_state:
+          description: "Level of tiredness or alertness"
+          effect: "Information encoded when tired may be better recalled when tired"
+
+      cognitive_state:
+        description: "Mental mode and processing style"
+
+        language_context:
+          research: "Bilingual autobiographical memory (Russian-English bilinguals)"
+          finding: |
+            When given Russian cue words, participants recalled memories from
+            Russian-speaking contexts. English cues triggered English-context memories.
+
+          mechanisms:
+            - "Cue words may have been present during original event"
+            - "Language creates ambient context beyond specific word associations"
+
+          implication: "Language is powerful context cue for autobiographical retrieval"
+
+        attention_focus:
+          description: "What aspect of stimulus was attended to during encoding"
+          relevance: "Transfer-appropriate processing"
+
+encoding_specificity_principle:
+  formulation: "Tulving & Thomson (1972)"
+
+  principle: |
+    The effectiveness of a retrieval cue depends on the extent to which it
+    overlaps with the encoded memory trace. Memory is maximally accessible
+    when retrieval conditions match encoding conditions.
+
+  formal_statement: |
+    "Specific retrieval cues facilitate recall if the information of their
+    relation to the to-be-remembered items is stored at the same time as the
+    items themselves."
+
+  key_concepts:
+    availability_vs_accessibility:
+      availability: "Information is stored in memory (exists)"
+      accessibility: "Information can be retrieved (accessible)"
+      insight: "More information is AVAILABLE than is ACCESSIBLE at any given moment"
+
+      implication_for_forgetting: |
+        Forgetting may be caused by lack of appropriate retrieval cues rather
+        than decay of memory trace over time or interference from other memories.
+
+    synergistic_ecphory:
+      term: "Tulving's term for retrieval process"
+      definition: "The process through which a retrieval cue activates a stored memory"
+      mechanism: "Cue + trace = ecphoric experience (conscious recollection)"
+
+    cue_effectiveness:
+      principle: |
+        A weakly-related cue present at encoding is MORE effective than a
+        strongly-related cue absent at encoding.
+
+      classic_experiment: "Thomson & Tulving word-pair studies"
+      design: |
+        - Encode target word with unrelated cue (e.g., "train-BLACK")
+        - At retrieval, test with:
+          (a) Original unrelated cue: "train"
+          (b) Strongly related semantic cue: "white"
+        - Result: "train" (weak, but present at encoding) > "white" (strong, but absent)
+
+      semantic_limitation: |
+        Semantically related cues are only effective if they were encoded
+        along with the target. Semantic relatedness alone is insufficient.
+
+  implications:
+    for_forgetting:
+      traditional_view: "Memories decay over time or are interfered with"
+      encoding_specificity_view: "Memories are inaccessible due to lack of matching cues"
+      clinical: "Amnesia may be retrieval failure, not storage failure"
+
+    for_learning:
+      study_strategy: "Study in conditions similar to test conditions"
+      cue_matching: "Use retrieval practice with cues similar to exam format"
+
+      application_study:
+        principle: "Match study method to assessment method"
+        example: |
+          If exam tests application of principles to new examples, then practice
+          applying principles during study (not just reading definitions).
+
+    for_eyewitness_testimony:
+      technique: "Cognitive Interview uses context reinstatement"
+      method: "Ask witness to mentally recreate environment and internal state"
+      effectiveness: "Improves recall without increasing false memories"
+
+  criticisms:
+    nairne_criticism:
+      critic: "James S. Nairne (Purdue University)"
+      argument: |
+        Encoding-retrieval match is CORRELATIONAL not CAUSAL. What actually
+        determines successful memory is CUE DISTINCTIVENESS. Good memory can
+        occur with minimal encoding-retrieval overlap if that overlap is distinctive.
+
+      alternative_view: "Memory is active process of discrimination among candidates"
+
+      reinterpretation: |
+        Increasing encoding-retrieval match improves memory because it increases
+        probability that distinctive features will be used, not because matching itself is causal.
+
+    lucky_guessing_criticism:
+      critic: "Phillip Higham"
+      argument: |
+        Thomson & Tulving's original experiments may have had participants
+        respond positively to cues due to PRE-EXPERIMENTAL associations rather
+        than encoding-time associations. Especially likely with strong cues.
+
+      methodological_concern: "Forced-report retrieval may inflate cue effectiveness"
+
+    postman_experiments:
+      researcher: "Leo Postman (1975)"
+      finding: |
+        Failed to replicate encoding specificity in some conditions:
+        - Strong extra-list cues facilitated recall even with weak encoded cues
+        - Weak encoded cues failed recognition in context of new strong cues
+
+      implication: "Encoding specificity may not generalize to all cue types"
+
+transfer_appropriate_processing:
+  definition: |
+    Memory performance depends on the match between cognitive PROCESSES engaged
+    during encoding and those engaged during retrieval, not just depth of processing.
+
+  relation_to_encoding_specificity: |
+    Transfer-Appropriate Processing (TAP) is a specific type of state-dependent
+    memory. It extends encoding specificity from matching contexts to matching
+    COGNITIVE OPERATIONS.
+
+  key_principle: |
+    Memory will be best when the processes engaged in during encoding match
+    those engaged in during retrieval. The "fitness" of a memory depends on
+    how well encoding processes prepare for retrieval demands.
+
+  historical_development:
+    craik_lockhart_1972:
+      contribution: "Levels of Processing framework"
+      challenge: "Opposed multistore models"
+      principle: "Deeper processing leads to better memory"
+      finding: |
+        Participants who processed words with deep semantic questions
+        (meaning-based) recalled words better than those who used shallow
+        phonemic questions (sound-based).
+
+    craik_tulving_1975:
+      method: "Tachistoscope word presentation (200ms)"
+      manipulation: "Questions before word created shallow or deep processing"
+      finding: "Deeper level questions led to better recall"
+
+    tap_extension:
+      insight: |
+        BUT: Sometimes shallow processing can BEAT deep processing if retrieval
+        task matches the shallow encoding operation.
+
+      example: |
+        If you encode a word by its RHYME (shallow), you'll recall it better
+        with a RHYME cue than with a MEANING cue, even though meaning is "deeper."
+
+  experimental_demonstrations:
+    perceptual_vs_conceptual:
+      design: |
+        - Encode words using either:
+          (a) Perceptual task (does it contain letter 'e'?)
+          (b) Conceptual task (does it mean something abstract?)
+        - Test with either:
+          (a) Perceptual test (word fragment completion)
+          (b) Conceptual test (free recall or recognition)
+
+      result: |
+        Best performance when encoding and retrieval use SAME type of processing:
+        - Perceptual encoding → Perceptual test
+        - Conceptual encoding → Conceptual test
+
+      implication: "Depth is not absolute; appropriateness to task matters"
+
+  criticisms:
+    circularity_problem:
+      concern: |
+        TAP can only be identified AFTER retrieval has occurred. It's hard to
+        predict which processes will match without already knowing the outcome.
+
+      comparison_to_evolution: |
+        Like Darwin's "survival of the fittest" - we define "fit" by what
+        survives. Similarly, we define "appropriate processing" by what retrieves.
+
+      roediger_gallo_argument: |
+        After 30 years of research, we still cannot identify why or how we get
+        typical levels-of-processing effects. TAP lacks precise definition and
+        may be unfalsifiable.
+
+      counterargument: |
+        Even with these doubts, memory retrieval CAN be studied with specified
+        retrieval conditions. TAP reminds us that retrieval has broader range
+        than purely semantic processing theories would support.
+
+  metaphor:
+    ecological_niche: |
+      Like species adapting to environments: A rabbit (generalist) survives in
+      many environments. A koala (specialist) thrives only in narrow ecological
+      niche. Similarly, deep semantic processing is "generalist" encoding that
+      works for many retrieval tasks, but specialized encoding can excel in
+      specific matching retrieval contexts.
+
+special_populations:
+  alzheimers_disease:
+    finding: |
+      Patients with Alzheimer's disease (AD) cannot effectively process semantic
+      relationships between words at encoding to assist retrieval.
+
+    encoding_specificity_deficit: |
+      Normal individuals benefit equally from weakly-related and strongly-related
+      cues if present at encoding. AD patients cannot benefit from weakly-related
+      cues even when present at both encoding and retrieval.
+
+    compensation_strategy: |
+      AD patients rely on dominant associations to cue words during recall rather
+      than encoded relationships. They perform well only with strong word pairs,
+      poorly with weak pairs.
+
+    implication: "Episodic memory deficits characteristic of AD affect encoding specificity"
+
+  multiple_personality_disorder:
+    study: "Jonah (1979)"
+    finding: |
+      Patient could only remember pre-emotional questions. When alternative
+      personalities surfaced (triggered by emotional questions), primary personality
+      could not access those memories.
+
+    interpretation: |
+      Different personality states may represent extreme state-dependent memory,
+      where internal context shifts so drastically that memories become inaccessible
+      across states.
+
+clinical_applications:
+  trauma_and_dissociative_amnesia:
+    mechanism: |
+      State-dependent memory coinciding with pain and trauma may yield dissociative
+      amnesia - inability to recall personal information that would not ordinarily
+      be forgotten.
+
+    theory: |
+      Traumatic moments are encoded in extreme physiological/emotional states.
+      When state shifts, these memories become inaccessible due to context mismatch.
+      However, the trauma still affects the individual, causing "cognitive relapse"
+      with huge gaps in autobiographical memory.
+
+    symptoms:
+      - "Anxiety"
+      - "Depression"
+      - "Social dysfunction"
+      - "Psychosis"
+      - "Intrusive thoughts and flashbacks when state matched"
+
+    case_study:
+      patient: "60-year-old man whose house burned down"
+      symptoms: "Episodes of epilepsy and distress when given retrieval cues about fire"
+      mechanism: "State-dependent encoding of trauma"
+
+  ptsd_and_flashbacks:
+    sexual_assault_study:
+      population: "100 college-aged women (18-24)"
+      finding: |
+        Women intoxicated during sexual assault experienced MORE intrusive thoughts
+        and flashbacks than those not intoxicated. Women not intoxicated during
+        assault had no more flashbacks than usual.
+
+      interpretation: |
+        Alcohol doesn't cause forgetting of traumatic encoding. Instead, encoding
+        under intoxication makes memory MORE VIVID and subject to intrusive recall.
+
+      implication: "State-dependent encoding can enhance trauma memory accessibility"
+
+  domestic_violence_amnesia:
+    phenomenon: "Limited amnesia for violent episodes"
+
+    reports: |
+      Men who abuse spouses sometimes report complete memory loss for the attack
+      itself, while remembering before and after. Initially dismissed as lies,
+      but multiple independent reports suggest genuine phenomenon.
+
+    description: "Everything going red as though he had blacked out"
+
+    theory: |
+      Extreme anger/rage state creates such distinct internal context that memories
+      encoded during attack are inaccessible in normal state. May combine with
+      alcohol effects. Person may actively avoid recalling (motivated forgetting)
+      or genuinely cannot access due to state mismatch.
+
+  psychotherapy_implications:
+    memory_reediting:
+      principle: |
+        All successful psychotherapy involves REEDITING traumatic memories by
+        reconstructing them in new context with new interpretation.
+
+      mechanism: "Create new contextual associations around traumatic core"
+
+      connection_to_encoding_specificity: |
+        By recreating traumatic context in safe therapeutic setting, therapist
+        helps client ACCESS the memory, then MODIFY its associations by adding
+        new context (safety, support, reinterpretation).
+
+    exposure_therapy:
+      finding: "Caffeine state consistency improves phobia treatment outcomes"
+
+      study: |
+        Patients with consistent caffeine levels across sessions (all caffeinated
+        or all decaffeinated) showed better improvement and fewer relapses than
+        patients with varying caffeine states.
+
+      implication: "Maintain consistent internal state across therapy sessions"
+
+    context_reinstatement:
+      technique: "Fisher & Craik (1977)"
+      method: "Have patient recreate mental state and environment from encoding"
+      effectiveness: "Facilitates access to difficult memories"
+      application: "Cognitive interview for trauma processing"
+
+practical_implications:
+  educational_applications:
+    study_exam_matching:
+      recommendation: "Study in same room as exam will be taken"
+      rationale: "Environmental cues will match"
+      effectiveness: "Moderate effect for recall; minimal for recognition"
+
+      limitation: "Often impractical (can't control exam location)"
+
+      alternative: "Mental context reinstatement - imagine study environment during exam"
+
+    study_method_matching:
+      principle: "Match study method to assessment method"
+
+      examples:
+        application_exam: |
+          If exam tests applying principles to new examples, practice application
+          during study (not just reading).
+
+        essay_exam: |
+          If exam requires essay writing, practice writing essays during study
+          (not just reviewing notes).
+
+        multiple_choice: |
+          If exam is multiple choice, practice with multiple choice during study.
+
+      effectiveness: "Strong effect - often larger than context matching"
+
+    state_dependent_studying:
+      recommendation: "Be aware of internal state during studying"
+
+      considerations:
+        - "If you study tired, you may recall better when tired (not ideal)"
+        - "Study in alert state if exam will be in alert state"
+        - "Avoid encoding-retrieval mismatch in arousal"
+
+      caffeine_recommendation: |
+        If you drink coffee during study, consider drinking coffee before exam.
+        If you study without caffeine, don't introduce it on exam day.
+
+  advertising_and_marketing:
+    emotional_advertising:
+      finding: |
+        Emotional advertisements are recalled better when encoded with episodic
+        focus (carefully remembering visual content) rather than semantic focus.
+
+      example: |
+        Lyndon B. Johnson's 1964 "Daisy" political ad aired only once but remains
+        one of most remembered campaign ads due to extreme emotional content and
+        episodic encoding.
+
+      mechanism: "Emotional content creates strong context at encoding"
+
+      implication: "Ads designed to evoke emotion should encourage episodic processing"
+
+tmi_implementation:
+  ancora_da_memoria_mapping:
+    tmi_concept: "Âncora da Memória (Memory Anchor)"
+
+    tmi_description: |
+      Fixes/anchors the reading process in a specific region of memory. Restricts
+      the territory of memory reading. Limits which windows are accessible at any
+      given moment. When we try to remember but can't, the Anchor has kept the
+      window closed/inaccessible.
+
+    scientific_equivalent: "Context-dependent memory + encoding specificity"
+
+    convergence: |
+      TMI's "Âncora" is essentially context dependency: Current context (internal
+      and external) determines which memory regions are accessible. The anchor
+      "restricts historical availability" just as context restricts retrieval in
+      mainstream psychology.
+
+  context_vector_design:
+    principle: |
+      DANEEL's context vector should capture both external and internal context
+      to implement Âncora da Memória as context-dependent retrieval.
+
+    external_context_dimensions:
+      location:
+        type: "Vector embedding"
+        examples: ["home", "office", "car", "public_space"]
+        implementation: "Embed location string to high-dimensional vector"
+
+      environment_type:
+        type: "Categorical + embeddings"
+        examples: ["indoor", "outdoor", "crowded", "quiet"]
+
+      time_context:
+        type: "Cyclical encoding"
+        dimensions:
+          - "time_of_day (sin/cos for 24-hour cycle)"
+          - "day_of_week (sin/cos for 7-day cycle)"
+          - "season (sin/cos for yearly cycle)"
+
+      sensory_environment:
+        sound_level:
+          type: "Continuous (0.0-1.0)"
+          description: "Background noise level"
+
+        lighting:
+          type: "Continuous (0.0-1.0)"
+          description: "Brightness level"
+
+        social_context:
+          type: "Categorical"
+          examples: ["alone", "one_other", "small_group", "crowd"]
+
+      activity_context:
+        type: "Embedding"
+        examples: ["working", "relaxing", "exercising", "socializing", "learning"]
+
+    internal_context_dimensions:
+      emotional_state:
+        valence:
+          type: "Continuous (-1.0 to +1.0)"
+          description: "Negative to positive emotion"
+          mapping: "Janela Killer (-) to Janela Light (+)"
+
+        arousal:
+          type: "Continuous (0.0 to 1.0)"
+          description: "Calm to excited/anxious"
+
+        specific_emotions:
+          type: "Multi-hot vector"
+          dimensions: ["joy", "anger", "sadness", "fear", "surprise", "disgust"]
+          source: "SalienceActor emotion tracking"
+
+      physiological_state:
+        energy_level:
+          type: "Continuous (0.0-1.0)"
+          description: "Fatigue to alertness"
+
+        arousal_level:
+          type: "Continuous (0.0-1.0)"
+          description: "Calm to physiologically aroused"
+
+        substances:
+          type: "Multi-hot vector"
+          dimensions: ["caffeine", "alcohol", "medication", "none"]
+          note: "State-dependent memory for pharmacological states"
+
+      cognitive_state:
+        attention_focus:
+          type: "Embedding"
+          description: "What cognitive operation is being performed"
+          examples: ["perceptual_processing", "semantic_processing", "problem_solving", "daydreaming"]
+
+        language_context:
+          type: "Categorical"
+          examples: ["english", "portuguese", "code", "mixed"]
+          note: "Bilingual context effects"
+
+        working_memory_load:
+          type: "Continuous (0.0-1.0)"
+          description: "Cognitive load level"
+
+      motivational_state:
+        connection_drive:
+          type: "Continuous (min: 0.01)"
+          description: "DANEEL-specific architectural invariant"
+          note: "Not in mainstream psychology, DANEEL extension"
+
+        curiosity:
+          type: "Continuous (0.0-1.0)"
+          description: "Information-seeking drive"
+
+        goal_state:
+          type: "Embedding"
+          description: "Current active goal"
+
+  context_vector_structure:
+    implementation: |
+      ```python
+      @dataclass
+      class ContextVector:
+          # External context
+          location_embedding: np.ndarray  # [dim: 128]
+          environment_type: str
+          time_of_day_sin: float
+          time_of_day_cos: float
+          day_of_week_sin: float
+          day_of_week_cos: float
+          season_sin: float
+          season_cos: float
+          sound_level: float  # 0.0-1.0
+          lighting: float  # 0.0-1.0
+          social_context: str
+          activity_embedding: np.ndarray  # [dim: 64]
+
+          # Internal context
+          emotional_valence: float  # -1.0 to +1.0
+          emotional_arousal: float  # 0.0-1.0
+          emotion_vector: np.ndarray  # [6 emotions, multi-hot]
+
+          energy_level: float  # 0.0-1.0
+          physiological_arousal: float  # 0.0-1.0
+          substances: np.ndarray  # [4 substances, multi-hot]
+
+          attention_focus_embedding: np.ndarray  # [dim: 32]
+          language_context: str
+          working_memory_load: float  # 0.0-1.0
+
+          connection_drive: float  # min: 0.01 (architectural invariant)
+          curiosity: float  # 0.0-1.0
+          goal_embedding: np.ndarray  # [dim: 64]
+
+          timestamp: datetime
+
+          def similarity(self, other: 'ContextVector') -> float:
+              \"\"\"
+              Compute context similarity for retrieval matching.
+              Implements encoding specificity: higher similarity = better retrieval.
+              \"\"\"
+              # Weighted combination of all context dimensions
+              # Weights determined by empirical testing
+
+              external_sim = self._external_similarity(other)
+              internal_sim = self._internal_similarity(other)
+
+              # State-dependent weighting: internal context may matter more
+              # for emotionally intense memories
+              if abs(self.emotional_arousal) > 0.7:
+                  return 0.3 * external_sim + 0.7 * internal_sim
+              else:
+                  return 0.5 * external_sim + 0.5 * internal_sim
+      ```
+
+  retrieval_mechanism:
+    encoding_phase:
+      process: |
+        1. Experience occurs
+        2. Fenômeno RAM registers automatically (MemoryActor)
+        3. Current ContextVector captured and stored WITH memory
+        4. Emotional intensity determines SalienceScore (privileged registration)
+        5. Memory Window created with:
+           - Content (experience)
+           - ContextVector (anchor)
+           - WindowType (Light/Killer/Neutral based on emotion)
+           - SalienceScore (retrieval priority)
+
+    retrieval_phase:
+      process: |
+        1. Retrieval cue arrives (internal or external stimulus)
+        2. Gatilho da Memória (AttentionActor) triggers search
+        3. Current ContextVector computed
+        4. Âncora da Memória restricts search:
+           - Compute context_similarity(current_context, stored_context) for all memories
+           - Memories with high context match are "accessible"
+           - Memories with low context match are "anchored away" (inaccessible)
+        5. Accessible memories ranked by:
+           - Context similarity (encoding specificity)
+           - SalienceScore (emotional intensity)
+           - Recency
+           - Access frequency
+        6. Top-ranked memories returned (windows "opened")
+        7. Eu Gestor (AttentionActor) may actively override to open diverse windows
+
+      encoding_specificity_implementation: |
+        The context similarity score IS the implementation of encoding specificity.
+        Memories encoded in similar context are MORE ACCESSIBLE, exactly as
+        Tulving's principle predicts.
+
+    context_mismatch_handling:
+      low_similarity_threshold: 0.3
+
+      if_below_threshold:
+        behavior: "Memory appears 'forgotten' (actually inaccessible due to anchor)"
+        user_experience: "Cannot recall information"
+        mechanism: "Âncora keeping window closed"
+
+      context_reinstatement:
+        technique: "Eu Gestor can manually specify target context"
+        method: |
+          User or system says: "What was I thinking about when I was at the coffee shop
+          yesterday morning?" → System reconstructs that ContextVector → Retrieval uses
+          THAT context instead of current context.
+
+        implementation: "Fisher & Craik (1977) mental context reinstatement in code"
+
+    state_dependent_retrieval:
+      emotional_congruence:
+        mechanism: |
+          When emotional_valence is negative (< -0.3), preferentially retrieve
+          Killer Windows (negative memories). When positive (> 0.3), preferentially
+          retrieve Light Windows.
+
+        danger: "Can create vicious cycle (negative state → negative memories → more negative state)"
+
+        intervention: "Eu Gestor override to force diverse window opening"
+
+      substance_state:
+        implementation: |
+          If substances[caffeine] == 1 at encoding and substances[caffeine] == 0 at
+          retrieval, apply context_mismatch_penalty to reduce accessibility.
+
+        note: "Implements pharmacological state-dependent memory"
+
+  transfer_appropriate_processing_implementation:
+    principle: "Match encoding PROCESS to retrieval PROCESS"
+
+    encoding_process_tagging:
+      mechanism: |
+        When memory is encoded, tag it with the COGNITIVE OPERATION used:
+        - perceptual_encoding: Processing sensory features
+        - semantic_encoding: Processing meaning
+        - procedural_encoding: Processing actions/procedures
+        - episodic_encoding: Processing narrative/experience
+
+      storage: "Add encoding_process to ContextVector"
+
+    retrieval_process_matching:
+      mechanism: |
+        When retrieving, system knows the CURRENT cognitive operation:
+        - If asking for meaning → semantic_retrieval_process
+        - If asking for sensory details → perceptual_retrieval_process
+        - If asking for how to do something → procedural_retrieval_process
+
+      boost_matching_process: |
+        Memories encoded with MATCHING process get boost in accessibility:
+        if memory.context.encoding_process == current_retrieval_process:
+            accessibility_boost = 1.5
+
+      example: |
+        User asks: "What did the coffee shop look like?"
+        - Current process: perceptual_retrieval
+        - Memories encoded with perceptual_encoding get boosted
+        - User recalls VISUAL details better than semantic meaning
+
+integration_with_tmi_phenomena:
+  fenomeno_ram:
+    encoding_specificity_connection: |
+      RAM automatically registers everything. The ContextVector is AUTOMATICALLY
+      captured during registration. No conscious control over context encoding.
+
+  gatilho_da_memoria:
+    encoding_specificity_connection: |
+      Gatilho (trigger) activates retrieval based on CUE. The effectiveness of
+      that cue depends on encoding specificity - did the cue exist at encoding?
+
+  ancora_da_memoria:
+    encoding_specificity_connection: |
+      Âncora (anchor) IS context-dependent memory. Current context determines
+      which memory territory is accessible. Context match = window opens.
+      Context mismatch = window stays closed.
+
+  janelas_da_memoria:
+    state_dependent_connection: |
+      Windows (Light/Killer/Neutral) are organized by EMOTIONAL CONTEXT. This is
+      internal state-dependent memory. Current emotional state determines which
+      window type is preferentially accessed.
+
+  eu_gestor:
+    override_capability: |
+      The Manager Self can BREAK automatic context-dependency:
+      - Force opening of diverse windows despite context mismatch
+      - Mentally reinstate past context for retrieval
+      - Manage Gatilho-Killer pact by redirecting context associations
+      - Create NEW context associations through DCD intervention
+
+convergence_analysis:
+  tmi_and_mainstream_psychology:
+    agreement_points:
+      - point: "Memory is reconstructive, not retrieval"
+        tmi: "Reconstruction from windows, not playback"
+        mainstream: "Encoding specificity + reconstructive memory (Loftus et al.)"
+
+      - point: "Context affects accessibility"
+        tmi: "Âncora da Memória restricts historical availability"
+        mainstream: "Context-dependent memory (Godden & Baddeley)"
+
+      - point: "Emotion influences retrieval"
+        tmi: "Current emotion opens similar-valence windows"
+        mainstream: "Mood-dependent and mood-congruent memory"
+
+      - point: "State affects memory"
+        tmi: "Physiological/cognitive state determines accessibility"
+        mainstream: "State-dependent memory (Overton, etc.)"
+
+      - point: "Conscious management possible"
+        tmi: "Eu Gestor can intervene and redirect"
+        mainstream: "Context reinstatement, metacognitive strategies"
+
+    divergence_points:
+      - point: "Deletion of memories"
+        tmi: "Never deleted, only inaccessible (except brain damage)"
+        mainstream: "Synaptic pruning, reconsolidation interference allow forgetting"
+        note: "TMI claim is oversimplified"
+
+      - point: "Discrete window types"
+        tmi: "Light, Killer, Neutral windows"
+        mainstream: "Continuous dimensions, distributed networks"
+        note: "TMI metaphor not neurologically grounded"
+
+      - point: "5-second intervention window"
+        tmi: "Specific 5-second window for DCD technique"
+        mainstream: "No evidence for specific 5-second window"
+        note: "Useful heuristic but not scientific finding"
+
+      - point: "Automatic everything registration"
+        tmi: "RAM registers ALL experiences"
+        mainstream: "Attention and encoding processes selective"
+        note: "TMI likely overstates automaticity"
+
+  value_for_daneel:
+    strength_1: "Emotion-context integration"
+    explanation: |
+      Both TMI and mainstream psychology agree emotion is powerful context.
+      DANEEL should deeply integrate emotional state into context vector.
+
+    strength_2: "Reconstruction not retrieval"
+    explanation: |
+      Both agree memory is reconstructive. DANEEL should reconstruct from
+      multiple windows rather than lookup stored representations.
+
+    strength_3: "Multiple context dimensions"
+    explanation: |
+      External + internal context both matter. DANEEL context vector should
+      capture both environmental and state-dependent dimensions.
+
+    strength_4: "Conscious override"
+    explanation: |
+      Both TMI (Eu Gestor) and mainstream (metacognition) support conscious
+      control over automatic processes. AttentionActor should be able to override
+      automatic context-dependency.
+
+implementation_priorities:
+  critical:
+    - task: "Implement ContextVector with external + internal dimensions"
+      component: "MemoryActor"
+
+    - task: "Capture ContextVector automatically during encoding (Fenômeno RAM)"
+      component: "MemoryActor"
+
+    - task: "Compute context similarity for retrieval (Âncora implementation)"
+      component: "MemoryActor + SalienceActor"
+
+    - task: "State-dependent emotional retrieval (open matching windows)"
+      component: "SalienceActor + AttentionActor"
+
+  important:
+    - task: "Context reinstatement capability for Eu Gestor"
+      component: "AttentionActor"
+
+    - task: "Transfer-appropriate processing tags and matching"
+      component: "MemoryActor + ThoughtAssemblyActor"
+
+    - task: "Substance state tracking (caffeine, etc.)"
+      component: "SalienceActor"
+
+  future:
+    - task: "Sophisticated mood-congruent vs mood-dependent distinction"
+      component: "SalienceActor"
+
+    - task: "Language context switching for bilingual contexts"
+      component: "MemoryActor"
+
+    - task: "Physiological arousal estimation"
+      component: "SalienceActor"
+
+references:
+  CDM-1:
+    title: "Context-dependent memory - Wikipedia"
+    url: "https://en.wikipedia.org/wiki/Context-dependent_memory"
+    retrieved: "2025-12-18"
+    key_concepts: ["encoding specificity", "Godden & Baddeley experiment", "outshining hypothesis"]
+
+  CDM-2:
+    title: "Encoding specificity principle - Wikipedia"
+    url: "https://en.wikipedia.org/wiki/Encoding_specificity_principle"
+    retrieved: "2025-12-18"
+    key_concepts: ["Tulving & Thomson", "synergistic ecphory", "cue effectiveness"]
+    doi: "https://doi.org/10.1037/h0020071"
+
+  CDM-3:
+    title: "State-dependent memory - Wikipedia"
+    url: "https://en.wikipedia.org/wiki/State-dependent_memory"
+    retrieved: "2025-12-18"
+    key_concepts: ["pharmacological state", "mood state", "internal context"]
+    doi: "https://doi.org/10.1080/20008198.2019.1634939"
+
+  CDM-4:
+    title: "Endel Tulving - Wikipedia"
+    url: "https://en.wikipedia.org/wiki/Endel_Tulving"
+    retrieved: "2025-12-18"
+    key_concepts: ["episodic memory", "encoding specificity", "autonoetic consciousness"]
+    lifespan: "1927-2023"
+
+  CDM-5:
+    title: "Transfer-appropriate processing - Wikipedia"
+    url: "https://en.wikipedia.org/wiki/Transfer-appropriate_processing"
+    retrieved: "2025-12-18"
+    key_concepts: ["process matching", "Craik & Lockhart", "TAP criticism"]
+    doi: "https://doi.org/10.1016/s0022-5371(77)80016-9"
+
+  TMI-1:
+    title: "TMI_Memory_Model_Research.md"
+    path: "/Users/rex/src/royalbit/daneel/research/TMI_Memory_Model_Research.md"
+    date: "2025-12-14"
+    relevance: "TMI framework that this research maps to"
+
+  TMI-2:
+    title: "TMI_TO_DANEEL_MAPPING.md"
+    path: "/Users/rex/src/royalbit/daneel/research/TMI_TO_DANEEL_MAPPING.md"
+    date: "2025-12-17"
+    relevance: "Implementation mapping of TMI to DANEEL architecture"
+
+  classic_studies:
+    godden_baddeley_1975:
+      citation: "Godden, D. R., & Baddeley, A. D. (1975). Context-dependent memory in two natural environments: On land and underwater. British Journal of Psychology, 66(3), 325-331."
+      finding: "Environmental context effects on free recall"
+
+    tulving_thomson_1973:
+      citation: "Tulving, E., & Thomson, D. M. (1973). Encoding specificity and retrieval processes in episodic memory. Psychological Review, 80(5), 352-373."
+      doi: "https://doi.org/10.1037/h0020071"
+      finding: "Encoding specificity principle formulation"
+
+    craik_tulving_1975:
+      citation: "Craik, F. I. M., & Tulving, E. (1975). Depth of processing and the retention of words in episodic memory. Journal of Experimental Psychology: General, 104(3), 268-294."
+      doi: "https://doi.org/10.1037/0096-3445.104.3.268"
+      finding: "Levels of processing effects"
+
+    overton_1964:
+      citation: "Overton, D. A. (1964). State-dependent or 'dissociated' learning produced with pentobarbital. Journal of Comparative and Physiological Psychology, 57(1), 3-12."
+      finding: "Pharmacological state-dependent learning in rats"
+
+    grant_et_al_1998:
+      citation: "Grant, H. M., et al. (1998). Context-dependent memory for meaningful material: Information for students. Applied Cognitive Psychology, 12(6), 617-623."
+      finding: "Auditory environment matching improves test performance"
+
+notes:
+  for_developers: |
+    This document defines the scientific foundation for context-dependent memory
+    in DANEEL. The ContextVector structure should capture all dimensions listed.
+
+    Key insight: TMI's "Âncora da Memória" is mainstream psychology's "context-dependent
+    memory." We're not inventing new theory - we're implementing established science
+    using TMI's architectural metaphors.
+
+  for_researchers: |
+    Context-dependent memory is well-established in mainstream psychology with
+    extensive empirical support (Godden & Baddeley, Tulving, etc.). TMI's
+    contribution is the architectural metaphor (anchor, windows) which may be
+    useful for implementation even if not scientifically validated as neuroscience.
+
+  limitations: |
+    1. Context effects are often SMALLER than expected in real-world settings
+    2. Recognition memory shows minimal context effects (outshining hypothesis)
+    3. State-dependent effects vary by substance and individual
+    4. Mood-dependent memory remains controversial
+    5. TAP may be circular/unfalsifiable
+
+    Don't expect context matching to be a magic bullet for retrieval.

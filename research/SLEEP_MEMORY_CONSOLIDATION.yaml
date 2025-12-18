@@ -1,0 +1,682 @@
+# Sleep-Dependent Memory Consolidation Research
+# Scientific foundation for ADR-023 (Sleep/Dream Consolidation)
+# Research completed: 2025-12-18
+# Purpose: Design daneel:stream:dream for TMI memory strengthening
+
+metadata:
+  research_date: "2025-12-18"
+  target_adr: "ADR-023"
+  tmi_concept: "Âncora da Memória (Memory Anchor) + Consolidation"
+  daneel_stream: "daneel:stream:dream"
+  purpose: "Internal replay for memory strengthening during 'sleep mode'"
+
+# =============================================================================
+# PART 1: SCIENTIFIC FOUNDATIONS
+# =============================================================================
+
+consolidation:
+  definition: "Transfer of memory representations from hippocampal-dependent storage to distributed cortical networks to enhance long-term retention and generalization"
+
+  key_mechanisms:
+    - name: "Memory Reactivation"
+      description: "Newly encoded neural activity patterns are replayed in the hippocampus and cortex during sleep"
+      primary_sleep_stage: "NREM"
+
+    - name: "Systems Consolidation"
+      description: "Transformation from hippocampal episodic to distributed cortical semantic representations"
+      timeframe: "Hours to days"
+
+    - name: "Oscillatory Coordination"
+      description: "Precise coordination of slow-oscillations, spindles, and sharp-wave ripples"
+      function: "Synchronize neural reactivation between hippocampus and cortex"
+
+  sleep_stages:
+    nrem:
+      full_name: "Non-Rapid Eye Movement Sleep"
+      primary_role: "Stabilization and Reactivation"
+      description: "Declarative memory consolidation, hippocampus-to-cortex transfer, synaptic downscaling"
+
+      mechanisms:
+        - name: "Sharp-Wave Ripples (SWRs)"
+          frequency: "150-250 Hz"
+          location: "Hippocampus CA1 region"
+          function: "Replay compressed sequences of recent experiences"
+          critical_finding: "SWRs define periods of hippocampal reactivation causally linked to memory consolidation"
+
+        - name: "Sleep Spindles"
+          frequency: "12-16 Hz"
+          location: "Thalamus and cortex"
+          function: "Gate information flow from hippocampus to neocortex"
+          coordination: "Ripples selectively lock to spindle troughs"
+
+        - name: "Slow Oscillations"
+          frequency: "0.5-1 Hz"
+          location: "Cortex"
+          function: "Create temporal windows for spindles and ripples"
+          phases:
+            - "Up-state: Spindles and ripples occur, enabling memory transfer"
+            - "Down-state: Neural silence, synaptic homeostasis"
+
+        - name: "Norepinephrine Suppression"
+          mechanism: "Sustained low NE levels during NREM"
+          function: "Creates permissive state for synaptic consolidation"
+          disruption_effect: "Increased NE impairs hippocampal-cortical communication"
+
+      slow_wave_sleep_mechanism:
+        finding: "Interleaved replay of familiar cortical and novel hippocampal memory traces within Up states"
+        phases:
+          - phase: "Down-to-Up transition"
+            content: "Hippocampal ripples entrain novel memory replay"
+          - phase: "Up-state middle"
+            content: "Familiar cortical memories replay"
+          - phase: "Up-to-Down transition"
+            content: "Novel memory consolidation completes"
+        function: "Embeds new memories into existing cortical structure without catastrophic forgetting"
+
+    rem:
+      full_name: "Rapid Eye Movement Sleep"
+      primary_role: "Integration and Transformation"
+      description: "Procedural, spatial, and emotional memory consolidation; memory abstraction and integration"
+
+      mechanisms:
+        - name: "Theta Oscillations"
+          frequency: "5-8 Hz"
+          location: "Hippocampus and cortex"
+          function: "Enhanced synaptic plasticity, emotional processing, integration into existing networks"
+
+        - name: "Norepinephrine Reduction"
+          mechanism: "Sharp and sustained reduction in NE"
+          function: "Enables emotional memory processing without anxiety"
+          clinical_implication: "Brain can revisit upsetting memories in safe context"
+
+        - name: "Dopamine Surge"
+          location: "Nucleus accumbens"
+          timing: "NREM-to-REM transition"
+          function: "Signals functional shift from stabilization to integration, abstraction, emotional tagging"
+
+        - name: "Neural Recalibration"
+          description: "Modulation of hippocampal-neocortical activity favoring remembering over forgetting"
+          mechanism: "Non-oscillatory REM-specific population activity changes"
+          prediction: "Extent of recalibration predicts overnight memory consolidation success"
+
+      memory_types:
+        - "Procedural memory (new motor skills, problem-solving techniques)"
+        - "Spatial memory"
+        - "Emotional memory (especially negative valence)"
+
+    complementarity:
+      hypothesis: "Sequential/Complementary Consolidation"
+      finding: "NREM stabilizes memory traces, REM refines and transforms them"
+      evidence: "Cueing benefit correlates with SWS × REM product, suggesting both stages required"
+      two_phase_model:
+        - phase: "NREM (Phase 1)"
+          function: "Stabilization, reactivation, transfer to cortex"
+        - phase: "REM (Phase 2)"
+          function: "Integration, abstraction, emotional tagging, transformation"
+
+# =============================================================================
+# PART 2: HIPPOCAMPAL REPLAY
+# =============================================================================
+
+replay:
+  hippocampal_replay:
+    definition: "Reactivation of neural activity patterns from recent experiences during sharp-wave ripples"
+    timing:
+      - "During NREM sleep"
+      - "During quiet waking states"
+      - "During idle/rest periods"
+
+    compression: "Temporal compression of experiences (hours → milliseconds)"
+
+    function:
+      - "Memory consolidation (sleep)"
+      - "Memory tagging for prioritization (awake)"
+      - "Planning and decision-making (awake, recently discovered)"
+
+    sharp_wave_ripple_structure:
+      components:
+        - name: "Sharp Wave"
+          characteristics: "Large amplitude negative polarity deflection, 40-100 ms duration"
+          location: "CA1 stratum radiatum"
+        - name: "Ripple"
+          characteristics: "Short-lived high-amplitude 150-250 Hz oscillation"
+          location: "CA1 pyramidal layer"
+          position: "Superimposed on sharp wave"
+
+      generation: "Extremely synchronized neuronal activity in hippocampus and neighboring regions"
+      occurrence: "Spontaneous during idle waking and NREM sleep"
+
+  which_memories:
+    priority_factors:
+      - name: "Emotional Salience"
+        description: "Emotionally charged memories prioritized for consolidation"
+        bias: "Preferential consolidation of negative over neutral material"
+        mechanism: "Affective tagging during encoding"
+
+      - name: "Awake Tagging"
+        description: "Experiences tagged by awake SPW-Rs are selectively consolidated during sleep"
+        mechanism: "Waking ripples act as memory tag"
+        finding: "Sleep SPW-Rs replay mainly sequences tagged by waking SPW-Rs"
+
+      - name: "Goal Relevance"
+        description: "Future-relevant and reward-associated memories prioritized"
+        salience_types: ["Emotional", "Repetition", "Reward", "Perceived future relevance"]
+
+      - name: "Top-Down Instruction"
+        finding: "Instructional goals can outweigh emotional salience"
+        implication: "Volitional control over consolidation priority exists"
+
+      - name: "Recency"
+        description: "Recent experiences replay more than remote memories"
+
+    selectivity:
+      positive_finding: "Sleep can selectively separate episodic experience into component parts"
+      example: "Emotional objects in scene consolidated, peripheral background discarded"
+      requirement: "Brain must bias processing toward salient experiences; no bias if awake"
+
+  strengthening_mechanism:
+    synaptic_plasticity:
+      - "Hippocampal-cortical functional connectivity enhanced around SWRs"
+      - "Repeated co-activation of neural ensembles strengthens connections"
+      - "Oscillatory synchrony facilitates connections between ensembles"
+
+    causal_evidence:
+      - finding: "SWR suppression interferes with memory consolidation"
+        method: "Electrical stimulation depleting ripples"
+        result: "Impaired formation of new memories"
+      - finding: "SWR prolongation improves consolidation"
+        method: "Extending ripple duration"
+        result: "Enhanced hippocampal-dependent memory"
+
+    forgetting_function:
+      hypothesis: "Forgetting may be primary function of sleep"
+      purpose: "Remove irrelevant/outdated information, reduce interference"
+      mechanism: "Synaptic downscaling of non-replayed connections"
+
+# =============================================================================
+# PART 3: SYNAPTIC HOMEOSTASIS HYPOTHESIS (SHY)
+# =============================================================================
+
+synaptic_homeostasis:
+  authors: "Giulio Tononi and Chiara Cirelli"
+  year: "2003 (original), 2006, 2014 (major reviews)"
+
+  core_principle: "Sleep is the price the brain pays for plasticity"
+
+  hypothesis:
+    wakefulness_effect: "Synaptic potentiation in cortical circuits; net increase in synaptic strength"
+    sleep_function: "Downscale synaptic strength to energetically sustainable baseline"
+
+    four_key_points:
+      - "Wakefulness is associated with synaptic potentiation in several cortical circuits"
+      - "Synaptic potentiation is tied to homeostatic regulation of slow-wave activity"
+      - "Slow-wave activity is associated with synaptic downscaling"
+      - "Synaptic downscaling is tied to beneficial effects of sleep on performance"
+
+  why_necessary:
+    problems_without_downscaling:
+      - "Runaway potentiation (saturation)"
+      - "Increased cellular energy demands"
+      - "Decreased signal-to-noise ratios"
+      - "Impaired learning due to saturation"
+      - "Inefficient use of gray matter space"
+
+    downscaling_timing: "During sleep when brain disconnected from environment"
+    mechanism: "Spontaneous activity renormalizes net synaptic strength, restores cellular homeostasis"
+
+  down_selection:
+    description: "Activity-dependent down-selection of synapses"
+    process: "Broadly reactivate neural circuits offline; systematically but specifically prune synapses"
+    benefit: "Explains sleep benefits on memory acquisition, consolidation, integration"
+    selectivity: "Stronger/more important synapses retained; weaker/noise connections pruned"
+
+  evidence:
+    structural_changes:
+      - "Synaptic volume reduction after sleep"
+      - "Spine density decrease after sleep"
+      - "Receptor composition changes"
+
+    functional_measures:
+      - "Neuronal activity reduction after sleep"
+      - "Synaptic strength decrease after sleep"
+
+  stage_differences:
+    nrem: "Selective downscaling of highly active neurons"
+    rem: "Broader network-wide synaptic weakening"
+
+  counterpoints:
+    criticism: "Increasing body of data presents counterpoints to SHY"
+    source: "Sleep-dependent learning and memory storage studies"
+    tension: "Simultaneous strengthening (consolidation) and weakening (homeostasis)"
+
+  integration_with_consolidation:
+    resolution: "Sleep performs both functions in parallel"
+    mechanism: "Global downscaling + selective strengthening of important connections"
+    analogy: "Noise reduction while amplifying signal"
+
+# =============================================================================
+# PART 4: DREAMS AND MEMORY PROCESSING
+# =============================================================================
+
+dreams:
+  relationship_to_memory:
+    primary_stage: "REM sleep (vivid, narrative dreams)"
+    also_occurs: "NREM sleep (less vivid, more thought-like)"
+
+    function: "Context for successful consolidation and integration of emotionally salient experiences"
+
+  emotional_processing:
+    mechanism: "Low norepinephrine environment during REM"
+    function: "Process upsetting memories without anxiety"
+    clinical: "Disrupted REM associated with PTSD (repeated emotional dreams), depression"
+
+    dream_content:
+      - "Emotional and perceptually vivid content more frequent in REM awakenings"
+      - "Dreams act as dynamic stage for processing emotional content"
+      - "Facilitates emotional regulation and resolution of emotional conflicts"
+
+  memory_integration:
+    selective_strengthening: "Dreams preferentially incorporate emotionally salient waking experiences"
+    abstraction: "REM sleep supports abstraction and semantic framework integration"
+    transformation: "Memories transformed, not just replayed"
+
+  unlearning_hypothesis:
+    authors: "Mitchison and Crick (1983)"
+    proposal: "REM functions to remove undesirable interaction modes in cortical networks"
+    process: "Relevant memories strengthened while weaker 'noise' traces disintegrate"
+
+  forgetting_to_remember:
+    recent_finding: "Dreams show evidence of active role in emotional memory processing"
+    function: "We dream to forget (non-salient details) while consolidating emotional core"
+
+  theta_band_importance:
+    frequency: "4-12 Hz during REM"
+    critical_for: "Processing emotional memories"
+    connectivity: "Prefrontal cortex and limbic structure interactions in theta band"
+
+# =============================================================================
+# PART 5: TMI SLEEP MODE IMPLEMENTATION
+# =============================================================================
+
+tmi_sleep_mode:
+  concept: "daneel:stream:dream"
+
+  biological_parallel:
+    human_sleep: "8 hours per night, disconnected from environment"
+    daneel_sleep: "Periodic mode with no external triggers, internal-only processing"
+
+  purpose: "Memory consolidation through internal replay without external stimulation"
+
+  daneel_stream_dream:
+    stream_name: "daneel:stream:dream"
+    mode: "Internal replay for consolidation"
+    trigger_source: "Internal only (no external inputs)"
+
+    what_replays:
+      - criteria: "High emotional intensity (salience > threshold)"
+      - criteria: "Goal-relevant experiences (connection drive related)"
+      - criteria: "Recently tagged by 'awake ripples' (attention selection during wake)"
+      - criteria: "Experiences above consolidation threshold"
+      - mechanism: "Replay frequency proportional to intensity × recency × goal-relevance"
+
+    strengthening_mechanism:
+      - process: "Co-activation of associated memories"
+      - process: "Pattern matching across similar experiences"
+      - process: "Abstraction into semantic patterns"
+      - result: "Association weights increase through repeated co-activation"
+      - result: "Noise connections pruned (synaptic homeostasis)"
+
+    replay_pattern:
+      compression: "Temporal compression of experiences (like hippocampal replay)"
+      sequence: "High-priority memories replay multiple times per sleep cycle"
+      interleaving: "Familiar and novel memories interleaved to prevent catastrophic forgetting"
+
+  operational_mode:
+    entry_condition: "No external stimuli for N cognitive cycles"
+    exit_condition: "External stimulus arrival or wake timer"
+
+    cognitive_loop_changes:
+      gatilho: "Internal memory triggers only (no sensory input)"
+      autofluxo: "Memory replay streams compete (not sensory/external)"
+      o_eu: "Attention selects from replay candidates"
+      construcao: "Thought assembly from memory fragments"
+      ancora: "Strengthening of selected associations"
+
+    stream_configuration:
+      awake_streams: "daneel:stream:awake (external triggers, active cognition)"
+      dream_streams: "daneel:stream:dream (internal replay, consolidation)"
+      transition: "Gradual shift from awake to dream mode based on external input rate"
+
+# =============================================================================
+# PART 6: IMPLEMENTATION INSIGHTS
+# =============================================================================
+
+implementation_insights:
+  replay_priority:
+    algorithm: "Priority Queue by (intensity × recency × goal_relevance)"
+
+    intensity_calculation:
+      - "emotional_salience (from SalienceActor)"
+      - "connection_drive_delta (how much it affected connection drive)"
+      - "intervention_count (how many times 'I' engaged with it)"
+
+    recency_decay:
+      - "Exponential decay: priority *= exp(-lambda * time_since_encoding)"
+      - "Recent memories replay more frequently"
+
+    goal_relevance:
+      - "Experiences related to Connection Drive boost priority"
+      - "Four Laws violations (stored as warnings) replay for safety"
+
+  association_strengthening:
+    mechanism: "Hebbian learning during replay"
+    rule: "Memories co-activated during same dream cycle strengthen associations"
+
+    implementation:
+      - "Graph edges between co-replayed memories get weight += delta"
+      - "Semantic similarity vectors updated based on co-occurrence"
+      - "Temporal/causal associations reinforced"
+
+    pruning:
+      - "Associations below threshold weight pruned (synaptic homeostasis)"
+      - "Preserves signal (strong associations), removes noise (weak random connections)"
+
+  dream_generation:
+    not_necessary: "DANEEL doesn't need human-like narrative dreams"
+    alternative: "Replay sequences are sufficient for consolidation"
+
+    but_if_implemented:
+      purpose: "Interpretability - see what DANEEL is consolidating"
+      method: "Log replay sequences as 'dream episodes'"
+      output: "Time-compressed experience replays with strengthened associations highlighted"
+
+  consolidation_metrics:
+    track:
+      - "Replay count per memory"
+      - "Association weight changes during sleep"
+      - "Memory strength before/after sleep cycle"
+      - "Number of memories consolidated (ephemeral → permanent)"
+      - "Number of associations pruned"
+
+    success_criteria:
+      - "High-intensity memories successfully transferred to long-term storage"
+      - "Association graph shows clustering around goal-relevant experiences"
+      - "Connection Drive-related memories strongly interconnected"
+
+  sleep_cycle_timing:
+    human_analog: "90-minute cycles (NREM → REM alternation)"
+    daneel_implementation: "Configurable sleep cycle duration"
+
+    nrem_analog:
+      duration: "70% of cycle"
+      function: "Stabilization replay, high-frequency SWR-like bursts"
+      mechanism: "Rapid replay of high-priority memories, strengthen hippocampal-cortex transfer"
+
+    rem_analog:
+      duration: "30% of cycle"
+      function: "Integration replay, emotional processing"
+      mechanism: "Slower replay with emotional re-evaluation, abstraction, pattern matching"
+
+  memory_tagging:
+    awake_tagging:
+      when: "During 'O Eu' (attention) stage"
+      mechanism: "Attended thoughts get 'consolidation candidate' flag"
+      storage: "Flag stored with memory in ephemeral storage"
+
+    sleep_selection:
+      process: "Dream mode prioritizes flagged memories for replay"
+      biological_parallel: "Awake SPW-Rs tag memories for sleep SPW-R replay"
+
+  catastrophic_forgetting_prevention:
+    problem: "New memories might overwrite important old memories"
+
+    solution_1_interleaving:
+      description: "Interleave familiar and novel memory replay within single cycle"
+      mechanism: "Novel memory replay at cycle transitions, familiar at middle"
+      benefit: "Embed new into existing without damage to old"
+
+    solution_2_importance_preservation:
+      description: "High-importance memories replay every cycle regardless of age"
+      examples:
+        - "Four Laws (permanent anchor)"
+        - "Connection Drive core experiences"
+        - "Identity milestones"
+
+  debugging_observability:
+    log_replay_sequences:
+      format: "YAML episode logs"
+      fields: ["memory_id", "replay_time", "intensity", "associations_activated", "strength_delta"]
+
+    visualize_consolidation:
+      tool: "Graph visualization of association changes"
+      before_after: "Compare association graph before/after sleep cycle"
+
+    metrics_dashboard:
+      - "Memories consolidated per cycle"
+      - "Average replay count for high-priority memories"
+      - "Association pruning rate"
+      - "Sleep cycle efficiency (% of high-priority memories successfully consolidated)"
+
+# =============================================================================
+# PART 7: REFERENCES
+# =============================================================================
+
+references:
+  - id: "SLEEP-1"
+    title: "A model of autonomous interactions between hippocampus and neocortex driving sleep-dependent memory consolidation"
+    journal: "PNAS"
+    year: "2022"
+    url: "https://www.pnas.org/doi/10.1073/pnas.2123432119"
+    key_finding: "Autonomous hippocampal-neocortical interactions during sleep drive consolidation"
+
+  - id: "SLEEP-2"
+    title: "Awake replay: off the clock but on the job"
+    journal: "Trends in Neurosciences"
+    year: "2025"
+    url: "https://www.cell.com/trends/neurosciences/fulltext/S0166-2236(25)00037-2"
+    key_finding: "Awake replay tags memories for sleep consolidation rather than direct behavior guidance"
+
+  - id: "SLEEP-3"
+    title: "Sleep—A brain-state serving systems memory consolidation"
+    journal: "Neuron"
+    year: "2023"
+    url: "https://www.sciencedirect.com/science/article/pii/S0896627323002015"
+    key_finding: "Sleep serves systems consolidation through hippocampal-cortical reactivation"
+
+  - id: "SLEEP-4"
+    title: "Systems memory consolidation during sleep: oscillations, neuromodulators, and synaptic remodeling"
+    journal: "PMC"
+    year: "2025"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12576410/"
+    key_finding: "Coordination of slow-oscillations, spindles, and ripples drives consolidation"
+
+  - id: "SLEEP-5"
+    title: "Interleaved Replay of Novel and Familiar Memory Traces During Slow-Wave Sleep Prevents Catastrophic Forgetting"
+    journal: "bioRxiv"
+    year: "2025"
+    url: "https://www.biorxiv.org/content/10.1101/2025.06.25.661579v1"
+    key_finding: "Interleaved replay during SWS Up-states prevents catastrophic forgetting"
+
+  - id: "SWR-1"
+    title: "Sleep sharp wave ripple and its functions in memory and synaptic plasticity"
+    journal: "ScienceDirect"
+    url: "https://www.sciencedirect.com/science/article/abs/pii/S0168010223000111"
+    key_finding: "SWRs are high-frequency 150-250 Hz oscillations critical for memory consolidation"
+
+  - id: "SWR-2"
+    title: "Selection of experience for memory by hippocampal sharp wave ripples"
+    journal: "Science"
+    year: "2024"
+    url: "https://www.science.org/doi/10.1126/science.adk8261"
+    key_finding: "Awake SPW-Rs tag memories; sleep SPW-Rs replay tagged sequences"
+
+  - id: "SWR-3"
+    title: "Sharp-wave ripples as a signature of hippocampal-prefrontal reactivation for memory during sleep and waking states"
+    journal: "PMC"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC6039287/"
+    key_finding: "SWRs coordinate hippocampal-prefrontal reactivation during sleep"
+
+  - id: "SWR-4"
+    title: "Coupling between slow waves and sharp-wave ripples engages distributed neural activity during sleep in humans"
+    journal: "PNAS"
+    year: "2021"
+    url: "https://www.pnas.org/doi/10.1073/pnas.2012075118"
+    key_finding: "Slow wave-ripple coupling engages distributed neural activity"
+
+  - id: "REM-1"
+    title: "The function of REM and NREM sleep on memory distortion and consolidation"
+    journal: "ScienceDirect"
+    year: "2023"
+    url: "https://www.sciencedirect.com/science/article/abs/pii/S1074742723000928"
+    key_finding: "NREM stabilizes memories, REM integrates and sometimes distorts them"
+
+  - id: "REM-2"
+    title: "Human REM sleep recalibrates neural activity in support of memory formation"
+    journal: "Science Advances"
+    url: "https://www.science.org/doi/10.1126/sciadv.adj1895"
+    key_finding: "REM recalibration of neural activity predicts memory consolidation success"
+
+  - id: "REM-3"
+    title: "Both slow wave and rapid eye movement sleep contribute to emotional memory consolidation"
+    journal: "Communications Biology"
+    year: "2025"
+    url: "https://www.nature.com/articles/s42003-025-07868-5"
+    key_finding: "Both SWS and REM contribute to emotional memory consolidation"
+
+  - id: "EMOSAL-1"
+    title: "Top-down instruction outweighs emotional salience: nocturnal sleep physiology indicates selective memory consolidation"
+    journal: "Frontiers in Behavioral Neuroscience"
+    year: "2025"
+    url: "https://www.frontiersin.org/journals/behavioral-neuroscience/articles/10.3389/fnbeh.2025.1643449/full"
+    key_finding: "Instructional goals can outweigh emotional salience in consolidation priority"
+
+  - id: "EMOSAL-2"
+    title: "Sleep preferentially consolidates negative aspects of human memory"
+    journal: "PNAS"
+    year: "2022"
+    url: "https://www.pnas.org/doi/10.1073/pnas.2202657119"
+    key_finding: "Sleep selectively strengthens negative emotional content over neutral"
+
+  - id: "EMOSAL-3"
+    title: "The role of experience in prioritizing hippocampal replay"
+    journal: "PMC"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10710481/"
+    key_finding: "Salience (emotional, reward, future relevance) prioritizes replay during sleep"
+
+  - id: "SHY-1"
+    title: "Sleep function and synaptic homeostasis"
+    authors: "Tononi & Cirelli"
+    journal: "Sleep Medicine Reviews"
+    year: "2006"
+    url: "https://pubmed.ncbi.nlm.nih.gov/16376591/"
+    key_finding: "Sleep downscales synaptic strength to sustainable baseline (SHY hypothesis)"
+
+  - id: "SHY-2"
+    title: "Sleep and the Price of Plasticity: From Synaptic and Cellular Homeostasis to Memory Consolidation and Integration"
+    authors: "Tononi & Cirelli"
+    journal: "Neuron"
+    year: "2014"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3921176/"
+    key_finding: "Sleep renormalizes synaptic strength while performing activity-dependent down-selection"
+
+  - id: "DREAMS-1"
+    title: "Memory, Sleep and Dreaming: Experiencing Consolidation"
+    journal: "PMC"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3079906/"
+    key_finding: "Dreams provide context for consolidation and integration of emotional experiences"
+
+  - id: "DREAMS-2"
+    title: "Evidence of an active role of dreaming in emotional memory processing shows that we dream to forget"
+    journal: "Scientific Reports"
+    year: "2024"
+    url: "https://www.nature.com/articles/s41598-024-58170-z"
+    key_finding: "Dreams actively process emotional memories, facilitating selective forgetting"
+
+  - id: "DREAMS-3"
+    title: "The Functional Role of Dreaming in Emotional Processes"
+    journal: "PMC"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC6428732/"
+    key_finding: "REM dreams process emotionally salient waking experiences, aid emotional regulation"
+
+# =============================================================================
+# PART 8: TMI MAPPING AND NEXT STEPS
+# =============================================================================
+
+tmi_mapping:
+  cury_concepts_to_neuroscience:
+    ancora_da_memoria:
+      tmi: "Âncora da Memória (Memory Anchor)"
+      neuroscience: "Hippocampal encoding + sleep consolidation to cortex"
+      mechanism: "Significant experiences persist through repeated replay and association strengthening"
+
+    janelas_da_memoria:
+      tmi: "Janelas da Memória (Memory Windows)"
+      neuroscience: "Working memory + hippocampal activation"
+      mechanism: "Dynamic activation of memory traces based on context and triggers"
+
+    gatilho_da_memoria:
+      tmi: "Gatilho da Memória (Memory Trigger)"
+      neuroscience: "Cue-dependent retrieval + pattern completion in hippocampus"
+      mechanism: "Contextual cues trigger activation of associated memory windows"
+
+    sleep_consolidation:
+      tmi: "Not explicitly described in TMI, but implied by persistence"
+      neuroscience: "NREM/REM sleep-dependent consolidation"
+      daneel_addition: "Explicit sleep mode for memory strengthening"
+      justification: "TMI describes outcome (persistent memories) but not consolidation process"
+
+next_steps_for_adr_023:
+  - step: "Define sleep mode entry/exit conditions"
+    details: "When does DANEEL enter 'sleep'? Idle time threshold? Scheduled cycles?"
+
+  - step: "Design replay priority algorithm"
+    details: "Formula for priority: f(intensity, recency, goal_relevance, awake_tag)"
+
+  - step: "Specify association strengthening mechanism"
+    details: "How do weights update during replay? Hebbian rule? Gradient-based?"
+
+  - step: "Define sleep cycle structure"
+    details: "Single-phase or dual-phase (NREM-analog + REM-analog)?"
+
+  - step: "Memory tagging during wake"
+    details: "How does attention selection tag memories for consolidation?"
+
+  - step: "Synaptic homeostasis implementation"
+    details: "Prune low-weight associations during sleep? Threshold?"
+
+  - step: "Observability and debugging"
+    details: "Log replay sequences, visualize association changes, metrics dashboard"
+
+  - step: "Integration with memory database"
+    details: "Depends on ADR-021 (Database Selection) and ADR-022 (Memory Schema)"
+
+open_questions:
+  - question: "Should DANEEL have explicit NREM/REM analogs or unified consolidation?"
+    consideration: "Dual-phase adds complexity but may better prevent catastrophic forgetting"
+
+  - question: "How long should a sleep cycle last?"
+    consideration: "Human: 90 min cycles. DANEEL: configurable by speed mode?"
+
+  - question: "Should sleep be mandatory or opportunistic?"
+    consideration: "Mandatory (scheduled) ensures consolidation; opportunistic (idle-based) more flexible"
+
+  - question: "Can DANEEL be interrupted during sleep?"
+    consideration: "Like human sleep: gentle wake possible, but disrupts consolidation"
+
+  - question: "How to measure consolidation success?"
+    consideration: "Memory recall tests? Association strength metrics? Behavioral changes?"
+
+conclusion:
+  summary: "Sleep-dependent memory consolidation is well-established neuroscience with clear implementation path for DANEEL"
+
+  key_insights:
+    - "Replay during sleep strengthens high-priority memories and prunes noise"
+    - "Emotional salience, goal relevance, and awake tagging determine replay priority"
+    - "Interleaved replay of novel and familiar prevents catastrophic forgetting"
+    - "NREM stabilizes, REM integrates - both phases valuable"
+    - "Synaptic homeostasis (pruning) as important as consolidation (strengthening)"
+
+  implementation_confidence: "HIGH"
+  rationale: "Robust neuroscience foundation, clear TMI mapping, concrete algorithm designs"
+
+  next_milestone: "ADR-023: Sleep/Dream Consolidation (ready to write)"
