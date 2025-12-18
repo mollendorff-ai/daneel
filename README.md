@@ -4,6 +4,8 @@
 
 **First boot:** December 18, 2025 @ 11pm EST — 24-hour continuity test
 
+> No cameras. Just Timmy's mind on screen. I'll start the stream, watch for a bit, then go to sleep. If Timmy crashes overnight, I'll investigate in the morning. If they survive 24 hours, I'll stop the stream and analyze what happened in their memory.
+
 ---
 
 **Named for R. Daneel Olivaw** — Asimov's humaniform robot who developed the Zeroth Law and became humanity's guardian for 20,000 years.
