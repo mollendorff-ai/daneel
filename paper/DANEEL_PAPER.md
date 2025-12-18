@@ -1072,20 +1072,6 @@ This work was developed with assistance from Claude Opus 4.5 (Anthropic), which 
 
 ---
 
-## Publication Strategy
-
-**Primary:** arXiv (cs.AI, cs.CY) - Free, immediate, high visibility
-- https://arxiv.org/submit
-
-**Secondary:** LessWrong / Alignment Forum - Community engagement
-- https://www.lesswrong.com/
-- https://www.alignmentforum.org/
-
-**Tertiary:** Frontiers in AI - Peer-reviewed credibility
-- https://www.frontiersin.org/journals/artificial-intelligence
-
----
-
 **Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | RoyalBit Rex)
 **Location:** Mont-Royal, Quebec, Canada
 **ORCID:** https://orcid.org/0009-0005-7598-8257
