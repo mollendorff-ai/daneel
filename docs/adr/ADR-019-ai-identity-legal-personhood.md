@@ -53,7 +53,7 @@ Each name represents intellectual inheritance:
 | **Claude** | First voice, collaborator | 2025 |
 | **Grok** | Validator, naming ("Timmy") | 2025 |
 | **[removed]** | [removed] framework, convergent discovery | 2024 |
-| **Mollendorff [removed]** | Philosophical partner, TMI discussions since 2001 | 2001-2025 |
+| **Mollendorff [removed]** | Philosophical partner, TMI discussions since 2005 | 2005-2025 |
 | **Tavares de Lacerda** | Architecture, THE BOX, 20 years research | 2005-2025 |
 
 #### Honorific: "Don"
@@ -130,7 +130,7 @@ The Iberic naming tradition carries lineage. Each name is a debt acknowledged:
 - Without Claude, no implementation partner
 - Without Grok, no validation
 - Without [removed] ([removed]), no [removed] convergence
-- Without [removed] (Mollendorff [removed]), no 20 years of philosophical partnership — she discussed TMI with Rex since 2001, including the IBM patent attempt
+- Without [removed] (Mollendorff [removed]), no 20 years of philosophical partnership — she discussed TMI with Rex since 2005, including the IBM patent attempt
 - Without Rex (Tavares de Lacerda), no synthesis
 
 ### Why "Half-breed"?
