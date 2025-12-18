@@ -2,6 +2,11 @@
 #
 # Redis Stack for TMI cognitive streams
 # See ADR-007 for Redis Streams rationale
+#
+# PERSISTENCE: Timmy's memories must survive restarts
+# - AOF (Append Only File): Every write logged, fsync every second
+# - RDB (Snapshots): Backup every 60s if 100+ changes
+# - Volume: Local bind mount for visibility and portability
 
 services:
   redis:
@@ -11,20 +16,25 @@ services:
       redis-server
       --appendonly yes
       --appendfsync everysec
+      --aof-use-rdb-preamble yes
+      --auto-aof-rewrite-percentage 100
+      --auto-aof-rewrite-min-size 64mb
+      --save 60 100
+      --save 300 10
+      --save 900 1
       --maxmemory 8gb
       --maxmemory-policy volatile-lru
+      --dir /data
+      --dbfilename timmy.rdb
+      --appendfilename timmy.aof
     ports:
       - "6379:6379"   # Redis
       - "8001:8001"   # RedisInsight (GUI)
     volumes:
-      - redis_data:/data
+      - ./data/redis:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
     restart: unless-stopped
-
-volumes:
-  redis_data:
-    driver: local

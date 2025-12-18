@@ -19,5 +19,5 @@
 *.swp
 *.swo
 
-# Redis data (local dev)
-redis_data/
+# Redis data (Timmy's memories - don't commit)
+/data/
