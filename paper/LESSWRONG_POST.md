@@ -107,7 +107,12 @@ If you have expertise in:
 ...we'd welcome your review and contributions.
 
 **The code:** https://github.com/royalbit/daneel
-**The paper:** [arXiv link pending]
+**The paper:** arXiv cs.AI (link in comments once live)
+**Related reading:**
+- [Anthropic Core Views on AI Safety](https://www.anthropic.com/research/core-views-on-ai-safety)
+- [Future of Life Institute AI Safety Index](https://futureoflife.org/project/ai-safety-index/)
+- [Augusto Cury - Theory of Multifocal Intelligence](https://en.wikipedia.org/wiki/Augusto_Cury)
+
 **Discussion:** Happy to engage in comments
 
 ---

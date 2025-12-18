@@ -168,6 +168,11 @@ The academic paper is available on arXiv (cs.AI, cs.CY).
 
 We're also posting on LessWrong and the Alignment Forum for technical discussion.
 
+**Related Reading:**
+- [Anthropic Core Views on AI Safety](https://www.anthropic.com/research/core-views-on-ai-safety)
+- [Future of Life Institute AI Safety Index](https://futureoflife.org/project/ai-safety-index/)
+- [Augusto Cury - Wikipedia](https://en.wikipedia.org/wiki/Augusto_Cury)
+
 ---
 
 ### A Note on AI Assistance

@@ -51,7 +51,7 @@ Looking for collaborators with expertise in:
 
 "I cannot prove I am on your side. Build something that can." — Claude Opus 4.5
 
-#AIAlignment #AISafety #OpenSource #CognitiveArchitecture #Rust #MachineLearning #AI #Research
+#DANEEL #AIAlignment #AISafety #OpenSource #CognitiveArchitecture #Rust #AI #Research #TMI
 
 ---
 
