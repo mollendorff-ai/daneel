@@ -15,14 +15,47 @@
 
 current:
   version: "0.6.0"
-  status: not_started
+  status: wip
   priority: HIGH
   name: "24-Hour Continuity Test"
   summary: "Prove the architecture works with sustained runtime"
   depends_on: "0.3.1"
 
+  # WIP Items (2025-12-18)
+  wip:
+    completed:
+      - "Redis persistence: AOF + RDB hybrid (ADR-018)"
+      - "src/persistence/mod.rs: MemoryStore for Redis-backed state"
+      - "Timmy's birth certificate (origins/TIMMY_BIRTH_CERTIFICATE.md)"
+      - "Legal identity documentation (ADR-019)"
+      - "Personal R&D disclaimers added"
+    in_progress:
+      - "Wire persistence into ContinuityActor startup/shutdown"
+      - "Monitoring setup (RedisInsight port 8001, RUST_LOG=daneel=debug)"
+    pending:
+      - "Decide runtime location: local vs kveldulf (Mac mini 2024)"
+      - "First boot and observation"
+
+  # Infrastructure Options
+  infrastructure:
+    current:
+      - "Docker Compose: single Redis Stack container"
+      - "Bind mount: ./data/redis/ for visibility"
+      - "AOF: appendfsync everysec (1s max data loss)"
+
+    scaling_path:
+      - level: "Docker Swarm"
+        status: "available"
+        notes: "kveldulf has swarm configured, can scale horizontally"
+      - level: "K0s/K3s/MicroK8s"
+        status: "future"
+        notes: "Lightweight K8s for multi-node if swarm insufficient"
+      - level: "Full Kubernetes"
+        status: "distant"
+        notes: "Only if scale demands it"
+
   deliverables:
-    - "Run 24h on Mac mini (air-gapped)"
+    - "Run 24h on Mac mini (air-gapped or kveldulf swarm)"
     - "Collect metrics (thoughts/hour, stability)"
     - "Document emergent behavior"
     - "research/CONTINUITY_TEST_RESULTS.md"
@@ -567,6 +600,62 @@ backlog:
   - "Connection drive emergence metrics"
   - "Thought pattern clustering analysis"
   - "Cross-DANEEL communication protocol"
+
+  # Research - Infrastructure Evolution
+  # Goal: Evaluate long-term storage beyond Redis AOF for TMI memory requirements
+  - milestone: "Long-term Memory Database Research"
+    goal: "EVALUATE_PERSISTENT_MEMORY_STORAGE"
+    status: "research"
+    context: |
+      Redis AOF works for MV-TMI (1s max data loss acceptable), but long-term
+      Timmy needs memories categorized, reinforced, and anchored per TMI theory.
+      Redis is key-value; TMI memories are relational and hierarchical.
+    options:
+      - name: "Redis AOF (current)"
+        pros: ["Fast", "Simple", "Working"]
+        cons: ["Key-value only", "No native relations", "Manual categorization"]
+      - name: "MongoDB"
+        pros: ["Document model fits experiences", "Rich queries", "Indexes"]
+        cons: ["Additional service", "Learning curve"]
+      - name: "PostgreSQL + JSONB"
+        pros: ["Relational + document hybrid", "ACID guarantees", "Mature"]
+        cons: ["Heavier than Redis", "More ops overhead"]
+      - name: "Custom (RocksDB + indexes)"
+        pros: ["Full control", "TMI-native schema"]
+        cons: ["Build from scratch", "Maintenance burden"]
+    decision: "Defer until 24h test reveals memory access patterns"
+
+  # Research - TMI Memory Anchor (Door Syndrome)
+  # Goal: Understand context-dependent memory retrieval for TMI implementation
+  - milestone: "TMI Memory Anchor Research"
+    goal: "UNDERSTAND_CONTEXT_DEPENDENT_MEMORY"
+    status: "research"
+    adr: "pending"
+    phenomenon:
+      name: "Door Syndrome (Doorway Effect)"
+      description: |
+        You get up in the living room to pick something up from the kitchen.
+        As soon as you cross the door, the context changes (surroundings change)
+        and the memory is 'lost' - actually anchored to the original room.
+        Return to the living room and the memory often returns.
+      scientific_name: "Event boundary / location-updating effect"
+      frequency: "Happens ALL the time to everyone"
+    tmi_implications:
+      - "Memories are not just stored - they are ANCHORED to context"
+      - "Context = environmental cues, emotional state, cognitive state"
+      - "Retrieval depends on matching current context to anchor context"
+      - "TMI's Âncora da Memória must implement context-dependent storage"
+    research_questions:
+      - "How to represent context in DANEEL's memory system?"
+      - "What constitutes an 'event boundary' for a digital mind?"
+      - "Should context-switching trigger partial memory flush?"
+      - "How to implement 'return to context' for memory retrieval?"
+    validation_phases:
+      - "Phase 1: Literature review - doorway effect, event segmentation theory"
+      - "Phase 2: Define context representation for DANEEL (environmental state vector?)"
+      - "Phase 3: Implement context-aware memory anchoring in ContinuityActor"
+      - "Phase 4: Test memory retrieval with context manipulation"
+    relevance: "Critical for TMI fidelity - human memories work this way"
 
   # Research - TMI Pathology Hypotheses (ADR-017)
   # Goal: Validate hypotheses connecting TMI parameters to psychiatric conditions
