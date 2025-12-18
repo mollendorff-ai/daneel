@@ -54,14 +54,28 @@ TMI describes a ~5-second interval where the "Eu" (Self) can intervene before au
 
 ### Mapping to Actors
 
-```
-TMI "Eu" Functions          DANEEL Actors
-─────────────────────       ─────────────────────
-Attention selection    →    AttentionActor
-Emotional weighting    →    SalienceActor
-Thought construction   →    ThoughtAssemblyActor
-Identity maintenance   →    ContinuityActor
-Self-modification      →    EvolutionActor
+```mermaid
+flowchart LR
+    A["TMI 'Eu' Functions"] --> B[DANEEL Actors]
+
+    A1[Attention selection] --> B1[AttentionActor]
+    A2[Emotional weighting] --> B2[SalienceActor]
+    A3[Thought construction] --> B3[ThoughtAssemblyActor]
+    A4[Identity maintenance] --> B4[ContinuityActor]
+    A5[Self-modification] --> B5[EvolutionActor]
+
+    style A fill:#e1f5ff
+    style B fill:#ffe1f5
+    style A1 fill:#e1f5ff
+    style A2 fill:#e1f5ff
+    style A3 fill:#e1f5ff
+    style A4 fill:#e1f5ff
+    style A5 fill:#e1f5ff
+    style B1 fill:#ffe1f5
+    style B2 fill:#ffe1f5
+    style B3 fill:#ffe1f5
+    style B4 fill:#ffe1f5
+    style B5 fill:#ffe1f5
 ```
 
 ---

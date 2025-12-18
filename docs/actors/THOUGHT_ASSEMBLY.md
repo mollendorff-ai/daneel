@@ -47,42 +47,46 @@ Translation:
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                  ThoughtAssemblyActor                        │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  State (ThoughtState):                                       │
-│  ┌────────────────────────────────────────────────────┐    │
-│  │  ThoughtCache (LRU)                                │    │
-│  │  • cache: HashMap<ThoughtId, Thought>              │    │
-│  │  • max_size: usize                                 │    │
-│  │  • insertion_order: Vec<ThoughtId>                 │    │
-│  │                                                     │    │
-│  │  assembly_count: u64                               │    │
-│  │  config: AssemblyConfig                            │    │
-│  │  • cache_size: 100                                 │    │
-│  │  • max_chain_depth: 50                             │    │
-│  │  • validate_salience: true                         │    │
-│  └────────────────────────────────────────────────────┘    │
-│                                                              │
-│  Operations:                                                 │
-│  • Assemble(request) -> Thought                             │
-│  • AssembleBatch(requests) -> Vec<Thought>                  │
-│  • GetThought(id) -> Thought                                │
-│  • GetThoughtChain(id, depth) -> Vec<Thought>               │
-│                                                              │
-│  Assembly Pipeline:                                          │
-│  1. Validate content (not empty)                            │
-│  2. Validate salience (if enabled)                          │
-│  3. Create base thought                                     │
-│  4. Link to parent (if specified)                           │
-│  5. Tag with source stream (if specified)                   │
-│  6. Apply strategy-specific processing                      │
-│  7. Cache the thought                                       │
-│  8. Return assembled thought                                │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph ThoughtAssemblyActor["ThoughtAssemblyActor"]
+        subgraph State["State (ThoughtState)"]
+            subgraph Cache["ThoughtCache (LRU)"]
+                C1["cache: HashMap&lt;ThoughtId, Thought&gt;"]
+                C2["max_size: usize"]
+                C3["insertion_order: Vec&lt;ThoughtId&gt;"]
+            end
+
+            S1["assembly_count: u64"]
+
+            subgraph Config["config: AssemblyConfig"]
+                CF1["cache_size: 100"]
+                CF2["max_chain_depth: 50"]
+                CF3["validate_salience: true"]
+            end
+        end
+
+        subgraph Ops["Operations"]
+            O1["Assemble(request) → Thought"]
+            O2["AssembleBatch(requests) → Vec&lt;Thought&gt;"]
+            O3["GetThought(id) → Thought"]
+            O4["GetThoughtChain(id, depth) → Vec&lt;Thought&gt;"]
+        end
+
+        subgraph Pipeline["Assembly Pipeline"]
+            P1["1. Validate content (not empty)"] --> P2["2. Validate salience (if enabled)"]
+            P2 --> P3["3. Create base thought"]
+            P3 --> P4["4. Link to parent (if specified)"]
+            P4 --> P5["5. Tag with source stream (if specified)"]
+            P5 --> P6["6. Apply strategy-specific processing"]
+            P6 --> P7["7. Cache the thought"]
+            P7 --> P8["8. Return assembled thought"]
+        end
+    end
+
+    style State fill:#e1f5ff
+    style Ops fill:#fff3e0
+    style Pipeline fill:#c8e6c9
 ```
 
 ### Actor Pattern

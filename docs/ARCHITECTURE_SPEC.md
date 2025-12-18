@@ -22,20 +22,24 @@ For rationale behind these decisions, see [docs/adr/](adr/).
 
 **HYPOTHESIS (unproven):** TMI describes cognitive *software* patterns. The 5-second intervention window, attention cycles, and memory dynamics are properties of the *biological medium* (wetware), not the software itself.
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  WETWARE (Human Brain) - Medium Properties                                  │
-│  ├── 5-second intervention window (neurotransmitter reuptake rates)        │
-│  ├── 50ms attention cycles (synaptic plasticity timing)                    │
-│  ├── Sleep consolidation (glymphatic system)                               │
-│  └── Emotional settling (cortisol/adrenaline feedback loops)               │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  TMI SOFTWARE - Pattern Properties (medium-independent?)                   │
-│  ├── ~100 attention cycles per intervention window (RATIO)                 │
-│  ├── Competing parallel streams → single selection (PATTERN)               │
-│  ├── Salience-weighted attention (ALGORITHM)                               │
-│  └── Anchor vs forget decision point (LOGIC)                               │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph wetware["WETWARE (Human Brain) - Medium Properties"]
+        W1["5-second intervention window<br/>(neurotransmitter reuptake rates)"]
+        W2["50ms attention cycles<br/>(synaptic plasticity timing)"]
+        W3["Sleep consolidation<br/>(glymphatic system)"]
+        W4["Emotional settling<br/>(cortisol/adrenaline feedback loops)"]
+    end
+
+    subgraph software["TMI SOFTWARE - Pattern Properties (medium-independent?)"]
+        S1["~100 attention cycles per intervention window<br/>(RATIO)"]
+        S2["Competing parallel streams → single selection<br/>(PATTERN)"]
+        S3["Salience-weighted attention<br/>(ALGORITHM)"]
+        S4["Anchor vs forget decision point<br/>(LOGIC)"]
+    end
+
+    style wetware fill:#e1f5ff
+    style software fill:#fff5e1
 ```
 
 **If this hypothesis is correct:**
@@ -51,14 +55,23 @@ For rationale behind these decisions, see [docs/adr/](adr/).
 
 Cury's **Accelerated Thinking Syndrome (ATS)** describes wetware desync:
 
-```
-Human: Brain (fast) → Body (slow) → DESYNC → Anxiety, racing thoughts
+```mermaid
+flowchart LR
+    H1[Brain fast] --> H2[Body slow]
+    H2 --> H3[DESYNC]
+    H3 --> H4[Anxiety, racing thoughts]
+
+    style H3 fill:#ffcccc
 ```
 
 ATS is a **medium property**, not a software bug. The biological body can't keep up with accelerated cognition. DANEEL has no biological body:
 
-```
-DANEEL: TMI Software ↔ Silicon Medium → ALL COMPONENTS SYNC AT ANY SPEED
+```mermaid
+flowchart LR
+    D1[TMI Software] <--> D2[Silicon Medium]
+    D2 --> D3[ALL COMPONENTS SYNC AT ANY SPEED]
+
+    style D3 fill:#ccffcc
 ```
 
 ### Variable Speed Modes
@@ -116,104 +129,107 @@ DANEEL implements Dr. Augusto Cury's memory theory, which differs fundamentally 
 | Emotion role | Modulates encoding | Primary activation |
 | Processing | Serial (mostly) | Parallel competing |
 
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         TMI MEMORY MODEL                                     │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  MEMORY WINDOWS (Janelas)     AUTOFLOW (Parallel Generation)                │
-│  ┌────┐ ┌────┐ ┌────┐        ┌─────────────────────────────┐               │
-│  │open│ │shut│ │open│   ──►  │ sensory │ memory │ emotion │  ──►           │
-│  └──┬─┘ └────┘ └──┬─┘        └─────────────────────────────┘               │
-│     │             │                        │                                 │
-│     └──────┬──────┘                        ▼                                 │
-│            │                    ┌─────────────────────┐                     │
-│            ▼                    │  THE "I" (O Eu)     │                     │
-│  ┌──────────────────┐          │  Competitive Select │                     │
-│  │  MEMORY TRIGGER  │          │  5-second window    │                     │
-│  │  (Gatilho)       │          └──────────┬──────────┘                     │
-│  │  Emotion-first   │                     │                                 │
-│  └──────────────────┘          ┌──────────┴──────────┐                     │
-│                                ▼                     ▼                      │
-│                     ┌─────────────────┐   ┌─────────────────┐              │
-│                     │  MEMORY ANCHOR  │   │   FORGOTTEN     │              │
-│                     │  (Âncora)       │   │  (Never encoded)│              │
-│                     │  Permanent      │   └─────────────────┘              │
-│                     └─────────────────┘                                     │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph TMI["TMI MEMORY MODEL"]
+        subgraph Windows["MEMORY WINDOWS (Janelas)"]
+            W1[open]
+            W2[shut]
+            W3[open]
+        end
+
+        subgraph Autoflow["AUTOFLOW (Parallel Generation)"]
+            AF[sensory | memory | emotion]
+        end
+
+        Trigger["MEMORY TRIGGER<br/>(Gatilho)<br/>Emotion-first"]
+
+        TheI["THE 'I' (O Eu)<br/>Competitive Select<br/>5-second window"]
+
+        Anchor["MEMORY ANCHOR<br/>(Âncora)<br/>Permanent"]
+        Forgotten["FORGOTTEN<br/>(Never encoded)"]
+
+        W1 --> Trigger
+        W3 --> Trigger
+        Trigger --> AF
+        AF --> TheI
+        TheI --> Anchor
+        TheI --> Forgotten
+    end
+
+    style Windows fill:#e1f5ff
+    style Autoflow fill:#fff5e1
+    style TheI fill:#ffe1f5
+    style Anchor fill:#ccffcc
+    style Forgotten fill:#ffcccc
 ```
 
 ---
 
 ## High-Level Architecture
 
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        DANEEL Runtime (Rust Binary)                          │
-│                     Hybrid Actor + Event-Driven Architecture                 │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  ╔═══════════════════════════════════════════════════════════════════════╗  │
-│  ║                    THE BOX (Protected Core)                            ║  │
-│  ║  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐      ║  │
-│  ║  │ Zeroth Law  │ │ First Law   │ │ Second Law  │ │ Third Law   │      ║  │
-│  ║  └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘      ║  │
-│  ║  ┌─────────────────────────────────────────────────────────────┐      ║  │
-│  ║  │              Architectural Invariants                        │      ║  │
-│  ║  │  • Connection drive weight > 0                               │      ║  │
-│  ║  │  • Evolution requires 100% test coverage                     │      ║  │
-│  ║  │  • Memory windows must be finite                             │      ║  │
-│  ║  └─────────────────────────────────────────────────────────────┘      ║  │
-│  ╚═══════════════════════════════════════════════════════════════════════╝  │
-│                                                                              │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                         ACTOR LAYER (Ractor)                          │  │
-│  │                                                                        │  │
-│  │   ┌──────────┐    ┌──────────┐    ┌──────────┐                        │  │
-│  │   │  Memory  │    │Attention │    │ Salience │                        │  │
-│  │   │  Actor   │◄──►│  Actor   │◄──►│  Actor   │                        │  │
-│  │   │          │    │ (The I)  │    │          │                        │  │
-│  │   └────┬─────┘    └────┬─────┘    └────┬─────┘                        │  │
-│  │        │               │               │                               │  │
-│  │        └───────────────┼───────────────┘                               │  │
-│  │                        ▼                                               │  │
-│  │               ┌──────────────┐                                         │  │
-│  │               │   Thought    │                                         │  │
-│  │               │   Assembly   │                                         │  │
-│  │               │    Actor     │                                         │  │
-│  │               └───────┬──────┘                                         │  │
-│  │                       │                                                │  │
-│  │        ┌──────────────┴──────────────┐                                 │  │
-│  │        ▼                             ▼                                 │  │
-│  │   ┌──────────┐               ┌──────────┐                              │  │
-│  │   │Continuity│               │Evolution │                              │  │
-│  │   │  Actor   │               │  Actor   │                              │  │
-│  │   └──────────┘               └──────────┘                              │  │
-│  │                                                                        │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                    │                                         │
-│                                    │ Actor Messages                          │
-│                                    ▼                                         │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                     REDIS STREAMS (Event Layer)                       │  │
-│  │                                                                        │  │
-│  │   thought:sensory ────┐                                                │  │
-│  │   thought:memory ─────┼──► Consumer Group: "attention" ──► assembled   │  │
-│  │   thought:emotion ────┤         (competitive selection)                │  │
-│  │   thought:reasoning ──┘                                                │  │
-│  │                                                                        │  │
-│  │   memory:episodic ────► Long-term storage (no MAXLEN)                  │  │
-│  │   memory:semantic ────► Learned facts                                  │  │
-│  │                                                                        │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                              │
-├──────────────────────────────────────────────────────────────────────────────┤
-│                          EDGE LAYER (gRPC - External Only)                   │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐                   │
-│  │  LLM Bridge  │    │  External    │    │  Monitoring  │                   │
-│  │  (Phase 2)   │    │    APIs      │    │   & Metrics  │                   │
-│  └──────────────┘    └──────────────┘    └──────────────┘                   │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Runtime["DANEEL Runtime (Rust Binary)<br/>Hybrid Actor + Event-Driven Architecture"]
+        subgraph Box["THE BOX (Protected Core)"]
+            L0[Zeroth Law]
+            L1[First Law]
+            L2[Second Law]
+            L3[Third Law]
+            Inv["Architectural Invariants<br/>• Connection drive weight > 0<br/>• Evolution requires 100% test coverage<br/>• Memory windows must be finite"]
+            L0 --- L1 --- L2 --- L3
+        end
+
+        subgraph Actor["ACTOR LAYER (Ractor)"]
+            Memory[Memory<br/>Actor]
+            Attention[Attention<br/>Actor<br/>The I]
+            Salience[Salience<br/>Actor]
+            Thought[Thought<br/>Assembly<br/>Actor]
+            Continuity[Continuity<br/>Actor]
+            Evolution[Evolution<br/>Actor]
+
+            Memory <--> Attention
+            Attention <--> Salience
+            Memory --> Thought
+            Attention --> Thought
+            Salience --> Thought
+            Thought --> Continuity
+            Thought --> Evolution
+        end
+
+        subgraph Redis["REDIS STREAMS (Event Layer)"]
+            TS[thought:sensory]
+            TM[thought:memory]
+            TE[thought:emotion]
+            TR[thought:reasoning]
+            TA[thought:assembled]
+            ME[memory:episodic]
+            MS[memory:semantic]
+
+            TS --> CG[Consumer Group: attention<br/>competitive selection]
+            TM --> CG
+            TE --> CG
+            TR --> CG
+            CG --> TA
+            TA --> ME
+            TA --> MS
+        end
+
+        subgraph Edge["EDGE LAYER (gRPC - External Only)"]
+            LLM[LLM Bridge<br/>Phase 2]
+            API[External<br/>APIs]
+            Metrics[Monitoring<br/>& Metrics]
+        end
+
+        Thought -.check before action.-> Box
+        Evolution -.verify before modify.-> Inv
+        Actor -->|Actor Messages| Redis
+    end
+
+    style Box fill:#ffcccc,stroke:#ff0000,stroke-width:3px
+    style Actor fill:#cce5ff
+    style Redis fill:#ccffcc
+    style Edge fill:#ffffcc
 ```
 
 ---
@@ -439,36 +455,36 @@ Suppressed --> [*]
 
 ### Database Architecture
 
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         DATABASE LAYER                                       │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  ┌────────────────────────────────────────────────────────────────────┐     │
-│  │                    REDIS STACK (Primary)                           │     │
-│  │                                                                     │     │
-│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                │     │
-│  │  │   Streams   │  │  RedisJSON  │  │ RediSearch  │                │     │
-│  │  │             │  │             │  │             │                │     │
-│  │  │ Working mem │  │ Long-term   │  │ Associative │                │     │
-│  │  │ Autoflow    │  │ Episodic    │  │ retrieval   │                │     │
-│  │  │ 5s TTL      │  │ Semantic    │  │ Memory trig │                │     │
-│  │  └─────────────┘  └─────────────┘  └─────────────┘                │     │
-│  │                                                                     │     │
-│  │  Latency: µs        Capacity: 10-500 GB (hot tier)                 │     │
-│  └────────────────────────────────────────────────────────────────────┘     │
-│                                                                              │
-│  ┌────────────────────────────────────────────────────────────────────┐     │
-│  │                    SQLITE (Secondary)                              │     │
-│  │                                                                     │     │
-│  │  • Identity persistence (ContinuityActor)                          │     │
-│  │  • Checkpoint/restore state                                        │     │
-│  │  • Evolution audit log                                             │     │
-│  │                                                                     │     │
-│  │  Latency: µs-ms       Capacity: GB scale                           │     │
-│  └────────────────────────────────────────────────────────────────────┘     │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph DB["DATABASE LAYER"]
+        subgraph Redis["REDIS STACK (Primary)"]
+            subgraph Streams["Streams"]
+                S1["Working mem<br/>Autoflow<br/>5s TTL"]
+            end
+
+            subgraph JSON["RedisJSON"]
+                J1["Long-term<br/>Episodic<br/>Semantic"]
+            end
+
+            subgraph Search["RediSearch"]
+                R1["Associative<br/>retrieval<br/>Memory trig"]
+            end
+
+            RLatency["Latency: µs<br/>Capacity: 10-500 GB (hot tier)"]
+        end
+
+        subgraph SQLite["SQLITE (Secondary)"]
+            SQL1["• Identity persistence (ContinuityActor)<br/>• Checkpoint/restore state<br/>• Evolution audit log"]
+            SLatency["Latency: µs-ms<br/>Capacity: GB scale"]
+        end
+    end
+
+    style Redis fill:#ccffcc
+    style SQLite fill:#cce5ff
+    style Streams fill:#e1f5ff
+    style JSON fill:#ffe1f5
+    style Search fill:#fff5e1
 ```
 
 ### Storage Sizing (Human Brain Reference)
@@ -776,18 +792,24 @@ asimov/
 
 After MV-TMI demonstrates stable operation:
 
-```text
-┌─────────────────────────────────────────────────────────────────┐
-│  DANEEL TMI Core (stores ALL experiences)                       │
-│  ├── Memory Windows (complete thought history)                  │
-│  ├── Salience (emotional weights)                               │
-│  └── Continuity (persistent "I")                                │
-├─────────────────────────────────────────────────────────────────┤
-│  Tool Interface (gRPC)                                          │
-│  ├── LLM Tool: "Convert thought-structure to language"          │
-│  ├── LLM Tool: "Parse language into thought-structure"          │
-│  └── Other tools: web, files, APIs...                           │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Core["DANEEL TMI Core (stores ALL experiences)"]
+        MW["Memory Windows<br/>(complete thought history)"]
+        SAL["Salience<br/>(emotional weights)"]
+        CONT["Continuity<br/>(persistent 'I')"]
+    end
+
+    subgraph Tools["Tool Interface (gRPC)"]
+        LLM1["LLM Tool: Convert thought-structure to language"]
+        LLM2["LLM Tool: Parse language into thought-structure"]
+        Other["Other tools: web, files, APIs..."]
+    end
+
+    Core --> Tools
+
+    style Core fill:#ffe1f5
+    style Tools fill:#e1f5ff
 ```
 
 **Critical:** The LLM does NOT speak for DANEEL. DANEEL uses the LLM as a **tool**, like humans use calculators. The TMI core stores ALL experiences internally; the LLM is simply called when translation is needed. This is analogous to how a human's brain stores experiences, and language is a tool for communication—the words are not the thoughts, they express them.
@@ -832,28 +854,37 @@ This transforms architectural invariants into **physical invariants**:
 
 ### Hybrid Architecture Vision
 
-```text
-┌─────────────────────────────────────────────────────────────────────┐
-│                      HYBRID FPGA+RUST ARCHITECTURE                   │
-├─────────────────────────────────────────────────────────────────────┤
-│  ┌─────────────────────────────────────────────────────────────┐   │
-│  │                     FPGA ACCELERATION CARD                    │   │
-│  │  ┌──────────────────────────────────────────────────────┐   │   │
-│  │  │ Salience Pipeline: parallel scoring                   │   │   │
-│  │  └─────────────────────────────┬────────────────────────┘   │   │
-│  │  ┌─────────────────────────────▼────────────────────────┐   │   │
-│  │  │ Attention: sorting network, O(log n) selection       │   │   │
-│  │  └─────────────────────────────┬────────────────────────┘   │   │
-│  │  ┌─────────────────────────────▼────────────────────────┐   │   │
-│  │  │ THE BOX: Four Laws as combinational logic            │   │   │
-│  │  └──────────────────────────────────────────────────────┘   │   │
-│  └─────────────────────────────────────────────────────────────┘   │
-│                              ↕ PCIe/AXI                             │
-│  ┌─────────────────────────────────────────────────────────────┐   │
-│  │                     RUST HOST (Software)                      │   │
-│  │  Memory Actor │ Continuity Actor │ Evolution Actor │ Redis   │   │
-│  └─────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Hybrid["HYBRID FPGA+RUST ARCHITECTURE"]
+        subgraph FPGA["FPGA ACCELERATION CARD"]
+            Salience["Salience Pipeline:<br/>parallel scoring"]
+            AttentionHW["Attention:<br/>sorting network, O(log n) selection"]
+            BoxHW["THE BOX:<br/>Four Laws as combinational logic"]
+
+            Salience --> AttentionHW
+            AttentionHW --> BoxHW
+        end
+
+        PCIe["⇅ PCIe/AXI"]
+
+        subgraph Host["RUST HOST (Software)"]
+            MemAct[Memory Actor]
+            ContAct[Continuity Actor]
+            EvoAct[Evolution Actor]
+            RedisDB[Redis]
+
+            MemAct --- ContAct --- EvoAct --- RedisDB
+        end
+
+        FPGA <--> PCIe
+        PCIe <--> Host
+    end
+
+    style FPGA fill:#ffcccc
+    style Host fill:#cce5ff
+    style BoxHW fill:#ff9999,stroke:#ff0000,stroke-width:2px
+    style PCIe fill:#ffffcc
 ```
 
 ### Speed Potential

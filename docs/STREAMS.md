@@ -17,36 +17,36 @@ Redis Streams provides the microsecond-latency infrastructure for this competiti
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                         Redis (In-Memory)                                │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│  THOUGHT STREAMS (Multiple Parallel - Working Memory)                   │
-│                                                                          │
-│  thought:sensory ──────┐                                                 │
-│  thought:memory ───────┼──► Consumer Group: "attention"                  │
-│  thought:emotion ──────┤       │                                         │
-│  thought:reasoning ────┘       │                                         │
-│                                ▼                                         │
-│                    ┌───────────────────┐                                 │
-│                    │ AttentionConsumer │                                 │
-│                    │ selects highest   │                                 │
-│                    │ salience (O Eu)   │                                 │
-│                    └─────────┬─────────┘                                 │
-│                              │                                           │
-│                              ▼                                           │
-│                    ┌───────────────────┐                                 │
-│                    │ thought:assembled │ (output stream)                 │
-│                    └───────────────────┘                                 │
-│                                                                          │
-│  MEMORY STREAMS (Long-term Persistence)                                  │
-│                                                                          │
-│  memory:episodic ────► Significant experiences (no MAXLEN)               │
-│  memory:semantic ────► Learned facts (no MAXLEN)                         │
-│  memory:procedural ──► Skills and patterns (no MAXLEN)                   │
-│                                                                          │
-└─────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph Redis["Redis (In-Memory)"]
+        subgraph TS["THOUGHT STREAMS (Multiple Parallel - Working Memory)"]
+            TS1[thought:sensory]
+            TS2[thought:memory]
+            TS3[thought:emotion]
+            TS4[thought:reasoning]
+        end
+
+        TS1 --> CG[Consumer Group: attention]
+        TS2 --> CG
+        TS3 --> CG
+        TS4 --> CG
+
+        CG --> AC[AttentionConsumer<br/>selects highest<br/>salience O Eu]
+
+        AC --> OUT[thought:assembled<br/>output stream]
+
+        subgraph MS["MEMORY STREAMS (Long-term Persistence)"]
+            MS1["memory:episodic<br/>Significant experiences<br/>(no MAXLEN)"]
+            MS2["memory:semantic<br/>Learned facts<br/>(no MAXLEN)"]
+            MS3["memory:procedural<br/>Skills and patterns<br/>(no MAXLEN)"]
+        end
+    end
+
+    style TS fill:#e1f5ff
+    style AC fill:#fff3e0
+    style OUT fill:#c8e6c9
+    style MS fill:#f3e5f5
 ```
 
 ## TMI Concept: Autofluxo
@@ -340,39 +340,47 @@ impl AttentionConsumer {
 
 The attention competition cycle (every ~50ms):
 
-```
-1. READ from all input streams (XREADGROUP)
-   ├─► thought:sensory
-   ├─► thought:memory
-   ├─► thought:emotion
-   └─► thought:reasoning
+```mermaid
+graph TB
+    Start([Start Competition Cycle]) --> Read
 
-2. SCORE each entry
-   composite_score = salience.composite(weights)
-   connection_boost = salience.connection_relevance * connection_weight
-   total_score = composite_score + connection_boost
+    subgraph Read["1. READ from all input streams (XREADGROUP)"]
+        R1[thought:sensory]
+        R2[thought:memory]
+        R3[thought:emotion]
+        R4[thought:reasoning]
+    end
 
-3. SORT by total_score (highest first)
-   candidates.sort_by(|a, b| b.total_score().cmp(a.total_score()))
+    Read --> Score["2. SCORE each entry<br/><br/>composite_score = salience.composite(weights)<br/>connection_boost = salience.connection_relevance * connection_weight<br/>total_score = composite_score + connection_boost"]
 
-4. SELECT winner (highest score)
-   winner = candidates.remove(0)
+    Score --> Sort["3. SORT by total_score (highest first)<br/><br/>candidates.sort_by(|a, b| b.total_score().cmp(a.total_score()))"]
 
-5. ACKNOWLEDGE winner (XACK)
-   redis.xack(winner.stream, group, winner.id)
+    Sort --> Select["4. SELECT winner (highest score)<br/><br/>winner = candidates.remove(0)"]
 
-6. PROCESS losers
-   for loser in losers:
-       if loser.total_score() < forget_threshold:
-           redis.xdel(loser.stream, loser.id)  // FORGET
-       else:
-           // Remains in stream for next cycle
+    Select --> Ack["5. ACKNOWLEDGE winner (XACK)<br/><br/>redis.xack(winner.stream, group, winner.id)"]
 
-7. OUTPUT winner (XADD to assembled)
-   redis.xadd("thought:assembled", winner)
+    Ack --> Process["6. PROCESS losers"]
 
-8. RETURN CompetitionResult
-   { winner, losers, forgotten }
+    Process --> Forget{loser.total_score()<br/>< forget_threshold?}
+    Forget -->|Yes| Delete["redis.xdel(loser.stream, loser.id)<br/>FORGET"]
+    Forget -->|No| Keep["Remains in stream<br/>for next cycle"]
+
+    Delete --> Output
+    Keep --> Output
+
+    Output["7. OUTPUT winner (XADD to assembled)<br/><br/>redis.xadd('thought:assembled', winner)"]
+
+    Output --> Return["8. RETURN CompetitionResult<br/><br/>{ winner, losers, forgotten }"]
+
+    Return --> End([End Cycle])
+
+    style Read fill:#e1f5ff
+    style Score fill:#fff3e0
+    style Select fill:#c8e6c9
+    style Forget fill:#ffe0b2
+    style Delete fill:#ffcccc
+    style Keep fill:#c8e6c9
+    style Output fill:#f3e5f5
 ```
 
 This algorithm directly implements TMI's attention competition:

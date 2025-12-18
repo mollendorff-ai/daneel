@@ -27,13 +27,24 @@ During the study of TMI (Teoria da Inteligência Multifocal), two critical hypot
 
 In DANEEL's Redis Streams implementation, "energia vital" maps directly to **information throughput**:
 
-```
-TMI Concept          →  Implementation
-─────────────────────────────────────────────────────
-Energia Vital        →  Stream throughput (entries/sec, bytes/sec)
-High Energy          →  Many candidates XADD'd per Autofluxo cycle
-Low Energy           →  Few candidates generated per cycle
-Volatile Energy      →  Burst patterns in stream writes
+```mermaid
+graph LR
+    subgraph Mapping["TMI Concept → Implementation"]
+        EV["Energia Vital"] --> ST["Stream throughput<br/>(entries/sec, bytes/sec)"]
+        HE["High Energy"] --> MC["Many candidates XADD'd<br/>per Autofluxo cycle"]
+        LE["Low Energy"] --> FC["Few candidates generated<br/>per cycle"]
+        VE["Volatile Energy"] --> BP["Burst patterns in<br/>stream writes"]
+    end
+
+    style Mapping fill:#f0f0ff,stroke:#333,stroke-width:2px
+    style EV fill:#ffe1cc,stroke:#666,stroke-width:1px
+    style ST fill:#e1f5ff,stroke:#666,stroke-width:1px
+    style HE fill:#ffe1cc,stroke:#666,stroke-width:1px
+    style MC fill:#e1f5ff,stroke:#666,stroke-width:1px
+    style LE fill:#ffe1cc,stroke:#666,stroke-width:1px
+    style FC fill:#e1f5ff,stroke:#666,stroke-width:1px
+    style VE fill:#ffe1cc,stroke:#666,stroke-width:1px
+    style BP fill:#e1f5ff,stroke:#666,stroke-width:1px
 ```
 
 This mapping is elegant because:

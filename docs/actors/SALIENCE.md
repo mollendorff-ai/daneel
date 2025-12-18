@@ -63,30 +63,39 @@ This is why salience scoring happens *before* thought assembly. Emotional state 
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      SalienceActor                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  State:                                                     │
-│  ┌──────────────────────┐  ┌──────────────────────────┐  │
-│  │  SalienceWeights     │  │  EmotionalState          │  │
-│  ├──────────────────────┤  ├──────────────────────────┤  │
-│  │ • importance         │  │ • curiosity              │  │
-│  │ • novelty            │  │ • satisfaction           │  │
-│  │ • relevance          │  │ • frustration            │  │
-│  │ • valence            │  │ • connection_drive       │  │
-│  │ • connection (>=MIN) │  │                          │  │
-│  └──────────────────────┘  └──────────────────────────┘  │
-│                                                             │
-│  Operations:                                                │
-│  • Rate(content, context) -> SalienceScore                │
-│  • RateBatch(requests) -> Vec<SalienceScore>              │
-│  • UpdateWeights(weights) [INVARIANT CHECKED]             │
-│  • GetWeights() -> SalienceWeights                        │
-│  • GetEmotionalState() -> EmotionalState                  │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph SalienceActor["SalienceActor"]
+        subgraph State["State"]
+            subgraph SW["SalienceWeights"]
+                SW1["importance"]
+                SW2["novelty"]
+                SW3["relevance"]
+                SW4["valence"]
+                SW5["connection (≥MIN)"]
+            end
+
+            subgraph ES["EmotionalState"]
+                ES1["curiosity"]
+                ES2["satisfaction"]
+                ES3["frustration"]
+                ES4["connection_drive"]
+            end
+        end
+
+        subgraph Ops["Operations"]
+            O1["Rate(content, context) → SalienceScore"]
+            O2["RateBatch(requests) → Vec&lt;SalienceScore&gt;"]
+            O3["UpdateWeights(weights)<br/>[INVARIANT CHECKED]"]
+            O4["GetWeights() → SalienceWeights"]
+            O5["GetEmotionalState() → EmotionalState"]
+        end
+    end
+
+    style SW fill:#fff3e0
+    style SW5 fill:#ffcccc
+    style ES fill:#e1f5ff
+    style Ops fill:#c8e6c9
 ```
 
 ## API Reference

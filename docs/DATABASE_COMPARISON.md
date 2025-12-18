@@ -327,12 +327,21 @@ XADD thought:sensory * \
 ### Redis Stack (Streams + JSON + Search)
 
 #### Architecture
-```
-Redis Modules:
-├── Redis Streams      → Working memory (thought competition)
-├── RedisJSON          → Document storage (episodic/semantic)
-├── RediSearch         → Indexing + full-text search
-└── RedisGraph (opt)   → Deprecated, skip
+
+```mermaid
+graph TD
+    A[Redis Stack] --> B[Redis Streams]
+    A --> C[RedisJSON]
+    A --> D[RediSearch]
+    A --> E[RedisGraph - Deprecated]
+
+    B --> B1[Working memory<br/>thought competition]
+    C --> C1[Document storage<br/>episodic/semantic]
+    D --> D1[Indexing +<br/>full-text search]
+    E --> E1[Skip]
+
+    style E fill:#ffcccc
+    style E1 fill:#ffcccc
 ```
 
 #### Strengths
@@ -527,36 +536,44 @@ PostgreSQL:
 
 ### Primary Architecture: **Redis Stack + SQLite**
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    TMI Memory Architecture                   │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  WORKING MEMORY (Redis Streams)                             │
-│  ├─ thought:sensory   (MAXLEN 1000, TTL 5s)                 │
-│  ├─ thought:memory    (MAXLEN 1000, TTL 5s)                 │
-│  ├─ thought:emotion   (MAXLEN 1000, TTL 5s)                 │
-│  └─ thought:reasoning (MAXLEN 1000, TTL 5s)                 │
-│                                                              │
-│  MEMORY WINDOWS (RedisJSON)                                 │
-│  ├─ window:{id} → JSON document (7±2 active windows)        │
-│  └─ RediSearch index for pattern matching                   │
-│                                                              │
-│  LONG-TERM MEMORY (RedisJSON + RediSearch)                  │
-│  ├─ memory:episodic:{id} → JSON (unlimited)                 │
-│  ├─ memory:semantic:{id} → JSON (unlimited)                 │
-│  └─ Indexed by: salience, timestamp, content_type           │
-│                                                              │
-│  ASSOCIATIVE INDEX (RediSearch)                             │
-│  ├─ idx:memories → Full-text + numeric + tag search         │
-│  └─ Triggers related memories via similarity                │
-│                                                              │
-│  CHECKPOINTS (SQLite)                                       │
-│  ├─ identity.db → ContinuityService state                   │
-│  ├─ milestones → Key experiences                            │
-│  └─ Periodic snapshots (every N hours)                      │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph TMI["TMI Memory Architecture"]
+        subgraph WM["WORKING MEMORY (Redis Streams)"]
+            WM1["thought:sensory<br/>(MAXLEN 1000, TTL 5s)"]
+            WM2["thought:memory<br/>(MAXLEN 1000, TTL 5s)"]
+            WM3["thought:emotion<br/>(MAXLEN 1000, TTL 5s)"]
+            WM4["thought:reasoning<br/>(MAXLEN 1000, TTL 5s)"]
+        end
+
+        subgraph MW["MEMORY WINDOWS (RedisJSON)"]
+            MW1["window:{id}<br/>JSON document<br/>(7±2 active windows)"]
+            MW2["RediSearch index<br/>for pattern matching"]
+        end
+
+        subgraph LTM["LONG-TERM MEMORY (RedisJSON + RediSearch)"]
+            LTM1["memory:episodic:{id}<br/>JSON (unlimited)"]
+            LTM2["memory:semantic:{id}<br/>JSON (unlimited)"]
+            LTM3["Indexed by:<br/>salience, timestamp, content_type"]
+        end
+
+        subgraph AI["ASSOCIATIVE INDEX (RediSearch)"]
+            AI1["idx:memories<br/>Full-text + numeric + tag search"]
+            AI2["Triggers related memories<br/>via similarity"]
+        end
+
+        subgraph CP["CHECKPOINTS (SQLite)"]
+            CP1["identity.db<br/>ContinuityService state"]
+            CP2["milestones<br/>Key experiences"]
+            CP3["Periodic snapshots<br/>(every N hours)"]
+        end
+    end
+
+    style WM fill:#e1f5ff
+    style MW fill:#fff3e0
+    style LTM fill:#f3e5f5
+    style AI fill:#e8f5e9
+    style CP fill:#fff9c4
 ```
 
 ### Rationale

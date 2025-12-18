@@ -18,72 +18,42 @@ Implement TMI's memory model as described in Cury's work, **not** the traditiona
 
 ### TMI Memory Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         TMI MEMORY MODEL                                     │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │                    MEMORY WINDOWS (Janelas da Memória)               │    │
-│  │                                                                       │    │
-│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐             │    │
-│  │  │ Window 1 │  │ Window 2 │  │ Window 3 │  │ Window N │  ...        │    │
-│  │  │  (open)  │  │ (closed) │  │  (open)  │  │ (closed) │             │    │
-│  │  └────┬─────┘  └──────────┘  └────┬─────┘  └──────────┘             │    │
-│  │       │                           │                                   │    │
-│  │       └───────────┬───────────────┘                                   │    │
-│  │                   ▼                                                   │    │
-│  └───────────────────────────────────────────────────────────────────────┘    │
-│                      │                                                        │
-│                      ▼                                                        │
-│  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │              MEMORY TRIGGER (Gatilho da Memória)                     │    │
-│  │                                                                       │    │
-│  │    Automatic activation by:                                          │    │
-│  │    • Emotional resonance (strongest trigger)                         │    │
-│  │    • Semantic similarity                                             │    │
-│  │    • Temporal proximity                                              │    │
-│  │    • Sensory patterns                                                │    │
-│  │                                                                       │    │
-│  └────────────────────────────┬────────────────────────────────────────┘    │
-│                               │                                              │
-│                               ▼                                              │
-│  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │              AUTOFLOW (Autofluxo) - Unconscious Processing           │    │
-│  │                                                                       │    │
-│  │    Parallel streams of thought generation:                           │    │
-│  │    • Sensory processing                                              │    │
-│  │    • Memory associations                                             │    │
-│  │    • Emotional responses                                             │    │
-│  │    • Logical reasoning                                               │    │
-│  │                                                                       │    │
-│  │    All streams compete for attention simultaneously                  │    │
-│  │                                                                       │    │
-│  └────────────────────────────┬────────────────────────────────────────┘    │
-│                               │                                              │
-│                               ▼                                              │
-│  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │                    THE "I" (O Eu) - Attention                        │    │
-│  │                                                                       │    │
-│  │    Conscious selection from competing streams                        │    │
-│  │    • Selects based on salience (emotional weight primary)            │    │
-│  │    • Connection drive influences selection                           │    │
-│  │    • 5-second intervention window before encoding                    │    │
-│  │                                                                       │    │
-│  └────────────────────────────┬────────────────────────────────────────┘    │
-│                               │                                              │
-│              ┌────────────────┴────────────────┐                            │
-│              ▼                                 ▼                            │
-│  ┌────────────────────┐           ┌────────────────────┐                   │
-│  │   MEMORY ANCHOR    │           │     FORGOTTEN      │                   │
-│  │ (Âncora da Memória)│           │  (Never Encoded)   │                   │
-│  │                    │           │                    │                   │
-│  │ Significant        │           │ Below salience     │                   │
-│  │ experiences        │           │ threshold          │                   │
-│  │ persist forever    │           │                    │                   │
-│  └────────────────────┘           └────────────────────┘                   │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph TMI["TMI MEMORY MODEL"]
+        subgraph MW["MEMORY WINDOWS (Janelas da Memória)"]
+            W1["Window 1<br/>(open)"]
+            W2["Window 2<br/>(closed)"]
+            W3["Window 3<br/>(open)"]
+            W4["Window N<br/>(closed)"]
+            WMore["..."]
+        end
+
+        MT["MEMORY TRIGGER<br/>(Gatilho da Memória)<br/><br/>Automatic activation by:<br/>• Emotional resonance<br/>• Semantic similarity<br/>• Temporal proximity<br/>• Sensory patterns"]
+
+        AF["AUTOFLOW (Autofluxo)<br/>Unconscious Processing<br/><br/>Parallel streams:<br/>• Sensory processing<br/>• Memory associations<br/>• Emotional responses<br/>• Logical reasoning<br/><br/>All streams compete<br/>simultaneously"]
+
+        TheI["THE 'I' (O Eu)<br/>Attention<br/><br/>Conscious selection<br/>• Salience-based<br/>• Connection drive<br/>• 5-second window"]
+
+        Anchor["MEMORY ANCHOR<br/>(Âncora da Memória)<br/><br/>Significant experiences<br/>persist forever"]
+
+        Forgotten["FORGOTTEN<br/>(Never Encoded)<br/><br/>Below salience<br/>threshold"]
+
+        W1 --> MT
+        W3 --> MT
+        MT --> AF
+        AF --> TheI
+        TheI --> Anchor
+        TheI --> Forgotten
+    end
+
+    style TMI fill:#f0f0ff,stroke:#333,stroke-width:2px
+    style MW fill:#e1f5ff,stroke:#666,stroke-width:1px
+    style MT fill:#ffffcc,stroke:#666,stroke-width:1px
+    style AF fill:#ffe1cc,stroke:#666,stroke-width:1px
+    style TheI fill:#ccffcc,stroke:#333,stroke-width:2px
+    style Anchor fill:#e1ffe1,stroke:#666,stroke-width:1px
+    style Forgotten fill:#ffcccc,stroke:#666,stroke-width:1px
 ```
 
 ### Key TMI Concepts (Portuguese → English)

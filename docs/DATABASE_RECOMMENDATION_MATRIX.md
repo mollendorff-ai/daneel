@@ -296,17 +296,21 @@ Neo4j          | 20 years | Medium    | Comm+Ent| Med  | ⭐⭐⭐⭐
 
 ### Architecture
 
-```
-┌──────────────────────────────────────────────────┐
-│  REDIS STACK (Primary Store)                     │
-│  ├─ Redis Streams    → Working memory (µs)       │
-│  ├─ RedisJSON        → Long-term memory (µs)     │
-│  └─ RediSearch       → Associative index (µs)    │
-├──────────────────────────────────────────────────┤
-│  SQLITE (Checkpoint Store)                       │
-│  ├─ identity.db      → ContinuityService (ms)    │
-│  └─ milestones.db    → Key experiences (ms)      │
-└──────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph Primary["REDIS STACK (Primary Store)"]
+        RS1["Redis Streams<br/>Working memory (µs)"]
+        RS2["RedisJSON<br/>Long-term memory (µs)"]
+        RS3["RediSearch<br/>Associative index (µs)"]
+    end
+
+    subgraph Checkpoint["SQLITE (Checkpoint Store)"]
+        SQ1["identity.db<br/>ContinuityService (ms)"]
+        SQ2["milestones.db<br/>Key experiences (ms)"]
+    end
+
+    style Primary fill:#e1f5ff
+    style Checkpoint fill:#fff9c4
 ```
 
 ### Decision Timeline

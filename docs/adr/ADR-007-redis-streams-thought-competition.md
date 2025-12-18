@@ -41,35 +41,38 @@ Use **Redis Streams** as the backbone for thought stream management.
 
 ### Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                         Redis (In-Memory)                                │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│  THOUGHT STREAMS (Multiple Parallel)                                     │
-│                                                                          │
-│  thought:sensory ──────┐                                                 │
-│  thought:memory ───────┼──► Consumer Group: "attention"                  │
-│  thought:emotion ──────┤       │                                         │
-│  thought:reasoning ────┘       │                                         │
-│                                ▼                                         │
-│                    ┌───────────────────┐                                 │
-│                    │  The "I" selects  │                                 │
-│                    │  highest salience │                                 │
-│                    └─────────┬─────────┘                                 │
-│                              │                                           │
-│                              ▼                                           │
-│                    ┌───────────────────┐                                 │
-│                    │ thought:assembled │ (output stream)                 │
-│                    └───────────────────┘                                 │
-│                                                                          │
-│  PERSISTENCE STREAMS (Long-term Memory)                                  │
-│                                                                          │
-│  memory:episodic ────► Significant experiences (no MAXLEN)               │
-│  memory:semantic ────► Learned facts (no MAXLEN)                         │
-│  memory:procedural ──► Skills and patterns (no MAXLEN)                   │
-│                                                                          │
-└─────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph Redis["Redis (In-Memory)"]
+        subgraph ThoughtStreams["THOUGHT STREAMS (Multiple Parallel)"]
+            TS1[thought:sensory]
+            TS2[thought:memory]
+            TS3[thought:emotion]
+            TS4[thought:reasoning]
+        end
+
+        CG[Consumer Group: attention]
+        TheI["The 'I' selects<br/>highest salience"]
+        Assembled[thought:assembled<br/>(output stream)]
+
+        subgraph Persistence["PERSISTENCE STREAMS (Long-term Memory)"]
+            Episodic[memory:episodic<br/>Significant experiences<br/>(no MAXLEN)]
+            Semantic[memory:semantic<br/>Learned facts<br/>(no MAXLEN)]
+            Procedural[memory:procedural<br/>Skills and patterns<br/>(no MAXLEN)]
+        end
+
+        TS1 --> CG
+        TS2 --> CG
+        TS3 --> CG
+        TS4 --> CG
+        CG --> TheI
+        TheI --> Assembled
+    end
+
+    style Redis fill:#fff0f0,stroke:#333,stroke-width:2px
+    style ThoughtStreams fill:#e1f5ff,stroke:#666,stroke-width:1px
+    style Persistence fill:#e1ffe1,stroke:#666,stroke-width:1px
+    style TheI fill:#ffffcc,stroke:#333,stroke-width:2px
 ```
 
 ### Competitive Attention Algorithm

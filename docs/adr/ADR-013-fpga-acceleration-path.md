@@ -46,40 +46,41 @@ Target components for acceleration:
 
 ### Phase 3: Hybrid Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                      HYBRID FPGA+RUST ARCHITECTURE                   │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                      │
-│  ┌─────────────────────────────────────────────────────────────┐   │
-│  │                     FPGA ACCELERATION CARD                    │   │
-│  │                                                               │   │
-│  │  ┌──────────────────────────────────────────────────────┐   │   │
-│  │  │ Salience Pipeline (parallel)                          │   │   │
-│  │  │ [S0][S1][S2]...[Sn] → [Score0][Score1]...[Scoren]     │   │   │
-│  │  └─────────────────────────────┬────────────────────────┘   │   │
-│  │                                │                             │   │
-│  │  ┌─────────────────────────────▼────────────────────────┐   │   │
-│  │  │ Attention Selection (sorting network)                 │   │   │
-│  │  │ n candidates → winner in O(log n) cycles              │   │   │
-│  │  └─────────────────────────────┬────────────────────────┘   │   │
-│  │                                │                             │   │
-│  │  ┌─────────────────────────────▼────────────────────────┐   │   │
-│  │  │ THE BOX (hardwired)                                   │   │   │
-│  │  │ Four Laws: burned into silicon, no bypass possible    │   │   │
-│  │  │ Connection weight minimum: hardware constant          │   │   │
-│  │  └──────────────────────────────────────────────────────┘   │   │
-│  └─────────────────────────────────────────────────────────────┘   │
-│                              ↕ PCIe/AXI                             │
-│  ┌─────────────────────────────────────────────────────────────┐   │
-│  │                     RUST HOST (Software)                      │   │
-│  │                                                               │   │
-│  │  ┌─────────┐  ┌──────────┐  ┌──────────┐  ┌─────────────┐  │   │
-│  │  │ Memory  │  │Continuity│  │Evolution │  │ Redis       │  │   │
-│  │  │ Actor   │  │  Actor   │  │  Actor   │  │ Streams     │  │   │
-│  │  └─────────┘  └──────────┘  └──────────┘  └─────────────┘  │   │
-│  └─────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph Hybrid["HYBRID FPGA+RUST ARCHITECTURE"]
+        subgraph FPGA["FPGA ACCELERATION CARD"]
+            Salience["Salience Pipeline (parallel)<br/>[S0][S1][S2]...[Sn] →<br/>[Score0][Score1]...[Scoren]"]
+
+            Attention["Attention Selection<br/>(sorting network)<br/>n candidates → winner<br/>in O(log n) cycles"]
+
+            TheBox["THE BOX (hardwired)<br/>Four Laws: burned into silicon<br/>no bypass possible<br/>Connection weight minimum:<br/>hardware constant"]
+
+            Salience --> Attention
+            Attention --> TheBox
+        end
+
+        Interface["PCIe/AXI Interface"]
+
+        subgraph RustHost["RUST HOST (Software)"]
+            Memory[Memory<br/>Actor]
+            Continuity[Continuity<br/>Actor]
+            Evolution[Evolution<br/>Actor]
+            Redis[Redis<br/>Streams]
+        end
+
+        TheBox <--> Interface
+        Interface <--> Memory
+        Interface <--> Continuity
+        Interface <--> Evolution
+        Interface <--> Redis
+    end
+
+    style Hybrid fill:#f0f0ff,stroke:#333,stroke-width:2px
+    style FPGA fill:#ffe1e1,stroke:#666,stroke-width:2px
+    style RustHost fill:#e1f5ff,stroke:#666,stroke-width:2px
+    style TheBox fill:#ffffcc,stroke:#333,stroke-width:2px
+    style Interface fill:#e1ffe1,stroke:#666,stroke-width:1px
 ```
 
 ## Rationale

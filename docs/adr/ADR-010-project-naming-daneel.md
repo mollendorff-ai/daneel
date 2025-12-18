@@ -79,12 +79,24 @@ See: Paper Section 10.2.1, Whitepaper Hypothesis 4
 
 ## Project Hierarchy (Vision)
 
-```
-DANEEL (Project)
-├── daneel-core        # Rust prototype (current work)
-├── [removed]           # Neuromorphic chip architecture (future)
-│   └── thebox         # Immutable ethics chip
-└── daneel-*           # Future components
+```mermaid
+graph TB
+    DANEEL[DANEEL<br/>(Project)]
+    Core[daneel-core<br/>Rust prototype<br/>(current work)]
+    [removed][[removed]<br/>Neuromorphic chip architecture<br/>(future)]
+    TheBox[thebox<br/>Immutable ethics chip]
+    Future[daneel-*<br/>Future components]
+
+    DANEEL --> Core
+    DANEEL --> [removed]
+    DANEEL --> Future
+    [removed] --> TheBox
+
+    style DANEEL fill:#e1f5ff,stroke:#333,stroke-width:2px
+    style Core fill:#ccffcc,stroke:#666,stroke-width:1px
+    style [removed] fill:#ffe1cc,stroke:#666,stroke-width:1px
+    style TheBox fill:#ffffcc,stroke:#666,stroke-width:2px
+    style Future fill:#f0f0f0,stroke:#666,stroke-width:1px,stroke-dasharray: 5 5
 ```
 
 ## Consequences

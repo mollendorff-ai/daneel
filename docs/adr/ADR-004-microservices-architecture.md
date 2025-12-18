@@ -87,13 +87,25 @@ Implement as **Rust microservices with gRPC communication**.
 
 ## Service Communication
 
-```
-MemoryService ←→ AttentionService ←→ SalienceService
-         ↓              ↓              ↓
-         └──────→ ThoughtAssemblyService ←──────┘
-                          ↓
-              ┌───────────┴───────────┐
-        ContinuityService      EvolutionService
+```mermaid
+graph TB
+    Memory[MemoryService]
+    Attention[AttentionService]
+    Salience[SalienceService]
+    ThoughtAssembly[ThoughtAssemblyService]
+    Continuity[ContinuityService]
+    Evolution[EvolutionService]
+
+    Memory <--> Attention
+    Attention <--> Salience
+    Memory --> ThoughtAssembly
+    Attention --> ThoughtAssembly
+    Salience --> ThoughtAssembly
+    ThoughtAssembly --> Continuity
+    ThoughtAssembly --> Evolution
+
+    style ThoughtAssembly fill:#ffffcc,stroke:#333,stroke-width:2px
+    style Attention fill:#e1f5ff,stroke:#666,stroke-width:1px
 ```
 
 ## References

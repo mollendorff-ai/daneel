@@ -34,31 +34,32 @@ Implement a **Hybrid Actor-Based Modular Monolith**:
 - gRPC only at edges (LLM integration, external APIs)
 - Ractor framework for supervision and future distribution
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│              DANEEL Runtime (Single Binary)                      │
-├─────────────────────────────────────────────────────────────────┤
-│  ACTORS (In-Process Message Passing - µs latency)               │
-│                                                                  │
-│  ┌─────────┐  ┌─────────┐  ┌─────────┐                         │
-│  │ Memory  │  │Attention│  │Salience │                         │
-│  │  Actor  │◄─┤  Actor  │◄─┤  Actor  │                         │
-│  └────┬────┘  └────┬────┘  └────┬────┘                         │
-│       └────────────┼───────────┘                                │
-│                    ▼                                             │
-│            ┌─────────────┐                                       │
-│            │  Thought    │                                       │
-│            │  Assembly   │                                       │
-│            └──────┬──────┘                                       │
-│       ┌───────────┴───────────┐                                  │
-│       ▼                       ▼                                  │
-│  ┌─────────┐           ┌─────────┐                              │
-│  │Continuity           │Evolution│                              │
-│  │  Actor  │           │  Actor  │                              │
-│  └─────────┘           └─────────┘                              │
-├─────────────────────────────────────────────────────────────────┤
-│  EDGE (gRPC - only for external communication)                  │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph DANEEL["DANEEL Runtime (Single Binary)"]
+        subgraph ACTORS["ACTORS (In-Process Message Passing - µs latency)"]
+            Salience[Salience<br/>Actor]
+            Attention[Attention<br/>Actor]
+            Memory[Memory<br/>Actor]
+            ThoughtAssembly[Thought<br/>Assembly]
+            Continuity[Continuity<br/>Actor]
+            Evolution[Evolution<br/>Actor]
+
+            Salience --> Attention
+            Attention --> Memory
+            Memory --> ThoughtAssembly
+            Attention --> ThoughtAssembly
+            Salience --> ThoughtAssembly
+            ThoughtAssembly --> Continuity
+            ThoughtAssembly --> Evolution
+        end
+
+        EDGE["EDGE (gRPC - only for external communication)"]
+    end
+
+    style DANEEL fill:#e1f5ff,stroke:#333,stroke-width:2px
+    style ACTORS fill:#fff,stroke:#666,stroke-width:1px
+    style EDGE fill:#ffe1e1,stroke:#666,stroke-width:1px
 ```
 
 ## Why Actor Model?

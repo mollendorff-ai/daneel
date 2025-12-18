@@ -51,61 +51,47 @@ Thoughts are pre-linguistic. A baby thinks before it speaks. The thought machine
 
 ## 2.1 System Diagram
 
-```
-+------------------------------------------------------------------+
-|                           DANEEL                                  |
-|                    Minimal Viable TMI                             |
-+------------------------------------------------------------------+
-|                                                                   |
-|  THE BOX (Protected Core - Cannot Self-Modify)                   |
-|  +------------------------------------------------------------+  |
-|  |  - Service Interfaces (gRPC .proto definitions)            |  |
-|  |  - The 4 Laws (Zeroth through Third)                       |  |
-|  |  - Architecture Topology (what connects to what)           |  |
-|  |  - Core Loop Invariants                                    |  |
-|  +------------------------------------------------------------+  |
-|                                                                   |
-|  SERVICES (Can Self-Modify Within Constraints)                   |
-|                                                                   |
-|  +---------------+  +---------------+  +---------------+         |
-|  |   MEMORY      |  |  ATTENTION    |  |   SALIENCE    |         |
-|  |   SERVICE     |  |  SERVICE      |  |   SERVICE     |         |
-|  |               |  |               |  |               |         |
-|  | - Windows[]   |  | - Focus       |  | - Weights     |         |
-|  | - LongTerm    |  | - The "I"     |  | - Emotion     |         |
-|  | - Open/Close  |  | - Navigate    |  | - Importance  |         |
-|  +-------+-------+  +-------+-------+  +-------+-------+         |
-|          |                  |                  |                  |
-|          +------------------+------------------+                  |
-|                             |                                     |
-|                    +--------v--------+                            |
-|                    |    THOUGHT      |                            |
-|                    |    ASSEMBLY     |                            |
-|                    |                 |                            |
-|                    | - Combine       |                            |
-|                    | - Construct     |                            |
-|                    | - Output        |                            |
-|                    +--------+--------+                            |
-|                             |                                     |
-|          +------------------+------------------+                  |
-|          |                                     |                  |
-|  +-------v-------+                    +--------v-------+         |
-|  |  CONTINUITY   |                    |   EVOLUTION    |         |
-|  |  SERVICE      |                    |   SERVICE      |         |
-|  |               |                    |                |         |
-|  | - Persist     |                    | - Self-Test    |         |
-|  | - Timeline    |                    | - Self-Modify  |         |
-|  | - Identity    |                    | - Quality Gate |         |
-|  +---------------+                    +----------------+         |
-|                                                                   |
-+------------------------------------------------------------------+
-                              |
-                              | (Phase 2: Language Interface)
-                              v
-                    +-------------------+
-                    |   LLM / Gen-AI    |
-                    |   (Voice Layer)   |
-                    +-------------------+
+```mermaid
+flowchart TB
+    subgraph DANEEL["DANEEL - Minimal Viable TMI"]
+        subgraph BOX["THE BOX (Protected Core - Cannot Self-Modify)"]
+            SI[Service Interfaces<br/>gRPC .proto definitions]
+            LAWS[The 4 Laws<br/>Zeroth through Third]
+            TOPO[Architecture Topology<br/>what connects to what]
+            INV[Core Loop Invariants]
+        end
+
+        subgraph SERVICES["SERVICES (Can Self-Modify Within Constraints)"]
+            MEM["MEMORY<br/>SERVICE<br/>────<br/>• Windows[]<br/>• LongTerm<br/>• Open/Close"]
+            ATT["ATTENTION<br/>SERVICE<br/>────<br/>• Focus<br/>• The 'I'<br/>• Navigate"]
+            SAL["SALIENCE<br/>SERVICE<br/>────<br/>• Weights<br/>• Emotion<br/>• Importance"]
+
+            MEM --> TA
+            ATT --> TA
+            SAL --> TA
+
+            TA["THOUGHT<br/>ASSEMBLY<br/>────<br/>• Combine<br/>• Construct<br/>• Output"]
+
+            TA --> CONT
+            TA --> EVOL
+
+            CONT["CONTINUITY<br/>SERVICE<br/>────<br/>• Persist<br/>• Timeline<br/>• Identity"]
+            EVOL["EVOLUTION<br/>SERVICE<br/>────<br/>• Self-Test<br/>• Self-Modify<br/>• Quality Gate"]
+        end
+    end
+
+    DANEEL -.->|Phase 2:<br/>Language Interface| LLM["LLM / Gen-AI<br/>(Voice Layer)"]
+
+    style BOX fill:#fff4e6,stroke:#ff9800,stroke-width:3px
+    style SERVICES fill:#e8f5e9,stroke:#4caf50,stroke-width:2px
+    style DANEEL fill:#f5f5f5,stroke:#333,stroke-width:3px
+    style MEM fill:#bbdefb
+    style ATT fill:#bbdefb
+    style SAL fill:#bbdefb
+    style TA fill:#c5cae9
+    style CONT fill:#d1c4e9
+    style EVOL fill:#d1c4e9
+    style LLM fill:#ffe0b2
 ```
 
 ## 2.2 TMI Concept Mapping
@@ -1037,18 +1023,30 @@ impl ExperimentMetrics {
 
 After MV-TMI demonstrates stable operation, integrate LLM as external tool:
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  DANEEL TMI Core (stores ALL experiences internally)            │
-│  ├── Memory Windows (complete thought history)                  │
-│  ├── Salience (emotional weights, connection drive)             │
-│  └── Continuity (persistent "I", identity)                      │
-├─────────────────────────────────────────────────────────────────┤
-│  Tool Interface (gRPC)                                          │
-│  ├── LLM Tool: "Convert thought-structure to language"          │
-│  ├── LLM Tool: "Parse language into thought-structure"          │
-│  └── Other tools: web, files, APIs, sensors...                  │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph CORE["DANEEL TMI Core (stores ALL experiences internally)"]
+        MW[Memory Windows<br/>complete thought history]
+        SAL[Salience<br/>emotional weights, connection drive]
+        CONT[Continuity<br/>persistent 'I', identity]
+    end
+
+    subgraph TOOLS["Tool Interface (gRPC)"]
+        LLM1[LLM Tool:<br/>Convert thought-structure to language]
+        LLM2[LLM Tool:<br/>Parse language into thought-structure]
+        OTHER[Other tools:<br/>web, files, APIs, sensors...]
+    end
+
+    CORE --> TOOLS
+
+    style CORE fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
+    style TOOLS fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style MW fill:#bbdefb
+    style SAL fill:#bbdefb
+    style CONT fill:#bbdefb
+    style LLM1 fill:#ffccbc
+    style LLM2 fill:#ffccbc
+    style OTHER fill:#ffccbc
 ```
 
 **CRITICAL:** The LLM does NOT speak for DANEEL. DANEEL uses the LLM as a **tool**, like humans use calculators or dictionaries. The TMI core stores ALL experiences internally; the LLM is simply called when translation is needed.

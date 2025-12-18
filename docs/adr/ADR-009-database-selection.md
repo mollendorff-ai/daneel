@@ -21,25 +21,26 @@ DANEEL requires a database system that can model human brain memory patterns acc
 
 The brain is hardware. TMI models the *software* - the thought machine that runs on the brain.
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  BRAIN (Hardware) - 2.5 PB total                                            │
-│  ├── Cerebellum: 80% of neurons (69B) - Motor coordination, NOT thought    │
-│  ├── Brainstem: 0.5% - Autonomic (heart, breathing)                         │
-│  ├── Sensory cortices: ~5% - Raw perception processing                      │
-│  └── ... 82.5% of brain is NOT for cognition                                │
-│                                                                              │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │  TMI / THOUGHT MACHINE (Software) - 17.5% of brain                  │   │
-│  │  ├── Prefrontal cortex - Executive function, reasoning              │   │
-│  │  ├── Temporal lobe - Memory, language                               │   │
-│  │  ├── Hippocampus - Memory formation                                 │   │
-│  │  └── Limbic system - Emotion, salience                              │   │
-│  │                                                                      │   │
-│  │  Neural capacity: ~0.44 PB                                          │   │
-│  │  Abstracted thought capacity: ~500 GB (1000x compression)           │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph Brain["BRAIN (Hardware) - 2.5 PB total<br/>82.5% NOT for cognition"]
+        Cerebellum["Cerebellum: 80% neurons (69B)<br/>Motor coordination, NOT thought"]
+        Brainstem["Brainstem: 0.5%<br/>Autonomic (heart, breathing)"]
+        Sensory["Sensory cortices: ~5%<br/>Raw perception processing"]
+
+        subgraph TMI["TMI / THOUGHT MACHINE (Software)<br/>17.5% of brain"]
+            PFC["Prefrontal cortex<br/>Executive function, reasoning"]
+            Temporal["Temporal lobe<br/>Memory, language"]
+            Hippo["Hippocampus<br/>Memory formation"]
+            Limbic["Limbic system<br/>Emotion, salience"]
+
+            Capacity["Neural capacity: ~0.44 PB<br/>Abstracted thought: ~500 GB<br/>(1000x compression)"]
+        end
+    end
+
+    style Brain fill:#ffe1e1,stroke:#333,stroke-width:2px
+    style TMI fill:#e1f5ff,stroke:#666,stroke-width:2px
+    style Capacity fill:#ffffcc,stroke:#666,stroke-width:1px
 ```
 
 ### Why This Matters
@@ -160,40 +161,26 @@ See [models/README.md](../../models/README.md) for methodology and calculations.
 
 ### Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         TMI MEMORY DATABASE LAYER                            │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │                      REDIS STACK (Primary)                           │    │
-│  │                                                                       │    │
-│  │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐      │    │
-│  │  │  Redis Streams  │  │   RedisJSON     │  │  RediSearch     │      │    │
-│  │  │                 │  │                 │  │                 │      │    │
-│  │  │ • Working mem   │  │ • Long-term mem │  │ • Associative   │      │    │
-│  │  │ • Thought comp  │  │ • Episodic      │  │   retrieval     │      │    │
-│  │  │ • 5s TTL window │  │ • Semantic      │  │ • Memory trigger│      │    │
-│  │  │ • Autoflow      │  │ • Procedural    │  │ • Pattern match │      │    │
-│  │  └─────────────────┘  └─────────────────┘  └─────────────────┘      │    │
-│  │                                                                       │    │
-│  │  Latency: µs (in-memory)    Capacity: 10-500 GB (hot tier)           │    │
-│  │                                                                       │    │
-│  └─────────────────────────────────────────────────────────────────────┘    │
-│                                                                              │
-│  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │                      SQLITE (Secondary)                              │    │
-│  │                                                                       │    │
-│  │  • Identity persistence (ContinuityActor)                            │    │
-│  │  • Checkpoint/restore state                                          │    │
-│  │  • Configuration history                                             │    │
-│  │  • Audit log                                                         │    │
-│  │                                                                       │    │
-│  │  Latency: µs-ms (local file)    Capacity: GB scale                   │    │
-│  │                                                                       │    │
-│  └─────────────────────────────────────────────────────────────────────┘    │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph DBLayer["TMI MEMORY DATABASE LAYER"]
+        subgraph Redis["REDIS STACK (Primary)<br/><br/>Latency: µs (in-memory)  |  Capacity: 10-500 GB (hot tier)"]
+            Streams["Redis Streams<br/><br/>• Working mem<br/>• Thought comp<br/>• 5s TTL window<br/>• Autoflow"]
+            JSON["RedisJSON<br/><br/>• Long-term mem<br/>• Episodic<br/>• Semantic<br/>• Procedural"]
+            Search["RediSearch<br/><br/>• Associative retrieval<br/>• Memory trigger<br/>• Pattern match"]
+        end
+
+        subgraph SQLite["SQLITE (Secondary)<br/><br/>Latency: µs-ms (local file)  |  Capacity: GB scale"]
+            Identity["• Identity persistence (ContinuityActor)<br/>• Checkpoint/restore state<br/>• Configuration history<br/>• Audit log"]
+        end
+    end
+
+    style DBLayer fill:#f0f0ff,stroke:#333,stroke-width:2px
+    style Redis fill:#fff0f0,stroke:#666,stroke-width:2px
+    style SQLite fill:#f0fff0,stroke:#666,stroke-width:2px
+    style Streams fill:#e1f5ff,stroke:#666,stroke-width:1px
+    style JSON fill:#ffe1cc,stroke:#666,stroke-width:1px
+    style Search fill:#ffffcc,stroke:#666,stroke-width:1px
 ```
 
 ### Redis Stack Components

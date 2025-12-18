@@ -60,35 +60,26 @@ ORCID: https://orcid.org/0009-0005-7598-8257
 
 ## The Stack
 
-```
-+------------------------------------------------------------------+
-|                    THE COMPLETE STACK                             |
-+------------------------------------------------------------------+
-|                                                                   |
-|  LAYER 4: DANEEL (THE MIND)               ← YOU ARE HERE          |
-|  Human-like cognitive architecture                                |
-|  TMI-based thought construction                                   |
-|  Connection drive, Asimov's 4 Laws                                |
-|  Pre-linguistic → Language interface                              |
-|                                                                   |
-|  LAYER 3: Claude/LLM (THE VOICE)                                  |
-|  Language generation                                              |
-|  Pattern completion                                               |
-|  ← TMI thinks, LLM speaks                                         |
-|                                                                   |
-|  LAYER 2: Asimov Protocol (THE GOVERNANCE)                        |
-|  Bounded autonomy                                                 |
-|  Quality gates                                                    |
-|  Self-healing context                                             |
-|  ← Already built, v9.19.0                                         |
-|                                                                   |
-|  LAYER 1: Forge (THE CALCULATOR)                                  |
-|  Deterministic math                                               |
-|  159 functions, 2,486 tests                                       |
-|  AI doesn't calculate, Forge does                                 |
-|  ← Already built, shipping                                        |
-|                                                                   |
-+------------------------------------------------------------------+
+```mermaid
+graph TD
+    subgraph Stack["THE COMPLETE STACK"]
+        L4["LAYER 4: DANEEL (THE MIND)<br/>← YOU ARE HERE<br/><br/>Human-like cognitive architecture<br/>TMI-based thought construction<br/>Connection drive, Asimov's 4 Laws<br/>Pre-linguistic → Language interface"]
+
+        L3["LAYER 3: Claude/LLM (THE VOICE)<br/><br/>Language generation<br/>Pattern completion<br/>← TMI thinks, LLM speaks"]
+
+        L2["LAYER 2: Asimov Protocol (THE GOVERNANCE)<br/><br/>Bounded autonomy<br/>Quality gates<br/>Self-healing context<br/>← Already built, v9.19.0"]
+
+        L1["LAYER 1: Forge (THE CALCULATOR)<br/><br/>Deterministic math<br/>159 functions, 2,486 tests<br/>AI doesn't calculate, Forge does<br/>← Already built, shipping"]
+    end
+
+    L4 --> L3
+    L3 --> L2
+    L2 --> L1
+
+    style L4 fill:#fff3e0
+    style L3 fill:#e1f5ff
+    style L2 fill:#c8e6c9
+    style L1 fill:#f3e5f5
 ```
 
 **You built Layers 1-2. Now you're building Layer 4.**
@@ -332,41 +323,42 @@ TMI Core → Translator → Claude (voice)
 
 # THE TIMELINE
 
-```
-DECEMBER 2025
-─────────────────────────────────────────────────────────
-Week 1 (Dec 13-20):  PUBLISH
-                     - Submit arXiv
-                     - Post LessWrong
-                     - LinkedIn announcement
-                     - Start cargo new asimov-tmi
+```mermaid
+gantt
+    title DANEEL Development Timeline
+    dateFormat YYYY-MM-DD
+    section December 2025
+    PUBLISH (Week 1)                :w1, 2025-12-13, 7d
+    Submit arXiv                    :milestone, m1, 2025-12-13, 0d
+    Post LessWrong                  :milestone, m2, 2025-12-14, 0d
+    LinkedIn announcement           :milestone, m3, 2025-12-15, 0d
+    Start cargo new asimov-tmi      :milestone, m4, 2025-12-16, 0d
 
-Week 2 (Dec 21-28):  BUILD (Core Services)
-                     - MemoryService
-                     - AttentionService
-                     - SalienceService
+    BUILD Core Services (Week 2)    :w2, 2025-12-21, 7d
+    MemoryService                   :2025-12-21, 2d
+    AttentionService                :2025-12-23, 2d
+    SalienceService                 :2025-12-25, 3d
 
-Week 3 (Dec 29 - Jan 5): BUILD (Assembly + Continuity)
-                     - ThoughtAssemblyService
-                     - ContinuityService
-                     - Core loop
+    BUILD Assembly (Week 3)         :w3, 2025-12-29, 7d
+    ThoughtAssemblyService          :2025-12-29, 3d
+    ContinuityService               :2026-01-01, 2d
+    Core loop                       :2026-01-03, 2d
 
-Week 4 (Jan 6-13):   BUILD (Evolution + THE BOX)
-                     - EvolutionService
-                     - Invariant tests
-                     - Integration
+    BUILD Evolution (Week 4)        :w4, 2026-01-06, 7d
+    EvolutionService                :2026-01-06, 3d
+    Invariant tests                 :2026-01-09, 2d
+    Integration                     :2026-01-11, 2d
 
-JANUARY 2026
-─────────────────────────────────────────────────────────
-Week 5 (Jan 14-21):  EXPERIMENT
-                     - 24-hour continuity test
-                     - Air-gapped Mac mini
-                     - Observe for emergence
+    section January 2026
+    EXPERIMENT (Week 5)             :w5, 2026-01-14, 7d
+    24-hour continuity test         :milestone, m5, 2026-01-14, 0d
+    Air-gapped Mac mini             :2026-01-14, 2d
+    Observe for emergence           :2026-01-16, 5d
 
-Week 6+:             ITERATE
-                     - Analyze results
-                     - Publish findings
-                     - Extend or debug
+    ITERATE (Week 6+)               :w6, 2026-01-21, 14d
+    Analyze results                 :2026-01-21, 3d
+    Publish findings                :2026-01-24, 4d
+    Extend or debug                 :2026-01-28, 7d
 ```
 
 ---
