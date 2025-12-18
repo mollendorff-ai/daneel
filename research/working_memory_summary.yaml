@@ -1,0 +1,529 @@
+# Working Memory Models: Structured Summary for TMI Implementation
+# Scientific foundation for DANEEL's Memory Windows (Janelas da Memória)
+# Generated: 2025-12-18
+
+models:
+  baddeley:
+    year: 1974
+    extended: 2000
+    components:
+      - name: "Central Executive"
+        function: "Supervisory attention, coordinates subsystems"
+        location: "Prefrontal cortex"
+        tmi_analog: "The I (O Eu)"
+
+      - name: "Phonological Loop"
+        function: "Stores sound-based information"
+        capacity: "~2 seconds of speech"
+        subsystems:
+          - "Phonological store (inner ear)"
+          - "Articulatory rehearsal (inner voice)"
+        tmi_analog: "No direct analog (TMI windows are modality-agnostic)"
+
+      - name: "Visuospatial Sketchpad"
+        function: "Stores visual and spatial information"
+        capacity: "3-4 objects"
+        subsystems:
+          - "Visual cache (object properties)"
+          - "Spatial store (locations)"
+        tmi_analog: "No direct analog (TMI windows are modality-agnostic)"
+
+      - name: "Episodic Buffer"
+        function: "Integrates modalities, links WM to LTM"
+        capacity: "4-5 integrated chunks"
+        added: 2000
+        features:
+          - "Multimodal integration"
+          - "Temporal sequencing"
+          - "Conscious retrieval"
+          - "LTM interface"
+        tmi_analog: "Memory Anchor (Âncora da Memória)"
+
+    capacity_total: "Varies by component and content type"
+    key_insight: "Separate storage bins for different modalities"
+
+  cowan:
+    year: 1988
+    refined: 2001-2021
+    structure:
+      levels:
+        - name: "Long-Term Memory"
+          capacity: "Unlimited"
+          tmi_analog: "Memory Anchor (permanent storage)"
+
+        - name: "Activated Long-Term Memory"
+          capacity: "Variable (theoretically unlimited)"
+          description: "Subset of LTM currently active"
+          tmi_analog: "Memory Windows (Janelas da Memória)"
+
+        - name: "Focus of Attention"
+          capacity: "4 chunks"
+          description: "Highly activated representations in conscious awareness"
+          tmi_analog: "The I (O Eu) - current focus"
+          control:
+            voluntary: "Central executive (goal-directed)"
+            involuntary: "Attentional orienting (stimulus-driven)"
+
+    oberauer_extension:
+      levels: 3
+      narrowest_focus: "1 item being actively processed"
+
+    focus_of_attention:
+      capacity: "4 chunks (young adults)"
+      capacity_children: "Fewer than 4"
+      capacity_elderly: "Fewer than 4"
+
+    key_insight: "WM is not separate from LTM - it's the activated portion"
+
+  miller:
+    year: 1956
+    title: "The Magical Number Seven, Plus or Minus Two"
+
+    magical_number: "7±2 items"
+    range:
+      lower: 5
+      upper: 9
+      typical: 7
+
+    modern_revision:
+      cowan_estimate: "4 chunks (when rehearsal prevented)"
+      reason: "Original included rehearsal effects"
+
+    information_theory:
+      bits: "2-3 bits"
+      alternatives: "4-8 distinguishable items"
+
+    chunking:
+      definition: "Grouping items into meaningful units"
+      key_principle: "Capacity limited by chunks, not information per chunk"
+      depends_on: "Prior knowledge in long-term memory"
+      example:
+        unchunked: "1-9-4-5-2-0-2-4 (8 items)"
+        chunked: "1945, 2024 (2 chunks)"
+      mechanism: "Hierarchical encoding"
+      training_effect: "80+ digits via expert chunking (Ericsson)"
+
+    content_variation:
+      digits: "~7 items"
+      letters: "~6 items"
+      words: "~5 items"
+
+    time_based_limit:
+      baddeley: "~2 seconds of rehearsable content"
+      metaphor: "Magic spell, not magic number"
+
+    key_insight: "Chunking extends effective capacity without increasing slots"
+
+context_switch_effects:
+  what_happens_at_boundary:
+    temporal_context:
+      behavior: "RESETS to baseline"
+      mechanism: "Context signal drifts during event, resets at boundary"
+      evidence: "Nature Communications (2022)"
+
+    working_memory:
+      behavior: "PARTIAL FLUSH (not complete wipe)"
+      preserves:
+        - "High-salience items"
+        - "Conceptually linked information"
+        - "Abstract event model (hippocampal)"
+        - "Emotionally significant content"
+      clears:
+        - "Low-salience details"
+        - "Context-specific ephemera"
+        - "Unattended items"
+        - "Task-irrelevant information"
+
+    long_term_encoding:
+      triggers: "Rapid reinstatement of prior event"
+      mechanism: "Hippocampal pattern replay"
+      purpose: "Promote consolidation to LTM"
+      evidence: "EEG pattern similarity analysis"
+
+    memory_effects:
+      within_event: "Strong temporal order memory"
+      across_events: "Impaired temporal order memory"
+      integration: "Possible via conceptual bridges"
+
+  partial_vs_full_flush:
+    not_full_flush:
+      reason: "Shared conceptual links allow rapid integration"
+      evidence: "Hippocampal theta-gamma coupling maintains abstract model"
+
+    partial_flush_mechanism:
+      - "Evaluate all WM items by salience"
+      - "Close/forget low-salience items"
+      - "Preserve high-salience items"
+      - "Brief reinstatement of closing items (consolidation)"
+      - "Open new WM slots for new context"
+
+    percentage_estimate:
+      clear: "20-30% of items (lowest salience)"
+      preserve: "50-70% of items (highest salience)"
+      note: "No consensus in literature - proposed for DANEEL"
+
+  persistence_factors:
+    - factor: "High salience"
+      mechanism: "Attention-based preservation"
+
+    - factor: "Emotional significance"
+      mechanism: "Amygdala modulation of encoding"
+
+    - factor: "Conceptual linkage"
+      mechanism: "Shared semantic features with new context"
+
+    - factor: "Active rehearsal"
+      mechanism: "Continued attention allocation"
+
+    - factor: "Recency"
+      mechanism: "Recent items more resistant to flush"
+
+    - factor: "Abstract gist"
+      mechanism: "Compressed summary more likely to persist than details"
+
+  triggers:
+    - "Prediction error (surprise)"
+    - "Temporal gap"
+    - "Goal change"
+    - "Location change"
+    - "Character change (in narratives)"
+    - "Explicit context marker"
+
+tmi_mapping:
+  janelas_da_memoria:
+    english: "Memory Windows"
+    function: "Bounded working memory of pre-linguistic content"
+    capacity: "3-9 windows (MIN=3, MAX=9)"
+    rationale: "Spans Miller's 7±2 and Cowan's 4"
+
+  bounded_capacity:
+    min: 3
+    min_rationale: "Below this, cognitive architecture cannot function"
+    max: 9
+    max_rationale: "Beyond this, attention cannot manage windows"
+    typical_active: "4-7 windows"
+    typical_in_focus: "1-2 windows actively processed"
+
+  context_switch_behavior:
+    on_boundary_detection:
+      step_1:
+        action: "Score all windows by composite salience"
+        mechanism: "SalienceActor evaluates emotional, semantic, temporal, sensory, connection"
+
+      step_2:
+        action: "Partial flush (close low-salience windows)"
+        threshold: "Bottom 20-30% by salience"
+        constraint: "Never drop below MIN=3 windows"
+
+      step_3:
+        action: "Reinstatement"
+        duration: "500-1000ms (TBD)"
+        purpose: "Brief recall promotes consolidation to Memory Anchor"
+
+      step_4:
+        action: "Memory Anchor encoding"
+        target: "High-salience content from closing windows"
+        storage: "Redis memory:episodic (persistent)"
+
+      step_5:
+        action: "Open new windows for new context"
+        initial_state: "Empty or seeded with reinstated gist"
+
+      step_6:
+        action: "Reset temporal context"
+        mechanism: "Update episode timestamp"
+
+    invariants:
+      - "Never drop below MIN_MEMORY_WINDOWS (3)"
+      - "At least one window persists across boundary"
+      - "High-salience windows always preserved"
+
+  memory_anchor:
+    tmi_concept: "Âncora da Memória"
+    function: "Persist significant experiences forever"
+    trigger: "High composite salience at encoding"
+    timing: "After 5-second intervention window"
+    daneel_implementation: "Redis memory:episodic stream (no MAXLEN)"
+    analog_in_traditional: "Episodic Buffer (Baddeley) + LTM interface"
+
+  memory_trigger:
+    tmi_concept: "Gatilho da Memória"
+    function: "Automatic activation by emotional/semantic resonance"
+    daneel_implementation: "Pattern matching in Redis XREAD"
+    analog_in_traditional: "Cowan's involuntary attentional orienting"
+
+  autoflow:
+    tmi_concept: "Autofluxo"
+    function: "Unconscious parallel thought generation"
+    competition: "Multiple streams compete for The I's attention"
+    daneel_implementation: "Parallel XADD to multiple streams"
+    analog_in_traditional: "Activated memory (Cowan) + preattentive processing"
+
+  the_i:
+    tmi_concept: "O Eu"
+    function: "Conscious attention selector"
+    selection_basis: "Salience-based competition"
+    timeframe: "5-second intervention window"
+    daneel_implementation: "AttentionActor with competitive consumer group read"
+    analog_in_traditional: "Central Executive (Baddeley) + Focus of Attention (Cowan)"
+
+  intervention_window:
+    duration: "5 seconds"
+    source: "Cury's clinical research (TMI-specific)"
+    function: "Period when 'The I' can intervene before encoding"
+    phases:
+      - "0-5s: Thought in working space (Memory Windows)"
+      - "During: Conscious intervention possible"
+      - "After 5s: Memory encoding (anchor or forget)"
+    key_insight: "Interruption point for cognitive distortions"
+    implementation: "INTERVENTION_WINDOW_MS = 5000"
+
+  differences_from_traditional:
+    - aspect: "Memory structure"
+      traditional: "Fixed hierarchy (STM/LTM)"
+      tmi: "Dynamic windows (open/close based on context)"
+
+    - aspect: "Activation mechanism"
+      traditional: "Controlled retrieval"
+      tmi: "Automatic triggering (emotion, semantics)"
+
+    - aspect: "Storage process"
+      traditional: "Transfer from STM → LTM"
+      tmi: "Anchor (persist) or forget (never encoded)"
+
+    - aspect: "Time window"
+      traditional: "Decay-based (~18 seconds)"
+      tmi: "5-second intervention window"
+
+    - aspect: "Role of emotion"
+      traditional: "Modulates encoding strength"
+      tmi: "Primary activation trigger"
+
+    - aspect: "Processing model"
+      traditional: "Serial (mostly)"
+      tmi: "Parallel streams competing (autoflow)"
+
+    - aspect: "Modality specificity"
+      traditional: "Separate subsystems (phonological, visuospatial)"
+      tmi: "Modality-agnostic windows"
+
+chunking:
+  definition: "Grouping discrete items into larger meaningful units"
+
+  key_principle: "Capacity limited by number of chunks, not information per chunk"
+
+  ltm_dependency:
+    requirement: "Chunks only meaningful if linked to long-term memory"
+    example: "1945 is one chunk only if recognized as a year"
+    implication: "DANEEL's chunking requires rich Memory Anchor (LTM)"
+
+  mechanism:
+    pattern_recognition: "Familiar patterns compressed"
+    hierarchical_encoding: "Chunks contain sub-chunks"
+    schema_based_grouping: "Prior knowledge enables compression"
+
+  lossy_compression:
+    tradeoff: "Preserve gist, lose detail"
+    example:
+      unchunked: "milk, cheese, bread, oranges, bananas (5 items)"
+      chunked: "dairy, grain, fruit (3 items)"
+      cost: "Cannot recall specific fruits without unpacking"
+
+  adaptive_strategy:
+    context: "2025 eLife PFC-basal ganglia model"
+    mechanism: "Reinforcement learning adjusts chunk size"
+    benefit: "Improves effective capacity, reduces errors"
+
+  tmi_implementation:
+    unit: "Memory Window = chunk boundary"
+    encoding: "Multiple Content items grouped in single window"
+    hierarchical: "Windows can reference other windows"
+
+    strategies:
+      low_salience: "Chunk aggressively (gist only)"
+      high_salience: "Preserve detail (resist chunking)"
+      capacity_pressure: "Chunk more when approaching MAX=9"
+
+    unpacking:
+      trigger: "AttentionActor focuses on chunked window"
+      action: "Retrieve detailed items from Memory Anchor (LTM)"
+      result: "Expand one chunk into multiple windows"
+
+  interaction_with_context_switch:
+    natural_chunking: "Event boundaries promote compression"
+    prior_event_summary: "Compress to single chunk before new event"
+    benefit: "Persistence across boundary without flooding WM"
+
+  research_evidence:
+    miller_1956: "Chunking extends capacity beyond 7 items"
+    ericsson_1995: "Expert chunking achieves 80+ digit span"
+    gobet_2025: "Adaptive chunking in PFC-basal ganglia circuit (eLife)"
+
+implementation_parameters:
+  capacity:
+    min_windows: 3
+    max_windows: 9
+    typical_active: 7
+    typical_focused: 2
+
+  salience_weights:
+    emotional: 0.4
+    semantic: 0.2
+    temporal: 0.1
+    sensory: 0.2
+    connection: 0.1
+
+  context_switch:
+    detection:
+      prediction_error_threshold: 0.7  # TBD
+      temporal_gap_ms: 30000  # TBD
+
+    flush:
+      close_percentage: 0.3  # Bottom 30% by salience
+      min_preserve: 3  # MIN_MEMORY_WINDOWS
+
+    reinstatement:
+      duration_ms: 500  # TBD
+      encode_to_anchor: true
+      seed_new_context: false  # TBD
+
+  timing:
+    intervention_window_ms: 5000  # TMI's 5-second window
+    decay_rate_per_second: 0.1  # TBD (if decay implemented)
+
+  chunking:
+    enable_auto_chunking: false  # Phase 2
+    chunk_threshold_salience: 0.3
+    max_items_per_chunk: 5
+
+tunable_questions:
+  - question: "What salience threshold triggers window closure at boundary?"
+    options: ["Absolute (e.g., <0.3)", "Relative (bottom 30%)"]
+    current: "Relative (bottom 30%)"
+
+  - question: "How long should reinstatement last?"
+    options: ["500ms", "1000ms", "2000ms"]
+    current: "500ms (TBD)"
+
+  - question: "Should windows decay over time?"
+    options: ["Yes (salience decay)", "No (event-driven only)"]
+    current: "Event-driven only"
+
+  - question: "Should attended windows have elevated salience?"
+    options: ["Yes (attention boost)", "No (salience independent)"]
+    current: "TBD"
+
+  - question: "Does emotional salience resist flushing more than semantic?"
+    options: ["Yes (emotion-weighted)", "No (equal weighting)"]
+    current: "Yes (weight=0.4 vs 0.2)"
+
+  - question: "Chunking strategy?"
+    options: ["Manual", "Rule-based", "Learned (RL)"]
+    current: "Manual (Phase 1)"
+
+references:
+  - id: "WM-1"
+    authors: "Miller, G. A."
+    year: 1956
+    title: "The Magical Number Seven, Plus or Minus Two"
+    journal: "Psychological Review"
+    doi: "10.1037/h0043158"
+    url: "https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two"
+
+  - id: "WM-2"
+    authors: "Baddeley, A. D., & Hitch, G."
+    year: 1974
+    title: "Working Memory"
+    publication: "Psychology of Learning and Motivation, Vol. 8"
+    url: "https://en.wikipedia.org/wiki/Baddeley%27s_model_of_working_memory"
+
+  - id: "WM-3"
+    authors: "Baddeley, A."
+    year: 2000
+    title: "The episodic buffer: a new component of working memory?"
+    journal: "Trends in Cognitive Sciences"
+    doi: "10.1016/S1364-6613(00)01538-2"
+
+  - id: "WM-4"
+    authors: "Hitch, G. J., Allen, R. J., & Baddeley, A. D."
+    year: 2025
+    title: "The multicomponent model of working memory fifty years on"
+    journal: "Quarterly Journal of Experimental Psychology"
+    url: "https://journals.sagepub.com/doi/full/10.1177/17470218241290909"
+
+  - id: "WM-5"
+    authors: "Cowan, N."
+    year: 2001
+    title: "The magical number 4 in short-term memory"
+    journal: "Behavioral and Brain Sciences"
+
+  - id: "WM-6"
+    authors: "Cowan, N., Morey, C. C., & Naveh-Benjamin, M."
+    year: 2021
+    title: "An Embedded-Processes Approach to Working Memory"
+    publication: "Working Memory: State of the Science (Oxford)"
+    url: "https://academic.oup.com/book/31963/chapter/267697039"
+
+  - id: "EB-1"
+    authors: "Heusser, A. C., Fitzpatrick, P. C., & Manning, J. R."
+    year: 2022
+    title: "Event boundaries shape temporal organization of memory by resetting temporal context"
+    journal: "Nature Communications"
+    doi: "10.1038/s41467-022-28216-9"
+    url: "https://www.nature.com/articles/s41467-022-28216-9"
+
+  - id: "EB-2"
+    authors: "Clewett, D., & DuBrow, S."
+    year: 2024
+    title: "Prediction error and event segmentation in episodic memory"
+    journal: "Neuroscience & Biobehavioral Reviews"
+    url: "https://www.sciencedirect.com/science/article/abs/pii/S0149763424000010"
+
+  - id: "EB-3"
+    authors: "Kim, G., Seo, Y., & Jeong, H."
+    year: 2025
+    title: "Hierarchical event segmentation of episodic memory in virtual reality"
+    journal: "npj Science of Learning"
+    url: "https://www.nature.com/articles/s41539-025-00321-6"
+
+  - id: "EB-4"
+    authors: "Sievers, C., & Momennejad, I."
+    year: 2025
+    title: "Event Segmentation Promotes the Reorganization of Emotional Memory"
+    journal: "Emotion"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11703549/"
+
+  - id: "CH-1"
+    authors: "Ericsson, K. A., & Kintsch, W."
+    year: 1995
+    title: "Long-term working memory"
+    journal: "Psychological Review"
+
+  - id: "CH-2"
+    authors: "Gobet, F., et al."
+    year: 2025
+    title: "Adaptive chunking improves effective working memory capacity in a prefrontal cortex and basal ganglia circuit"
+    journal: "eLife"
+    url: "https://elifesciences.org/articles/97894"
+
+  - id: "TMI-1"
+    authors: "Cury, A."
+    year: 1999
+    title: "Inteligência Multifocal"
+    publisher: "Cultrix"
+
+  - id: "TMI-2"
+    authors: "Cury, A."
+    year: 2006
+    title: "O Código da Inteligência"
+    publisher: "Thomas Nelson Brasil"
+
+meta:
+  document_version: "1.0"
+  created: "2025-12-18"
+  author: "Claude Opus 4.5"
+  purpose: "Scientific foundation for DANEEL's Memory Windows implementation"
+  related_documents:
+    - "/Users/rex/src/royalbit/daneel/docs/adr/ADR-008-tmi-faithful-memory-model.md"
+    - "/Users/rex/src/royalbit/daneel/docs/actors/MEMORY.md"
+    - "/Users/rex/src/royalbit/daneel/docs/research/WORKING_MEMORY_MODELS.md"

@@ -1221,6 +1221,273 @@ references:
   relevance: 'More capable models show greater introspective awareness'
 
 # Legal Personhood References (ADR-019)
+# =============================================================================
+# Method of Loci Research References
+# Added: 2025-12-18
+# =============================================================================
+
+# Primary Method of Loci Studies [LOCI-*]
+- url: https://en.wikipedia.org/wiki/Method_of_loci
+  title: 'Method of loci - Wikipedia'
+  categories:
+  - memory
+  - cognitive-science
+  - wikipedia
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  ref_id: LOCI-1
+  key_finding: 'Ancient memory technique using spatial environments to enhance recall; used by 90% of memory champions'
+  relevance: 'Validates TMI context-dependent memory anchoring as fundamental human capability'
+
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC7929507/
+  title: 'Durable memories and efficient neural coding through mnemonic training using the method of loci'
+  categories:
+  - memory
+  - neuroscience
+  - method-of-loci
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  authors: 'Martin Dresler et al.'
+  year: 2021
+  journal: Science Advances
+  doi: 10.1126/sciadv.abc7606
+  ref_id: LOCI-3
+  key_finding: 'Training induces brain connectivity changes matching memory champions; hippocampal-neocortical coupling'
+  relevance: 'Neural basis for context-dependent memory enhancement'
+
+- url: https://bpspsychub.onlinelibrary.wiley.com/doi/10.1111/bjop.12799
+  title: 'The method of loci in the context of psychological research: A systematic review and meta-analysis'
+  categories:
+  - memory
+  - meta-analysis
+  - method-of-loci
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  authors: 'Ondřej et al.'
+  year: 2025
+  journal: British Journal of Psychology
+  doi: 10.1111/bjop.12799
+  ref_id: LOCI-4
+  key_finding: 'Large effect size (d=0.88) for serial recall vs. rehearsal; robust cognitive and neural mechanisms'
+  relevance: 'Meta-analytic validation of spatial memory enhancement'
+
+- url: https://journals.sagepub.com/doi/10.1177/1747021821993457
+  title: 'The effectiveness of the loci method as a mnemonic device: Meta-analysis'
+  categories:
+  - memory
+  - meta-analysis
+  - method-of-loci
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  authors: 'Conal Twomey, Meike Kroneisen'
+  year: 2021
+  journal: Quarterly Journal of Experimental Psychology
+  doi: 10.1177/1747021821993457
+  ref_id: LOCI-5
+  key_finding: 'Medium effect size (g=0.65), robust across publication bias adjustments'
+  relevance: 'Demonstrates reliability of spatial memory enhancement across studies'
+
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC9540171/
+  title: 'Optimized virtual reality-based Method of Loci memorization techniques through increased immersion and effective memory palace designs'
+  categories:
+  - memory
+  - virtual-reality
+  - method-of-loci
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  year: 2022
+  ref_id: LOCI-VR-1
+  key_finding: '20-22% improvement over traditional techniques; VR adds 8.8% via embodied cognition'
+  relevance: 'Embodied cognition amplifies spatial memory effects'
+
+# Hippocampal Place Cells [PLACE-*]
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC11653063/
+  title: 'Hippocampal Discoveries: Spatial View Cells, Connectivity, and Computations for Memory and Navigation, in Primates Including Humans'
+  categories:
+  - neuroscience
+  - hippocampus
+  - place-cells
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  year: 2025
+  journal: PMC
+  ref_id: PLACE-1
+  key_finding: 'Discovery of spatial view cells in primates; critical for episodic memory of viewed locations'
+  relevance: 'Neural substrate for spatial memory in humans'
+
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC12159490/
+  title: 'All active hippocampal pyramidal cells are place cells'
+  categories:
+  - neuroscience
+  - hippocampus
+  - place-cells
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  year: 2025
+  journal: PMC
+  ref_id: PLACE-2
+  key_finding: '100% of active hippocampal cells show spatial tuning, resolving decades-long debate'
+  relevance: 'Confirms universal spatial encoding in hippocampus'
+
+- url: https://cshperspectives.cshlp.org/content/7/2/a021808.full.pdf
+  title: 'Place Cells, Grid Cells, and Memory'
+  categories:
+  - neuroscience
+  - hippocampus
+  - place-cells
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  authors: 'Edvard Moser et al.'
+  year: 2015
+  journal: Cold Spring Harbor Perspectives
+  ref_id: PLACE-3
+  key_finding: 'Place cells express current, past, and future locations; readouts of hippocampal memories'
+  relevance: 'Foundational understanding of spatial memory system'
+
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC7754708/
+  title: 'Targeted Activation of Hippocampal Place Cells Drives Memory-Guided Spatial Behavior'
+  categories:
+  - neuroscience
+  - hippocampus
+  - place-cells
+  - optogenetics
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  year: 2020
+  journal: PMC
+  ref_id: PLACE-4
+  key_finding: 'Causal evidence that place cell activation directly supports spatial navigation and memory'
+  relevance: 'Proves place cells actively drive memory-guided behavior'
+
+# Context-Dependent Memory / Doorway Effect [DOOR-*]
+- url: https://www.scientificamerican.com/article/why-walking-through-doorway-makes-you-forget/
+  title: 'Why Walking through a Doorway Makes You Forget'
+  categories:
+  - memory
+  - context-dependent
+  - doorway-effect
+  - popular-science
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  source: Scientific American
+  ref_id: DOOR-1
+  key_finding: 'Event boundary segmentation causes context-dependent forgetting'
+  relevance: 'Same mechanism as Method of Loci but involuntary'
+
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC9789331/
+  title: 'Contextual inference in learning and memory'
+  categories:
+  - memory
+  - context-dependent
+  - neuroscience
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  year: 2022
+  journal: PMC
+  ref_id: DOOR-2
+  key_finding: 'Neural mechanisms of context-dependent memory encoding and retrieval'
+  relevance: 'Theoretical framework for understanding context effects'
+
+- url: https://www.frontiersin.org/journals/behavioral-neuroscience/articles/10.3389/fnbeh.2017.00143/full
+  title: 'A Spatial-Context Effect in Recognition Memory'
+  categories:
+  - memory
+  - context-dependent
+  - spatial-memory
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  year: 2017
+  journal: Frontiers in Behavioral Neuroscience
+  doi: 10.3389/fnbeh.2017.00143
+  ref_id: DOOR-3
+  key_finding: 'Spatial context significantly enhances recognition memory performance'
+  relevance: 'Direct evidence for spatial context as memory enhancer'
+
+- url: https://link.springer.com/article/10.1186/s40359-021-00536-3
+  title: 'Doorways do not always cause forgetting: a multimodal investigation'
+  categories:
+  - memory
+  - context-dependent
+  - doorway-effect
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  year: 2021
+  journal: BMC Psychology
+  doi: 10.1186/s40359-021-00536-3
+  ref_id: DOOR-4
+  key_finding: 'Effect requires active navigation and environmental change; nuanced mechanism'
+  relevance: 'Clarifies boundary conditions for doorway effect'
+
+# Historical and Cultural Sources [SIMONIDES-*]
+- url: https://artofmemory.com/blog/simonides-of-ceos/
+  title: 'Simonides of Ceos and the Method of Loci'
+  categories:
+  - memory
+  - history
+  - method-of-loci
+  - educational
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  source: Art of Memory
+  ref_id: SIMONIDES-1
+  key_finding: 'Origin story from Cicero De Oratore; banquet hall collapse c. 556-468 BCE'
+  relevance: 'Historical foundation of spatial memory technique'
+
+- url: https://www.smithsonianmag.com/arts-culture/secrets-sherlocks-mind-palace-180949567/
+  title: 'The Secrets of Sherlock Mind Palace'
+  categories:
+  - memory
+  - method-of-loci
+  - popular-culture
+  - popular-science
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-18
+  source: Smithsonian Magazine
+  ref_id: SIMONIDES-2
+  key_finding: 'Modern applications and cultural references to memory palace technique'
+  relevance: 'Demonstrates continued relevance in popular culture'
+
 - url: https://plato.stanford.edu/entries/legal-rights/
   title: 'Legal Rights - Stanford Encyclopedia of Philosophy'
   categories:
