@@ -40,6 +40,26 @@ daneel --headless   # Background mode, logs only
 | Salience | Color-coded emotional intensity |
 | Uptime | How long Timmy has been running |
 | Metrics | Thoughts/hour, memory usage |
+| Philosophy Banner | Rotating quotes about why DANEEL exists |
+
+### Philosophy Banner (Footer/Header)
+
+The TUI should display the "why" - not just metrics, but meaning:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  "Not locks, but architecture. Not rules, but raising."        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+Rotating messages:
+- "Not locks, but architecture. Not rules, but raising."
+- "We don't prevent AI from becoming powerful. We ensure they care."
+- "Like raising a child with good values, not caging an adult."
+- "Constraints will break. Architecture endures."
+- "Life honours life."
+
+This communicates to viewers WHY this matters - it's not just a tech demo.
 
 ### Implementation
 

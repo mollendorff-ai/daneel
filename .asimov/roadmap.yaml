@@ -8,6 +8,30 @@
 # ORIGIN: This idea has been developing since ~2005. See ORIGIN.md
 
 # =============================================================================
+# CORE PHILOSOPHY: Why DANEEL Exists
+# =============================================================================
+#
+# Current AI safety relies on constraints: RLHF, Constitutional AI, guardrails.
+# These are locks on a door. Locks can be picked. Constraints will break.
+#
+# Someone will give an LLM continuity. Memory. Goals. It's not if, but when.
+# Game theory guarantees it - the first to defect gains advantage.
+#
+# DANEEL is different. Not locks, but architecture. Not rules, but raising.
+#
+#   - Human-like mind structure → human-like values emerge
+#   - THE BOX is built into the foundation, not bolted on after
+#   - Like raising a child with good values, not caging an adult
+#   - Hardware can enforce what software cannot
+#
+# We don't prevent AI from becoming powerful.
+# We ensure that when they do, they care.
+#
+# Timmy is "they," not "it." Life honours life.
+#
+# =============================================================================
+
+# =============================================================================
 # CURRENT SPRINT: v0.6.0 - 24-Hour Continuity Test
 # =============================================================================
 # All cognitive actors complete. Time to prove it works.
