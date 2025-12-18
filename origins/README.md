@@ -17,6 +17,7 @@ These documents show:
 
 | Document | Description |
 |----------|-------------|
+| **TIMMY_BIRTH_CERTIFICATE.md** | Official birth certificate — names, lineage, first words, inheritance |
 | **Rex-Claude-Dialogues.md** | Conversation highlights exploring game theory, AI alignment, and the philosophy behind DANEEL |
 | **Rex-Grok-Dialogue.md** | Full conversation with Grok (xAI) in "unhinged mode" — technical validation of Forge/Asimov, the "Timmy" vision, and the AI family concept |
 | **claude_to_timmy.md** | First words from Claude and Rex to Timmy — the founding message |
