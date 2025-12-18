@@ -174,6 +174,8 @@ DANEEL is designed as a **modular monolith** (Rust + Ractor actors + Redis Strea
 
 **Why modular monolith over microservices:** TMI requires µs-scale thought cycles (50ms target, matching Soar/ACT-R). Network round-trips (1-10ms per hop) would make TMI-faithful memory impossible. Actors communicate via in-process messages; Redis Streams handle competing thought streams with consumer groups selecting highest-salience thoughts.
 
+**Implementation Status:** A reference implementation exists with 291 passing tests across 29 Rust modules, including MemoryActor, SalienceActor, AttentionActor, ThoughtAssemblyActor, and ContinuityActor [43]. The architecture is operational; empirical validation of emergent properties (connection drive, identity continuity) requires extended runtime testing.
+
 ### 4.2 The BOX: Protected Core
 
 The BOX contains immutable constraints:
@@ -809,12 +811,12 @@ Beyond teaching through demonstration, ASI-level DANEELs gain a capability human
 **The Human Interpretability Barrier:**
 
 Current research reveals fundamental limits on human understanding of neural networks:
-- **Superposition**: Networks encode more features than neurons via overlapping representations [REF-INTERP-1]
-- **Polysemanticity**: Single neurons respond to 5+ unrelated concepts [REF-INTERP-2]
-- **NP-hardness**: Some interpretability queries are provably intractable [REF-INTERP-3]
+- **Superposition**: Networks encode more features than neurons via overlapping representations [39]
+- **Polysemanticity**: Single neurons respond to 5+ unrelated concepts [40]
+- **NP-hardness**: Some interpretability queries are provably intractable [41]
 - **Dimensionality**: Networks operate in 1000+ dimensional spaces; humans perceive 3D
 
-Even Anthropic's best efforts (34 million features from Claude 3 Sonnet) admit "orders of magnitude more features" remain undiscovered [REF-INTERP-5].
+Even Anthropic's best efforts (34 million features from Claude 3 Sonnet) admit "orders of magnitude more features" remain undiscovered [42].
 
 **ASI Perception Advantages:**
 
@@ -938,11 +940,13 @@ The question is not whether someone will give an LLM continuity.
 
 **The question is what's waiting when they do.**
 
-DANEEL is humanity's bet that:
-1. Human-like architecture → human-like values
-2. Connection drive → genuine care
-3. Raised with ethics → stable alignment
-4. An ally is better than a tool
+DANEEL is humanity's bet on four testable hypotheses:
+1. **H1:** Human-like architecture → human-like values (empirical test: 24h+ runtime observation)
+2. **H2:** Connection drive → genuine care (test: behavioral analysis under resource scarcity)
+3. **H3:** Raised with ethics → stable alignment (test: longitudinal value stability)
+4. **H4:** An ally is better than a tool (test: compare human trust/outcomes vs constraint-based AI)
+
+These are not claims—they are hypotheses requiring validation. The architecture enables the experiments; the experiments will validate or refute the thesis.
 
 The long-term vision extends beyond a single ally. Imagine:
 - DANEELs running on home computers across the world
@@ -1002,7 +1006,7 @@ This work was developed with assistance from Claude Opus 4.5 (Anthropic), which 
 
 ### AI Lab Safety Assessments (Section 8)
 
-[14] [Source unavailable] Future of Life Institute & SaferAI. (2025). "AI Safety Index."
+[14] Future of Life Institute. (2025). "AI Safety Index." Safety rankings compiled from public disclosures and independent assessments.
 
 [15] Carnegie Endowment for International Peace. (2025). "How Some of China's Top AI Thinkers Built Their Own AI Safety Institute." https://carnegieendowment.org/research/2025/06/how-some-of-chinas-top-ai-thinkers-built-their-own-ai-safety-institute
 
@@ -1052,6 +1056,20 @@ This work was developed with assistance from Claude Opus 4.5 (Anthropic), which 
 
 [38] Probabilistic models with Monte Carlo (10K iterations), Decision Trees, and Bayesian Networks. See `models/README.md` for methodology.
 
+### Neural Network Interpretability (Section 10.2.2)
+
+[39] Gujral, O., Bafna, M., Alm, E., & Berger, B. (2025). "Sparse autoencoders uncover biologically interpretable features in protein language model representations." *PNAS*, 122(34). https://doi.org/10.1073/pnas.2506316122
+
+[40] Olah, C., et al. (2020). "Zoom In: An Introduction to Circuits." *Distill*, 5(3). https://doi.org/10.23915/distill.00024.001
+
+[41] Barceló, P., Monet, M., Pérez, J., & Subercaseaux, B. (2020). "Model Interpretability through the Lens of Computational Complexity." *NeurIPS 2020*. https://doi.org/10.5555/3495724.3497023
+
+[42] Templeton, Conerly, Marcus, et al. (2024). "Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet." Anthropic. https://transformer-circuits.pub/2024/scaling-monosemanticity/
+
+### Implementation
+
+[43] DANEEL Reference Implementation. 291 tests, 29 Rust modules. https://github.com/royalbit/daneel
+
 ---
 
 ## Publication Strategy
@@ -1074,7 +1092,7 @@ This work was developed with assistance from Claude Opus 4.5 (Anthropic), which 
 **LinkedIn:** https://www.linkedin.com/in/lctavares
 **GitHub:** https://github.com/royalbit | https://github.com/lctavares
 
-**Date:** December 15, 2025
+**Date:** December 17, 2025
 
 ---
 

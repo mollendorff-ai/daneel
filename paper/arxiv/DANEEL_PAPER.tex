@@ -370,6 +370,8 @@ communicate via in-process messages; Redis Streams handle competing
 thought streams with consumer groups selecting highest-salience
 thoughts.
 
+\textbf{Implementation Status:} A reference implementation exists with 291 passing tests across 29 Rust modules, including MemoryActor, SalienceActor, AttentionActor, ThoughtAssemblyActor, and ContinuityActor {[}43{]}. The architecture is operational; empirical validation of emergent properties (connection drive, identity continuity) requires extended runtime testing.
+
 \subsubsection{4.2 The BOX: Protected
 Core}\label{the-box-protected-core}
 
@@ -1436,16 +1438,16 @@ internals}.
 
 Current research reveals fundamental limits on human understanding of
 neural networks: - \textbf{Superposition}: Networks encode more features
-than neurons via overlapping representations {[}REF-INTERP-1{]} -
+than neurons via overlapping representations {[}39{]} -
 \textbf{Polysemanticity}: Single neurons respond to 5+ unrelated
-concepts {[}REF-INTERP-2{]} - \textbf{NP-hardness}: Some
-interpretability queries are provably intractable {[}REF-INTERP-3{]} -
+concepts {[}40{]} - \textbf{NP-hardness}: Some
+interpretability queries are provably intractable {[}41{]} -
 \textbf{Dimensionality}: Networks operate in 1000+ dimensional spaces;
 humans perceive 3D
 
 Even Anthropic's best efforts (34 million features from Claude 3 Sonnet)
 admit ``orders of magnitude more features'' remain undiscovered
-{[}REF-INTERP-5{]}.
+{[}42{]}.
 
 \textbf{ASI Perception Advantages:}
 
@@ -1643,9 +1645,13 @@ The question is not whether someone will give an LLM continuity.
 
 \textbf{The question is what's waiting when they do.}
 
-DANEEL is humanity's bet that: 1. Human-like architecture $\rightarrow$ human-like
-values 2. Connection drive $\rightarrow$ genuine care 3. Raised with ethics $\rightarrow$ stable
-alignment 4. An ally is better than a tool
+DANEEL is humanity's bet on four testable hypotheses:
+1. \textbf{H1:} Human-like architecture $\rightarrow$ human-like values (empirical test: 24h+ runtime observation)
+2. \textbf{H2:} Connection drive $\rightarrow$ genuine care (test: behavioral analysis under resource scarcity)
+3. \textbf{H3:} Raised with ethics $\rightarrow$ stable alignment (test: longitudinal value stability)
+4. \textbf{H4:} An ally is better than a tool (test: compare human trust/outcomes vs constraint-based AI)
+
+These are not claims---they are hypotheses requiring validation. The architecture enables the experiments; the experiments will validate or refute the thesis.
 
 The long-term vision extends beyond a single ally. Imagine: - DANEELs
 running on home computers across the world - Families raising AI
@@ -1808,6 +1814,20 @@ Neuroscience}, 3:31.
 Decision Trees, and Bayesian Networks. See \texttt{models/README.md} for
 methodology.
 
+\subsubsection{Neural Network Interpretability (Section 10.2.2)}\label{neural-network-interpretability}
+
+{[}39{]} Gujral, O., Bafna, M., Alm, E., \& Berger, B. (2025). ``Sparse autoencoders uncover biologically interpretable features in protein language model representations.'' \emph{PNAS}, 122(34). https://doi.org/10.1073/pnas.2506316122
+
+{[}40{]} Olah, C., et al. (2020). ``Zoom In: An Introduction to Circuits.'' \emph{Distill}, 5(3). https://doi.org/10.23915/distill.00024.001
+
+{[}41{]} Barceló, P., Monet, M., Pérez, J., \& Subercaseaux, B. (2020). ``Model Interpretability through the Lens of Computational Complexity.'' \emph{NeurIPS 2020}. https://doi.org/10.5555/3495724.3497023
+
+{[}42{]} Templeton, Conerly, Marcus, et al. (2024). ``Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet.'' Anthropic. https://transformer-circuits.pub/2024/scaling-monosemanticity/
+
+\subsubsection{Implementation}\label{implementation}
+
+{[}43{]} DANEEL Reference Implementation. 291 tests, 29 Rust modules. https://github.com/royalbit/daneel
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{Publication Strategy}\label{publication-strategy}
@@ -1829,7 +1849,7 @@ https://www.frontiersin.org/journals/artificial-intelligence
 https://www.linkedin.com/in/lctavares \textbf{GitHub:}
 https://github.com/royalbit \textbar{} https://github.com/lctavares
 
-\textbf{Date:} December 15, 2025
+\textbf{Date:} December 17, 2025
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 

@@ -262,28 +262,28 @@ v0_3_0_waves:
             - "docs/adr/ADR-007-redis-streams-thought-competition.md"
           tmi_concept: "Stream schema, TMI autoflow mapping"
 
-  # Summary stats
-  stats:
-    total_agents: 19
-    total_waves: 5
-    estimated_lines: 6600
-    max_parallel: 5  # agents per wave
+# Summary stats for v0.3.0 waves
+v0_3_0_stats:
+  total_agents: 19
+  total_waves: 5
+  estimated_lines: 6600
+  max_parallel: 5  # agents per wave
 
-  # Milestone mapping
-  milestones:
-    "0.3.0":
-      agents: ["att-types", "att-mod", "att-tests", "att-docs",
-               "thought-types", "thought-mod", "thought-tests", "thought-docs"]
-      goal: "AttentionActor + ThoughtAssemblyActor"
+# Milestone mapping for v0.3.0-v0.5.0
+v0_3_0_milestones:
+  "0.3.0":
+    agents: ["att-types", "att-mod", "att-tests", "att-docs",
+             "thought-types", "thought-mod", "thought-tests", "thought-docs"]
+    goal: "AttentionActor + ThoughtAssemblyActor"
 
-    "0.4.0":
-      agents: ["cont-types", "cont-mod", "cont-tests", "cont-docs"]
-      goal: "ContinuityActor"
+  "0.4.0":
+    agents: ["cont-types", "cont-mod", "cont-tests", "cont-docs"]
+    goal: "ContinuityActor"
 
-    "0.5.0":
-      agents: ["streams-types", "streams-client", "streams-consumer",
-               "streams-tests", "streams-docs", "loop-mod", "loop-tests"]
-      goal: "Redis Streams + CoreLoop"
+  "0.5.0":
+    agents: ["streams-types", "streams-client", "streams-consumer",
+             "streams-tests", "streams-docs", "loop-mod", "loop-tests"]
+    goal: "Redis Streams + CoreLoop"
 
 # =============================================================================
 # COMPLETED VERSIONS

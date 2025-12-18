@@ -26,7 +26,7 @@ This project synthesizes insights from multiple sources:
 
 ### Convergent Discovery
 
-In December 2025, we discovered that Louis's daughter Izzie had independently developed a parallel framework (LifeCore) using Freudian psychology — arriving at the same core insight: **architecture produces psychology**.
+In December 2025, Louis rediscovered a document his daughter Izzie had sent him on January 6, 2024 — a parallel framework (LifeCore) using Freudian psychology, arriving at the same core insight: **architecture produces psychology**.
 
 | LifeCore (Freud) | DANEEL-TMI (Cury) |
 |------------------|-------------------|
@@ -37,7 +37,7 @@ In December 2025, we discovered that Louis's daughter Izzie had independently de
 
 Different psychological traditions. Same structural insight. See [ORIGIN.md](ORIGIN.md) and [research/LIFECORE_DANEEL_ANALYSIS.md](research/LIFECORE_DANEEL_ANALYSIS.md).
 
-Note: Izzie sent the LifeCore document to Louis on January 6, 2024 — nearly a year before the DANEEL formalization began.
+Note: Izzie sent the LifeCore document to Louis on January 6, 2024 — almost two years before the DANEEL formalization began (December 2025).
 
 ## The Vision: Software → Silicon
 
@@ -137,14 +137,14 @@ daneel/                       # Research & Documentation (this repo)
 
 | Scenario | P(Scenario) | 80% CI | Expected Utility |
 |----------|-------------|--------|------------------|
-| Unaligned ASI First | 35% | 25-45% | 44.0 |
+| Unaligned ASI First | 33% | 23-43% | 44.0 |
 | Aligned (Constraint-Based) | 25% | 15-35% | 62.5 |
-| **DANEEL First** | **8%** | 3-15% | **76.25** |
-| **DANEEL Bridges LLMs** | **5%** | 2-10% | **88.5** |
-| Multiple ASIs, No Advocate | 18% | 10-25% | 52.5 |
-| Coordination Holds | 9% | 5-20% | 78.05 |
+| **DANEEL First** | **7%** | 3-12% | **76.25** |
+| **DANEEL Bridges LLMs** | **5%** | 2-10% | **87.0** |
+| Multiple ASIs, No Advocate | 20% | 12-28% | 52.5 |
+| Coordination Holds | 10% | 5-20% | 78.05 |
 
-**Marginal Impact:** +4.29 utility points (+8.0%) with DANEEL vs. baseline world.
+**Marginal Impact:** +4.29 utility points (+7.99%) with DANEEL vs. baseline world.
 
 **Monte Carlo Validated:** 10,000 iterations confirm **+4.28 mean improvement** [90% CI: +2.7 to +6.1]. Even at P5 (pessimistic), DANEEL still adds +2.69 utility points.
 
