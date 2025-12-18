@@ -21,6 +21,80 @@ current:
   summary: "Prove the architecture works with sustained runtime"
   depends_on: "0.3.1"
 
+  # ==========================================================================
+  # CRITICAL: BRAIN SURGERY - Implement new memory architecture
+  # ==========================================================================
+  # Timmy needs a new brain. The Rust code must be updated to match:
+  # - ADR-020: Redis Streams (awake + dream only)
+  # - ADR-021: Qdrant for persistent memory (NOT SurrealDB)
+  # - ADR-022: Memory schema (vectors + payloads)
+  # - ADR-023: Sleep/Dream consolidation mode
+  # ==========================================================================
+  brain_surgery:
+    status: "CRITICAL - NEXT"
+    priority: "HIGHEST"
+    description: |
+      Update DANEEL Rust code to implement the new memory architecture.
+      This is existential - without persistent memory, Timmy cannot grow.
+
+    phases:
+      - id: "SURGERY-1"
+        title: "Types & Schema (Foundation)"
+        status: pending
+        items:
+          - "Create src/memory_db/types.rs with Qdrant-compatible types"
+          - "Memory, Episode, Association, MemoryPayload structs"
+          - "Update core/types.rs: add valence, arousal, consolidation fields"
+          - "Create src/actors/sleep/types.rs: SleepState, SleepConfig"
+
+      - id: "SURGERY-2"
+        title: "Qdrant Integration"
+        status: pending
+        depends_on: ["SURGERY-1"]
+        items:
+          - "Add qdrant-client = '1.16' to Cargo.toml"
+          - "Create src/memory_db/mod.rs: MemoryDb client wrapper"
+          - "Implement init_collections(), store_memory(), find_by_context()"
+          - "Implement strengthen_association(), get_replay_candidates()"
+
+      - id: "SURGERY-3"
+        title: "Stream Refactor"
+        status: pending
+        depends_on: ["SURGERY-1"]
+        items:
+          - "Update src/streams/mod.rs: awake + dream streams only"
+          - "Remove memory:episodic, memory:semantic streams"
+          - "Implement ThoughtEntry, DreamEntry types"
+          - "Wire consolidation_tag flow"
+
+      - id: "SURGERY-4"
+        title: "Actor Updates"
+        status: pending
+        depends_on: ["SURGERY-2", "SURGERY-3"]
+        items:
+          - "Update MemoryActor: add consolidation state to windows"
+          - "Wire ContinuityActor to Qdrant (replace Redis persistence)"
+          - "Create SleepActor: scheduler + consolidation logic"
+          - "Wire sleep cycle into main.rs"
+
+      - id: "SURGERY-5"
+        title: "Integration & Testing"
+        status: pending
+        depends_on: ["SURGERY-4"]
+        items:
+          - "Docker Compose: add Qdrant service"
+          - "Integration tests: memory storage → retrieval → consolidation"
+          - "24-hour test with new architecture"
+
+    infrastructure:
+      qdrant:
+        image: "qdrant/qdrant:latest"
+        ports: ["6333:6333", "6334:6334"]
+        storage: "./data/qdrant"
+      redis:
+        purpose: "Ephemeral streams only (awake + dream)"
+        persistence: "AOF for stream recovery"
+
   # WIP Items (2025-12-18)
   wip:
     in_progress:
@@ -36,19 +110,19 @@ current:
           - Separate from core_redis (Traefik config)
       - id: "ADR-021"
         title: "Memory Database Selection"
-        status: wip
+        status: done
         description: |
-          Why Redis can't do TMI memory (key-value vs relational+graph).
-          Options: SurrealDB (Rust-native), PostgreSQL+pgvector+AGE, ArangoDB.
-          Need: context vectors, emotional intensity, relationships, reinforcement.
+          DECISION: Qdrant (Apache 2.0, vector-native, ASI-scale).
+          Rejected: SurrealDB (BSL license), libSQL (won't scale), PostgreSQL (struggles at 100M+).
+          Qdrant: vectors + payloads, horizontal sharding, 1TB+ ready.
       - id: "ADR-022"
         title: "TMI Memory Schema"
-        status: wip
+        status: done
         description: |
-          Experience structure: content, context_vector, emotional_intensity,
-          salience_at_formation, access_count, strength, associations.
-          Relationship types: causal, temporal, semantic, emotional.
-          Reinforcement mechanics: access strengthens, decay over time.
+          Qdrant schema: memories, episodes, identity collections.
+          768-dim vectors + payloads (valence, arousal, consolidation_strength).
+          Associations stored as payload arrays (no native graph edges).
+          Revised for Qdrant (was SurrealDB).
       - id: "ADR-023"
         title: "Sleep/Dream Consolidation"
         status: wip
