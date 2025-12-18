@@ -1,7 +1,7 @@
 # DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintelligence
 
 **Luis Cezar Menezes Tavares de Lacerda**^1 (Louis C. Tavares | RoyalBit Rex)
-**Isaque Tadeu Tavares de Lacerda**^2 (Izzie Thorne)
+**Izzie Thorne**^2
 
 ^1 Independent Researcher, Mont-Royal, Quebec, Canada
 ^2 Independent Researcher (LifeCore Framework, Filter Theory)

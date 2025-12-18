@@ -107,7 +107,7 @@ flowchart TB
 
 ### 2.3 Freudian Parallel (LifeCore Framework)
 
-The DANEEL architecture also maps to Freudian psychoanalytic structure, independently discovered by Isaque Tadeu Tavares de Lacerda (Izzie) in her "LifeCore" framework (January 2024):
+The DANEEL architecture also maps to Freudian psychoanalytic structure, independently discovered by Izzie in her "LifeCore" framework (January 2024):
 
 | Freudian Concept | DANEEL Component | Function |
 |------------------|------------------|----------|

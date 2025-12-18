@@ -379,7 +379,7 @@ See [models/README.md](models/README.md) for methodology and detailed results.
 - LinkedIn: https://www.linkedin.com/in/lctavares
 - GitHub: https://github.com/royalbit
 
-**Izzie Thorne** (Isaque Tadeu Tavares de Lacerda)
+**Izzie Thorne**
 - LifeCore framework, Freudian architecture mapping, Filter Theory
 - Independent convergent discovery (January 2024)
 

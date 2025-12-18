@@ -9,7 +9,7 @@ DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintellig
    - ORCID: 0009-0005-7598-8257
    - Email: [your email]
 
-2. **Isaque Tadeu Tavares de Lacerda** (Izzie Thorne)
+2. **Izzie Thorne**
    - Affiliation: Independent Researcher (LifeCore Framework, Filter Theory)
 
 ## Categories

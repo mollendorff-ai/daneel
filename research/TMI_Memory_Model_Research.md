@@ -562,7 +562,7 @@ The DANEEL architecture adds several concepts not present in Cury's original TMI
 - **Not in TMI:** Cury's theory has no equivalent constraint system
 
 **3. LifeCore Parallel (Freudian Mapping)**
-- **Origin:** Isaque Tadeu Tavares de Lacerda (Izzie), January 2024
+- **Origin:** Izzie, January 2024
 - **Purpose:** Maps TMI concepts to Freudian structure (Id/Ego/SuperEgo)
 - **See:** [LIFECORE_DANEEL_ANALYSIS.md](LIFECORE_DANEEL_ANALYSIS.md)
 

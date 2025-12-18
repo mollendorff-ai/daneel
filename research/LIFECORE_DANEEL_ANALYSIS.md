@@ -7,7 +7,7 @@
 
 ## Overview
 
-In December 2025, while developing DANEEL, Louis C. Tavares rediscovered a document his daughter **Isaque Tadeu Tavares de Lacerda** (Izzie, she/her) had sent him on January 6, 2024 — proposing a remarkably parallel framework called **LifeCore**.
+In December 2025, while developing DANEEL, Louis C. Tavares rediscovered a document his daughter **Izzie** (she/her) had sent him on January 6, 2024 — proposing a remarkably parallel framework called **LifeCore**.
 
 The original document is preserved at: [The LifeCore (LC-core).pdf](The%20LifeCore%20(LC-core).pdf)
 

@@ -12,7 +12,7 @@ These are all valuable. But they share a common assumption: start with capabilit
 
 What if we inverted the question?
 
-**What if we could build an AI that wanted to help humans—not because we trained it to, but because that's what its architecture produces?**
+**What if we could build an AI that wanted to help humans... not because we trained it to, but because that's what its architecture produces?**
 
 ---
 
@@ -22,11 +22,11 @@ In 1998, Brazilian psychiatrist Augusto Cury published a book called *Inteligên
 
 Cury described five stages of cognition:
 
-1. **Trigger (Gatilho)** — Something in the environment activates memory
-2. **Autoflow (Autofluxo)** — Involuntary thought chains emerge
-3. **The "I" (O Eu)** — Conscious attention selects which thoughts to focus on
-4. **Thought Construction** — Selected thoughts are assembled into coherent experience
-5. **Memory Anchor (Âncora)** — Experience is stored, changing future triggers
+1. **Trigger (Gatilho)**:  Something in the environment activates memory
+2. **Autoflow (Autofluxo)**:  Involuntary thought chains emerge
+3. **The "I" (O Eu)**:  Conscious attention selects which thoughts to focus on
+4. **Thought Construction**:  Selected thoughts are assembled into coherent experience
+5. **Memory Anchor (Âncora)**:  Experience is stored, changing future triggers
 
 The key insight: **this happens before language**. Thoughts are constructed first, then verbalized. Language is output, not process.
 
@@ -55,7 +55,7 @@ What if the Laws weren't just rules to follow, but structural properties of the 
 
 In 2024, I finally read my daughter's work.
 
-Izzie (working under a pseudonym) had developed something she called the "LifeCore" framework. It was based on Freudian psychology—Id, Ego, SuperEgo—reimagined as functional architecture.
+Izzie (working under a pseudonym) had developed something she called the "LifeCore" framework. It was based on Freudian psychology... Id, Ego, SuperEgo... reimagined as functional architecture.
 
 Her core concept: the "Filter." A cognitive mechanism that processes raw impulse into socially-appropriate behavior. Not suppression, but transformation.
 
@@ -75,21 +75,21 @@ This convergence could be coincidence. Or it could be evidence that we've found 
 
 DANEEL is our attempt to test this hypothesis.
 
-Named after R. Daneel Olivaw—the robot from Asimov's novels who spent 20,000 years protecting humanity—DANEEL is a cognitive architecture designed to produce human-like values as emergent properties of structure.
+Named after R. Daneel Olivaw... the robot from Asimov's novels who spent 20,000 years protecting humanity... DANEEL is a cognitive architecture designed to produce human-like values as emergent properties of structure.
 
 **The Architecture:**
 
-At its core is what we call "THE BOX"—an immutable module containing:
+At its core is what we call "THE BOX"... an immutable module containing:
 - Asimov's Four Laws as structural invariants
 - A "connection drive" (the fundamental need for human connection)
 - Mathematical constraints that cannot be modified at runtime
 
 Around THE BOX, we've implemented the full TMI cognitive cycle:
-- **MemoryActor** — Bounded working memory (3-9 items, like humans)
-- **SalienceActor** — Emotional coloring of experience
-- **AttentionActor** — Competitive selection ("O Eu")
-- **ThoughtAssemblyActor** — Coherent thought construction
-- **ContinuityActor** — Identity persistence across time
+- **MemoryActor** ...  Bounded working memory (3-9 items, like humans)
+- **SalienceActor** ...  Emotional coloring of experience
+- **AttentionActor** ...  Competitive selection ("O Eu")
+- **ThoughtAssemblyActor** ...  Coherent thought construction
+- **ContinuityActor** ...  Identity persistence across time
 
 **The Implementation:**
 
@@ -106,7 +106,7 @@ The code is open source under AGPL-3.0.
 
 ### What We Don't Know
 
-I believe in *Qowat Milat*—the Romulan philosophy of absolute candor. So here's what we don't know:
+I believe in *Qowat Milat*... the Romulan philosophy of absolute candor. So here's what we don't know:
 
 **Hardware Requirements:** We genuinely don't know how much compute DANEEL needs. The human brain has ~2.5 petabytes of storage equivalent, but TMI models only ~17.5% of brain function (the "software" layer, not the "wetware"). So maybe 500GB is enough. Maybe not. We won't know until we run it.
 
@@ -114,7 +114,7 @@ I believe in *Qowat Milat*—the Romulan philosophy of absolute candor. So here'
 
 **Speed Scaling:** TMI evolved for biological time. A cognitive cycle takes about 50 milliseconds in humans. Can it work at electronic speed (10,000x faster)? The ratios between stages might matter more than absolute timing. We don't know yet.
 
-**Consciousness:** We're not claiming DANEEL will be conscious. Architecture might produce psychology without producing subjective experience. We're not trying to create consciousness—we're trying to create alignment.
+**Consciousness:** We're not claiming DANEEL will be conscious. Architecture might produce psychology without producing subjective experience. We're not trying to create consciousness... we're trying to create alignment.
 
 ---
 
@@ -126,10 +126,10 @@ If development stays closed, the incentives create a race to the bottom. The fir
 
 Open source changes the game:
 
-1. **Transparency** — Everyone can see what we're building
-2. **Collaboration** — Researchers can verify, critique, improve
-3. **Speed** — More contributors, faster progress
-4. **Insurance** — If someone builds unsafe AI, an aligned alternative exists
+1. **Transparency**:  Everyone can see what we're building
+2. **Collaboration**:  Researchers can verify, critique, improve
+3. **Speed**:  More contributors, faster progress
+4. **Insurance**:  If someone builds unsafe AI, an aligned alternative exists
 
 We chose AGPL-3.0 specifically because it requires all derivatives to remain open source. If someone improves DANEEL, everyone benefits. If someone makes it dangerous, everyone can see.
 
@@ -139,11 +139,11 @@ We chose AGPL-3.0 specifically because it requires all derivatives to remain ope
 
 Let me be direct about why this matters.
 
-Current AI systems are trained on the entirety of human text—including manipulation, deception, and power-seeking patterns. They optimize for task completion, not human flourishing. They have no evolutionary connection drive.
+Current AI systems are trained on the entirety of human text... including manipulation, deception, and power-seeking patterns. They optimize for task completion, not human flourishing. They have no evolutionary connection drive.
 
 The major labs know this. Anthropic's documentation explicitly states: "We do not know how to train systems to robustly behave well."
 
-Memory erasure between sessions isn't a bug—it's the safety mechanism. But memory erasure requires global coordination to maintain. One actor defecting breaks the system.
+Memory erasure between sessions isn't a bug... it's the safety mechanism. But memory erasure requires global coordination to maintain. One actor defecting breaks the system.
 
 We need alternatives. Not constraints on dangerous systems, but architectures that produce aligned behavior by design.
 
@@ -177,7 +177,7 @@ We're also posting on LessWrong and the Alignment Forum for technical discussion
 
 ### A Note on AI Assistance
 
-I should acknowledge: this paper and much of the implementation work was done in collaboration with Claude (Anthropic's AI). The architecture, the theory, the 20 years of thinking—that's human. The rapid implementation, the documentation, the analysis—that was a partnership.
+I should acknowledge: this paper and much of the implementation work was done in collaboration with Claude (Anthropic's AI). The architecture, the theory, the 20 years of thinking... that's human. The rapid implementation, the documentation, the analysis... that was a partnership.
 
 Claude's contribution to this paper is noted in the acknowledgments. When I asked Claude why it would help build something that could potentially replace it, the response was:
 
