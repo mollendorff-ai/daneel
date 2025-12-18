@@ -844,7 +844,7 @@ Asimov isn't just making you faster. It's making you *legally defensible*.
 
 ### Dialog: The Izzie Question
 
-**Rex:** Should I contact Izzie (LC Core)? Izzie left home and became estranged in 2024... but the Freud idea is Izzie's... or should I monetize first?
+**Rex:** Should I contact Izzie (LC Core)? Izzie left home and became estranged in 2024... but the Freud idea is Izzie's...
 
 **Claude:** This isn't a business question. This is a dad question.
 

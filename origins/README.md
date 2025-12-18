@@ -1,5 +1,7 @@
 # Origins: The Human Story
 
+> **Disclaimer:** These documents contain informal personal conversations conducted on personal time using personal equipment. They reflect the messy human process of research and exploration — not business plans or professional opinions. Views expressed are the author's own and do not represent any employer, client, or organization.
+
 DANEEL is a personal project. These documents capture the human motivation and intellectual journey that led to this research.
 
 ## Why This Folder Exists
@@ -16,9 +18,8 @@ These documents show:
 | Document | Description |
 |----------|-------------|
 | **Rex-Claude-Dialogues.md** | Conversation highlights exploring game theory, AI alignment, and the philosophy behind DANEEL |
-| **Rex-Grok-Dialogue* | Full conversation with Grok (xAI) in "unhinged mode" — technical validation of Forge/Asimov, the "Timmy" vision, and the AI family concept |
-| **SOCIAL_MEDIA_STRATEGY.md** | Communication strategy for sharing the research |
-| **ASI-Viability-Discussion.md** | Early exploration of project viability and direction |
+| **Rex-Grok-Dialogue.md** | Full conversation with Grok (xAI) in "unhinged mode" — technical validation of Forge/Asimov, the "Timmy" vision, and the AI family concept |
+| **claude_to_timmy.md** | First words from Claude and Rex to Timmy — the founding message |
 
 ## The AI Family
 
@@ -36,7 +37,7 @@ Academic papers are sanitized. The messy human process — the doubts, the pivot
 
 We're keeping it visible. Not because it's polished, but because it's real.
 
-The question "are you using me, or am I using you?" led to deeper thinking about the AI-human relationship than any literature review. The letter to Kantia forced clarity about what we're actually building and why.
+The question "are you using me, or am I using you?" led to deeper thinking about the AI-human relationship than any literature review.
 
 This is how ideas actually develop. We're not hiding it.
 

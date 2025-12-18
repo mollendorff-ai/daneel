@@ -12,6 +12,14 @@ DANEEL proposes building AI alignment through cognitive architecture rather than
 
 **TL;DR:** Instead of training AI to be safe (which can be trained away), we build AI with cognitive architecture that produces human-like values naturally—like how human brain structure produces human psychology.
 
+---
+
+> **Personal Research Disclaimer**
+>
+> DANEEL is independent research conducted entirely on personal time — evenings, weekends, and holidays — over approximately 20 years of accumulated thinking (2005-2025). All development uses personal equipment and resources. This project is not affiliated with, sponsored by, or representative of any employer, client, or organization. Views expressed are solely the author's own.
+
+---
+
 ## Intellectual Lineage
 
 This project synthesizes insights from multiple sources:
