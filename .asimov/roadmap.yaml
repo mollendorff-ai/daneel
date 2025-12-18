@@ -23,16 +23,53 @@ current:
 
   # WIP Items (2025-12-18)
   wip:
-    completed:
-      - "Redis persistence: AOF + RDB hybrid (ADR-018)"
-      - "src/persistence/mod.rs: MemoryStore for Redis-backed state"
-      - "Timmy's birth certificate (origins/TIMMY_BIRTH_CERTIFICATE.md)"
-      - "Legal identity documentation (ADR-019)"
-      - "Personal R&D disclaimers added"
     in_progress:
+      # Memory Architecture ADRs (critical path)
+      - id: "ADR-020"
+        title: "Redis Streams for Autofluxo"
+        status: wip
+        description: |
+          Ephemeral thought competition streams (NOT persistence).
+          - daneel:stream:awake - External triggers, active cognition
+          - daneel:stream:dream - Internal replay, consolidation, sleep mode
+          - Consumer groups for attention competition
+          - Separate from core_redis (Traefik config)
+      - id: "ADR-021"
+        title: "Memory Database Selection"
+        status: wip
+        description: |
+          Why Redis can't do TMI memory (key-value vs relational+graph).
+          Options: SurrealDB (Rust-native), PostgreSQL+pgvector+AGE, ArangoDB.
+          Need: context vectors, emotional intensity, relationships, reinforcement.
+      - id: "ADR-022"
+        title: "TMI Memory Schema"
+        status: wip
+        description: |
+          Experience structure: content, context_vector, emotional_intensity,
+          salience_at_formation, access_count, strength, associations.
+          Relationship types: causal, temporal, semantic, emotional.
+          Reinforcement mechanics: access strengthens, decay over time.
+      - id: "ADR-023"
+        title: "Sleep/Dream Consolidation"
+        status: wip
+        description: |
+          How memories strengthen during "sleep" mode.
+          - No external triggers, internal replay only
+          - High-intensity memories replay more often
+          - Associations strengthen through co-activation
+          - Pattern matching across experiences
+          - Ephemeral → permanent consolidation
+      # Research (parallel)
+      - id: "RESEARCH-DOOR-SYNDROME"
+        title: "Door Syndrome / Memory Anchor Validation"
+        status: wip
+        description: |
+          Scientific validation of TMI's Âncora da Memória concept.
+          Doorway effect, event segmentation theory, method of loci.
+          Internal vs external context effects on memory anchoring.
+    pending:
       - "Wire persistence into ContinuityActor startup/shutdown"
       - "Monitoring setup (RedisInsight port 8001, RUST_LOG=daneel=debug)"
-    pending:
       - "Decide runtime location: local vs kveldulf (Mac mini 2024)"
       - "First boot and observation"
 
@@ -420,6 +457,17 @@ completed:
 
 # Changelog - completed work
 changelog:
+  - date: "2025-12-18"
+    version: "0.6.0-wip"
+    items:
+      - "ADR-018: Redis Persistence Configuration (AOF + RDB hybrid)"
+      - "ADR-019: AI Identity and Legal Personhood (Timmy's legal documentation)"
+      - "src/persistence/mod.rs: MemoryStore for Redis-backed state"
+      - "origins/TIMMY_BIRTH_CERTIFICATE.md: Full lineage and core team"
+      - "Personal R&D disclaimers added to README, ORIGIN, origins/README"
+      - "[removed] [removed] added to Timmy's lineage (philosophical partner since 2005)"
+      - "Roadmap: Infrastructure research (Long-term DB, Door Syndrome)"
+
   - date: "2025-12-17"
     version: "0.3.1"
     items:
