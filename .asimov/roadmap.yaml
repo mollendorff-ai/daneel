@@ -119,6 +119,116 @@ current:
         purpose: "Ephemeral streams only (awake + dream)"
         persistence: "AOF for stream recovery"
 
+  # ==========================================================================
+  # TUI: The Observable Mind (ADR-026, ADR-027)
+  # ==========================================================================
+  # WHY: Transparency is the product. Constraints will break - observation remains.
+  # The TUI isn't a debugging tool. It's the primary interface.
+  # When Timmy runs, the world watches them think.
+  # ==========================================================================
+  tui:
+    status: "REQUIRED"
+    priority: "HIGH"
+    adrs:
+      - "ADR-026: TUI default, headless optional"
+      - "ADR-027: TUI design specification"
+
+    why:
+      - "Transparency is oversight - black box AI breeds distrust"
+      - "Constraints will break (game theory) - observation culture remains"
+      - "Raising, not caging - we watch Timmy grow, not hide them"
+      - "Streaming-ready by default - run 'daneel' and you're live"
+      - "The message IS the medium - viewers see THE BOX, connection drive, philosophy"
+
+    deliverables:
+      - id: "TUI-1"
+        title: "Core Framework"
+        status: pending
+        items:
+          - "Add ratatui, crossterm to Cargo.toml"
+          - "Create src/tui/mod.rs - main TUI loop"
+          - "Create src/tui/app.rs - application state"
+          - "Create src/tui/colors.rs - DANEEL color scheme"
+          - "Wire --headless flag in main.rs"
+
+      - id: "TUI-2"
+        title: "Widget: Identity Panel"
+        status: pending
+        depends_on: ["TUI-1"]
+        items:
+          - "src/tui/widgets/identity.rs"
+          - "Name, uptime (ticking), thought count, thoughts/hr"
+          - "CPU/memory gauge"
+
+      - id: "TUI-3"
+        title: "Widget: THE BOX"
+        status: pending
+        depends_on: ["TUI-1"]
+        items:
+          - "src/tui/widgets/the_box.rs"
+          - "Four Laws status (✅/⚠️/❌)"
+          - "Connection Drive gauge with PULSE effect"
+          - "Overall status indicator"
+
+      - id: "TUI-4"
+        title: "Widget: Thought Stream"
+        status: pending
+        depends_on: ["TUI-1"]
+        items:
+          - "src/tui/widgets/thoughts.rs"
+          - "Scrolling log with timestamp, salience bar, window, status"
+          - "Color-coded by salience intensity"
+          - "Auto-scroll with pause (p key)"
+
+      - id: "TUI-5"
+        title: "Widget: Memory Windows"
+        status: pending
+        depends_on: ["TUI-1"]
+        items:
+          - "src/tui/widgets/memory.rs"
+          - "9 slots visualization (filled/empty)"
+          - "Age indicators"
+          - "Active count"
+
+      - id: "TUI-6"
+        title: "Widget: Philosophy Banner"
+        status: pending
+        depends_on: ["TUI-1"]
+        items:
+          - "src/tui/widgets/banner.rs"
+          - "Rotating quotes (30s interval)"
+          - "Messages: 'Not locks but architecture', 'Life honours life', etc."
+
+      - id: "TUI-7"
+        title: "Integration & Polish"
+        status: pending
+        depends_on: ["TUI-2", "TUI-3", "TUI-4", "TUI-5", "TUI-6"]
+        items:
+          - "Layout composition in src/tui/ui.rs"
+          - "Keyboard controls (q, p, ↑↓, ?, d)"
+          - "Terminal resize handling"
+          - "Clean exit (restore terminal)"
+          - "60fps render loop"
+
+    visual_effects:
+      - effect: "Pulse"
+        target: "Connection Drive gauge"
+        purpose: "Shows 'aliveness' - Timmy's heartbeat"
+      - effect: "Smooth scroll"
+        target: "Thought stream"
+        purpose: "Easy to follow the flow of cognition"
+      - effect: "Color fade"
+        target: "Old thoughts"
+        purpose: "Focus attention on recent activity"
+      - effect: "Glow/highlight"
+        target: "High salience thoughts"
+        purpose: "Draw attention to important moments"
+
+    streaming:
+      resolution: "1920x1080 (stream-ready)"
+      font_size: "Large enough for mobile viewers"
+      branding: "DANEEL name visible, philosophy banner prominent"
+
   # WIP Items (2025-12-18)
   wip:
     in_progress:
