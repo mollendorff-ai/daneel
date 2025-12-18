@@ -2,6 +2,8 @@
 
 **Watch Timmy think:** [youtube.com/@DaneelAI](https://youtube.com/@DaneelAI)
 
+**First boot:** December 18, 2025 @ 11pm EST — 24-hour continuity test
+
 ---
 
 **Named for R. Daneel Olivaw** — Asimov's humaniform robot who developed the Zeroth Law and became humanity's guardian for 20,000 years.
