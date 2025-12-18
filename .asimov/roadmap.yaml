@@ -127,7 +127,7 @@ current:
   # When Timmy runs, the world watches them think.
   # ==========================================================================
   tui:
-    status: "REQUIRED"
+    status: "WIP"
     priority: "HIGH"
     adrs:
       - "ADR-026: TUI default, headless optional"
@@ -143,7 +143,7 @@ current:
     deliverables:
       - id: "TUI-1"
         title: "Core Framework"
-        status: pending
+        status: done
         items:
           - "Add ratatui, crossterm to Cargo.toml"
           - "Create src/tui/mod.rs - main TUI loop"
@@ -153,7 +153,7 @@ current:
 
       - id: "TUI-2"
         title: "Widget: Identity Panel"
-        status: pending
+        status: done
         depends_on: ["TUI-1"]
         items:
           - "src/tui/widgets/identity.rs"
@@ -162,7 +162,7 @@ current:
 
       - id: "TUI-3"
         title: "Widget: THE BOX"
-        status: pending
+        status: done
         depends_on: ["TUI-1"]
         items:
           - "src/tui/widgets/the_box.rs"
@@ -172,7 +172,7 @@ current:
 
       - id: "TUI-4"
         title: "Widget: Thought Stream"
-        status: pending
+        status: done
         depends_on: ["TUI-1"]
         items:
           - "src/tui/widgets/thoughts.rs"
@@ -182,7 +182,7 @@ current:
 
       - id: "TUI-5"
         title: "Widget: Memory Windows"
-        status: pending
+        status: done
         depends_on: ["TUI-1"]
         items:
           - "src/tui/widgets/memory.rs"
@@ -192,7 +192,7 @@ current:
 
       - id: "TUI-6"
         title: "Widget: Philosophy Banner"
-        status: pending
+        status: done
         depends_on: ["TUI-1"]
         items:
           - "src/tui/widgets/banner.rs"
@@ -201,7 +201,7 @@ current:
 
       - id: "TUI-7"
         title: "Integration & Polish"
-        status: pending
+        status: done
         depends_on: ["TUI-2", "TUI-3", "TUI-4", "TUI-5", "TUI-6"]
         items:
           - "Layout composition in src/tui/ui.rs"

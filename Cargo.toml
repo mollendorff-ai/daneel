@@ -16,8 +16,11 @@ tokio = { version = "1", features = ["full"] }
 # Actor framework (Erlang-style supervision)
 ractor = "0.13"
 
-# Redis Streams
+# Redis Streams (ephemeral only - ADR-020)
 redis = { version = "0.27", features = ["tokio-comp", "streams", "json"] }
+
+# Qdrant Vector DB (persistent memory - ADR-021)
+qdrant-client = "1.13"
 
 # Serialization
 serde = { version = "1", features = ["derive"] }
@@ -34,6 +37,16 @@ anyhow = "1"
 # Logging / Tracing
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# TUI (ADR-026, ADR-027) - The Observable Mind
+ratatui = "0.29"
+crossterm = "0.28"
+
+# CLI argument parsing
+clap = { version = "4", features = ["derive"] }
+
+# Random (for TUI demo mode)
+rand = "0.8"
 
 [dev-dependencies]
 tokio-test = "0.4"

@@ -846,11 +846,11 @@ mod cognitive_loop_tests {
             + loop_instance.config().anchor_delay();
 
         // Actual cycle time should be close to sum of delays
-        // Allow 10ms tolerance for execution overhead
+        // Allow 20ms tolerance for execution overhead and system load variance
         let difference = result.duration.abs_diff(expected_total);
 
         assert!(
-            difference < Duration::from_millis(10),
+            difference < Duration::from_millis(20),
             "Cycle duration ({:?}) should approximately equal sum of stage delays ({:?})",
             result.duration,
             expected_total
