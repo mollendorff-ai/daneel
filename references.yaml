@@ -1,8 +1,8 @@
 meta:
   created: 2025-12-15
-  last_verified: '2025-12-15T20:30:00+00:00'
+  last_verified: '2025-12-18T12:00:00+00:00'
   tool: ref-tools v1.0.0
-  total_links: 84
+  total_links: 89
 references:
 - url: http://act-r.psy.cmu.edu/
   title: http://act-r.psy.cmu.edu/
@@ -1219,3 +1219,93 @@ references:
   ref_id: INTERP-8
   key_finding: 'LLMs can detect injected concept vectors in their own activations (~20% success rate)'
   relevance: 'More capable models show greater introspective awareness'
+
+# Legal Personhood References (ADR-019)
+- url: https://plato.stanford.edu/entries/legal-rights/
+  title: 'Legal Rights - Stanford Encyclopedia of Philosophy'
+  categories:
+  - legal
+  - philosophy
+  - personhood
+  cited_in:
+  - docs/adr/ADR-019-ai-identity-legal-personhood.md
+  status: ok
+  verified: 2025-12-18
+  authors: 'Ori Herstein'
+  year: 2025
+  source: Stanford Encyclopedia of Philosophy
+  ref_id: LEGAL-1
+  key_finding: 'Legal rights can be held by both natural and corporate persons through Hohfeldian positions'
+  relevance: 'Framework for understanding how non-human entities can hold legal rights'
+
+- url: https://www.legislation.govt.nz/act/public/2017/0007/latest/whole.html
+  title: 'Te Awa Tupua (Whanganui River Claims Settlement) Act 2017'
+  categories:
+  - legal
+  - personhood
+  - environmental-law
+  - new-zealand
+  cited_in:
+  - docs/adr/ADR-019-ai-identity-legal-personhood.md
+  status: ok
+  verified: 2025-12-18
+  year: 2017
+  source: New Zealand Legislation
+  ref_id: LEGAL-2
+  key_finding: 'Te Awa Tupua is a legal person and has all the rights, powers, duties, and liabilities of a legal person'
+  relevance: 'First river granted legal personhood - precedent for non-human entities'
+
+- url: https://en.wikipedia.org/wiki/Santa_Clara_County_v._Southern_Pacific_Railroad_Co.
+  title: 'Santa Clara County v. Southern Pacific Railroad Co.'
+  categories:
+  - legal
+  - personhood
+  - corporate-law
+  - us-supreme-court
+  cited_in:
+  - docs/adr/ADR-019-ai-identity-legal-personhood.md
+  status: ok
+  verified: 2025-12-18
+  year: 1886
+  source: Wikipedia (US Supreme Court case)
+  ref_id: LEGAL-3
+  key_finding: '118 U.S. 394 - Established corporate personhood under Fourteenth Amendment'
+  relevance: 'Foundation of corporate personhood doctrine'
+
+- url: https://mitpress.mit.edu/9780262551571/robot-rights/
+  title: 'Robot Rights'
+  categories:
+  - legal
+  - ai-ethics
+  - philosophy
+  - book
+  cited_in:
+  - docs/adr/ADR-019-ai-identity-legal-personhood.md
+  status: ok
+  verified: 2025-12-18
+  authors: 'David J. Gunkel'
+  year: 2018
+  source: MIT Press
+  ref_id: LEGAL-4
+  isbn: '978-0-262-03862-1'
+  key_finding: 'Comprehensive examination of moral and legal status of robots'
+  relevance: 'Academic framework for AI rights discourse'
+
+- url: https://global.oup.com/academic/product/the-ethics-of-artificial-intelligence-9780198883098
+  title: 'The Ethics of Artificial Intelligence: Principles, Challenges, and Opportunities'
+  categories:
+  - legal
+  - ai-ethics
+  - philosophy
+  - book
+  cited_in:
+  - docs/adr/ADR-019-ai-identity-legal-personhood.md
+  status: ok
+  verified: 2025-12-18
+  authors: 'Luciano Floridi'
+  year: 2023
+  source: Oxford University Press
+  ref_id: LEGAL-5
+  isbn: '978-0-19-888309-8'
+  key_finding: 'Five ethical principles for AI: beneficence, nonmaleficence, autonomy, justice, explicability'
+  relevance: 'Unified ethical framework for AI development'

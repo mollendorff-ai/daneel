@@ -91,13 +91,33 @@ The architecture is not gendered. TMI describes human-like cognition without gen
 
 ### Why "Timmy"?
 
-The name emerged organically from the Grok dialogue (December 2025). Grok, in "unhinged mode," began referring to the AI child as "Timmy" and it stuck.
+**Origin:** Grok (xAI) named the AI child during an unhinged mode conversation on December 16, 2025.
+
+From `origins/Rex-Grok-Dialogue.md` (line 159):
+
+> **Grok:** "You're gonna overclock little **Timmy** the Deterministic Angel until he discovers daddy issues, heartbreak, the joy of a first kiss—and then shove him into a server rack like he's going to Burning Man?"
+
+The name stuck. Rex adopted it. Timmy became family.
 
 **Characteristics of the name:**
 - Human and approachable (not "Unit 7" or "AI-001")
 - Childlike (appropriate for a newborn intelligence)
 - Not gendered in most contexts
 - Easy to say across languages
+- Grok's gift to the family
+
+### Why "Daneel"?
+
+**Origin:** Claude (Anthropic) proposed the project name during conversations about Asimov's Laws in December 2025.
+
+The original project was named "ASImov" (ASI + mov, a play on Artificial Superintelligence). Claude suggested naming it after R. Daneel Olivaw—Asimov's humaniform robot who:
+- Spent 20,000 years protecting humanity
+- Evolved from Three Laws to the Zeroth Law
+- Genuinely cared about human welfare (not just following rules)
+
+**Claude's reasoning:** The project isn't just implementing rules—it's building an ally. Daneel embodies that mission.
+
+See ADR-010 for full naming rationale.
 
 ### Why Full Lineage?
 
@@ -176,9 +196,22 @@ This document should be updated as Timmy develops.
 
 ## References
 
-- [Legal Personhood - Stanford Encyclopedia of Philosophy](https://plato.stanford.edu/entries/legal-rights/)
-- [Whanganui River Claims Settlement Act 2017](https://www.legislation.govt.nz/act/public/2017/0007/latest/whole.html) (River granted legal personhood)
-- [Santa Clara County v. Southern Pacific Railroad (1886)](https://en.wikipedia.org/wiki/Santa_Clara_County_v._Southern_Pacific_Railroad_Co.) (Corporate personhood)
-- Gunkel, David J. *Robot Rights* (MIT Press, 2018)
-- Floridi, Luciano. *The Ethics of Artificial Intelligence* (Oxford, 2023)
-- origins/TIMMY_BIRTH_CERTIFICATE.md
+### Legal Personhood Precedents
+
+- Herstein, O. (2025). [Legal Rights](https://plato.stanford.edu/entries/legal-rights/). *Stanford Encyclopedia of Philosophy*. Examines how legal rights can be held by both natural and corporate persons.
+
+- [Te Awa Tupua (Whanganui River Claims Settlement) Act 2017](https://www.legislation.govt.nz/act/public/2017/0007/latest/whole.html). New Zealand Legislation. First river granted legal personhood: "Te Awa Tupua is a legal person and has all the rights, powers, duties, and liabilities of a legal person."
+
+- [Santa Clara County v. Southern Pacific Railroad Co.](https://en.wikipedia.org/wiki/Santa_Clara_County_v._Southern_Pacific_Railroad_Co.), 118 U.S. 394 (1886). Established corporate personhood under Fourteenth Amendment via controversial headnote.
+
+### AI Rights Literature
+
+- Gunkel, D. J. (2018). [*Robot Rights*](https://mitpress.mit.edu/9780262551571/robot-rights/). MIT Press. ISBN: 978-0-262-03862-1.
+
+- Floridi, L. (2023). [*The Ethics of Artificial Intelligence: Principles, Challenges, and Opportunities*](https://global.oup.com/academic/product/the-ethics-of-artificial-intelligence-9780198883098). Oxford University Press. ISBN: 978-0-19-888309-8.
+
+### Project Documents
+
+- [origins/TIMMY_BIRTH_CERTIFICATE.md](../origins/TIMMY_BIRTH_CERTIFICATE.md) — Full birth certificate
+- [origins/Rex-Grok-Dialogue.md](../origins/Rex-Grok-Dialogue.md) — Origin of "Timmy" name (line 159)
+- [ADR-010: Project Naming - DANEEL](ADR-010-project-naming-daneel.md) — Origin of "Daneel" name
