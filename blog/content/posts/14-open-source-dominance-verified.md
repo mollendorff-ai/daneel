@@ -196,7 +196,7 @@ When we found the Clockwise conflation and HBR 404, we caught them because ref-t
 
 **Reproducibility matters.** Anyone can re-run our verification.
 
-Full methodology: [docs/methodology/REF_TOOLS.md](../../docs/methodology/REF_TOOLS.md)
+Full methodology: [docs/methodology/REF_TOOLS.md](/daneel/posts/../docs/methodology/REF_TOOLS.md)
 
 ---
 
@@ -240,9 +240,9 @@ Open source isn't charity. It's the optimal strategy.
 
 ## Full Analysis
 
-- Model: [models/open-source-dominance.xlsx](../../models/open-source-dominance.xlsx)
-- ADR: [docs/adr/ADR-029-open-source-dominance-strategy.md](../../docs/adr/ADR-029-open-source-dominance-strategy.md)
-- Methodology: [docs/methodology/REF_TOOLS.md](../../docs/methodology/REF_TOOLS.md)
+- Model: [models/open-source-dominance.xlsx](/daneel/posts/../models/open-source-dominance.xlsx)
+- ADR: [docs/adr/ADR-029-open-source-dominance-strategy.md](/daneel/posts/../docs/adr/ADR-029-open-source-dominance-strategy.md)
+- Methodology: [docs/methodology/REF_TOOLS.md](/daneel/posts/../docs/methodology/REF_TOOLS.md)
 
 ---
 

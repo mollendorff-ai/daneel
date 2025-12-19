@@ -241,7 +241,7 @@ Solo developers don't have the 75%.
 
 ## The Math: 147x → 169x Advantage
 
-Let's connect this to the [open source dominance equation](../14-open-source-dominance-verified).
+Let's connect this to the [open source dominance equation](/daneel/posts/14-open-source-dominance-verified).
 
 ### Pre-AI Baseline
 

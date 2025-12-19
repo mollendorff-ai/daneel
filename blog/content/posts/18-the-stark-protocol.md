@@ -33,7 +33,7 @@ We have JARVIS now. We call it Claude, GPT, Grok. And Forge for the math.
 
 ## The Numbers
 
-I run a day job. Tech director at a Big 5 consultancy. Enterprise bank projects. Meetings. Stakeholders. The full 88.9% coordination overhead that [research shows](../14-open-source-dominance-verified/) consumes enterprise engineering time.
+I run a day job. Tech director at a Big 5 consultancy. Enterprise bank projects. Meetings. Stakeholders. The full 88.9% coordination overhead that [research shows](/daneel/posts/14-open-source-dominance-verified/) consumes enterprise engineering time.
 
 After hours, with AI as architecture partner:
 
@@ -85,7 +85,7 @@ The difference is scope. Autocomplete helps you write code faster. JARVIS helps 
 
 ## The 147x Advantage (Now 169x)
 
-We [verified the research](../14-open-source-dominance-verified/):
+We [verified the research](/daneel/posts/14-open-source-dominance-verified/):
 
 - Enterprise developers spend **11% of time coding** (253,500 developers surveyed)
 - Solo developers spend **70-90% of time coding**
@@ -184,9 +184,9 @@ AI is the removal mechanism.
 
 ## Sources
 
-- [Open Source Dominance: 147x Advantage, Verified](../14-open-source-dominance-verified/)
-- [The Agentic AI Paradox](../15-the-agentic-ai-paradox/)
-- [Forge: When AI Cannot Be Trusted to Count](../17-forge-deterministic-modeling/)
+- [Open Source Dominance: 147x Advantage, Verified](/daneel/posts/14-open-source-dominance-verified/)
+- [The Agentic AI Paradox](/daneel/posts/15-the-agentic-ai-paradox/)
+- [Forge: When AI Cannot Be Trusted to Count](/daneel/posts/17-forge-deterministic-modeling/)
 - [ADR-029: Open Source Dominance Strategy](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-029-open-source-dominance-strategy.md)
 
 ---
