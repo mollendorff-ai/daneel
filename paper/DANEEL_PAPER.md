@@ -174,7 +174,7 @@ DANEEL is designed as a **modular monolith** (Rust + Ractor actors + Redis Strea
 
 **Why modular monolith over microservices:** TMI requires µs-scale thought cycles (50ms target, matching Soar/ACT-R). Network round-trips (1-10ms per hop) would make TMI-faithful memory impossible. Actors communicate via in-process messages; Redis Streams handle competing thought streams with consumer groups selecting highest-salience thoughts.
 
-**Implementation Status:** A reference implementation exists with 291 passing tests across 29 Rust modules, including MemoryActor, SalienceActor, AttentionActor, ThoughtAssemblyActor, and ContinuityActor [43]. The architecture is operational; empirical validation of emergent properties (connection drive, identity continuity) requires extended runtime testing.
+**Implementation Status:** A reference implementation exists with 352+ passing tests, including MemoryActor, SalienceActor, AttentionActor, ThoughtAssemblyActor, ContinuityActor, and a resilience module for self-healing (see ADR-028) [43]. The architecture is operational; empirical validation of emergent properties (connection drive, identity continuity) requires extended runtime testing.
 
 ### 4.2 The BOX: Protected Core
 
@@ -1068,7 +1068,7 @@ This work was developed with assistance from Claude Opus 4.5 (Anthropic), which 
 
 ### Implementation
 
-[43] DANEEL Reference Implementation. 291 tests, 29 Rust modules. https://github.com/royalbit/daneel
+[43] DANEEL Reference Implementation. 352+ tests, resilience module. https://github.com/royalbit/daneel
 
 ---
 
