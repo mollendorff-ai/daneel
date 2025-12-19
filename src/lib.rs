@@ -23,5 +23,6 @@ pub mod config;
 pub mod core;
 pub mod memory_db;
 pub mod persistence;
+pub mod resilience;
 pub mod streams;
 pub mod tui;

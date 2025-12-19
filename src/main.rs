@@ -16,6 +16,7 @@
 use clap::Parser;
 use daneel::core::cognitive_loop::CognitiveLoop;
 use daneel::core::laws::LAWS;
+use daneel::resilience;
 use daneel::tui::ThoughtUpdate;
 use tokio::sync::mpsc;
 use tracing::info;
@@ -49,6 +50,16 @@ fn main() {
 /// The mind should be observable by default.
 /// Transparency is oversight.
 fn run_tui() {
+    // Install panic hooks FIRST - before any terminal manipulation
+    // This ensures terminal is restored even if we panic during setup
+    if let Err(e) = resilience::install_panic_hooks() {
+        eprintln!("Warning: Failed to install panic hooks: {e}");
+        eprintln!("Terminal may not be restored on crash.");
+    }
+
+    // Reset terminal cleanup flag for this run
+    resilience::reset_terminal_cleanup_flag();
+
     // Create a tokio runtime for the cognitive loop
     let runtime = tokio::runtime::Runtime::new().expect("Failed to create tokio runtime");
 
