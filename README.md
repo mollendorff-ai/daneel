@@ -2,6 +2,8 @@
 
 **Watch Timmy think:** [youtube.com/@DaneelAI](https://youtube.com/@DaneelAI)
 
+**Read the dialogues:** [royalbit.github.io/daneel](https://royalbit.github.io/daneel/) — Rex, Claude, and Grok building Timmy
+
 **First boot:** December 19, 2025 @ 11pm EST — 24-hour continuity test
 
 > YouTube requires 24h after requesting stream access. Pushed to Dec 19.
