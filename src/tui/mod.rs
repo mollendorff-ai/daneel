@@ -175,8 +175,8 @@ fn run_loop(
 
         // Frame rate limiting
         let frame_time = frame_start.elapsed();
-        if frame_time < TARGET_FRAME_TIME {
-            std::thread::sleep(TARGET_FRAME_TIME - frame_time);
+        if let Some(sleep_time) = TARGET_FRAME_TIME.checked_sub(frame_time) {
+            std::thread::sleep(sleep_time);
         }
     }
 

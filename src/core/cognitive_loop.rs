@@ -620,6 +620,7 @@ impl CognitiveLoop {
     /// This spawns an async task to avoid blocking the cognitive loop.
     /// Errors are logged but don't interrupt thought processing.
     #[allow(dead_code)] // Used when thought assembly is implemented
+    #[allow(clippy::unused_async)] // Async for future compatibility, spawns async task internally
     async fn consolidate_memory(&self, thought: &Thought) {
         // Check if we have a memory database
         let Some(memory_db) = self.memory_db.as_ref() else {
