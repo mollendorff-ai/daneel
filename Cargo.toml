@@ -136,6 +136,8 @@ derivable_impls = "allow"  # Explicit Default impls document intent
 useless_let_if_seq = "allow"  # Explicit let + if clearer for error handling
 io_other_error = "allow"  # std::io::Error::new is clearer than ::other
 single_component_path_imports = "allow"  # Explicit imports are fine
+self_only_used_in_recursion = "allow"  # Recursive methods intentionally use self
+unchecked_time_subtraction = "allow"  # Duration subtraction guarded by if
 
 # === Dependencies ===
 multiple_crate_versions = "allow"  # Transitive deps we don't control
