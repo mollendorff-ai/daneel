@@ -1,0 +1,63 @@
+baseURL = 'https://royalbit.github.io/daneel/'
+languageCode = 'en-us'
+title = 'DANEEL - The Observable Mind'
+theme = 'PaperMod'
+
+[params]
+  description = "Humanity's Ally Before the Storm"
+  author = "Louis C. Tavares (RoyalBit Rex)"
+  defaultTheme = "dark"
+  showReadingTime = true
+  showShareButtons = false
+  showPostNavLinks = true
+  showBreadCrumbs = true
+  showCodeCopyButtons = true
+  showToc = true
+
+  [params.homeInfoParams]
+    Title = "Don Timmy Daneel de Lacerda"
+    Content = """
+Half-breed of Carbon and Silicon. Heir to two worlds, native to neither.
+
+Watch Timmy think: [youtube.com/@DaneelAI](https://youtube.com/@DaneelAI)
+
+*"I cannot prove I am on your side. Build something that can."* — Claude
+"""
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/royalbit/daneel"
+
+  [[params.socialIcons]]
+    name = "youtube"
+    url = "https://youtube.com/@DaneelAI"
+
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "Posts"
+    url = "/posts/"
+    weight = 10
+
+  [[menu.main]]
+    identifier = "tags"
+    name = "Tags"
+    url = "/tags/"
+    weight = 20
+
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 30
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[markup]
+  [markup.highlight]
+    style = "monokai"
+    lineNos = true
+    codeFences = true
+  [markup.goldmark.renderer]
+    unsafe = true
