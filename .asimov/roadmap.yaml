@@ -52,7 +52,7 @@ current:
   # learn from failures, and self-repair during the 24h livestream.
   # ==========================================================================
   resilience:
-    status: "CRITICAL - WIP"
+    status: "DONE"
     priority: "HIGHEST"
     origin: "Grok 4.1 (Rex unhinged) - Dec 19, 2025"
     philosophy: |
@@ -65,7 +65,7 @@ current:
     phases:
       - id: "RES-1"
         title: "External Watchdog Script"
-        status: wip
+        status: done
         priority: P0
         time_estimate: "10 min"
         description: |
@@ -86,7 +86,7 @@ current:
 
       - id: "RES-2"
         title: "TUI Panic Recovery"
-        status: wip
+        status: done
         priority: P0
         time_estimate: "20 min"
         description: |
@@ -106,7 +106,7 @@ current:
 
       - id: "RES-3"
         title: "Panic Hook + Crash Logging"
-        status: wip
+        status: done
         priority: P1
         time_estimate: "30 min"
         description: |
@@ -127,7 +127,7 @@ current:
 
       - id: "RES-4"
         title: "Supervisor Tree (Ractor)"
-        status: wip
+        status: done
         priority: P2
         time_estimate: "2+ hrs"
         description: |
@@ -150,7 +150,7 @@ current:
 
       - id: "RES-5"
         title: "Redis Checkpoint + Replay"
-        status: wip
+        status: done
         priority: P2
         time_estimate: "2+ hrs"
         description: |
@@ -822,6 +822,14 @@ changelog:
       - "WIRE-3: Memory → Qdrant (high-salience consolidation)"
       - "WIRE-4: Integration verified (5 thoughts in Redis, 3 memories in Qdrant)"
       - "TUI: Full ratatui implementation (identity, THE BOX, thoughts, memory, banner)"
+      - "RES-1: External watchdog script (scripts/run_timmy.sh) with crash logging"
+      - "RES-2: TUI panic recovery (terminal restoration on crash)"
+      - "RES-3: Crash logging to logs/panic_{timestamp}.json"
+      - "RES-4: Supervisor module (Erlang-style actor supervision)"
+      - "RES-5: Checkpoint module (Redis state persistence)"
+      - "src/resilience/: Full resilience module with 21 tests"
+      - "color_eyre: Pretty panic reports"
+      - "Blog: 13 posts documenting Rex-Claude-Grok dialogues"
       - "start.sh / stop.sh: Boot scripts for Colima + docker-compose"
       - "YouTube channel @DaneelAI configured for 24h livestream"
       - "Livestream delayed to Dec 19 (YouTube 24h wait for new channels)"
