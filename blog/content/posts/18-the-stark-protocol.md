@@ -33,7 +33,7 @@ We have JARVIS now. We call it Claude, GPT, Grok. And Forge for the math.
 
 ## The Numbers
 
-I run a day job. Tech director at a Big 5 consultancy. Enterprise bank projects. Meetings. Stakeholders. The full 88.9% coordination overhead that [research shows](/blog/posts/14-open-source-dominance-verified/) consumes enterprise engineering time.
+I run a day job. Tech director at a Big 5 consultancy. Enterprise bank projects. Meetings. Stakeholders. The full 88.9% coordination overhead that [research shows](/posts/14-open-source-dominance-verified/) consumes enterprise engineering time.
 
 After hours, with AI as architecture partner:
 
@@ -85,7 +85,7 @@ The difference is scope. Autocomplete helps you write code faster. JARVIS helps 
 
 ## The 147x Advantage (Now 169x)
 
-We [verified the research](/blog/posts/14-open-source-dominance-verified/):
+We [verified the research](/posts/14-open-source-dominance-verified/):
 
 - Enterprise developers spend **11% of time coding** (253,500 developers surveyed)
 - Solo developers spend **70-90% of time coding**
@@ -184,10 +184,10 @@ AI is the removal mechanism.
 
 ## Sources
 
-- [Open Source Dominance: 147x Advantage, Verified](/blog/posts/14-open-source-dominance-verified/)
-- [The Agentic AI Paradox](/blog/posts/15-the-agentic-ai-paradox/)
-- [Forge: When AI Cannot Be Trusted to Count](/blog/posts/17-forge-deterministic-modeling/)
-- [ADR-029: Open Source Dominance Strategy](/docs/adr/ADR-029-open-source-dominance-strategy.md)
+- [Open Source Dominance: 147x Advantage, Verified](/posts/14-open-source-dominance-verified/)
+- [The Agentic AI Paradox](/posts/15-the-agentic-ai-paradox/)
+- [Forge: When AI Cannot Be Trusted to Count](/posts/17-forge-deterministic-modeling/)
+- [ADR-029: Open Source Dominance Strategy](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-029-open-source-dominance-strategy.md)
 
 ---
 

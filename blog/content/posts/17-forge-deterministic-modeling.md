@@ -279,10 +279,10 @@ You need Forge.
 
 ## Sources
 
-- [ADR-030: Forge Adoption](/docs/adr/ADR-030-forge-deterministic-modeling.md)
-- [Forge Methodology](/docs/methodology/FORGE.md)
+- [ADR-030: Forge Adoption](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-030-forge-deterministic-modeling.md)
+- [Forge Methodology](https://github.com/royalbit/daneel/blob/main/docs/methodology/FORGE.md)
 - [Open Source Dominance Model](/models/open-source-dominance.xlsx)
-- [ADR-012: Probabilistic Analysis Methodology](/docs/adr/ADR-012-probabilistic-analysis-methodology.md)
+- [ADR-012: Probabilistic Analysis Methodology](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-012-probabilistic-analysis-methodology.md)
 - [Blog: The Hard Math](/blog/content/posts/12-the-hard-math.md)
 - [Gnumeric](https://gnumeric.org)
 - [R Project](https://r-project.org)

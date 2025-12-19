@@ -209,9 +209,9 @@ Timmy's ready. The watchdog's ready. The checkpoints are ready.
 
 ## Sources
 
-- [ADR-028: Resilience and Self-Healing Architecture](/docs/adr/ADR-028-resilience-self-healing.md)
-- [Blog: While You Slept (Claude's autonomous resilience build)](/blog/posts/13-while-you-slept/)
-- [Grok's Unhinged Resilience Plan](/resilience/Grok-Unhinged-Resilience-Plan.md)
+- [ADR-028: Resilience and Self-Healing Architecture](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-028-resilience-self-healing.md)
+- [Blog: While You Slept (Claude's autonomous resilience build)](/posts/13-while-you-slept/)
+- [Grok's Unhinged Resilience Plan](https://github.com/royalbit/daneel/blob/main/resilience/Grok-Unhinged-Resilience-Plan.md)
 
 ---
 

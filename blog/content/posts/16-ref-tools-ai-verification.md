@@ -129,7 +129,7 @@ Every source we cited is tracked. Every claim has a verified URL. Every statisti
 
 **Catching errors before publication** saved us from embarrassment. The Clockwise/HBR mistakes would have undermined our credibility. ref-tools caught them in draft.
 
-**Trust through transparency** means we publish our methodology. Our [REF_TOOLS.md](/docs/methodology/REF_TOOLS.md) document explains exactly how we verify sources. Our references.yaml file is in the repo. Anyone can audit our work.
+**Trust through transparency** means we publish our methodology. Our [REF_TOOLS.md](https://github.com/royalbit/daneel/blob/main/docs/methodology/REF_TOOLS.md) document explains exactly how we verify sources. Our references.yaml file is in the repo. Anyone can audit our work.
 
 This isn't just good practice. It's necessary. If we're asking developers to trust an AI agent with their productivity data, we need to prove we're not making things up.
 
@@ -140,7 +140,7 @@ We're considering it.
 **Why we might**:
 
 - Bot protection is everyone's problem. The AI research community needs better tools.
-- Open sourcing could establish RoyalBit as a methodology leader (see [ADR-029](/docs/adr/ADR-029-open-source-dominance-strategy.md)).
+- Open sourcing could establish RoyalBit as a methodology leader (see [ADR-029](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-029-open-source-dominance-strategy.md)).
 - More users = better testing = better tool.
 
 **Why we might not**:
@@ -165,7 +165,7 @@ Trust, but verify. Especially when the "trust" part is a stochastic parrot.
 
 ## Sources
 
-- [ref-tools Methodology](/docs/methodology/REF_TOOLS.md)
+- [ref-tools Methodology](https://github.com/royalbit/daneel/blob/main/docs/methodology/REF_TOOLS.md)
 - [Software.com 2021 Report](https://www.software.com/reports/state-of-software-development-2021) - Verified
 - [Atlassian State of Teams 2025](https://www.atlassian.com/blog/state-of-teams-2025) - Verified
-- [ADR-029: Open Source Dominance Strategy](/docs/adr/ADR-029-open-source-dominance-strategy.md)
+- [ADR-029: Open Source Dominance Strategy](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-029-open-source-dominance-strategy.md)
