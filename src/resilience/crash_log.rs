@@ -66,9 +66,9 @@ impl CrashReport {
             "Unknown panic payload".to_string()
         };
 
-        let location = panic_info.location().map(|loc| {
-            format!("{}:{}:{}", loc.file(), loc.line(), loc.column())
-        });
+        let location = panic_info
+            .location()
+            .map(|loc| format!("{}:{}:{}", loc.file(), loc.line(), loc.column()));
 
         // Capture backtrace
         let backtrace = std::backtrace::Backtrace::capture();
@@ -95,10 +95,7 @@ impl CrashReport {
 
     /// Get the filename for this crash report
     pub fn filename(&self) -> String {
-        format!(
-            "panic_{}.json",
-            self.timestamp.format("%Y%m%d_%H%M%S")
-        )
+        format!("panic_{}.json", self.timestamp.format("%Y%m%d_%H%M%S"))
     }
 
     /// Save crash report to file
@@ -140,11 +137,7 @@ pub fn detect_previous_crash() -> Option<CrashReport> {
     let mut crash_files: Vec<_> = fs::read_dir(&log_dir)
         .ok()?
         .filter_map(|entry| entry.ok())
-        .filter(|entry| {
-            entry.file_name()
-                .to_string_lossy()
-                .starts_with("panic_")
-        })
+        .filter(|entry| entry.file_name().to_string_lossy().starts_with("panic_"))
         .collect();
 
     // Sort by name (which includes timestamp) descending
@@ -168,11 +161,7 @@ pub fn get_all_crash_reports() -> Vec<CrashReport> {
         .into_iter()
         .flatten()
         .filter_map(|entry| entry.ok())
-        .filter(|entry| {
-            entry.file_name()
-                .to_string_lossy()
-                .starts_with("panic_")
-        })
+        .filter(|entry| entry.file_name().to_string_lossy().starts_with("panic_"))
         .filter_map(|entry| {
             let contents = fs::read_to_string(entry.path()).ok()?;
             serde_json::from_str(&contents).ok()
@@ -190,11 +179,7 @@ pub fn cleanup_old_logs(keep_count: usize) -> std::io::Result<usize> {
 
     let mut crash_files: Vec<_> = fs::read_dir(&log_dir)?
         .filter_map(|entry| entry.ok())
-        .filter(|entry| {
-            entry.file_name()
-                .to_string_lossy()
-                .starts_with("panic_")
-        })
+        .filter(|entry| entry.file_name().to_string_lossy().starts_with("panic_"))
         .collect();
 
     // Sort by name descending (newest first)

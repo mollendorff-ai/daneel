@@ -12,8 +12,8 @@
 //!
 //! Origin: Grok 4.1 (Rex unhinged) - Dec 19, 2025
 
-pub mod crash_log;
 pub mod checkpoint;
+pub mod crash_log;
 pub mod supervisor;
 
 use std::io::Write;
@@ -21,9 +21,9 @@ use std::panic;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use crossterm::{
+    cursor::Show,
     execute,
     terminal::{disable_raw_mode, LeaveAlternateScreen},
-    cursor::Show,
 };
 
 /// Flag to track if terminal cleanup has been done

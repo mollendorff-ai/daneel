@@ -527,8 +527,7 @@ impl CognitiveLoop {
         // Stage 4: Assembly (Construção do Pensamento)
         // Assemble the winning entry into a conscious thought
         let stage_start = Instant::now();
-        let thought = Thought::new(content.clone(), salience)
-            .with_source("cognitive_loop");
+        let thought = Thought::new(content.clone(), salience).with_source("cognitive_loop");
         let thought_id = thought.id;
 
         // Write to Redis if connected
@@ -628,7 +627,9 @@ impl CognitiveLoop {
         };
 
         // Calculate composite salience
-        let salience = thought.salience.composite(&crate::core::types::SalienceWeights::default());
+        let salience = thought
+            .salience
+            .composite(&crate::core::types::SalienceWeights::default());
 
         // Only store if above threshold
         if salience < self.consolidation_threshold {

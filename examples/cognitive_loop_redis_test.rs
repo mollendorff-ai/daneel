@@ -41,10 +41,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         info!(
             "Cycle {} complete - Duration: {:?}, Thought produced: {:?}, On time: {}",
-            result.cycle_number,
-            result.duration,
-            result.thought_produced,
-            result.on_time
+            result.cycle_number, result.duration, result.thought_produced, result.on_time
         );
     }
 
@@ -56,7 +53,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     info!("  Success rate: {:.2}%", metrics.success_rate() * 100.0);
     info!("  Average cycle time: {:?}", metrics.average_cycle_time);
     info!("  On-time percentage: {:.2}%", metrics.on_time_percentage);
-    info!("  Thoughts per second: {:.2}", metrics.thoughts_per_second());
+    info!(
+        "  Thoughts per second: {:.2}",
+        metrics.thoughts_per_second()
+    );
 
     info!("\nTest complete!");
     Ok(())

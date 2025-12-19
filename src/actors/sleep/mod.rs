@@ -90,12 +90,21 @@ impl SleepState {
         }
 
         // Saturating to u64::MAX is fine - if we've been idle longer than ~584 million years, it's time to sleep
-        let idle_duration = self.last_activity.elapsed().as_millis().min(u128::from(u64::MAX)) as u64;
-        let awake_duration = self.awake_since.elapsed().as_millis().min(u128::from(u64::MAX)) as u64;
+        let idle_duration = self
+            .last_activity
+            .elapsed()
+            .as_millis()
+            .min(u128::from(u64::MAX)) as u64;
+        let awake_duration = self
+            .awake_since
+            .elapsed()
+            .as_millis()
+            .min(u128::from(u64::MAX)) as u64;
 
         let idle_trigger = idle_duration > self.config.idle_threshold_ms;
         let awake_trigger = awake_duration > self.config.min_awake_duration_ms;
-        let queue_trigger = self.consolidation_queue_estimate >= self.config.min_consolidation_queue;
+        let queue_trigger =
+            self.consolidation_queue_estimate >= self.config.min_consolidation_queue;
 
         // Enter sleep if idle AND (awake long enough OR queue is large)
         idle_trigger && (awake_trigger || queue_trigger)

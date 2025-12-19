@@ -28,10 +28,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
         Line::from(""),
         Line::from(vec![
             Span::styled("Uptime: ", Style::default().fg(colors::DIM)),
-            Span::styled(
-                app.uptime_string(),
-                Style::default().fg(colors::FOREGROUND),
-            ),
+            Span::styled(app.uptime_string(), Style::default().fg(colors::FOREGROUND)),
         ]),
         Line::from(""),
         Line::from(vec![

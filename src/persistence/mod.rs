@@ -164,7 +164,11 @@ impl MemoryStore {
     // =========================================================================
 
     /// Save a value as JSON to a key
-    async fn save_json<T: Serialize>(&mut self, key: &str, value: &T) -> Result<(), PersistenceError> {
+    async fn save_json<T: Serialize>(
+        &mut self,
+        key: &str,
+        value: &T,
+    ) -> Result<(), PersistenceError> {
         let json = serde_json::to_string(value)?;
         let _: () = self.conn.set(key, json).await?;
         debug!("Saved to {}", key);
@@ -172,12 +176,17 @@ impl MemoryStore {
     }
 
     /// Load a value from JSON key
-    async fn load_json<T: DeserializeOwned>(&mut self, key: &str) -> Result<Option<T>, PersistenceError> {
+    async fn load_json<T: DeserializeOwned>(
+        &mut self,
+        key: &str,
+    ) -> Result<Option<T>, PersistenceError> {
         let json: Option<String> = self.conn.get(key).await?;
         match json {
             Some(s) => {
-                let value = serde_json::from_str(&s).map_err(|e| PersistenceError::DeserializationFailed {
-                    reason: format!("Key {}: {}", key, e),
+                let value = serde_json::from_str(&s).map_err(|e| {
+                    PersistenceError::DeserializationFailed {
+                        reason: format!("Key {}: {}", key, e),
+                    }
                 })?;
                 Ok(Some(value))
             }
@@ -204,7 +213,10 @@ impl MemoryStore {
     // =========================================================================
 
     /// Save an experience
-    pub async fn save_experience(&mut self, experience: &Experience) -> Result<(), PersistenceError> {
+    pub async fn save_experience(
+        &mut self,
+        experience: &Experience,
+    ) -> Result<(), PersistenceError> {
         let key = format!("{}:{}", keys::EXPERIENCES, experience.id);
         self.save_json(&key, experience).await?;
 
@@ -228,7 +240,9 @@ impl MemoryStore {
     }
 
     /// Load all experiences
-    pub async fn load_all_experiences(&mut self) -> Result<HashMap<ExperienceId, Experience>, PersistenceError> {
+    pub async fn load_all_experiences(
+        &mut self,
+    ) -> Result<HashMap<ExperienceId, Experience>, PersistenceError> {
         let ids: Vec<String> = self.conn.smembers(keys::EXPERIENCE_INDEX).await?;
         let mut experiences = HashMap::new();
 
@@ -295,7 +309,10 @@ impl MemoryStore {
     // =========================================================================
 
     /// Save a full checkpoint
-    pub async fn save_checkpoint(&mut self, state: &CheckpointState) -> Result<(), PersistenceError> {
+    pub async fn save_checkpoint(
+        &mut self,
+        state: &CheckpointState,
+    ) -> Result<(), PersistenceError> {
         // Save to specific checkpoint key
         let key = format!("{}:{}", keys::CHECKPOINTS, state.checkpoint_id);
         self.save_json(&key, state).await?;
@@ -313,7 +330,9 @@ impl MemoryStore {
     }
 
     /// Load the latest checkpoint
-    pub async fn load_latest_checkpoint(&mut self) -> Result<Option<CheckpointState>, PersistenceError> {
+    pub async fn load_latest_checkpoint(
+        &mut self,
+    ) -> Result<Option<CheckpointState>, PersistenceError> {
         self.load_json(keys::CHECKPOINT_LATEST).await
     }
 

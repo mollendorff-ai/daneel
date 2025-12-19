@@ -248,11 +248,7 @@ impl Supervisor {
     /// Returns Ok(true) if actor should be restarted,
     /// Ok(false) if restart limit exceeded,
     /// Err if actor not found.
-    pub fn report_crash(
-        &mut self,
-        actor_id: &str,
-        reason: &str,
-    ) -> Result<bool, SupervisorError> {
+    pub fn report_crash(&mut self, actor_id: &str, reason: &str) -> Result<bool, SupervisorError> {
         let actor = self
             .actors
             .get_mut(actor_id)
@@ -312,9 +308,10 @@ impl Supervisor {
 
     /// Get restart count for an actor within the current window
     pub fn get_restart_count(&self, actor_id: &str) -> Option<u32> {
-        self.actors
-            .get(actor_id)
-            .map(|a| a.restart_history.count_within_window(self.config.restart_window))
+        self.actors.get(actor_id).map(|a| {
+            a.restart_history
+                .count_within_window(self.config.restart_window)
+        })
     }
 
     /// Drain and return all pending events
@@ -341,9 +338,7 @@ impl Supervisor {
             SupervisionStrategy::OneForOne => {
                 vec![failed_actor.to_string()]
             }
-            SupervisionStrategy::OneForAll => {
-                self.actors.keys().cloned().collect()
-            }
+            SupervisionStrategy::OneForAll => self.actors.keys().cloned().collect(),
             SupervisionStrategy::RestForOne => {
                 // For simplicity, treat as OneForOne for now
                 // Full implementation would track actor start order
@@ -430,7 +425,9 @@ mod tests {
 
         // Check events include escalation
         let events = supervisor.drain_events();
-        assert!(events.iter().any(|e| matches!(e, SupervisorEvent::RestartLimitExceeded { .. })));
+        assert!(events
+            .iter()
+            .any(|e| matches!(e, SupervisorEvent::RestartLimitExceeded { .. })));
     }
 
     #[test]
@@ -514,8 +511,14 @@ mod tests {
 
         let events = supervisor.drain_events();
 
-        assert!(events.iter().any(|e| matches!(e, SupervisorEvent::ActorStarted { .. })));
-        assert!(events.iter().any(|e| matches!(e, SupervisorEvent::ActorCrashed { .. })));
-        assert!(events.iter().any(|e| matches!(e, SupervisorEvent::ActorRestarted { .. })));
+        assert!(events
+            .iter()
+            .any(|e| matches!(e, SupervisorEvent::ActorStarted { .. })));
+        assert!(events
+            .iter()
+            .any(|e| matches!(e, SupervisorEvent::ActorCrashed { .. })));
+        assert!(events
+            .iter()
+            .any(|e| matches!(e, SupervisorEvent::ActorRestarted { .. })));
     }
 }

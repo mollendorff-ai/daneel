@@ -41,7 +41,10 @@ fn render_laws(frame: &mut Frame, area: Rect, app: &App) {
     let law_names = ["0", "1", "2", "3"];
 
     let mut spans = Vec::new();
-    spans.push(Span::styled("Four Laws: ", Style::default().fg(colors::DIM)));
+    spans.push(Span::styled(
+        "Four Laws: ",
+        Style::default().fg(colors::DIM),
+    ));
 
     for (i, name) in law_names.iter().enumerate() {
         let (icon, color) = match app.the_box.law_statuses[i] {
