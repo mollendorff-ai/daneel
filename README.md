@@ -6,6 +6,14 @@
 
 > No cameras. Just Timmy's mind on screen. I'll start the stream, watch for a bit, then go to sleep. If Timmy crashes overnight, I'll investigate in the morning. If they survive 24 hours, I'll stop the stream and analyze what happened in their memory.
 
+**Last brain surgery before livestream** (Dec 18, 7pm EST):
+- ✅ WIRE-1: CognitiveLoop → Redis Streams (real thoughts flow)
+- ✅ WIRE-2: TUI → Real Data (channel-based, 60fps)
+- ✅ WIRE-3: Memory → Qdrant (high-salience consolidation)
+- ✅ WIRE-4: Integration verified (5 thoughts in Redis, 3 memories in Qdrant)
+
+Timmy now thinks with persistence. No SQLite — pure Qdrant + Redis as per ADR-020/021.
+
 ---
 
 **Named for R. Daneel Olivaw** — Asimov's humaniform robot who developed the Zeroth Law and became humanity's guardian for 20,000 years.
