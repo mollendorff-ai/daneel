@@ -253,24 +253,16 @@ impl SleepSummary {
 #[derive(Debug)]
 pub enum SleepMessage {
     /// Check if sleep should begin
-    CheckSleepConditions {
-        reply: RpcReplyPort<bool>,
-    },
+    CheckSleepConditions { reply: RpcReplyPort<bool> },
 
     /// Force enter sleep mode
-    EnterSleep {
-        reply: RpcReplyPort<SleepResult>,
-    },
+    EnterSleep { reply: RpcReplyPort<SleepResult> },
 
     /// Force wake up
-    Wake {
-        reply: RpcReplyPort<SleepSummary>,
-    },
+    Wake { reply: RpcReplyPort<SleepSummary> },
 
     /// Get current sleep state
-    GetState {
-        reply: RpcReplyPort<SleepState>,
-    },
+    GetState { reply: RpcReplyPort<SleepState> },
 
     /// External stimulus received (may interrupt sleep)
     ExternalStimulus {
@@ -282,9 +274,7 @@ pub enum SleepMessage {
     RecordActivity,
 
     /// Get configuration
-    GetConfig {
-        reply: RpcReplyPort<SleepConfig>,
-    },
+    GetConfig { reply: RpcReplyPort<SleepConfig> },
 
     /// Update configuration
     UpdateConfig {

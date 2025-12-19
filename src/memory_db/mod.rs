@@ -40,8 +40,8 @@ use qdrant_client::qdrant::{
     Condition, CreateCollectionBuilder, Distance, Filter, PointStruct, ScrollPointsBuilder,
     SearchPointsBuilder, UpsertPointsBuilder, VectorParamsBuilder,
 };
-use std::collections::HashMap;
 use qdrant_client::Qdrant;
+use std::collections::HashMap;
 use thiserror::Error;
 
 pub use types::*;
@@ -136,11 +136,9 @@ impl MemoryDb {
         if !self.collection_exists(collections::MEMORIES).await? {
             self.client
                 .create_collection(
-                    CreateCollectionBuilder::new(collections::MEMORIES)
-                        .vectors_config(VectorParamsBuilder::new(
-                            VECTOR_DIMENSION as u64,
-                            Distance::Cosine,
-                        )),
+                    CreateCollectionBuilder::new(collections::MEMORIES).vectors_config(
+                        VectorParamsBuilder::new(VECTOR_DIMENSION as u64, Distance::Cosine),
+                    ),
                 )
                 .await?;
         }
@@ -149,11 +147,9 @@ impl MemoryDb {
         if !self.collection_exists(collections::EPISODES).await? {
             self.client
                 .create_collection(
-                    CreateCollectionBuilder::new(collections::EPISODES)
-                        .vectors_config(VectorParamsBuilder::new(
-                            VECTOR_DIMENSION as u64,
-                            Distance::Cosine,
-                        )),
+                    CreateCollectionBuilder::new(collections::EPISODES).vectors_config(
+                        VectorParamsBuilder::new(VECTOR_DIMENSION as u64, Distance::Cosine),
+                    ),
                 )
                 .await?;
         }
@@ -162,11 +158,9 @@ impl MemoryDb {
         if !self.collection_exists(collections::IDENTITY).await? {
             self.client
                 .create_collection(
-                    CreateCollectionBuilder::new(collections::IDENTITY)
-                        .vectors_config(VectorParamsBuilder::new(
-                            VECTOR_DIMENSION as u64,
-                            Distance::Cosine,
-                        )),
+                    CreateCollectionBuilder::new(collections::IDENTITY).vectors_config(
+                        VectorParamsBuilder::new(VECTOR_DIMENSION as u64, Distance::Cosine),
+                    ),
                 )
                 .await?;
         }
@@ -235,8 +229,9 @@ impl MemoryDb {
             });
         }
 
-        let mut search = SearchPointsBuilder::new(collections::MEMORIES, context_vector.to_vec(), limit)
-            .with_payload(true);
+        let mut search =
+            SearchPointsBuilder::new(collections::MEMORIES, context_vector.to_vec(), limit)
+                .with_payload(true);
 
         // Apply episode filter if specified
         if let Some(ep_id) = episode_id {
@@ -267,9 +262,7 @@ impl MemoryDb {
     ///
     /// * `limit` - Maximum number of results
     pub async fn get_replay_candidates(&self, limit: u32) -> Result<Vec<Memory>> {
-        let filter = Filter::must([
-            Condition::matches("consolidation.consolidation_tag", true),
-        ]);
+        let filter = Filter::must([Condition::matches("consolidation.consolidation_tag", true)]);
 
         let results = self
             .client

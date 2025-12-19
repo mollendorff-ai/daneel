@@ -28,8 +28,8 @@ use crossterm::{
 use ratatui::{backend::CrosstermBackend, Terminal};
 use tokio::sync::mpsc;
 
-use app::{App, ThoughtStatus};
 use crate::core::cognitive_loop::CycleResult;
+use app::{App, ThoughtStatus};
 
 /// Target frame rate (60 FPS)
 const TARGET_FRAME_TIME: Duration = Duration::from_millis(16);
@@ -75,8 +75,15 @@ impl ThoughtUpdate {
         // Generate a window label based on cycle number
         // In Wave 3, this will come from actual memory window data
         let windows = [
-            "trigger", "autoflow", "attention", "assembly", "anchor",
-            "memory", "reasoning", "emotion", "sensory",
+            "trigger",
+            "autoflow",
+            "attention",
+            "assembly",
+            "anchor",
+            "memory",
+            "reasoning",
+            "emotion",
+            "sensory",
         ];
         let window = windows[result.cycle_number as usize % windows.len()].to_string();
 

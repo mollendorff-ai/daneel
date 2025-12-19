@@ -127,14 +127,13 @@ impl CheckpointManager {
     ) -> Result<(), redis::RedisError> {
         let mut conn = redis_client.get_multiplexed_async_connection().await?;
 
-        let json = serde_json::to_string(checkpoint)
-            .map_err(|e| {
-                redis::RedisError::from((
-                    redis::ErrorKind::Serialize,
-                    "Failed to serialize checkpoint",
-                    e.to_string(),
-                ))
-            })?;
+        let json = serde_json::to_string(checkpoint).map_err(|e| {
+            redis::RedisError::from((
+                redis::ErrorKind::Serialize,
+                "Failed to serialize checkpoint",
+                e.to_string(),
+            ))
+        })?;
 
         redis::cmd("SET")
             .arg(&self.config.redis_key)
@@ -161,14 +160,13 @@ impl CheckpointManager {
 
         match result {
             Some(json) => {
-                let checkpoint: Checkpoint = serde_json::from_str(&json)
-                    .map_err(|e| {
-                        redis::RedisError::from((
-                            redis::ErrorKind::Serialize,
-                            "Failed to deserialize checkpoint",
-                            e.to_string(),
-                        ))
-                    })?;
+                let checkpoint: Checkpoint = serde_json::from_str(&json).map_err(|e| {
+                    redis::RedisError::from((
+                        redis::ErrorKind::Serialize,
+                        "Failed to deserialize checkpoint",
+                        e.to_string(),
+                    ))
+                })?;
                 Ok(Some(checkpoint))
             }
             None => Ok(None),
@@ -190,12 +188,7 @@ mod tests {
 
     #[test]
     fn test_checkpoint_serializes_correctly() {
-        let checkpoint = Checkpoint::new(
-            500,
-            vec![0.5, 0.7, 0.3],
-            0.8,
-            5,
-        );
+        let checkpoint = Checkpoint::new(500, vec![0.5, 0.7, 0.3], 0.8, 5);
 
         let json = serde_json::to_string(&checkpoint).unwrap();
         assert!(json.contains("thought_count"));

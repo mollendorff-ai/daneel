@@ -90,7 +90,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     if memory_count > 0 {
         info!("\nRetrieving memories with high salience...");
         let candidates = memory_db.get_replay_candidates(10).await?;
-        info!("Found {} memories tagged for consolidation", candidates.len());
+        info!(
+            "Found {} memories tagged for consolidation",
+            candidates.len()
+        );
 
         for (i, memory) in candidates.iter().take(3).enumerate() {
             info!(
