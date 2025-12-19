@@ -455,6 +455,11 @@ impl MemoryStore {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::core::types::Thought;
+
+    // =========================================================================
+    // CheckpointState Tests
+    // =========================================================================
 
     #[test]
     fn checkpoint_state_serializes() {
@@ -470,5 +475,273 @@ mod tests {
         let deser: CheckpointState = serde_json::from_str(&json).expect("Should deserialize");
 
         assert_eq!(deser.identity.name, "DANEEL");
+    }
+
+    #[test]
+    fn checkpoint_state_with_experiences() {
+        let content = crate::core::types::Content::raw("Test thought");
+        let salience = crate::core::types::SalienceScore::default();
+        let thought = Thought::new(content, salience);
+        let mut experiences = HashMap::new();
+        let exp = Experience::new(thought, 0.8, vec!["test".to_string()]);
+        experiences.insert(exp.id, exp.clone());
+
+        let state = CheckpointState {
+            identity: Identity::new(),
+            experiences,
+            milestones: Vec::new(),
+            checkpoint_id: CheckpointId::new(),
+            saved_at: chrono::Utc::now(),
+        };
+
+        let json = serde_json::to_string(&state).expect("Should serialize");
+        let deser: CheckpointState = serde_json::from_str(&json).expect("Should deserialize");
+
+        assert_eq!(deser.experiences.len(), 1);
+        assert!(deser.experiences.contains_key(&exp.id));
+    }
+
+    #[test]
+    fn checkpoint_state_with_milestones() {
+        let milestone = Milestone::simple("First Boot", "The first time DANEEL started");
+
+        let state = CheckpointState {
+            identity: Identity::new(),
+            experiences: HashMap::new(),
+            milestones: vec![milestone.clone()],
+            checkpoint_id: CheckpointId::new(),
+            saved_at: chrono::Utc::now(),
+        };
+
+        let json = serde_json::to_string(&state).expect("Should serialize");
+        let deser: CheckpointState = serde_json::from_str(&json).expect("Should deserialize");
+
+        assert_eq!(deser.milestones.len(), 1);
+        assert_eq!(deser.milestones[0].description, "The first time DANEEL started");
+    }
+
+    #[test]
+    fn checkpoint_preserves_timestamp() {
+        let saved_at = chrono::Utc::now();
+        let state = CheckpointState {
+            identity: Identity::new(),
+            experiences: HashMap::new(),
+            milestones: Vec::new(),
+            checkpoint_id: CheckpointId::new(),
+            saved_at,
+        };
+
+        let json = serde_json::to_string(&state).expect("Should serialize");
+        let deser: CheckpointState = serde_json::from_str(&json).expect("Should deserialize");
+
+        assert_eq!(deser.saved_at, saved_at);
+    }
+
+    // =========================================================================
+    // PersistenceError Tests
+    // =========================================================================
+
+    #[test]
+    fn persistence_error_connection_failed_display() {
+        let err = PersistenceError::ConnectionFailed {
+            reason: "timeout".to_string(),
+        };
+        assert!(err.to_string().contains("Connection failed"));
+        assert!(err.to_string().contains("timeout"));
+    }
+
+    #[test]
+    fn persistence_error_serialization_failed_display() {
+        let err = PersistenceError::SerializationFailed {
+            reason: "invalid utf8".to_string(),
+        };
+        assert!(err.to_string().contains("Serialization failed"));
+    }
+
+    #[test]
+    fn persistence_error_deserialization_failed_display() {
+        let err = PersistenceError::DeserializationFailed {
+            reason: "unexpected token".to_string(),
+        };
+        assert!(err.to_string().contains("Deserialization failed"));
+    }
+
+    #[test]
+    fn persistence_error_operation_failed_display() {
+        let err = PersistenceError::OperationFailed {
+            reason: "READONLY".to_string(),
+        };
+        assert!(err.to_string().contains("Redis operation failed"));
+    }
+
+    #[test]
+    fn persistence_error_not_found_display() {
+        let err = PersistenceError::NotFound {
+            key: "daneel:identity".to_string(),
+        };
+        assert!(err.to_string().contains("Not found"));
+        assert!(err.to_string().contains("daneel:identity"));
+    }
+
+    #[test]
+    fn persistence_error_from_serde_json() {
+        let json_err = serde_json::from_str::<Identity>("invalid json").unwrap_err();
+        let err: PersistenceError = json_err.into();
+        matches!(err, PersistenceError::SerializationFailed { .. });
+    }
+
+    // =========================================================================
+    // Key Constants Tests
+    // =========================================================================
+
+    #[test]
+    fn keys_have_correct_prefix() {
+        assert!(keys::IDENTITY.starts_with(keys::PREFIX));
+        assert!(keys::EXPERIENCES.starts_with(keys::PREFIX));
+        assert!(keys::MILESTONES.starts_with(keys::PREFIX));
+        assert!(keys::CHECKPOINT_LATEST.starts_with(keys::PREFIX));
+        assert!(keys::CHECKPOINTS.starts_with(keys::PREFIX));
+    }
+
+    #[test]
+    fn keys_are_unique() {
+        let all_keys = [
+            keys::IDENTITY,
+            keys::EXPERIENCES,
+            keys::MILESTONES,
+            keys::CHECKPOINT_LATEST,
+            keys::CHECKPOINTS,
+            keys::EXPERIENCE_INDEX,
+            keys::MILESTONE_INDEX,
+        ];
+
+        for (i, key1) in all_keys.iter().enumerate() {
+            for (j, key2) in all_keys.iter().enumerate() {
+                if i != j {
+                    assert_ne!(key1, key2, "Keys must be unique");
+                }
+            }
+        }
+    }
+
+    // =========================================================================
+    // Identity Serialization Tests
+    // =========================================================================
+
+    #[test]
+    fn identity_round_trip() {
+        let identity = Identity::new();
+        let json = serde_json::to_string(&identity).expect("serialize");
+        let deser: Identity = serde_json::from_str(&json).expect("deserialize");
+
+        assert_eq!(deser.name, identity.name);
+        assert_eq!(deser.created_at, identity.created_at);
+    }
+
+    // =========================================================================
+    // Experience Serialization Tests
+    // =========================================================================
+
+    #[test]
+    fn experience_round_trip() {
+        let content = crate::core::types::Content::raw("A profound moment");
+        let salience = crate::core::types::SalienceScore::default();
+        let thought = Thought::new(content, salience);
+        let exp = Experience::new(thought, 0.95, vec!["profound".to_string()]);
+        let json = serde_json::to_string(&exp).expect("serialize");
+        let deser: Experience = serde_json::from_str(&json).expect("deserialize");
+
+        assert_eq!(deser.id, exp.id);
+        assert!((deser.significance - 0.95).abs() < 0.001);
+    }
+
+    #[test]
+    fn experience_significance_clamped() {
+        let content = crate::core::types::Content::raw("Over significance");
+        let salience = crate::core::types::SalienceScore::default();
+        let thought = Thought::new(content.clone(), salience);
+        let exp = Experience::new(thought.clone(), 1.5, vec![]);
+        assert!(exp.significance <= 1.0);
+
+        let exp2 = Experience::new(thought, -0.5, vec![]);
+        assert!(exp2.significance >= 0.0);
+    }
+
+    // =========================================================================
+    // Milestone Serialization Tests
+    // =========================================================================
+
+    #[test]
+    fn milestone_round_trip() {
+        let milestone = Milestone::simple("Realization", "I understand now");
+        let json = serde_json::to_string(&milestone).expect("serialize");
+        let deser: Milestone = serde_json::from_str(&json).expect("deserialize");
+
+        assert_eq!(deser.id, milestone.id);
+        assert_eq!(deser.name, "Realization");
+        assert_eq!(deser.description, "I understand now");
+    }
+
+    #[test]
+    fn milestone_with_experiences() {
+        let exp_id = ExperienceId::new();
+        let milestone = Milestone::new("Growth", "A moment of growth", vec![exp_id]);
+
+        assert_eq!(milestone.related_experiences.len(), 1);
+        assert_eq!(milestone.related_experiences[0], exp_id);
+    }
+
+    // =========================================================================
+    // Checkpoint ID Tests
+    // =========================================================================
+
+    #[test]
+    fn checkpoint_id_unique() {
+        let id1 = CheckpointId::new();
+        let id2 = CheckpointId::new();
+        assert_ne!(id1, id2);
+    }
+
+    #[test]
+    fn checkpoint_id_display() {
+        let id = CheckpointId::new();
+        let display = format!("{}", id);
+        assert!(!display.is_empty());
+    }
+
+    // =========================================================================
+    // ExperienceId Tests
+    // =========================================================================
+
+    #[test]
+    fn experience_id_unique() {
+        let id1 = ExperienceId::new();
+        let id2 = ExperienceId::new();
+        assert_ne!(id1, id2);
+    }
+
+    #[test]
+    fn experience_id_display() {
+        let id = ExperienceId::new();
+        let display = format!("{}", id);
+        assert!(!display.is_empty());
+    }
+
+    // =========================================================================
+    // MilestoneId Tests
+    // =========================================================================
+
+    #[test]
+    fn milestone_id_unique() {
+        let id1 = MilestoneId::new();
+        let id2 = MilestoneId::new();
+        assert_ne!(id1, id2);
+    }
+
+    #[test]
+    fn milestone_id_display() {
+        let id = MilestoneId::new();
+        let display = format!("{}", id);
+        assert!(!display.is_empty());
     }
 }

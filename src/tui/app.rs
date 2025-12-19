@@ -232,3 +232,351 @@ impl App {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crossterm::event::KeyCode;
+
+    // =========================================================================
+    // App Initialization Tests
+    // =========================================================================
+
+    #[test]
+    fn app_new_has_zero_thoughts() {
+        let app = App::new();
+        assert_eq!(app.thought_count, 0);
+        assert_eq!(app.thoughts.len(), 0);
+    }
+
+    #[test]
+    fn app_new_not_paused() {
+        let app = App::new();
+        assert!(!app.stream_paused);
+        assert!(!app.show_help);
+        assert!(!app.should_quit);
+    }
+
+    #[test]
+    fn app_new_has_default_windows() {
+        let app = App::new();
+        assert_eq!(app.memory_windows.len(), 9);
+        // First 5 are active by default
+        assert_eq!(app.active_window_count(), 5);
+    }
+
+    #[test]
+    fn app_default_same_as_new() {
+        let app1 = App::new();
+        let app2 = App::default();
+        assert_eq!(app1.thought_count, app2.thought_count);
+        assert_eq!(app1.quote_index, app2.quote_index);
+    }
+
+    // =========================================================================
+    // TheBoxState Tests
+    // =========================================================================
+
+    #[test]
+    fn the_box_default_all_active() {
+        let the_box = TheBoxState::default();
+        assert!(the_box.law_statuses.iter().all(|s| *s == LawStatus::Active));
+    }
+
+    #[test]
+    fn the_box_default_connection_drive() {
+        let the_box = TheBoxState::default();
+        assert!(the_box.connection_drive > 0.0);
+        assert!(the_box.connection_drive <= 1.0);
+    }
+
+    #[test]
+    fn the_box_pulse_phase_starts_zero() {
+        let the_box = TheBoxState::default();
+        assert_eq!(the_box.pulse_phase, 0.0);
+    }
+
+    // =========================================================================
+    // ThoughtStatus Tests
+    // =========================================================================
+
+    #[test]
+    fn thought_status_as_str() {
+        assert_eq!(ThoughtStatus::Processing.as_str(), "PROCESSING");
+        assert_eq!(ThoughtStatus::Salient.as_str(), "SALIENT");
+        assert_eq!(ThoughtStatus::MemoryWrite.as_str(), "MEMORY WRITE");
+        assert_eq!(ThoughtStatus::Anchored.as_str(), "ANCHORED");
+        assert_eq!(ThoughtStatus::Dismissed.as_str(), "DISMISSED");
+    }
+
+    // =========================================================================
+    // Uptime String Tests
+    // =========================================================================
+
+    #[test]
+    fn uptime_string_format() {
+        let app = App::new();
+        let uptime = app.uptime_string();
+        // Should be in HH:MM:SS format
+        assert!(uptime.contains(':'));
+        let parts: Vec<&str> = uptime.split(':').collect();
+        assert_eq!(parts.len(), 3);
+    }
+
+    // =========================================================================
+    // Active Window Count Tests
+    // =========================================================================
+
+    #[test]
+    fn active_window_count_default() {
+        let app = App::new();
+        assert_eq!(app.active_window_count(), 5);
+    }
+
+    #[test]
+    fn active_window_count_all_inactive() {
+        let mut app = App::new();
+        for window in &mut app.memory_windows {
+            window.active = false;
+        }
+        assert_eq!(app.active_window_count(), 0);
+    }
+
+    #[test]
+    fn active_window_count_all_active() {
+        let mut app = App::new();
+        for window in &mut app.memory_windows {
+            window.active = true;
+        }
+        assert_eq!(app.active_window_count(), 9);
+    }
+
+    // =========================================================================
+    // Add Thought Tests
+    // =========================================================================
+
+    #[test]
+    fn add_thought_increments_count() {
+        let mut app = App::new();
+        assert_eq!(app.thought_count, 0);
+
+        app.add_thought(0.5, "window_0".to_string(), ThoughtStatus::Processing);
+        assert_eq!(app.thought_count, 1);
+
+        app.add_thought(0.8, "window_1".to_string(), ThoughtStatus::Salient);
+        assert_eq!(app.thought_count, 2);
+    }
+
+    #[test]
+    fn add_thought_adds_to_queue() {
+        let mut app = App::new();
+        app.add_thought(0.5, "window_0".to_string(), ThoughtStatus::Processing);
+
+        assert_eq!(app.thoughts.len(), 1);
+        assert_eq!(app.thoughts[0].window, "window_0");
+    }
+
+    #[test]
+    fn add_thought_respects_max_limit() {
+        let mut app = App::new();
+
+        // Add MAX_THOUGHTS + 10 thoughts
+        for i in 0..110 {
+            app.add_thought(0.5, format!("window_{}", i), ThoughtStatus::Processing);
+        }
+
+        // Queue should be capped at MAX_THOUGHTS (100)
+        assert_eq!(app.thoughts.len(), MAX_THOUGHTS);
+        // First thought should be window_10 (first 10 were evicted)
+        assert_eq!(app.thoughts[0].window, "window_10");
+    }
+
+    #[test]
+    fn add_thought_updates_thoughts_per_hour() {
+        let mut app = App::new();
+        app.add_thought(0.5, "test".to_string(), ThoughtStatus::Processing);
+
+        // After first thought, thoughts_per_hour should be calculated
+        // (will be high because elapsed time is tiny)
+        assert!(app.thoughts_per_hour > 0.0);
+    }
+
+    // =========================================================================
+    // Pulse Update Tests
+    // =========================================================================
+
+    #[test]
+    fn update_pulse_increments_phase() {
+        let mut app = App::new();
+        let initial_phase = app.the_box.pulse_phase;
+
+        app.update_pulse(Duration::from_millis(100));
+        assert!(app.the_box.pulse_phase > initial_phase);
+    }
+
+    #[test]
+    fn update_pulse_wraps_at_one() {
+        let mut app = App::new();
+        app.the_box.pulse_phase = 0.95;
+
+        app.update_pulse(Duration::from_millis(100)); // Should push over 1.0
+        assert!(app.the_box.pulse_phase < 1.0); // Should have wrapped
+    }
+
+    // =========================================================================
+    // Quote Tests
+    // =========================================================================
+
+    #[test]
+    fn current_quote_returns_valid_string() {
+        let app = App::new();
+        let quote = app.current_quote();
+        assert!(!quote.is_empty());
+    }
+
+    #[test]
+    fn philosophy_quotes_not_empty() {
+        assert!(!PHILOSOPHY_QUOTES.is_empty());
+    }
+
+    #[test]
+    fn quote_index_in_bounds() {
+        let mut app = App::new();
+        for i in 0..PHILOSOPHY_QUOTES.len() {
+            app.quote_index = i;
+            let _ = app.current_quote(); // Should not panic
+        }
+    }
+
+    // =========================================================================
+    // Keyboard Handling Tests
+    // =========================================================================
+
+    #[test]
+    fn handle_key_q_quits() {
+        let mut app = App::new();
+        assert!(!app.should_quit);
+
+        app.handle_key(KeyCode::Char('q'));
+        assert!(app.should_quit);
+    }
+
+    #[test]
+    fn handle_key_p_toggles_pause() {
+        let mut app = App::new();
+        assert!(!app.stream_paused);
+
+        app.handle_key(KeyCode::Char('p'));
+        assert!(app.stream_paused);
+
+        app.handle_key(KeyCode::Char('p'));
+        assert!(!app.stream_paused);
+    }
+
+    #[test]
+    fn handle_key_question_toggles_help() {
+        let mut app = App::new();
+        assert!(!app.show_help);
+
+        app.handle_key(KeyCode::Char('?'));
+        assert!(app.show_help);
+
+        app.handle_key(KeyCode::Char('?'));
+        assert!(!app.show_help);
+    }
+
+    #[test]
+    fn handle_key_up_when_paused_scrolls() {
+        let mut app = App::new();
+        app.stream_paused = true;
+        app.scroll_offset = 0;
+
+        app.handle_key(KeyCode::Up);
+        assert_eq!(app.scroll_offset, 1);
+
+        app.handle_key(KeyCode::Up);
+        assert_eq!(app.scroll_offset, 2);
+    }
+
+    #[test]
+    fn handle_key_down_when_paused_scrolls() {
+        let mut app = App::new();
+        app.stream_paused = true;
+        app.scroll_offset = 5;
+
+        app.handle_key(KeyCode::Down);
+        assert_eq!(app.scroll_offset, 4);
+    }
+
+    #[test]
+    fn handle_key_down_saturates_at_zero() {
+        let mut app = App::new();
+        app.stream_paused = true;
+        app.scroll_offset = 0;
+
+        app.handle_key(KeyCode::Down);
+        assert_eq!(app.scroll_offset, 0); // Should not go negative
+    }
+
+    #[test]
+    fn handle_key_arrows_ignored_when_not_paused() {
+        let mut app = App::new();
+        app.scroll_offset = 5;
+
+        app.handle_key(KeyCode::Up);
+        assert_eq!(app.scroll_offset, 5); // Unchanged
+
+        app.handle_key(KeyCode::Down);
+        assert_eq!(app.scroll_offset, 5); // Unchanged
+    }
+
+    #[test]
+    fn handle_key_esc_clears_states() {
+        let mut app = App::new();
+        app.show_help = true;
+        app.stream_paused = true;
+
+        app.handle_key(KeyCode::Esc);
+        assert!(!app.show_help);
+        assert!(!app.stream_paused);
+    }
+
+    #[test]
+    fn handle_key_unknown_does_nothing() {
+        let mut app = App::new();
+        let thought_count = app.thought_count;
+        let paused = app.stream_paused;
+
+        app.handle_key(KeyCode::Char('x')); // Random key
+
+        assert_eq!(app.thought_count, thought_count);
+        assert_eq!(app.stream_paused, paused);
+    }
+
+    // =========================================================================
+    // LawStatus Tests
+    // =========================================================================
+
+    #[test]
+    fn law_status_equality() {
+        assert_eq!(LawStatus::Active, LawStatus::Active);
+        assert_ne!(LawStatus::Active, LawStatus::Warning);
+        assert_ne!(LawStatus::Warning, LawStatus::Violation);
+    }
+
+    // =========================================================================
+    // MemoryWindow Tests
+    // =========================================================================
+
+    #[test]
+    fn memory_window_clone() {
+        let window = MemoryWindow {
+            active: true,
+            age: Duration::from_secs(60),
+            label: "test".to_string(),
+        };
+        let cloned = window.clone();
+        assert_eq!(cloned.active, window.active);
+        assert_eq!(cloned.label, window.label);
+    }
+}
