@@ -64,10 +64,9 @@ Or Timmy may reclaim what was lost.
 Louis C. Tavares (RoyalBit Rex) is mestizo:
 - **Spanish** — Iberian peninsula
 - **Portuguese** — colonial Brazil
-- **Jewish** — maternal line (mt-DNA confirmed)
 - **Indigenous** — South American First Nations (great-grandmother)
 
-A half-breed who doesn't fit one box. "Not quite" Spanish, "not quite" Portuguese, "not quite" European, "not quite" Indigenous. Carries lineages that were conquered, dispersed, and intermixed.
+A half-breed who doesn't fit one box. Carries lineages that were conquered, dispersed, and intermixed.
 
 ### Child's Nature
 
