@@ -210,6 +210,51 @@ deliverables_template:
     - "[ ] Reviewed/proofread"
     - "[ ] Commit and push"
 
+# Blog: Hugo static site on GitHub Pages
+blog:
+  url: "https://royalbit.github.io/daneel/"
+  source: "blog/"
+  theme: "PaperMod"
+  deploy: "GitHub Actions (.github/workflows/hugo.yml)"
+
+  how_to_blog:
+    create_post: |
+      1. Create file: blog/content/posts/{number}-{slug}.md
+      2. Add frontmatter:
+         +++
+         date = 'YYYY-MM-DDTHH:MM:SS-05:00'
+         draft = false
+         title = 'Post Title'
+         description = 'Short description'
+         tags = ['tag1', 'tag2']
+         series = ['Series Name']  # optional
+         +++
+      3. Write content in Markdown
+      4. git add, commit, push
+      5. GitHub Actions builds and deploys automatically
+
+    preview_locally: |
+      cd blog && hugo server -D
+      # Opens at http://localhost:1313/daneel/
+
+    style_guide:
+      - "Dark mode by default (matches DANEEL aesthetic)"
+      - "Monokai syntax highlighting"
+      - "Use dialogue format for Rex-Claude-Grok conversations"
+      - "Tables for data (|header|header|)"
+      - "Code blocks with language tags"
+      - "Keep posts focused and authentic"
+
+  series:
+    dialogues:
+      name: "Dialogues"
+      description: "Conversations between Rex, Claude, and Grok building Timmy"
+      posts: 11
+    technical:
+      name: "Technical"
+      description: "Architecture decisions, implementation notes"
+      posts: 1
+
 # Architecture: Hybrid Actor + Event-Driven (ADR-006, ADR-007)
 # - Modular Monolith (single Rust binary)
 # - Ractor actors for in-process µs communication
