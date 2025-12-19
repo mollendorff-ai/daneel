@@ -111,7 +111,8 @@ impl SalienceState {
     }
 
     /// Calculate importance score
-    #[allow(clippy::only_used_in_recursion)]
+    #[allow(unknown_lints)]
+    #[allow(clippy::only_used_in_recursion, clippy::self_only_used_in_recursion)]
     fn calculate_importance(&self, content: &Content) -> f32 {
         // Baseline importance based on content type
         match content {
