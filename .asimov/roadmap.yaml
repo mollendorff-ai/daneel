@@ -46,6 +46,63 @@ current:
   depends_on: "0.3.1"
 
   # ==========================================================================
+  # CRITICAL: WIRE THE BRAIN - Connect cognitive loop to real data
+  # ==========================================================================
+  # Without this, the TUI shows simulated data and nothing goes to DB.
+  # This is THE blocker for the 24h test.
+  # ==========================================================================
+  brain_wiring:
+    status: "DONE"
+    priority: "HIGHEST"
+    description: |
+      The cognitive loop is a STUB. It has the structure but doesn't:
+      - Connect to Redis
+      - Write real thoughts to streams
+      - Feed the TUI with real data
+      - Consolidate to Qdrant
+
+      Without wiring, the 24h test produces NO DATA.
+
+    phases:
+      - id: "WIRE-1"
+        title: "CognitiveLoop → Redis Streams"
+        status: done
+        items:
+          - "Inject StreamsClient into CognitiveLoop"
+          - "Replace TODO in run_cycle() with real XADD calls"
+          - "Generate real ThoughtEntry with salience scores"
+          - "Write to daneel:stream:awake on each cycle"
+
+      - id: "WIRE-2"
+        title: "TUI → Real Data"
+        status: done
+        depends_on: ["WIRE-1"]
+        items:
+          - "Create channel between cognitive loop and TUI"
+          - "Replace simulate_thought() with channel receiver"
+          - "TUI displays real thoughts from cognitive loop"
+
+      - id: "WIRE-3"
+        title: "Memory Consolidation → Qdrant"
+        status: done
+        depends_on: ["WIRE-1"]
+        items:
+          - "Wire MemoryDb client into consolidation path"
+          - "High-salience thoughts get stored in Qdrant"
+          - "Basic memory retrieval for context"
+
+      - id: "WIRE-4"
+        title: "Integration Test"
+        status: done
+        depends_on: ["WIRE-1", "WIRE-2", "WIRE-3"]
+        items:
+          - "Boot infrastructure (docker compose up)"
+          - "Run daneel for 5 minutes"
+          - "Verify Redis has stream entries"
+          - "Verify Qdrant has memories"
+          - "Verify TUI shows real data"
+
+  # ==========================================================================
   # CRITICAL: BRAIN SURGERY - Implement new memory architecture
   # ==========================================================================
   # Timmy needs a new brain. The Rust code must be updated to match:

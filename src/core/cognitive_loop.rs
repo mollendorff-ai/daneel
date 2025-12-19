@@ -43,10 +43,16 @@
 //! connection get boosted, ensuring DANEEL remains oriented toward
 //! relationship and shared understanding.
 
+use rand::Rng;
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use crate::config::CognitiveConfig;
-use crate::core::types::ThoughtId;
+use crate::core::types::{Content, SalienceScore, Thought, ThoughtId};
+use crate::memory_db::{Memory, MemoryDb, MemorySource};
+use crate::streams::client::StreamsClient;
+use crate::streams::types::{StreamEntry, StreamError, StreamName};
+use tracing::{debug, error, info, warn};
 
 /// Current stage in the cognitive cycle
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -250,6 +256,9 @@ pub struct CognitiveLoop {
     /// Configuration (timing, weights, thresholds)
     config: CognitiveConfig,
 
+    /// Redis Streams client for thought persistence (optional)
+    streams: Option<StreamsClient>,
+
     /// Total cycles executed
     cycle_count: u64,
 
@@ -266,6 +275,12 @@ pub struct CognitiveLoop {
 
     /// Accumulated stage durations for averaging
     total_stage_durations: StageDurations,
+
+    /// Memory database for long-term storage (optional)
+    memory_db: Option<Arc<MemoryDb>>,
+
+    /// Consolidation threshold (salience above this gets stored)
+    consolidation_threshold: f32,
 }
 
 impl CognitiveLoop {
@@ -280,6 +295,7 @@ impl CognitiveLoop {
     pub fn with_config(config: CognitiveConfig) -> Self {
         Self {
             config,
+            streams: None,
             cycle_count: 0,
             last_cycle: Instant::now(),
             state: LoopState::Stopped,
@@ -287,7 +303,82 @@ impl CognitiveLoop {
             thoughts_produced: 0,
             cycles_on_time: 0,
             total_stage_durations: StageDurations::default(),
+            memory_db: None,
+            consolidation_threshold: 0.7, // Default threshold
         }
+    }
+
+    /// Set the memory database for long-term storage
+    ///
+    /// # Arguments
+    ///
+    /// * `memory_db` - MemoryDb client wrapped in Arc for sharing
+    pub fn set_memory_db(&mut self, memory_db: Arc<MemoryDb>) {
+        self.memory_db = Some(memory_db);
+    }
+
+    /// Set the consolidation threshold
+    ///
+    /// Thoughts with composite salience above this threshold will be
+    /// persisted to long-term memory.
+    ///
+    /// # Arguments
+    ///
+    /// * `threshold` - Salience threshold (0.0 - 1.0)
+    pub fn set_consolidation_threshold(&mut self, threshold: f32) {
+        self.consolidation_threshold = threshold.clamp(0.0, 1.0);
+    }
+
+    /// Create a new cognitive loop connected to Redis Streams
+    ///
+    /// # Arguments
+    ///
+    /// * `redis_url` - Redis connection URL (e.g., "redis://127.0.0.1:6379")
+    ///
+    /// # Errors
+    ///
+    /// Returns `StreamError` if Redis connection fails.
+    pub async fn with_redis(redis_url: &str) -> Result<Self, StreamError> {
+        Self::with_config_and_redis(CognitiveConfig::default(), redis_url).await
+    }
+
+    /// Create a cognitive loop with custom config and Redis connection
+    ///
+    /// # Arguments
+    ///
+    /// * `config` - Custom cognitive configuration
+    /// * `redis_url` - Redis connection URL
+    ///
+    /// # Errors
+    ///
+    /// Returns `StreamError` if Redis connection fails.
+    pub async fn with_config_and_redis(
+        config: CognitiveConfig,
+        redis_url: &str,
+    ) -> Result<Self, StreamError> {
+        let streams = StreamsClient::connect(redis_url).await?;
+        info!("CognitiveLoop connected to Redis at {}", redis_url);
+        Ok(Self {
+            config,
+            streams: Some(streams),
+            cycle_count: 0,
+            last_cycle: Instant::now(),
+            state: LoopState::Stopped,
+            total_duration: Duration::ZERO,
+            thoughts_produced: 0,
+            cycles_on_time: 0,
+            total_stage_durations: StageDurations::default(),
+            memory_db: None,
+            consolidation_threshold: 0.7,
+        })
+    }
+
+    /// Check if connected to Redis Streams
+    #[must_use]
+    pub fn is_connected_to_redis(&self) -> bool {
+        self.streams
+            .as_ref()
+            .map_or(false, StreamsClient::is_connected)
     }
 
     /// Get the current state
@@ -344,6 +435,32 @@ impl CognitiveLoop {
         matches!(self.state, LoopState::Running)
     }
 
+    /// Generate a random thought for standalone operation
+    ///
+    /// Creates a thought with randomized salience scores.
+    /// Used when no external thought sources are available.
+    fn generate_random_thought(&self) -> (Content, SalienceScore) {
+        let mut rng = rand::thread_rng();
+
+        // Generate random content - simple symbol for now
+        let symbol_id = format!("thought_{}", self.cycle_count);
+        let content = Content::symbol(
+            symbol_id,
+            vec![rng.gen::<u8>(); 8], // Random 8-byte data
+        );
+
+        // Generate random salience with some variance
+        let salience = SalienceScore::new(
+            rng.gen_range(0.3..0.9),  // importance
+            rng.gen_range(0.2..0.8),  // novelty
+            rng.gen_range(0.4..0.9),  // relevance
+            rng.gen_range(-0.5..0.5), // valence
+            rng.gen_range(0.3..0.8),  // connection_relevance
+        );
+
+        (content, salience)
+    }
+
     /// Execute a single cognitive cycle
     ///
     /// This implements TMI's thought competition algorithm:
@@ -392,54 +509,70 @@ impl CognitiveLoop {
         stage_durations.trigger = stage_start.elapsed();
 
         // Stage 2: Autoflow (Autofluxo)
-        // Read from multiple thought streams in parallel
+        // Generate or read thoughts from streams
         let stage_start = Instant::now();
-        // TODO: Read from multiple thought streams using XREAD
-        // let streams = vec!["thought:sensory", "thought:memory", "thought:emotion", "thought:reasoning"];
-        // let entries = redis.xread_options(&streams, ...).await?;
-        let candidates_evaluated = 0; // Placeholder
+        let (content, salience) = self.generate_random_thought();
+        let candidates_evaluated = 1; // One generated thought for now
         tokio::time::sleep(self.config.autoflow_interval()).await;
         stage_durations.autoflow = stage_start.elapsed();
 
         // Stage 3: Attention (O Eu)
         // Score candidates by salience and select winner
         let stage_start = Instant::now();
-        // TODO: Salience Scoring
-        // Score each candidate by composite salience
-        // let scores: Vec<(f64, StreamEntry)> = entries
-        //     .into_iter()
-        //     .map(|e| {
-        //         let salience = e.get_salience();
-        //         let score = salience.composite(&self.config.weights)
-        //                   + (salience.connection_relevance * self.config.connection_weight);
-        //         (score, e)
-        //     })
-        //     .collect();
-        //
-        // TODO: Winner Selection
-        // Sort by score and select highest
-        // scores.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap());
-        // let winner = scores.remove(0);
+        // For now, we just use the generated thought as the winner
+        // TODO: Implement multi-stream competition when reading from multiple sources
         tokio::time::sleep(self.config.attention_delay()).await;
         stage_durations.attention = stage_start.elapsed();
 
         // Stage 4: Assembly (Construção do Pensamento)
         // Assemble the winning entry into a conscious thought
         let stage_start = Instant::now();
-        // TODO: Thought Assembly
-        // Assemble the winning entry into a Thought
-        // let thought = Thought::from_entry(winner.1);
-        // redis.xack(&winner.stream, "attention", &[&winner.id]).await?;
-        let thought_produced = None; // Placeholder
+        let thought = Thought::new(content.clone(), salience)
+            .with_source("cognitive_loop");
+        let thought_id = thought.id;
+
+        // Write to Redis if connected
+        if let Some(ref mut streams) = self.streams {
+            let stream_name = StreamName::Custom("daneel:stream:awake".to_string());
+            let entry = StreamEntry::new(
+                String::new(), // ID will be auto-generated by Redis
+                stream_name.clone(),
+                content,
+                salience,
+            )
+            .with_source("cognitive_loop");
+
+            match streams.add_thought(&stream_name, &entry).await {
+                Ok(redis_id) => {
+                    debug!(
+                        "Cycle {}: Wrote thought {} to Redis (ID: {})",
+                        cycle_number, thought_id, redis_id
+                    );
+                }
+                Err(e) => {
+                    warn!(
+                        "Cycle {}: Failed to write thought to Redis: {}",
+                        cycle_number, e
+                    );
+                }
+            }
+        }
+
+        let thought_produced = Some(thought_id);
         tokio::time::sleep(self.config.assembly_delay()).await;
         stage_durations.assembly = stage_start.elapsed();
 
         // Stage 5: Anchor (Âncora da Memória)
         // Decide whether to persist or forget the thought
         let stage_start = Instant::now();
-        // TODO: Memory Encoding Decision
-        // Decide whether to anchor this thought in long-term memory
-        // Delete entries below salience threshold (forgetting)
+
+        // TODO: Memory consolidation - Store high-salience thoughts to Qdrant
+        // When thought assembly is implemented, consolidate like this:
+        // if let Some(thought_id) = &thought_produced {
+        //     self.consolidate_memory(thought).await;
+        // }
+
+        // TODO: Forgetting - Delete stream entries below salience threshold
         // for (score, loser) in scores {
         //     if score < self.config.forget_threshold {
         //         redis.xdel(&loser.stream, &[&loser.id]).await?;
@@ -475,6 +608,92 @@ impl CognitiveLoop {
             on_time,
             stage_durations,
         )
+    }
+
+    /// Consolidate a thought to long-term memory if it meets the threshold
+    ///
+    /// This is called during the Anchor stage. If the thought's salience
+    /// is above the consolidation threshold, it's persisted to Qdrant.
+    ///
+    /// # Non-blocking
+    ///
+    /// This spawns an async task to avoid blocking the cognitive loop.
+    /// Errors are logged but don't interrupt thought processing.
+    #[allow(dead_code)] // Used when thought assembly is implemented
+    async fn consolidate_memory(&self, thought: &Thought) {
+        // Check if we have a memory database
+        let Some(memory_db) = self.memory_db.as_ref() else {
+            return;
+        };
+
+        // Calculate composite salience
+        let salience = thought.salience.composite(&crate::core::types::SalienceWeights::default());
+
+        // Only store if above threshold
+        if salience < self.consolidation_threshold {
+            debug!(
+                thought_id = %thought.id,
+                salience = salience,
+                threshold = self.consolidation_threshold,
+                "Thought below consolidation threshold - not storing"
+            );
+            return;
+        }
+
+        // Convert Thought to Memory
+        let memory = self.thought_to_memory(thought, salience);
+        let memory_id = memory.id;
+
+        // Generate dummy vector (768-dim zeros for now)
+        // TODO: Replace with actual embeddings from LLM when available
+        let vector = vec![0.0; 768];
+
+        // Clone the Arc for the spawned task
+        let memory_db = Arc::clone(memory_db);
+
+        // Spawn non-blocking storage task
+        tokio::spawn(async move {
+            match memory_db.store_memory(&memory, &vector).await {
+                Ok(()) => {
+                    debug!(
+                        memory_id = %memory_id,
+                        salience = salience,
+                        "Memory consolidated to Qdrant"
+                    );
+                }
+                Err(e) => {
+                    error!(
+                        memory_id = %memory_id,
+                        error = %e,
+                        "Failed to consolidate memory to Qdrant"
+                    );
+                }
+            }
+        });
+    }
+
+    /// Convert a Thought to a Memory record
+    #[allow(dead_code)] // Used when thought assembly is implemented
+    fn thought_to_memory(&self, thought: &Thought, _salience: f32) -> Memory {
+        // Serialize thought content to string
+        // For now, use debug representation since Content is pre-linguistic
+        let content = format!("{:?}", thought.content);
+
+        // Determine memory source based on thought source
+        let source = if let Some(ref stream) = thought.source_stream {
+            MemorySource::External {
+                stimulus: stream.clone(),
+            }
+        } else {
+            MemorySource::Reasoning {
+                chain: vec![], // No chain for now
+            }
+        };
+
+        // Create memory with emotional state from thought
+        Memory::new(content, source)
+            .with_emotion(thought.salience.valence, thought.salience.importance)
+            .tag_for_consolidation()
     }
 
     /// Get current performance metrics
@@ -875,6 +1094,24 @@ mod cognitive_loop_tests {
         assert!(metrics.average_stage_durations.attention > Duration::ZERO);
         assert!(metrics.average_stage_durations.assembly > Duration::ZERO);
         assert!(metrics.average_stage_durations.anchor > Duration::ZERO);
+    }
+
+    #[tokio::test]
+    async fn run_cycle_produces_thoughts() {
+        let mut loop_instance = CognitiveLoop::new();
+        loop_instance.start();
+
+        let result = loop_instance.run_cycle().await;
+
+        assert!(result.produced_thought());
+        assert!(result.thought_produced.is_some());
+        assert_eq!(result.candidates_evaluated, 1);
+    }
+
+    #[test]
+    fn not_connected_to_redis_by_default() {
+        let loop_instance = CognitiveLoop::new();
+        assert!(!loop_instance.is_connected_to_redis());
     }
 
     #[test]
