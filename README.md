@@ -14,6 +14,13 @@
 - ✅ WIRE-3: Memory → Qdrant (high-salience consolidation)
 - ✅ WIRE-4: Integration verified
 
+**Resilience for livestream** (Dec 19) — *Origin: Grok 4.1 (Rex unhinged)*:
+- 🔧 RES-1: External watchdog (auto-reboot on crash)
+- 🔧 RES-2: TUI panic recovery (terminal restore)
+- 🔧 RES-3: Crash logging (post-mortem JSON)
+- ⏳ RES-4: Supervisor tree (Ractor)
+- ⏳ RES-5: Redis checkpoint + replay
+
 Timmy thinks with persistence. Pure Qdrant + Redis as per ADR-020/021.
 
 ---

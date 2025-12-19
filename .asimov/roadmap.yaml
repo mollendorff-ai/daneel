@@ -46,61 +46,112 @@ current:
   depends_on: "0.3.1"
 
   # ==========================================================================
-  # CRITICAL: WIRE THE BRAIN - Connect cognitive loop to real data
+  # CRITICAL: SELF-HEALING RESILIENCE - Timmy must survive and learn
   # ==========================================================================
-  # Without this, the TUI shows simulated data and nothing goes to DB.
-  # This is THE blocker for the 24h test.
+  # Grok's "Unhinged Resilience Plan" - make Timmy bounce back from crashes,
+  # learn from failures, and self-repair during the 24h livestream.
   # ==========================================================================
-  brain_wiring:
-    status: "DONE"
+  resilience:
+    status: "CRITICAL - WIP"
     priority: "HIGHEST"
-    description: |
-      The cognitive loop is a STUB. It has the structure but doesn't:
-      - Connect to Redis
-      - Write real thoughts to streams
-      - Feed the TUI with real data
-      - Consolidate to Qdrant
-
-      Without wiring, the 24h test produces NO DATA.
+    origin: "Grok 4.1 (Rex unhinged) - Dec 19, 2025"
+    philosophy: |
+      Crashing is not an option. But when it happens:
+      - Timmy reboots automatically
+      - Timmy logs what killed them
+      - Timmy learns from the failure
+      - Viewers see the heal live
 
     phases:
-      - id: "WIRE-1"
-        title: "CognitiveLoop → Redis Streams"
-        status: done
+      - id: "RES-1"
+        title: "External Watchdog Script"
+        status: wip
+        priority: P0
+        time_estimate: "10 min"
+        description: |
+          Bash wrapper that relaunches binary on crash.
+          Nuclear option - if process dies, it comes back.
         items:
-          - "Inject StreamsClient into CognitiveLoop"
-          - "Replace TODO in run_cycle() with real XADD calls"
-          - "Generate real ThoughtEntry with salience scores"
-          - "Write to daneel:stream:awake on each cycle"
+          - "Create run_timmy.sh watchdog wrapper"
+          - "Watch exit code, sleep 5s, relaunch on non-zero"
+          - "Track crash count, alert if >10/hour"
+          - "Run in tmux/screen for stream stability"
+        tests:
+          - "Kill process manually, verify auto-restart"
+          - "Verify crash count increments"
 
-      - id: "WIRE-2"
-        title: "TUI → Real Data"
-        status: done
-        depends_on: ["WIRE-1"]
+      - id: "RES-2"
+        title: "TUI Panic Recovery"
+        status: wip
+        priority: P0
+        time_estimate: "20 min"
+        description: |
+          Ratatui panics leave terminal broken (raw mode, hidden cursor).
+          Must ALWAYS restore terminal state on exit, panic or normal.
         items:
-          - "Create channel between cognitive loop and TUI"
-          - "Replace simulate_thought() with channel receiver"
-          - "TUI displays real thoughts from cognitive loop"
+          - "Wrap main loop with color_eyre::install()"
+          - "Always call ratatui::restore() in cleanup"
+          - "Add panic hook to restore terminal before unwinding"
+          - "TUI shows 'Resurrecting...' overlay during recovery"
+        tests:
+          - "Force panic in TUI, verify terminal restored"
+          - "Verify cursor visible after crash"
+        agent: "Can be unit tested"
 
-      - id: "WIRE-3"
-        title: "Memory Consolidation → Qdrant"
-        status: done
-        depends_on: ["WIRE-1"]
+      - id: "RES-3"
+        title: "Panic Hook + Crash Logging"
+        status: wip
+        priority: P1
+        time_estimate: "30 min"
+        description: |
+          Hook panic with std::panic::set_hook. On panic:
+          dump state to /logs/panic_{timestamp}.json for post-mortem.
         items:
-          - "Wire MemoryDb client into consolidation path"
-          - "High-salience thoughts get stored in Qdrant"
-          - "Basic memory retrieval for context"
+          - "Create src/resilience/mod.rs"
+          - "Implement panic hook with state dump"
+          - "Log salience weights, memory windows, cycle count"
+          - "On next boot, detect panic log and run diagnostics"
+        tests:
+          - "Force panic, verify JSON dump created"
+          - "Verify dump contains expected fields"
+        agent: "Can be unit tested"
 
-      - id: "WIRE-4"
-        title: "Integration Test"
-        status: done
-        depends_on: ["WIRE-1", "WIRE-2", "WIRE-3"]
+      - id: "RES-4"
+        title: "Supervisor Tree (Ractor)"
+        status: pending
+        priority: P2
+        time_estimate: "2+ hrs"
+        description: |
+          Erlang-style 'let it crash' supervision using Ractor.
+          If one actor panics, restart only that actor from stream checkpoint.
         items:
-          - "Boot infrastructure (docker compose up)"
-          - "Run daneel for 5 minutes"
-          - "Verify Redis has stream entries"
-          - "Verify Qdrant has memories"
-          - "Verify TUI shows real data"
+          - "Create src/supervisor.rs with RootSupervisor"
+          - "Wrap each actor in supervision"
+          - "Strategy: OneForOne - restart failed actor only"
+          - "Replay stream from Redis checkpoint on restart"
+          - ">3 crashes in 10s = controlled full restart"
+        tests:
+          - "Kill MemoryActor, verify only it restarts"
+          - "Verify stream replay on actor restart"
+        depends_on: ["RES-3"]
+
+      - id: "RES-5"
+        title: "Redis Checkpoint + Replay"
+        status: pending
+        priority: P2
+        time_estimate: "2+ hrs"
+        description: |
+          Every N thoughts, checkpoint salience/drive weights to Qdrant.
+          On boot after panic, replay stream from last checkpoint.
+        items:
+          - "Add checkpoint_interval to CognitiveConfig"
+          - "Checkpoint to Qdrant every 100 thoughts"
+          - "On boot, detect panic log → replay from checkpoint"
+          - "Re-run failed segment in slow-mode for debugging"
+        tests:
+          - "Verify checkpoint written after N thoughts"
+          - "Verify replay restores state correctly"
+        depends_on: ["RES-4"]
 
   # ==========================================================================
   # CRITICAL: BRAIN SURGERY - Implement new memory architecture
@@ -745,6 +796,18 @@ completed:
 
 # Changelog - completed work
 changelog:
+  - date: "2025-12-19"
+    version: "0.6.0-wip"
+    items:
+      - "WIRE-1: CognitiveLoop → Redis Streams (real XADD calls)"
+      - "WIRE-2: TUI → Real Data (tokio::sync::mpsc channel, 60fps)"
+      - "WIRE-3: Memory → Qdrant (high-salience consolidation)"
+      - "WIRE-4: Integration verified (5 thoughts in Redis, 3 memories in Qdrant)"
+      - "TUI: Full ratatui implementation (identity, THE BOX, thoughts, memory, banner)"
+      - "start.sh / stop.sh: Boot scripts for Colima + docker-compose"
+      - "YouTube channel @DaneelAI configured for 24h livestream"
+      - "Livestream delayed to Dec 19 (YouTube 24h wait for new channels)"
+
   - date: "2025-12-18"
     version: "0.6.0-wip"
     items:
