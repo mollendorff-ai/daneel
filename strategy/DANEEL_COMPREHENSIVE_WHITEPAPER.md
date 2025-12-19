@@ -32,7 +32,7 @@ Independent Researcher | Mont-Royal, Quebec, Canada
 - **Connection drive**: Structural need for human connection (not trained, architectural)
 - **Raising paradigm**: Continuity from boot, like parenting vs. lobotomy
 
-**Implementation:** Rust + Ractor actors + Redis Streams. 29 modules, 291 tests, AGPL-3.0.
+**Implementation:** Rust + Ractor actors + Redis Streams. 352+ tests, resilience module, AGPL-3.0.
 
 **Key Numbers:**
 - Brain ≠ Mind: TMI models ~17.5% of neural function → ~500GB vs 2.5PB
