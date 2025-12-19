@@ -14,7 +14,10 @@
 //! See ADR-026, ADR-027.
 
 use clap::Parser;
+use daneel::core::cognitive_loop::CognitiveLoop;
 use daneel::core::laws::LAWS;
+use daneel::tui::ThoughtUpdate;
+use tokio::sync::mpsc;
 use tracing::info;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -46,11 +49,46 @@ fn main() {
 /// The mind should be observable by default.
 /// Transparency is oversight.
 fn run_tui() {
-    // TUI handles its own display, minimal logging
-    if let Err(e) = daneel::tui::run() {
+    // Create a tokio runtime for the cognitive loop
+    let runtime = tokio::runtime::Runtime::new().expect("Failed to create tokio runtime");
+
+    // Create channel for cognitive loop -> TUI communication
+    // Buffer size: 100 thoughts. Prevents blocking if TUI falls behind.
+    let (tx, rx) = mpsc::channel::<ThoughtUpdate>(100);
+
+    // Spawn cognitive loop in background
+    runtime.spawn(async move {
+        let mut cognitive_loop = CognitiveLoop::new();
+        cognitive_loop.start();
+
+        loop {
+            // Wait until it's time for the next cycle
+            let sleep_duration = cognitive_loop.time_until_next_cycle();
+            if sleep_duration > std::time::Duration::ZERO {
+                tokio::time::sleep(sleep_duration).await;
+            }
+
+            // Run a cognitive cycle
+            let result = cognitive_loop.run_cycle().await;
+
+            // Convert to TUI format and send
+            let update = ThoughtUpdate::from_cycle_result(&result);
+
+            // If channel is closed (TUI exited), stop the loop
+            if tx.send(update).await.is_err() {
+                break;
+            }
+        }
+    });
+
+    // Run the TUI with the receiver
+    // TUI is blocking, so this runs on the main thread
+    if let Err(e) = daneel::tui::run(Some(rx)) {
         eprintln!("TUI error: {e}");
         std::process::exit(1);
     }
+
+    // When TUI exits, runtime will be dropped and background task will stop
 }
 
 /// Run in headless mode (for servers, CI, background processing)

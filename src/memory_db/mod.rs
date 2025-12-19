@@ -103,6 +103,24 @@ impl MemoryDb {
         Ok(Self { client })
     }
 
+    /// Connect to Qdrant and initialize collections in one call
+    ///
+    /// This is a convenience method that combines `connect()` and `init_collections()`.
+    /// Use this for quick setup during startup.
+    ///
+    /// # Arguments
+    ///
+    /// * `url` - Qdrant gRPC URL (e.g., "http://localhost:6334")
+    ///
+    /// # Errors
+    ///
+    /// Returns error if connection or collection creation fails.
+    pub async fn connect_and_init(url: &str) -> Result<Self> {
+        let db = Self::connect(url).await?;
+        db.init_collections().await?;
+        Ok(db)
+    }
+
     /// Initialize collections if they don't exist
     ///
     /// Creates:

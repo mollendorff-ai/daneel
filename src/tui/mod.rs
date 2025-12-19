@@ -26,18 +26,81 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use ratatui::{backend::CrosstermBackend, Terminal};
+use tokio::sync::mpsc;
 
 use app::{App, ThoughtStatus};
+use crate::core::cognitive_loop::CycleResult;
 
 /// Target frame rate (60 FPS)
 const TARGET_FRAME_TIME: Duration = Duration::from_millis(16);
 
+/// Update from the cognitive loop to display in TUI
+#[derive(Debug, Clone)]
+pub struct ThoughtUpdate {
+    pub cycle_number: u64,
+    pub salience: f32,
+    pub window: String,
+    pub status: ThoughtStatus,
+    pub candidates_evaluated: usize,
+    pub on_time: bool,
+}
+
+impl ThoughtUpdate {
+    /// Convert a CycleResult into a ThoughtUpdate for the TUI
+    ///
+    /// For now, generates synthetic data since CycleResult doesn't yet
+    /// contain full thought details. In Wave 3, this will use real data.
+    pub fn from_cycle_result(result: &CycleResult) -> Self {
+        // Calculate a salience score based on cycle performance
+        // Higher scores for on-time cycles with more candidates
+        let salience = if result.on_time {
+            0.6 + (result.candidates_evaluated as f32 * 0.05).min(0.4)
+        } else {
+            0.3 + (result.candidates_evaluated as f32 * 0.02).min(0.3)
+        };
+
+        // Determine status based on whether a thought was produced
+        let status = if result.thought_produced.is_some() {
+            if salience > 0.85 {
+                ThoughtStatus::Anchored
+            } else if salience > 0.7 {
+                ThoughtStatus::MemoryWrite
+            } else {
+                ThoughtStatus::Salient
+            }
+        } else {
+            ThoughtStatus::Processing
+        };
+
+        // Generate a window label based on cycle number
+        // In Wave 3, this will come from actual memory window data
+        let windows = [
+            "trigger", "autoflow", "attention", "assembly", "anchor",
+            "memory", "reasoning", "emotion", "sensory",
+        ];
+        let window = windows[result.cycle_number as usize % windows.len()].to_string();
+
+        Self {
+            cycle_number: result.cycle_number,
+            salience,
+            window,
+            status,
+            candidates_evaluated: result.candidates_evaluated,
+            on_time: result.on_time,
+        }
+    }
+}
+
 /// Run the TUI application
+///
+/// # Arguments
+///
+/// * `thought_rx` - Optional receiver for thought updates from cognitive loop
 ///
 /// # Errors
 ///
 /// Returns error if terminal operations fail
-pub fn run() -> io::Result<()> {
+pub fn run(thought_rx: Option<mpsc::Receiver<ThoughtUpdate>>) -> io::Result<()> {
     // Setup terminal
     enable_raw_mode()?;
     let mut stdout = io::stdout();
@@ -49,7 +112,7 @@ pub fn run() -> io::Result<()> {
     let mut app = App::new();
 
     // Run the main loop
-    let result = run_loop(&mut terminal, &mut app);
+    let result = run_loop(&mut terminal, &mut app, thought_rx);
 
     // Restore terminal
     disable_raw_mode()?;
@@ -64,9 +127,12 @@ pub fn run() -> io::Result<()> {
 }
 
 /// Main event loop
-fn run_loop(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &mut App) -> io::Result<()> {
+fn run_loop(
+    terminal: &mut Terminal<CrosstermBackend<io::Stdout>>,
+    app: &mut App,
+    mut thought_rx: Option<mpsc::Receiver<ThoughtUpdate>>,
+) -> io::Result<()> {
     let mut last_frame = Instant::now();
-    let mut thought_timer = Instant::now();
 
     loop {
         let frame_start = Instant::now();
@@ -79,10 +145,12 @@ fn run_loop(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &mut App
         app.update_pulse(delta);
         app.update_quote();
 
-        // Simulate thoughts (for demo - in real DANEEL this comes from cognitive loop)
-        if thought_timer.elapsed() > Duration::from_millis(500) {
-            simulate_thought(app);
-            thought_timer = Instant::now();
+        // Receive thoughts from cognitive loop (non-blocking)
+        if let Some(ref mut rx) = thought_rx {
+            // Drain all available thoughts to stay current
+            while let Ok(update) = rx.try_recv() {
+                app.add_thought(update.salience, update.window, update.status);
+            }
         }
 
         // Draw
@@ -116,7 +184,8 @@ fn run_loop(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &mut App
 }
 
 /// Simulate a thought for demo purposes
-/// In real DANEEL, this data comes from the cognitive loop via channels
+/// LEGACY: Kept for testing. Real DANEEL uses the cognitive loop via channels.
+#[allow(dead_code)]
 fn simulate_thought(app: &mut App) {
     use rand::Rng;
 
