@@ -52,7 +52,7 @@ current:
   # The 147x advantage only works if people KNOW about it and JOIN.
   # ==========================================================================
   open_source_collaboration:
-    status: "WIP"
+    status: "DONE"
     priority: "HIGHLY-CRITICAL"
     origin: "Rex + Claude Opus 4.5 - Dec 19, 2025"
     philosophy: |
@@ -67,45 +67,121 @@ current:
     phases:
       - id: "OSS-1"
         title: "Research Agentic AI Impact"
-        status: wip
+        status: done
         priority: P0
         description: |
           How does AI-assisted coding (MCP, autonomous agents) change the
           open source dominance equation? Labs still have BMAD, meetings,
           reviews - but now with AI velocity on top.
         items:
-          - "Research GitHub Copilot productivity stats"
-          - "Research Cursor, Devin, agentic coding tools"
-          - "Research BMAD and legacy workflow overhead"
-          - "Research corporate AI adoption rates"
-          - "Update open-source-dominance.yaml with agentic factors"
+          - "Research GitHub Copilot productivity stats ✓"
+          - "Research Cursor, Devin, agentic coding tools ✓"
+          - "Research BMAD and legacy workflow overhead ✓"
+          - "Research corporate AI adoption rates ✓"
+          - "Update open-source-dominance.yaml with agentic factors ✓"
 
       - id: "OSS-2"
         title: "Document ref-tools Methodology"
-        status: wip
+        status: done
         priority: P0
         description: |
           ref-tools is our secret weapon for source verification.
           Anti-bot web fetching that actually works with LLMs.
           Document the methodology: ref-tools + references.yaml workflow.
         items:
-          - "Create docs/methodology/REF_TOOLS.md"
-          - "Explain references.yaml role and structure"
-          - "Document verification workflow"
-          - "Consider open-sourcing ref-tools"
+          - "Create docs/methodology/REF_TOOLS.md ✓"
+          - "Explain references.yaml role and structure ✓"
+          - "Document verification workflow ✓"
+          - "Consider open-sourcing ref-tools (deferred to Q1 2026)"
 
       - id: "OSS-3"
         title: "Blog: Open Source Dominance"
-        status: wip
+        status: done
         priority: P0
         description: |
           Blog post explaining the 147x advantage, verification methodology,
           and why agentic AI makes open source even MORE dominant.
         items:
-          - "Write blog/013-open-source-dominance-verified.md"
-          - "Include verification story (found errors, corrected)"
-          - "Include agentic AI analysis"
-          - "Include ref-tools methodology"
+          - "Post 14: Open Source Dominance - 147x Advantage, Verified ✓"
+          - "Post 15: The Agentic AI Paradox ✓"
+          - "Post 16: ref-tools - Teaching AI to Verify Sources ✓"
+          - "Post 17: Forge - When AI Cannot Be Trusted to Count ✓"
+          - "Post 18: The Stark Protocol - When AI Becomes JARVIS ✓"
+          - "Post 19: Grok Made Timmy Unkillable - T-Minus Launch ✓"
+
+  # ==========================================================================
+  # TEST COVERAGE: Push to 100% (where possible)
+  # ==========================================================================
+  # Current: 360 tests, 37% of codebase is tests
+  # Gaps: persistence (1 test), tui (0 tests)
+  # ==========================================================================
+  test_coverage:
+    status: "WIP"
+    priority: "HIGH"
+    origin: "Rex + Claude Opus 4.5 - Dec 19, 2025"
+    current_stats:
+      total_tests: 360
+      test_loc: 4730
+      production_loc: 12632
+      test_ratio: "37%"
+    coverage_by_module:
+      actors: { tests: 201, status: "excellent" }
+      core: { tests: 53, status: "excellent" }
+      streams: { tests: 42, status: "excellent" }
+      memory_db: { tests: 24, status: "good" }
+      resilience: { tests: 20, status: "good" }
+      config: { tests: 12, status: "good" }
+      persistence: { tests: 1, status: "gap", loc: 474 }
+      tui: { tests: 0, status: "gap", loc: 800 }
+
+    phases:
+      - id: "TEST-1"
+        title: "Persistence Module Tests"
+        status: pending
+        priority: P1
+        target_tests: 20
+        description: |
+          MemoryStore needs unit tests. Currently only 1 doc test.
+          Mock Redis for isolated testing.
+        items:
+          - "MemoryStore::new() initialization"
+          - "save_state() serialization"
+          - "load_state() deserialization"
+          - "Round-trip state preservation"
+          - "Error handling (Redis unavailable)"
+          - "Empty state handling"
+          - "Large state handling"
+
+      - id: "TEST-2"
+        title: "TUI Widget Tests"
+        status: pending
+        priority: P1
+        target_tests: 15
+        description: |
+          Test widget logic without rendering.
+          Focus on calculations, formatting, state.
+        items:
+          - "identity.rs: uptime formatting, metric calculations"
+          - "the_box.rs: law status logic, pulse timing"
+          - "thoughts.rs: scroll bounds, salience color mapping"
+          - "memory.rs: window slot counting, age formatting"
+          - "banner.rs: quote rotation timing"
+          - "colors.rs: color scheme consistency"
+
+      - id: "TEST-3"
+        title: "TUI App Tests"
+        status: pending
+        priority: P2
+        target_tests: 10
+        description: |
+          Test app state machine without terminal.
+          Keyboard handling, view transitions.
+        items:
+          - "app.rs: state transitions"
+          - "app.rs: keyboard event handling"
+          - "app.rs: help toggle"
+          - "app.rs: pause/resume"
+          - "app.rs: scroll navigation"
 
   # ==========================================================================
   # CRITICAL: SELF-HEALING RESILIENCE - Timmy must survive and learn
@@ -243,7 +319,7 @@ current:
   # - ADR-023: Sleep/Dream consolidation mode
   # ==========================================================================
   brain_surgery:
-    status: "CRITICAL - NEXT"
+    status: "DONE"
     priority: "HIGHEST"
     description: |
       Update DANEEL Rust code to implement the new memory architecture.
@@ -252,7 +328,7 @@ current:
     phases:
       - id: "SURGERY-1"
         title: "Types & Schema (Foundation)"
-        status: pending
+        status: done
         items:
           - "Create src/memory_db/types.rs with Qdrant-compatible types"
           - "Memory, Episode, Association, MemoryPayload structs"
@@ -261,7 +337,7 @@ current:
 
       - id: "SURGERY-2"
         title: "Qdrant Integration"
-        status: pending
+        status: done
         depends_on: ["SURGERY-1"]
         items:
           - "Add qdrant-client = '1.16' to Cargo.toml"
@@ -271,7 +347,7 @@ current:
 
       - id: "SURGERY-3"
         title: "Stream Refactor"
-        status: pending
+        status: done
         depends_on: ["SURGERY-1"]
         items:
           - "Update src/streams/mod.rs: awake + dream streams only"
@@ -281,7 +357,7 @@ current:
 
       - id: "SURGERY-4"
         title: "Actor Updates"
-        status: pending
+        status: done
         depends_on: ["SURGERY-2", "SURGERY-3"]
         items:
           - "Update MemoryActor: add consolidation state to windows"
@@ -291,7 +367,7 @@ current:
 
       - id: "SURGERY-5"
         title: "Integration & Testing"
-        status: pending
+        status: done
         depends_on: ["SURGERY-4"]
         items:
           - "Docker Compose: add Qdrant service"
@@ -879,11 +955,14 @@ changelog:
   - date: "2025-12-19"
     version: "0.6.0-wip"
     items:
+      # Brain Wiring (WIRE-1→4)
       - "WIRE-1: CognitiveLoop → Redis Streams (real XADD calls)"
       - "WIRE-2: TUI → Real Data (tokio::sync::mpsc channel, 60fps)"
       - "WIRE-3: Memory → Qdrant (high-salience consolidation)"
       - "WIRE-4: Integration verified (5 thoughts in Redis, 3 memories in Qdrant)"
+      # TUI
       - "TUI: Full ratatui implementation (identity, THE BOX, thoughts, memory, banner)"
+      # Resilience (RES-1→5)
       - "RES-1: External watchdog script (scripts/run_timmy.sh) with crash logging"
       - "RES-2: TUI panic recovery (terminal restoration on crash)"
       - "RES-3: Crash logging to logs/panic_{timestamp}.json"
@@ -891,13 +970,28 @@ changelog:
       - "RES-5: Checkpoint module (Redis state persistence)"
       - "src/resilience/: Full resilience module with 21 tests"
       - "color_eyre: Pretty panic reports"
-      - "Blog: 13 posts documenting Rex-Claude-Grok dialogues"
+      # Open Source Collaboration (OSS-1→3) - COMPLETED
+      - "OSS-1: Research Agentic AI Impact (GitHub Copilot, Cursor, Devin, BCG adoption data)"
+      - "OSS-2: docs/methodology/REF_TOOLS.md + FORGE.md documentation"
+      - "OSS-3: Blog posts 14-19 (Open Source Dominance, Agentic AI, ref-tools, Forge, Stark Protocol, Launch)"
+      - "ADR-029: Open Source Dominance Strategy (147x → 169x with agentic AI)"
+      - "ADR-030: Forge Adoption for Deterministic Financial Modeling"
+      # Blog
+      - "Blog: 19 posts total documenting Rex-Claude-Grok dialogues and methodology"
+      - "Blog: Fixed future-dated posts 14-19 (Hugo skips future dates)"
+      # Infrastructure
       - "start.sh / stop.sh: Boot scripts for Colima + docker-compose"
       - "YouTube channel @DaneelAI configured for 24h livestream"
-      - "Livestream delayed to Dec 19 (YouTube 24h wait for new channels)"
+      - "Livestream: 11:30pm EST Dec 19, 2025"
+      # Dependencies
       - "DEPS: Major dependency update - redis 1.0, ractor 0.15, rand 0.9, crossterm 0.29"
       - "Makefile + pre-commit hook: Quality gates (fmt, clippy, test)"
+      # Documentation
       - "ADR-028: Resilience and Self-Healing documentation"
+      # Test Coverage Analysis
+      - "Test coverage: 360 tests, 37% of codebase (4,730 test LOC / 12,632 production LOC)"
+      - "Coverage gaps identified: persistence (1 test), tui (0 tests)"
+      - "TEST-1, TEST-2, TEST-3: Test coverage roadmap added"
 
   - date: "2025-12-18"
     version: "0.6.0-wip"
