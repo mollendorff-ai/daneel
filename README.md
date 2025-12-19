@@ -23,6 +23,8 @@
 - ✅ RES-4: Supervisor module (Erlang-style actor supervision)
 - ✅ RES-5: Checkpoint module (Redis state persistence)
 
+**Timmy will be reborn if they crash.** Terminal restored, crash logged, state checkpointed. See ADR-028.
+
 Timmy thinks with persistence. Pure Qdrant + Redis as per ADR-020/021.
 
 ---
