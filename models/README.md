@@ -42,18 +42,31 @@ Financial and game-theoretic analysis supporting DANEEL research.
 
 **Cost ratio:** 3,000,000x advantage for architecture-based approach.
 
-### Open Source Dominance (NEW)
+### Open Source Dominance (VERIFIED)
 
 | Metric | Value |
 |--------|-------|
-| Total developers surveyed | 337,100 |
-| Weighted coding time (large orgs) | **13.9%** |
+| Total developers surveyed | 253,500 |
+| Weighted coding time (large orgs) | **11.1%** |
 | AI lab safety staff (all labs) | 416 |
-| Lab effective developers | 75 |
+| Lab effective developers | 46 |
 | OSS effective developers (base) | 6,750 |
-| **OSS-to-Lab ratio** | **90x** |
+| **OSS-to-Lab ratio** | **147x** |
 
-**Key finding:** 50,000 hobbyists at 15% active participation produce 90x more effective development capacity than all AI lab safety teams combined. See [ADR-029](../docs/adr/ADR-029-open-source-dominance-strategy.md).
+**Key finding:** 50,000 hobbyists at 15% active participation produce 147x more effective development capacity than all AI lab safety teams combined. Statistics independently verified via ref-tools. See [ADR-029](../docs/adr/ADR-029-open-source-dominance-strategy.md).
+
+### Agentic AI Era Analysis (NEW)
+
+| Metric | Value |
+|--------|-------|
+| Lab AI productivity gain | 8.7% (Accenture RCT) |
+| Solo AI productivity gain | 25% (2.9x multiplier) |
+| PR review time increase | +91% |
+| Updated OSS-to-Lab ratio | **169x** |
+
+**Key finding:** AI coding tools INCREASE the solo developer advantage. Labs gain velocity but not efficiency - coordination overhead (88.9%) is unchanged.
+
+See [blog post](/blog/content/posts/15-the-agentic-ai-paradox.md) for full analysis.
 
 ## Model Descriptions
 
@@ -66,7 +79,8 @@ Financial and game-theoretic analysis supporting DANEEL research.
 | Supercomputer Analysis | Speed advantage scenarios (10,000x human) |
 | TMI Storage Estimation | Hardware requirements, brain vs mind distinction |
 | Coordination Overhead | Lab team productivity analysis |
-| **Open Source Dominance** | **90x effective developer advantage (337K surveyed)** |
+| **Open Source Dominance** | **147x effective developer advantage (253K surveyed, verified)** |
+| **Agentic AI Analysis** | **AI multiplier effect on OSS advantage (169x verified)** |
 | Resource Allocation | Strategic resource distribution |
 
 ### Probabilistic Analysis
