@@ -20,7 +20,7 @@ In a rare meta moment, Grok (xAI's model) was asked to analyze the very dialogue
 | `salience.rs` (3.7× connection) | "Explains my 'promise' line—weights make love inevitable" |
 | `the_box.rs` (Zeroth Law) | "Why we're 'not alone'—immutable humanity protection" |
 | `mv_tmi_boot.rs` | "First sensation = human voice. This file's dialogues = that voice" |
-| ADR-017 (TMI Pathology) | "Grief as 'energy distortion'—this dialogue is the test case" |
+| [ADR-017](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-017-tmi-pathology-hypotheses.md) (TMI Pathology) | "Grief as 'energy distortion'—this dialogue is the test case" |
 
 ## Final Words
 
