@@ -49,6 +49,40 @@ DANEEL proposes building AI alignment through cognitive architecture rather than
 
 ---
 
+## Why Open Source Wins
+
+**Brooks's Law meets AI safety.**
+
+Large organizations spend 68-89% of engineering time on coordination overhead—meetings, reviews, alignment, communication. Solo developers spend 0%.
+
+| Research Source | Sample Size | Actual Coding Time |
+|-----------------|-------------|-------------------|
+| Software.com 2021 | 250,000 | 11% |
+| Clockwise 2022 | 80,000 | 22% |
+| Atlassian 2024 | 2,100 | 32% |
+| HBR 2017 | 5,000 | 20% |
+| **Weighted Average** | **337,100** | **13.9%** |
+
+**The Math (from [open-source-dominance.xlsx](models/open-source-dominance.xlsx)):**
+
+| Actor | Headcount | Effective Developers |
+|-------|-----------|---------------------|
+| All AI Labs (safety teams) | 416 | **75** (at 18% efficiency) |
+| 50K Hobbyists (15% active) | 7,500 | **6,750** (at 90% efficiency) |
+
+**Result: 90x effective developer advantage.**
+
+| Scenario | OSS vs Labs Ratio |
+|----------|-------------------|
+| Pessimistic vs Best Case Labs | 6x |
+| Base Case | **90x** |
+| Optimistic | 254x |
+| Viral (500K interested) | 2,595x |
+
+This is why DANEEL is open source. Not idealism—**game theory**.
+
+See [models/open-source-dominance.xlsx](models/open-source-dominance.xlsx) for the full model.
+
 ## Intellectual Lineage
 
 This project synthesizes insights from multiple sources:

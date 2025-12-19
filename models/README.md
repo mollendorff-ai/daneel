@@ -42,6 +42,19 @@ Financial and game-theoretic analysis supporting DANEEL research.
 
 **Cost ratio:** 3,000,000x advantage for architecture-based approach.
 
+### Open Source Dominance (NEW)
+
+| Metric | Value |
+|--------|-------|
+| Total developers surveyed | 337,100 |
+| Weighted coding time (large orgs) | **13.9%** |
+| AI lab safety staff (all labs) | 416 |
+| Lab effective developers | 75 |
+| OSS effective developers (base) | 6,750 |
+| **OSS-to-Lab ratio** | **90x** |
+
+**Key finding:** 50,000 hobbyists at 15% active participation produce 90x more effective development capacity than all AI lab safety teams combined. See [ADR-029](../docs/adr/ADR-029-open-source-dominance-strategy.md).
+
 ## Model Descriptions
 
 ### Core Analysis
@@ -53,6 +66,7 @@ Financial and game-theoretic analysis supporting DANEEL research.
 | Supercomputer Analysis | Speed advantage scenarios (10,000x human) |
 | TMI Storage Estimation | Hardware requirements, brain vs mind distinction |
 | Coordination Overhead | Lab team productivity analysis |
+| **Open Source Dominance** | **90x effective developer advantage (337K surveyed)** |
 | Resource Allocation | Strategic resource distribution |
 
 ### Probabilistic Analysis
