@@ -72,13 +72,17 @@ current:
           Bash wrapper that relaunches binary on crash.
           Nuclear option - if process dies, it comes back.
         items:
-          - "Create run_timmy.sh watchdog wrapper"
+          - "Create scripts/run_timmy.sh watchdog wrapper"
           - "Watch exit code, sleep 5s, relaunch on non-zero"
-          - "Track crash count, alert if >10/hour"
+          - "Track crash count in /tmp/timmy_crashes.log"
+          - "Alert if >10 crashes/hour (write to stderr)"
           - "Run in tmux/screen for stream stability"
+          - "Graceful shutdown on SIGTERM/SIGINT"
         tests:
-          - "Kill process manually, verify auto-restart"
-          - "Verify crash count increments"
+          - "scripts/test_watchdog.sh - integration test"
+          - "Test: Kill process manually, verify auto-restart within 6s"
+          - "Test: Verify crash count increments in log"
+          - "Test: Verify SIGTERM causes clean exit (no restart)"
 
       - id: "RES-2"
         title: "TUI Panic Recovery"
@@ -89,14 +93,16 @@ current:
           Ratatui panics leave terminal broken (raw mode, hidden cursor).
           Must ALWAYS restore terminal state on exit, panic or normal.
         items:
-          - "Wrap main loop with color_eyre::install()"
-          - "Always call ratatui::restore() in cleanup"
-          - "Add panic hook to restore terminal before unwinding"
-          - "TUI shows 'Resurrecting...' overlay during recovery"
+          - "Create src/resilience/mod.rs module"
+          - "Install color_eyre for pretty panic reports"
+          - "Create install_panic_hooks() that restores terminal"
+          - "Wrap ratatui::restore() in panic hook"
+          - "Add recovery state to TUI for 'Resurrecting...' overlay"
         tests:
-          - "Force panic in TUI, verify terminal restored"
-          - "Verify cursor visible after crash"
-        agent: "Can be unit tested"
+          - "Unit test: panic hook installation succeeds"
+          - "Unit test: terminal_cleanup() is idempotent"
+          - "Integration test: force panic, verify terminal restored"
+          - "Test in src/resilience/tests.rs (Rust inline tests)"
 
       - id: "RES-3"
         title: "Panic Hook + Crash Logging"
@@ -105,52 +111,64 @@ current:
         time_estimate: "30 min"
         description: |
           Hook panic with std::panic::set_hook. On panic:
-          dump state to /logs/panic_{timestamp}.json for post-mortem.
+          dump state to logs/panic_{timestamp}.json for post-mortem.
         items:
-          - "Create src/resilience/mod.rs"
-          - "Implement panic hook with state dump"
+          - "Add CrashReport struct with timestamp, backtrace, state"
+          - "Implement dump_crash_report() to serialize state"
           - "Log salience weights, memory windows, cycle count"
-          - "On next boot, detect panic log and run diagnostics"
+          - "Create logs/ directory on startup if missing"
+          - "On next boot, detect_previous_crash() returns Option<CrashReport>"
         tests:
-          - "Force panic, verify JSON dump created"
-          - "Verify dump contains expected fields"
-        agent: "Can be unit tested"
+          - "Unit test: CrashReport serializes correctly"
+          - "Unit test: dump_crash_report() creates valid JSON"
+          - "Unit test: detect_previous_crash() finds existing logs"
+          - "Unit test: crash log contains expected fields"
+          - "Tests inline in src/resilience/crash_log.rs"
 
       - id: "RES-4"
         title: "Supervisor Tree (Ractor)"
-        status: pending
+        status: wip
         priority: P2
         time_estimate: "2+ hrs"
         description: |
           Erlang-style 'let it crash' supervision using Ractor.
           If one actor panics, restart only that actor from stream checkpoint.
         items:
-          - "Create src/supervisor.rs with RootSupervisor"
-          - "Wrap each actor in supervision"
+          - "Create src/resilience/supervisor.rs with SupervisorConfig"
+          - "Implement ActorSupervisor trait for restartable actors"
           - "Strategy: OneForOne - restart failed actor only"
-          - "Replay stream from Redis checkpoint on restart"
-          - ">3 crashes in 10s = controlled full restart"
+          - "Track restart counts per actor"
+          - ">3 crashes in 10s = escalate to full restart"
+          - "Emit SupervisorEvent for monitoring"
         tests:
-          - "Kill MemoryActor, verify only it restarts"
-          - "Verify stream replay on actor restart"
+          - "Unit test: SupervisorConfig validates correctly"
+          - "Unit test: restart count tracking"
+          - "Unit test: escalation after threshold"
+          - "Unit test: OneForOne strategy restarts only failed actor"
+          - "Tests inline in src/resilience/supervisor.rs"
         depends_on: ["RES-3"]
 
       - id: "RES-5"
         title: "Redis Checkpoint + Replay"
-        status: pending
+        status: wip
         priority: P2
         time_estimate: "2+ hrs"
         description: |
-          Every N thoughts, checkpoint salience/drive weights to Qdrant.
+          Every N thoughts, checkpoint cognitive state to Redis.
           On boot after panic, replay stream from last checkpoint.
         items:
-          - "Add checkpoint_interval to CognitiveConfig"
-          - "Checkpoint to Qdrant every 100 thoughts"
-          - "On boot, detect panic log → replay from checkpoint"
-          - "Re-run failed segment in slow-mode for debugging"
+          - "Create src/resilience/checkpoint.rs"
+          - "Add CheckpointConfig with interval (default: 100 thoughts)"
+          - "Checkpoint struct: thought_count, salience_weights, drive_state, timestamp"
+          - "save_checkpoint() to Redis key 'daneel:checkpoint:latest'"
+          - "load_checkpoint() returns Option<Checkpoint>"
+          - "On boot, if crash detected + checkpoint exists, log recovery info"
         tests:
-          - "Verify checkpoint written after N thoughts"
-          - "Verify replay restores state correctly"
+          - "Unit test: Checkpoint serializes/deserializes correctly"
+          - "Unit test: save_checkpoint() writes to Redis"
+          - "Unit test: load_checkpoint() reads from Redis"
+          - "Unit test: checkpoint interval triggers correctly"
+          - "Tests inline in src/resilience/checkpoint.rs"
         depends_on: ["RES-4"]
 
   # ==========================================================================
