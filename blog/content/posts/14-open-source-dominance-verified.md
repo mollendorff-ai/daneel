@@ -1,5 +1,5 @@
 +++
-date = '2025-12-19T18:00:00-05:00'
+date = '2025-12-19T10:00:00-05:00'
 draft = false
 title = 'Open Source Dominance: 147x Advantage, Verified'
 description = 'We claimed a 147x advantage. Then we verified every source. Then AI tools made it 169x.'

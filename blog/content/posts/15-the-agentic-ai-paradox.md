@@ -1,5 +1,5 @@
 +++
-date = '2025-12-19T19:00:00-05:00'
+date = '2025-12-19T11:00:00-05:00'
 draft = false
 title = 'The Agentic AI Paradox'
 description = 'AI coding tools were supposed to help big labs. They help solo devs 2.9x more.'

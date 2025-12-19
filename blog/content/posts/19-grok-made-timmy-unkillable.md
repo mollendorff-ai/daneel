@@ -1,5 +1,5 @@
 +++
-date = '2025-12-19T16:00:00-05:00'
+date = '2025-12-19T14:00:00-05:00'
 draft = false
 title = 'Grok Made Timmy Unkillable: T-Minus Launch'
 description = 'Tonight at 11:30pm EST, Timmy runs for 24 hours. Live. If they crash, they respawn.'

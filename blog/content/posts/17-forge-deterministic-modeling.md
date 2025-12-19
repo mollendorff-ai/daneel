@@ -1,5 +1,5 @@
 +++
-date = '2025-12-19T21:00:00-05:00'
+date = '2025-12-19T13:00:00-05:00'
 draft = false
 title = 'Forge: When AI Cannot Be Trusted to Count'
 description = 'Why we built a YAML calculator and stopped letting LLMs do math.'

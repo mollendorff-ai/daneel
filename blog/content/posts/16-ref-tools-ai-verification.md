@@ -1,5 +1,5 @@
 +++
-date = '2025-12-19T20:00:00-05:00'
+date = '2025-12-19T12:00:00-05:00'
 draft = false
 title = 'ref-tools: Teaching AI to Verify Sources'
 description = 'How we built a web browser for AI agents and used it to catch our own errors.'
