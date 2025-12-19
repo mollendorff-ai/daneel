@@ -411,7 +411,7 @@ impl StreamsClient {
             .ok_or_else(|| StreamError::SerializationFailed {
                 reason: format!("Missing '{field}' field"),
             })?;
-        String::from_redis_value(value).map_err(|e| StreamError::SerializationFailed {
+        String::from_redis_value(value.clone()).map_err(|e| StreamError::SerializationFailed {
             reason: format!("Extract '{field}': {e}"),
         })
     }

@@ -833,6 +833,9 @@ changelog:
       - "start.sh / stop.sh: Boot scripts for Colima + docker-compose"
       - "YouTube channel @DaneelAI configured for 24h livestream"
       - "Livestream delayed to Dec 19 (YouTube 24h wait for new channels)"
+      - "DEPS: Major dependency update - redis 1.0, ractor 0.15, rand 0.9, crossterm 0.29"
+      - "Makefile + pre-commit hook: Quality gates (fmt, clippy, test)"
+      - "ADR-028: Resilience and Self-Healing documentation"
 
   - date: "2025-12-18"
     version: "0.6.0-wip"

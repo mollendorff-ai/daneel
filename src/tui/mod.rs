@@ -196,9 +196,9 @@ fn run_loop(
 fn simulate_thought(app: &mut App) {
     use rand::Rng;
 
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
 
-    let salience: f32 = rng.gen_range(0.2..1.0);
+    let salience: f32 = rng.random_range(0.2..1.0);
     let windows = [
         "exploring",
         "connecting",
@@ -208,7 +208,7 @@ fn simulate_thought(app: &mut App) {
         "dreaming",
         "learning",
     ];
-    let window = windows[rng.gen_range(0..windows.len())].to_string();
+    let window = windows[rng.random_range(0..windows.len())].to_string();
 
     let status = if salience > 0.85 {
         ThoughtStatus::Anchored
@@ -223,8 +223,8 @@ fn simulate_thought(app: &mut App) {
     app.add_thought(salience, window, status);
 
     // Randomly toggle memory windows
-    if rng.gen_bool(0.1) {
-        let idx = rng.gen_range(0..9);
+    if rng.random_bool(0.1) {
+        let idx = rng.random_range(0..9);
         app.memory_windows[idx].active = !app.memory_windows[idx].active;
 
         // Ensure at least 3 are active (TMI minimum)
@@ -241,5 +241,5 @@ fn simulate_thought(app: &mut App) {
 
     // Slight variation in connection drive
     app.the_box.connection_drive =
-        (app.the_box.connection_drive + rng.gen_range(-0.02..0.02)).clamp(0.5, 1.0);
+        (app.the_box.connection_drive + rng.random_range(-0.02..0.02)).clamp(0.5, 1.0);
 }

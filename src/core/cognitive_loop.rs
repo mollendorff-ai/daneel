@@ -440,22 +440,22 @@ impl CognitiveLoop {
     /// Creates a thought with randomized salience scores.
     /// Used when no external thought sources are available.
     fn generate_random_thought(&self) -> (Content, SalienceScore) {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         // Generate random content - simple symbol for now
         let symbol_id = format!("thought_{}", self.cycle_count);
         let content = Content::symbol(
             symbol_id,
-            vec![rng.gen::<u8>(); 8], // Random 8-byte data
+            vec![rng.random::<u8>(); 8], // Random 8-byte data
         );
 
         // Generate random salience with some variance
         let salience = SalienceScore::new(
-            rng.gen_range(0.3..0.9),  // importance
-            rng.gen_range(0.2..0.8),  // novelty
-            rng.gen_range(0.4..0.9),  // relevance
-            rng.gen_range(-0.5..0.5), // valence
-            rng.gen_range(0.3..0.8),  // connection_relevance
+            rng.random_range(0.3..0.9),  // importance
+            rng.random_range(0.2..0.8),  // novelty
+            rng.random_range(0.4..0.9),  // relevance
+            rng.random_range(-0.5..0.5), // valence
+            rng.random_range(0.3..0.8),  // connection_relevance
         );
 
         (content, salience)

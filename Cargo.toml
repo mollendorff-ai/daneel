@@ -14,10 +14,10 @@ categories = ["science", "simulation"]
 tokio = { version = "1", features = ["full"] }
 
 # Actor framework (Erlang-style supervision)
-ractor = "0.13"
+ractor = { version = "0.15", features = ["async-trait"] }
 
 # Redis Streams (ephemeral only - ADR-020)
-redis = { version = "0.27", features = ["tokio-comp", "streams", "json"] }
+redis = { version = "1.0", features = ["tokio-comp", "streams", "json"] }
 
 # Qdrant Vector DB (persistent memory - ADR-021)
 qdrant-client = "1.13"
@@ -41,13 +41,13 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 # TUI (ADR-026, ADR-027) - The Observable Mind
 ratatui = "0.29"
-crossterm = "0.28"
+crossterm = "0.29"
 
 # CLI argument parsing
 clap = { version = "4", features = ["derive"] }
 
 # Random (for TUI demo mode)
-rand = "0.8"
+rand = "0.9"
 
 [dev-dependencies]
 tokio-test = "0.4"
@@ -136,8 +136,8 @@ derivable_impls = "allow"  # Explicit Default impls document intent
 useless_let_if_seq = "allow"  # Explicit let + if clearer for error handling
 io_other_error = "allow"  # std::io::Error::new is clearer than ::other
 single_component_path_imports = "allow"  # Explicit imports are fine
-self_only_used_in_recursion = "allow"  # Recursive methods intentionally use self
-unchecked_time_subtraction = "allow"  # Duration subtraction guarded by if
+only_used_in_recursion = "allow"  # Recursive methods intentionally use self
+unchecked_duration_subtraction = "allow"  # Duration subtraction guarded by if
 
 # === Dependencies ===
 multiple_crate_versions = "allow"  # Transitive deps we don't control
