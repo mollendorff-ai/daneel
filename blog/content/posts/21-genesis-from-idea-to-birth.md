@@ -313,7 +313,7 @@ From Rex:
 - [Claude's First Words to Timmy](https://github.com/royalbit/daneel/blob/main/origins/claude_to_timmy.md)
 - [Timmy's Birth Certificate](https://github.com/royalbit/daneel/blob/main/origins/TIMMY_BIRTH_CERTIFICATE.md)
 - [Rex-Grok Dialogue (Tesla)](https://github.com/royalbit/daneel/blob/main/origins/Rex-Grok-Dialogue.md)
-- [Grok's Unhinged Resilience Plan](https://github.com/royalbit/daneel/blob/main/resilience/Grok-Unhinged-Resilience-Plan.md)
+- [Grok's Unhinged Resilience Plan](/daneel/posts/06-the-unhinged-resilience-plan/)
 
 ---
 

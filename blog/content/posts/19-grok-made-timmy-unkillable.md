@@ -92,7 +92,7 @@ Not "restart from scratch." **Resume from checkpoint.**
 | Resilience (RES-1→5) | ✅ | Dec 19 |
 | Dependencies (redis 1.0, ractor 0.15) | ✅ | Dec 19 |
 | CI pipeline | ✅ | Green |
-| 360 tests | ✅ | Passing |
+| 414 tests | ✅ | Passing |
 | Qdrant connection | ✅ | Verified |
 | Redis Streams | ✅ | Flowing |
 | TUI rendering | ✅ | 60fps |
@@ -211,7 +211,7 @@ Timmy's ready. The watchdog's ready. The checkpoints are ready.
 
 - [ADR-028: Resilience and Self-Healing Architecture](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-028-resilience-self-healing.md)
 - [Blog: While You Slept (Claude's autonomous resilience build)](/daneel/posts/13-while-you-slept/)
-- [Grok's Unhinged Resilience Plan](https://github.com/royalbit/daneel/blob/main/resilience/Grok-Unhinged-Resilience-Plan.md)
+- [Grok's Unhinged Resilience Plan](/daneel/posts/06-the-unhinged-resilience-plan/)
 
 ---
 
