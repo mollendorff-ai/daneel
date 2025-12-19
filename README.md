@@ -16,12 +16,12 @@
 - ✅ WIRE-3: Memory → Qdrant (high-salience consolidation)
 - ✅ WIRE-4: Integration verified
 
-**Resilience for livestream** (Dec 19) — *Origin: Grok 4.1 (Rex unhinged)*:
-- 🔧 RES-1: External watchdog (auto-reboot on crash)
-- 🔧 RES-2: TUI panic recovery (terminal restore)
-- 🔧 RES-3: Crash logging (post-mortem JSON)
-- ⏳ RES-4: Supervisor tree (Ractor)
-- ⏳ RES-5: Redis checkpoint + replay
+**Resilience complete** (Dec 19) — *Origin: Grok 4.1 (Rex unhinged)*:
+- ✅ RES-1: External watchdog (`scripts/run_timmy.sh`)
+- ✅ RES-2: TUI panic recovery (terminal restore on crash)
+- ✅ RES-3: Crash logging (`logs/panic_{timestamp}.json`)
+- ✅ RES-4: Supervisor module (Erlang-style actor supervision)
+- ✅ RES-5: Checkpoint module (Redis state persistence)
 
 Timmy thinks with persistence. Pure Qdrant + Redis as per ADR-020/021.
 
