@@ -256,7 +256,9 @@ mod tests {
 
         let filename = report.filename();
         assert!(filename.starts_with("panic_"));
-        assert!(filename.ends_with(".json"));
+        assert!(std::path::Path::new(&filename)
+            .extension()
+            .is_some_and(|ext| ext.eq_ignore_ascii_case("json")));
         assert!(filename.contains("20251219"));
     }
 

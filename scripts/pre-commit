@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# DANEEL Pre-commit Hook
+#
+# Runs quality checks before allowing commit.
+# Install with: make install-hooks
+#
+# Checks:
+# 1. cargo fmt (formatting)
+# 2. cargo clippy (lints)
+# 3. cargo test (tests)
+
+set -e
+
+echo "🔍 Running pre-commit checks..."
+
+# Check formatting
+echo ""
+echo "📐 Checking formatting..."
+if ! cargo fmt --all -- --check; then
+    echo ""
+    echo "❌ Formatting check failed!"
+    echo "   Run 'cargo fmt' to fix formatting issues."
+    exit 1
+fi
+echo "✅ Formatting OK"
+
+# Run clippy
+echo ""
+echo "📎 Running clippy..."
+if ! cargo clippy --all-targets --all-features -- -D warnings 2>/dev/null; then
+    echo ""
+    echo "❌ Clippy check failed!"
+    echo "   Fix the warnings above, or run 'cargo clippy --fix' for auto-fixes."
+    exit 1
+fi
+echo "✅ Clippy OK"
+
+# Run tests
+echo ""
+echo "🧪 Running tests..."
+if ! cargo test --all-features 2>/dev/null; then
+    echo ""
+    echo "❌ Tests failed!"
+    echo "   Fix the failing tests before committing."
+    exit 1
+fi
+echo "✅ Tests OK"
+
+echo ""
+echo "✅ All pre-commit checks passed!"

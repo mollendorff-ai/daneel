@@ -105,10 +105,37 @@ float_cmp = "allow"  # Exact float comparisons in tests are fine
 
 # === Async ===
 future_not_send = "allow"  # Will address when needed
+unused_async = "allow"  # Async for future compatibility
 
 # === Cognitive Architecture ===
 too_many_lines = "allow"
 cognitive_complexity = "allow"
+
+# === Rust 1.92+ Pedantic (too noisy) ===
+significant_drop_tightening = "allow"  # False positives in async code
+map_unwrap_or = "allow"  # map_or is clearer sometimes
+unnecessary_map_or = "allow"  # map_or can be clearer than is_some_and
+redundant_closure = "allow"  # Explicit closures can be clearer
+redundant_closure_for_method_calls = "allow"  # Method refs vs closures - style
+or_fun_call = "allow"  # .unwrap_or_else not always clearer
+unnecessary_wraps = "allow"  # API consistency matters
+if_then_some_else_none = "allow"  # Explicit if/else clearer
+cast_possible_truncation = "allow"  # We know our target platforms
+cast_sign_loss = "allow"  # Explicit casts are intentional
+cast_lossless = "allow"  # Explicit casts are intentional
+unused_self = "allow"  # API consistency for future methods
+return_self_not_must_use = "allow"  # Builder pattern doesn't need #[must_use]
+manual_is_variant_and = "allow"  # Explicit matches clearer
+impl_trait_in_params = "allow"  # Generic bounds are fine
+iter_without_into_iter = "allow"  # Not always needed
+redundant_clone = "allow"  # Explicit clones document intent
+needless_doctest_main = "allow"  # Main in doctests for completeness
+unnecessary_sort_by = "allow"  # sort_by can be clearer than sort_by_key
+manual_is_multiple_of = "allow"  # Explicit % == 0 is clear
+derivable_impls = "allow"  # Explicit Default impls document intent
+useless_let_if_seq = "allow"  # Explicit let + if clearer for error handling
+io_other_error = "allow"  # std::io::Error::new is clearer than ::other
+single_component_path_imports = "allow"  # Explicit imports are fine
 
 # === Dependencies ===
 multiple_crate_versions = "allow"  # Transitive deps we don't control
