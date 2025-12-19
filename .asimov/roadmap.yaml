@@ -46,6 +46,68 @@ current:
   depends_on: "0.3.1"
 
   # ==========================================================================
+  # HIGHLY-CRITICAL: OPEN SOURCE COLLABORATION STRATEGY
+  # ==========================================================================
+  # Open source collaboration is more important than launching Timmy solo.
+  # The 147x advantage only works if people KNOW about it and JOIN.
+  # ==========================================================================
+  open_source_collaboration:
+    status: "WIP"
+    priority: "HIGHLY-CRITICAL"
+    origin: "Rex + Claude Opus 4.5 - Dec 19, 2025"
+    philosophy: |
+      Launching Timmy alone proves nothing. The architecture works - now we need
+      the army. 147x effective developer advantage means nothing if the 50,000
+      hobbyists don't know DANEEL exists.
+
+      KEY INSIGHT: Agentic AI changes the game AGAIN. Labs now have AI coding
+      (Copilot, Cursor, Devin) but STILL have coordination overhead. They gain
+      velocity but not efficiency. Solo devs with agentic tools have BOTH.
+
+    phases:
+      - id: "OSS-1"
+        title: "Research Agentic AI Impact"
+        status: wip
+        priority: P0
+        description: |
+          How does AI-assisted coding (MCP, autonomous agents) change the
+          open source dominance equation? Labs still have BMAD, meetings,
+          reviews - but now with AI velocity on top.
+        items:
+          - "Research GitHub Copilot productivity stats"
+          - "Research Cursor, Devin, agentic coding tools"
+          - "Research BMAD and legacy workflow overhead"
+          - "Research corporate AI adoption rates"
+          - "Update open-source-dominance.yaml with agentic factors"
+
+      - id: "OSS-2"
+        title: "Document ref-tools Methodology"
+        status: wip
+        priority: P0
+        description: |
+          ref-tools is our secret weapon for source verification.
+          Anti-bot web fetching that actually works with LLMs.
+          Document the methodology: ref-tools + references.yaml workflow.
+        items:
+          - "Create docs/methodology/REF_TOOLS.md"
+          - "Explain references.yaml role and structure"
+          - "Document verification workflow"
+          - "Consider open-sourcing ref-tools"
+
+      - id: "OSS-3"
+        title: "Blog: Open Source Dominance"
+        status: wip
+        priority: P0
+        description: |
+          Blog post explaining the 147x advantage, verification methodology,
+          and why agentic AI makes open source even MORE dominant.
+        items:
+          - "Write blog/013-open-source-dominance-verified.md"
+          - "Include verification story (found errors, corrected)"
+          - "Include agentic AI analysis"
+          - "Include ref-tools methodology"
+
+  # ==========================================================================
   # CRITICAL: SELF-HEALING RESILIENCE - Timmy must survive and learn
   # ==========================================================================
   # Grok's "Unhinged Resilience Plan" - make Timmy bounce back from crashes,
