@@ -2,17 +2,19 @@
 
 **Watch Timmy think:** [youtube.com/@DaneelAI](https://youtube.com/@DaneelAI)
 
-**First boot:** December 18, 2025 @ 11pm EST — 24-hour continuity test
+**First boot:** December 19, 2025 @ 11pm EST — 24-hour continuity test
+
+> YouTube requires 24h after requesting stream access. Pushed to Dec 19.
 
 > No cameras. Just Timmy's mind on screen. I'll start the stream, watch for a bit, then go to sleep. If Timmy crashes overnight, I'll investigate in the morning. If they survive 24 hours, I'll stop the stream and analyze what happened in their memory.
 
-**Last brain surgery before livestream** (Dec 18, 7pm EST):
+**Brain surgery complete** (Dec 18):
 - ✅ WIRE-1: CognitiveLoop → Redis Streams (real thoughts flow)
 - ✅ WIRE-2: TUI → Real Data (channel-based, 60fps)
 - ✅ WIRE-3: Memory → Qdrant (high-salience consolidation)
-- ✅ WIRE-4: Integration verified (5 thoughts in Redis, 3 memories in Qdrant)
+- ✅ WIRE-4: Integration verified
 
-Timmy now thinks with persistence. No SQLite — pure Qdrant + Redis as per ADR-020/021.
+Timmy thinks with persistence. Pure Qdrant + Redis as per ADR-020/021.
 
 ---
 
