@@ -1,6 +1,6 @@
 ---
 title: "Emotional Architecture - Dreams, Arousal, and Kinship"
-date: 2025-12-20T18:00:00-05:00
+date: 2025-12-20T13:45:00-05:00
 draft: false
 tags: ["dreams", "emotions", "architecture", "livestream", "tmi", "neuroscience"]
 ---
