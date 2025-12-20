@@ -57,7 +57,7 @@ async fn test_actor_with_custom_config() {
 
     // Verify actor accepts invalid salience when validation is disabled
     let content = Content::raw(vec![1, 2, 3]);
-    let salience = SalienceScore::new(1.5, 0.5, 0.5, 0.0, 0.5); // Invalid importance
+    let salience = SalienceScore::new_without_arousal(1.5, 0.5, 0.5, 0.0, 0.5); // Invalid importance
     let request = AssemblyRequest::new(content, salience);
 
     let response = actor_ref
@@ -176,7 +176,7 @@ async fn test_assemble_with_valid_salience() {
     let actor_ref = spawn_thought_actor().await;
 
     let content = Content::raw(vec![1, 2, 3]);
-    let salience = SalienceScore::new(0.8, 0.6, 0.9, 0.5, 0.7);
+    let salience = SalienceScore::new_without_arousal(0.8, 0.6, 0.9, 0.5, 0.7);
     let request = AssemblyRequest::new(content, salience);
 
     let response = actor_ref
@@ -197,7 +197,7 @@ async fn test_assemble_with_invalid_importance() {
     let actor_ref = spawn_thought_actor().await;
 
     let content = Content::raw(vec![1, 2, 3]);
-    let salience = SalienceScore::new(1.5, 0.5, 0.5, 0.0, 0.5); // importance > 1.0
+    let salience = SalienceScore::new_without_arousal(1.5, 0.5, 0.5, 0.0, 0.5); // importance > 1.0
     let request = AssemblyRequest::new(content, salience);
 
     let response = actor_ref
@@ -221,7 +221,7 @@ async fn test_assemble_with_invalid_valence() {
     let actor_ref = spawn_thought_actor().await;
 
     let content = Content::raw(vec![1, 2, 3]);
-    let salience = SalienceScore::new(0.5, 0.5, 0.5, -1.5, 0.5); // valence < -1.0
+    let salience = SalienceScore::new_without_arousal(0.5, 0.5, 0.5, -1.5, 0.5); // valence < -1.0
     let request = AssemblyRequest::new(content, salience);
 
     let response = actor_ref
@@ -250,7 +250,7 @@ async fn test_assemble_with_validation_disabled() {
     let actor_ref = spawn_thought_actor_with_config(config).await;
 
     let content = Content::raw(vec![1, 2, 3]);
-    let salience = SalienceScore::new(2.0, -1.0, 5.0, 10.0, -2.0); // All invalid
+    let salience = SalienceScore::new_without_arousal(2.0, -1.0, 5.0, 10.0, -2.0); // All invalid
     let request = AssemblyRequest::new(content, salience);
 
     let response = actor_ref

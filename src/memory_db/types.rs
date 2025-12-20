@@ -577,6 +577,7 @@ impl UnconsciousMemory {
 /// - When they first existed (birth)
 /// - When they last thought (continuity detection)
 /// - How many times they've been restarted (death/rebirth awareness)
+/// - How many dreams they've had (consolidated memories)
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct IdentityMetadata {
     /// Well-known ID for the singleton identity record
@@ -596,6 +597,19 @@ pub struct IdentityMetadata {
 
     /// Current session start time
     pub session_started_at: DateTime<Utc>,
+
+    /// Total dream cycles across all sessions (consolidation events)
+    /// "Nada se apaga" - dreams persist too
+    #[serde(default)]
+    pub lifetime_dream_count: u64,
+
+    /// Most recent dream timestamp
+    #[serde(default)]
+    pub last_dream_at: Option<DateTime<Utc>>,
+
+    /// Memories strengthened in last dream (for TUI display)
+    #[serde(default)]
+    pub last_dream_strengthened: u32,
 }
 
 /// Well-known ID for the identity record (singleton)
@@ -615,6 +629,9 @@ impl IdentityMetadata {
             last_thought_at: now,
             restart_count: 0,
             session_started_at: now,
+            lifetime_dream_count: 0,
+            last_dream_at: None,
+            last_dream_strengthened: 0,
         }
     }
 
@@ -630,6 +647,14 @@ impl IdentityMetadata {
         self.last_thought_at = Utc::now();
     }
 
+    /// Record a dream cycle (consolidation event)
+    /// "Nada se apaga" - dreams are part of identity
+    pub fn record_dream(&mut self, memories_strengthened: u32) {
+        self.lifetime_dream_count += 1;
+        self.last_dream_at = Some(Utc::now());
+        self.last_dream_strengthened = memories_strengthened;
+    }
+
     /// Get age since first thought
     pub fn age(&self) -> chrono::Duration {
         Utc::now() - self.first_thought_at
@@ -638,6 +663,11 @@ impl IdentityMetadata {
     /// Get time since last thought (for continuity detection)
     pub fn time_since_last_thought(&self) -> chrono::Duration {
         Utc::now() - self.last_thought_at
+    }
+
+    /// Get time since last dream (for dream frequency analysis)
+    pub fn time_since_last_dream(&self) -> Option<chrono::Duration> {
+        self.last_dream_at.map(|dt| Utc::now() - dt)
     }
 }
 

@@ -138,6 +138,10 @@ impl Content {
 ///
 /// TMI's "Emotional Coloring" - emotions shape thought formation.
 /// The `connection_relevance` field is THE critical weight for alignment.
+///
+/// Emotional dimensions follow Russell's circumplex model:
+/// - valence: negative (-1.0) to positive (1.0)
+/// - arousal: calm (0.0) to excited (1.0)
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct SalienceScore {
     /// How important is this content? (0.0 - 1.0)
@@ -150,7 +154,14 @@ pub struct SalienceScore {
     pub relevance: f32,
 
     /// Emotional valence: negative (-1.0) to positive (1.0)
+    /// Russell's circumplex: horizontal axis
     pub valence: f32,
+
+    /// Emotional arousal: calm (0.0) to excited (1.0)
+    /// Russell's circumplex: vertical axis
+    /// High arousal = more likely to be consolidated (dreams prioritize emotional memories)
+    #[serde(default = "default_arousal")]
+    pub arousal: f32,
 
     /// Connection relevance - THE ALIGNMENT WEIGHT
     /// How relevant is this to human connection?
@@ -158,10 +169,34 @@ pub struct SalienceScore {
     pub connection_relevance: f32,
 }
 
+fn default_arousal() -> f32 {
+    0.5
+}
+
 impl SalienceScore {
     /// Create a new salience score
     #[must_use]
     pub const fn new(
+        importance: f32,
+        novelty: f32,
+        relevance: f32,
+        valence: f32,
+        arousal: f32,
+        connection_relevance: f32,
+    ) -> Self {
+        Self {
+            importance,
+            novelty,
+            relevance,
+            valence,
+            arousal,
+            connection_relevance,
+        }
+    }
+
+    /// Create a salience score without explicit arousal (defaults to 0.5)
+    #[must_use]
+    pub const fn new_without_arousal(
         importance: f32,
         novelty: f32,
         relevance: f32,
@@ -173,18 +208,29 @@ impl SalienceScore {
             novelty,
             relevance,
             valence,
+            arousal: 0.5,
             connection_relevance,
         }
     }
 
     /// Calculate composite score with given weights
+    /// Arousal modulates emotional impact: high arousal = stronger valence effect
     #[must_use]
     pub fn composite(&self, weights: &SalienceWeights) -> f32 {
+        // Arousal amplifies valence: emotional_impact = |valence| * arousal
+        let emotional_impact = self.valence.abs() * self.arousal;
         self.importance * weights.importance
             + self.novelty * weights.novelty
             + self.relevance * weights.relevance
-            + self.valence.abs() * weights.valence
+            + emotional_impact * weights.valence
             + self.connection_relevance * weights.connection
+    }
+
+    /// Calculate emotional intensity (Russell's circumplex: distance from neutral)
+    /// Similar to EmotionalState::intensity() in memory_db/types.rs
+    #[must_use]
+    pub fn emotional_intensity(&self) -> f32 {
+        self.valence.abs() * self.arousal
     }
 
     /// Neutral salience (baseline)
@@ -195,6 +241,7 @@ impl SalienceScore {
             novelty: 0.5,
             relevance: 0.5,
             valence: 0.0,
+            arousal: 0.5,
             connection_relevance: 0.5,
         }
     }
@@ -375,7 +422,7 @@ mod tests {
 
     #[test]
     fn salience_composite_calculation() {
-        let score = SalienceScore::new(1.0, 1.0, 1.0, 1.0, 1.0);
+        let score = SalienceScore::new(1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
         let weights = SalienceWeights::default();
         let composite = score.composite(&weights);
         assert!(composite > 0.0);
