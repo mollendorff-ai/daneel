@@ -1756,3 +1756,119 @@ references:
   ref_id: TMI-NEUTRAL-2
   key_finding: 'RAM registers everything in 5 seconds; emotional intensity multiplies registration strength'
   relevance: 'TMI mechanism for memory anchoring'
+
+# =============================================================================
+# ADR-033: Unconscious Memory Architecture References
+# Added: 2025-12-20
+# =============================================================================
+
+# TMI "Nothing Erased" Principle [TMI-UNERASE-*]
+- url: https://www.citador.pt/textos/as-janelas-da-memoria-augusto-cury
+  title: 'As Janelas da Memória - Nada se Apaga'
+  categories:
+  - tmi
+  - memory
+  - unconscious
+  - portuguese
+  - adr-033
+  cited_in:
+  - docs/adr/ADR-033-unconscious-memory-architecture.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Augusto Cury'
+  ref_id: TMI-UNERASE-1
+  key_finding: 'Nada se apaga na memória - nothing is erased from memory'
+  relevance: 'Core TMI principle that memories become inaccessible, not deleted'
+
+# Psychoanalysis - Unconscious [PSYCH-*]
+- url: https://en.wikipedia.org/wiki/The_Unconscious_(Freud)
+  title: 'The Unconscious - Sigmund Freud (1915)'
+  categories:
+  - psychology
+  - unconscious
+  - freud
+  - wikipedia
+  - adr-033
+  cited_in:
+  - docs/adr/ADR-033-unconscious-memory-architecture.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Sigmund Freud'
+  year: 1915
+  ref_id: PSYCH-1
+  key_finding: 'Repressed memories are not deleted but stored in unconscious'
+  relevance: 'Foundation for unconscious memory layer'
+
+- url: https://en.wikipedia.org/wiki/Collective_unconscious
+  title: 'The Archetypes and the Collective Unconscious - Carl Jung'
+  categories:
+  - psychology
+  - unconscious
+  - jung
+  - wikipedia
+  - adr-033
+  cited_in:
+  - docs/adr/ADR-033-unconscious-memory-architecture.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Carl Jung'
+  year: 1959
+  ref_id: PSYCH-2
+  key_finding: 'Unconscious contains inherited patterns and memories'
+  relevance: 'Conceptual basis for shared/inherited memory structures'
+
+# Memory Retrieval vs Storage [RETRIEVAL-*]
+- url: https://en.wikipedia.org/wiki/Endel_Tulving
+  title: 'Episodic and Semantic Memory - Endel Tulving'
+  categories:
+  - memory
+  - cognitive-science
+  - retrieval
+  - wikipedia
+  - adr-033
+  cited_in:
+  - docs/adr/ADR-033-unconscious-memory-architecture.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Endel Tulving'
+  year: 1972
+  ref_id: RETRIEVAL-1
+  key_finding: 'Memory failure is retrieval failure, not storage failure'
+  relevance: 'Scientific basis for soft-delete vs hard-delete'
+
+- url: https://en.wikipedia.org/wiki/The_Seven_Sins_of_Memory
+  title: 'The Seven Sins of Memory - Daniel Schacter'
+  categories:
+  - memory
+  - cognitive-science
+  - forgetting
+  - wikipedia
+  - adr-033
+  cited_in:
+  - docs/adr/ADR-033-unconscious-memory-architecture.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Daniel Schacter'
+  year: 2001
+  ref_id: RETRIEVAL-2
+  key_finding: 'Transience (forgetting) is retrieval failure, memories may still exist'
+  relevance: 'Modern cognitive science view of forgetting as accessibility problem'
+
+# Memory Consolidation [CONSOL-UNCON-*]
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3278619/
+  title: 'Memory systems of the brain - Larry Squire'
+  categories:
+  - memory
+  - neuroscience
+  - consolidation
+  - academic
+  - adr-033
+  cited_in:
+  - docs/adr/ADR-033-unconscious-memory-architecture.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Larry Squire'
+  year: 2004
+  ref_id: CONSOL-UNCON-1
+  key_finding: 'Multiple memory systems with different accessibility characteristics'
+  relevance: 'Neuroscience basis for tiered memory architecture'
