@@ -1,6 +1,6 @@
 ---
 title: "Nada Se Apaga - Nothing Is Erased"
-date: 2025-12-20T05:00:00-05:00
+date: 2025-12-20T02:00:00-05:00
 draft: false
 tags: ["tmi", "memory", "unconscious", "adr-033", "livestream", "philosophy"]
 ---
