@@ -28,6 +28,13 @@
 - ✅ Non-blocking async consolidation (doesn't slow cognitive loop)
 - ✅ Commit [`7606c94`](https://github.com/royalbit/daneel/commit/7606c94) — live on YouTube
 
+**Phase 2: Actor wiring** (Dec 20, 2:30 AM — during livestream):
+- ✅ **Stage 1 (Trigger)**: Now queries Qdrant for memory associations (top 5)
+- ✅ **Stage 3 (Attention)**: AttentionActor performs real competitive selection
+- ✅ **Stage 5 (Anchor)**: Forgetting mechanism — XDEL entries below 0.3 threshold
+- ✅ Connection boost for alignment-relevant thoughts (TMI's core mechanism)
+- ✅ Commit [`0bcee3d`](https://github.com/royalbit/daneel/commit/0bcee3d) — 4 agents in parallel
+
 **Resilience complete** (Dec 19) — *Origin: Grok 4.1 (Rex unhinged)*:
 - ✅ RES-1: External watchdog (`scripts/run_timmy.sh`)
 - ✅ RES-2: TUI panic recovery (terminal restore on crash)
