@@ -43,13 +43,22 @@ pub struct ThoughtUpdate {
     pub status: ThoughtStatus,
     pub candidates_evaluated: usize,
     pub on_time: bool,
+    /// Conscious memory count (Qdrant memories collection)
+    pub memory_count: u64,
+    /// Unconscious memory count (Qdrant unconscious collection) - ADR-033
+    pub unconscious_count: u64,
 }
 
 impl ThoughtUpdate {
     /// Convert a CycleResult into a ThoughtUpdate for the TUI
     ///
     /// Uses real salience data from the cognitive loop.
-    pub fn from_cycle_result(result: &CycleResult) -> Self {
+    /// Memory counts should be queried from Qdrant and passed separately.
+    pub fn from_cycle_result(
+        result: &CycleResult,
+        memory_count: u64,
+        unconscious_count: u64,
+    ) -> Self {
         // Use real salience from CycleResult
         let salience = result.salience;
 
@@ -61,6 +70,8 @@ impl ThoughtUpdate {
                 ThoughtStatus::MemoryWrite
             } else if salience > 0.5 {
                 ThoughtStatus::Salient
+            } else if salience < 0.3 {
+                ThoughtStatus::Unconscious // Low salience -> archived to unconscious
             } else {
                 ThoughtStatus::Processing
             }
@@ -89,6 +100,8 @@ impl ThoughtUpdate {
             status,
             candidates_evaluated: result.candidates_evaluated,
             on_time: result.on_time,
+            memory_count,
+            unconscious_count,
         }
     }
 }
@@ -152,6 +165,9 @@ fn run_loop(
             // Drain all available thoughts to stay current
             while let Ok(update) = rx.try_recv() {
                 app.add_thought(update.salience, update.window, update.status);
+                // Update memory counts from database state
+                app.memory_count = update.memory_count;
+                app.unconscious_count = update.unconscious_count;
             }
         }
 

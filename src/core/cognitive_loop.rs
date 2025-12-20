@@ -328,6 +328,11 @@ impl CognitiveLoop {
         self.memory_db = Some(memory_db);
     }
 
+    /// Get a reference to the memory database (for querying counts)
+    pub fn memory_db(&self) -> Option<&Arc<MemoryDb>> {
+        self.memory_db.as_ref()
+    }
+
     /// Set the consolidation threshold
     ///
     /// Thoughts with composite salience above this threshold will be

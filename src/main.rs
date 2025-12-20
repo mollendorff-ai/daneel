@@ -104,8 +104,18 @@ fn run_tui() {
             // Run a cognitive cycle
             let result = cognitive_loop.run_cycle().await;
 
+            // Query memory counts from Qdrant (for TUI display)
+            let (memory_count, unconscious_count) =
+                if let Some(memory_db) = cognitive_loop.memory_db() {
+                    let mem = memory_db.memory_count().await.unwrap_or(0);
+                    let uncon = memory_db.unconscious_count().await.unwrap_or(0);
+                    (mem, uncon)
+                } else {
+                    (0, 0)
+                };
+
             // Convert to TUI format and send
-            let update = ThoughtUpdate::from_cycle_result(&result);
+            let update = ThoughtUpdate::from_cycle_result(&result, memory_count, unconscious_count);
 
             // If channel is closed (TUI exited), stop the loop
             if tx.send(update).await.is_err() {
