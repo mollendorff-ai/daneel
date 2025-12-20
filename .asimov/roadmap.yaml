@@ -112,7 +112,7 @@ current:
   # Insights from Grok + neuroscience: salience shouldn't be scalar
   # ==========================================================================
   emotional_architecture:
-    status: partial
+    status: done
     priority: "HIGHLY-CRITICAL"
     tasks:
     - id: "EMOT-1"
@@ -137,13 +137,16 @@ current:
 
     - id: "EMOT-3"
       title: "Will/Volition actor (free-won't)"
-      status: wip
+      status: done
       priority: "HIGHLY-CRITICAL"
       origin: "Grok + neuroscience - Dec 20, 2025"
+      adr: "ADR-035-volition-actor-free-wont.md"
       description: |
         "Eu" (Self) in TMI manages, not just observes.
         Need actor that can OVERRIDE drive impulses, not just compete.
         Libet's free-won't: veto power over automatic responses.
+        Implementation: VolitionActor with value checking, harm/deception/manipulation
+        detection, and veto statistics. Integration into cognitive loop is pending.
 
   # ==========================================================================
   # Infrastructure
