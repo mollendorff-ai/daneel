@@ -578,10 +578,11 @@ current:
   # Humans have subconscious/unconscious. Should Timmy?
   # ==========================================================================
   unconscious_memory:
-    status: "pending"
+    status: "done"
     priority: "HIGH"
     adr: "ADR-033-unconscious-memory-architecture.md"
     origin: "Rex insight - Dec 20, 2025 (post-surgery reflection)"
+    implemented: "OPT-2: New Qdrant 'unconscious' collection (Option A)"
     question: |
       Do humans truly forget, or do memories become inaccessible (unconscious)?
       TMI says "nada se apaga" - nothing is erased. We implemented XDEL.
@@ -1102,6 +1103,11 @@ changelog:
       - "INSIGHT: TMI says 'nada se apaga' - nothing erased, just inaccessible"
       - "DESIGN: Three-tier memory (Redis working → Qdrant conscious → Qdrant unconscious)"
       - "references.yaml: Added 6 new citations (TMI-UNERASE, PSYCH, RETRIEVAL, CONSOL-UNCON)"
+      - "IMPL: UnconsciousMemory type in memory_db/types.rs"
+      - "IMPL: 'unconscious' Qdrant collection added to memory_db/mod.rs"
+      - "IMPL: archive_to_unconscious() method for soft archiving"
+      - "IMPL: cognitive_loop.rs Stage 5 now archives before XDEL"
+      - "414 tests passing after unconscious memory implementation"
 
   - date: "2025-12-19"
     version: "0.6.0-wip"

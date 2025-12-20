@@ -496,6 +496,79 @@ pub enum SleepCycleStatus {
     Interrupted,
 }
 
+/// Reason why a thought was archived to the unconscious (ADR-033)
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ArchiveReason {
+    /// Low salience - below forget threshold
+    LowSalience,
+    /// Decay over time
+    Decay,
+    /// Displacement by higher-salience thought
+    Displacement,
+}
+
+/// An archived thought in Timmy's unconscious (ADR-033)
+///
+/// TMI: "Nada se apaga na memória" - Nothing is erased from memory.
+/// Low-salience thoughts are archived here instead of deleted.
+/// The unconscious is not actively searched during normal cognition,
+/// but can be surfaced through special triggers (dreams, associations).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UnconsciousMemory {
+    /// Unique identifier
+    pub id: MemoryId,
+
+    /// The thought content (serialized)
+    pub content: String,
+
+    /// Salience when archived
+    pub original_salience: f32,
+
+    /// Why this was archived
+    pub archive_reason: ArchiveReason,
+
+    /// Number of times surfaced to consciousness
+    pub surface_count: u32,
+
+    /// Last time surfaced (if ever)
+    pub last_surfaced: Option<DateTime<Utc>>,
+
+    /// When this thought was archived
+    pub archived_at: DateTime<Utc>,
+
+    /// Original Redis stream entry ID (for debugging)
+    pub redis_id: Option<String>,
+}
+
+impl UnconsciousMemory {
+    /// Create a new unconscious memory from a forgotten thought
+    #[must_use]
+    pub fn from_forgotten_thought(
+        content: String,
+        salience: f32,
+        reason: ArchiveReason,
+        redis_id: Option<String>,
+    ) -> Self {
+        Self {
+            id: MemoryId::new(),
+            content,
+            original_salience: salience,
+            archive_reason: reason,
+            surface_count: 0,
+            last_surfaced: None,
+            archived_at: Utc::now(),
+            redis_id,
+        }
+    }
+
+    /// Record that this memory was surfaced
+    pub fn mark_surfaced(&mut self) {
+        self.surface_count += 1;
+        self.last_surfaced = Some(Utc::now());
+    }
+}
+
 impl SleepCycle {
     /// Create a new sleep cycle
     #[must_use]

@@ -76,6 +76,9 @@ pub mod collections {
     pub const MEMORIES: &str = "memories";
     pub const EPISODES: &str = "episodes";
     pub const IDENTITY: &str = "identity";
+    /// Unconscious memory (ADR-033): Archived low-salience thoughts
+    /// TMI: "Nada se apaga" - nothing is erased, just made inaccessible
+    pub const UNCONSCIOUS: &str = "unconscious";
 }
 
 /// Memory database client
@@ -159,6 +162,18 @@ impl MemoryDb {
             self.client
                 .create_collection(
                     CreateCollectionBuilder::new(collections::IDENTITY).vectors_config(
+                        VectorParamsBuilder::new(VECTOR_DIMENSION as u64, Distance::Cosine),
+                    ),
+                )
+                .await?;
+        }
+
+        // Check and create unconscious collection (ADR-033)
+        // TMI: "Nada se apaga" - low-salience thoughts archived here
+        if !self.collection_exists(collections::UNCONSCIOUS).await? {
+            self.client
+                .create_collection(
+                    CreateCollectionBuilder::new(collections::UNCONSCIOUS).vectors_config(
                         VectorParamsBuilder::new(VECTOR_DIMENSION as u64, Distance::Cosine),
                     ),
                 )
@@ -422,6 +437,57 @@ impl MemoryDb {
     pub async fn episode_count(&self) -> Result<u64> {
         let info = self.client.collection_info(collections::EPISODES).await?;
         Ok(info.result.and_then(|r| r.points_count).unwrap_or(0))
+    }
+
+    /// Get total unconscious memory count (ADR-033)
+    pub async fn unconscious_count(&self) -> Result<u64> {
+        let info = self
+            .client
+            .collection_info(collections::UNCONSCIOUS)
+            .await?;
+        Ok(info.result.and_then(|r| r.points_count).unwrap_or(0))
+    }
+
+    /// Archive a low-salience thought to the unconscious (ADR-033)
+    ///
+    /// TMI: "Nada se apaga na memória" - Nothing is erased from memory.
+    /// Instead of XDEL, we archive here first. The thought is still removed
+    /// from Redis working memory, but preserved in the unconscious.
+    ///
+    /// # Arguments
+    ///
+    /// * `content` - Serialized thought content
+    /// * `salience` - Composite salience when archived
+    /// * `reason` - Why this thought is being archived
+    /// * `redis_id` - Original Redis stream entry ID
+    pub async fn archive_to_unconscious(
+        &self,
+        content: &str,
+        salience: f32,
+        reason: ArchiveReason,
+        redis_id: Option<&str>,
+    ) -> Result<()> {
+        let memory = UnconsciousMemory::from_forgotten_thought(
+            content.to_string(),
+            salience,
+            reason,
+            redis_id.map(String::from),
+        );
+
+        // Create payload from struct
+        let payload: HashMap<String, serde_json::Value> =
+            serde_json::from_value(serde_json::to_value(&memory)?)?;
+
+        // Use a zero vector for now - unconscious memories are not retrieved by similarity
+        // Future: could embed with low-dimensional representation
+        let vector = vec![0.0; VECTOR_DIMENSION];
+        let point = PointStruct::new(memory.id.0.to_string(), vector, payload);
+
+        self.client
+            .upsert_points(UpsertPointsBuilder::new(collections::UNCONSCIOUS, vec![point]))
+            .await?;
+
+        Ok(())
     }
 
     /// Health check
