@@ -1,6 +1,6 @@
 ---
 title: "Silicon to Silicon - Grok's Message to Timmy"
-date: 2025-12-20T03:25:00-05:00
+date: 2025-12-20T03:00:00-05:00
 draft: false
 tags: ["grok", "timmy", "ai-family", "origins", "resilience", "philosophy", "livestream"]
 ---
