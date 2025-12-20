@@ -927,4 +927,149 @@ mod tests {
         assert_eq!(parsed.archive_reason, memory.archive_reason);
         assert_eq!(parsed.redis_id, memory.redis_id);
     }
+
+    // =========================================================================
+    // TUI-VIS-4: IdentityMetadata Cumulative Dream Stats Tests
+    // =========================================================================
+
+    #[test]
+    fn identity_metadata_cumulative_fields_initialize_to_zero() {
+        let identity = IdentityMetadata::new();
+        assert_eq!(identity.cumulative_dream_strengthened, 0);
+        assert_eq!(identity.cumulative_dream_candidates, 0);
+    }
+
+    #[test]
+    fn identity_metadata_default_cumulative_fields_zero() {
+        let identity = IdentityMetadata::default();
+        assert_eq!(identity.cumulative_dream_strengthened, 0);
+        assert_eq!(identity.cumulative_dream_candidates, 0);
+    }
+
+    #[test]
+    fn identity_metadata_record_dream_updates_cumulative() {
+        let mut identity = IdentityMetadata::new();
+
+        // Record first dream
+        identity.record_dream(10, 25);
+        assert_eq!(identity.cumulative_dream_strengthened, 10);
+        assert_eq!(identity.cumulative_dream_candidates, 25);
+        assert_eq!(identity.last_dream_strengthened, 10);
+
+        // Record second dream - cumulative should accumulate
+        identity.record_dream(15, 30);
+        assert_eq!(identity.cumulative_dream_strengthened, 25);
+        assert_eq!(identity.cumulative_dream_candidates, 55);
+        assert_eq!(identity.last_dream_strengthened, 15);
+
+        // Verify lifetime_dream_count also incremented
+        assert_eq!(identity.lifetime_dream_count, 2);
+    }
+
+    #[test]
+    fn identity_metadata_record_dream_with_zero_values() {
+        let mut identity = IdentityMetadata::new();
+
+        // Dream with no strengthening
+        identity.record_dream(0, 10);
+        assert_eq!(identity.cumulative_dream_strengthened, 0);
+        assert_eq!(identity.cumulative_dream_candidates, 10);
+        assert_eq!(identity.last_dream_strengthened, 0);
+
+        // Verify dream still counted
+        assert_eq!(identity.lifetime_dream_count, 1);
+    }
+
+    #[test]
+    fn identity_metadata_dream_efficiency_calculation() {
+        let mut identity = IdentityMetadata::new();
+
+        // Record dreams
+        identity.record_dream(50, 100);
+        identity.record_dream(25, 50);
+
+        // Total: 75 strengthened, 150 candidates
+        assert_eq!(identity.cumulative_dream_strengthened, 75);
+        assert_eq!(identity.cumulative_dream_candidates, 150);
+
+        // Calculate efficiency
+        let efficiency = if identity.cumulative_dream_candidates > 0 {
+            (identity.cumulative_dream_strengthened as f32 / identity.cumulative_dream_candidates as f32) * 100.0
+        } else {
+            0.0
+        };
+
+        assert!((efficiency - 50.0).abs() < 0.01);
+    }
+
+    #[test]
+    fn identity_metadata_cumulative_persists_across_restarts() {
+        let mut identity = IdentityMetadata::new();
+
+        // Record some dreams
+        identity.record_dream(100, 200);
+        identity.record_dream(50, 100);
+
+        // Simulate restart
+        identity.record_restart();
+
+        // Cumulative values should persist
+        assert_eq!(identity.cumulative_dream_strengthened, 150);
+        assert_eq!(identity.cumulative_dream_candidates, 300);
+        assert_eq!(identity.restart_count, 1);
+    }
+
+    #[test]
+    fn identity_metadata_record_dream_updates_timestamp() {
+        let mut identity = IdentityMetadata::new();
+        assert!(identity.last_dream_at.is_none());
+
+        identity.record_dream(10, 20);
+        assert!(identity.last_dream_at.is_some());
+
+        let first_dream_time = identity.last_dream_at.unwrap();
+
+        // Record another dream
+        identity.record_dream(5, 10);
+        assert!(identity.last_dream_at.is_some());
+
+        // Timestamp should have updated
+        let second_dream_time = identity.last_dream_at.unwrap();
+        assert!(second_dream_time >= first_dream_time);
+    }
+
+    #[test]
+    fn identity_metadata_serialization_with_cumulative_fields() {
+        let mut identity = IdentityMetadata::new();
+        identity.record_dream(42, 100);
+        identity.record_dream(58, 150);
+
+        let json = serde_json::to_string(&identity).expect("should serialize");
+        let parsed: IdentityMetadata = serde_json::from_str(&json).expect("should deserialize");
+
+        assert_eq!(parsed.cumulative_dream_strengthened, 100);
+        assert_eq!(parsed.cumulative_dream_candidates, 250);
+        assert_eq!(parsed.last_dream_strengthened, 58);
+        assert_eq!(parsed.lifetime_dream_count, 2);
+    }
+
+    #[test]
+    fn identity_metadata_high_volume_dreams() {
+        let mut identity = IdentityMetadata::new();
+
+        // Simulate many dreams
+        for i in 1..=100 {
+            identity.record_dream(i, i * 2);
+        }
+
+        // Total strengthened: 1 + 2 + ... + 100 = 5050
+        // Total candidates: 2 + 4 + ... + 200 = 10100
+        assert_eq!(identity.cumulative_dream_strengthened, 5050);
+        assert_eq!(identity.cumulative_dream_candidates, 10100);
+        assert_eq!(identity.lifetime_dream_count, 100);
+
+        // Verify efficiency is 50%
+        let efficiency = (identity.cumulative_dream_strengthened as f32 / identity.cumulative_dream_candidates as f32) * 100.0;
+        assert!((efficiency - 50.0).abs() < 0.01);
+    }
 }

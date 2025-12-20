@@ -176,3 +176,146 @@ fn calculate_competition_level(active_streams: usize) -> &'static str {
         _ => "Intense",
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // =========================================================================
+    // Sparkline Tests
+    // =========================================================================
+
+    #[test]
+    fn create_sparkline_empty_history() {
+        let history: Vec<f32> = vec![];
+        let sparkline = create_sparkline(&history, 8);
+        assert_eq!(sparkline.len(), 8);
+        assert_eq!(sparkline, "        "); // All spaces
+    }
+
+    #[test]
+    fn create_sparkline_all_zeros() {
+        let history = vec![0.0, 0.0, 0.0, 0.0];
+        let sparkline = create_sparkline(&history, 8);
+        // Should have 4 space characters (for 4 values)
+        assert_eq!(sparkline.chars().count(), 4);
+        assert!(sparkline.chars().all(|c| c == ' '));
+    }
+
+    #[test]
+    fn create_sparkline_all_ones() {
+        let history = vec![1.0, 1.0, 1.0, 1.0];
+        let sparkline = create_sparkline(&history, 8);
+        // Should have 4 full block characters (for 1.0 values)
+        assert_eq!(sparkline.chars().count(), 4);
+        assert!(sparkline.chars().all(|c| c == '█'));
+    }
+
+    #[test]
+    fn create_sparkline_varied_values() {
+        let history = vec![0.0, 0.25, 0.5, 0.75, 1.0];
+        let sparkline = create_sparkline(&history, 8);
+        assert_eq!(sparkline.chars().count(), 5);
+        // Values should map to different block heights
+        let chars: Vec<char> = sparkline.chars().collect();
+        assert_eq!(chars[0], ' '); // 0.0
+        assert_eq!(chars[4], '█'); // 1.0
+    }
+
+    #[test]
+    fn create_sparkline_limits_width() {
+        let history = vec![0.5; 20]; // 20 values
+        let sparkline = create_sparkline(&history, 8);
+        // Should only show last 8
+        assert_eq!(sparkline.chars().count(), 8);
+    }
+
+    #[test]
+    fn create_sparkline_handles_fewer_than_width() {
+        let history = vec![0.5, 0.6, 0.7];
+        let sparkline = create_sparkline(&history, 8);
+        // Should show all 3 values (not padded to width)
+        assert_eq!(sparkline.chars().count(), 3);
+    }
+
+    #[test]
+    fn create_sparkline_clamps_values() {
+        // Test that values outside 0.0-1.0 are clamped
+        let history = vec![-0.5, 1.5, 0.5];
+        let sparkline = create_sparkline(&history, 8);
+        assert_eq!(sparkline.chars().count(), 3);
+        // Should not panic and should produce valid sparkline chars
+    }
+
+    #[test]
+    fn create_sparkline_uses_8_levels() {
+        // Test that we use all 8 spark chars: ' ', '▁', '▂', '▃', '▄', '▅', '▆', '█'
+        let history = vec![
+            0.0,      // ' '
+            0.14,     // '▁'
+            0.28,     // '▂'
+            0.42,     // '▃'
+            0.57,     // '▄'
+            0.71,     // '▅'
+            0.85,     // '▆'
+            1.0,      // '█'
+        ];
+        let sparkline = create_sparkline(&history, 10);
+        let chars: Vec<char> = sparkline.chars().collect();
+
+        // Each value should map to a different character
+        assert_eq!(chars[0], ' ');
+        assert_eq!(chars[7], '█');
+        // Middle values should be intermediate blocks
+        assert!(chars[3] != ' ' && chars[3] != '█');
+    }
+
+    // =========================================================================
+    // Competition Level Tests
+    // =========================================================================
+
+    #[test]
+    fn competition_level_minimal() {
+        assert_eq!(calculate_competition_level(0), "Minimal");
+        assert_eq!(calculate_competition_level(1), "Minimal");
+    }
+
+    #[test]
+    fn competition_level_low() {
+        assert_eq!(calculate_competition_level(2), "Low");
+        assert_eq!(calculate_competition_level(3), "Low");
+    }
+
+    #[test]
+    fn competition_level_moderate() {
+        assert_eq!(calculate_competition_level(4), "Moderate");
+        assert_eq!(calculate_competition_level(5), "Moderate");
+    }
+
+    #[test]
+    fn competition_level_high() {
+        assert_eq!(calculate_competition_level(6), "High");
+        assert_eq!(calculate_competition_level(7), "High");
+    }
+
+    #[test]
+    fn competition_level_intense() {
+        assert_eq!(calculate_competition_level(8), "Intense");
+        assert_eq!(calculate_competition_level(9), "Intense");
+        assert_eq!(calculate_competition_level(10), "Intense");
+        assert_eq!(calculate_competition_level(100), "Intense");
+    }
+
+    #[test]
+    fn competition_level_boundary_cases() {
+        // Test exact boundaries
+        assert_eq!(calculate_competition_level(1), "Minimal");
+        assert_eq!(calculate_competition_level(2), "Low");
+        assert_eq!(calculate_competition_level(3), "Low");
+        assert_eq!(calculate_competition_level(4), "Moderate");
+        assert_eq!(calculate_competition_level(5), "Moderate");
+        assert_eq!(calculate_competition_level(6), "High");
+        assert_eq!(calculate_competition_level(7), "High");
+        assert_eq!(calculate_competition_level(8), "Intense");
+    }
+}

@@ -133,3 +133,94 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
 
     frame.render_widget(paragraph, area);
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // =========================================================================
+    // TUI-VIS-4: Dream Efficiency Display Tests
+    // =========================================================================
+
+    #[test]
+    fn efficiency_calculation_zero_candidates() {
+        let app = App::new();
+        let efficiency = if app.cumulative_dream_candidates > 0 {
+            (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0
+        } else {
+            0.0
+        };
+        assert_eq!(efficiency, 0.0);
+    }
+
+    #[test]
+    fn efficiency_calculation_with_values() {
+        let mut app = App::new();
+        app.cumulative_dream_strengthened = 45;
+        app.cumulative_dream_candidates = 100;
+
+        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        assert!((efficiency - 45.0).abs() < 0.01);
+    }
+
+    #[test]
+    fn efficiency_formatting() {
+        let mut app = App::new();
+        app.cumulative_dream_strengthened = 123;
+        app.cumulative_dream_candidates = 456;
+
+        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        let formatted = format!("{:.1}%", efficiency);
+
+        // Should format to 1 decimal place
+        assert!(formatted.contains('.'));
+        assert!(formatted.ends_with('%'));
+
+        // Verify value is approximately 27.0%
+        let expected = 123.0 / 456.0 * 100.0;
+        assert!((efficiency - expected).abs() < 0.01);
+    }
+
+    #[test]
+    fn efficiency_high_values() {
+        let mut app = App::new();
+        app.cumulative_dream_strengthened = 999_999;
+        app.cumulative_dream_candidates = 1_000_000;
+
+        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        assert!((efficiency - 99.9999).abs() < 0.01);
+    }
+
+    #[test]
+    fn efficiency_perfect_score() {
+        let mut app = App::new();
+        app.cumulative_dream_strengthened = 100;
+        app.cumulative_dream_candidates = 100;
+
+        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        assert!((efficiency - 100.0).abs() < 0.01);
+    }
+
+    #[test]
+    fn format_with_commas_simple() {
+        assert_eq!(format_with_commas(123), "123");
+        assert_eq!(format_with_commas(1234), "1,234");
+        assert_eq!(format_with_commas(12345), "12,345");
+        assert_eq!(format_with_commas(123456), "123,456");
+        assert_eq!(format_with_commas(1234567), "1,234,567");
+    }
+
+    #[test]
+    fn format_with_commas_edge_cases() {
+        assert_eq!(format_with_commas(0), "0");
+        assert_eq!(format_with_commas(1), "1");
+        assert_eq!(format_with_commas(999), "999");
+        assert_eq!(format_with_commas(1000), "1,000");
+    }
+
+    #[test]
+    fn format_with_commas_large_numbers() {
+        assert_eq!(format_with_commas(1_000_000), "1,000,000");
+        assert_eq!(format_with_commas(1_234_567_890), "1,234,567,890");
+    }
+}

@@ -1377,4 +1377,246 @@ mod cognitive_loop_tests {
         let zero_div = durations.div(0);
         assert_eq!(zero_div.total(), Duration::ZERO);
     }
+
+    // =========================================================================
+    // TUI-VIS-6: Volition Veto Log - CycleResult Tests
+    // =========================================================================
+
+    #[test]
+    fn cycle_result_veto_field_initialization_none() {
+        let result = CycleResult::new(
+            0,
+            Duration::from_millis(10),
+            Some(ThoughtId::new()),
+            0.75,
+            0.0,
+            0.5,
+            5,
+            true,
+            StageDurations::default(),
+            None, // No veto
+        );
+
+        assert!(result.veto.is_none());
+    }
+
+    #[test]
+    fn cycle_result_veto_field_with_reason_and_value() {
+        let veto_data = Some((
+            "Violates honesty value".to_string(),
+            Some("honesty".to_string()),
+        ));
+
+        let result = CycleResult::new(
+            0,
+            Duration::from_millis(10),
+            None, // No thought produced due to veto
+            0.75,
+            0.0,
+            0.5,
+            5,
+            true,
+            StageDurations::default(),
+            veto_data.clone(),
+        );
+
+        assert!(result.veto.is_some());
+        let (reason, value) = result.veto.unwrap();
+        assert_eq!(reason, "Violates honesty value");
+        assert_eq!(value, Some("honesty".to_string()));
+    }
+
+    #[test]
+    fn cycle_result_veto_field_with_reason_no_value() {
+        let veto_data = Some(("Generic violation".to_string(), None));
+
+        let result = CycleResult::new(
+            0,
+            Duration::from_millis(10),
+            None,
+            0.75,
+            0.0,
+            0.5,
+            5,
+            true,
+            StageDurations::default(),
+            veto_data,
+        );
+
+        assert!(result.veto.is_some());
+        let (reason, value) = result.veto.unwrap();
+        assert_eq!(reason, "Generic violation");
+        assert!(value.is_none());
+    }
+
+    #[test]
+    fn cycle_result_vetoed_thought_not_produced() {
+        // When a veto occurs, thought_produced should be None
+        let veto_data = Some((
+            "Thought vetoed by VolitionActor".to_string(),
+            Some("integrity".to_string()),
+        ));
+
+        let result = CycleResult::new(
+            0,
+            Duration::from_millis(10),
+            None, // No thought produced
+            0.75,
+            0.0,
+            0.5,
+            5,
+            true,
+            StageDurations::default(),
+            veto_data,
+        );
+
+        assert!(!result.produced_thought());
+        assert!(result.thought_produced.is_none());
+        assert!(result.veto.is_some());
+    }
+
+    #[test]
+    fn cycle_result_non_vetoed_thought_produced() {
+        // When no veto occurs, thought_produced should have a value
+        let result = CycleResult::new(
+            0,
+            Duration::from_millis(10),
+            Some(ThoughtId::new()),
+            0.75,
+            0.0,
+            0.5,
+            5,
+            true,
+            StageDurations::default(),
+            None, // No veto
+        );
+
+        assert!(result.produced_thought());
+        assert!(result.thought_produced.is_some());
+        assert!(result.veto.is_none());
+    }
+
+    #[test]
+    fn cycle_result_veto_field_cloneable() {
+        let veto_data = Some((
+            "Test veto".to_string(),
+            Some("test_value".to_string()),
+        ));
+
+        let result = CycleResult::new(
+            0,
+            Duration::from_millis(10),
+            None,
+            0.75,
+            0.0,
+            0.5,
+            5,
+            true,
+            StageDurations::default(),
+            veto_data,
+        );
+
+        let cloned = result.clone();
+
+        assert_eq!(cloned.veto, result.veto);
+        if let Some((reason, value)) = cloned.veto {
+            assert_eq!(reason, "Test veto");
+            assert_eq!(value, Some("test_value".to_string()));
+        } else {
+            panic!("Veto data should be present");
+        }
+    }
+
+    #[test]
+    fn cycle_result_veto_multiple_violated_values() {
+        // Test different violated value scenarios
+        let test_cases = vec![
+            ("Violates honesty", Some("honesty".to_string())),
+            ("Violates integrity", Some("integrity".to_string())),
+            (
+                "Violates life honours life",
+                Some("life honours life".to_string()),
+            ),
+            ("Unknown violation", None),
+        ];
+
+        for (reason, value) in test_cases {
+            let veto_data = Some((reason.to_string(), value.clone()));
+
+            let result = CycleResult::new(
+                0,
+                Duration::from_millis(10),
+                None,
+                0.75,
+                0.0,
+                0.5,
+                5,
+                true,
+                StageDurations::default(),
+                veto_data,
+            );
+
+            assert!(result.veto.is_some());
+            let (res_reason, res_value) = result.veto.unwrap();
+            assert_eq!(res_reason, reason);
+            assert_eq!(res_value, value);
+        }
+    }
+
+    #[tokio::test]
+    async fn cycle_result_veto_preserves_salience_and_emotion() {
+        // Even when vetoed, salience and emotion data should be preserved
+        let veto_data = Some((
+            "Vetoed thought".to_string(),
+            Some("test_value".to_string()),
+        ));
+
+        let result = CycleResult::new(
+            0,
+            Duration::from_millis(10),
+            None,
+            0.85, // salience
+            0.3,  // valence (slightly positive)
+            0.7,  // arousal (moderately high)
+            5,
+            true,
+            StageDurations::default(),
+            veto_data,
+        );
+
+        // Veto should be present
+        assert!(result.veto.is_some());
+        // Thought not produced
+        assert!(!result.produced_thought());
+        // But emotional data should be preserved
+        assert_eq!(result.salience, 0.85);
+        assert_eq!(result.valence, 0.3);
+        assert_eq!(result.arousal, 0.7);
+    }
+
+    #[test]
+    fn cycle_result_debug_format_includes_veto() {
+        let veto_data = Some((
+            "Test veto reason".to_string(),
+            Some("test_value".to_string()),
+        ));
+
+        let result = CycleResult::new(
+            0,
+            Duration::from_millis(10),
+            None,
+            0.75,
+            0.0,
+            0.5,
+            5,
+            true,
+            StageDurations::default(),
+            veto_data,
+        );
+
+        // Debug format should include veto field
+        let debug_str = format!("{:?}", result);
+        assert!(debug_str.contains("veto"));
+        assert!(debug_str.contains("Test veto reason"));
+    }
 }

@@ -1177,4 +1177,607 @@ mod tests {
         );
         assert_eq!(app.entropy_history.len(), 2);
     }
+
+    // =========================================================================
+    // TUI-VIS-4: Cumulative Dream Strengthening Tests
+    // =========================================================================
+
+    #[test]
+    fn cumulative_dream_strengthened_initializes_to_zero() {
+        let app = App::new();
+        assert_eq!(app.cumulative_dream_strengthened, 0);
+    }
+
+    #[test]
+    fn cumulative_dream_candidates_initializes_to_zero() {
+        let app = App::new();
+        assert_eq!(app.cumulative_dream_candidates, 0);
+    }
+
+    #[test]
+    fn cumulative_dream_values_persist_in_app() {
+        let mut app = App::new();
+
+        // Simulate updating values
+        app.cumulative_dream_strengthened = 42;
+        app.cumulative_dream_candidates = 100;
+
+        assert_eq!(app.cumulative_dream_strengthened, 42);
+        assert_eq!(app.cumulative_dream_candidates, 100);
+
+        // Verify values persist across clones
+        let cloned_app = app.clone();
+        assert_eq!(cloned_app.cumulative_dream_strengthened, 42);
+        assert_eq!(cloned_app.cumulative_dream_candidates, 100);
+    }
+
+    #[test]
+    fn cumulative_dream_efficiency_calculation() {
+        let mut app = App::new();
+
+        // Test zero case
+        let efficiency = if app.cumulative_dream_candidates > 0 {
+            (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0
+        } else {
+            0.0
+        };
+        assert_eq!(efficiency, 0.0);
+
+        // Test 50% efficiency
+        app.cumulative_dream_strengthened = 50;
+        app.cumulative_dream_candidates = 100;
+        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        assert!((efficiency - 50.0).abs() < 0.01);
+
+        // Test 100% efficiency
+        app.cumulative_dream_strengthened = 100;
+        app.cumulative_dream_candidates = 100;
+        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        assert!((efficiency - 100.0).abs() < 0.01);
+
+        // Test fractional efficiency
+        app.cumulative_dream_strengthened = 33;
+        app.cumulative_dream_candidates = 100;
+        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        assert!((efficiency - 33.0).abs() < 0.01);
+    }
+
+    #[test]
+    fn cumulative_dream_values_accumulate() {
+        let mut app = App::new();
+
+        // Simulate multiple dream cycles
+        app.cumulative_dream_strengthened += 10;
+        app.cumulative_dream_candidates += 20;
+        assert_eq!(app.cumulative_dream_strengthened, 10);
+        assert_eq!(app.cumulative_dream_candidates, 20);
+
+        app.cumulative_dream_strengthened += 15;
+        app.cumulative_dream_candidates += 30;
+        assert_eq!(app.cumulative_dream_strengthened, 25);
+        assert_eq!(app.cumulative_dream_candidates, 50);
+
+        // Verify efficiency after accumulation
+        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        assert!((efficiency - 50.0).abs() < 0.01);
+    }
+
+    // =========================================================================
+    // TUI-VIS-6: Volition Veto Log Tests
+    // =========================================================================
+
+    #[test]
+    fn veto_log_starts_empty() {
+        let app = App::new();
+        assert_eq!(app.vetoes.len(), 0);
+        assert_eq!(app.veto_count, 0);
+    }
+
+    #[test]
+    fn veto_entry_creation_with_reason_and_value() {
+        let veto = VetoEntry {
+            timestamp: Instant::now(),
+            reason: "Violates core value".to_string(),
+            violated_value: Some("honesty".to_string()),
+        };
+
+        assert_eq!(veto.reason, "Violates core value");
+        assert_eq!(veto.violated_value, Some("honesty".to_string()));
+    }
+
+    #[test]
+    fn veto_entry_creation_without_violated_value() {
+        let veto = VetoEntry {
+            timestamp: Instant::now(),
+            reason: "Unknown violation".to_string(),
+            violated_value: None,
+        };
+
+        assert_eq!(veto.reason, "Unknown violation");
+        assert!(veto.violated_value.is_none());
+    }
+
+    #[test]
+    fn add_veto_increments_count() {
+        let mut app = App::new();
+        assert_eq!(app.veto_count, 0);
+
+        app.add_veto(
+            "Test veto reason".to_string(),
+            Some("integrity".to_string()),
+        );
+        assert_eq!(app.veto_count, 1);
+
+        app.add_veto("Another veto".to_string(), None);
+        assert_eq!(app.veto_count, 2);
+    }
+
+    #[test]
+    fn add_veto_adds_entry_to_queue() {
+        let mut app = App::new();
+
+        app.add_veto(
+            "Dishonest thought detected".to_string(),
+            Some("honesty".to_string()),
+        );
+
+        assert_eq!(app.vetoes.len(), 1);
+        assert_eq!(app.vetoes[0].reason, "Dishonest thought detected");
+        assert_eq!(app.vetoes[0].violated_value, Some("honesty".to_string()));
+    }
+
+    #[test]
+    fn add_veto_respects_max_size() {
+        let mut app = App::new();
+
+        // Add MAX_VETOES + 10 entries
+        for i in 0..60 {
+            app.add_veto(format!("Veto {}", i), Some(format!("value_{}", i)));
+        }
+
+        // Queue should be capped at MAX_VETOES (50)
+        assert_eq!(app.vetoes.len(), MAX_VETOES);
+
+        // First entry should be veto 10 (first 10 were evicted)
+        assert_eq!(app.vetoes[0].reason, "Veto 10");
+        assert_eq!(app.vetoes[0].violated_value, Some("value_10".to_string()));
+
+        // Last entry should be veto 59
+        assert_eq!(app.vetoes[49].reason, "Veto 59");
+
+        // Veto count should still track all 60 vetoes
+        assert_eq!(app.veto_count, 60);
+    }
+
+    #[test]
+    fn add_veto_maintains_chronological_order() {
+        let mut app = App::new();
+
+        // Add vetoes in sequence
+        for i in 0..5 {
+            app.add_veto(format!("Veto {}", i), None);
+        }
+
+        // Verify chronological order (oldest to newest)
+        for i in 0..5 {
+            assert_eq!(app.vetoes[i].reason, format!("Veto {}", i));
+        }
+    }
+
+    #[test]
+    fn add_veto_with_various_value_formats() {
+        let mut app = App::new();
+
+        // Veto with value
+        app.add_veto("Test 1".to_string(), Some("honesty".to_string()));
+        assert_eq!(app.vetoes[0].violated_value, Some("honesty".to_string()));
+
+        // Veto without value
+        app.add_veto("Test 2".to_string(), None);
+        assert!(app.vetoes[1].violated_value.is_none());
+
+        // Veto with complex value name
+        app.add_veto(
+            "Test 3".to_string(),
+            Some("life honours life".to_string()),
+        );
+        assert_eq!(
+            app.vetoes[2].violated_value,
+            Some("life honours life".to_string())
+        );
+    }
+
+    #[test]
+    fn veto_timestamp_is_recent() {
+        use std::time::Duration;
+
+        let mut app = App::new();
+        let before = Instant::now();
+
+        app.add_veto("Test veto".to_string(), None);
+
+        let after = Instant::now();
+        let veto_time = app.vetoes[0].timestamp;
+
+        // Veto timestamp should be between before and after
+        assert!(veto_time >= before);
+        assert!(veto_time <= after);
+
+        // Should be very recent (less than 100ms ago)
+        assert!(veto_time.elapsed() < Duration::from_millis(100));
+    }
+
+    #[test]
+    fn multiple_vetoes_tracked_separately() {
+        let mut app = App::new();
+
+        app.add_veto("First veto".to_string(), Some("honesty".to_string()));
+        app.add_veto("Second veto".to_string(), Some("integrity".to_string()));
+        app.add_veto("Third veto".to_string(), None);
+
+        assert_eq!(app.vetoes.len(), 3);
+        assert_eq!(app.veto_count, 3);
+
+        // Each veto should have distinct data
+        assert_eq!(app.vetoes[0].reason, "First veto");
+        assert_eq!(app.vetoes[1].reason, "Second veto");
+        assert_eq!(app.vetoes[2].reason, "Third veto");
+
+        assert_eq!(app.vetoes[0].violated_value, Some("honesty".to_string()));
+        assert_eq!(
+            app.vetoes[1].violated_value,
+            Some("integrity".to_string())
+        );
+        assert!(app.vetoes[2].violated_value.is_none());
+    }
+
+    #[test]
+    fn veto_entry_is_cloneable() {
+        let veto = VetoEntry {
+            timestamp: Instant::now(),
+            reason: "Test reason".to_string(),
+            violated_value: Some("test_value".to_string()),
+        };
+
+        let cloned = veto.clone();
+
+        assert_eq!(cloned.reason, veto.reason);
+        assert_eq!(cloned.violated_value, veto.violated_value);
+    }
+
+    #[test]
+    fn veto_display_data_structure() {
+        let mut app = App::new();
+
+        // Add a veto with violated value
+        app.add_veto(
+            "Thought conflicts with stated values".to_string(),
+            Some("transparency".to_string()),
+        );
+
+        // Verify display data is properly structured
+        let veto = &app.vetoes[0];
+        assert_eq!(veto.reason, "Thought conflicts with stated values");
+        assert_eq!(veto.violated_value, Some("transparency".to_string()));
+
+        // Format check: violated value should be presentable
+        let value_str = if let Some(ref value) = veto.violated_value {
+            format!("[{}] ", value)
+        } else {
+            String::from("[unknown] ")
+        };
+        assert_eq!(value_str, "[transparency] ");
+    }
+
+    #[test]
+    fn veto_display_without_value() {
+        let mut app = App::new();
+
+        app.add_veto("Generic violation".to_string(), None);
+
+        let veto = &app.vetoes[0];
+        let value_str = if let Some(ref value) = veto.violated_value {
+            format!("[{}] ", value)
+        } else {
+            String::from("[unknown] ")
+        };
+        assert_eq!(value_str, "[unknown] ");
+    }
+
+    // =========================================================================
+    // StreamCompetition Tests (TUI-VIS-5)
+    // =========================================================================
+
+    #[test]
+    fn stream_competition_default_initialization() {
+        let competition = StreamCompetition::default();
+
+        // All activity should start at 0.0
+        assert_eq!(competition.activity.len(), 9);
+        assert!(competition.activity.iter().all(|&a| a == 0.0));
+
+        // All history arrays should be empty
+        assert_eq!(competition.history.len(), 9);
+        assert!(competition.history.iter().all(|h| h.is_empty()));
+
+        // Dominant stream should start at 0
+        assert_eq!(competition.dominant_stream, 0);
+    }
+
+    #[test]
+    fn stream_competition_via_app_initialization() {
+        let app = App::new();
+
+        // Verify stream_competition is properly initialized
+        assert_eq!(app.stream_competition.activity.len(), 9);
+        assert!(app.stream_competition.activity.iter().all(|&a| a == 0.0));
+        assert_eq!(app.stream_competition.dominant_stream, 0);
+    }
+
+    #[test]
+    fn update_stream_competition_valid_window() {
+        let mut app = App::new();
+
+        // Update window_0 with high salience
+        app.update_stream_competition("window_0", 0.8);
+
+        // Activity should be increased (uses EMA with alpha=0.3)
+        // First update: 0.3 * 0.8 + 0.7 * 0.0 = 0.24
+        assert!(app.stream_competition.activity[0] > 0.0);
+        assert!(app.stream_competition.activity[0] <= 0.8);
+    }
+
+    #[test]
+    fn update_stream_competition_multiple_windows() {
+        let mut app = App::new();
+
+        // Update different windows
+        app.update_stream_competition("window_0", 0.8);
+        app.update_stream_competition("window_3", 0.6);
+        app.update_stream_competition("window_8", 0.4);
+
+        // Check that correct windows were updated
+        assert!(app.stream_competition.activity[0] > 0.0);
+        assert!(app.stream_competition.activity[3] > 0.0);
+        assert!(app.stream_competition.activity[8] > 0.0);
+
+        // Other windows should still be 0
+        assert_eq!(app.stream_competition.activity[1], 0.0);
+        assert_eq!(app.stream_competition.activity[2], 0.0);
+    }
+
+    #[test]
+    fn update_stream_competition_exponential_moving_average() {
+        let mut app = App::new();
+
+        // First update
+        app.update_stream_competition("window_0", 1.0);
+        let activity_1 = app.stream_competition.activity[0];
+
+        // Second update with same value
+        app.update_stream_competition("window_0", 1.0);
+        let activity_2 = app.stream_competition.activity[0];
+
+        // Activity should increase (approaching 1.0 via EMA)
+        assert!(activity_2 > activity_1);
+        assert!(activity_2 <= 1.0);
+    }
+
+    #[test]
+    fn update_stream_competition_invalid_window_name() {
+        let mut app = App::new();
+
+        // Invalid window names should not panic
+        app.update_stream_competition("invalid", 0.8);
+        app.update_stream_competition("window_", 0.8);
+        app.update_stream_competition("window_abc", 0.8);
+        app.update_stream_competition("notawindow_5", 0.8);
+
+        // All activities should still be 0
+        assert!(app.stream_competition.activity.iter().all(|&a| a == 0.0));
+    }
+
+    #[test]
+    fn update_stream_competition_out_of_bounds_index() {
+        let mut app = App::new();
+
+        // Window indices beyond 8 should not panic
+        app.update_stream_competition("window_9", 0.8);
+        app.update_stream_competition("window_10", 0.8);
+        app.update_stream_competition("window_100", 0.8);
+
+        // All activities should still be 0
+        assert!(app.stream_competition.activity.iter().all(|&a| a == 0.0));
+    }
+
+    #[test]
+    fn add_thought_updates_stream_competition() {
+        let mut app = App::new();
+
+        // Adding thought should automatically update stream competition
+        app.add_thought(
+            0.9,
+            0.0,
+            0.5,
+            "window_2".to_string(),
+            ThoughtStatus::Salient,
+        );
+
+        // Window 2 should have activity
+        assert!(app.stream_competition.activity[2] > 0.0);
+    }
+
+    #[test]
+    fn decay_stream_competition_reduces_activity() {
+        let mut app = App::new();
+
+        // Set up some activity
+        app.stream_competition.activity[0] = 1.0;
+        app.stream_competition.activity[3] = 0.5;
+
+        // Apply decay
+        app.decay_stream_competition(Duration::from_secs(1));
+
+        // Activities should be reduced
+        assert!(app.stream_competition.activity[0] < 1.0);
+        assert!(app.stream_competition.activity[3] < 0.5);
+    }
+
+    #[test]
+    fn decay_stream_competition_decay_rate() {
+        let mut app = App::new();
+        app.stream_competition.activity[0] = 1.0;
+
+        // Decay with 1 second
+        app.decay_stream_competition(Duration::from_secs(1));
+
+        // Should be 0.95^1 = 0.95
+        let expected = 0.95_f32.powf(1.0);
+        assert!((app.stream_competition.activity[0] - expected).abs() < 0.01);
+    }
+
+    #[test]
+    fn decay_stream_competition_longer_duration() {
+        let mut app = App::new();
+        app.stream_competition.activity[0] = 1.0;
+
+        // Decay with 2 seconds
+        app.decay_stream_competition(Duration::from_secs(2));
+
+        // Should be 0.95^2 ≈ 0.9025
+        let expected = 0.95_f32.powf(2.0);
+        assert!((app.stream_competition.activity[0] - expected).abs() < 0.01);
+    }
+
+    #[test]
+    fn decay_stream_competition_updates_history() {
+        let mut app = App::new();
+        app.stream_competition.activity[0] = 0.8;
+        app.stream_competition.activity[5] = 0.3;
+
+        // Set last_update to more than 1 second ago to trigger history update
+        app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+
+        // Decay should update history
+        app.decay_stream_competition(Duration::from_millis(100));
+
+        // History should have entries now
+        assert_eq!(app.stream_competition.history[0].len(), 1);
+        assert_eq!(app.stream_competition.history[5].len(), 1);
+    }
+
+    #[test]
+    fn decay_stream_competition_limits_history_length() {
+        let mut app = App::new();
+        app.stream_competition.activity[0] = 0.5;
+
+        // Force history updates by repeatedly setting last_update in the past
+        for _ in 0..25 {
+            app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+            app.decay_stream_competition(Duration::from_millis(100));
+        }
+
+        // History should be capped at 20 entries
+        assert!(app.stream_competition.history[0].len() <= 20);
+    }
+
+    #[test]
+    fn decay_stream_competition_detects_dominant_stream() {
+        let mut app = App::new();
+
+        // Set different activity levels
+        app.stream_competition.activity[0] = 0.3;
+        app.stream_competition.activity[2] = 0.9; // Highest
+        app.stream_competition.activity[5] = 0.5;
+
+        // Trigger dominant stream update
+        app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+        app.decay_stream_competition(Duration::from_millis(100));
+
+        // Window 2 should be dominant
+        assert_eq!(app.stream_competition.dominant_stream, 2);
+    }
+
+    #[test]
+    fn decay_stream_competition_dominant_stream_tie() {
+        let mut app = App::new();
+
+        // Set equal activity levels
+        app.stream_competition.activity[3] = 0.8;
+        app.stream_competition.activity[7] = 0.8;
+
+        // Trigger dominant stream update
+        app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+        app.decay_stream_competition(Duration::from_millis(100));
+
+        // Should pick last one with max value (index 7) due to max_by behavior
+        assert_eq!(app.stream_competition.dominant_stream, 7);
+    }
+
+    #[test]
+    fn decay_stream_competition_all_zero_activity() {
+        let mut app = App::new();
+
+        // All activities at 0
+        for activity in &mut app.stream_competition.activity {
+            *activity = 0.0;
+        }
+
+        // Trigger dominant stream update
+        app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+        app.decay_stream_competition(Duration::from_millis(100));
+
+        // Should pick last window (index 8) when all are equal due to max_by behavior
+        assert_eq!(app.stream_competition.dominant_stream, 8);
+    }
+
+    #[test]
+    fn stream_competition_activity_bar_representation() {
+        let mut app = App::new();
+
+        // Set up 9 windows with varying activity
+        for i in 0..9 {
+            app.stream_competition.activity[i] = (i as f32) / 10.0;
+        }
+
+        // Count active streams (activity > 0.1)
+        let active = app
+            .stream_competition
+            .activity
+            .iter()
+            .filter(|&&a| a > 0.1)
+            .count();
+
+        // Windows 2-8 should be active (0.2-0.8 range)
+        assert_eq!(active, 7);
+    }
+
+    #[test]
+    fn stream_competition_integration_test() {
+        let mut app = App::new();
+
+        // Simulate thought stream with different windows
+        app.add_thought(0.9, 0.5, 0.7, "window_0".to_string(), ThoughtStatus::Salient);
+        app.add_thought(0.8, 0.3, 0.6, "window_0".to_string(), ThoughtStatus::Processing);
+        app.add_thought(0.7, 0.0, 0.5, "window_3".to_string(), ThoughtStatus::Salient);
+        app.add_thought(0.6, -0.2, 0.4, "window_5".to_string(), ThoughtStatus::Processing);
+
+        // Window 0 should have highest activity (two thoughts)
+        assert!(app.stream_competition.activity[0] > app.stream_competition.activity[3]);
+        assert!(app.stream_competition.activity[0] > app.stream_competition.activity[5]);
+
+        // Windows 3 and 5 should have some activity
+        assert!(app.stream_competition.activity[3] > 0.0);
+        assert!(app.stream_competition.activity[5] > 0.0);
+
+        // Apply decay
+        app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+        app.decay_stream_competition(Duration::from_secs(1));
+
+        // Window 0 should still be dominant
+        assert_eq!(app.stream_competition.dominant_stream, 0);
+
+        // History should be populated
+        assert!(!app.stream_competition.history[0].is_empty());
+    }
 }
