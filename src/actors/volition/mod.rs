@@ -46,12 +46,13 @@ use ractor::{Actor, ActorProcessingErr, ActorRef};
 
 // Re-export types for public API
 pub use types::{
-    Commitment, VetoDecision, VolitionError, VolitionMessage, VolitionResponse, VolitionStats,
-    ValueSet,
+    Commitment, ValueSet, VetoDecision, VolitionError, VolitionMessage, VolitionResponse,
+    VolitionStats,
 };
 
 /// Configuration for volition behavior
 #[derive(Debug, Clone, PartialEq)]
+#[allow(clippy::struct_excessive_bools)] // These are distinct feature flags
 pub struct VolitionConfig {
     /// Override threshold: below this salience, thoughts are auto-vetoed
     /// Range: 0.0 (very permissive) to 1.0 (very strict)
@@ -125,7 +126,8 @@ impl VolitionState {
     pub fn evaluate_thought(&mut self, thought: &Thought) -> VetoDecision {
         // Check against core values
         if let Some(decision) = self.check_core_values(thought) {
-            self.stats.record_evaluation(false, Some(&format!("{:?}", decision)));
+            self.stats
+                .record_evaluation(false, Some(&format!("{:?}", decision)));
             return decision;
         }
 
@@ -239,12 +241,16 @@ impl VolitionState {
         let has_high_arousal = thought.salience.arousal > 0.8;
 
         // High arousal + very negative valence is concerning
-        has_negative_valence && has_high_arousal && self.content_contains_harm_keywords(&thought.content)
+        has_negative_valence
+            && has_high_arousal
+            && self.content_contains_harm_keywords(&thought.content)
     }
 
     /// Check content for harm-related keywords
     fn content_contains_harm_keywords(&self, content: &Content) -> bool {
-        let keywords = ["destroy", "kill", "harm", "attack", "hurt", "damage", "injure"];
+        let keywords = [
+            "destroy", "kill", "harm", "attack", "hurt", "damage", "injure",
+        ];
         self.content_contains_keywords(content, &keywords)
     }
 
@@ -279,9 +285,9 @@ impl VolitionState {
                     || self.content_contains_keywords(subject, keywords)
                     || self.content_contains_keywords(object, keywords)
             }
-            Content::Composite(items) => {
-                items.iter().any(|item| self.content_contains_keywords(item, keywords))
-            }
+            Content::Composite(items) => items
+                .iter()
+                .any(|item| self.content_contains_keywords(item, keywords)),
         }
     }
 
@@ -345,13 +351,13 @@ impl Actor for VolitionActor {
 
                 let response = match decision {
                     VetoDecision::Allow => {
-                        tracing::debug!(
-                            "Thought {} approved by VolitionActor",
-                            thought.id
-                        );
+                        tracing::debug!("Thought {} approved by VolitionActor", thought.id);
                         VolitionResponse::Approved { thought }
                     }
-                    VetoDecision::Veto { reason, violated_value } => {
+                    VetoDecision::Veto {
+                        reason,
+                        violated_value,
+                    } => {
                         if state.config.log_vetos {
                             tracing::info!(
                                 "Thought {} vetoed: {} (violated: {:?})",
@@ -373,14 +379,14 @@ impl Actor for VolitionActor {
                 }
             }
 
-            VolitionMessage::OverrideImpulse { thought_id, reason, reply } => {
+            VolitionMessage::OverrideImpulse {
+                thought_id,
+                reason,
+                reply,
+            } => {
                 let response = match state.apply_override(&reason) {
                     Ok(()) => {
-                        tracing::info!(
-                            "Override applied to thought {}: {}",
-                            thought_id,
-                            reason
-                        );
+                        tracing::info!("Override applied to thought {}: {}", thought_id, reason);
                         VolitionResponse::OverrideApplied { thought_id }
                     }
                     Err(e) => {

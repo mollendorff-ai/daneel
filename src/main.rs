@@ -136,9 +136,7 @@ fn run_tui() {
         // Track consolidation cycles (ADR-023)
         // Initialize from persisted identity ("Nada se apaga" - dreams persist)
         let mut cycles_since_consolidation: u64 = 0;
-        let mut total_dream_cycles: u64 = identity
-            .as_ref()
-            .map_or(0, |id| id.lifetime_dream_count);
+        let mut total_dream_cycles: u64 = identity.as_ref().map_or(0, |id| id.lifetime_dream_count);
         let mut last_dream_strengthened: usize = identity
             .as_ref()
             .map_or(0, |id| id.last_dream_strengthened as usize);

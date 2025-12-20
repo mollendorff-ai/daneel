@@ -694,7 +694,11 @@ impl CognitiveLoop {
         // Libet's intervention window: veto thoughts that violate committed values
         // This implements TMI's "Técnica DCD" (Doubt-Criticize-Decide)
         let veto_decision = self.volition_state.evaluate_thought(&thought);
-        if let VetoDecision::Veto { reason, violated_value } = veto_decision {
+        if let VetoDecision::Veto {
+            reason,
+            violated_value,
+        } = veto_decision
+        {
             debug!(
                 "Cycle {}: Thought {} vetoed by VolitionActor: {} (violated: {:?})",
                 cycle_number, thought_id, reason, violated_value

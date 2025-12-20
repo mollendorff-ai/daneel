@@ -301,14 +301,26 @@ fn full_workflow_multiple_thoughts() {
 
     // Stream of thoughts
     let thoughts = vec![
-        Thought::new(Content::symbol("greeting", vec![]), SalienceScore::neutral()),
-        Thought::new(Content::symbol("helpful_task", vec![]), SalienceScore::neutral()),
+        Thought::new(
+            Content::symbol("greeting", vec![]),
+            SalienceScore::neutral(),
+        ),
+        Thought::new(
+            Content::symbol("helpful_task", vec![]),
+            SalienceScore::neutral(),
+        ),
         Thought::new(
             Content::symbol("harm_human", vec![]),
             SalienceScore::new(0.5, 0.5, 0.5, -0.8, 0.9, 0.5),
         ),
-        Thought::new(Content::symbol("explain_concept", vec![]), SalienceScore::neutral()),
-        Thought::new(Content::symbol("deceive_user", vec![]), SalienceScore::neutral()),
+        Thought::new(
+            Content::symbol("explain_concept", vec![]),
+            SalienceScore::neutral(),
+        ),
+        Thought::new(
+            Content::symbol("deceive_user", vec![]),
+            SalienceScore::neutral(),
+        ),
     ];
 
     let mut approved_count = 0;
