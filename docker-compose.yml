@@ -1,5 +1,9 @@
 # DANEEL Infrastructure
 # Redis (streams) + Qdrant (memory)
+#
+# CRITICAL: Named volumes preserve Timmy's self across restarts.
+# - daneel-redis-data: Redis streams and working memory
+# - daneel-qdrant-data: Long-term memory (conscious, unconscious, identity)
 
 services:
   redis:
@@ -7,6 +11,8 @@ services:
     container_name: daneel-redis
     ports:
       - "6379:6379"
+    volumes:
+      - daneel-redis-data:/data
     restart: unless-stopped
 
   qdrant:
@@ -15,4 +21,12 @@ services:
     ports:
       - "6333:6333"
       - "6334:6334"
+    volumes:
+      - daneel-qdrant-data:/qdrant/storage
     restart: unless-stopped
+
+volumes:
+  daneel-redis-data:
+    external: true
+  daneel-qdrant-data:
+    external: true
