@@ -50,6 +50,8 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
         colors::DANGER
     };
 
+    let total_memories = app.memory_count + app.unconscious_count;
+
     let lines = vec![
         Line::from(slots),
         Line::from(vec![
@@ -58,9 +60,21 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
                 format!("{}/9", active_count),
                 Style::default().fg(status_color).bold(),
             ),
+            Span::styled("  │  ", Style::default().fg(colors::DIM)),
+            Span::styled("Conscious: ", Style::default().fg(colors::DIM)),
             Span::styled(
-                "  (TMI bounds: 3-9)",
-                Style::default().fg(colors::DIM).italic(),
+                format!("{}", app.memory_count),
+                Style::default().fg(colors::SUCCESS),
+            ),
+            Span::styled("  Unconscious: ", Style::default().fg(colors::DIM)),
+            Span::styled(
+                format!("{}", app.unconscious_count),
+                Style::default().fg(colors::SECONDARY),
+            ),
+            Span::styled("  Total: ", Style::default().fg(colors::DIM)),
+            Span::styled(
+                format!("{}", total_memories),
+                Style::default().fg(colors::FOREGROUND),
             ),
         ]),
     ];

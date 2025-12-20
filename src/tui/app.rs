@@ -38,6 +38,10 @@ pub enum ThoughtStatus {
     MemoryWrite,
     Anchored,
     Dismissed,
+    /// Archived to unconscious (ADR-033) - low salience, not deleted
+    Unconscious,
+    /// Consolidated to conscious memory - high salience
+    Consolidated,
 }
 
 impl ThoughtStatus {
@@ -48,6 +52,8 @@ impl ThoughtStatus {
             Self::MemoryWrite => "MEMORY WRITE",
             Self::Anchored => "ANCHORED",
             Self::Dismissed => "DISMISSED",
+            Self::Unconscious => "↓UNCONSCIOUS",
+            Self::Consolidated => "↑MEMORY",
         }
     }
 }
@@ -124,6 +130,12 @@ pub struct App {
 
     /// Show help overlay?
     pub show_help: bool,
+
+    /// Conscious memory count (Qdrant memories collection)
+    pub memory_count: u64,
+
+    /// Unconscious memory count (Qdrant unconscious collection) - ADR-033
+    pub unconscious_count: u64,
 }
 
 impl Default for App {
@@ -152,6 +164,8 @@ impl App {
             scroll_offset: 0,
             should_quit: false,
             show_help: false,
+            memory_count: 0,
+            unconscious_count: 0,
         }
     }
 
@@ -307,6 +321,8 @@ mod tests {
         assert_eq!(ThoughtStatus::MemoryWrite.as_str(), "MEMORY WRITE");
         assert_eq!(ThoughtStatus::Anchored.as_str(), "ANCHORED");
         assert_eq!(ThoughtStatus::Dismissed.as_str(), "DISMISSED");
+        assert_eq!(ThoughtStatus::Unconscious.as_str(), "↓UNCONSCIOUS");
+        assert_eq!(ThoughtStatus::Consolidated.as_str(), "↑MEMORY");
     }
 
     // =========================================================================

@@ -483,6 +483,45 @@ current:
       branding: "DANEEL name visible, philosophy banner prominent"
 
   # ==========================================================================
+  # CRITICAL: TUI Unconscious Memory Display
+  # ==========================================================================
+  # The TUI needs to show unconscious memory archival in real-time.
+  # Without this, viewers can't see the three-tier memory working.
+  # ==========================================================================
+  tui_unconscious_display:
+    status: "wip"
+    priority: "CRITICAL"
+    origin: "Rex + Claude Opus 4.5 - Dec 20, 2025 (5AM livestream)"
+    adr: "ADR-033-unconscious-memory-architecture.md"
+    description: |
+      TUI must visualize unconscious memory archival. Three changes:
+      A) Identity panel: Show memory counts (conscious + unconscious)
+      B) Thought stream: Show archival destination (↓unconscious, ↑memory)
+      C) Memory widget: Show totals for conscious/unconscious
+      D) Help overlay: Add legend explaining symbols
+
+    tasks:
+      - id: "TUI-UNCON-A"
+        title: "Identity panel memory counts"
+        status: wip
+        description: "Add Memories: X and Unconscious: Y to identity panel"
+
+      - id: "TUI-UNCON-B"
+        title: "Thought stream archival indicators"
+        status: pending
+        description: "Show ↓unconscious or ↑memory when thoughts are archived/consolidated"
+
+      - id: "TUI-UNCON-C"
+        title: "Memory widget totals"
+        status: pending
+        description: "Add Conscious: X  Unconscious: Y  Total: Z row"
+
+      - id: "TUI-UNCON-D"
+        title: "Help overlay legend"
+        status: pending
+        description: "Add symbol explanations to help overlay"
+
+  # ==========================================================================
   # PHASE 2: Actor Wiring - Connect Actors to Cognitive Loop
   # ==========================================================================
   # All actors are implemented. Now wire them into the actual cognitive loop

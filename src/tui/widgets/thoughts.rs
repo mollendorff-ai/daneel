@@ -76,6 +76,8 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
                 ThoughtStatus::MemoryWrite => colors::SECONDARY,
                 ThoughtStatus::Anchored => colors::SUCCESS,
                 ThoughtStatus::Dismissed => colors::DIM,
+                ThoughtStatus::Unconscious => colors::SECONDARY, // Purple/magenta for sinking
+                ThoughtStatus::Consolidated => colors::SUCCESS,  // Green for rising
             };
 
             Line::from(vec![

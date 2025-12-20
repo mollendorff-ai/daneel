@@ -32,6 +32,11 @@ pub fn render(frame: &mut Frame, area: Rect) {
         ("↑/↓", "Scroll when paused"),
         ("?", "Toggle this help"),
         ("Esc", "Close help / resume"),
+        ("", ""),
+        ("─────", "── LEGEND ──────────────"),
+        ("↑MEMORY", "Consolidated to conscious"),
+        ("↓UNCON", "Archived to unconscious"),
+        ("██████", "Salience bar (higher=more)"),
     ];
 
     let lines: Vec<Line> = controls

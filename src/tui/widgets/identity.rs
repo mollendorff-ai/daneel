@@ -24,27 +24,37 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
         Line::from(vec![
             Span::styled("Name: ", Style::default().fg(colors::DIM)),
             Span::styled("Timmy", Style::default().fg(colors::PRIMARY).bold()),
-        ]),
-        Line::from(""),
-        Line::from(vec![
-            Span::styled("Uptime: ", Style::default().fg(colors::DIM)),
+            Span::styled("  Uptime: ", Style::default().fg(colors::DIM)),
             Span::styled(app.uptime_string(), Style::default().fg(colors::FOREGROUND)),
         ]),
-        Line::from(""),
         Line::from(vec![
             Span::styled("Thoughts: ", Style::default().fg(colors::DIM)),
             Span::styled(
                 format!("{}", app.thought_count),
                 Style::default().fg(colors::FOREGROUND),
             ),
+            Span::styled("  Rate: ", Style::default().fg(colors::DIM)),
+            Span::styled(
+                format!("{:.0}/hr", app.thoughts_per_hour),
+                Style::default().fg(colors::FOREGROUND),
+            ),
         ]),
         Line::from(""),
         Line::from(vec![
-            Span::styled("Thoughts/hr: ", Style::default().fg(colors::DIM)),
+            Span::styled("Memories: ", Style::default().fg(colors::DIM)),
             Span::styled(
-                format!("{:.0}", app.thoughts_per_hour),
-                Style::default().fg(colors::FOREGROUND),
+                format!("{}", app.memory_count),
+                Style::default().fg(colors::SUCCESS),
             ),
+            Span::styled(" ↑", Style::default().fg(colors::SUCCESS)),
+        ]),
+        Line::from(vec![
+            Span::styled("Unconscious: ", Style::default().fg(colors::DIM)),
+            Span::styled(
+                format!("{}", app.unconscious_count),
+                Style::default().fg(colors::SECONDARY),
+            ),
+            Span::styled(" ↓", Style::default().fg(colors::SECONDARY)),
         ]),
     ];
 
