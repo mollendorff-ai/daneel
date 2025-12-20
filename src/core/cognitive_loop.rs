@@ -47,9 +47,10 @@ use rand::Rng;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
+use crate::actors::attention::{AttentionConfig, AttentionState};
 use crate::config::CognitiveConfig;
-use crate::core::types::{Content, SalienceScore, Thought, ThoughtId};
-use crate::memory_db::{Memory, MemoryDb, MemorySource};
+use crate::core::types::{Content, SalienceScore, Thought, ThoughtId, WindowId};
+use crate::memory_db::{Memory, MemoryDb, MemorySource, VECTOR_DIMENSION};
 use crate::streams::client::StreamsClient;
 use crate::streams::types::{StreamEntry, StreamError, StreamName};
 use tracing::{debug, error, info, warn};
@@ -286,6 +287,10 @@ pub struct CognitiveLoop {
 
     /// Consolidation threshold (salience above this gets stored)
     consolidation_threshold: f32,
+
+    /// Attention state for competitive selection (O Eu)
+    #[allow(dead_code)] // Will be used in Stage 3 (Attention) implementation
+    attention_state: AttentionState,
 }
 
 impl CognitiveLoop {
@@ -310,6 +315,7 @@ impl CognitiveLoop {
             total_stage_durations: StageDurations::default(),
             memory_db: None,
             consolidation_threshold: 0.7, // Default threshold
+            attention_state: AttentionState::with_config(AttentionConfig::default()),
         }
     }
 
@@ -375,6 +381,7 @@ impl CognitiveLoop {
             total_stage_durations: StageDurations::default(),
             memory_db: None,
             consolidation_threshold: 0.7,
+            attention_state: AttentionState::with_config(AttentionConfig::default()),
         })
     }
 
@@ -506,10 +513,47 @@ impl CognitiveLoop {
         // Stage 1: Trigger (Gatilho da Memória)
         // Memory trigger activation - associative recall based on context
         let stage_start = Instant::now();
-        // TODO: Trigger memory associations from recent experience
-        // - Query memory for recent context
-        // - Activate associative networks
-        // - Prime relevant memory streams
+
+        // Query Qdrant for memory associations if connected
+        if let Some(ref memory_db) = self.memory_db {
+            // Generate query vector (zeros for now, will be replaced with actual context embedding)
+            // TODO: Replace with context vector derived from recent thought/experience
+            let query_vector = vec![0.0; VECTOR_DIMENSION];
+
+            // Query for top 5 most relevant memories
+            match memory_db.find_by_context(&query_vector, None, 5).await {
+                Ok(memories) => {
+                    if memories.is_empty() {
+                        debug!("No memories retrieved from Qdrant (database may be empty)");
+                    } else {
+                        debug!(
+                            count = memories.len(),
+                            "Retrieved memories from Qdrant for associative priming"
+                        );
+                        // Log each retrieved memory for debugging
+                        for (memory, score) in &memories {
+                            debug!(
+                                memory_id = %memory.id,
+                                similarity = score,
+                                content_preview = %memory.content.chars().take(50).collect::<String>(),
+                                connection_relevance = memory.connection_relevance,
+                                "Memory association triggered"
+                            );
+                        }
+                    }
+                }
+                Err(e) => {
+                    // Log error but don't crash - cognitive loop continues
+                    warn!(
+                        error = %e,
+                        "Failed to query memory associations - continuing without memory trigger"
+                    );
+                }
+            }
+        } else {
+            debug!("Memory database not connected - skipping memory trigger");
+        }
+
         tokio::time::sleep(self.config.trigger_delay()).await;
         stage_durations.trigger = stage_start.elapsed();
 
@@ -517,15 +561,47 @@ impl CognitiveLoop {
         // Generate or read thoughts from streams
         let stage_start = Instant::now();
         let (content, salience) = self.generate_random_thought();
+
+        // Assign a window ID to this candidate thought
+        let window_id = WindowId::new();
         let candidates_evaluated = 1; // One generated thought for now
         tokio::time::sleep(self.config.autoflow_interval()).await;
         stage_durations.autoflow = stage_start.elapsed();
 
         // Stage 3: Attention (O Eu)
-        // Score candidates by salience and select winner
+        // Competitive selection using AttentionActor logic
         let stage_start = Instant::now();
-        // For now, we just use the generated thought as the winner
-        // TODO: Implement multi-stream competition when reading from multiple sources
+
+        // Update attention map with candidate salience
+        // Calculate composite salience for competitive selection
+        let composite_salience_candidate = salience.composite(&crate::core::types::SalienceWeights::default());
+        self.attention_state.update_window_salience(
+            window_id,
+            composite_salience_candidate,
+            salience.connection_relevance,
+        );
+
+        // Run attention cycle to select winner
+        let attention_response = self.attention_state.cycle();
+
+        // Extract the winner (for now, we only have one candidate, so it should win)
+        let (winning_window, _winning_salience) = match attention_response {
+            crate::actors::attention::AttentionResponse::CycleComplete { focused, salience: attention_salience } => {
+                (focused, attention_salience)
+            }
+            _ => {
+                // Unexpected response type - fall back to our candidate
+                (Some(window_id), composite_salience_candidate)
+            }
+        };
+
+        debug!(
+            cycle = cycle_number,
+            candidate_count = candidates_evaluated,
+            winner = ?winning_window,
+            "Attention stage: competitive selection complete"
+        );
+
         tokio::time::sleep(self.config.attention_delay()).await;
         stage_durations.attention = stage_start.elapsed();
 
@@ -535,8 +611,8 @@ impl CognitiveLoop {
         let thought = Thought::new(content.clone(), salience).with_source("cognitive_loop");
         let thought_id = thought.id;
 
-        // Calculate composite salience for this thought
-        let composite_salience = salience.composite(&crate::core::types::SalienceWeights::default());
+        // Use the composite salience calculated during attention stage
+        let composite_salience = composite_salience_candidate;
 
         // Write to Redis if connected
         if let Some(ref mut streams) = self.streams {

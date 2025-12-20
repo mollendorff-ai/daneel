@@ -177,7 +177,7 @@ impl AttentionState {
     ///
     /// Performs competitive selection and updates focus if appropriate.
     /// Returns the window that won focus (if any).
-    fn cycle(&mut self) -> AttentionResponse {
+    pub fn cycle(&mut self) -> AttentionResponse {
         self.cycle_count += 1;
 
         // Select winner through competitive selection

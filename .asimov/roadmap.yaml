@@ -482,6 +482,47 @@ current:
       font_size: "Large enough for mobile viewers"
       branding: "DANEEL name visible, philosophy banner prominent"
 
+  # ==========================================================================
+  # PHASE 2: Actor Wiring - Connect Actors to Cognitive Loop
+  # ==========================================================================
+  # All actors are implemented. Now wire them into the actual cognitive loop
+  # to create the complete TMI cognitive architecture.
+  # ==========================================================================
+  phase2_actor_wiring:
+    status: "wip"
+    priority: "HIGH"
+    origin: "Rex + Claude Opus 4.5 - Dec 20, 2025"
+    description: |
+      Wire implemented actors into the cognitive loop to create the complete
+      TMI architecture. Actors exist but are not yet integrated into the
+      main cognitive flow. This phase connects all the pieces.
+
+    tasks:
+      - id: "WIRE-ATT-3"
+        title: "Wire AttentionActor into Stage 3 (O Eu)"
+        status: wip
+        description: "Connect AttentionActor to cognitive loop Stage 3 for competitive window selection"
+
+      - id: "WIRE-THOUGHT-4"
+        title: "Wire ThoughtAssemblyActor into Stage 4"
+        status: pending
+        description: "Connect ThoughtAssemblyActor to cognitive loop Stage 4 for thought construction"
+
+      - id: "WIRE-TRIGGER-MEM"
+        title: "Implement Trigger stage memory query"
+        status: wip
+        description: "Wire memory queries into Stage 1 (Gatilho/Trigger) for context-aware triggers"
+
+      - id: "WIRE-MULTISTREAM"
+        title: "Implement multi-stream competition"
+        status: pending
+        description: "Wire Redis Streams competition across multiple thought streams"
+
+      - id: "WIRE-FORGETTING"
+        title: "Implement forgetting (XDEL)"
+        status: wip
+        description: "Wire Redis XDEL for old thought cleanup and memory management"
+
   # WIP Items (2025-12-18)
   wip:
     in_progress:

@@ -435,6 +435,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::const_is_empty)]
     fn philosophy_quotes_not_empty() {
         assert!(!PHILOSOPHY_QUOTES.is_empty());
     }
