@@ -1,0 +1,18 @@
+# DANEEL Infrastructure
+# Redis (streams) + Qdrant (memory)
+
+services:
+  redis:
+    image: redis:latest
+    container_name: daneel-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant
+    container_name: daneel-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    restart: unless-stopped

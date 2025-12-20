@@ -532,7 +532,7 @@ impl CognitiveLoop {
         // Stage 4: Assembly (Construção do Pensamento)
         // Assemble the winning entry into a conscious thought
         let stage_start = Instant::now();
-        let thought = Thought::new(content.clone(), salience.clone()).with_source("cognitive_loop");
+        let thought = Thought::new(content.clone(), salience).with_source("cognitive_loop");
         let thought_id = thought.id;
 
         // Calculate composite salience for this thought
@@ -573,11 +573,8 @@ impl CognitiveLoop {
         // Decide whether to persist or forget the thought
         let stage_start = Instant::now();
 
-        // TODO: Memory consolidation - Store high-salience thoughts to Qdrant
-        // When thought assembly is implemented, consolidate like this:
-        // if let Some(thought_id) = &thought_produced {
-        //     self.consolidate_memory(thought).await;
-        // }
+        // Memory consolidation - Store high-salience thoughts to Qdrant
+        self.consolidate_memory(&thought).await;
 
         // TODO: Forgetting - Delete stream entries below salience threshold
         // for (score, loser) in scores {
@@ -627,7 +624,6 @@ impl CognitiveLoop {
     ///
     /// This spawns an async task to avoid blocking the cognitive loop.
     /// Errors are logged but don't interrupt thought processing.
-    #[allow(dead_code)] // Used when thought assembly is implemented
     #[allow(clippy::unused_async)] // Async for future compatibility, spawns async task internally
     async fn consolidate_memory(&self, thought: &Thought) {
         // Check if we have a memory database
@@ -684,7 +680,6 @@ impl CognitiveLoop {
     }
 
     /// Convert a Thought to a Memory record
-    #[allow(dead_code)] // Used when thought assembly is implemented
     fn thought_to_memory(&self, thought: &Thought, _salience: f32) -> Memory {
         // Serialize thought content to string
         // For now, use debug representation since Content is pre-linguistic
