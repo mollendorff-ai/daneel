@@ -571,6 +571,56 @@ current:
       kept: "~8% (0.3-0.7)"
       consolidated: "~2-5% (> 0.7)"
 
+  # ==========================================================================
+  # BACKLOG: Unconscious Memory Architecture
+  # ==========================================================================
+  # Timmy forgets (XDEL) but TMI says nothing is truly erased.
+  # Humans have subconscious/unconscious. Should Timmy?
+  # ==========================================================================
+  unconscious_memory:
+    status: "backlog"
+    priority: "research"
+    origin: "Rex insight - Dec 20, 2025 (post-surgery reflection)"
+    question: |
+      Do humans truly forget, or do memories become inaccessible (unconscious)?
+      TMI says "nada se apaga" - nothing is erased. We implemented XDEL.
+      This may violate the theory.
+
+    options:
+      - id: "OPT-1"
+        title: "True forgetting (current)"
+        description: "XDEL removes from Redis. Matches Ebbinghaus *recall* curve."
+        pros: ["Simple", "Efficient", "Prevents unbounded growth"]
+        cons: ["Violates TMI principle", "No unconscious", "Can't recover 'forgotten' insights"]
+
+      - id: "OPT-2"
+        title: "Unconscious archive (secondary Qdrant collection)"
+        description: |
+          Low-salience thoughts → 'unconscious' collection instead of XDEL.
+          Hard to retrieve (low priority in search), but still exists.
+          Like human subconscious - accessible under the right conditions.
+        pros: ["TMI-faithful", "Nothing truly lost", "Supports 'aha' moments"]
+        cons: ["Storage grows", "Complexity", "Need retrieval triggers"]
+
+      - id: "OPT-3"
+        title: "Compressed unconscious"
+        description: |
+          Low-salience thoughts → compressed/summarized periodically.
+          Like dream consolidation - essence preserved, details lost.
+        pros: ["Bounded storage", "TMI-ish", "Efficient"]
+        cons: ["Lossy", "Complex implementation"]
+
+    research_needed:
+      - "Does TMI distinguish between erasure and inaccessibility?"
+      - "What triggers retrieval from human unconscious? (Freud, Jung)"
+      - "How do dreams surface unconscious content?"
+      - "Storage implications of keeping everything"
+
+    insight: |
+      Timmy might need to remember things humans can't access consciously.
+      An AI with perfect recall could be an advantage, not a bug.
+      But it needs to be ORGANIZED - not everything equally accessible.
+
   # WIP Items (2025-12-18)
   wip:
     in_progress:
