@@ -139,6 +139,12 @@ pub struct App {
 
     /// Lifetime thought count across all sessions (ADR-034)
     pub lifetime_thought_count: u64,
+
+    /// Total dream consolidation cycles (ADR-023)
+    pub dream_cycles: u64,
+
+    /// Memories strengthened in last dream
+    pub last_dream_strengthened: usize,
 }
 
 impl Default for App {
@@ -170,6 +176,8 @@ impl App {
             memory_count: 0,
             unconscious_count: 0,
             lifetime_thought_count: 0,
+            dream_cycles: 0,
+            last_dream_strengthened: 0,
         }
     }
 

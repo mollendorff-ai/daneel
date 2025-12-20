@@ -135,6 +135,8 @@ fn run_tui() {
 
         // Track consolidation cycles (ADR-023)
         let mut cycles_since_consolidation: u64 = 0;
+        let mut total_dream_cycles: u64 = 0;
+        let mut last_dream_strengthened: usize = 0;
 
         if let Some(ref db) = memory_db {
             cognitive_loop.set_memory_db(db.clone());
@@ -189,10 +191,13 @@ fn run_tui() {
                                     consolidated += 1;
                                 }
                             }
+                            // Track for TUI display
+                            total_dream_cycles += 1;
+                            last_dream_strengthened = consolidated;
                             if consolidated > 0 {
                                 info!(
-                                    "Dream consolidation: strengthened {} memories",
-                                    consolidated
+                                    "Dream #{}: strengthened {} memories",
+                                    total_dream_cycles, consolidated
                                 );
                             }
                         }
@@ -223,6 +228,8 @@ fn run_tui() {
                 memory_count,
                 unconscious_count,
                 lifetime_thought_count,
+                total_dream_cycles,
+                last_dream_strengthened,
             );
 
             // If channel is closed (TUI exited), stop the loop

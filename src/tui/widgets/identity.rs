@@ -73,6 +73,19 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
                 Style::default().fg(colors::SECONDARY),
             ),
             Span::styled(" ↓", Style::default().fg(colors::SECONDARY)),
+            Span::styled("  Dreams: ", Style::default().fg(colors::DIM)),
+            Span::styled(
+                format!("{}", app.dream_cycles),
+                Style::default().fg(colors::WARNING),
+            ),
+            if app.last_dream_strengthened > 0 {
+                Span::styled(
+                    format!(" (+{})", app.last_dream_strengthened),
+                    Style::default().fg(colors::WARNING),
+                )
+            } else {
+                Span::raw("")
+            },
         ]),
     ];
 

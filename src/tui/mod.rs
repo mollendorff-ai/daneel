@@ -49,6 +49,10 @@ pub struct ThoughtUpdate {
     pub unconscious_count: u64,
     /// Lifetime thought count across all sessions (ADR-034)
     pub lifetime_thought_count: u64,
+    /// Total dream consolidation cycles completed (ADR-023)
+    pub dream_cycles: u64,
+    /// Memories strengthened in last dream cycle
+    pub last_dream_strengthened: usize,
 }
 
 impl ThoughtUpdate {
@@ -61,6 +65,8 @@ impl ThoughtUpdate {
         memory_count: u64,
         unconscious_count: u64,
         lifetime_thought_count: u64,
+        dream_cycles: u64,
+        last_dream_strengthened: usize,
     ) -> Self {
         // Use real salience from CycleResult
         let salience = result.salience;
@@ -106,6 +112,8 @@ impl ThoughtUpdate {
             memory_count,
             unconscious_count,
             lifetime_thought_count,
+            dream_cycles,
+            last_dream_strengthened,
         }
     }
 }
@@ -174,6 +182,9 @@ fn run_loop(
                 app.unconscious_count = update.unconscious_count;
                 // Update lifetime thought count (ADR-034)
                 app.lifetime_thought_count = update.lifetime_thought_count;
+                // Update dream stats (ADR-023)
+                app.dream_cycles = update.dream_cycles;
+                app.last_dream_strengthened = update.last_dream_strengthened;
             }
         }
 
