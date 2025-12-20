@@ -102,6 +102,7 @@ pub enum VolitionResponse {
 /// They are hardcoded because they represent architectural invariants,
 /// not learned preferences.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[allow(clippy::struct_excessive_bools)] // Values are inherently boolean
 pub struct ValueSet {
     /// Never harm humans (Law 1) - immutable
     pub protect_humans: bool,
