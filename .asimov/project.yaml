@@ -277,6 +277,10 @@ social:
       max_chars: 700  # Keep it punchy
       style: teaser_hook  # 2-3 sentences + link + hashtags
       hashtags: "#IndieResearch #AI #AIAlignment"
+    youtube:
+      channel: "https://www.youtube.com/@DaneelAI"
+      style: long_form  # Video content, deep dives
+      hashtags: "#DANEEL #AI #AIAlignment"
 
   # Posting strategy
   strategy:
