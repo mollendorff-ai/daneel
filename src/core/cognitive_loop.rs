@@ -50,7 +50,7 @@ use std::time::{Duration, Instant};
 use crate::actors::attention::{AttentionConfig, AttentionState};
 use crate::config::CognitiveConfig;
 use crate::core::types::{Content, SalienceScore, Thought, ThoughtId, WindowId};
-use crate::memory_db::{Memory, MemoryDb, MemorySource, VECTOR_DIMENSION};
+use crate::memory_db::{ArchiveReason, Memory, MemoryDb, MemorySource, VECTOR_DIMENSION};
 use crate::streams::client::StreamsClient;
 use crate::streams::types::{StreamEntry, StreamError, StreamName};
 use tracing::{debug, error, info, warn};
@@ -680,15 +680,41 @@ impl CognitiveLoop {
         // Memory consolidation - Store high-salience thoughts to Qdrant
         self.consolidate_memory(&thought).await;
 
-        // Forgetting - Delete stream entries below salience threshold
-        // TMI: Low-salience thoughts are forgotten, not persisted
+        // Forgetting - Archive to unconscious, then delete stream entries (ADR-033)
+        // TMI: "Nada se apaga na memória" - nothing is erased, just made inaccessible
         if (composite_salience as f64) < self.config.forget_threshold {
-            if let Some((stream_name, redis_id)) = redis_entry {
+            if let Some((ref stream_name, ref redis_id)) = redis_entry {
+                // Archive to unconscious BEFORE deleting from Redis (ADR-033)
+                if let Some(ref memory_db) = self.memory_db {
+                    let content_str = serde_json::to_string(&thought.content)
+                        .unwrap_or_else(|_| "serialization_error".to_string());
+                    if let Err(e) = memory_db
+                        .archive_to_unconscious(
+                            &content_str,
+                            composite_salience,
+                            ArchiveReason::LowSalience,
+                            Some(redis_id),
+                        )
+                        .await
+                    {
+                        warn!(
+                            "Cycle {}: Failed to archive thought {} to unconscious: {}",
+                            cycle_number, redis_id, e
+                        );
+                    } else {
+                        debug!(
+                            "Cycle {}: Archived thought {} to unconscious (salience {:.3})",
+                            cycle_number, redis_id, composite_salience
+                        );
+                    }
+                }
+
+                // Now delete from Redis working memory
                 if let Some(ref mut streams) = self.streams {
-                    match streams.forget_thought(&stream_name, &redis_id).await {
+                    match streams.forget_thought(stream_name, redis_id).await {
                         Ok(()) => {
                             debug!(
-                                "Cycle {}: Forgot thought {} (salience {:.3} < threshold {:.3})",
+                                "Cycle {}: Forgot thought {} from Redis (salience {:.3} < threshold {:.3})",
                                 cycle_number,
                                 redis_id,
                                 composite_salience,
