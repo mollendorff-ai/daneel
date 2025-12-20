@@ -531,7 +531,7 @@ current:
   # TMI says 90% of thoughts should be neutral/low-salience. Currently 99% are high.
   # ==========================================================================
   tmi_salience_calibration:
-    status: "pending"
+    status: "done"
     priority: "CRITICAL"
     origin: "Rex + Claude Opus 4.5 - Dec 20, 2025 (3AM research session)"
     adr: "ADR-032-tmi-salience-calibration.md"
@@ -550,7 +550,7 @@ current:
     task:
       id: "CAL-SALIENCE"
       title: "Implement TMI-faithful salience distribution"
-      status: pending
+      status: done
       file: "src/core/cognitive_loop.rs"
       function: "generate_random_thought()"
       change: |
@@ -1045,6 +1045,7 @@ changelog:
       - "RESEARCH: TMI >90% neutral windows, Ebbinghaus curve, GWT information bottleneck"
       - "references.yaml: Added 10 new research citations (FORGET-*, WM-*, GWT-*, BOTTLE-*, CONSOL-*, TMI-NEUTRAL-*)"
       - "CRITICAL: Identified root cause - salience generation, not threshold"
+      - "CAL-SALIENCE: Implemented TMI-faithful bimodal distribution (90% neutral, 10% salient)"
 
   - date: "2025-12-19"
     version: "0.6.0-wip"

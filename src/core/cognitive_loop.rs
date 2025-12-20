@@ -449,8 +449,12 @@ impl CognitiveLoop {
 
     /// Generate a random thought for standalone operation
     ///
-    /// Creates a thought with randomized salience scores.
-    /// Used when no external thought sources are available.
+    /// Creates a thought with TMI-faithful salience distribution.
+    /// Per ADR-032: >90% of cortical archives are neutral windows.
+    ///
+    /// Distribution:
+    /// - 90%: Low-salience (neutral windows) - will be forgotten
+    /// - 10%: High-salience (emotional/important) - may be kept/consolidated
     fn generate_random_thought(&self) -> (Content, SalienceScore) {
         let mut rng = rand::rng();
 
@@ -461,13 +465,33 @@ impl CognitiveLoop {
             vec![rng.random::<u8>(); 8], // Random 8-byte data
         );
 
-        // Generate random salience with some variance
+        // TMI-faithful salience distribution (ADR-032)
+        // Augusto Cury: >90% of cortical archives are neutral windows
+        let (importance, novelty, relevance, connection_relevance) =
+            if rng.random::<f32>() < 0.90 {
+                // 90%: Neutral/low-salience thoughts (will be forgotten)
+                (
+                    rng.random_range(0.0..0.35),  // importance
+                    rng.random_range(0.0..0.30),  // novelty
+                    rng.random_range(0.0..0.40),  // relevance
+                    rng.random_range(0.1..0.40),  // connection (min 0.1 per invariant)
+                )
+            } else {
+                // 10%: High-salience thoughts (emotional/important)
+                (
+                    rng.random_range(0.5..0.95),  // importance
+                    rng.random_range(0.4..0.85),  // novelty
+                    rng.random_range(0.5..0.95),  // relevance
+                    rng.random_range(0.5..0.90),  // connection
+                )
+            };
+
         let salience = SalienceScore::new(
-            rng.random_range(0.3..0.9),  // importance
-            rng.random_range(0.2..0.8),  // novelty
-            rng.random_range(0.4..0.9),  // relevance
-            rng.random_range(-0.5..0.5), // valence
-            rng.random_range(0.3..0.8),  // connection_relevance
+            importance,
+            novelty,
+            relevance,
+            rng.random_range(-0.5..0.5), // valence (unchanged)
+            connection_relevance,
         );
 
         (content, salience)
