@@ -517,7 +517,10 @@ mod tests {
         let deser: CheckpointState = serde_json::from_str(&json).expect("Should deserialize");
 
         assert_eq!(deser.milestones.len(), 1);
-        assert_eq!(deser.milestones[0].description, "The first time DANEEL started");
+        assert_eq!(
+            deser.milestones[0].description,
+            "The first time DANEEL started"
+        );
     }
 
     #[test]

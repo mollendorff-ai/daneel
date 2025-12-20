@@ -95,7 +95,10 @@ mod tests {
         // DANEEL brand color is teal-ish
         if let Color::Rgb(r, g, b) = PRIMARY {
             assert!(g > r, "Green should be dominant in teal");
-            assert!(g > b || (g as i16 - b as i16).abs() < 50, "Green should be close to or greater than blue");
+            assert!(
+                g > b || (g as i16 - b as i16).abs() < 50,
+                "Green should be close to or greater than blue"
+            );
         }
     }
 
