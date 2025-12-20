@@ -48,33 +48,28 @@ pub struct ThoughtUpdate {
 impl ThoughtUpdate {
     /// Convert a CycleResult into a ThoughtUpdate for the TUI
     ///
-    /// For now, generates synthetic data since CycleResult doesn't yet
-    /// contain full thought details. In Wave 3, this will use real data.
+    /// Uses real salience data from the cognitive loop.
     pub fn from_cycle_result(result: &CycleResult) -> Self {
-        // Calculate a salience score based on cycle performance
-        // Higher scores for on-time cycles with more candidates
-        let salience = if result.on_time {
-            0.6 + (result.candidates_evaluated as f32 * 0.05).min(0.4)
-        } else {
-            0.3 + (result.candidates_evaluated as f32 * 0.02).min(0.3)
-        };
+        // Use real salience from CycleResult
+        let salience = result.salience;
 
-        // Determine status based on whether a thought was produced
+        // Determine status based on salience and thought production
         let status = if result.thought_produced.is_some() {
             if salience > 0.85 {
                 ThoughtStatus::Anchored
             } else if salience > 0.7 {
                 ThoughtStatus::MemoryWrite
-            } else {
+            } else if salience > 0.5 {
                 ThoughtStatus::Salient
+            } else {
+                ThoughtStatus::Processing
             }
         } else {
-            ThoughtStatus::Processing
+            ThoughtStatus::Dismissed
         };
 
-        // Generate a window label based on cycle number
-        // In Wave 3, this will come from actual memory window data
-        let windows = [
+        // Map cognitive stage to window label based on cycle timing
+        let stage_names = [
             "trigger",
             "autoflow",
             "attention",
@@ -85,7 +80,7 @@ impl ThoughtUpdate {
             "emotion",
             "sensory",
         ];
-        let window = windows[result.cycle_number as usize % windows.len()].to_string();
+        let window = stage_names[result.cycle_number as usize % stage_names.len()].to_string();
 
         Self {
             cycle_number: result.cycle_number,

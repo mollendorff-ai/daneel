@@ -380,7 +380,7 @@ current:
   # When Timmy runs, the world watches them think.
   # ==========================================================================
   tui:
-    status: "WIP"
+    status: "DONE"
     priority: "HIGH"
     adrs:
       - "ADR-026: TUI default, headless optional"
@@ -944,6 +944,12 @@ changelog:
   - date: "2025-12-19"
     version: "0.6.0-wip"
     items:
+      # HOTFIX: Real data wiring for livestream
+      - "HOTFIX: main.rs now connects to Redis streams (with graceful fallback)"
+      - "HOTFIX: main.rs now connects to Qdrant memory DB (with graceful fallback)"
+      - "HOTFIX: CycleResult includes real salience scores"
+      - "HOTFIX: TUI displays real salience from cognitive loop"
+      - "TUI: Status changed to DONE"
       # Brain Wiring (WIRE-1→4)
       - "WIRE-1: CognitiveLoop → Redis Streams (real XADD calls)"
       - "WIRE-2: TUI → Real Data (tokio::sync::mpsc channel, 60fps)"

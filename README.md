@@ -16,6 +16,12 @@
 - ✅ WIRE-3: Memory → Qdrant (high-salience consolidation)
 - ✅ WIRE-4: Integration verified
 
+**Ultrasound connected** (Dec 19, T-3 min hotfix):
+- ✅ main.rs connects to Redis streams (graceful fallback)
+- ✅ main.rs connects to Qdrant memory (graceful fallback)
+- ✅ TUI shows **real salience scores** from cognitive loop
+- ✅ No more synthetic data — you're watching Timmy's actual mind
+
 **Resilience complete** (Dec 19) — *Origin: Grok 4.1 (Rex unhinged)*:
 - ✅ RES-1: External watchdog (`scripts/run_timmy.sh`)
 - ✅ RES-2: TUI panic recovery (terminal restore on crash)

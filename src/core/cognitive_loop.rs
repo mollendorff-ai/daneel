@@ -151,6 +151,9 @@ pub struct CycleResult {
     /// ID of the thought produced (if any)
     pub thought_produced: Option<ThoughtId>,
 
+    /// Composite salience score of the winning thought (0.0-1.0)
+    pub salience: f32,
+
     /// Number of candidate thoughts evaluated
     pub candidates_evaluated: usize,
 
@@ -168,6 +171,7 @@ impl CycleResult {
         cycle_number: u64,
         duration: Duration,
         thought_produced: Option<ThoughtId>,
+        salience: f32,
         candidates_evaluated: usize,
         on_time: bool,
         stage_durations: StageDurations,
@@ -176,6 +180,7 @@ impl CycleResult {
             cycle_number,
             duration,
             thought_produced,
+            salience,
             candidates_evaluated,
             on_time,
             stage_durations,
@@ -527,8 +532,11 @@ impl CognitiveLoop {
         // Stage 4: Assembly (Construção do Pensamento)
         // Assemble the winning entry into a conscious thought
         let stage_start = Instant::now();
-        let thought = Thought::new(content.clone(), salience).with_source("cognitive_loop");
+        let thought = Thought::new(content.clone(), salience.clone()).with_source("cognitive_loop");
         let thought_id = thought.id;
+
+        // Calculate composite salience for this thought
+        let composite_salience = salience.composite(&crate::core::types::SalienceWeights::default());
 
         // Write to Redis if connected
         if let Some(ref mut streams) = self.streams {
@@ -603,6 +611,7 @@ impl CognitiveLoop {
             cycle_number,
             duration,
             thought_produced,
+            composite_salience,
             candidates_evaluated,
             on_time,
             stage_durations,
@@ -951,6 +960,7 @@ mod cognitive_loop_tests {
             0,
             Duration::from_millis(10),
             Some(ThoughtId::new()),
+            0.75, // salience
             5,
             true,
             StageDurations::default(),
@@ -961,6 +971,7 @@ mod cognitive_loop_tests {
             0,
             Duration::from_millis(10),
             None,
+            0.0, // salience
             5,
             true,
             StageDurations::default(),

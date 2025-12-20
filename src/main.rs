@@ -69,7 +69,29 @@ fn run_tui() {
 
     // Spawn cognitive loop in background
     runtime.spawn(async move {
-        let mut cognitive_loop = CognitiveLoop::new();
+        // Connect to Redis for thought streams
+        let mut cognitive_loop = match CognitiveLoop::with_redis("redis://127.0.0.1:6379").await {
+            Ok(loop_instance) => {
+                info!("Connected to Redis streams");
+                loop_instance
+            }
+            Err(e) => {
+                eprintln!("Warning: Redis unavailable ({}), running standalone", e);
+                CognitiveLoop::new()
+            }
+        };
+
+        // Connect to Qdrant for long-term memory
+        match daneel::memory_db::MemoryDb::connect("http://127.0.0.1:6334").await {
+            Ok(memory_db) => {
+                info!("Connected to Qdrant memory database");
+                cognitive_loop.set_memory_db(std::sync::Arc::new(memory_db));
+            }
+            Err(e) => {
+                eprintln!("Warning: Qdrant unavailable ({}), memory disabled", e);
+            }
+        }
+
         cognitive_loop.start();
 
         loop {
