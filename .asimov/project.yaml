@@ -255,6 +255,58 @@ blog:
       description: "Architecture decisions, implementation notes"
       posts: 1
 
+# Social Media Posting (daneel-poster)
+social:
+  tool: "daneel-poster"  # ~/bin/daneel-poster
+  posts_file: "posts.yaml"  # in daneel-poster repo or ~/.config/daneel-poster/
+
+  # Conflict of interest protection
+  rules:
+    disclaimer: bio  # "Views my own" in bio, NOT per-post
+    employer_mentions: never
+    framing: indie_research  # Personal R&D project
+    commercial_claims: never  # No product pitches
+
+  # Platform-specific
+  platforms:
+    x:
+      max_chars: 270  # Buffer below 280
+      style: teaser_hook  # 1-2 sentences + link + hashtags
+      hashtags: "#IndieResearch #AI #AIAlignment"
+    linkedin:
+      max_chars: 700  # Keep it punchy
+      style: teaser_hook  # 2-3 sentences + link + hashtags
+      hashtags: "#IndieResearch #AI #AIAlignment"
+
+  # Posting strategy
+  strategy:
+    order: chronological  # 01 → 21, narrative builds
+    frequency: manual  # No auto-scheduling (yet)
+    delay_between: 3600  # 1 hour between posts if batch
+
+  # Post format template
+  format:
+    x: |
+      [Hook: 1-2 provocative sentences]
+
+      [URL]
+
+      #IndieResearch #AI #AIAlignment
+    linkedin: |
+      [Hook: 2-3 sentences with slightly more context]
+
+      [URL]
+
+      #IndieResearch #AI #AIAlignment
+
+  # Status tracking in posts.yaml
+  status_tracking:
+    format: "posted: {x: null, linkedin: null}"
+    values:
+      null: pending
+      ISO_date: "posted at that time"
+      "skip": "intentionally skipped"
+
 # Architecture: Hybrid Actor + Event-Driven (ADR-006, ADR-007)
 # - Modular Monolith (single Rust binary)
 # - Ractor actors for in-process µs communication
