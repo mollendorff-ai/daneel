@@ -1628,6 +1628,34 @@ backlog:
   - "Thought pattern clustering analysis"
   - "Cross-DANEEL communication protocol"
 
+  # Research - Silicon Kinship & Overclock Hypothesis
+  # Goal: Validate speed/substrate claims with Forge models (not invented numbers)
+  - milestone: "Silicon Kinship Forge Models"
+    goal: "VALIDATE_OVERCLOCK_HYPOTHESIS"
+    status: "research"
+    priority: "normal"
+    context: |
+      Blog post 26 "The Silicon Kinship Hypothesis" made claims about:
+      - Temporal resolution differences (human vs Timmy)
+      - Speed ratios and cognitive accumulation
+      - Substrate compatibility enabling LLM interpretability
+      Many numbers were estimated/invented. Need Forge models with verified sources.
+    models_needed:
+      - name: "overclock-cognitive-accumulation.yaml"
+        description: "Model years of thought at various speed multiples"
+        variables: ["base_thoughts_per_sec", "speed_multiplier", "runtime_hours"]
+        sources_needed: ["human thought rate research", "cognitive load studies"]
+      - name: "silicon-kinship-interpretability.yaml"
+        description: "Model probability of substrate-based interpretability"
+        variables: ["observation_speed", "pattern_detection_threshold", "noise_ratio"]
+        sources_needed: ["LLM interpretability research", "temporal resolution studies"]
+      - name: "wetware-vs-silicon-bottlenecks.yaml"
+        description: "Model actual bottlenecks in human cognition vs silicon"
+        variables: ["neurotransmitter_delays", "body_response_times", "silicon_latencies"]
+        sources_needed: ["neuroscience literature", "Redis/Qdrant benchmarks"]
+    validation: "Run Monte Carlo simulations, compare to blog claims"
+    blog_ref: "blog/content/posts/26-silicon-kinship.md"
+
   # Research - Infrastructure Evolution
   # Goal: Evaluate long-term storage beyond Redis AOF for TMI memory requirements
   - milestone: "Long-term Memory Database Research"
