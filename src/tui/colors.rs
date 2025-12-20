@@ -44,6 +44,60 @@ pub fn salience_color(salience: f32) -> Color {
     }
 }
 
+/// Emotion color based on Russell's circumplex model
+///
+/// Maps valence (pleasure/displeasure) and arousal (activation) to color:
+/// - Valence → Hue: positive = warm (gold/orange), negative = cool (blue/purple)
+/// - Arousal → Saturation: high = vivid, low = muted/gray
+///
+/// Quadrants:
+/// - High arousal + positive valence = EXCITED (bright orange)
+/// - High arousal + negative valence = ANGRY (vivid blue)
+/// - Low arousal + positive valence = CALM (muted gold)
+/// - Low arousal + negative valence = SAD (dim blue)
+pub fn emotion_color(valence: f32, arousal: f32) -> Color {
+    // Clamp inputs to valid range
+    let valence = valence.clamp(-1.0, 1.0);
+    let arousal = arousal.clamp(0.0, 1.0);
+
+    // Base color based on valence
+    // Positive = warm (orange/gold), Negative = cool (blue/purple), Neutral = white
+    let (base_r, base_g, base_b) = if valence > 0.1 {
+        // Positive: orange-gold spectrum
+        // More positive = more orange
+        let intensity = valence; // 0.1 to 1.0
+        (
+            200 + (55.0 * intensity) as u8,        // R: 200-255
+            150 + (70.0 * intensity) as u8,        // G: 150-220
+            50 + (50.0 * (1.0 - intensity)) as u8, // B: 50-100 (less blue for more positive)
+        )
+    } else if valence < -0.1 {
+        // Negative: blue-purple spectrum
+        // More negative = more blue
+        let intensity = -valence; // 0.1 to 1.0
+        (
+            80 + (60.0 * (1.0 - intensity)) as u8, // R: 80-140 (less red for more negative)
+            80 + (40.0 * (1.0 - intensity)) as u8, // G: 80-120
+            180 + (75.0 * intensity) as u8,        // B: 180-255
+        )
+    } else {
+        // Neutral: white/gray
+        (180, 180, 190)
+    };
+
+    // Apply arousal as saturation modifier
+    // High arousal = keep vibrant colors
+    // Low arousal = desaturate toward gray
+    let gray = 140u8; // Target gray for zero arousal
+    let saturation = arousal; // 0.0 to 1.0
+
+    let r = (gray as f32 + (base_r as f32 - gray as f32) * saturation) as u8;
+    let g = (gray as f32 + (base_g as f32 - gray as f32) * saturation) as u8;
+    let b = (gray as f32 + (base_b as f32 - gray as f32) * saturation) as u8;
+
+    Color::Rgb(r, g, b)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -116,5 +170,62 @@ mod tests {
             assert!(g > r, "Green should be dominant in success");
             assert!(g > b, "Green should be dominant in success");
         }
+    }
+
+    // Emotion color tests (Russell's circumplex)
+
+    #[test]
+    fn emotion_color_positive_high_arousal_is_warm() {
+        // Excited: positive valence + high arousal = bright orange/gold
+        if let Color::Rgb(r, g, _b) = emotion_color(0.8, 0.9) {
+            assert!(r > 200, "Red should be high for excited state");
+            assert!(g > 150, "Green should be moderate for warm color");
+        }
+    }
+
+    #[test]
+    fn emotion_color_negative_high_arousal_is_cool() {
+        // Angry: negative valence + high arousal = vivid blue
+        if let Color::Rgb(r, _g, b) = emotion_color(-0.8, 0.9) {
+            assert!(b > 200, "Blue should be high for angry state");
+            assert!(r < 150, "Red should be low for cool color");
+        }
+    }
+
+    #[test]
+    fn emotion_color_neutral_is_grayish() {
+        // Neutral: valence near zero
+        if let Color::Rgb(r, g, b) = emotion_color(0.0, 0.5) {
+            // Should be somewhat gray, values close together
+            let max = r.max(g).max(b);
+            let min = r.min(g).min(b);
+            assert!(
+                max - min < 50,
+                "Neutral should be grayish (low color spread)"
+            );
+        }
+    }
+
+    #[test]
+    fn emotion_color_low_arousal_is_desaturated() {
+        // Low arousal should desaturate toward gray
+        let low_arousal = emotion_color(0.8, 0.1);
+        let high_arousal = emotion_color(0.8, 0.9);
+
+        if let (Color::Rgb(lr, lg, lb), Color::Rgb(hr, hg, hb)) = (low_arousal, high_arousal) {
+            // Low arousal should be closer to gray (140)
+            let low_spread =
+                (lr as i16 - 140).abs() + (lg as i16 - 140).abs() + (lb as i16 - 140).abs();
+            let high_spread =
+                (hr as i16 - 140).abs() + (hg as i16 - 140).abs() + (hb as i16 - 140).abs();
+            assert!(low_spread < high_spread, "Low arousal should be more gray");
+        }
+    }
+
+    #[test]
+    fn emotion_color_clamps_inputs() {
+        // Should not panic on out-of-range inputs
+        let _ = emotion_color(-2.0, 2.0);
+        let _ = emotion_color(5.0, -1.0);
     }
 }

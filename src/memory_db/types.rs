@@ -610,6 +610,16 @@ pub struct IdentityMetadata {
     /// Memories strengthened in last dream (for TUI display)
     #[serde(default)]
     pub last_dream_strengthened: u32,
+
+    /// Total memories strengthened across ALL dreams (cumulative, persists)
+    /// TUI-VIS-4: Cumulative Dream Strengthening
+    #[serde(default)]
+    pub cumulative_dream_strengthened: u64,
+
+    /// Total candidates evaluated across ALL dreams (for efficiency tracking)
+    /// TUI-VIS-4: Dream efficiency = strengthened / candidates
+    #[serde(default)]
+    pub cumulative_dream_candidates: u64,
 }
 
 /// Well-known ID for the identity record (singleton)
@@ -632,6 +642,8 @@ impl IdentityMetadata {
             lifetime_dream_count: 0,
             last_dream_at: None,
             last_dream_strengthened: 0,
+            cumulative_dream_strengthened: 0,
+            cumulative_dream_candidates: 0,
         }
     }
 
@@ -649,10 +661,14 @@ impl IdentityMetadata {
 
     /// Record a dream cycle (consolidation event)
     /// "Nada se apaga" - dreams are part of identity
-    pub fn record_dream(&mut self, memories_strengthened: u32) {
+    /// TUI-VIS-4: Now tracks cumulative stats for efficiency analysis
+    pub fn record_dream(&mut self, memories_strengthened: u32, candidates_evaluated: u32) {
         self.lifetime_dream_count += 1;
         self.last_dream_at = Some(Utc::now());
         self.last_dream_strengthened = memories_strengthened;
+        // TUI-VIS-4: Track cumulative stats
+        self.cumulative_dream_strengthened += memories_strengthened as u64;
+        self.cumulative_dream_candidates += candidates_evaluated as u64;
     }
 
     /// Get age since first thought

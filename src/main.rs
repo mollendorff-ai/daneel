@@ -140,6 +140,13 @@ fn run_tui() {
         let mut last_dream_strengthened: usize = identity
             .as_ref()
             .map_or(0, |id| id.last_dream_strengthened as usize);
+        // TUI-VIS-4: Initialize cumulative dream stats from persisted identity
+        let mut cumulative_dream_strengthened: u64 = identity
+            .as_ref()
+            .map_or(0, |id| id.cumulative_dream_strengthened);
+        let mut cumulative_dream_candidates: u64 = identity
+            .as_ref()
+            .map_or(0, |id| id.cumulative_dream_candidates);
 
         if let Some(ref db) = memory_db {
             cognitive_loop.set_memory_db(db.clone());
@@ -184,6 +191,7 @@ fn run_tui() {
                     // Get replay candidates and strengthen them
                     match db.get_replay_candidates(CONSOLIDATION_BATCH_SIZE).await {
                         Ok(candidates) => {
+                            let candidates_count = candidates.len();
                             let mut consolidated = 0;
                             for memory in &candidates {
                                 if db
@@ -198,9 +206,13 @@ fn run_tui() {
                             total_dream_cycles += 1;
                             last_dream_strengthened = consolidated;
 
+                            // TUI-VIS-4: Update cumulative stats
+                            cumulative_dream_strengthened += consolidated as u64;
+                            cumulative_dream_candidates += candidates_count as u64;
+
                             // "Nada se apaga" - record dream in identity
                             if let Some(ref mut id) = identity {
-                                id.record_dream(consolidated as u32);
+                                id.record_dream(consolidated as u32, candidates_count as u32);
                             }
 
                             if consolidated > 0 {
@@ -239,6 +251,9 @@ fn run_tui() {
                 lifetime_thought_count,
                 total_dream_cycles,
                 last_dream_strengthened,
+                cumulative_dream_strengthened,
+                cumulative_dream_candidates,
+                result.veto.clone(), // TUI-VIS-6: Pass veto event to TUI
             );
 
             // If channel is closed (TUI exited), stop the loop

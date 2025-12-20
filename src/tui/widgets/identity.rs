@@ -87,6 +87,46 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
                 Span::raw("")
             },
         ]),
+        // TUI-VIS-4: Cumulative dream strengthening stats
+        Line::from(vec![
+            Span::styled("Total Strengthened: ", Style::default().fg(colors::DIM)),
+            Span::styled(
+                format!("{}", app.cumulative_dream_strengthened),
+                Style::default().fg(colors::SUCCESS).bold(),
+            ),
+            Span::styled("  Efficiency: ", Style::default().fg(colors::DIM)),
+            {
+                // Calculate dream efficiency ratio
+                let efficiency = if app.cumulative_dream_candidates > 0 {
+                    (app.cumulative_dream_strengthened as f32
+                        / app.cumulative_dream_candidates as f32)
+                        * 100.0
+                } else {
+                    0.0
+                };
+                Span::styled(
+                    format!("{:.1}%", efficiency),
+                    Style::default().fg(colors::PRIMARY).bold(),
+                )
+            },
+        ]),
+        Line::from(vec![
+            Span::styled("Resurfacing: ", Style::default().fg(colors::DIM)),
+            // Show count with glow effect when active
+            if app.is_resurfacing_active() {
+                Span::styled(
+                    format!("{} ↑↓", app.resurfacing_count),
+                    Style::default().fg(colors::HIGHLIGHT).bold(),
+                )
+            } else if app.resurfacing_count > 0 {
+                Span::styled(
+                    format!("{} ↑↓", app.resurfacing_count),
+                    Style::default().fg(colors::SECONDARY),
+                )
+            } else {
+                Span::styled("0 ↑↓", Style::default().fg(colors::DIM))
+            },
+        ]),
     ];
 
     let paragraph = Paragraph::new(lines).block(block);

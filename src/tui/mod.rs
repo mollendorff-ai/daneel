@@ -39,6 +39,10 @@ const TARGET_FRAME_TIME: Duration = Duration::from_millis(16);
 pub struct ThoughtUpdate {
     pub cycle_number: u64,
     pub salience: f32,
+    /// Emotional valence (-1.0 to 1.0) - Russell's circumplex horizontal axis
+    pub valence: f32,
+    /// Emotional arousal (0.0 to 1.0) - Russell's circumplex vertical axis
+    pub arousal: f32,
     pub window: String,
     pub status: ThoughtStatus,
     pub candidates_evaluated: usize,
@@ -53,6 +57,15 @@ pub struct ThoughtUpdate {
     pub dream_cycles: u64,
     /// Memories strengthened in last dream cycle
     pub last_dream_strengthened: usize,
+    /// Total memories strengthened across ALL dreams (cumulative)
+    /// TUI-VIS-4: Cumulative Dream Strengthening
+    pub cumulative_dream_strengthened: u64,
+    /// Total candidates evaluated across ALL dreams
+    /// TUI-VIS-4: For efficiency tracking (strengthened / candidates)
+    pub cumulative_dream_candidates: u64,
+    /// Veto event if one occurred this cycle: (reason, violated_value)
+    /// TUI-VIS-6: Volition Veto Log
+    pub veto_occurred: Option<(String, Option<String>)>,
 }
 
 impl ThoughtUpdate {
@@ -60,6 +73,7 @@ impl ThoughtUpdate {
     ///
     /// Uses real salience data from the cognitive loop.
     /// Memory counts should be queried from Qdrant and passed separately.
+    #[allow(clippy::too_many_arguments)]
     pub fn from_cycle_result(
         result: &CycleResult,
         memory_count: u64,
@@ -67,6 +81,9 @@ impl ThoughtUpdate {
         lifetime_thought_count: u64,
         dream_cycles: u64,
         last_dream_strengthened: usize,
+        cumulative_dream_strengthened: u64,
+        cumulative_dream_candidates: u64,
+        veto_occurred: Option<(String, Option<String>)>,
     ) -> Self {
         // Use real salience from CycleResult
         let salience = result.salience;
@@ -105,6 +122,8 @@ impl ThoughtUpdate {
         Self {
             cycle_number: result.cycle_number,
             salience,
+            valence: result.valence,
+            arousal: result.arousal,
             window,
             status,
             candidates_evaluated: result.candidates_evaluated,
@@ -114,6 +133,9 @@ impl ThoughtUpdate {
             lifetime_thought_count,
             dream_cycles,
             last_dream_strengthened,
+            cumulative_dream_strengthened,
+            cumulative_dream_candidates,
+            veto_occurred,
         }
     }
 }
@@ -171,12 +193,19 @@ fn run_loop(
         // Update animations
         app.update_pulse(delta);
         app.update_quote();
+        app.update_resurfacing();
 
         // Receive thoughts from cognitive loop (non-blocking)
         if let Some(ref mut rx) = thought_rx {
             // Drain all available thoughts to stay current
             while let Ok(update) = rx.try_recv() {
-                app.add_thought(update.salience, update.window, update.status);
+                app.add_thought(
+                    update.salience,
+                    update.valence,
+                    update.arousal,
+                    update.window,
+                    update.status,
+                );
                 // Update memory counts from database state
                 app.memory_count = update.memory_count;
                 app.unconscious_count = update.unconscious_count;
@@ -185,6 +214,12 @@ fn run_loop(
                 // Update dream stats (ADR-023)
                 app.dream_cycles = update.dream_cycles;
                 app.last_dream_strengthened = update.last_dream_strengthened;
+                app.cumulative_dream_strengthened = update.cumulative_dream_strengthened;
+                app.cumulative_dream_candidates = update.cumulative_dream_candidates;
+                // Add veto event if one occurred (TUI-VIS-6)
+                if let Some((reason, violated_value)) = update.veto_occurred {
+                    app.add_veto(reason, violated_value);
+                }
             }
         }
 
@@ -227,6 +262,9 @@ fn simulate_thought(app: &mut App) {
     let mut rng = rand::rng();
 
     let salience: f32 = rng.random_range(0.2..1.0);
+    // Emotional dimensions (Russell's circumplex)
+    let valence: f32 = rng.random_range(-1.0..1.0); // pleasure/displeasure
+    let arousal: f32 = rng.random_range(0.0..1.0); // activation level
     let windows = [
         "exploring",
         "connecting",
@@ -248,7 +286,7 @@ fn simulate_thought(app: &mut App) {
         ThoughtStatus::Processing
     };
 
-    app.add_thought(salience, window, status);
+    app.add_thought(salience, valence, arousal, window, status);
 
     // Randomly toggle memory windows
     if rng.random_bool(0.1) {
