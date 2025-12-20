@@ -488,7 +488,7 @@ async fn test_window_lifecycle() {
 
     // 2. Store content with salience
     let content = Content::symbol("test", vec![42]);
-    let salience = SalienceScore::new(0.8, 0.6, 0.9, 0.5, 0.7);
+    let salience = SalienceScore::new_without_arousal(0.8, 0.6, 0.9, 0.5, 0.7);
     let request = StoreRequest::new(window_id, content.clone()).with_salience(salience);
 
     actor_ref

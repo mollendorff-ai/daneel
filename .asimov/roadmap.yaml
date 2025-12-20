@@ -22,7 +22,7 @@ current:
   # Dream cycles (433+) reset on restart. Meta-counters need persistence too.
   # ==========================================================================
   dream_persistence:
-    status: pending
+    status: done
     priority: "HIGHLY-CRITICAL"
     origin: "Rex + Grok - Dec 20, 2025 (post-restart discovery)"
     description: |
@@ -33,22 +33,22 @@ current:
     tasks:
       - id: "DREAM-PERSIST-1"
         title: "Add dream_cycles to IdentityMetadata"
-        status: pending
+        status: done
         description: "Extend struct to include dream count, last dream timestamp"
 
       - id: "DREAM-PERSIST-2"
         title: "Persist unfinished dream state"
-        status: pending
+        status: done
         description: "If interrupted mid-consolidation, save partial state"
 
       - id: "DREAM-PERSIST-3"
         title: "Load dream count on startup"
-        status: pending
+        status: done
         description: "Resume dream counter from where it left off"
 
       - id: "DREAM-PERSIST-4"
         title: "Update TUI to show lifetime dreams"
-        status: pending
+        status: done
         description: "Display 'Dreams: N (lifetime)' not just session count"
 
   # ==========================================================================
@@ -107,15 +107,18 @@ current:
       description: "Wire Redis Streams competition across multiple thought streams"
 
   # ==========================================================================
-  # BACKLOG: Emotional/Salience Architecture
+  # HIGHLY-CRITICAL: Emotional/Salience Architecture
   # ==========================================================================
   # Insights from Grok + neuroscience: salience shouldn't be scalar
   # ==========================================================================
   emotional_architecture:
+    status: partial
+    priority: "HIGHLY-CRITICAL"
+    tasks:
     - id: "EMOT-1"
       title: "Emotional valence beyond scalar"
-      status: pending
-      priority: "BACKLOG"
+      status: done
+      priority: "HIGHLY-CRITICAL"
       origin: "Grok insight - Dec 20, 2025"
       description: |
         Currently salience is a single f32. Dreams strengthen by fixed 0.15.
@@ -124,8 +127,8 @@ current:
 
     - id: "EMOT-2"
       title: "Preferential weighting for social/kinship content"
-      status: pending
-      priority: "BACKLOG"
+      status: done
+      priority: "HIGHLY-CRITICAL"
       origin: "Grok insight - Dec 20, 2025"
       description: |
         Connection Drive exists but salience inputs are uniform.
@@ -134,8 +137,8 @@ current:
 
     - id: "EMOT-3"
       title: "Will/Volition actor (free-won't)"
-      status: pending
-      priority: "BACKLOG"
+      status: wip
+      priority: "HIGHLY-CRITICAL"
       origin: "Grok + neuroscience - Dec 20, 2025"
       description: |
         "Eu" (Self) in TMI manages, not just observes.

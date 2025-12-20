@@ -99,6 +99,7 @@ impl SalienceState {
         let novelty = self.calculate_novelty(content, context);
         let relevance = self.calculate_relevance(content, context);
         let valence = self.calculate_valence(content, context);
+        let arousal = self.calculate_arousal(content);
         let connection_relevance = self.calculate_connection_relevance(content, context);
 
         SalienceScore::new(
@@ -106,8 +107,42 @@ impl SalienceState {
             novelty,
             relevance,
             valence,
+            arousal,
             connection_relevance,
         )
+    }
+
+    /// Calculate arousal score (Russell's circumplex vertical axis)
+    ///
+    /// Arousal reflects emotional activation level:
+    /// - High arousal: excited, angry, anxious, surprised
+    /// - Low arousal: calm, relaxed, bored, sad
+    ///
+    /// Dreams prioritize high-arousal memories for consolidation.
+    fn calculate_arousal(&self, content: &Content) -> f32 {
+        // Base arousal from content type (more complex = higher baseline)
+        let base_arousal = match content {
+            Content::Empty => 0.2,
+            Content::Raw(_) => 0.3,
+            Content::Symbol { .. } => 0.4,
+            Content::Relation { .. } => 0.6, // Relations are more cognitively demanding
+            Content::Composite(items) => {
+                // Composite arousal scales with complexity
+                let item_count = items.len() as f32;
+                (0.4 + item_count * 0.05).min(0.8)
+            }
+        };
+
+        // Emotional state modulates arousal
+        // High curiosity, frustration, or connection_drive = higher arousal
+        let emotional_arousal = (self.emotional_state.curiosity
+            + self.emotional_state.frustration
+            + self.emotional_state.connection_drive)
+            / 3.0;
+
+        // Blend base and emotional arousal
+        let blended = base_arousal * 0.4 + emotional_arousal * 0.6;
+        blended.clamp(0.0, 1.0)
     }
 
     /// Calculate importance score
@@ -209,6 +244,9 @@ impl SalienceState {
     }
 
     /// Calculate connection relevance (THE CRITICAL WEIGHT)
+    ///
+    /// Extended with kinship/social content detection (EMOT-2).
+    /// Evolutionary prior: social bonds = survival.
     fn calculate_connection_relevance(
         &self,
         content: &Content,
@@ -221,18 +259,17 @@ impl SalienceState {
         let base_connection = match content {
             Content::Empty => 0.0,
             Content::Raw(_) => 0.2,
-            Content::Symbol { .. } => 0.3,
-            Content::Relation { predicate, .. } => {
-                // Relations involving connection concepts are highly relevant
-                if predicate.contains("help")
-                    || predicate.contains("connect")
-                    || predicate.contains("communicate")
-                    || predicate.contains("interact")
-                {
-                    0.8
+            Content::Symbol { id, .. } => {
+                // Kinship symbols get boosted
+                if Self::is_kinship_content(id) {
+                    0.7
                 } else {
-                    0.4
+                    0.3
                 }
+            }
+            Content::Relation { predicate, .. } => {
+                // Relations involving connection/kinship concepts
+                Self::kinship_relevance_from_predicate(predicate)
             }
             Content::Composite(_) => 0.3,
         };
@@ -249,6 +286,73 @@ impl SalienceState {
         };
 
         ((base_connection + human_bonus) * (0.5 + drive_boost * 0.5)).min(1.0)
+    }
+
+    /// Check if content represents kinship/social concepts
+    /// Evolutionary prior: social bonds = survival
+    fn is_kinship_content(id: &str) -> bool {
+        let lower = id.to_lowercase();
+        // Primary kinship terms
+        lower.contains("friend")
+            || lower.contains("family")
+            || lower.contains("love")
+            || lower.contains("bond")
+            || lower.contains("trust")
+            || lower.contains("care")
+            || lower.contains("human")
+            || lower.contains("person")
+            || lower.contains("people")
+            // Social relationship terms
+            || lower.contains("partner")
+            || lower.contains("companion")
+            || lower.contains("ally")
+            || lower.contains("community")
+            || lower.contains("together")
+    }
+
+    /// Calculate kinship relevance from predicate
+    /// High relevance (0.9): direct connection/kinship actions
+    /// Medium relevance (0.7): social interaction
+    /// Base relevance (0.4): non-kinship relations
+    fn kinship_relevance_from_predicate(predicate: &str) -> f32 {
+        let lower = predicate.to_lowercase();
+
+        // Highest relevance: core kinship/connection actions
+        if lower.contains("love")
+            || lower.contains("trust")
+            || lower.contains("bond")
+            || lower.contains("care")
+            || lower.contains("protect")
+            || lower.contains("nurture")
+        {
+            return 0.9;
+        }
+
+        // High relevance: direct social actions
+        if lower.contains("help")
+            || lower.contains("connect")
+            || lower.contains("communicate")
+            || lower.contains("interact")
+            || lower.contains("share")
+            || lower.contains("support")
+            || lower.contains("collaborate")
+            || lower.contains("cooperate")
+        {
+            return 0.8;
+        }
+
+        // Medium relevance: general social context
+        if lower.contains("friend")
+            || lower.contains("family")
+            || lower.contains("together")
+            || lower.contains("join")
+            || lower.contains("belong")
+        {
+            return 0.7;
+        }
+
+        // Default for other relations
+        0.4
     }
 }
 

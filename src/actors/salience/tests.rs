@@ -336,7 +336,7 @@ fn previous_high_novelty_reduces_current_novelty() {
     let state = SalienceState::new();
     let content = Content::symbol("test", vec![]);
 
-    let previous_score = SalienceScore::new(0.5, 0.9, 0.5, 0.0, 0.5); // High novelty
+    let previous_score = SalienceScore::new_without_arousal(0.5, 0.9, 0.5, 0.0, 0.5); // High novelty
 
     let score_with_context = state.rate_content(
         &content,
@@ -357,22 +357,24 @@ fn previous_high_novelty_reduces_current_novelty() {
 
 #[test]
 fn composite_score_calculation() {
-    let score = SalienceScore::new(1.0, 1.0, 1.0, 1.0, 1.0);
+    // With arousal modulating valence: emotional_impact = |valence| * arousal
+    let score = SalienceScore::new(1.0, 1.0, 1.0, 1.0, 1.0, 1.0); // All 1.0 including arousal
     let weights = SalienceWeights::default();
     let composite = score.composite(&weights);
 
-    // All scores at 1.0, so composite should equal sum of weights
+    // With arousal at 1.0, emotional_impact = |1.0| * 1.0 = 1.0
+    // So composite equals sum of weights
     let expected = weights.importance
         + weights.novelty
         + weights.relevance
-        + weights.valence
+        + weights.valence  // emotional_impact = 1.0 * 1.0 = 1.0
         + weights.connection;
     assert!((composite - expected).abs() < 0.001);
 }
 
 #[test]
 fn connection_weight_affects_composite_score() {
-    let score = SalienceScore::new(0.5, 0.5, 0.5, 0.0, 1.0); // High connection relevance
+    let score = SalienceScore::new_without_arousal(0.5, 0.5, 0.5, 0.0, 1.0); // High connection relevance
 
     let low_connection_weights = SalienceWeights {
         importance: 0.25,

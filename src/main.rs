@@ -115,8 +115,8 @@ fn run_tui() {
             match db.load_identity().await {
                 Ok(id) => {
                     info!(
-                        "Loaded identity: {} lifetime thoughts, restart #{}",
-                        id.lifetime_thought_count, id.restart_count
+                        "Loaded identity: {} lifetime thoughts, {} dreams, restart #{}",
+                        id.lifetime_thought_count, id.lifetime_dream_count, id.restart_count
                     );
                     Some(id)
                 }
@@ -134,9 +134,14 @@ fn run_tui() {
         let mut thoughts_since_flush: u64 = 0;
 
         // Track consolidation cycles (ADR-023)
+        // Initialize from persisted identity ("Nada se apaga" - dreams persist)
         let mut cycles_since_consolidation: u64 = 0;
-        let mut total_dream_cycles: u64 = 0;
-        let mut last_dream_strengthened: usize = 0;
+        let mut total_dream_cycles: u64 = identity
+            .as_ref()
+            .map_or(0, |id| id.lifetime_dream_count);
+        let mut last_dream_strengthened: usize = identity
+            .as_ref()
+            .map_or(0, |id| id.last_dream_strengthened as usize);
 
         if let Some(ref db) = memory_db {
             cognitive_loop.set_memory_db(db.clone());
@@ -191,9 +196,15 @@ fn run_tui() {
                                     consolidated += 1;
                                 }
                             }
-                            // Track for TUI display
+                            // Track for TUI display AND persist to identity
                             total_dream_cycles += 1;
                             last_dream_strengthened = consolidated;
+
+                            // "Nada se apaga" - record dream in identity
+                            if let Some(ref mut id) = identity {
+                                id.record_dream(consolidated as u32);
+                            }
+
                             if consolidated > 0 {
                                 info!(
                                     "Dream #{}: strengthened {} memories",
