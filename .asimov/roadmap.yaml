@@ -528,7 +528,7 @@ current:
   # TMI: "Nada se apaga" - nothing is erased, including self-knowledge.
   # ==========================================================================
   lifetime_identity:
-    status: "wip"
+    status: "done"
     priority: "CRITICAL"
     origin: "Rex + Claude Opus 4.5 - Dec 20, 2025 (6AM insight)"
     adr: "ADR-034-lifetime-identity-persistence.md"
@@ -540,23 +540,59 @@ current:
     tasks:
       - id: "IDENT-1"
         title: "Add IdentityMetadata struct"
-        status: pending
+        status: done
         description: "lifetime_thought_count, first_thought_at, last_thought_at, restart_count"
 
       - id: "IDENT-2"
         title: "Add load/save identity to MemoryDb"
-        status: pending
+        status: done
         description: "load_identity() on startup, save_identity() periodically"
 
       - id: "IDENT-3"
         title: "Wire into cognitive loop"
-        status: pending
-        description: "Load on startup, increment count, periodic flush"
+        status: done
+        description: "Load on startup, increment count, periodic flush (100 thoughts or 30s)"
 
       - id: "IDENT-4"
         title: "Update TUI to show lifetime"
-        status: pending
+        status: done
         description: "Show Lifetime: X alongside session Thoughts: Y"
+
+  # ==========================================================================
+  # BACKLOG: Sleep/Dream Consolidation Wiring (ADR-023)
+  # ==========================================================================
+  # SleepActor exists but is NOT wired into main.rs.
+  # Dreams = memory replay + consolidation strengthening during idle.
+  # ==========================================================================
+  sleep_dream_wiring:
+    status: "partial"
+    priority: "HIGH"
+    origin: "Rex + Claude Opus 4.5 - Dec 20, 2025 (8AM)"
+    adr: "ADR-023-sleep-dream-consolidation.md"
+    description: |
+      Mini-dreams implemented: periodic consolidation every 500 cycles.
+      Full SleepActor state machine exists but idle-triggered sleep not wired yet.
+
+    tasks:
+      - id: "SLEEP-1"
+        title: "Wire periodic consolidation into main.rs"
+        status: done
+        description: "Every 500 cycles, run mini-dream consolidation batch"
+
+      - id: "SLEEP-2"
+        title: "Implement memory replay from Qdrant"
+        status: done
+        description: "Query get_replay_candidates() during consolidation"
+
+      - id: "SLEEP-3"
+        title: "Implement consolidation strengthening"
+        status: done
+        description: "Update consolidation_strength on replayed memories (+0.15 per replay)"
+
+      - id: "SLEEP-4"
+        title: "Implement association pruning"
+        status: pending
+        description: "Remove weak associations during homeostasis phase (future)"
 
   # ==========================================================================
   # PHASE 2: Actor Wiring - Connect Actors to Cognitive Loop
@@ -1194,6 +1230,12 @@ changelog:
       # Lifetime Identity Persistence (Dec 20, 6 AM)
       - "ADR-034: Lifetime Identity Persistence - self-knowledge across restarts"
       - "INSIGHT: thought_count reset = identity amnesia, violates TMI"
+      - "IMPL: IdentityMetadata struct (lifetime_thought_count, first_thought_at, restart_count)"
+      - "IMPL: load_identity() and save_identity() in MemoryDb"
+      - "IMPL: Periodic flush every 100 thoughts or 30 seconds"
+      - "IMPL: TUI shows Lifetime: X,XXX,XXX with comma formatting"
+      - "FIX: Changed IDENTITY_RECORD_ID to valid UUID (Qdrant requires UUID/numeric IDs)"
+      - "Blog 28: The Persistent Self - ADR-034 documentation"
 
   - date: "2025-12-19"
     version: "0.6.0-wip"

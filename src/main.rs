@@ -102,6 +102,14 @@ fn run_tui() {
         #[allow(clippy::items_after_statements)]
         const IDENTITY_FLUSH_THOUGHT_INTERVAL: u64 = 100;
 
+        // ADR-023: Sleep/Dream Consolidation - periodic memory strengthening
+        #[allow(clippy::items_after_statements)]
+        const CONSOLIDATION_INTERVAL_CYCLES: u64 = 500; // Run consolidation every 500 cycles
+        #[allow(clippy::items_after_statements)]
+        const CONSOLIDATION_BATCH_SIZE: u32 = 10; // Strengthen 10 memories per batch
+        #[allow(clippy::items_after_statements)]
+        const CONSOLIDATION_STRENGTH_DELTA: f32 = 0.15; // Increase strength by 0.15 per replay
+
         // Load identity from Qdrant (ADR-034: Lifetime Identity Persistence)
         let mut identity: Option<IdentityMetadata> = if let Some(ref db) = memory_db {
             match db.load_identity().await {
@@ -124,6 +132,9 @@ fn run_tui() {
         // Track when we last flushed identity (for periodic save)
         let mut last_identity_flush = Instant::now();
         let mut thoughts_since_flush: u64 = 0;
+
+        // Track consolidation cycles (ADR-023)
+        let mut cycles_since_consolidation: u64 = 0;
 
         if let Some(ref db) = memory_db {
             cognitive_loop.set_memory_db(db.clone());
@@ -159,6 +170,38 @@ fn run_tui() {
                     thoughts_since_flush = 0;
                     last_identity_flush = Instant::now();
                 }
+            }
+
+            // ADR-023: Periodic memory consolidation (mini-dreams)
+            cycles_since_consolidation += 1;
+            if cycles_since_consolidation >= CONSOLIDATION_INTERVAL_CYCLES {
+                if let Some(ref db) = memory_db {
+                    // Get replay candidates and strengthen them
+                    match db.get_replay_candidates(CONSOLIDATION_BATCH_SIZE).await {
+                        Ok(candidates) => {
+                            let mut consolidated = 0;
+                            for memory in &candidates {
+                                if db
+                                    .update_consolidation(&memory.id, CONSOLIDATION_STRENGTH_DELTA)
+                                    .await
+                                    .is_ok()
+                                {
+                                    consolidated += 1;
+                                }
+                            }
+                            if consolidated > 0 {
+                                info!(
+                                    "Dream consolidation: strengthened {} memories",
+                                    consolidated
+                                );
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("Warning: Failed to get replay candidates: {}", e);
+                        }
+                    }
+                }
+                cycles_since_consolidation = 0;
             }
 
             // Query memory counts from Qdrant (for TUI display)
