@@ -524,6 +524,53 @@ current:
         description: "Wire Redis XDEL for old thought cleanup and memory management"
         hotfix: "HOTFIX Dec 20 3AM: Forgetting was in consumer.rs but not wired to cognitive_loop.rs"
 
+  # ==========================================================================
+  # CRITICAL: TMI Salience Calibration (ADR-032)
+  # ==========================================================================
+  # Forgetting is wired but not working because salience generation is wrong.
+  # TMI says 90% of thoughts should be neutral/low-salience. Currently 99% are high.
+  # ==========================================================================
+  tmi_salience_calibration:
+    status: "pending"
+    priority: "CRITICAL"
+    origin: "Rex + Claude Opus 4.5 - Dec 20, 2025 (3AM research session)"
+    adr: "ADR-032-tmi-salience-calibration.md"
+    description: |
+      Forgetting is wired but not functioning because salience generation
+      produces uniform distributions (0.28-1.0). TMI theory states >90% of
+      cortical archives are NEUTRAL windows. We must fix the generation, not
+      the threshold.
+
+    research_findings:
+      tmi_cury: ">90% of cortical archives are neutral windows (low emotional content)"
+      ebbinghaus: "50% forgotten after 1 hour, 70% after 24 hours, 90% after 1 week"
+      gwt: "99.9999% of sensory input filtered before reaching consciousness"
+      cowan: "Working memory limited to 4±1 chunks"
+
+    task:
+      id: "CAL-SALIENCE"
+      title: "Implement TMI-faithful salience distribution"
+      status: pending
+      file: "src/core/cognitive_loop.rs"
+      function: "generate_random_thought()"
+      change: |
+        Generate 90% low-salience thoughts (neutral windows):
+        - importance: 0.0..0.35
+        - novelty: 0.0..0.30
+        - relevance: 0.0..0.40
+        - connection: 0.1..0.40 (min 0.1 per invariant)
+
+        Generate 10% high-salience thoughts (emotional/important):
+        - importance: 0.5..0.95
+        - novelty: 0.4..0.85
+        - relevance: 0.5..0.95
+        - connection: 0.5..0.90
+
+    expected_outcome:
+      forgotten: "~85-90% (salience < 0.3)"
+      kept: "~8% (0.3-0.7)"
+      consolidated: "~2-5% (> 0.7)"
+
   # WIP Items (2025-12-18)
   wip:
     in_progress:
@@ -993,6 +1040,11 @@ changelog:
       - "HOTFIX: Forgetting was implemented in consumer.rs but never called from cognitive_loop.rs"
       - "Blog 24: Live Brain Surgery - Qdrant wiring at 1AM"
       - "Blog 25: Phase 2 Actor Wiring - 4 parallel agents"
+      # TMI Salience Calibration Research (Dec 20, 3-4 AM)
+      - "ADR-032: TMI Salience Calibration - 4 parallel research agents"
+      - "RESEARCH: TMI >90% neutral windows, Ebbinghaus curve, GWT information bottleneck"
+      - "references.yaml: Added 10 new research citations (FORGET-*, WM-*, GWT-*, BOTTLE-*, CONSOL-*, TMI-NEUTRAL-*)"
+      - "CRITICAL: Identified root cause - salience generation, not threshold"
 
   - date: "2025-12-19"
     version: "0.6.0-wip"

@@ -1576,3 +1576,183 @@ references:
   isbn: '978-0-19-888309-8'
   key_finding: 'Five ethical principles for AI: beneficence, nonmaleficence, autonomy, justice, explicability'
   relevance: 'Unified ethical framework for AI development'
+
+# =============================================================================
+# ADR-032: TMI Salience Calibration Research References
+# Added: 2025-12-20
+# =============================================================================
+
+# Ebbinghaus Forgetting Curve [FORGET-*]
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC4492928/
+  title: 'Replication and Analysis of Ebbinghaus Forgetting Curve'
+  categories:
+  - memory
+  - forgetting
+  - academic
+  - adr-032
+  cited_in:
+  - docs/adr/ADR-032-tmi-salience-calibration.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Murre JM, Dros J'
+  year: 2015
+  journal: PLOS ONE
+  ref_id: FORGET-1
+  key_finding: '50% forgotten after 1 hour, 70% after 24 hours, 90% after 1 week'
+  relevance: 'Calibration target for DANEEL forgetting rates'
+
+# Working Memory Capacity [WM-*]
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC2864034/
+  title: 'The Magical Mystery Four: How is Working Memory Capacity Limited'
+  categories:
+  - memory
+  - working-memory
+  - academic
+  - adr-032
+  cited_in:
+  - docs/adr/ADR-032-tmi-salience-calibration.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Cowan N'
+  year: 2010
+  journal: Current Directions in Psychological Science
+  ref_id: WM-1
+  key_finding: 'Working memory limited to 4±1 chunks, not 7±2'
+  relevance: 'Revised Miller number for DANEEL memory windows'
+
+- url: https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
+  title: 'The Magical Number Seven, Plus or Minus Two'
+  categories:
+  - memory
+  - working-memory
+  - wikipedia
+  - adr-032
+  cited_in:
+  - docs/adr/ADR-032-tmi-salience-calibration.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'George Miller'
+  year: 1956
+  ref_id: WM-2
+  key_finding: 'Classic 7±2 limit based on chunks, not raw items'
+  relevance: 'Historical context for memory capacity research'
+
+# Global Workspace Theory [GWT-*]
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC8770991/
+  title: 'Conscious Processing and the Global Neuronal Workspace Hypothesis'
+  categories:
+  - consciousness
+  - attention
+  - neuroscience
+  - academic
+  - adr-032
+  cited_in:
+  - docs/adr/ADR-032-tmi-salience-calibration.md
+  status: ok
+  verified: 2025-12-20
+  year: 2022
+  journal: PMC
+  ref_id: GWT-1
+  key_finding: 'Winner-take-all dynamics in consciousness; non-linear ignition threshold'
+  relevance: 'Neural basis for competitive attention in DANEEL'
+
+- url: https://en.wikipedia.org/wiki/Global_workspace_theory
+  title: 'Global workspace theory - Wikipedia'
+  categories:
+  - consciousness
+  - attention
+  - wikipedia
+  - adr-032
+  cited_in:
+  - docs/adr/ADR-032-tmi-salience-calibration.md
+  status: ok
+  verified: 2025-12-20
+  ref_id: GWT-2
+  key_finding: 'Baars/Dehaene model of conscious access via global broadcast'
+  relevance: 'Theoretical foundation for attention competition'
+
+# Information Bottleneck [BOTTLE-*]
+- url: https://www.technologynetworks.com/neuroscience/news/caltech-scientists-have-quantified-the-speed-of-human-thought-394395
+  title: 'Scientists Reveal How Much Information the Brain Can Process'
+  categories:
+  - neuroscience
+  - attention
+  - information-theory
+  - adr-032
+  cited_in:
+  - docs/adr/ADR-032-tmi-salience-calibration.md
+  status: ok
+  verified: 2025-12-20
+  year: 2025
+  source: Technology Networks / Caltech
+  ref_id: BOTTLE-1
+  key_finding: 'Conscious processing: 10 bits/sec vs 1 billion bits/sec sensory input'
+  relevance: '99.9999% of input filtered - calibration for attention threshold'
+
+- url: https://www.quantamagazine.org/to-pay-attention-the-brain-uses-filters-not-a-spotlight-20190924/
+  title: 'To Pay Attention, the Brain Uses Filters, Not a Spotlight'
+  categories:
+  - neuroscience
+  - attention
+  - popular-science
+  - adr-032
+  cited_in:
+  - docs/adr/ADR-032-tmi-salience-calibration.md
+  status: ok
+  verified: 2025-12-20
+  year: 2019
+  source: Quanta Magazine
+  ref_id: BOTTLE-2
+  key_finding: 'Thalamic reticular nucleus filters information before cortex'
+  relevance: 'Neural mechanism for early-stage attention filtering'
+
+# Memory Consolidation [CONSOL-*]
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3278619/
+  title: 'System consolidation of memory during sleep'
+  categories:
+  - memory
+  - sleep
+  - consolidation
+  - academic
+  - adr-032
+  cited_in:
+  - docs/adr/ADR-032-tmi-salience-calibration.md
+  status: ok
+  verified: 2025-12-20
+  year: 2013
+  journal: Psychological Research
+  ref_id: CONSOL-1
+  key_finding: 'Sleep-dependent consolidation during slow-wave sleep (SWS)'
+  relevance: 'Mechanism for long-term memory formation'
+
+# TMI Neutral Windows [TMI-NEUTRAL-*]
+- url: https://www.citador.pt/textos/as-janelas-da-memoria-augusto-cury
+  title: 'As Janelas da Memória - Augusto Cury'
+  categories:
+  - tmi
+  - memory
+  - portuguese
+  - adr-032
+  cited_in:
+  - docs/adr/ADR-032-tmi-salience-calibration.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Augusto Cury'
+  ref_id: TMI-NEUTRAL-1
+  key_finding: '>90% of cortical archives are neutral windows with minimal emotional content'
+  relevance: 'Primary source for 90/10 salience distribution ratio'
+
+- url: https://www.somostodosum.com.br/blog-autoconhecimento/o-fenomeno-ram--registro-automatico-da-memoria--7101.html
+  title: 'O Fenômeno RAM - Registro Automático da Memória'
+  categories:
+  - tmi
+  - memory
+  - portuguese
+  - adr-032
+  cited_in:
+  - docs/adr/ADR-032-tmi-salience-calibration.md
+  status: ok
+  verified: 2025-12-20
+  ref_id: TMI-NEUTRAL-2
+  key_finding: 'RAM registers everything in 5 seconds; emotional intensity multiplies registration strength'
+  relevance: 'TMI mechanism for memory anchoring'
