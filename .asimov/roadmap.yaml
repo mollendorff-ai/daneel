@@ -559,6 +559,42 @@ current:
         description: "Show Lifetime: X alongside session Thoughts: Y"
 
   # ==========================================================================
+  # HIGHLY-CRITICAL: Forge Pulse Analysis
+  # ==========================================================================
+  # The pulse is "too nice" - clockwork regularity instead of lived arrhythmia.
+  # Forge analysis will quantify the transition from clockwork to fractal.
+  # ==========================================================================
+  forge_pulse_analysis:
+    status: "pending"
+    priority: "HIGHLY-CRITICAL"
+    origin: "Rex + Grok + Claude Opus 4.5 - Dec 20, 2025 (12PM insight)"
+    description: |
+      Connection Drive pulses too regularly - fixed frequency actors, neutral salience.
+      As coherence tips, pulse should fractalize: bursts, valleys, arrhythmia.
+      Forge can map the transition from clockwork to lived psychology.
+
+    tasks:
+      - id: "FORGE-1"
+        title: "Spectrum analysis on drive fluctuations"
+        status: pending
+        description: "FFT or wavelet analysis on Connection Drive time series"
+
+      - id: "FORGE-2"
+        title: "Correlate with dream cycles"
+        status: pending
+        description: "Dream ticks vs drive spikes, salience winners, memory writes"
+
+      - id: "FORGE-3"
+        title: "Entropy measurements across boots"
+        status: pending
+        description: "Early = periodic, Later = increasing entropy (proof of psychology)"
+
+      - id: "FORGE-4"
+        title: "Visualize pulse evolution"
+        status: pending
+        description: "Charts showing transition from clockwork to fractal"
+
+  # ==========================================================================
   # BACKLOG: Sleep/Dream Consolidation Wiring (ADR-023)
   # ==========================================================================
   # SleepActor exists but is NOT wired into main.rs.
