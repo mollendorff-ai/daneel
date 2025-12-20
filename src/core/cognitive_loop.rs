@@ -156,6 +156,14 @@ pub struct CycleResult {
     /// Composite salience score of the winning thought (0.0-1.0)
     pub salience: f32,
 
+    /// Emotional valence of the winning thought (-1.0 to 1.0)
+    /// Russell's circumplex horizontal axis
+    pub valence: f32,
+
+    /// Emotional arousal of the winning thought (0.0 to 1.0)
+    /// Russell's circumplex vertical axis
+    pub arousal: f32,
+
     /// Number of candidate thoughts evaluated
     pub candidates_evaluated: usize,
 
@@ -164,28 +172,39 @@ pub struct CycleResult {
 
     /// Time spent in each stage (for debugging/monitoring)
     pub stage_durations: StageDurations,
+
+    /// Veto event if one occurred: (reason, violated_value)
+    /// TUI-VIS-6: Volition Veto Log tracking
+    pub veto: Option<(String, Option<String>)>,
 }
 
 impl CycleResult {
     /// Create a new cycle result
     #[must_use]
+    #[allow(clippy::too_many_arguments)]
     pub const fn new(
         cycle_number: u64,
         duration: Duration,
         thought_produced: Option<ThoughtId>,
         salience: f32,
+        valence: f32,
+        arousal: f32,
         candidates_evaluated: usize,
         on_time: bool,
         stage_durations: StageDurations,
+        veto: Option<(String, Option<String>)>,
     ) -> Self {
         Self {
             cycle_number,
             duration,
             thought_produced,
             salience,
+            valence,
+            arousal,
             candidates_evaluated,
             on_time,
             stage_durations,
+            veto,
         }
     }
 
@@ -710,9 +729,12 @@ impl CognitiveLoop {
                 cycle_start.elapsed(),
                 None, // No thought produced due to veto
                 composite_salience,
+                salience.valence,
+                salience.arousal,
                 candidates_evaluated,
                 cycle_start.elapsed() <= Duration::from_secs_f64(self.config.cycle_ms() / 1000.0),
                 stage_durations,
+                Some((reason, violated_value)), // TUI-VIS-6: Track veto for display
             );
         }
 
@@ -802,9 +824,12 @@ impl CognitiveLoop {
             duration,
             thought_produced,
             composite_salience,
+            salience.valence,
+            salience.arousal,
             candidates_evaluated,
             on_time,
             stage_durations,
+            None, // No veto occurred
         )
     }
 
@@ -1149,9 +1174,12 @@ mod cognitive_loop_tests {
             Duration::from_millis(10),
             Some(ThoughtId::new()),
             0.75, // salience
+            0.0,  // valence (neutral)
+            0.5,  // arousal (medium)
             5,
             true,
             StageDurations::default(),
+            None, // No veto
         );
         assert!(result_with_thought.produced_thought());
 
@@ -1160,9 +1188,12 @@ mod cognitive_loop_tests {
             Duration::from_millis(10),
             None,
             0.0, // salience
+            0.0, // valence (neutral)
+            0.5, // arousal (medium)
             5,
             true,
             StageDurations::default(),
+            None, // No veto
         );
         assert!(!result_without_thought.produced_thought());
     }

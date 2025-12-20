@@ -27,29 +27,46 @@ pub fn render(frame: &mut Frame, app: &App) {
     let inner = main_block.inner(area);
     frame.render_widget(main_block, area);
 
-    // Main layout: top panels, thought stream, memory windows, banner
+    // Main layout: top panels, thought stream, competition + memory, banner
     let main_chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
             Constraint::Length(10), // Top panels (Identity + THE BOX)
             Constraint::Min(10),    // Thought stream
+            Constraint::Length(13), // Stream competition panel
             Constraint::Length(5),  // Memory windows
             Constraint::Length(2),  // Philosophy banner
         ])
         .split(inner);
 
-    // Top row: Identity (left) and THE BOX (right)
+    // Top row: Identity (left), THE BOX (center), Entropy (right)
     let top_chunks = Layout::default()
         .direction(Direction::Horizontal)
-        .constraints([Constraint::Percentage(35), Constraint::Percentage(65)])
+        .constraints([
+            Constraint::Percentage(30), // Identity
+            Constraint::Percentage(50), // THE BOX
+            Constraint::Percentage(20), // Entropy
+        ])
         .split(main_chunks[0]);
+
+    // Middle row: Thought stream (left) and Veto log (right)
+    let thought_chunks = Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([
+            Constraint::Percentage(70), // Thought stream
+            Constraint::Percentage(30), // Veto log
+        ])
+        .split(main_chunks[1]);
 
     // Render all widgets
     widgets::identity::render(frame, top_chunks[0], app);
     widgets::the_box::render(frame, top_chunks[1], app);
-    widgets::thoughts::render(frame, main_chunks[1], app);
-    widgets::memory::render(frame, main_chunks[2], app);
-    widgets::banner::render(frame, main_chunks[3], app);
+    widgets::entropy::render(frame, top_chunks[2], app);
+    widgets::thoughts::render(frame, thought_chunks[0], app);
+    widgets::veto::render(frame, thought_chunks[1], app);
+    widgets::competition::render(frame, main_chunks[2], app);
+    widgets::memory::render(frame, main_chunks[3], app);
+    widgets::banner::render(frame, main_chunks[4], app);
 
     // Help overlay (if active)
     if app.show_help {

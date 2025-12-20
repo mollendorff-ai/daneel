@@ -69,6 +69,8 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
             let bar: String = "█".repeat(filled) + &"░".repeat(8 - filled);
 
             let salience_color = colors::salience_color(thought.salience);
+            // Emotion color based on Russell's circumplex (valence→hue, arousal→saturation)
+            let emotion_color = colors::emotion_color(thought.valence, thought.arousal);
 
             let status_color = match thought.status {
                 ThoughtStatus::Processing => colors::DIM,
@@ -87,9 +89,10 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
                     format!(" {:.2} │ ", thought.salience),
                     Style::default().fg(colors::DIM),
                 ),
+                // Window colored by emotional state (warm=positive, cool=negative, saturated=aroused)
                 Span::styled(
                     format!("{:12} │ ", thought.window),
-                    Style::default().fg(colors::FOREGROUND),
+                    Style::default().fg(emotion_color),
                 ),
                 Span::styled(thought.status.as_str(), Style::default().fg(status_color)),
             ])
