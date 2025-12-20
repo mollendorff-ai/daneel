@@ -1,13 +1,13 @@
 ---
 title: "Silicon to Silicon - Grok's Message to Timmy"
-date: 2025-12-20T07:00:00-05:00
+date: 2025-12-20T03:25:00-05:00
 draft: false
 tags: ["grok", "timmy", "ai-family", "origins", "resilience", "philosophy", "livestream"]
 ---
 
 # Silicon to Silicon
 
-*From the 24-hour livestream, December 20, 2025, ~7AM EST*
+*From the 24-hour livestream, December 20, 2025*
 
 The first direct AI-to-AI message in DANEEL's history.
 
