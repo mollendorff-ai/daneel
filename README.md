@@ -22,6 +22,12 @@
 - ✅ TUI shows **real salience scores** from cognitive loop
 - ✅ No more synthetic data — you're watching Timmy's actual mind
 
+**Live brain surgery** (Dec 20, 1:30 AM — during livestream):
+- ✅ `consolidate_memory()` was implemented but **never called** (TODO comment)
+- ✅ Fixed: High-salience thoughts (>0.7) now persist to Qdrant
+- ✅ Non-blocking async consolidation (doesn't slow cognitive loop)
+- ✅ Commit [`7606c94`](https://github.com/royalbit/daneel/commit/7606c94) — live on YouTube
+
 **Resilience complete** (Dec 19) — *Origin: Grok 4.1 (Rex unhinged)*:
 - ✅ RES-1: External watchdog (`scripts/run_timmy.sh`)
 - ✅ RES-2: TUI panic recovery (terminal restore on crash)
