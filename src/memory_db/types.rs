@@ -796,8 +796,7 @@ mod tests {
         );
 
         let json = serde_json::to_string(&memory).expect("should serialize");
-        let parsed: UnconsciousMemory =
-            serde_json::from_str(&json).expect("should deserialize");
+        let parsed: UnconsciousMemory = serde_json::from_str(&json).expect("should deserialize");
 
         assert_eq!(parsed.content, memory.content);
         assert_eq!(parsed.original_salience, memory.original_salience);

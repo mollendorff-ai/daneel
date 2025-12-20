@@ -484,7 +484,10 @@ impl MemoryDb {
         let point = PointStruct::new(memory.id.0.to_string(), vector, payload);
 
         self.client
-            .upsert_points(UpsertPointsBuilder::new(collections::UNCONSCIOUS, vec![point]))
+            .upsert_points(UpsertPointsBuilder::new(
+                collections::UNCONSCIOUS,
+                vec![point],
+            ))
             .await?;
 
         Ok(())

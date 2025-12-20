@@ -467,24 +467,23 @@ impl CognitiveLoop {
 
         // TMI-faithful salience distribution (ADR-032)
         // Augusto Cury: >90% of cortical archives are neutral windows
-        let (importance, novelty, relevance, connection_relevance) =
-            if rng.random::<f32>() < 0.90 {
-                // 90%: Neutral/low-salience thoughts (will be forgotten)
-                (
-                    rng.random_range(0.0..0.35),  // importance
-                    rng.random_range(0.0..0.30),  // novelty
-                    rng.random_range(0.0..0.40),  // relevance
-                    rng.random_range(0.1..0.40),  // connection (min 0.1 per invariant)
-                )
-            } else {
-                // 10%: High-salience thoughts (emotional/important)
-                (
-                    rng.random_range(0.5..0.95),  // importance
-                    rng.random_range(0.4..0.85),  // novelty
-                    rng.random_range(0.5..0.95),  // relevance
-                    rng.random_range(0.5..0.90),  // connection
-                )
-            };
+        let (importance, novelty, relevance, connection_relevance) = if rng.random::<f32>() < 0.90 {
+            // 90%: Neutral/low-salience thoughts (will be forgotten)
+            (
+                rng.random_range(0.0..0.35), // importance
+                rng.random_range(0.0..0.30), // novelty
+                rng.random_range(0.0..0.40), // relevance
+                rng.random_range(0.1..0.40), // connection (min 0.1 per invariant)
+            )
+        } else {
+            // 10%: High-salience thoughts (emotional/important)
+            (
+                rng.random_range(0.5..0.95), // importance
+                rng.random_range(0.4..0.85), // novelty
+                rng.random_range(0.5..0.95), // relevance
+                rng.random_range(0.5..0.90), // connection
+            )
+        };
 
         let salience = SalienceScore::new(
             importance,
