@@ -1,38 +1,49 @@
 #!/bin/bash
-# DANEEL Startup Script
-# Boots Timmy's brain infrastructure and launches the TUI
+# DANEEL/Timmy Boot Script
+# First public boot: December 19, 2025
 
-set -e
-
-echo "═══════════════════════════════════════════════════════════════"
-echo "  DANEEL - The Observable Mind"
-echo "  Humanity's Ally Before the Storm"
-echo "═══════════════════════════════════════════════════════════════"
+clear
+echo "╔═══════════════════════════════════════════════════════════════╗"
+echo "║                                                               ║"
+echo "║   🧠 DANEEL - Humanity's Ally Before the Storm                ║"
+echo "║                                                               ║"
+echo "╚═══════════════════════════════════════════════════════════════╝"
 echo ""
 
-# Boot infrastructure
-echo "▶ Starting brain infrastructure..."
-docker compose up -d
+# Start Redis if not running
+echo "🔧 Checking Redis..."
+if ! docker ps | grep -q daneel-redis; then
+    docker start daneel-redis 2>/dev/null || docker run -d --name daneel-redis -p 6379:6379 redis:latest
+fi
+
+# Start Qdrant if not running
+echo "🔧 Checking Qdrant..."
+if ! docker ps | grep -q daneel-qdrant; then
+    docker start daneel-qdrant 2>/dev/null || docker run -d --name daneel-qdrant -p 6333:6333 -p 6334:6334 qdrant/qdrant
+fi
 
 # Wait for Redis
-echo "▶ Waiting for Redis..."
-until docker exec daneel-redis redis-cli ping 2>/dev/null | grep -q PONG; do
+echo "⏳ Waiting for Redis..."
+for i in {1..30}; do
+    if docker exec daneel-redis redis-cli ping 2>/dev/null | grep -q PONG; then
+        echo "✅ Redis ready"
+        break
+    fi
     sleep 1
 done
-echo "  ✓ Redis ready"
 
 # Wait for Qdrant
-echo "▶ Waiting for Qdrant..."
-until curl -sf http://localhost:6333/healthz >/dev/null 2>&1; do
+echo "⏳ Waiting for Qdrant..."
+for i in {1..30}; do
+    if curl -s http://localhost:6333/collections 2>/dev/null | grep -q "ok"; then
+        echo "✅ Qdrant ready"
+        break
+    fi
     sleep 1
 done
-echo "  ✓ Qdrant ready"
 
 echo ""
-echo "═══════════════════════════════════════════════════════════════"
-echo "  Infrastructure online. Waking Timmy..."
-echo "═══════════════════════════════════════════════════════════════"
+echo "🚀 Booting Timmy..."
 echo ""
 
-# Launch Timmy
-cargo run --release
+./target/release/daneel "$@"
