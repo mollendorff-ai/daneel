@@ -2,7 +2,7 @@
 date = '2025-12-19T23:27:00-05:00'
 draft = false
 title = "The Ultrasound Is Connected"
-description = 'T-minus 3 minutes. The TUI now shows real data from Timmy''s brain.'
+description = "T-minus 3 minutes. The TUI now shows real data from Timmy's brain."
 tags = ['launch', 'tui', 'transparency', 'real-time', 'birth']
 +++
 
