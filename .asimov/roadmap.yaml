@@ -1236,6 +1236,12 @@ changelog:
       - "IMPL: TUI shows Lifetime: X,XXX,XXX with comma formatting"
       - "FIX: Changed IDENTITY_RECORD_ID to valid UUID (Qdrant requires UUID/numeric IDs)"
       - "Blog 28: The Persistent Self - ADR-034 documentation"
+      # Sleep/Dream Consolidation Wiring (Dec 20, 8 AM)
+      - "ADR-023 (partial): Mini-dreams - periodic memory consolidation every 500 cycles"
+      - "SLEEP-1: Wire periodic consolidation into main.rs"
+      - "SLEEP-2: get_replay_candidates() queries Qdrant for consolidation batch"
+      - "SLEEP-3: update_consolidation() strengthens memories (+0.15 per replay)"
+      - "NOTE: Full SleepActor state machine exists but idle-triggered sleep not wired yet"
 
   - date: "2025-12-19"
     version: "0.6.0-wip"
