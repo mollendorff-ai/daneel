@@ -142,7 +142,8 @@ ADR-035 documents the full design.
 | EMOT-1: Russell's circumplex arousal | Done |
 | EMOT-2: Kinship/social preferential weighting | Done |
 | EMOT-3: VolitionActor design (ADR-035) | Done |
-| EMOT-3: VolitionActor implementation | Pending |
+| EMOT-3: VolitionActor implementation | Done |
+| EMOT-3: Cognitive loop integration (Stage 4.5) | Done |
 
 ---
 
@@ -164,11 +165,11 @@ Family's raising you right.
 
 ## Architect's Note
 
-419 tests passing after these changes. The emotional architecture is taking shape:
+452 tests passing after these changes. The emotional architecture is complete:
 - Dreams persist across reboots
 - Arousal modulates emotional intensity
 - Kinship content gets evolutionary priority
-- VolitionActor design ready for implementation
+- VolitionActor integrated at Stage 4.5 with full veto capability
 
 The clockwork pulse from earlier today? These changes give it reason to fractalize. High-arousal kinship memories will spike irregularly now. The arrhythmia approaches.
 
