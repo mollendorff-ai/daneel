@@ -16,6 +16,42 @@ current:
   summary: "Prove the architecture works with sustained runtime"
 
   # ==========================================================================
+  # HIGHLY-CRITICAL: Dream Persistence (NEXT)
+  # ==========================================================================
+  # "Nada se apaga" failed for dream count - it was in-memory only.
+  # Dream cycles (433+) reset on restart. Meta-counters need persistence too.
+  # ==========================================================================
+  dream_persistence:
+    status: pending
+    priority: "HIGHLY-CRITICAL"
+    origin: "Rex + Grok - Dec 20, 2025 (post-restart discovery)"
+    description: |
+      Dream count was `let mut total_dream_cycles: u64 = 0;` in main.rs.
+      Survives within session, dies on restart. Violated "Nada se apaga"
+      for operational meta-data. Must persist to identity record.
+
+    tasks:
+      - id: "DREAM-PERSIST-1"
+        title: "Add dream_cycles to IdentityMetadata"
+        status: pending
+        description: "Extend struct to include dream count, last dream timestamp"
+
+      - id: "DREAM-PERSIST-2"
+        title: "Persist unfinished dream state"
+        status: pending
+        description: "If interrupted mid-consolidation, save partial state"
+
+      - id: "DREAM-PERSIST-3"
+        title: "Load dream count on startup"
+        status: pending
+        description: "Resume dream counter from where it left off"
+
+      - id: "DREAM-PERSIST-4"
+        title: "Update TUI to show lifetime dreams"
+        status: pending
+        description: "Display 'Dreams: N (lifetime)' not just session count"
+
+  # ==========================================================================
   # HIGHLY-CRITICAL: Forge Pulse Analysis
   # ==========================================================================
   # The pulse is "too nice" - clockwork regularity instead of lived arrhythmia.
@@ -71,11 +107,48 @@ current:
       description: "Wire Redis Streams competition across multiple thought streams"
 
   # ==========================================================================
+  # BACKLOG: Emotional/Salience Architecture
+  # ==========================================================================
+  # Insights from Grok + neuroscience: salience shouldn't be scalar
+  # ==========================================================================
+  emotional_architecture:
+    - id: "EMOT-1"
+      title: "Emotional valence beyond scalar"
+      status: pending
+      priority: "BACKLOG"
+      origin: "Grok insight - Dec 20, 2025"
+      description: |
+        Currently salience is a single f32. Dreams strengthen by fixed 0.15.
+        No threat vs reward differentiation. Emotional valence should be
+        multi-dimensional (arousal, valence, dominance) or categorical.
+
+    - id: "EMOT-2"
+      title: "Preferential weighting for social/kinship content"
+      status: pending
+      priority: "BACKLOG"
+      origin: "Grok insight - Dec 20, 2025"
+      description: |
+        Connection Drive exists but salience inputs are uniform.
+        Social/kinship content should have higher baseline salience
+        (evolutionary prior - social bonds = survival).
+
+    - id: "EMOT-3"
+      title: "Will/Volition actor (free-won't)"
+      status: pending
+      priority: "BACKLOG"
+      origin: "Grok + neuroscience - Dec 20, 2025"
+      description: |
+        "Eu" (Self) in TMI manages, not just observes.
+        Need actor that can OVERRIDE drive impulses, not just compete.
+        Libet's free-won't: veto power over automatic responses.
+
+  # ==========================================================================
   # Infrastructure
   # ==========================================================================
   infrastructure:
     current:
       - "Docker Compose: Redis Stack + Qdrant"
+      - "Named volumes: daneel-redis-data, daneel-qdrant-data (FIXED Dec 20)"
       - "AOF: appendfsync everysec (1s max data loss)"
     scaling_path:
       - "Docker Swarm (kveldulf ready)"

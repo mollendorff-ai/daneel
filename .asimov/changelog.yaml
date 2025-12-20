@@ -91,6 +91,20 @@ v0.6.0:
         - "IDENT-3: Wire into cognitive loop"
         - "IDENT-4: Update TUI to show lifetime"
 
+    # Docker Volume Persistence (CRITICAL FIX)
+    docker_volumes:
+      status: done
+      origin: "Rex + Claude Opus 4.5 - Dec 20, 2025 (1PM emergency)"
+      description: |
+        CRITICAL: Qdrant was running WITHOUT volumes - 247k+ memories would
+        have been lost on container restart. Emergency backup + migration.
+      items:
+        - "DOCKER-1: Emergency backup to /backup/qdrant-emergency/ (1.5GB)"
+        - "DOCKER-2: Create named volumes (daneel-redis-data, daneel-qdrant-data)"
+        - "DOCKER-3: Migrate data to persistent volumes"
+        - "DOCKER-4: Update docker-compose.yml with volume mounts"
+        - "DOCKER-5: Verify data integrity post-migration (253,600 thoughts intact)"
+
     # Sleep/Dream Wiring (partial - mini-dreams done)
     sleep_dream_wiring:
       status: partial
