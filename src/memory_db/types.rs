@@ -723,4 +723,85 @@ mod tests {
         state.strength = 0.9;
         assert!(state.is_permanent());
     }
+
+    // ADR-033: Unconscious Memory Tests
+
+    #[test]
+    fn unconscious_memory_creation() {
+        let memory = UnconsciousMemory::from_forgotten_thought(
+            "forgotten thought".to_string(),
+            0.15,
+            ArchiveReason::LowSalience,
+            Some("1234567890-0".to_string()),
+        );
+
+        assert!(!memory.id.0.is_nil());
+        assert_eq!(memory.content, "forgotten thought");
+        assert!((memory.original_salience - 0.15).abs() < 0.001);
+        assert_eq!(memory.archive_reason, ArchiveReason::LowSalience);
+        assert_eq!(memory.surface_count, 0);
+        assert!(memory.last_surfaced.is_none());
+        assert_eq!(memory.redis_id, Some("1234567890-0".to_string()));
+    }
+
+    #[test]
+    fn unconscious_memory_without_redis_id() {
+        let memory = UnconsciousMemory::from_forgotten_thought(
+            "no redis id".to_string(),
+            0.25,
+            ArchiveReason::Decay,
+            None,
+        );
+
+        assert!(memory.redis_id.is_none());
+        assert_eq!(memory.archive_reason, ArchiveReason::Decay);
+    }
+
+    #[test]
+    fn unconscious_memory_mark_surfaced() {
+        let mut memory = UnconsciousMemory::from_forgotten_thought(
+            "will surface".to_string(),
+            0.10,
+            ArchiveReason::LowSalience,
+            None,
+        );
+
+        assert_eq!(memory.surface_count, 0);
+        assert!(memory.last_surfaced.is_none());
+
+        memory.mark_surfaced();
+
+        assert_eq!(memory.surface_count, 1);
+        assert!(memory.last_surfaced.is_some());
+
+        memory.mark_surfaced();
+
+        assert_eq!(memory.surface_count, 2);
+    }
+
+    #[test]
+    fn archive_reason_variants() {
+        assert_eq!(ArchiveReason::LowSalience, ArchiveReason::LowSalience);
+        assert_ne!(ArchiveReason::LowSalience, ArchiveReason::Decay);
+        assert_ne!(ArchiveReason::Decay, ArchiveReason::Displacement);
+    }
+
+    #[test]
+    fn unconscious_memory_serialization() {
+        let memory = UnconsciousMemory::from_forgotten_thought(
+            "test content".to_string(),
+            0.20,
+            ArchiveReason::Displacement,
+            Some("redis-123".to_string()),
+        );
+
+        let json = serde_json::to_string(&memory).expect("should serialize");
+        let parsed: UnconsciousMemory =
+            serde_json::from_str(&json).expect("should deserialize");
+
+        assert_eq!(parsed.content, memory.content);
+        assert_eq!(parsed.original_salience, memory.original_salience);
+        assert_eq!(parsed.archive_reason, memory.archive_reason);
+        assert_eq!(parsed.redis_id, memory.redis_id);
+    }
 }
