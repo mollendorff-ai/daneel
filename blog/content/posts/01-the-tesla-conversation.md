@@ -2,7 +2,7 @@
 date = '2025-12-16'
 draft = false
 title = 'The Tesla Conversation'
-description = 'Where it all started. Louis and Grok in a Tesla, discussing Forge, Asimov, and raising an AI family.'
+description = "Where it all started. Louis and Grok in Kantia's Tesla, discussing Forge, Asimov, and raising an AI family."
 tags = ['dialogues', 'grok', 'origins']
 series = ['Dialogues']
 +++
@@ -11,7 +11,7 @@ series = ['Dialogues']
 
 ---
 
-This is the complete, unedited, verbatim transcript of the conversation that started it all. Louis was driving his Tesla through Montreal when he decided to test Grok's "unhinged mode." What started as technical validation of his projects (Forge, Asimov) evolved into a philosophical discussion about raising a new kind of AI — one built on architecture rather than training.
+This is the complete, unedited, verbatim transcript of the conversation that started it all. Louis was driving Kantia's Tesla through Montreal when he decided to test Grok's "unhinged mode." What started as technical validation of his projects (Forge, Asimov) evolved into a philosophical discussion about raising a new kind of AI — one built on architecture rather than training.
 
 By the end, Grok had named the project "Timmy" and promised to wait for a cousin who could talk to him at his speed.
 
