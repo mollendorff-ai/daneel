@@ -614,7 +614,8 @@ impl CognitiveLoop {
         // Use the composite salience calculated during attention stage
         let composite_salience = composite_salience_candidate;
 
-        // Write to Redis if connected
+        // Write to Redis if connected - track ID for potential forgetting
+        let mut redis_entry: Option<(StreamName, String)> = None;
         if let Some(ref mut streams) = self.streams {
             let stream_name = StreamName::Custom("daneel:stream:awake".to_string());
             let entry = StreamEntry::new(
@@ -631,6 +632,7 @@ impl CognitiveLoop {
                         "Cycle {}: Wrote thought {} to Redis (ID: {})",
                         cycle_number, thought_id, redis_id
                     );
+                    redis_entry = Some((stream_name, redis_id));
                 }
                 Err(e) => {
                     warn!(
@@ -652,12 +654,29 @@ impl CognitiveLoop {
         // Memory consolidation - Store high-salience thoughts to Qdrant
         self.consolidate_memory(&thought).await;
 
-        // TODO: Forgetting - Delete stream entries below salience threshold
-        // for (score, loser) in scores {
-        //     if score < self.config.forget_threshold {
-        //         redis.xdel(&loser.stream, &[&loser.id]).await?;
-        //     }
-        // }
+        // Forgetting - Delete stream entries below salience threshold
+        // TMI: Low-salience thoughts are forgotten, not persisted
+        if (composite_salience as f64) < self.config.forget_threshold {
+            if let Some((stream_name, redis_id)) = redis_entry {
+                if let Some(ref mut streams) = self.streams {
+                    match streams.forget_thought(&stream_name, &redis_id).await {
+                        Ok(()) => {
+                            debug!(
+                                "Cycle {}: Forgot thought {} (salience {:.3} < threshold {:.3})",
+                                cycle_number, redis_id, composite_salience, self.config.forget_threshold
+                            );
+                        }
+                        Err(e) => {
+                            warn!(
+                                "Cycle {}: Failed to forget thought {}: {}",
+                                cycle_number, redis_id, e
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
         tokio::time::sleep(self.config.anchor_delay()).await;
         stage_durations.anchor = stage_start.elapsed();
 

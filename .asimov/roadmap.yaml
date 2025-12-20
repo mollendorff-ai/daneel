@@ -489,7 +489,7 @@ current:
   # to create the complete TMI cognitive architecture.
   # ==========================================================================
   phase2_actor_wiring:
-    status: "wip"
+    status: "done"
     priority: "HIGH"
     origin: "Rex + Claude Opus 4.5 - Dec 20, 2025"
     description: |
@@ -500,7 +500,7 @@ current:
     tasks:
       - id: "WIRE-ATT-3"
         title: "Wire AttentionActor into Stage 3 (O Eu)"
-        status: wip
+        status: done
         description: "Connect AttentionActor to cognitive loop Stage 3 for competitive window selection"
 
       - id: "WIRE-THOUGHT-4"
@@ -510,7 +510,7 @@ current:
 
       - id: "WIRE-TRIGGER-MEM"
         title: "Implement Trigger stage memory query"
-        status: wip
+        status: done
         description: "Wire memory queries into Stage 1 (Gatilho/Trigger) for context-aware triggers"
 
       - id: "WIRE-MULTISTREAM"
@@ -520,8 +520,9 @@ current:
 
       - id: "WIRE-FORGETTING"
         title: "Implement forgetting (XDEL)"
-        status: wip
+        status: done
         description: "Wire Redis XDEL for old thought cleanup and memory management"
+        hotfix: "HOTFIX Dec 20 3AM: Forgetting was in consumer.rs but not wired to cognitive_loop.rs"
 
   # WIP Items (2025-12-18)
   wip:
@@ -982,6 +983,17 @@ completed:
 
 # Changelog - completed work
 changelog:
+  - date: "2025-12-20"
+    version: "0.6.0-wip"
+    items:
+      # Phase 2: Actor Wiring (Dec 20, 2-3 AM livestream)
+      - "WIRE-ATT-3: AttentionActor wired into Stage 3 (competitive selection)"
+      - "WIRE-TRIGGER-MEM: Memory query wired into Stage 1 (Qdrant top-5)"
+      - "WIRE-FORGETTING: Forgetting wired into Stage 5 (XDEL for salience < 0.3)"
+      - "HOTFIX: Forgetting was implemented in consumer.rs but never called from cognitive_loop.rs"
+      - "Blog 24: Live Brain Surgery - Qdrant wiring at 1AM"
+      - "Blog 25: Phase 2 Actor Wiring - 4 parallel agents"
+
   - date: "2025-12-19"
     version: "0.6.0-wip"
     items:
