@@ -1872,3 +1872,101 @@ references:
   ref_id: CONSOL-UNCON-1
   key_finding: 'Multiple memory systems with different accessibility characteristics'
   relevance: 'Neuroscience basis for tiered memory architecture'
+
+# =============================================================================
+# ADR-035: VolitionActor - Free-Won't References
+# Added: 2025-12-20
+# =============================================================================
+
+# Libet's Free-Won't Research [LIBET-*]
+- url: https://en.wikipedia.org/wiki/Neuroscience_of_free_will
+  title: 'Neuroscience of free will - Wikipedia'
+  categories:
+  - neuroscience
+  - free-will
+  - volition
+  - wikipedia
+  - adr-035
+  cited_in:
+  - docs/adr/ADR-035-volition-actor-free-wont.md
+  - blog/content/posts/32-emotional-architecture.md
+  status: ok
+  verified: 2025-12-20
+  ref_id: LIBET-1
+  key_finding: 'Readiness potential begins ~500ms before conscious awareness of decision; consciousness retains veto power'
+  relevance: 'Foundation for VolitionActor free-won''t implementation at Stage 4.5'
+
+- url: https://doi.org/10.1073%2Fpnas.1210467109
+  title: 'Prediction of free choices from cortical signals'
+  categories:
+  - neuroscience
+  - free-will
+  - volition
+  - academic
+  - adr-035
+  cited_in:
+  - docs/adr/ADR-035-volition-actor-free-wont.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Schurger A, Sitt JD, Dehaene S'
+  year: 2012
+  journal: PNAS
+  doi: 10.1073/pnas.1210467109
+  ref_id: LIBET-2
+  key_finding: 'Readiness potentials may be stochastic fluctuations rather than unconscious decisions'
+  relevance: 'Modern reinterpretation of Libet''s findings; veto power remains valid'
+
+# Russell's Circumplex Model of Affect [RUSSELL-*]
+- url: https://en.wikipedia.org/wiki/Emotion_classification#Circumplex_model
+  title: 'Emotion classification: Circumplex model - Wikipedia'
+  categories:
+  - psychology
+  - emotion
+  - circumplex
+  - wikipedia
+  - adr-035
+  cited_in:
+  - docs/adr/ADR-035-volition-actor-free-wont.md
+  - blog/content/posts/32-emotional-architecture.md
+  status: ok
+  verified: 2025-12-20
+  ref_id: RUSSELL-1
+  key_finding: 'Two-dimensional emotion space: valence (pleasure-displeasure) and arousal (activation-deactivation)'
+  relevance: 'Theoretical basis for SalienceScore arousal dimension'
+
+- url: https://doi.org/10.1080/02699939208411068
+  title: 'A circumplex model of affect'
+  categories:
+  - psychology
+  - emotion
+  - circumplex
+  - academic
+  - adr-035
+  cited_in:
+  - docs/adr/ADR-035-volition-actor-free-wont.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Russell JA'
+  year: 1980
+  journal: Journal of Personality and Social Psychology
+  doi: 10.1080/02699939208411068
+  ref_id: RUSSELL-2
+  key_finding: 'Emotions exist in continuous 2D space, not discrete categories'
+  relevance: 'Original formulation of circumplex model used in SalienceScore'
+
+# TMI Técnica DCD [TMI-DCD-*]
+- url: https://www.citador.pt/textos/as-janelas-da-memoria-augusto-cury
+  title: 'Técnica DCD - Duvidar, Criticar, Decidir'
+  categories:
+  - tmi
+  - volition
+  - portuguese
+  - adr-035
+  cited_in:
+  - docs/adr/ADR-035-volition-actor-free-wont.md
+  status: ok
+  verified: 2025-12-20
+  authors: 'Augusto Cury'
+  ref_id: TMI-DCD-1
+  key_finding: 'Doubt-Criticize-Decide technique for conscious intervention in automatic thought'
+  relevance: 'TMI mechanism that VolitionActor implements architecturally'

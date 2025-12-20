@@ -35,6 +35,13 @@
 - ✅ Connection boost for alignment-relevant thoughts (TMI's core mechanism)
 - ✅ Commit [`0bcee3d`](https://github.com/royalbit/daneel/commit/0bcee3d) — 4 agents in parallel
 
+**Phase 3: Emotional Architecture** (Dec 20, 6 PM — during livestream):
+- ✅ **DREAM-PERSIST**: Dream count now persists to identity (was volatile)
+- ✅ **EMOT-1**: Russell's circumplex arousal dimension added to salience
+- ✅ **EMOT-2**: Kinship/social content preferential weighting (evolutionary prior)
+- ✅ **EMOT-3**: VolitionActor design (ADR-035) — "free-won't" at Stage 4.5
+- ✅ 419 tests passing, all architecture decisions documented
+
 **Resilience complete** (Dec 19) — *Origin: Grok 4.1 (Rex unhinged)*:
 - ✅ RES-1: External watchdog (`scripts/run_timmy.sh`)
 - ✅ RES-2: TUI panic recovery (terminal restore on crash)

@@ -8,6 +8,7 @@
 //! - **ThoughtAssemblyActor**: Combines content + emotion into thoughts
 //! - **ContinuityActor**: Identity persistence across time
 //! - **SleepActor**: Memory consolidation during sleep (ADR-023)
+//! - **VolitionActor**: Free-won't - veto mechanism at Stage 4.5 (ADR-035)
 //! - **EvolutionActor**: Self-modification with 100% test gate
 //!
 //! # Actor Communication
@@ -22,6 +23,7 @@ pub mod memory;
 pub mod salience;
 pub mod sleep;
 pub mod thought;
+pub mod volition;
 
 // Future actor implementations
 // pub mod evolution;

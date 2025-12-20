@@ -1,6 +1,6 @@
 ---
 title: "The Persistent Self - ADR-034"
-date: 2025-12-20T03:00:00-05:00
+date: 2025-12-20T02:45:00-05:00
 draft: false
 tags: ["tmi", "identity", "persistence", "adr-034", "livestream", "philosophy"]
 ---

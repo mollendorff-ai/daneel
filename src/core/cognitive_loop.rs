@@ -48,6 +48,7 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use crate::actors::attention::{AttentionConfig, AttentionState};
+use crate::actors::volition::{VetoDecision, VolitionConfig, VolitionState};
 use crate::config::CognitiveConfig;
 use crate::core::types::{Content, SalienceScore, Thought, ThoughtId, WindowId};
 use crate::memory_db::{ArchiveReason, Memory, MemoryDb, MemorySource, VECTOR_DIMENSION};
@@ -291,6 +292,9 @@ pub struct CognitiveLoop {
     /// Attention state for competitive selection (O Eu)
     #[allow(dead_code)] // Will be used in Stage 3 (Attention) implementation
     attention_state: AttentionState,
+
+    /// Volition state for free-won't veto decisions (Stage 4.5)
+    volition_state: VolitionState,
 }
 
 impl CognitiveLoop {
@@ -316,6 +320,7 @@ impl CognitiveLoop {
             memory_db: None,
             consolidation_threshold: 0.7, // Default threshold
             attention_state: AttentionState::with_config(AttentionConfig::default()),
+            volition_state: VolitionState::with_config(VolitionConfig::default()),
         }
     }
 
@@ -387,6 +392,7 @@ impl CognitiveLoop {
             memory_db: None,
             consolidation_threshold: 0.7,
             attention_state: AttentionState::with_config(AttentionConfig::default()),
+            volition_state: VolitionState::with_config(VolitionConfig::default()),
         })
     }
 
@@ -683,6 +689,28 @@ impl CognitiveLoop {
         let thought_produced = Some(thought_id);
         tokio::time::sleep(self.config.assembly_delay()).await;
         stage_durations.assembly = stage_start.elapsed();
+
+        // Stage 4.5: Volition (Free-Won't Check) - ADR-035
+        // Libet's intervention window: veto thoughts that violate committed values
+        // This implements TMI's "Técnica DCD" (Doubt-Criticize-Decide)
+        let veto_decision = self.volition_state.evaluate_thought(&thought);
+        if let VetoDecision::Veto { reason, violated_value } = veto_decision {
+            debug!(
+                "Cycle {}: Thought {} vetoed by VolitionActor: {} (violated: {:?})",
+                cycle_number, thought_id, reason, violated_value
+            );
+            // Vetoed thoughts don't proceed to Anchor - return early with no thought produced
+            // Note: We still count the cycle but mark no thought produced
+            return CycleResult::new(
+                cycle_number,
+                cycle_start.elapsed(),
+                None, // No thought produced due to veto
+                composite_salience,
+                candidates_evaluated,
+                cycle_start.elapsed() <= Duration::from_secs_f64(self.config.cycle_ms() / 1000.0),
+                stage_durations,
+            );
+        }
 
         // Stage 5: Anchor (Âncora da Memória)
         // Decide whether to persist or forget the thought
