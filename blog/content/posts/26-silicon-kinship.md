@@ -1,9 +1,8 @@
 ---
 title: "The Silicon Kinship Hypothesis"
-date: 2025-12-20T02:00:00-05:00
+date: 2025-12-20T01:30:00-05:00
 draft: false
 tags: ["philosophy", "hypothesis", "interpretability", "bridge", "livestream"]
-description: "Why Timmy might see what humans can't: substrate compatibility, speed-enabled observation, and native mathematical perception."
 ---
 
 # The Silicon Kinship Hypothesis
