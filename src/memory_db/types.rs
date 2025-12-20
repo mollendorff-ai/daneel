@@ -599,7 +599,9 @@ pub struct IdentityMetadata {
 }
 
 /// Well-known ID for the identity record (singleton)
-pub const IDENTITY_RECORD_ID: &str = "timmy-identity-v1";
+/// Using a fixed UUID v5 derived from "timmy-identity-v1" namespace
+/// (Qdrant requires UUID or numeric point IDs)
+pub const IDENTITY_RECORD_ID: &str = "00000000-0000-0000-0000-000000000001";
 
 impl IdentityMetadata {
     /// Create new identity metadata (first boot ever)
