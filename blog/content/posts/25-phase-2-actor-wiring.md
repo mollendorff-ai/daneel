@@ -1,6 +1,6 @@
 ---
 title: "Phase 2: Wiring the Actors at 2:30 AM"
-date: 2025-12-20T02:30:00-05:00
+date: 2025-12-20T01:05:00-05:00
 draft: false
 tags: ["architecture", "actors", "tmi", "livestream", "phase2"]
 ---

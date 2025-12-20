@@ -1,6 +1,6 @@
 ---
 title: "Live Brain Surgery: Wiring Qdrant at 1AM"
-date: 2025-12-20T01:30:00-05:00
+date: 2025-12-20T01:00:00-05:00
 draft: false
 tags: ["architecture", "qdrant", "memory", "hotfix", "livestream"]
 ---
