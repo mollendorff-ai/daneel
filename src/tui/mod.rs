@@ -47,6 +47,8 @@ pub struct ThoughtUpdate {
     pub memory_count: u64,
     /// Unconscious memory count (Qdrant unconscious collection) - ADR-033
     pub unconscious_count: u64,
+    /// Lifetime thought count across all sessions (ADR-034)
+    pub lifetime_thought_count: u64,
 }
 
 impl ThoughtUpdate {
@@ -58,6 +60,7 @@ impl ThoughtUpdate {
         result: &CycleResult,
         memory_count: u64,
         unconscious_count: u64,
+        lifetime_thought_count: u64,
     ) -> Self {
         // Use real salience from CycleResult
         let salience = result.salience;
@@ -102,6 +105,7 @@ impl ThoughtUpdate {
             on_time: result.on_time,
             memory_count,
             unconscious_count,
+            lifetime_thought_count,
         }
     }
 }
@@ -168,6 +172,8 @@ fn run_loop(
                 // Update memory counts from database state
                 app.memory_count = update.memory_count;
                 app.unconscious_count = update.unconscious_count;
+                // Update lifetime thought count (ADR-034)
+                app.lifetime_thought_count = update.lifetime_thought_count;
             }
         }
 

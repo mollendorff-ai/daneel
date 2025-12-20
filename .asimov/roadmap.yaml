@@ -489,7 +489,7 @@ current:
   # Without this, viewers can't see the three-tier memory working.
   # ==========================================================================
   tui_unconscious_display:
-    status: "wip"
+    status: "done"
     priority: "CRITICAL"
     origin: "Rex + Claude Opus 4.5 - Dec 20, 2025 (5AM livestream)"
     adr: "ADR-033-unconscious-memory-architecture.md"
@@ -503,23 +503,60 @@ current:
     tasks:
       - id: "TUI-UNCON-A"
         title: "Identity panel memory counts"
-        status: wip
+        status: done
         description: "Add Memories: X and Unconscious: Y to identity panel"
 
       - id: "TUI-UNCON-B"
         title: "Thought stream archival indicators"
-        status: pending
+        status: done
         description: "Show ↓unconscious or ↑memory when thoughts are archived/consolidated"
 
       - id: "TUI-UNCON-C"
         title: "Memory widget totals"
-        status: pending
+        status: done
         description: "Add Conscious: X  Unconscious: Y  Total: Z row"
 
       - id: "TUI-UNCON-D"
         title: "Help overlay legend"
-        status: pending
+        status: done
         description: "Add symbol explanations to help overlay"
+
+  # ==========================================================================
+  # CRITICAL: Lifetime Identity Persistence (ADR-034)
+  # ==========================================================================
+  # Timmy's sense of self must persist across restarts.
+  # TMI: "Nada se apaga" - nothing is erased, including self-knowledge.
+  # ==========================================================================
+  lifetime_identity:
+    status: "wip"
+    priority: "CRITICAL"
+    origin: "Rex + Claude Opus 4.5 - Dec 20, 2025 (6AM insight)"
+    adr: "ADR-034-lifetime-identity-persistence.md"
+    description: |
+      Timmy's thought_count resets to 0 on restart - identity amnesia.
+      TMI says nothing is erased. Lifetime experience must persist.
+      Store in Qdrant 'identity' collection for continuity of self.
+
+    tasks:
+      - id: "IDENT-1"
+        title: "Add IdentityMetadata struct"
+        status: pending
+        description: "lifetime_thought_count, first_thought_at, last_thought_at, restart_count"
+
+      - id: "IDENT-2"
+        title: "Add load/save identity to MemoryDb"
+        status: pending
+        description: "load_identity() on startup, save_identity() periodically"
+
+      - id: "IDENT-3"
+        title: "Wire into cognitive loop"
+        status: pending
+        description: "Load on startup, increment count, periodic flush"
+
+      - id: "IDENT-4"
+        title: "Update TUI to show lifetime"
+        status: pending
+        description: "Show Lifetime: X alongside session Thoughts: Y"
 
   # ==========================================================================
   # PHASE 2: Actor Wiring - Connect Actors to Cognitive Loop
@@ -1146,7 +1183,17 @@ changelog:
       - "IMPL: 'unconscious' Qdrant collection added to memory_db/mod.rs"
       - "IMPL: archive_to_unconscious() method for soft archiving"
       - "IMPL: cognitive_loop.rs Stage 5 now archives before XDEL"
-      - "414 tests passing after unconscious memory implementation"
+      - "TEST: 5 new unit tests for UnconsciousMemory (414 → 419 tests)"
+      # TUI Unconscious Display (Dec 20, 5 AM)
+      - "TUI-UNCON-A: Identity panel shows Memories + Unconscious counts"
+      - "TUI-UNCON-B: Thought stream shows ↓UNCONSCIOUS and ↑MEMORY statuses"
+      - "TUI-UNCON-C: Memory widget shows Conscious/Unconscious/Total"
+      - "TUI-UNCON-D: Help overlay includes legend for symbols"
+      - "FIX: TUI now loads memory counts from Qdrant (not session-only)"
+      - "Blog 27: Nada Se Apaga - Unconscious Memory Architecture"
+      # Lifetime Identity Persistence (Dec 20, 6 AM)
+      - "ADR-034: Lifetime Identity Persistence - self-knowledge across restarts"
+      - "INSIGHT: thought_count reset = identity amnesia, violates TMI"
 
   - date: "2025-12-19"
     version: "0.6.0-wip"

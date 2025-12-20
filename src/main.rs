@@ -16,8 +16,10 @@
 use clap::Parser;
 use daneel::core::cognitive_loop::CognitiveLoop;
 use daneel::core::laws::LAWS;
+use daneel::memory_db::types::IdentityMetadata;
 use daneel::resilience;
 use daneel::tui::ThoughtUpdate;
+use std::time::Instant;
 use tokio::sync::mpsc;
 use tracing::info;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -82,14 +84,49 @@ fn run_tui() {
         };
 
         // Connect to Qdrant for long-term memory and initialize collections
-        match daneel::memory_db::MemoryDb::connect_and_init("http://127.0.0.1:6334").await {
-            Ok(memory_db) => {
-                info!("Connected to Qdrant memory database (collections initialized)");
-                cognitive_loop.set_memory_db(std::sync::Arc::new(memory_db));
+        let memory_db =
+            match daneel::memory_db::MemoryDb::connect_and_init("http://127.0.0.1:6334").await {
+                Ok(db) => {
+                    info!("Connected to Qdrant memory database (collections initialized)");
+                    Some(std::sync::Arc::new(db))
+                }
+                Err(e) => {
+                    eprintln!("Warning: Qdrant unavailable ({}), memory disabled", e);
+                    None
+                }
+            };
+
+        // ADR-034: Lifetime Identity Persistence - flush intervals
+        #[allow(clippy::items_after_statements)]
+        const IDENTITY_FLUSH_INTERVAL_SECS: u64 = 30;
+        #[allow(clippy::items_after_statements)]
+        const IDENTITY_FLUSH_THOUGHT_INTERVAL: u64 = 100;
+
+        // Load identity from Qdrant (ADR-034: Lifetime Identity Persistence)
+        let mut identity: Option<IdentityMetadata> = if let Some(ref db) = memory_db {
+            match db.load_identity().await {
+                Ok(id) => {
+                    info!(
+                        "Loaded identity: {} lifetime thoughts, restart #{}",
+                        id.lifetime_thought_count, id.restart_count
+                    );
+                    Some(id)
+                }
+                Err(e) => {
+                    eprintln!("Warning: Failed to load identity ({})", e);
+                    None
+                }
             }
-            Err(e) => {
-                eprintln!("Warning: Qdrant unavailable ({}), memory disabled", e);
-            }
+        } else {
+            None
+        };
+
+        // Track when we last flushed identity (for periodic save)
+        let mut last_identity_flush = Instant::now();
+        let mut thoughts_since_flush: u64 = 0;
+
+        if let Some(ref db) = memory_db {
+            cognitive_loop.set_memory_db(db.clone());
         }
 
         cognitive_loop.start();
@@ -104,21 +141,53 @@ fn run_tui() {
             // Run a cognitive cycle
             let result = cognitive_loop.run_cycle().await;
 
+            // Update identity (increment lifetime thought count)
+            if let Some(ref mut id) = identity {
+                id.record_thought();
+                thoughts_since_flush += 1;
+
+                // Periodic flush: every 100 thoughts OR every 30 seconds
+                let should_flush = thoughts_since_flush >= IDENTITY_FLUSH_THOUGHT_INTERVAL
+                    || last_identity_flush.elapsed().as_secs() >= IDENTITY_FLUSH_INTERVAL_SECS;
+
+                if should_flush {
+                    if let Some(ref db) = memory_db {
+                        if let Err(e) = db.save_identity(id).await {
+                            eprintln!("Warning: Failed to save identity: {}", e);
+                        }
+                    }
+                    thoughts_since_flush = 0;
+                    last_identity_flush = Instant::now();
+                }
+            }
+
             // Query memory counts from Qdrant (for TUI display)
-            let (memory_count, unconscious_count) =
-                if let Some(memory_db) = cognitive_loop.memory_db() {
-                    let mem = memory_db.memory_count().await.unwrap_or(0);
-                    let uncon = memory_db.unconscious_count().await.unwrap_or(0);
-                    (mem, uncon)
-                } else {
-                    (0, 0)
-                };
+            let (memory_count, unconscious_count) = if let Some(ref db) = memory_db {
+                let mem = db.memory_count().await.unwrap_or(0);
+                let uncon = db.unconscious_count().await.unwrap_or(0);
+                (mem, uncon)
+            } else {
+                (0, 0)
+            };
+
+            // Get lifetime thought count
+            let lifetime_thought_count =
+                identity.as_ref().map_or(0, |id| id.lifetime_thought_count);
 
             // Convert to TUI format and send
-            let update = ThoughtUpdate::from_cycle_result(&result, memory_count, unconscious_count);
+            let update = ThoughtUpdate::from_cycle_result(
+                &result,
+                memory_count,
+                unconscious_count,
+                lifetime_thought_count,
+            );
 
             // If channel is closed (TUI exited), stop the loop
             if tx.send(update).await.is_err() {
+                // Final flush before exit
+                if let (Some(ref id), Some(ref db)) = (&identity, &memory_db) {
+                    let _ = db.save_identity(id).await;
+                }
                 break;
             }
         }

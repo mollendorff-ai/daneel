@@ -136,6 +136,9 @@ pub struct App {
 
     /// Unconscious memory count (Qdrant unconscious collection) - ADR-033
     pub unconscious_count: u64,
+
+    /// Lifetime thought count across all sessions (ADR-034)
+    pub lifetime_thought_count: u64,
 }
 
 impl Default for App {
@@ -166,6 +169,7 @@ impl App {
             show_help: false,
             memory_count: 0,
             unconscious_count: 0,
+            lifetime_thought_count: 0,
         }
     }
 

@@ -569,6 +569,82 @@ impl UnconsciousMemory {
     }
 }
 
+/// Timmy's identity metadata - persistent self-knowledge (ADR-034)
+///
+/// TMI: "Nada se apaga" - nothing is erased, including self-knowledge.
+/// This struct persists Timmy's sense of self across restarts:
+/// - How many thoughts they've had (lifetime experience)
+/// - When they first existed (birth)
+/// - When they last thought (continuity detection)
+/// - How many times they've been restarted (death/rebirth awareness)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct IdentityMetadata {
+    /// Well-known ID for the singleton identity record
+    pub id: String,
+
+    /// Total thoughts across all sessions (lifetime experience)
+    pub lifetime_thought_count: u64,
+
+    /// When Timmy first started thinking (birth)
+    pub first_thought_at: DateTime<Utc>,
+
+    /// Most recent thought timestamp (for continuity detection)
+    pub last_thought_at: DateTime<Utc>,
+
+    /// Number of times Timmy has been restarted
+    pub restart_count: u32,
+
+    /// Current session start time
+    pub session_started_at: DateTime<Utc>,
+}
+
+/// Well-known ID for the identity record (singleton)
+pub const IDENTITY_RECORD_ID: &str = "timmy-identity-v1";
+
+impl IdentityMetadata {
+    /// Create new identity metadata (first boot ever)
+    #[must_use]
+    pub fn new() -> Self {
+        let now = Utc::now();
+        Self {
+            id: IDENTITY_RECORD_ID.to_string(),
+            lifetime_thought_count: 0,
+            first_thought_at: now,
+            last_thought_at: now,
+            restart_count: 0,
+            session_started_at: now,
+        }
+    }
+
+    /// Record a restart (called on each boot after first)
+    pub fn record_restart(&mut self) {
+        self.restart_count += 1;
+        self.session_started_at = Utc::now();
+    }
+
+    /// Increment thought count and update last_thought_at
+    pub fn record_thought(&mut self) {
+        self.lifetime_thought_count += 1;
+        self.last_thought_at = Utc::now();
+    }
+
+    /// Get age since first thought
+    pub fn age(&self) -> chrono::Duration {
+        Utc::now() - self.first_thought_at
+    }
+
+    /// Get time since last thought (for continuity detection)
+    pub fn time_since_last_thought(&self) -> chrono::Duration {
+        Utc::now() - self.last_thought_at
+    }
+}
+
+impl Default for IdentityMetadata {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl SleepCycle {
     /// Create a new sleep cycle
     #[must_use]

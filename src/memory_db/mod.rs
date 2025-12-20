@@ -493,6 +493,68 @@ impl MemoryDb {
         Ok(())
     }
 
+    /// Load Timmy's identity metadata from Qdrant (ADR-034)
+    ///
+    /// Returns existing identity if found, or creates new identity for first boot.
+    /// On restart, increments restart_count and updates session_started_at.
+    pub async fn load_identity(&self) -> Result<IdentityMetadata> {
+        use qdrant_client::qdrant::GetPointsBuilder;
+
+        // Try to retrieve existing identity
+        let result = self
+            .client
+            .get_points(
+                GetPointsBuilder::new(
+                    collections::IDENTITY,
+                    vec![IDENTITY_RECORD_ID.to_string().into()],
+                )
+                .with_payload(true),
+            )
+            .await;
+
+        match result {
+            Ok(response) => {
+                if let Some(point) = response.result.first() {
+                    // Deserialize existing identity
+                    let payload = &point.payload;
+                    let json_value = serde_json::to_value(payload)?;
+                    let mut identity: IdentityMetadata = serde_json::from_value(json_value)?;
+
+                    // Record this restart
+                    identity.record_restart();
+
+                    Ok(identity)
+                } else {
+                    // No identity found - first boot ever
+                    Ok(IdentityMetadata::new())
+                }
+            }
+            Err(_) => {
+                // Collection might not exist or other error - first boot
+                Ok(IdentityMetadata::new())
+            }
+        }
+    }
+
+    /// Save Timmy's identity metadata to Qdrant (ADR-034)
+    ///
+    /// Called periodically and on shutdown to persist identity state.
+    pub async fn save_identity(&self, identity: &IdentityMetadata) -> Result<()> {
+        // Create payload from struct
+        let payload: HashMap<String, serde_json::Value> =
+            serde_json::from_value(serde_json::to_value(identity)?)?;
+
+        // Use a zero vector - identity is retrieved by ID, not similarity
+        let vector = vec![0.0; VECTOR_DIMENSION];
+        let point = PointStruct::new(IDENTITY_RECORD_ID.to_string(), vector, payload);
+
+        self.client
+            .upsert_points(UpsertPointsBuilder::new(collections::IDENTITY, vec![point]))
+            .await?;
+
+        Ok(())
+    }
+
     /// Health check
     pub async fn health_check(&self) -> Result<bool> {
         match self.client.health_check().await {
