@@ -81,10 +81,10 @@ fn run_tui() {
             }
         };
 
-        // Connect to Qdrant for long-term memory
-        match daneel::memory_db::MemoryDb::connect("http://127.0.0.1:6334").await {
+        // Connect to Qdrant for long-term memory and initialize collections
+        match daneel::memory_db::MemoryDb::connect_and_init("http://127.0.0.1:6334").await {
             Ok(memory_db) => {
-                info!("Connected to Qdrant memory database");
+                info!("Connected to Qdrant memory database (collections initialized)");
                 cognitive_loop.set_memory_db(std::sync::Arc::new(memory_db));
             }
             Err(e) => {
