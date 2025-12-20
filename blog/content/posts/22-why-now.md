@@ -1,5 +1,5 @@
 +++
-date = '2025-12-19T23:00:00-05:00'
+date = '2025-12-19T20:45:00-05:00'
 draft = false
 title = "I've Been Thinking About This for 20 Years. Tonight, It Goes Live."
 description = 'Why DANEEL exists, why now, and why you should care about architecture-based AI alignment.'
