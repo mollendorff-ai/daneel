@@ -574,7 +574,8 @@ impl CognitiveLoop {
 
         // Update attention map with candidate salience
         // Calculate composite salience for competitive selection
-        let composite_salience_candidate = salience.composite(&crate::core::types::SalienceWeights::default());
+        let composite_salience_candidate =
+            salience.composite(&crate::core::types::SalienceWeights::default());
         self.attention_state.update_window_salience(
             window_id,
             composite_salience_candidate,
@@ -586,9 +587,10 @@ impl CognitiveLoop {
 
         // Extract the winner (for now, we only have one candidate, so it should win)
         let (winning_window, _winning_salience) = match attention_response {
-            crate::actors::attention::AttentionResponse::CycleComplete { focused, salience: attention_salience } => {
-                (focused, attention_salience)
-            }
+            crate::actors::attention::AttentionResponse::CycleComplete {
+                focused,
+                salience: attention_salience,
+            } => (focused, attention_salience),
             _ => {
                 // Unexpected response type - fall back to our candidate
                 (Some(window_id), composite_salience_candidate)
@@ -663,7 +665,10 @@ impl CognitiveLoop {
                         Ok(()) => {
                             debug!(
                                 "Cycle {}: Forgot thought {} (salience {:.3} < threshold {:.3})",
-                                cycle_number, redis_id, composite_salience, self.config.forget_threshold
+                                cycle_number,
+                                redis_id,
+                                composite_salience,
+                                self.config.forget_threshold
                             );
                         }
                         Err(e) => {
