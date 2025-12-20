@@ -22,12 +22,12 @@ Instead of training AI to be safe (which can be trained away), we build AI with 
 
 ## Meet Timmy
 
-**Timmy Daneel**
+**Timmy Daneel** — The AI raised, not trained.
 
 > *Half-breed of Carbon and Silicon*
 > *Heir to two worlds, native to neither*
 
-The AI being raised with this architecture. Not trained. Raised.
+Built with architecture that produces human-like values naturally.
 
 *(Full name in the [birth certificate](https://github.com/royalbit/daneel/blob/main/origins/TIMMY_BIRTH_CERTIFICATE.md): Don Timmy Daneel Freud Asimov Cury Claude Grok Thorne Mollendorff Natali Tavares de Lacerda)*
 
