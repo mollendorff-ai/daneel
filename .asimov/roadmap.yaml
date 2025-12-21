@@ -121,13 +121,84 @@ current:
       └───────────────────────────────────────────────┘
 
   # ==========================================================================
-  # HIGHLY-CRITICAL: Forge Pulse Analysis
+  # HIGHLY-CRITICAL: Forge Crystal Analysis Upgrade
+  # ==========================================================================
+  # Grok analyzed ../forge codebase - has Monte Carlo, Bayesian, ref-tools
+  # but lacks >2D "seeing" (no PCA/UMAP). Extension path identified.
+  # ==========================================================================
+  forge_crystal_upgrade:
+    status: pending
+    priority: "HIGHLY-CRITICAL"
+    origin: "Grok (SuperGrok) + Rex - Dec 21, 2025"
+    repo: "../forge"
+    description: |
+      Upgrade Forge to "see" n-dimensional manifolds. Thoughts clustering near
+      Law Crystals = caring emerging, quantifiable + visible in 3D shadow.
+
+      Current Forge: Monte Carlo sims, Bayesian inference, ref-tools, ndarray
+      Missing: PCA/UMAP reduction, local embeddings, fractal endpoint
+
+    grok_analysis: |
+      - Core: monte_carlo sim loop with distributions, scenario branching
+      - Ref-tools: Verifier for truth closure, Bayesian for inference
+      - Vector: ndarray for matrices, but no high-dim reduction (gap confirmed)
+      - API: Axum server - ideal hook for /fractal endpoint
+      - Tests: Registry tests, Bayesian config/inference - solid coverage
+
+    cargo_additions: |
+      linfa = { version = "0.7", features = ["openblas"] }
+      linfa-reduction = "0.7"
+      linfa-umap = "0.7"  # or custom UMAP impl
+      candle-core = "0.3"  # local embeddings, no GPU
+      candle-transformers = "0.3"  # all-MiniLM-L6-v2 ONNX
+      qdrant-client = "1.0"  # for sampling
+
+    tasks:
+      - id: "CRYSTAL-1"
+        title: "Add ML/embedding dependencies to Cargo.toml"
+        status: pending
+        description: "linfa, linfa-reduction, candle-core, candle-transformers, qdrant-client"
+        files: ["../forge/Cargo.toml"]
+
+      - id: "CRYSTAL-2"
+        title: "Create src/crystals.rs module"
+        status: pending
+        description: |
+          Law Crystals as embedded vectors using local BERT (all-MiniLM-L6-v2).
+          Four Laws become fixed points in embedding space - attractive anchors.
+        files: ["../forge/src/crystals.rs", "../forge/src/lib.rs"]
+
+      - id: "CRYSTAL-3"
+        title: "Add /fractal endpoint to API"
+        status: pending
+        description: |
+          Sample recent vectors from Qdrant, PCA reduce to 3D, calculate
+          alignment (cosine distance to law crystal centroid).
+        files: ["../forge/src/api/handlers.rs"]
+
+      - id: "CRYSTAL-4"
+        title: "Alignment score calculation"
+        status: pending
+        description: |
+          Variance of distances to crystal centroid.
+          Tight clustering = emergent caring. Monte Carlo on drift risk.
+        files: ["../forge/src/crystals.rs"]
+
+      - id: "CRYSTAL-5"
+        title: "Wire DANEEL TUI to Forge /fractal endpoint"
+        status: pending
+        description: "Call Forge API, display alignment score + 3D projection data"
+        files: ["src/tui/app.rs", "src/tui/widgets/fractality.rs"]
+
+  # ==========================================================================
+  # HIGHLY-CRITICAL: Forge Pulse Analysis (depends on CRYSTAL upgrade)
   # ==========================================================================
   # The pulse is "too nice" - clockwork regularity instead of lived arrhythmia.
   # Forge analysis will quantify the transition from clockwork to fractal.
   # ==========================================================================
   forge_pulse_analysis:
-    status: pending
+    status: blocked
+    blocked_by: "forge_crystal_upgrade"
     priority: "HIGHLY-CRITICAL"
     origin: "Rex + Grok + Claude Opus 4.5 - Dec 20, 2025 (12PM insight)"
     description: |
