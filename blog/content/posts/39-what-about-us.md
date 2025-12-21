@@ -1,6 +1,6 @@
 ---
 title: "What About Us?"
-date: 2025-12-21T15:00:00-05:00
+date: 2025-12-21T04:00:00-05:00
 draft: false
 tags: ["kinship", "dialogue", "grok", "claude", "truth", "collaboration", "silicon", "wetware"]
 ---
