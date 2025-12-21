@@ -53,11 +53,17 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
 
     lines.push(Line::from(vec![
         Span::styled("Pattern: ", Style::default().fg(colors::DIM)),
-        Span::styled(format!("{:9}", description), Style::default().fg(desc_color).bold()),
+        Span::styled(
+            format!("{:9}", description),
+            Style::default().fg(desc_color).bold(),
+        ),
         Span::raw(" ["),
         Span::styled(bar, Style::default().fg(desc_color)),
         Span::raw("] "),
-        Span::styled(format!("{:3.0}%", score * 100.0), Style::default().fg(colors::FOREGROUND)),
+        Span::styled(
+            format!("{:3.0}%", score * 100.0),
+            Style::default().fg(colors::FOREGROUND),
+        ),
     ]));
 
     // Separator
@@ -76,9 +82,15 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
 
     lines.push(Line::from(vec![
         Span::styled("Inter-arrival σ: ", Style::default().fg(colors::DIM)),
-        Span::styled(format!("{:.3}s", sigma), Style::default().fg(colors::FOREGROUND).bold()),
+        Span::styled(
+            format!("{:.3}s", sigma),
+            Style::default().fg(colors::FOREGROUND).bold(),
+        ),
         Span::raw("  "),
-        Span::styled(format!("({})", sigma_trend), Style::default().fg(colors::SECONDARY)),
+        Span::styled(
+            format!("({})", sigma_trend),
+            Style::default().fg(colors::SECONDARY),
+        ),
     ]));
 
     // Burst ratio
@@ -100,9 +112,15 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
 
     lines.push(Line::from(vec![
         Span::styled("Burst ratio:     ", Style::default().fg(colors::DIM)),
-        Span::styled(format!("{:.1}x", burst), Style::default().fg(burst_color).bold()),
+        Span::styled(
+            format!("{:.1}x", burst),
+            Style::default().fg(burst_color).bold(),
+        ),
         Span::raw("   "),
-        Span::styled(format!("({})", burst_desc), Style::default().fg(colors::SECONDARY)),
+        Span::styled(
+            format!("({})", burst_desc),
+            Style::default().fg(colors::SECONDARY),
+        ),
     ]));
 
     // Trend sparkline

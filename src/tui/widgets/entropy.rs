@@ -92,7 +92,6 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
 mod tests {
     use super::*;
     use crate::tui::app::ThoughtStatus;
-    
 
     #[test]
     fn entropy_description_emergent() {

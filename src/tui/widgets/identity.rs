@@ -123,7 +123,10 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
         ]),
         // Resurfacing line with detailed info when available
         {
-            let mut spans = vec![Span::styled("Resurfacing: ", Style::default().fg(colors::DIM))];
+            let mut spans = vec![Span::styled(
+                "Resurfacing: ",
+                Style::default().fg(colors::DIM),
+            )];
 
             // Show count with glow effect when active
             if app.is_resurfacing_active() {
@@ -155,7 +158,11 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
                 ));
                 spans.push(Span::styled(
                     format!(" ({})", delta_str),
-                    Style::default().fg(if delta > 0.0 { colors::SUCCESS } else { colors::WARNING }),
+                    Style::default().fg(if delta > 0.0 {
+                        colors::SUCCESS
+                    } else {
+                        colors::WARNING
+                    }),
                 ));
             }
 

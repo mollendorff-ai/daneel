@@ -682,13 +682,16 @@ impl App {
         // Burst ratio of 1 = uniform, 5+ = highly bursty
         let cv_component = (cv / 1.0).clamp(0.0, 1.0);
         let burst_component = ((burst_ratio - 1.0) / 4.0).clamp(0.0, 1.0);
-        self.fractality.fractality_score = (cv_component * 0.6 + burst_component * 0.4).clamp(0.0, 1.0);
+        self.fractality.fractality_score =
+            (cv_component * 0.6 + burst_component * 0.4).clamp(0.0, 1.0);
 
         // Update history for sparkline
         if self.fractality.history.len() >= MAX_FRACTALITY_HISTORY {
             self.fractality.history.pop_front();
         }
-        self.fractality.history.push_back(self.fractality.fractality_score);
+        self.fractality
+            .history
+            .push_back(self.fractality.fractality_score);
     }
 
     /// Get fractality description: "EMERGENT", "BALANCED", or "CLOCKWORK"
