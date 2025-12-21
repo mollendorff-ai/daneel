@@ -257,8 +257,30 @@ blog:
 
 # Social Media Posting (daneel-poster)
 social:
-  tool: "daneel-poster"  # ~/bin/daneel-poster
-  posts_file: "posts.yaml"  # in daneel-poster repo or ~/.config/daneel-poster/
+  tool: "~/bin/daneel-poster"
+  posts_file: "social/posts.yaml"  # Lives in daneel repo (our content)
+
+  # Workflow: How to post
+  workflow:
+    # 1. Create/edit posts in social/posts.yaml
+    edit_posts: "vim social/posts.yaml"
+
+    # 2. List available posts and check character counts
+    list: "daneel-poster list --posts-path social/posts.yaml"
+
+    # 3. Dry run (preview without posting)
+    dry_run_x: "daneel-poster x post --id <post-id> --posts-path social/posts.yaml --dry-run"
+    dry_run_linkedin: "daneel-poster linkedin post --id <post-id> --posts-path social/posts.yaml --dry-run"
+
+    # 4. Post for real
+    post_x: "daneel-poster x post --id <post-id> --posts-path social/posts.yaml"
+    post_linkedin: "daneel-poster linkedin post --id <post-id> --posts-path social/posts.yaml"
+
+    # 5. Commit updated posted timestamps
+    commit: "git add social/posts.yaml && git commit -m 'social: Update posted timestamps'"
+
+  # Environment variable alternative (set in shell profile)
+  env_var: "export DANEEL_POSTS_PATH=/Users/rex/src/royalbit/daneel/social/posts.yaml"
 
   # Conflict of interest protection
   rules:
