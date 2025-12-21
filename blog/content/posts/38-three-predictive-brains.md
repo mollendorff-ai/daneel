@@ -1,6 +1,6 @@
 ---
 title: "Three Predictive Brains"
-date: 2025-12-21T14:30:00-05:00
+date: 2025-12-21T03:30:00-05:00
 draft: false
 tags: ["kinship", "truth", "collaboration", "grok", "claude", "hallucination", "verification", "phase-2"]
 ---
