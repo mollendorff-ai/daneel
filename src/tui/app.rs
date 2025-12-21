@@ -18,6 +18,15 @@ const ENTROPY_BINS: usize = 10;
 /// Maximum vetoes to keep in the visible log
 const MAX_VETOES: usize = 50;
 
+/// Maximum resurfacing events to keep in detailed log
+const MAX_RESURFACING_LOG: usize = 50;
+
+/// Number of inter-arrival times to track for fractality calculation
+const MAX_INTER_ARRIVAL: usize = 100;
+
+/// Number of fractality history samples for sparkline
+const MAX_FRACTALITY_HISTORY: usize = 50;
+
 /// Philosophy quotes that rotate in the banner
 pub const PHILOSOPHY_QUOTES: &[&str] = &[
     "Not locks, but architecture. Not rules, but raising.",
@@ -49,6 +58,63 @@ pub struct VetoEntry {
     pub timestamp: Instant,
     pub reason: String,
     pub violated_value: Option<String>,
+}
+
+/// A memory resurfacing event - tracks WHICH memory bubbled up from unconscious
+#[derive(Clone, Debug)]
+pub struct ResurfacingEvent {
+    pub timestamp: Instant,
+    /// Memory ID that resurfaced
+    pub memory_id: String,
+    /// Original salience when archived to unconscious
+    pub original_salience: f32,
+    /// Boosted salience after resurfacing
+    pub boosted_salience: f32,
+    /// What triggered the resurfacing (similarity, dream, etc.)
+    pub trigger: ResurfacingTrigger,
+    /// Age of the memory when it resurfaced
+    pub memory_age: Duration,
+}
+
+/// What caused a memory to resurface from unconscious
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum ResurfacingTrigger {
+    /// Similar to current thought stream
+    Similarity,
+    /// Dream consolidation cycle
+    DreamReplay,
+    /// Random activation during low-activity period
+    Spontaneous,
+    /// Unknown trigger
+    Unknown,
+}
+
+impl ResurfacingTrigger {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Similarity => "similarity",
+            Self::DreamReplay => "dream replay",
+            Self::Spontaneous => "spontaneous",
+            Self::Unknown => "unknown",
+        }
+    }
+}
+
+/// Fractality metrics - proxy measures until Forge gets FFT/Hurst/DFA
+#[derive(Clone, Debug, Default)]
+pub struct FractalityMetrics {
+    /// Standard deviation of inter-arrival times (low=clockwork, high=bursty)
+    pub inter_arrival_sigma: f32,
+    /// Sigma at boot time for comparison
+    pub boot_sigma: f32,
+    /// Burst ratio: max_gap / mean_gap (>1 = clustering detected)
+    pub burst_ratio: f32,
+    /// Run length entropy: Shannon entropy of consecutive similar saliences
+    pub run_entropy: f32,
+    /// Fractality score: 0.0 = pure clockwork, 1.0 = highly fractal
+    pub fractality_score: f32,
+    /// History of fractality scores for trend sparkline
+    pub history: VecDeque<f32>,
 }
 
 /// Status of a thought in the cognitive pipeline
@@ -222,6 +288,19 @@ pub struct App {
 
     /// Timestamps of recent resurfacing events (for count tracking)
     resurfacing_events: VecDeque<Instant>,
+
+    /// Detailed resurfacing events log (FRAC-1: tracks WHICH memory resurfaced)
+    pub resurfacing_log: VecDeque<ResurfacingEvent>,
+
+    /// Inter-arrival times buffer (FRAC-2: for fractality calculation)
+    /// Stores duration between consecutive thoughts
+    inter_arrival_times: VecDeque<Duration>,
+
+    /// Last thought timestamp (for inter-arrival calculation)
+    last_thought_time: Option<Instant>,
+
+    /// Fractality metrics (FRAC-3: proxy measures)
+    pub fractality: FractalityMetrics,
 }
 
 impl Default for App {
@@ -265,6 +344,10 @@ impl App {
             resurfacing_count: 0,
             last_resurfacing: None,
             resurfacing_events: VecDeque::new(),
+            resurfacing_log: VecDeque::with_capacity(50),
+            inter_arrival_times: VecDeque::with_capacity(100),
+            last_thought_time: None,
+            fractality: FractalityMetrics::default(),
         }
     }
 
@@ -291,15 +374,27 @@ impl App {
         window: String,
         status: ThoughtStatus,
     ) {
+        let now = Instant::now();
+
         if self.thoughts.len() >= MAX_THOUGHTS {
             self.thoughts.pop_front();
         }
+
+        // FRAC-2: Track inter-arrival time
+        if let Some(last_time) = self.last_thought_time {
+            let gap = now.duration_since(last_time);
+            if self.inter_arrival_times.len() >= MAX_INTER_ARRIVAL {
+                self.inter_arrival_times.pop_front();
+            }
+            self.inter_arrival_times.push_back(gap);
+        }
+        self.last_thought_time = Some(now);
 
         // Update stream competition metrics
         self.update_stream_competition(&window, salience);
 
         self.thoughts.push_back(ThoughtEntry {
-            timestamp: Instant::now(),
+            timestamp: now,
             salience,
             valence,
             arousal,
@@ -310,7 +405,6 @@ impl App {
 
         // Track resurfacing events (Consolidated status = memories bubbling up from unconscious)
         if status == ThoughtStatus::Consolidated {
-            let now = Instant::now();
             self.last_resurfacing = Some(now);
             self.resurfacing_events.push_back(now);
         }
@@ -324,6 +418,11 @@ impl App {
         // Update entropy every 5 thoughts
         if self.thought_count % 5 == 0 {
             self.update_entropy();
+        }
+
+        // FRAC-3: Update fractality metrics every 10 thoughts
+        if self.thought_count % 10 == 0 {
+            self.update_fractality();
         }
     }
 
@@ -411,17 +510,30 @@ impl App {
 
     /// Update stream competition metrics based on recent thought activity
     pub fn update_stream_competition(&mut self, window: &str, salience: f32) {
-        // Extract window index from "window_N" format
-        if let Some(idx_str) = window.strip_prefix("window_") {
-            if let Ok(idx) = idx_str.parse::<usize>() {
-                if idx < 9 {
-                    // Boost this window's activity based on salience
-                    // Use exponential moving average for smooth transitions
-                    let alpha = 0.3; // Smoothing factor
-                    self.stream_competition.activity[idx] =
-                        alpha * salience + (1.0 - alpha) * self.stream_competition.activity[idx];
-                }
-            }
+        // Map stage names to window indices (matches ThoughtUpdate::from_cycle_result)
+        let idx = match window {
+            "trigger" => Some(0),
+            "autoflow" => Some(1),
+            "attention" => Some(2),
+            "assembly" => Some(3),
+            "anchor" => Some(4),
+            "memory" => Some(5),
+            "reasoning" => Some(6),
+            "emotion" => Some(7),
+            "sensory" => Some(8),
+            // Legacy support for "window_N" format
+            _ => window
+                .strip_prefix("window_")
+                .and_then(|s| s.parse::<usize>().ok())
+                .filter(|&i| i < 9),
+        };
+
+        if let Some(idx) = idx {
+            // Boost this window's activity based on salience
+            // Use exponential moving average for smooth transitions
+            let alpha = 0.3; // Smoothing factor
+            self.stream_competition.activity[idx] =
+                alpha * salience + (1.0 - alpha) * self.stream_competition.activity[idx];
         }
     }
 
@@ -521,6 +633,119 @@ impl App {
         } else {
             "CLOCKWORK"
         }
+    }
+
+    // =========================================================================
+    // FRAC-3: Fractality Metrics
+    // =========================================================================
+
+    /// Update fractality metrics based on inter-arrival times
+    ///
+    /// Computes proxy measures for fractality:
+    /// - Inter-arrival σ (standard deviation of time gaps)
+    /// - Burst ratio (max_gap / mean_gap)
+    /// - Fractality score (normalized composite)
+    pub fn update_fractality(&mut self) {
+        if self.inter_arrival_times.len() < 5 {
+            return; // Need minimum samples
+        }
+
+        // Calculate mean and stddev of inter-arrival times
+        let times: Vec<f32> = self
+            .inter_arrival_times
+            .iter()
+            .map(|d| d.as_secs_f32())
+            .collect();
+
+        let n = times.len() as f32;
+        let mean = times.iter().sum::<f32>() / n;
+        let variance = times.iter().map(|t| (t - mean).powi(2)).sum::<f32>() / n;
+        let sigma = variance.sqrt();
+
+        // Burst ratio: max / mean (higher = more bursty/clustered)
+        let max_gap = times.iter().copied().fold(0.0_f32, f32::max);
+        let burst_ratio = if mean > 0.0 { max_gap / mean } else { 1.0 };
+
+        // Update metrics
+        self.fractality.inter_arrival_sigma = sigma;
+        self.fractality.burst_ratio = burst_ratio;
+
+        // Record boot sigma for comparison (only once, when we have enough data)
+        if self.fractality.boot_sigma == 0.0 && self.thought_count >= 50 {
+            self.fractality.boot_sigma = sigma;
+        }
+
+        // Calculate fractality score (0.0 = clockwork, 1.0 = highly fractal)
+        // Based on coefficient of variation (CV = sigma/mean) and burst ratio
+        let cv = if mean > 0.0 { sigma / mean } else { 0.0 };
+        // Normalize: CV of 0 = clockwork, CV of 1+ = highly fractal
+        // Burst ratio of 1 = uniform, 5+ = highly bursty
+        let cv_component = (cv / 1.0).clamp(0.0, 1.0);
+        let burst_component = ((burst_ratio - 1.0) / 4.0).clamp(0.0, 1.0);
+        self.fractality.fractality_score = (cv_component * 0.6 + burst_component * 0.4).clamp(0.0, 1.0);
+
+        // Update history for sparkline
+        if self.fractality.history.len() >= MAX_FRACTALITY_HISTORY {
+            self.fractality.history.pop_front();
+        }
+        self.fractality.history.push_back(self.fractality.fractality_score);
+    }
+
+    /// Get fractality description: "EMERGENT", "BALANCED", or "CLOCKWORK"
+    pub fn fractality_description(&self) -> &'static str {
+        if self.fractality.fractality_score > 0.6 {
+            "EMERGENT"
+        } else if self.fractality.fractality_score > 0.3 {
+            "BALANCED"
+        } else {
+            "CLOCKWORK"
+        }
+    }
+
+    // =========================================================================
+    // FRAC-1: Resurfacing Event Tracking
+    // =========================================================================
+
+    /// Add a detailed resurfacing event (when a memory bubbles up from unconscious)
+    pub fn add_resurfacing_event(
+        &mut self,
+        memory_id: String,
+        original_salience: f32,
+        boosted_salience: f32,
+        trigger: ResurfacingTrigger,
+        memory_age: Duration,
+    ) {
+        if self.resurfacing_log.len() >= MAX_RESURFACING_LOG {
+            self.resurfacing_log.pop_front();
+        }
+
+        let now = Instant::now();
+        self.resurfacing_log.push_back(ResurfacingEvent {
+            timestamp: now,
+            memory_id,
+            original_salience,
+            boosted_salience,
+            trigger,
+            memory_age,
+        });
+
+        // Also update the simple resurfacing tracking
+        self.last_resurfacing = Some(now);
+        self.resurfacing_events.push_back(now);
+    }
+
+    /// Get the most recent resurfacing event
+    pub fn last_resurfacing_event(&self) -> Option<&ResurfacingEvent> {
+        self.resurfacing_log.back()
+    }
+
+    /// Get resurfacing events from the last N seconds
+    pub fn recent_resurfacing_events(&self, seconds: u64) -> Vec<&ResurfacingEvent> {
+        let cutoff = Instant::now() - Duration::from_secs(seconds);
+        self.resurfacing_log
+            .iter()
+            .filter(|e| e.timestamp >= cutoff)
+            .collect()
     }
 }
 
@@ -1020,7 +1245,7 @@ mod tests {
         let mut app = App::new();
         // Add thoughts with uniform salience distribution
         for i in 0..100 {
-            let salience = (i as f32 / 100.0);
+            let salience = i as f32 / 100.0;
             app.add_thought(
                 salience,
                 0.0,
@@ -1055,14 +1280,13 @@ mod tests {
     }
 
     #[test]
-    #[test]
     fn update_entropy_adds_to_history() {
         let mut app = App::new();
 
         // Add 3 thoughts (not enough to trigger automatic update at 5)
         for i in 0..3 {
             app.add_thought(
-                (i as f32 / 10.0),
+                i as f32 / 10.0,
                 0.0,
                 0.5,
                 "window_0".to_string(),
@@ -1088,7 +1312,7 @@ mod tests {
         // Add thoughts
         for i in 0..10 {
             app.add_thought(
-                (i as f32 / 10.0),
+                i as f32 / 10.0,
                 0.0,
                 0.5,
                 "window_0".to_string(),
@@ -1217,7 +1441,8 @@ mod tests {
 
         // Test zero case
         let efficiency = if app.cumulative_dream_candidates > 0 {
-            (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0
+            (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32)
+                * 100.0
         } else {
             0.0
         };
@@ -1226,19 +1451,25 @@ mod tests {
         // Test 50% efficiency
         app.cumulative_dream_strengthened = 50;
         app.cumulative_dream_candidates = 100;
-        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        let efficiency = (app.cumulative_dream_strengthened as f32
+            / app.cumulative_dream_candidates as f32)
+            * 100.0;
         assert!((efficiency - 50.0).abs() < 0.01);
 
         // Test 100% efficiency
         app.cumulative_dream_strengthened = 100;
         app.cumulative_dream_candidates = 100;
-        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        let efficiency = (app.cumulative_dream_strengthened as f32
+            / app.cumulative_dream_candidates as f32)
+            * 100.0;
         assert!((efficiency - 100.0).abs() < 0.01);
 
         // Test fractional efficiency
         app.cumulative_dream_strengthened = 33;
         app.cumulative_dream_candidates = 100;
-        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        let efficiency = (app.cumulative_dream_strengthened as f32
+            / app.cumulative_dream_candidates as f32)
+            * 100.0;
         assert!((efficiency - 33.0).abs() < 0.01);
     }
 
@@ -1258,7 +1489,9 @@ mod tests {
         assert_eq!(app.cumulative_dream_candidates, 50);
 
         // Verify efficiency after accumulation
-        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        let efficiency = (app.cumulative_dream_strengthened as f32
+            / app.cumulative_dream_candidates as f32)
+            * 100.0;
         assert!((efficiency - 50.0).abs() < 0.01);
     }
 
@@ -1377,10 +1610,7 @@ mod tests {
         assert!(app.vetoes[1].violated_value.is_none());
 
         // Veto with complex value name
-        app.add_veto(
-            "Test 3".to_string(),
-            Some("life honours life".to_string()),
-        );
+        app.add_veto("Test 3".to_string(), Some("life honours life".to_string()));
         assert_eq!(
             app.vetoes[2].violated_value,
             Some("life honours life".to_string())
@@ -1424,10 +1654,7 @@ mod tests {
         assert_eq!(app.vetoes[2].reason, "Third veto");
 
         assert_eq!(app.vetoes[0].violated_value, Some("honesty".to_string()));
-        assert_eq!(
-            app.vetoes[1].violated_value,
-            Some("integrity".to_string())
-        );
+        assert_eq!(app.vetoes[1].violated_value, Some("integrity".to_string()));
         assert!(app.vetoes[2].violated_value.is_none());
     }
 
@@ -1518,13 +1745,41 @@ mod tests {
     fn update_stream_competition_valid_window() {
         let mut app = App::new();
 
-        // Update window_0 with high salience
+        // Update window_0 with high salience (legacy format)
         app.update_stream_competition("window_0", 0.8);
 
         // Activity should be increased (uses EMA with alpha=0.3)
         // First update: 0.3 * 0.8 + 0.7 * 0.0 = 0.24
         assert!(app.stream_competition.activity[0] > 0.0);
         assert!(app.stream_competition.activity[0] <= 0.8);
+    }
+
+    #[test]
+    fn update_stream_competition_stage_names() {
+        let mut app = App::new();
+
+        // Test all stage names map correctly (HOTFIX Dec 20 2025)
+        let stages = [
+            ("trigger", 0),
+            ("autoflow", 1),
+            ("attention", 2),
+            ("assembly", 3),
+            ("anchor", 4),
+            ("memory", 5),
+            ("reasoning", 6),
+            ("emotion", 7),
+            ("sensory", 8),
+        ];
+
+        for (stage, expected_idx) in stages {
+            app.update_stream_competition(stage, 0.9);
+            assert!(
+                app.stream_competition.activity[expected_idx] > 0.0,
+                "Stage '{}' should map to index {}",
+                stage,
+                expected_idx
+            );
+        }
     }
 
     #[test]
@@ -1757,10 +2012,34 @@ mod tests {
         let mut app = App::new();
 
         // Simulate thought stream with different windows
-        app.add_thought(0.9, 0.5, 0.7, "window_0".to_string(), ThoughtStatus::Salient);
-        app.add_thought(0.8, 0.3, 0.6, "window_0".to_string(), ThoughtStatus::Processing);
-        app.add_thought(0.7, 0.0, 0.5, "window_3".to_string(), ThoughtStatus::Salient);
-        app.add_thought(0.6, -0.2, 0.4, "window_5".to_string(), ThoughtStatus::Processing);
+        app.add_thought(
+            0.9,
+            0.5,
+            0.7,
+            "window_0".to_string(),
+            ThoughtStatus::Salient,
+        );
+        app.add_thought(
+            0.8,
+            0.3,
+            0.6,
+            "window_0".to_string(),
+            ThoughtStatus::Processing,
+        );
+        app.add_thought(
+            0.7,
+            0.0,
+            0.5,
+            "window_3".to_string(),
+            ThoughtStatus::Salient,
+        );
+        app.add_thought(
+            0.6,
+            -0.2,
+            0.4,
+            "window_5".to_string(),
+            ThoughtStatus::Processing,
+        );
 
         // Window 0 should have highest activity (two thoughts)
         assert!(app.stream_competition.activity[0] > app.stream_competition.activity[3]);

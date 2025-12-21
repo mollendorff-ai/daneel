@@ -19,6 +19,22 @@ use ratatui::{
 use crate::tui::app::App;
 use crate::tui::colors;
 
+/// Stage names matching ThoughtUpdate::from_cycle_result
+const STAGE_NAMES: [&str; 9] = [
+    "TRIGGER ",
+    "AUTOFLOW",
+    "ATTENTION",
+    "ASSEMBLY",
+    "ANCHOR  ",
+    "MEMORY  ",
+    "REASON  ",
+    "EMOTION ",
+    "SENSORY ",
+];
+
+/// Unicode block elements for sparklines
+const SPARK_CHARS: [char; 8] = [' ', '▁', '▂', '▃', '▄', '▅', '▆', '█'];
+
 pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let block = Block::default()
         .title(" STREAM COMPETITION ")
@@ -55,7 +71,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
         .zip(app.stream_competition.history.iter())
         .enumerate()
     {
-        let window_label = format!("W{}", i + 1);
+        let window_label = STAGE_NAMES[i];
         let is_dominant = i == app.stream_competition.dominant_stream;
 
         // Bar visualization (20 chars wide)
@@ -80,14 +96,14 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
         // Build the line
         let mut line_spans = vec![
             Span::styled(
-                format!("{:3}", window_label),
+                window_label,
                 if is_dominant {
                     Style::default().fg(colors::HIGHLIGHT).bold()
                 } else {
                     Style::default().fg(colors::FOREGROUND)
                 },
             ),
-            Span::raw("  "),
+            Span::raw(" "),
             Span::styled(bar, Style::default().fg(bar_color)),
             Span::raw("  "),
             Span::styled(
@@ -148,9 +164,6 @@ fn create_sparkline(history: &[f32], width: usize) -> String {
     if history.is_empty() {
         return " ".repeat(width);
     }
-
-    // Use Unicode block elements for sparklines
-    const SPARK_CHARS: [char; 8] = [' ', '▁', '▂', '▃', '▄', '▅', '▆', '█'];
 
     // Take the last `width` samples
     let start = history.len().saturating_sub(width);
@@ -251,14 +264,14 @@ mod tests {
     fn create_sparkline_uses_8_levels() {
         // Test that we use all 8 spark chars: ' ', '▁', '▂', '▃', '▄', '▅', '▆', '█'
         let history = vec![
-            0.0,      // ' '
-            0.14,     // '▁'
-            0.28,     // '▂'
-            0.42,     // '▃'
-            0.57,     // '▄'
-            0.71,     // '▅'
-            0.85,     // '▆'
-            1.0,      // '█'
+            0.0,  // ' '
+            0.14, // '▁'
+            0.28, // '▂'
+            0.42, // '▃'
+            0.57, // '▄'
+            0.71, // '▅'
+            0.85, // '▆'
+            1.0,  // '█'
         ];
         let sparkline = create_sparkline(&history, 10);
         let chars: Vec<char> = sparkline.chars().collect();

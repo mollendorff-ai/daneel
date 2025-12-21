@@ -5,6 +5,7 @@
 pub mod banner;
 pub mod competition;
 pub mod entropy;
+pub mod fractality;
 pub mod help;
 pub mod identity;
 pub mod memory;
