@@ -1970,3 +1970,476 @@ references:
   ref_id: TMI-DCD-1
   key_finding: 'Doubt-Criticize-Decide technique for conscious intervention in automatic thought'
   relevance: 'TMI mechanism that VolitionActor implements architecturally'
+
+# =============================================================================
+# ADR-038: Phase 2 External Stimuli Research References
+# Added: 2025-12-21
+# =============================================================================
+
+# Criticality Metrics [CRIT-*]
+- url: http://www.scholarpedia.org/article/Neuronal_avalanche
+  title: 'Neuronal Avalanche - Scholarpedia'
+  categories:
+  - neuroscience
+  - criticality
+  - avalanches
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: CRIT-1
+  key_finding: 'Critical exponent α ≈ -3/2 for avalanche size distribution; branching ratio σ ≈ 1 at criticality'
+  relevance: 'Primary metric for detecting criticality in DANEEL'
+
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC6871218/
+  title: 'Avalanche dynamics and the human connectome'
+  categories:
+  - neuroscience
+  - criticality
+  - avalanches
+  - academic
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: CRIT-2
+  key_finding: 'Branching ratio σ < 1 subcritical, σ = 1 critical, σ > 1 supercritical'
+  relevance: 'Branching ratio calculation method for DANEEL metrics'
+
+- url: https://www.frontiersin.org/articles/10.3389/fphys.2012.00450/full
+  title: 'DFA: A Scale-Free View on Neuronal Oscillations'
+  categories:
+  - neuroscience
+  - dfa
+  - criticality
+  - academic
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: CRIT-3
+  key_finding: 'DFA exponent α ≈ 1.0 indicates criticality; α = 0.5 white noise, α = 1.5 Brownian'
+  relevance: 'Detrended Fluctuation Analysis implementation for DANEEL'
+
+- url: https://www.nature.com/articles/s41467-021-24260-z
+  title: 'Avalanches and edge-of-chaos learning in small, randomly connected neural networks'
+  categories:
+  - neuroscience
+  - criticality
+  - edge-of-chaos
+  - nature
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: CRIT-4
+  key_finding: 'Avalanche criticality and edge-of-chaos criticality are DISTINCT phenomena - do not necessarily co-occur'
+  relevance: 'Critical distinction for Phase 2 measurement protocol'
+
+- url: https://www.nature.com/articles/s41598-018-37920-w
+  title: 'Critical synchronization and 1/f noise in inhibitory/excitatory rich-club neural networks'
+  categories:
+  - neuroscience
+  - criticality
+  - power-spectrum
+  - nature
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: CRIT-5
+  key_finding: 'At criticality: 1/f^β with β ≈ 1-2 (pink noise); subcritical: flat spectrum; supercritical: gamma peak'
+  relevance: 'Power spectral density analysis for DANEEL'
+
+- url: http://www.scholarpedia.org/article/Scale-free_neocortical_dynamics
+  title: 'Scale-free neocortical dynamics - Scholarpedia'
+  categories:
+  - neuroscience
+  - criticality
+  - scale-free
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: CRIT-6
+  key_finding: 'Scale-free dynamics indicate no characteristic scale; power-law distributions in activity durations'
+  relevance: 'Theoretical foundation for emergent dynamics'
+
+# Noise Injection Techniques [NOISE-*]
+- url: https://arxiv.org/abs/1603.09382
+  title: 'Deep Networks with Stochastic Depth'
+  categories:
+  - ml
+  - noise-injection
+  - stochastic-depth
+  - arxiv
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  authors: 'Huang et al.'
+  year: 2016
+  ref_id: NOISE-1
+  key_finding: 'Randomly dropping entire layers during training reduces vanishing gradients, enables 1200+ layer networks'
+  relevance: 'Stochastic depth technique for DANEEL perturbation'
+
+- url: https://openreview.net/pdf?id=SylO2yStDr
+  title: 'Reducing Transformer Depth on Demand with Structured Dropout'
+  categories:
+  - ml
+  - transformers
+  - layerdrop
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: NOISE-2
+  key_finding: 'LayerDrop drops entire transformer layers as groups, enabling flexible depth at inference'
+  relevance: 'Structured dropout approach for cognitive stage perturbation'
+
+- url: https://www.ibm.com/think/topics/llm-temperature
+  title: 'What is LLM Temperature?'
+  categories:
+  - ml
+  - llm
+  - temperature
+  - ibm
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: NOISE-3
+  key_finding: 'Temperature τ < 0.5 deterministic, τ > 1.0 creative/chaotic; modifies softmax distribution'
+  relevance: 'Temperature-based perturbation for salience scoring'
+
+- url: https://arxiv.org/html/2501.12314v1
+  title: 'Uncertainty Quantification With Monte Carlo Noise Injection'
+  categories:
+  - ml
+  - noise-injection
+  - bayesian
+  - arxiv
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  year: 2025
+  ref_id: NOISE-4
+  key_finding: 'Weight noise injection is equivalent to Bayesian inference on deep Gaussian processes'
+  relevance: 'Theoretical foundation for noise injection in DANEEL'
+
+- url: https://machinelearningmastery.com/train-neural-networks-with-noise-to-reduce-overfitting/
+  title: 'Train Neural Networks With Noise to Reduce Overfitting'
+  categories:
+  - ml
+  - noise-injection
+  - regularization
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: NOISE-5
+  key_finding: 'Three injection points: input noise, weight noise, gradient noise; equivalent to Tikhonov regularization'
+  relevance: 'Practical noise injection implementation guide'
+
+- url: https://link.springer.com/chapter/10.1007/978-3-030-64221-1_16
+  title: 'Adaptive Gaussian Noise Injection Regularization'
+  categories:
+  - ml
+  - noise-injection
+  - adaptive
+  - springer
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  year: 2020
+  ref_id: NOISE-6
+  key_finding: 'Whiteout technique: adaptive Gaussian noise outperforms Bernoulli-based dropout by 2-3%'
+  relevance: 'Adaptive noise injection for DANEEL stimulus'
+
+# Cognitive Architecture Stimuli [COG-*]
+- url: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0014803
+  title: 'The Timing of the Cognitive Cycle'
+  categories:
+  - cognitive-architecture
+  - lida
+  - timing
+  - plos
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: COG-1
+  key_finding: 'LIDA cognitive cycle: 260-390ms total; understanding 80-100ms, consciousness 200-280ms, action 60-110ms'
+  relevance: 'Timing parameters for DANEEL sensory injection'
+
+- url: https://ccrg.cs.memphis.edu/assets/papers/2012/GWT-LIDA-neuroscience.pdf
+  title: 'Global Workspace Theory, its LIDA model and the underlying neuroscience'
+  categories:
+  - cognitive-architecture
+  - lida
+  - gwt
+  - academic
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: COG-2
+  key_finding: 'Conscious contents arise from competition among coalitions; codelets as specialized mini-agents'
+  relevance: 'Codelet architecture for DANEEL sensory processing'
+
+- url: https://advancesincognitivesystems.github.io/acs2021/data/ACS-21_paper_6.pdf
+  title: 'An Analysis and Comparison of ACT-R and Soar'
+  categories:
+  - cognitive-architecture
+  - actr
+  - soar
+  - comparison
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: COG-3
+  key_finding: 'Both use buffer-based perception; working memory integrates sensor data with stored agent data'
+  relevance: 'Buffer architecture comparison for DANEEL design'
+
+- url: https://arxiv.org/html/2402.03824v3
+  title: 'A Call for Embodied AI'
+  categories:
+  - cognitive-architecture
+  - embodied-ai
+  - arxiv
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  year: 2024
+  ref_id: COG-4
+  key_finding: 'Bidirectional coupling essential: perception → action → environment → perception'
+  relevance: 'Environmental feedback loop for DANEEL Phase 2'
+
+- url: https://en.wikipedia.org/wiki/Embodied_cognition
+  title: 'Embodied cognition - Wikipedia'
+  categories:
+  - cognitive-architecture
+  - embodied-cognition
+  - wikipedia
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: COG-5
+  key_finding: '4E Cognition: Embodied, Embedded, Enacted, Extended - cognition emerges from interaction'
+  relevance: 'Theoretical foundation for environmental interaction'
+
+# Inducing Criticality [INDUCE-*]
+- url: https://www.nature.com/articles/s41598-025-18004-y
+  title: 'Mean-field approximation for calculating critical point in spiking neural networks'
+  categories:
+  - neuroscience
+  - criticality
+  - mean-field
+  - nature
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  year: 2025
+  ref_id: INDUCE-1
+  key_finding: 'Analytical calculation of critical synaptic weight; works with N=100 neurons; Python code available'
+  relevance: 'Mean-field approach for DANEEL criticality tuning'
+  code_url: 'https://github.com/LIFCriticality/Simulator'
+
+- url: https://www.nature.com/articles/s41467-020-16548-3
+  title: 'Between perfectly critical and fully irregular: a reverberating model captures and predicts cortical spike propagation'
+  categories:
+  - neuroscience
+  - criticality
+  - plasticity
+  - nature
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: INDUCE-2
+  key_finding: 'Input strength modulation (K_ext/N 0.25-0.56) tunes subcritical↔critical↔supercritical; task-dependent benefits'
+  relevance: 'Input strength protocol for Phase 2 experiments'
+
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC5446191/
+  title: 'Criticality in the brain: A synthesis of neurobiology, models and cognition'
+  categories:
+  - neuroscience
+  - criticality
+  - sorn
+  - pmc
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: INDUCE-3
+  key_finding: 'SORN: STDP + iSTDP + IP + SN + SP self-organizes to criticality; Gaussian noise σ²=0.05 NECESSARY'
+  relevance: 'Plasticity rules and noise requirements for DANEEL'
+
+- url: https://direct.mit.edu/artl/article/21/1/55/2790/Lambda-and-the-Edge-of-Chaos-in-Recurrent-Neural
+  title: 'Lambda and the Edge of Chaos in Recurrent Neural Networks'
+  categories:
+  - ml
+  - edge-of-chaos
+  - lambda
+  - mit
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: INDUCE-4
+  key_finding: 'λNN parameter analogous to Langton λCA; second edge-of-chaos exists on opposite side of chaotic region'
+  relevance: 'Lambda parameter for characterizing DANEEL dynamics'
+
+- url: https://www.nature.com/articles/s42005-024-01530-y
+  title: 'Robust criticality in FitzHugh-Nagumo oscillator networks'
+  categories:
+  - neuroscience
+  - criticality
+  - oscillators
+  - nature
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  year: 2024
+  ref_id: INDUCE-5
+  key_finding: 'Criticality robust across broad coupling range [20-60] μS; power flow analysis as alternative metric'
+  relevance: 'Robust criticality without fine-tuning for DANEEL'
+
+- url: https://arxiv.org/abs/2108.06395
+  title: 'Criticality in phase oscillator reservoir computing'
+  categories:
+  - ml
+  - reservoir-computing
+  - criticality
+  - arxiv
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: INDUCE-6
+  key_finding: 'Reservoir computing shows power-law avalanches when oscillators synchronize; memristive switching creates avalanches'
+  relevance: 'Reservoir computing parallels for DANEEL architecture'
+
+- url: https://pubmed.ncbi.nlm.nih.gov/15165396/
+  title: 'Real-time computation at the edge of chaos in recurrent neural networks'
+  categories:
+  - ml
+  - edge-of-chaos
+  - computation
+  - pubmed
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: INDUCE-7
+  key_finding: 'Systems at criticality show maximal dynamic range, mutual information, input-output separability'
+  relevance: 'Computational benefits of criticality for DANEEL'
+
+- url: https://www.frontiersin.org/journals/computational-neuroscience/articles/10.3389/fncom.2021.611183/full
+  title: 'Criticality, Connectivity, and Neural Disorder: A Multifaceted Approach'
+  categories:
+  - neuroscience
+  - criticality
+  - connectivity
+  - frontiers
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: INDUCE-8
+  key_finding: 'Small-world topology + balanced E/I ratio + scale-free characteristics support criticality'
+  relevance: 'Network topology requirements for DANEEL'
+
+# Implementation Resources [IMPL-*]
+- url: https://github.com/LIFCriticality/Simulator
+  title: 'LIFCriticality Simulator - Python implementation'
+  categories:
+  - code
+  - criticality
+  - python
+  - github
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  ref_id: IMPL-1
+  key_finding: 'Python code for mean-field criticality calculation in LIF networks'
+  relevance: 'Reference implementation for DANEEL criticality metrics'
+
+# Grok-Recommended References [GROK-*]
+- url: https://www.jneurosci.org/content/23/35/11167
+  title: 'Neuronal Avalanches in Neocortical Circuits'
+  categories:
+  - neuroscience
+  - criticality
+  - avalanches
+  - seminal
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  authors: 'Beggs & Plenz'
+  year: 2003
+  ref_id: GROK-1
+  key_finding: 'First demonstration of power-law avalanche distributions in cortical cultures'
+  relevance: 'Foundational paper for criticality in neural systems'
+
+- url: https://pubmed.ncbi.nlm.nih.gov/17517489/
+  title: 'Edge of Chaos and Prediction of Computational Performance for Neural Circuit Models'
+  categories:
+  - neuroscience
+  - reservoir-computing
+  - edge-of-chaos
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-21
+  authors: 'Legenstein & Maass'
+  year: 2007
+  journal: 'Neural Networks (NOT Neural Computation)'
+  doi: '10.1016/j.neunet.2007.04.017'
+  ref_id: GROK-2
+  key_finding: 'Edge of chaos predicts parameter values yielding maximal computational performance in neural microcircuits'
+  relevance: 'Theoretical foundation for edge-of-chaos computation'
+  note: 'Grok gave wrong URL (MIT Press instead of Elsevier) - corrected via verification'
+
+# GROK-3 REMOVED - HALLUCINATED
+# Original claim: arXiv:1904.05969 "Noise Outsourcing for Efficient Gradient Estimation"
+# Reality: arXiv:1904.05969 is "The Galactic Centre Chimney" - an astrophysics paper
+# Grok fabricated both title and finding about 1/f noise pushing RNNs to criticality
+# No replacement found - the specific claim about "noise outsourcing" appears invented

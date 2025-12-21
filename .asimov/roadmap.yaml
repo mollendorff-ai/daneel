@@ -6,14 +6,111 @@
 # human-like values as emergent properties.
 
 # =============================================================================
-# CURRENT SPRINT: v0.6.0 - 24-Hour Continuity Test
+# CURRENT SPRINT: v0.7.0 - External Stimuli Injection (Phase 2)
 # =============================================================================
 
 current:
-  version: "0.6.0"
+  version: "0.7.0"
   status: wip
-  name: "24-Hour Continuity Test"
-  summary: "Prove the architecture works with sustained runtime"
+  name: "External Stimuli Injection"
+  summary: "Open the loop - inject external stimuli and observe dynamics"
+
+  # ==========================================================================
+  # PHASE 1 COMPLETE: Stability Validated (ADR-036)
+  # ==========================================================================
+  phase1_stability:
+    status: done
+    priority: "COMPLETE"
+    origin: "Rex + Claude Opus 4.5 - Dec 21, 2025"
+    adr: "ADR-036-phase1-stability-validation.md"
+    description: |
+      24+ hours runtime. 573K+ vectors. 118K+ stream entries. Zero crashes.
+      Closed-loop architecture is STABLE. Clockwork dynamics confirmed.
+      Ready for Phase 2: external perturbation.
+
+    results:
+      runtime_hours: 26
+      stream_entries: 118878
+      consolidated_memories: 14412
+      unconscious_vectors: 573724
+      dream_cycles: 500
+      crashes: 0
+
+  # ==========================================================================
+  # CRITICAL: Phase 2 - External Stimuli Injection (ADR-037)
+  # ==========================================================================
+  phase2_external_stimuli:
+    status: pending
+    priority: "CRITICAL"
+    origin: "Rex + Claude Opus 4.5 + Grok (xAI) - Dec 21, 2025"
+    adr: "ADR-037-phase2-external-stimuli-injection.md"
+    description: |
+      Open the loop. Inject external stimuli into thought:sensory stream.
+      Measure: absorption, amplification, adaptation, or criticality?
+
+      The question: What happens when the environment pushes back?
+
+    stimulus_options:
+      - id: "STIM-A"
+        name: "Pure Noise Injection"
+        description: "Random vectors at intervals"
+        complexity: low
+        status: evaluating
+
+      - id: "STIM-B"
+        name: "Patterned Signals"
+        description: "Sine, fractal, chaotic patterns"
+        complexity: medium
+        status: evaluating
+
+      - id: "STIM-C"
+        name: "Semantic Vectors"
+        description: "Text → embedding → injection"
+        complexity: medium
+        status: evaluating
+
+      - id: "STIM-D"
+        name: "Cross-Model Injection"
+        description: "Samples from Grok/Claude activations"
+        complexity: high
+        status: evaluating
+
+      - id: "STIM-E"
+        name: "Hybrid Approach"
+        description: "Noise + patterns + semantics + spikes"
+        complexity: high
+        status: evaluating
+
+    tasks:
+      - id: "PHASE2-1"
+        title: "Design stimulus injection API"
+        status: pending
+        description: "Define StimulusSource trait, injection endpoint"
+
+      - id: "PHASE2-2"
+        title: "Implement noise injector"
+        status: pending
+        description: "Random vector generation, configurable frequency/intensity"
+
+      - id: "PHASE2-3"
+        title: "Add TUI stimulus panel"
+        status: pending
+        description: "Show injection rate, stimulus type, response metrics"
+
+      - id: "PHASE2-4"
+        title: "Measurement protocol"
+        status: pending
+        description: "Response time distribution, entropy shift, memory formation"
+
+      - id: "PHASE2-5"
+        title: "Cross-model experiments (with Grok)"
+        status: blocked
+        blocked_by: "Grok consultation"
+        description: "Sample Grok activations as stimulus source"
+
+    consultation:
+      grok: pending
+      claude: ongoing
 
   # ==========================================================================
   # CRITICAL HOTFIX: Stream Competition Window Format Mismatch
