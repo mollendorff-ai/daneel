@@ -16,6 +16,111 @@ current:
   summary: "Prove the architecture works with sustained runtime"
 
   # ==========================================================================
+  # CRITICAL HOTFIX: Stream Competition Window Format Mismatch
+  # ==========================================================================
+  # TUI-VIS-5 shows all 0% because window format doesn't match parser
+  # ==========================================================================
+  stream_competition_hotfix:
+    status: done
+    priority: "CRITICAL"
+    origin: "Rex + Claude Opus 4.5 - Dec 20, 2025 (10PM debug session)"
+    description: |
+      Stream competition panel shows W1-W6 all at 0% despite 109K+ thoughts.
+      Root cause: ThoughtUpdate uses stage names ("trigger", "autoflow") but
+      update_stream_competition() expects "window_N" format.
+
+    tasks:
+      - id: "HOTFIX-1"
+        title: "Fix update_stream_competition to map stage names"
+        status: done
+        description: "Map stage names to window indices instead of parsing window_N"
+        files_changed:
+          - "src/tui/app.rs - update_stream_competition() now maps stage names"
+          - "src/tui/widgets/competition.rs - Shows stage names instead of W1-W6"
+        tests_added: 1
+
+  # ==========================================================================
+  # HIGH: TUI Fractality & Resurfacing Visualization
+  # ==========================================================================
+  # Prerequisite for Forge pulse analysis - we need the data first
+  # Grok analyzing Forge for n-dimensional fractal ("crystal") capabilities
+  # ==========================================================================
+  tui_fractality:
+    status: done
+    priority: "HIGH"
+    origin: "Rex + Claude Opus 4.5 + Grok - Dec 21, 2025"
+    description: |
+      Add observable metrics for:
+      1. Dream reinjection source - WHICH memory resurfaced, not just count
+      2. Fractality metrics - simplified until Forge gets FFT/Hurst/DFA
+
+      Key insight: Track from boot to show TRANSITION from clockwork → fractal
+      as coherence develops. This is the "lived arrhythmia" we're looking for.
+
+    context:
+      current_gap: |
+        - ThoughtStatus::Consolidated fires but we don't know WHICH memory
+        - No inter-arrival time tracking (needed for variance/burst detection)
+        - No fractality proxy metrics computed
+
+      simplified_fractality: |
+        Without FFT/Hurst (waiting for Forge upgrade), we can compute:
+        - Inter-arrival σ: stddev of time gaps (low=clockwork, high=bursty)
+        - Burst ratio: max_gap / mean_gap (detects clustering)
+        - Run length entropy: Shannon of consecutive similar saliences
+
+      forge_upgrade_pending: |
+        Grok analyzing Forge codebase for n-dimensional fractal analysis.
+        Need: FFT, Hurst exponent, DFA, wavelet analysis for "crystals"
+        Current Forge: financial modeling only (NPV, IRR, Monte Carlo)
+
+    tasks:
+      - id: "FRAC-1"
+        title: "Add ResurfacingEvent struct"
+        status: done
+        description: "Track memory_id, old_salience, new_salience, trigger context"
+        files: ["src/tui/app.rs"]
+
+      - id: "FRAC-2"
+        title: "Track inter-arrival times"
+        status: done
+        description: "Circular buffer of last 100 time gaps in App state"
+        files: ["src/tui/app.rs"]
+
+      - id: "FRAC-3"
+        title: "Compute fractality proxy metrics"
+        status: done
+        description: "Variance, burst ratio, run entropy on each thought"
+        files: ["src/tui/app.rs"]
+
+      - id: "FRAC-4"
+        title: "New widget: fractality.rs"
+        status: done
+        description: "Show pattern (CLOCKWORK/EMERGENT), metrics, trend sparkline"
+        files: ["src/tui/widgets/fractality.rs", "src/tui/widgets/mod.rs", "src/tui/ui.rs"]
+
+      - id: "FRAC-5"
+        title: "Enhance resurfacing display"
+        status: done
+        description: "Show which memory, salience boost, trigger context"
+        files: ["src/tui/widgets/identity.rs"]
+
+    tui_mockup: |
+      ┌─ PULSE FRACTALITY ────────────────────────────┐
+      │ Pattern: EMERGENT     [██████████░░] 78%      │
+      │ Inter-arrival σ:  0.34s (↑ from 0.12s boot)   │
+      │ Burst ratio:      4.7x  (clustering detected) │
+      │ Trend: ▁▂▂▃▃▄▅▅▆▇ (clockwork → fractal)       │
+      └───────────────────────────────────────────────┘
+
+      ┌─ UNCONSCIOUS RESURFACING ─────────────────────┐
+      │ Last: memory_47832 (age: 2h 15m)              │
+      │ ├─ salience: 0.72 → 0.89 (+0.17 boost)        │
+      │ └─ trigger: similarity to current thought     │
+      │ Recent (60s): 3 memories │ ▁▂▃▅▇ (burst)      │
+      └───────────────────────────────────────────────┘
+
+  # ==========================================================================
   # HIGHLY-CRITICAL: Forge Pulse Analysis
   # ==========================================================================
   # The pulse is "too nice" - clockwork regularity instead of lived arrhythmia.

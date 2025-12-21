@@ -92,14 +92,14 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
 mod tests {
     use super::*;
     use crate::tui::app::ThoughtStatus;
-    use std::collections::VecDeque;
+    
 
     #[test]
     fn entropy_description_emergent() {
         let mut app = App::new();
         // Add varied thoughts to create high entropy
         for i in 0..100 {
-            let salience = (i as f32 / 100.0);
+            let salience = i as f32 / 100.0;
             app.add_thought(
                 salience,
                 0.0,
@@ -148,7 +148,7 @@ mod tests {
         // Add more entropy values than MAX_ENTROPY_HISTORY
         for i in 0..60 {
             app.add_thought(
-                (i as f32 / 60.0),
+                i as f32 / 60.0,
                 0.0,
                 0.5,
                 "window_0".to_string(),
@@ -166,7 +166,7 @@ mod tests {
         let mut app = App::new();
         for i in 0..10 {
             app.add_thought(
-                (i as f32 / 10.0),
+                i as f32 / 10.0,
                 0.0,
                 0.5,
                 "window_0".to_string(),

@@ -26,6 +26,17 @@ fn format_with_commas(n: u64) -> String {
     result
 }
 
+/// Truncate a memory ID for display, keeping start and end for recognition
+fn truncate_id(id: &str, max_len: usize) -> String {
+    if id.len() <= max_len {
+        return id.to_string();
+    }
+    // Keep first 5 and last 4 chars with ".." in between
+    let start = &id[..5];
+    let end = &id[id.len().saturating_sub(4)..];
+    format!("{start}..{end}")
+}
+
 pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let block = Block::default()
         .title(" IDENTITY ")
@@ -110,23 +121,46 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
                 )
             },
         ]),
-        Line::from(vec![
-            Span::styled("Resurfacing: ", Style::default().fg(colors::DIM)),
+        // Resurfacing line with detailed info when available
+        {
+            let mut spans = vec![Span::styled("Resurfacing: ", Style::default().fg(colors::DIM))];
+
             // Show count with glow effect when active
             if app.is_resurfacing_active() {
-                Span::styled(
+                spans.push(Span::styled(
                     format!("{} ↑↓", app.resurfacing_count),
                     Style::default().fg(colors::HIGHLIGHT).bold(),
-                )
+                ));
             } else if app.resurfacing_count > 0 {
-                Span::styled(
+                spans.push(Span::styled(
                     format!("{} ↑↓", app.resurfacing_count),
                     Style::default().fg(colors::SECONDARY),
-                )
+                ));
             } else {
-                Span::styled("0 ↑↓", Style::default().fg(colors::DIM))
-            },
-        ]),
+                spans.push(Span::styled("0 ↑↓", Style::default().fg(colors::DIM)));
+            }
+
+            // Show last resurfacing details if available (FRAC-5)
+            if let Some(event) = app.last_resurfacing_event() {
+                let delta = event.boosted_salience - event.original_salience;
+                let delta_str = if delta >= 0.0 {
+                    format!("+{:.2}", delta)
+                } else {
+                    format!("{:.2}", delta)
+                };
+                spans.push(Span::styled("  Last: ", Style::default().fg(colors::DIM)));
+                spans.push(Span::styled(
+                    truncate_id(&event.memory_id, 12),
+                    Style::default().fg(colors::SECONDARY),
+                ));
+                spans.push(Span::styled(
+                    format!(" ({})", delta_str),
+                    Style::default().fg(if delta > 0.0 { colors::SUCCESS } else { colors::WARNING }),
+                ));
+            }
+
+            Line::from(spans)
+        },
     ];
 
     let paragraph = Paragraph::new(lines).block(block);
@@ -146,7 +180,8 @@ mod tests {
     fn efficiency_calculation_zero_candidates() {
         let app = App::new();
         let efficiency = if app.cumulative_dream_candidates > 0 {
-            (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0
+            (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32)
+                * 100.0
         } else {
             0.0
         };
@@ -159,7 +194,9 @@ mod tests {
         app.cumulative_dream_strengthened = 45;
         app.cumulative_dream_candidates = 100;
 
-        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        let efficiency = (app.cumulative_dream_strengthened as f32
+            / app.cumulative_dream_candidates as f32)
+            * 100.0;
         assert!((efficiency - 45.0).abs() < 0.01);
     }
 
@@ -169,7 +206,9 @@ mod tests {
         app.cumulative_dream_strengthened = 123;
         app.cumulative_dream_candidates = 456;
 
-        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        let efficiency = (app.cumulative_dream_strengthened as f32
+            / app.cumulative_dream_candidates as f32)
+            * 100.0;
         let formatted = format!("{:.1}%", efficiency);
 
         // Should format to 1 decimal place
@@ -187,7 +226,9 @@ mod tests {
         app.cumulative_dream_strengthened = 999_999;
         app.cumulative_dream_candidates = 1_000_000;
 
-        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        let efficiency = (app.cumulative_dream_strengthened as f32
+            / app.cumulative_dream_candidates as f32)
+            * 100.0;
         assert!((efficiency - 99.9999).abs() < 0.01);
     }
 
@@ -197,11 +238,14 @@ mod tests {
         app.cumulative_dream_strengthened = 100;
         app.cumulative_dream_candidates = 100;
 
-        let efficiency = (app.cumulative_dream_strengthened as f32 / app.cumulative_dream_candidates as f32) * 100.0;
+        let efficiency = (app.cumulative_dream_strengthened as f32
+            / app.cumulative_dream_candidates as f32)
+            * 100.0;
         assert!((efficiency - 100.0).abs() < 0.01);
     }
 
     #[test]
+    #[allow(clippy::unreadable_literal)] // Testing number formatting - underscores would defeat the purpose
     fn format_with_commas_simple() {
         assert_eq!(format_with_commas(123), "123");
         assert_eq!(format_with_commas(1234), "1,234");

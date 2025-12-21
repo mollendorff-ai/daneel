@@ -58,13 +58,23 @@ pub fn render(frame: &mut Frame, app: &App) {
         ])
         .split(main_chunks[1]);
 
+    // Competition + Fractality row
+    let analysis_chunks = Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([
+            Constraint::Percentage(55), // Stream competition
+            Constraint::Percentage(45), // Pulse fractality
+        ])
+        .split(main_chunks[2]);
+
     // Render all widgets
     widgets::identity::render(frame, top_chunks[0], app);
     widgets::the_box::render(frame, top_chunks[1], app);
     widgets::entropy::render(frame, top_chunks[2], app);
     widgets::thoughts::render(frame, thought_chunks[0], app);
     widgets::veto::render(frame, thought_chunks[1], app);
-    widgets::competition::render(frame, main_chunks[2], app);
+    widgets::competition::render(frame, analysis_chunks[0], app);
+    widgets::fractality::render(frame, analysis_chunks[1], app);
     widgets::memory::render(frame, main_chunks[3], app);
     widgets::banner::render(frame, main_chunks[4], app);
 

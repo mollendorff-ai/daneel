@@ -994,7 +994,9 @@ mod tests {
 
         // Calculate efficiency
         let efficiency = if identity.cumulative_dream_candidates > 0 {
-            (identity.cumulative_dream_strengthened as f32 / identity.cumulative_dream_candidates as f32) * 100.0
+            (identity.cumulative_dream_strengthened as f32
+                / identity.cumulative_dream_candidates as f32)
+                * 100.0
         } else {
             0.0
         };
@@ -1069,7 +1071,9 @@ mod tests {
         assert_eq!(identity.lifetime_dream_count, 100);
 
         // Verify efficiency is 50%
-        let efficiency = (identity.cumulative_dream_strengthened as f32 / identity.cumulative_dream_candidates as f32) * 100.0;
+        let efficiency = (identity.cumulative_dream_strengthened as f32
+            / identity.cumulative_dream_candidates as f32)
+            * 100.0;
         assert!((efficiency - 50.0).abs() < 0.01);
     }
 }

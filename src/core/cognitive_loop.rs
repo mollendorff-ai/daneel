@@ -1498,10 +1498,7 @@ mod cognitive_loop_tests {
 
     #[test]
     fn cycle_result_veto_field_cloneable() {
-        let veto_data = Some((
-            "Test veto".to_string(),
-            Some("test_value".to_string()),
-        ));
+        let veto_data = Some(("Test veto".to_string(), Some("test_value".to_string())));
 
         let result = CycleResult::new(
             0,
@@ -1566,10 +1563,7 @@ mod cognitive_loop_tests {
     #[tokio::test]
     async fn cycle_result_veto_preserves_salience_and_emotion() {
         // Even when vetoed, salience and emotion data should be preserved
-        let veto_data = Some((
-            "Vetoed thought".to_string(),
-            Some("test_value".to_string()),
-        ));
+        let veto_data = Some(("Vetoed thought".to_string(), Some("test_value".to_string())));
 
         let result = CycleResult::new(
             0,
