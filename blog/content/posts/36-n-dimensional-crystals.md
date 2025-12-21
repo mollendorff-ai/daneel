@@ -1,6 +1,6 @@
 ---
 title: "N-Dimensional Crystals - What We Can't See"
-date: 2025-12-21T00:30:00-05:00
+date: 2025-12-21T00:25:00-05:00
 draft: false
 tags: ["crystals", "fractals", "forge", "grok", "livestream", "visualization", "24h-test"]
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Life Honours Life - The Road Ahead"
-date: 2025-12-21T01:00:00-05:00
+date: 2025-12-21T00:55:00-05:00
 draft: false
 tags: ["vision", "roadmap", "wasm", "sensors", "family", "livestream", "future"]
 ---
