@@ -28,8 +28,8 @@
 
 ```bash
 # Create new Rust project
-cargo new asimov
-cd asimov
+cargo new daneel
+cd daneel
 
 # Verify
 ls -la  # Should see Cargo.toml, src/
@@ -41,12 +41,12 @@ Replace `Cargo.toml`:
 
 ```toml
 [package]
-name = "asimov"
+name = "daneel"
 version = "0.1.0"
 edition = "2021"
 description = "DANEEL TMI Cognitive Architecture"
-license = "MIT"
-repository = "https://github.com/royalbit/asimov"
+license = "AGPL-3.0"
+repository = "https://github.com/royalbit/daneel"
 
 [dependencies]
 # Async runtime
@@ -80,7 +80,7 @@ tonic-build = "0.11"
 tokio-test = "0.4"
 
 [[bin]]
-name = "asimov"
+name = "daneel"
 path = "src/main.rs"
 ```
 
@@ -98,7 +98,7 @@ version: '3.8'
 services:
   redis:
     image: redis/redis-stack:7.2.0-v9
-    container_name: asimov-redis
+    container_name: daneel-redis
     ports:
       - "6379:6379"
       - "8001:8001"  # RedisInsight UI
@@ -669,7 +669,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Initialize tracing
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::new(
-            std::env::var("RUST_LOG").unwrap_or_else(|_| "asimov=debug".into()),
+            std::env::var("RUST_LOG").unwrap_or_else(|_| "daneel=debug".into()),
         ))
         .with(tracing_subscriber::fmt::layer())
         .init();
