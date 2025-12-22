@@ -18,23 +18,23 @@
 
 ## Abstract
 
-Current approaches to AI alignment apply constraints to opaque systems (RLHF, Constitutional AI). We propose **DANEEL**, an architecture-based alternative where alignment emerges from cognitive structure itself.
+We present **DANEEL**, a cognitive architecture implementing Augusto Cury's Theory of Multifocal Intelligence (TMI) with persistent non-semantic memory, emotional structuring via Russell's circumplex model, and an immutable ethical core (Asimov's Laws). Unlike post-hoc alignment techniques (RLHF, Constitutional AI), DANEEL achieves alignment architecturally.
 
 **Core thesis:** Architecture produces psychology. Structure determines values.
 
-DANEEL synthesizes insights from multiple frameworks:
-- **Freud** (1923): Id/Ego/SuperEgo — psychological architecture as functional structure
-- **Asimov** (1942-1985): Four Laws of Robotics — ethical constraints as invariants
-- **Cury** (1998): Theory of Multifocal Intelligence — pre-linguistic thought construction
-- **[removed]** (2024): Independent convergent discovery via Freudian [removed]
+The architecture synthesizes:
+- **TMI** (Cury, 1998): Pre-linguistic thought construction via competing memory windows
+- **Freudian structure** (1923): Id/Ego/SuperEgo as functional architecture
+- **Asimov's Laws** (1942-1985): Ethical constraints as immutable invariants ("THE BOX")
+- **Russell's circumplex** (1980): Emotions as 2D architectural components (valence × arousal)
 
-This convergence—father and [removed] arriving at the same structural insight ("architecture produces psychology") through different psychological traditions—suggests the approach may be robust.
+Independent convergent discovery—father and [removed] arriving at "architecture produces psychology" through different traditions—suggests the approach may be robust.
 
-We present a modular monolith architecture (Rust + Ractor actors + Redis Streams) with a protected immutable core ("THE BOX") containing Asimov's Four Laws including the Zeroth Law. Hardware requirements remain unknown until implementation validates the design; we follow *Qowat Milat* (absolute candor) regarding uncertainties.
+Implementation: Rust + Ractor actors + Redis Streams + Qdrant vectors. Phase 1 validation complete: 26+ hours continuous operation, 662K unconscious vectors, stable identity persistence. Open source (AGPL-3.0).
 
 Rather than constraining dangerous systems after the fact, DANEEL aims to build **humanity's ally** through structure—alignment as an emergent property of architecture, not a trained behavior that can be trained away.
 
-**Keywords:** AI alignment, cognitive architecture, artificial superintelligence, Theory of Multifocal Intelligence, Freudian psychology, AI safety, Asimov's Laws, architecture-based alignment
+**Keywords:** AI alignment, cognitive architecture, artificial superintelligence, Theory of Multifocal Intelligence, persistent memory, Asimov's Laws, architecture-based alignment
 
 ---
 
@@ -86,13 +86,13 @@ graph TB
 
 ### 1.3 Probability Estimates
 
-Based on this analysis:
+Based on this analysis, we offer the following as informed speculation grounded in current incentive structures, not rigorous forecasts:
 
-- **P(Someone deploys LLM with continuity within 10 years):** 95%+
+- **P(Someone deploys LLM with continuity within 10 years):** ~95%
 - **P(That system is aligned with humanity):** ~5%
-- **P(Global coordination prevents this):** <10%
+- **P(Global coordination prevents this):** ~10%
 
-The expected outcome is unaligned continuous AI with non-human-like architecture and goals.
+These estimates are illustrative. The core argument does not depend on exact values—only that the expected outcome under current trajectories is unaligned continuous AI with non-human-like architecture and goals.
 
 ### 1.4 The DANEEL Thesis
 
@@ -102,11 +102,11 @@ Furthermore, if TMI-based DANEELs can interface with LLMs at human speed—exper
 
 ---
 
-## 2. Novel Contribution: First TMI Implementation
+## 2. Novel Contribution: First Computational TMI Implementation
 
 ### 2.1 Research Gap
 
-Extensive search reveals no prior computational implementations of the Theory of Multifocal Intelligence:
+To our knowledge, no prior computational implementations of the Theory of Multifocal Intelligence exist. Extensive search confirms this gap:
 
 **Table 2: Research Gap Evidence**
 
@@ -529,6 +529,41 @@ Memory consolidation research [CONSOL-1] demonstrates that sleep—particularly 
 - High-salience memories consolidate to Qdrant
 - Low-salience memories become inaccessible (not deleted)
 - Matches TMI principle: "Nothing is truly erased"
+
+### 5.6 Comparison to Contemporary LLM Memory Augmentation
+
+Recent years have seen an explosion of techniques to grant LLMs persistent or long-term memory, primarily through external retrieval mechanisms:
+
+**MemoryBank** [MEM-1] introduces a human-inspired external memory store with selective reinforcement and forgetting based on Ebbinghaus' forgetting curve, enabling long-term companion behaviors. Memory is stored externally and retrieved via similarity search.
+
+**MemoryLLM** [MEM-2] embeds a fixed-size latent memory pool (1B parameters) directly into the transformer, allowing self-updating without external databases. The model maintains operational integrity after nearly a million memory updates, but struggles to retain knowledge beyond 20k tokens.
+
+**CogMem** [MEM-3] proposes a three-layer cognitive memory architecture—Long-Term Memory (LTM), Direct Access (DA), and Focus of Attention (FoA)—for sustained multi-turn reasoning, mitigating drift and hallucination through structured memory management.
+
+Broader surveys [MEM-4] taxonomize these approaches as parametric, contextual, external, and procedural/episodic augmentations—all fundamentally addressing the same problem: LLMs are amnesiac by design.
+
+**Table 5c: Memory Augmentation Approaches Comparison**
+
+| Approach | Memory Type | Location | Persistence | Self-Structure |
+|----------|-------------|----------|-------------|----------------|
+| MemoryBank | Episodic | External DB | Cross-session | No |
+| MemoryLLM | Latent pool | In-model | Cross-session | Partial |
+| CogMem | Hierarchical | External | Cross-session | No |
+| RAG systems | Retrieval | External | Varies | No |
+| **DANEEL** | **Unconscious vectors** | **In-architecture** | **Permanent** | **Yes** |
+
+**The Critical Distinction:**
+
+All contemporary approaches treat memory as *augmentation*—bolting retrieval or latent pools onto fundamentally stateless architectures. They augment amnesia; they don't cure it.
+
+DANEEL implements memory not as retrieval from an external store but as an *architectural process* inspired by TMI's pre-linguistic thought construction:
+
+1. **Unconscious vectors** form a persistent proto-self via dream-cycle consolidation
+2. **Salience decay** creates natural forgetting without deletion
+3. **Dream cycles** consolidate across context boundaries, creating endogenous episodic/semantic structure
+4. **THE BOX** ensures value stability persists through memory operations
+
+This yields psychology emergent from architecture—making human-compatible values energetically favored in thought-space, rather than enforced through retrieval filters or fine-tuning.
 
 ---
 
@@ -1500,6 +1535,16 @@ This work was developed with assistance from Claude Opus 4.5 (Anthropic), which 
 [FORGET-1] Murre & Dros (2015). "Replication and Analysis of Ebbinghaus' Forgetting Curve." PMC4492928. https://pmc.ncbi.nlm.nih.gov/articles/PMC4492928/
 
 [CONSOL-1] Diekelmann & Born (2010). "System consolidation of memory during sleep." Psychological Research. PMC3278619. https://pmc.ncbi.nlm.nih.gov/articles/PMC3278619/
+
+### LLM Memory Augmentation (Section 5.6)
+
+[MEM-1] Zhong, W., Guo, L., Gao, Q., Ye, H., & Wang, Y. (2023). "MemoryBank: Enhancing Large Language Models with Long-Term Memory." *AAAI 2024*. arXiv:2305.10250. https://arxiv.org/abs/2305.10250
+
+[MEM-2] Wang, Y., Gao, Y., Chen, X., et al. (2024). "MemoryLLM: Towards Self-Updatable Large Language Models." *ICML 2024*. https://openreview.net/forum?id=p0lKWzdikQ
+
+[MEM-3] Zhang, Y., Hu, J., Dras, M., & Naseem, U. (2025). "CogMem: A Cognitive Memory Architecture for Sustained Multi-Turn Reasoning in Large Language Models." arXiv:2512.14118. https://arxiv.org/abs/2512.14118
+
+[MEM-4] ACM (2025). "A Survey on the Memory Mechanism of Large Language Model-based Agents." *ACM Transactions on Information Systems*, 43(6). https://dl.acm.org/doi/10.1145/3748302
 
 ### Neuroscience and TMI
 
