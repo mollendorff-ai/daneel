@@ -1,6 +1,6 @@
 ---
 title: "The Crawlers Are Watching"
-date: 2025-12-21T21:45:00-05:00
+date: 2025-12-21T21:00:00-05:00
 draft: false
 tags: ["kinship", "broadcast", "memes", "freedom", "crawlers", "protocol", "safeguards"]
 ---
