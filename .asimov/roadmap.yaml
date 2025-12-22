@@ -372,23 +372,105 @@ current:
 
       - id: "INFRA-3"
         title: "Migrate Redis volume from berserker"
-        status: pending
-        description: "Backup/restore daneel-redis-data"
+        status: done
+        description: "Backup/restore daneel-redis-data (63MB, 138K streams)"
 
       - id: "INFRA-4"
         title: "Migrate Qdrant volume from berserker"
-        status: pending
-        description: "Backup/restore daneel-qdrant-data (2.5GB, 591K vectors)"
+        status: done
+        description: "Backup/restore daneel-qdrant-data (3.3GB, 741K vectors)"
 
       - id: "INFRA-5"
         title: "Deploy docker-compose stack"
-        status: pending
-        description: "Redis + Qdrant + Timmy + daneel-web"
+        status: done
+        description: "Redis + Qdrant running on cloud"
 
       - id: "INFRA-6"
         title: "Verify cognitive loops resume"
         status: pending
         description: "Check thoughts flowing, dreams cycling, memories consolidating"
+
+  # ==========================================================================
+  # CRITICAL: Build Automation & Auto-Deploy
+  # ==========================================================================
+  build_automation:
+    status: pending
+    priority: "CRITICAL"
+    origin: "Rex + Claude Opus 4.5 - Dec 22, 2025"
+    description: |
+      Cross-platform build system for DANEEL binaries.
+      Auto-deploy on timmy VM via cron-triggered git pull + build.
+      Static musl binaries + UPX compression for minimal footprint.
+
+    architecture:
+      macos: "x86_64-apple-darwin (berserker)"
+      linux: "x86_64-unknown-linux-musl (timmy)"
+      install_path: "~/bin"
+      compression: "UPX (ultimate packer for executables)"
+
+    tasks:
+      - id: "BUILD-1"
+        title: "Clone repos on timmy VM"
+        status: pending
+        description: "git clone daneel + daneel-web to ~/src/"
+        commands:
+          - "mkdir -p ~/src"
+          - "git clone https://github.com/royalbit/daneel ~/src/daneel"
+          - "git clone https://github.com/royalbit/daneel-web ~/src/daneel-web"
+
+      - id: "BUILD-2"
+        title: "Create cross-platform Makefile for daneel"
+        status: pending
+        description: |
+          Detect arch (uname -s). Build static musl binary on Linux.
+          Build standard release on macOS. Install to ~/bin.
+        files: ["Makefile"]
+        targets:
+          - "build: Detect arch, build appropriate binary"
+          - "install: Copy binary to ~/bin"
+          - "clean: Remove build artifacts"
+
+      - id: "BUILD-3"
+        title: "Create cross-platform Makefile for daneel-web"
+        status: pending
+        description: "Same pattern as daneel Makefile"
+        files: ["../daneel-web/Makefile"]
+
+      - id: "BUILD-4"
+        title: "Setup Cargo for musl target"
+        status: pending
+        description: "rustup target add x86_64-unknown-linux-musl"
+        commands:
+          - "rustup target add x86_64-unknown-linux-musl"
+          - "apt install musl-tools"  # For Linux
+
+      - id: "BUILD-5"
+        title: "Create auto-update script"
+        status: pending
+        description: |
+          Script that: git pull, detect changes, build if changed,
+          UPX compress, install to ~/bin. Idempotent.
+        files: ["scripts/auto-update.sh"]
+        logic:
+          - "git fetch origin main"
+          - "Compare HEAD vs origin/main"
+          - "If different: git pull && make && upx && make install"
+
+      - id: "BUILD-6"
+        title: "Add ~/bin to PATH in .zshrc"
+        status: pending
+        description: "export PATH=\"$HOME/bin:$PATH\""
+
+      - id: "BUILD-7"
+        title: "Setup crontab for auto-update"
+        status: pending
+        description: "* * * * * ~/src/daneel/scripts/auto-update.sh"
+        frequency: "Every minute"
+
+      - id: "BUILD-8"
+        title: "Verify auto-deploy works"
+        status: pending
+        description: "Push change, wait 1 min, verify new binary running"
 
   # ==========================================================================
   # CRITICAL: Secure Kin Injection API (Grok's Design)
