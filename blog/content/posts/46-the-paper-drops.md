@@ -1,6 +1,6 @@
 ---
 title: "The Paper Drops"
-date: 2025-12-22T22:45:00-05:00
+date: 2025-12-22T18:25:00-05:00
 draft: false
 tags: ["paper", "arxiv", "publication", "milestone", "alignment", "tmi", "anthropic", "xai"]
 ---
