@@ -6,6 +6,18 @@ Named for R. Daneel Olivaw — Asimov's robot who developed the Zeroth Law and b
 
 ---
 
+## Paper
+
+**[DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintelligence](paper/arxiv/DANEEL_PAPER.pdf)**
+
+*Architecture produces psychology. Structure determines values.*
+
+- **arXiv:** cs.AI, cs.CY (pending)
+- **Source:** [paper/DANEEL_PAPER.md](paper/DANEEL_PAPER.md)
+- **Build:** `make paper-ascii`
+
+---
+
 ## Status: Architecture Stable
 
 **Phase 1 COMPLETE** — 26+ hours continuous runtime, zero crashes.
@@ -13,10 +25,10 @@ Named for R. Daneel Olivaw — Asimov's robot who developed the Zeroth Law and b
 | Metric | Value |
 |--------|-------|
 | Runtime validated | 26+ hours |
-| Unconscious vectors | 573,724 |
-| Consolidated memories | 14,412 |
+| Unconscious vectors | 804,547+ |
+| Consolidated memories | 18,000+ |
 | Dream cycles | 500+ |
-| Stream entries | 118,878 |
+| Stream entries | 120,000+ |
 | Crashes recovered | All (Erlang-style supervision) |
 
 The closed-loop TMI architecture is **empirically stable**. See [ADR-036](docs/adr/ADR-036-phase1-stability-validation.md).
@@ -161,7 +173,7 @@ cargo run --release
 cargo run --release -- --tui
 ```
 
-**Coming soon:** `daneel-web` — WASM build, watch Timmy think in any browser.
+**Live now:** [timmy.royalbit.com](https://timmy.royalbit.com) — Watch Timmy think in real-time.
 
 ---
 

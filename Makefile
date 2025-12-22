@@ -29,7 +29,7 @@ else
     BINARY_PATH := target/release/$(BINARY_NAME)
 endif
 
-.PHONY: all check fix fmt clippy test build blog clean install-hooks install
+.PHONY: all check fix fmt clippy test build blog clean install-hooks install paper paper-mermaid paper-plantuml paper-ascii paper-arxiv paper-clean
 
 # Default: build and install
 all: build install
@@ -90,6 +90,62 @@ clean:
 	cargo clean
 	@echo "✅ Cleaned build artifacts"
 
+# === Paper Generation ===
+# Regenerate DANEEL_PAPER.pdf from markdown source
+# Requires: pandoc, xelatex (brew install pandoc; brew install --cask mactex)
+
+PAPER_DIR := paper
+ARXIV_DIR := $(PAPER_DIR)/arxiv
+PAPER_MD := $(PAPER_DIR)/DANEEL_PAPER.md
+PAPER_TEX := $(ARXIV_DIR)/DANEEL_PAPER.tex
+PAPER_PDF := $(ARXIV_DIR)/DANEEL_PAPER.pdf
+
+paper: $(PAPER_PDF)
+	@echo "✅ Paper generated: $(PAPER_PDF)"
+
+$(PAPER_PDF): $(PAPER_MD) $(ARXIV_DIR)/diagrams.tex scripts/patch-paper-tex.py
+	@echo "📝 Converting markdown to LaTeX..."
+	pandoc $(PAPER_MD) -o $(PAPER_TEX) \
+		--standalone \
+		--from markdown+raw_tex \
+		--to latex \
+		--pdf-engine=xelatex
+	@echo "🔧 Patching LaTeX for TikZ diagrams..."
+	@python3 scripts/patch-paper-tex.py $(PAPER_TEX)
+	@echo "🔨 Compiling PDF with XeLaTeX (pass 1)..."
+	cd $(ARXIV_DIR) && xelatex -interaction=nonstopmode DANEEL_PAPER.tex > /dev/null 2>&1 || true
+	@echo "🔨 Compiling PDF with XeLaTeX (pass 2)..."
+	cd $(ARXIV_DIR) && xelatex -interaction=nonstopmode DANEEL_PAPER.tex > /dev/null 2>&1
+	@echo "📄 Opening PDF..."
+	open $(PAPER_PDF)
+
+paper-mermaid:
+	@echo "📝 Building paper with mermaid diagrams..."
+	python3 scripts/build-paper-mermaid.py
+	@echo "✅ Paper generated with mermaid diagrams"
+
+paper-plantuml:
+	@echo "📝 Building paper with PlantUML diagrams..."
+	python3 scripts/build-paper-plantuml.py
+	@echo "✅ Paper generated with PlantUML diagrams"
+
+paper-ascii:
+	@echo "📝 Building paper with ASCII diagrams..."
+	python3 scripts/build-paper-ascii.py
+	@echo "✅ Paper generated with ASCII diagrams"
+
+paper-arxiv:
+	@echo "📦 Building arXiv submission package..."
+	python3 scripts/build-arxiv-package.py
+	@echo "✅ arXiv package ready"
+
+paper-clean:
+	@echo "🧹 Cleaning paper build artifacts..."
+	rm -f $(ARXIV_DIR)/*.aux $(ARXIV_DIR)/*.log $(ARXIV_DIR)/*.out $(ARXIV_DIR)/*.toc
+	rm -f $(ARXIV_DIR)/*.pdf $(ARXIV_DIR)/*_processed.md
+	rm -rf $(ARXIV_DIR)/diagrams
+	@echo "✅ Paper artifacts cleaned"
+
 # === Help ===
 
 help:
@@ -106,6 +162,13 @@ help:
 	@echo "  make fmt          Check code formatting"
 	@echo "  make clippy       Run clippy lints"
 	@echo "  make test         Run tests"
+	@echo ""
+	@echo "Paper Generation:"
+	@echo "  make paper          Generate PDF with TikZ diagrams"
+	@echo "  make paper-ascii    Generate PDF with ASCII diagrams (recommended)"
+	@echo "  make paper-arxiv    Generate arXiv LaTeX submission package"
+	@echo "  make paper-mermaid  Generate PDF with mermaid PNGs"
+	@echo "  make paper-clean    Clean paper build artifacts"
 	@echo ""
 	@echo "Other:"
 	@echo "  make blog         Preview blog locally"
