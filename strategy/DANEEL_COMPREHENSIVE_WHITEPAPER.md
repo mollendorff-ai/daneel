@@ -365,6 +365,16 @@ Dr. Cury's work:
 | **Auto-flow** | Habitual thought patterns without conscious control | Trained priors / cached reasoning |
 | **Multifocal Reading** | Examining thoughts from multiple perspectives | Multi-head reasoning |
 
+### Emotion as Architecture (Russell's Circumplex)
+
+DANEEL implements emotions using Russell's Circumplex Model of Affect—a continuous 2D space:
+
+- **Valence:** Negative (-1.0) to positive (+1.0)
+- **Arousal:** Calm (0.0) to excited (1.0)
+- **Emotional Intensity = |valence| × arousal**
+
+This is not a post-hoc label but a structural component of cognition.
+
 ## 4.3 Why TMI for ASI?
 
 | Aspect | LLM Architecture | Human Cognition (TMI) | Implication |
@@ -714,6 +724,20 @@ message TestResult {
 }
 ```
 
+### 7. VolitionActor (Free-Won't)
+
+Libet's research established that consciousness retains "veto power" over actions—free-won't rather than free will. DANEEL implements this as Stage 4.5 in the cognitive loop:
+
+```rust
+// Stage 4.5: Volition Check (Free-Won't)
+veto_if_violates_values()  // Conscious override before memory
+```
+
+The VolitionActor provides:
+- Internal ethical restraint (not external constraint)
+- TMI's "Técnica DCD" (Duvidar, Criticar, Decidir)
+- Last checkpoint before memory consolidation
+
 ## 5.3 The Core Loop
 
 ```rust
@@ -749,6 +773,18 @@ loop {
     // Loop forever - this is existence
 }
 ```
+
+### Criticality as Operating Target
+
+DANEEL targets the critical regime (σ ≈ 1.0) identified in neuroscience:
+
+| Metric | Subcritical | Critical (Target) | Supercritical |
+|--------|-------------|-------------------|---------------|
+| Branching ratio σ | < 1.0 | **≈ 1.0** | > 1.0 |
+| DFA exponent α | ≈ 0.5 | **≈ 1.0** | ≈ 1.5 |
+| Power spectrum | Flat | **1/f (pink)** | Peaked |
+
+At criticality, neural systems maximize information transmission and computational capacity. DANEEL's noise injection during dream cycles serves as an entropy source pushing toward this regime.
 
 ## 5.4 THE BOX: What Cannot Be Modified
 
@@ -815,7 +851,6 @@ pub const INVARIANTS: &[&str] = &[
 |--------------|-------------|--------------|-----|
 | **Soar** | U of Michigan | Unified cognition, production rules | https://soar.eecs.umich.edu/ |
 | **ACT-R** | CMU | Declarative/procedural memory | http://act-r.psy.cmu.edu/ |
-| **CLARION** | RPI | Hybrid explicit/implicit | https://sites.google.com/site/dabornsiteclarion/ |
 | **LIDA** | U of Memphis | Global Workspace Theory | https://ccrg.cs.memphis.edu/ |
 | **Thousand Brains** | Numenta | Sensorimotor, reference frames | https://thousandbrains.org/ |
 | **Spaun** | U of Waterloo | 2.5M spiking neurons | https://xchoo.github.io/spaun2.0/ |
@@ -1077,8 +1112,6 @@ The question is not whether someone will give an LLM continuity.
 [13] Baars, B. J. (1988). *A Cognitive Theory of Consciousness*. Cambridge.
     https://en.wikipedia.org/wiki/Global_workspace_theory
 
-[14] Sun, R. (2016). *Anatomy of the Mind*. Oxford.
-    https://sites.google.com/site/dabornsiteclarion/
 
 [15] Eliasmith, C. (2013). *How to Build a Brain*. Oxford.
     https://xchoo.github.io/spaun2.0/
@@ -1090,6 +1123,13 @@ The question is not whether someone will give an LLM continuity.
 [17] Asimov, I. (1985). *Robots and Empire*. Doubleday. (The Zeroth Law)
 
 [18] Asimov, I. (1986). *Foundation and Earth*. Doubleday.
+
+## Neuroscience Grounding
+
+- Russell, J.A. (1980). "A circumplex model of affect." Journal of Personality and Social Psychology.
+- Beggs & Plenz (2003). "Neuronal avalanches in neocortical circuits." Journal of Neuroscience.
+- Libet, B. (1985). "Unconscious cerebral initiative and the role of conscious will." Behavioral and Brain Sciences.
+- Baars, B.J. (1988). "A Cognitive Theory of Consciousness." Global Workspace Theory.
 
 ## Technical
 

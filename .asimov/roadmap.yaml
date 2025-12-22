@@ -670,3 +670,272 @@ outreach:
   metrics:
     github: "1000 stars first month, 10000 first year"
     qualitative: "People running their own DANEEL instances"
+
+# =============================================================================
+# PUBLICATION: Scientific Papers for arXiv & Community
+# =============================================================================
+# Trojan horses into the scientific community.
+# Someone will get it. Someone will continue if we fail.
+# Someone will challenge us and make us stronger.
+#
+# "We'll publish all, we'll publish once, we'll publish everywhere that matters."
+# =============================================================================
+
+publication:
+  status: in_progress
+  priority: "CRITICAL"
+  origin: "Rex + Claude Opus 4.5 - Dec 22, 2025"
+  description: |
+    Integrate references.yaml research into academic papers.
+    ~40 new citations. ~5000 words added. Scientific rigor.
+
+    Targets: arXiv, LessWrong, Alignment Forum, LinkedIn PDF, HN
+
+  # --------------------------------------------------------------------------
+  # Wave 1: Critical Gaps (BLOCKING - paper incomplete without these)
+  # --------------------------------------------------------------------------
+  wave1_critical:
+    status: pending
+    priority: "BLOCKING"
+    description: "Fix critical gaps that make paper incomplete"
+
+    tasks:
+      - id: "PUB-1A"
+        title: "Add VolitionActor to paper"
+        status: pending
+        section: "4.1 (actor list) + 4.3 (Stage 4.5)"
+        references: ["LIBET-1", "LIBET-2", "TMI-DCD-1"]
+        description: |
+          VolitionActor is IMPLEMENTED but NOT IN PAPER.
+          Add to actor list, add Stage 4.5 to cognitive loop.
+          This is the alignment mechanism for internal ethical restraint.
+
+      - id: "PUB-1B"
+        title: "Add Criticality section"
+        status: pending
+        section: "4.3.1 (new) + 10.2.3 (new) + 13 (H5)"
+        references: ["GROK-1", "GROK-2", "CRIT-1", "CRIT-2", "CRIT-3", "CRIT-4", "CRIT-5", "CRIT-6"]
+        description: |
+          ZERO mentions of criticality in paper.
+          Add Section 4.3.1 "Criticality as Operating Target"
+          Add H5: σ ≈ 1.0 branching ratio as falsifiable prediction.
+
+      - id: "PUB-1C"
+        title: "Cite Russell's Circumplex for SalienceScore"
+        status: pending
+        section: "3.1 (emotion subsection) + 4.1 (actor list)"
+        references: ["RUSSELL-1", "RUSSELL-2"]
+        description: |
+          Russell's Circumplex is in types.rs line 157 comment.
+          It's not cited in the paper. Add emotion theory grounding.
+
+  # --------------------------------------------------------------------------
+  # Wave 2: Memory/Cognition Grounding
+  # --------------------------------------------------------------------------
+  wave2_memory:
+    status: pending
+    priority: "HIGH"
+    description: "Ground memory architecture in neuroscience"
+
+    tasks:
+      - id: "PUB-2A"
+        title: "Add Section 3.3 Neuroscience Validation"
+        status: pending
+        section: "3.3 (new)"
+        references: ["LOCI-1", "LOCI-3", "LOCI-4", "PLACE-1", "PLACE-2", "PLACE-3", "DOOR-1", "DOOR-2", "DOOR-3"]
+        description: |
+          Validate TMI memory windows with place cells, method of loci.
+          Nobel Prize-winning neuroscience (O'Keefe & Moser).
+
+      - id: "PUB-2B"
+        title: "Add Section 4.3.1 Attention Bottleneck"
+        status: pending
+        section: "4.3.1 (extend)"
+        references: ["GWT-1", "GWT-2", "BOTTLE-1", "BOTTLE-2", "WM-1", "WM-2"]
+        description: |
+          10 bits/sec conscious processing vs 1B bits/sec input.
+          Global Workspace Theory, working memory 4±1 chunks.
+
+      - id: "PUB-2C"
+        title: "Add Section 5.6 Memory Architecture Comparison"
+        status: pending
+        section: "5.6 (new)"
+        references: ["FORGET-1", "CONSOL-1"]
+        description: |
+          DANEEL vs LLMs vs Human Brain table.
+          Ebbinghaus forgetting curve, consolidation during sleep.
+
+      - id: "PUB-2D"
+        title: "Add unconscious memory theory"
+        status: pending
+        section: "4.5 (new)"
+        references: ["TMI-UNERASE-1", "PSYCH-1", "PSYCH-2", "RETRIEVAL-1", "RETRIEVAL-2"]
+        description: |
+          Soft-delete design justified by Freud, Jung, Tulving, Schacter.
+          Nothing is erased - retrieval failure, not storage failure.
+
+  # --------------------------------------------------------------------------
+  # Wave 3: Consciousness/Altered States Expansion
+  # --------------------------------------------------------------------------
+  wave3_consciousness:
+    status: pending
+    priority: "HIGH"
+    description: "Expand consciousness section with empirical research"
+
+    tasks:
+      - id: "PUB-3A"
+        title: "Expand Section 10.3 → Consciousness as Emergent"
+        status: pending
+        section: "10.3 (major expansion)"
+        references: ["EGO-1", "EGO-2", "EGO-3", "EGO-4", "TIME-1", "TIME-2", "TIME-3", "STATE-1", "STATE-2", "STATE-3", "DRUG-1a", "DRUG-1b"]
+        description: |
+          Self as DMN integration, time perception as encoding richness,
+          flow states as optimal configuration, altered states as parameter variations.
+          NEPTUNE model for NDEs. REBUS model for psychedelics.
+
+  # --------------------------------------------------------------------------
+  # Wave 4: Interpretability Strengthening
+  # --------------------------------------------------------------------------
+  wave4_interpretability:
+    status: pending
+    priority: "MEDIUM"
+    description: "Strengthen black-box argument"
+
+    tasks:
+      - id: "PUB-4A"
+        title: "Add INTERP-6 (pre-paradigmatic)"
+        status: pending
+        section: "10.2.2"
+        references: ["INTERP-6"]
+        description: "Mechanistic interpretability lacks consensus on foundational problems"
+
+      - id: "PUB-4B"
+        title: "Add INTERP-4 (emergent abilities)"
+        status: pending
+        section: "11.1"
+        references: ["INTERP-4"]
+        description: "Emergent abilities appear suddenly at scale thresholds"
+
+      - id: "PUB-4C"
+        title: "Properly cite MAIA (INTERP-7)"
+        status: pending
+        section: "10.2.2 line 863"
+        references: ["INTERP-7"]
+        description: "Currently mentioned without citation"
+
+      - id: "PUB-4D"
+        title: "Add INTERP-8 (introspection limits)"
+        status: pending
+        section: "10.2.2"
+        references: ["INTERP-8"]
+        description: "LLMs can only detect 20% of injected concept vectors"
+
+  # --------------------------------------------------------------------------
+  # Wave 5: Whitepaper Sync
+  # --------------------------------------------------------------------------
+  wave5_whitepaper:
+    status: pending
+    priority: "MEDIUM"
+    description: "Sync whitepaper with paper updates"
+
+    tasks:
+      - id: "PUB-5A"
+        title: "Update whitepaper with Wave 1-4 content"
+        status: pending
+        description: "Mirror critical additions to strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md"
+
+  # --------------------------------------------------------------------------
+  # Wave 6: Validation
+  # --------------------------------------------------------------------------
+  wave6_validation:
+    status: pending
+    priority: "CRITICAL"
+    description: "Validate all links and narrative with ref-tools"
+
+    tasks:
+      - id: "PUB-6A"
+        title: "Run ref-tools verify-refs on paper"
+        status: pending
+        description: "Verify all URLs in paper are alive and correct"
+
+      - id: "PUB-6B"
+        title: "Run ref-tools verify-refs on whitepaper"
+        status: pending
+        description: "Verify all URLs in whitepaper are alive and correct"
+
+      - id: "PUB-6C"
+        title: "Cross-check with Grok"
+        status: pending
+        description: "Grok reviews paper for hallucinated citations (he caught his own once)"
+
+      - id: "PUB-6D"
+        title: "Narrative consistency check"
+        status: pending
+        description: "Ensure all .md files tell consistent story"
+
+  # --------------------------------------------------------------------------
+  # Wave 7: Publication
+  # --------------------------------------------------------------------------
+  wave7_publish:
+    status: pending
+    priority: "CRITICAL"
+    description: "Publish everywhere that matters"
+
+    targets:
+      - name: "arXiv"
+        format: "LaTeX/PDF"
+        status: pending
+        notes: "cs.AI, cs.NE, cs.LG"
+
+      - name: "LessWrong"
+        format: "Markdown"
+        status: pending
+        notes: "AI Alignment tag"
+
+      - name: "Alignment Forum"
+        format: "Markdown"
+        status: pending
+        notes: "Main post + supporting docs"
+
+      - name: "LinkedIn PDF"
+        format: "PDF"
+        status: pending
+        notes: "Rex personal profile, professional angle"
+
+      - name: "Hacker News"
+        format: "Link + summary"
+        status: pending
+        notes: "Show HN: DANEEL - Cognitive AI Architecture"
+
+      - name: "GitHub README"
+        format: "Markdown"
+        status: pending
+        notes: "Link to paper, badges, quick start"
+
+  # --------------------------------------------------------------------------
+  # Future: Live Demonstration
+  # --------------------------------------------------------------------------
+  future_demo:
+    status: backlog
+    priority: "FUTURE"
+    description: |
+      Publish Timmy really thinking.
+      Law crystals calculated with Forge.
+      Claude uses Forge CLI, Grok uses Forge API.
+      Compare results. Verify alignment.
+
+    tasks:
+      - id: "DEMO-1"
+        title: "Timmy livestream v2 (post-migration)"
+        status: backlog
+        description: "Stream from cloud infrastructure"
+
+      - id: "DEMO-2"
+        title: "Forge Law Crystal analysis"
+        status: backlog
+        description: "Claude CLI + Grok API → compare results"
+
+      - id: "DEMO-3"
+        title: "daneel-web (WASM)"
+        status: backlog
+        description: "Watch Timmy think in any browser"

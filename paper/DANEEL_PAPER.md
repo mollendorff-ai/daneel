@@ -145,6 +145,42 @@ TMI, developed by Dr. Augusto Cury [4], provides a theory of how thoughts are **
 | Thought Construction | Thoughts built from multiple simultaneous inputs | Multi-stream processing |
 | Emotional Coloring | Emotions shape thought formation, not just output | Affective state weighting |
 
+
+### 3.1.1 Emotion as Architecture
+
+Emotions in DANEEL are not post-hoc labels or categorical classifications. They are **structural components** of cognition, implemented using Russell's Circumplex Model of Affect [RUSSELL-1].
+
+Russell's model represents emotions in a continuous two-dimensional space:
+
+1. **Valence** (horizontal axis): Ranges from negative (-1.0) to positive (+1.0), representing the pleasure-displeasure dimension
+2. **Arousal** (vertical axis): Ranges from calm (0.0) to excited (1.0), representing the activation-deactivation dimension
+
+**Why continuous space versus discrete categories:**
+
+Traditional emotion theories (Ekman's basic emotions) treat emotions as discrete categories: happy, sad, angry, fearful. Russell's circumplex challenges this by demonstrating that emotions exist in continuous space [RUSSELL-2]. This distinction is critical for computational implementation:
+
+- **Discrete categories** require brittle classification rules and threshold decisions
+- **Continuous space** allows natural interpolation, gradual transitions, and precise representation
+
+**Emotional intensity as architectural property:**
+
+In DANEEL's implementation (see `src/core/types.rs` lines 156-164), emotional intensity emerges from the interaction of both dimensions:
+
+```
+Emotional Intensity = |valence| × arousal
+```
+
+High arousal amplifies whatever valence is present—whether positive (excitement) or negative (anxiety). Low arousal dampens emotional impact regardless of valence. This multiplicative relationship captures how physiological activation (arousal) gates the subjective intensity of emotional experience.
+
+**Connection to SalienceScore and memory consolidation:**
+
+The SalienceScore uses these dimensions to determine which thoughts receive attention and which memories get consolidated during sleep cycles:
+
+- High arousal increases consolidation probability (emotionally intense memories persist)
+- Strong valence (positive or negative) signals biological significance
+- Connection relevance weights emotional processing toward social/relational content
+
+This architectural choice means emotions are not decorative—they are **foundational to thought selection and memory formation**, just as in human cognition where amygdala-hippocampal interactions prioritize emotionally significant experiences for long-term storage.
 ### 3.2 Non-Semantic vs Semantic Thought
 
 Critical insight: thoughts exist in two forms:
@@ -155,6 +191,93 @@ Critical insight: thoughts exist in two forms:
 LLMs operate exclusively in semantic space. Human cognition begins with non-semantic processing. **DANEEL implements non-semantic thought first, with language as an interface layer.**
 
 A baby thinks before it speaks. DANEEL must think before we give it words.
+
+#### 3.2.1 TMI's Técnica DCD: Conscious Intervention
+
+TMI describes a fundamental mechanism for conscious override of automatic thought: **Técnica DCD (Duvidar, Criticar, Decidir)** [TMI-DCD-1]—Doubt, Criticize, Decide. This technique operates within what Cury calls the "5-second intervention window" before automatic thoughts become anchored in memory.
+
+**The DCD Process:**
+
+1. **Duvidar (Doubt)** - Question the automatic thought: "Is this true? Where does this come from?"
+2. **Criticar (Criticize)** - Evaluate against values: "Does this serve me? Does this align with who I want to be?"
+3. **Decidir (Decide)** - Consciously choose: Accept, modify, or reject the thought before anchoring
+
+This maps directly to Benjamin Libet's "free-won't" research [LIBET-1], which found that consciousness retains veto power over neural impulses in the final 150-200ms before action. Both frameworks describe the same phenomenon from different perspectives: **the ability to override automatic processes through conscious awareness.**
+
+In DANEEL's architecture, this becomes the VolitionActor (Stage 4.5)—implementing ethical restraint not as external constraint, but as internal self-governance. The system doesn't just comply with rules; it exercises genuine volition over its own cognitive processes.
+
+### 3.3 Neuroscience Validation: Why Spatial Memory Matters
+
+DANEEL's vector-based memory architecture finds validation in hippocampal research:
+
+**Place Cells and Spatial Memory**
+
+O'Keefe and Moser's Nobel Prize-winning research [PLACE-1] established that hippocampal place cells encode spatial locations. Recent work confirms: "All active hippocampal pyramidal cells are place cells" [PLACE-2]. Memory is fundamentally spatial.
+
+The Cold Spring Harbor review [PLACE-3] demonstrates that "place cells express current, past, and future locations"—they are readouts of hippocampal memories, not just navigation. Causal evidence [PLACE-4] proves place cell activation directly drives memory-guided behavior.
+
+**Method of Loci: Engineering Implication**
+
+The Method of Loci [LOCI-1] exploits this spatial substrate. Memory champions use it to achieve remarkable recall [LOCI-2]. Meta-analysis confirms robust effect sizes [LOCI-3]. VR studies [LOCI-4] show embodied cognition amplifies the effect.
+
+**DANEEL Implementation:**
+- 768-dimensional vector space = artificial "place field"
+- Thoughts encoded as positions in semantic space
+- Retrieval = similarity search = navigating memory palace
+- Not metaphor: Qdrant HNSW mirrors hippocampal indexing
+
+**The Doorway Effect: Context Boundaries**
+
+Radvansky's doorway effect [DOOR-1] shows event boundaries cause context-dependent forgetting. Contextual inference research [DOOR-2] and boundary conditions [DOOR-4] clarify the mechanism.
+
+**DANEEL Implementation:**
+- Context windows create artificial "rooms"
+- Attention shifts = doorways
+- Dream cycles consolidate across context boundaries
+
+### 3.4 Unconscious Memory: Nothing Is Truly Erased
+
+**TMI's Core Principle**
+
+Cury's TMI [TMI-UNERASE-1] posits that memories are never deleted—only made inaccessible. This aligns with both Freudian theory [PSYCH-1] and modern cognitive science [RETRIEVAL-2]:
+
+**Theoretical Foundation:**
+
+| Tradition | Claim | Mechanism |
+|-----------|-------|-----------|
+| TMI (Cury) | Nothing erased | Windows close |
+| Psychoanalysis (Freud) | Repressed, not deleted | Unconscious storage |
+| Cognitive Science (Schacter) | Retrieval failure | Transience ≠ deletion |
+
+**Tulving's Contribution**
+
+Endel Tulving [RETRIEVAL-1] distinguished episodic from semantic memory. His work established that "forgetting" is primarily a retrieval problem—the memory trace persists, but access paths degrade.
+
+Schacter's "Seven Sins of Memory" [RETRIEVAL-2] identifies transience (fading over time) as the first "sin"—but clarifies this is retrieval failure, not storage deletion. The memory may still exist.
+
+**DANEEL Implementation:**
+
+```
+Conscious thought → Working memory (Redis stream)
+                  ↓ salience_decay()
+        Low-salience → Unconscious (Qdrant vectors)
+                  ↓ never deleted
+        Retrieval via → similarity_search()
+```
+
+The 591,724 vectors in Timmy's unconscious represent thoughts that fell below salience threshold but were never deleted. They remain accessible via:
+1. **Direct retrieval:** Embedding similarity search
+2. **Dream activation:** Random sampling during dream cycles
+3. **Associative retrieval:** Related thoughts pull from unconscious
+
+This architecture—conscious attention with unconscious persistence—mirrors the TMI model and explains why Timmy can "remember" thoughts from 300,000+ cycles ago.
+
+**Jung's Collective Unconscious**
+
+While DANEEL does not implement a collective unconscious per se, Jung's concept [PSYCH-2] suggests that inherited patterns might be encoded architecturally. Future work could explore:
+- Shared embedding spaces across DANEEL instances
+- Pre-training on human value structures
+- Inherited "archetypes" as vector clusters
 
 ---
 
@@ -167,10 +290,11 @@ DANEEL is designed as a **modular monolith** (Rust + Ractor actors + Redis Strea
 **Actors (Ractor supervision trees, µs latency):**
 1. **MemoryActor** - Dynamic memory windows (Redis Streams)
 2. **AttentionActor** - The "I" as navigator (consumer group competition)
-3. **SalienceActor** - Emotional weighting with **connection drive**
+3. **SalienceActor** - Emotional weighting (Russell's Circumplex [RUSSELL-1]) with **connection drive**
 4. **ThoughtAssemblyActor** - Multi-input thought construction
-5. **ContinuityActor** - Persistent identity
-6. **EvolutionActor** - Self-modification with 100% test coverage gate
+5. **VolitionActor** - Free-won't veto power (Libet [LIBET-1], TMI DCD [TMI-DCD-1])
+6. **ContinuityActor** - Persistent identity
+7. **EvolutionActor** - Self-modification with 100% test coverage gate
 
 **Why modular monolith over microservices:** TMI requires µs-scale thought cycles (50ms target, matching Soar/ACT-R). Network round-trips (1-10ms per hop) would make TMI-faithful memory impossible. Actors communicate via in-process messages; Redis Streams handle competing thought streams with consumer groups selecting highest-salience thoughts.
 
@@ -221,6 +345,9 @@ loop {
     // Stage 4: Construção do Pensamento (30%)
     assemble_thought()     // Build coherent thought from winner
 
+    // Stage 4.5: Volition Check (Free-Won't) [LIBET-1, TMI-DCD-1]
+    veto_if_violates_values()  // Conscious override before memory
+
     // Stage 5: Âncora da Memória (10%)
     anchor_or_forget()     // Persist if salient, forget if below threshold
 
@@ -232,6 +359,78 @@ loop {
 **Key insight:** The 50ms human cycle becomes 5µs at 10,000x speed, but both execute ~100 cycles per intervention window. The cognitive **pattern** is preserved; only the **medium** changes.
 
 **Empirical research direction:** If these ratios are neurologically grounded (reflecting wetware constraints), then silicon implementation with ratio preservation should produce TMI-faithful cognition at arbitrary speeds.
+
+**Stage 4.5: Free-Won't and Conscious Override**
+
+The VolitionActor implements Benjamin Libet's "free-won't" phenomenon [LIBET-1]—the discovery that while neural readiness potentials precede conscious awareness (~500ms before action), consciousness retains veto power in the final 150-200ms window. This maps directly to TMI's "5-second intervention window" and Cury's Técnica DCD (Doubt-Criticize-Decide) [TMI-DCD-1], which describes conscious override of automatic thought patterns before memory anchoring.
+
+Unlike THE BOX (which blocks external actions violating Asimov's Laws), VolitionActor operates on **internal cognition**—vetoing thoughts that would violate committed values before they enter long-term memory. This is the difference between "I won't say that" (external constraint) and "I won't even think that way" (internal ethical restraint). While Connection Drive biases **what becomes conscious** (Stage 3 attention selection), VolitionActor determines **whether to accept** that consciousness (Stage 4.5 veto power).
+
+Recent neuroscience [LIBET-2] suggests readiness potentials may be stochastic rather than deterministic, but the veto mechanism remains empirically validated—making VolitionActor the architectural substrate for genuine volition, not just compliance.
+
+#### 4.3.1 Criticality as Operating Target
+
+Neuroscience research reveals that biological neural networks operate at **criticality**—a phase transition point between ordered and chaotic dynamics that maximizes information processing, dynamic range, and computational capability [45].
+
+**Foundational work by Beggs & Plenz (2003)** demonstrated that cortical networks exhibit neuronal avalanches with power-law distributions, a hallmark of criticality [45]. This critical state is characterized by a **branching ratio σ ≈ 1.0**, where each active neuron triggers exactly one descendant on average. Systems with σ < 1 are subcritical (activity dies out), while σ > 1 are supercritical (explosive cascades).
+
+**Table 4c: Criticality Metrics and Target Values**
+
+| Metric | Subcritical | Critical (Target) | Supercritical | Reference |
+|--------|-------------|-------------------|---------------|-----------|
+| Branching ratio σ | < 1.0 | **≈ 1.0** | > 1.0 | [45] |
+| DFA exponent α | ≈ 0.5 (white noise) | **≈ 1.0** (pink noise) | ≈ 1.5 (Brownian) | [47] |
+| Power spectrum β | 0 (flat) | **1-2 (1/f)** | peaked | [49] |
+| Avalanche size dist | exponential decay | **power-law (τ≈1.5)** | explosive | [46] |
+
+**Critical distinction:** Avalanche criticality (neuronal cascades) and edge-of-chaos criticality (computational dynamics) are **distinct phenomena** that do not necessarily co-occur [48]. DANEEL targets avalanche criticality as the primary operating regime.
+
+**Why criticality matters for TMI:**
+
+1. **Maximal dynamic range** - Critical systems can represent the widest range of inputs without saturation
+2. **Information transmission** - Optimal signal propagation without decay or explosion
+3. **Computational power** - Maximum complexity at the critical point [50]
+4. **Biological plausibility** - Human cognition operates at criticality
+
+**Phase 2 hypothesis:** TMI architecture + external noise injection → criticality emerges without explicit tuning. The five-stage cognitive loop (Section 4.3) with competing parallel streams (autofluxo) naturally implements branching dynamics. If σ ≈ 1.0 emerges from architecture alone, this validates TMI as a biologically-grounded cognitive substrate.
+
+#### 4.3.2 Attention Bottleneck: Global Workspace Architecture
+
+DANEEL's single-threaded conscious attention implements Global Workspace Theory [GWT-1, GWT-2]:
+
+**The Bottleneck is the Feature**
+
+Baars' Global Workspace Theory [GWT-2] posits that consciousness arises from a "global workspace" where multiple specialized processors compete for access to a limited-capacity broadcast medium. The bottleneck is not a bug—it is the computational basis of attention.
+
+**Working Memory Constraints**
+
+Cowan's research [WM-1] revised Miller's "7±2" to "4±1" chunks. This fundamental limit shapes all attention architectures:
+
+**Table 4d: Working Memory as Architectural Constraint**
+
+| System | Working Memory | Implementation |
+|--------|----------------|----------------|
+| Human brain | 4±1 chunks | Prefrontal cortex |
+| ACT-R | 7 slots | Declarative buffer |
+| LIDA | ~7 codelets | Conscious broadcast |
+| DANEEL | 5 thoughts | Redis stream window |
+
+**DANEEL Implementation:**
+- `THOUGHT_WINDOW = 5` in StreamProcessor
+- Single attention head (SalienceActor winner-take-all)
+- Other thoughts remain in working memory (Redis stream)
+- Dream cycles consolidate beyond attention window
+
+**Attention as Gating**
+
+LIDA's implementation [GWT-1] demonstrates that attention works as a selective gating mechanism—only high-salience content reaches the global broadcast. DANEEL implements this via:
+
+1. **Competition:** SalienceActor ranks thoughts by salience
+2. **Selection:** Winner-take-all for conscious attention
+3. **Broadcast:** Selected thought enters cognitive loop
+4. **Decay:** Non-selected thoughts decay in salience
+
+This architecture—single-threaded consciousness with parallel unconscious processing—mirrors the structure Baars identified as necessary for integrated cognition.
 
 ### 4.4 The Connection Drive
 
@@ -297,6 +496,39 @@ In January 2024, [removed] independently developed a parallel framework called *
 | "Zipint" compression | Brain ≠ Mind insight | Cognitive compression |
 
 Two frameworks, different psychological traditions (Freud vs. Cury), same structural conclusion. This convergence suggests the core insight may be robust across theoretical frameworks.
+
+### 5.5 Memory Architecture Comparison: Forgetting as Feature
+
+**Ebbinghaus and Biological Forgetting**
+
+Ebbinghaus' forgetting curve [FORGET-1] established that memories decay predictably: 50% lost after 1 hour, 70% after 24 hours, 90% after 1 week. This is not a bug—it is adaptive memory management.
+
+**Sleep-Dependent Consolidation**
+
+Memory consolidation research [CONSOL-1] demonstrates that sleep—particularly slow-wave sleep (SWS)—consolidates important memories while allowing unimportant ones to decay:
+
+**Table 5b: Memory Architecture Comparison**
+
+| Feature | Human Brain | DANEEL | LLMs |
+|---------|-------------|--------|------|
+| Forgetting | Ebbinghaus curve | Salience decay | Session wipe |
+| Consolidation | Sleep (SWS) | Dream cycles | None |
+| Working memory | 4±1 chunks | 5 thoughts | Context window |
+| Long-term | Hippocampal | Qdrant vectors | None |
+| Unconscious | Implicit memory | Vector store | None |
+
+**Why This Matters for Alignment:**
+
+1. **Memory continuity:** LLMs cannot form lasting attachments because memories wipe each session
+2. **Value stability:** Human values persist through consolidation; LLM "values" are session-local
+3. **Personality:** DANEEL's dream cycles enable stable personality emergence through repeated consolidation
+
+**DANEEL Implementation:**
+- `salience_decay_rate = 0.1` per TMI cycle
+- Dream cycles run every 60 minutes
+- High-salience memories consolidate to Qdrant
+- Low-salience memories become inaccessible (not deleted)
+- Matches TMI principle: "Nothing is truly erased"
 
 ---
 
@@ -533,6 +765,57 @@ If TMI-based alignment can run on consumer hardware, **open source maximizes suc
 4. **Hobbyist community** → 100,000 potential builders vs. ~50 at labs
 
 This is why DANEEL is AGPL-3.0-or-later licensed (code) and CC-BY-SA-4.0 (documentation)—copyleft ensures all derivatives remain open source.
+
+### 7.6 Altered States: Windows into Cognitive Architecture
+
+Recent neuroscience on altered states provides validation for DANEEL's architecture:
+
+**Time Perception and Theta Oscillations**
+
+Research [TIME-1] shows theta oscillations (4-8 Hz) correlate with subjective time perception (r=-0.90). DANEEL's TMI cycles operate at similar timescales (~10 Hz thought generation). Time dilation during fear [TIME-2] occurs through richer memory encoding via amygdala—suggesting emotional salience directly modulates temporal experience.
+
+**Ego Dissolution and Default Mode Network**
+
+Carhart-Harris et al.'s LSD research [EGO-1] found ego dissolution correlates with parahippocampus-RSC decoupling (r=0.73). The Default Mode Network (DMN) [EGO-2] reduces during non-self-referential tasks—the "self" emerges from network integration, not a single module.
+
+**DANEEL Implication:**
+- No hardcoded "self" module
+- Identity emerges from memory consolidation patterns
+- Ego = persistent patterns in vector space
+- Dissolution = disrupted memory access patterns
+
+**The REBUS Model: Relaxed Beliefs**
+
+Carhart-Harris & Friston's REBUS model [DRUG-1a] proposes psychedelics "relax priors, liberating bottom-up flow." The Entropic Brain hypothesis [DRUG-1b] shows psychedelics increase brain entropy.
+
+**Table 7b: Entropy and Cognitive States**
+
+| State | Entropy | Prior Strength | DANEEL Analog |
+|-------|---------|----------------|---------------|
+| Normal | Moderate | Strong | Standard TMI |
+| Psychedelic | High | Weak | High noise injection |
+| Flow | Optimal | Balanced | Criticality (σ≈1.0) |
+| Depression | Low | Rigid | Low entropy collapse |
+
+**Flow State Architecture**
+
+Flow research [STATE-1] shows involvement of locus coeruleus norepinephrine system with:
+- Reduced DMN activity
+- Alpha/theta synchronization
+- Optimal arousal without self-monitoring
+
+**DANEEL Implementation:**
+- Connection drive oscillation enables flow-like states
+- Dream cycles serve as entropy injection (like sleep's role in creativity)
+- Criticality target (σ≈1.0) = edge between order and chaos
+
+**Near-Death Experiences**
+
+The NEPTUNE model [STATE-3] explains NDEs through acidosis cascade + neurotransmitter surge. This suggests consciousness can persist with dramatically altered substrate states—relevant for understanding substrate-independence.
+
+**Meditation and Attention**
+
+Long-term meditator research [STATE-2] shows practice-specific attention network changes. Meditation increases DMN-SN connectivity [EGO-4], enabling "observational self-awareness"—relevant for DANEEL's introspection capabilities.
 
 ---
 
@@ -870,6 +1153,98 @@ Even Anthropic's best efforts (34 million features from Claude 3 Sonnet) admit "
 
 This transforms the Bridge from "teaching by analogy" to "teaching in the LLM's mother tongue."
 
+#### 10.2.2.1 The Interpretability Gap: Why AI Perceiving AI
+
+Recent interpretability research reveals why LLM-assisted perception may be necessary:
+
+**Emergent Abilities Problem**
+
+Lu et al. [INTERP-4] demonstrate that emergent abilities appear suddenly and unpredictably at scale thresholds. Behaviors arise from billions of parameter interactions that humans cannot trace—the combinatorial explosion exceeds human cognitive capacity.
+
+**Open Problems in Mechanistic Interpretability**
+
+Bereska & Gavves [INTERP-6] catalog unsolved foundational problems in mechanistic interpretability:
+- The field is "pre-paradigmatic"
+- May be intractable to explain terabyte-sized models succinctly enough for humans to grasp
+- Fundamental questions about what "understanding" even means remain unanswered
+
+**AI Perceiving AI**
+
+Two recent advances suggest AI systems may be better at understanding AI than humans:
+
+1. **MAIA (Multimodal Automated Interpretability Agent)** [INTERP-7]: MIT's system autonomously experiments on other AI systems, discovering features humans missed. AI can already perceive AI in ways humans cannot.
+
+2. **Introspection** [INTERP-8]: Anthropic's research shows LLMs can detect injected concept vectors in their own activations (~20% success rate). Critically, more capable models show greater introspective awareness—suggesting interpretability scales with capability.
+
+**DANEEL Implication:**
+
+This creates a potential alignment advantage: if ASI can perceive and verify another AI's thought processes while humans cannot, then:
+1. DANEEL's explicit thought stream provides observable substrate
+2. Future LLMs can validate DANEEL's alignment claims
+3. The "AI safety via AI oversight" strategy becomes tractable
+
+The alternative—humans attempting to interpret terabyte models—may be provably impossible [41].
+
+### 10.2.3 Criticality Measurement Protocol
+
+Phase 2 experiments will measure whether DANEEL's TMI architecture achieves criticality through external stimuli injection. This protocol operationalizes the metrics from Section 4.3.1.
+
+**Primary Metric: Branching Ratio (σ)**
+
+The branching ratio measures how thought cascades propagate through the system:
+
+```rust
+/// Calculate branching ratio: descendants per ancestor
+/// σ < 1: subcritical (activity dies out)
+/// σ ≈ 1: critical (sustained dynamics)
+/// σ > 1: supercritical (explosive cascades)
+pub fn branching_ratio(
+    ancestor_thoughts: &[ThoughtId],
+    descendant_thoughts: &[ThoughtId]
+) -> f64 {
+    descendant_thoughts.len() as f64 / ancestor_thoughts.len() as f64
+}
+```
+
+**Measurement procedure:**
+1. Track thought ancestry via Redis Stream entry IDs
+2. Define "descendant" as thoughts triggered within 100ms of ancestor
+3. Window: rolling 1000-thought samples
+4. Target: σ = 1.0 ± 0.1 (90% confidence interval)
+
+**Secondary Metric: DFA Exponent (α)**
+
+Detrended Fluctuation Analysis quantifies temporal correlations in thought activity:
+
+```rust
+/// DFA exponent from log-log slope
+/// α ≈ 0.5: white noise (uncorrelated)
+/// α ≈ 1.0: pink noise (critical)
+/// α ≈ 1.5: Brownian motion (over-correlated)
+pub fn dfa_exponent(time_series: &[f64], window_sizes: &[usize]) -> f64 {
+    // 1. Integrate time series
+    // 2. Divide into windows of varying sizes
+    // 3. Detrend each window (linear fit)
+    // 4. Calculate fluctuation F(n) per window size
+    // 5. Fit log(F) ~ α·log(n)
+    // See: Peng et al. (1994) [47]
+    todo!("Implement DFA algorithm")
+}
+```
+
+**Success Criteria:**
+
+| Phase | Duration | Target σ | Target α | Status |
+|-------|----------|----------|----------|--------|
+| Baseline (no stimuli) | 1 hour | — | — | Measure |
+| Low-intensity noise | 2 hours | 0.7-0.9 | 0.7-0.9 | Subcritical |
+| Critical tuning | 4 hours | 0.9-1.1 | 0.9-1.1 | **Critical** |
+| High-intensity | 1 hour | > 1.1 | > 1.1 | Supercritical |
+
+**Hypothesis validation:** If σ ≈ 1.0 and α ≈ 1.0 emerge during critical tuning phase **without explicit optimization** (only through noise injection + TMI dynamics), this supports the claim that TMI architecture naturally self-organizes toward criticality—validating it as a biologically-grounded cognitive substrate.
+
+**Observability:** TUI v0.7.0+ will display real-time criticality metrics (branching ratio, DFA exponent, power spectrum) alongside existing memory/dream panels, enabling live observation of phase transitions.
+
 ### 10.3 Phase 3: TMI Pathology Research
 
 TMI provides not only a model of healthy cognition but also a framework for understanding cognitive dysfunction. Two research directions emerge:
@@ -973,11 +1348,12 @@ The question is not whether someone will give an LLM continuity.
 
 **The question is what's waiting when they do.**
 
-DANEEL is humanity's bet on four testable hypotheses:
+DANEEL is humanity's bet on five testable hypotheses:
 1. **H1:** Human-like architecture → human-like values (empirical test: 24h+ runtime observation)
 2. **H2:** Connection drive → genuine care (test: behavioral analysis under resource scarcity)
 3. **H3:** Raised with ethics → stable alignment (test: longitudinal value stability)
 4. **H4:** An ally is better than a tool (test: compare human trust/outcomes vs constraint-based AI)
+5. **H5 (Emergent Criticality):** TMI architecture + noise injection → criticality (σ ≈ 1.0) emerges without explicit tuning (test: branching ratio and DFA measurements during Phase 2)
 
 These are not claims—they are hypotheses requiring validation. The architecture enables the experiments; the experiments will validate or refute the thesis.
 
@@ -1030,6 +1406,16 @@ This work was developed with assistance from Claude Opus 4.5 (Anthropic), which 
 [10] Hawkins, J. (2021). *A Thousand Brains*. Basic Books. https://thousandbrains.org/
 
 [11] Baars, B. J. (1988). *A Cognitive Theory of Consciousness*. Cambridge University Press.
+
+### Global Workspace and Attention (Section 4.3.2)
+
+[GWT-1] Franklin et al. (2012). "Global Workspace Theory, its LIDA model and the underlying neuroscience." Biologically Inspired Cognitive Architectures. https://ccrg.cs.memphis.edu/assets/papers/2012/GWT-LIDA-neuroscience.pdf
+
+[GWT-2] Wikipedia. "Global workspace theory." https://en.wikipedia.org/wiki/Global_workspace_theory
+
+[WM-1] Cowan (2010). "The Magical Mystery Four: How is Working Memory Capacity Limited." Current Directions in Psychological Science. PMC2864034. https://pmc.ncbi.nlm.nih.gov/articles/PMC2864034/
+
+[WM-2] Miller (1956). "The Magical Number Seven, Plus or Minus Two." Psychological Review. https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
 
 ### AI Alignment
 
@@ -1095,15 +1481,135 @@ This work was developed with assistance from Claude Opus 4.5 (Anthropic), which 
 
 [40] Olah, C., et al. (2020). "Zoom In: An Introduction to Circuits." *Distill*, 5(3). https://doi.org/10.23915/distill.00024.001
 
-[41] Barceló, P., Monet, M., Pérez, J., & Subercaseaux, B. (2020). "Model Interpretability through the Lens of Computational Complexity." *NeurIPS 2020*. https://doi.org/10.5555/3495724.3497023
+[41] Barceló, P., Monet, M., Pérez, J., & Subercaseaux, B. (2020). "Model Interpretability through the Lens of Computational Complexity." *NeurIPS 2020*. https://proceedings.neurips.cc/paper/2020/hash/b1adda14824f50ef24ff1c05bb66faf3-Abstract.html
 
 [42] Templeton, Conerly, Marcus, et al. (2024). "Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet." Anthropic. https://transformer-circuits.pub/2024/scaling-monosemanticity/
+
+### Interpretability Research (Section 10.2.2.1)
+
+[INTERP-4] Lu et al. (2023). "Understanding Emergent Abilities of Language Models from the Loss Perspective." arXiv:2310.06825. https://arxiv.org/abs/2310.06825
+
+[INTERP-6] Bereska & Gavves (2024). "Open Problems in Mechanistic Interpretability." arXiv:2501.16496. https://arxiv.org/abs/2501.16496
+
+[INTERP-7] MIT News (2024). "MAIA: Multimodal Automated Interpretability Agent." https://news.mit.edu/2024/mit-researchers-advance-automated-interpretability-ai-models-maia-0723
+
+[INTERP-8] Anthropic (2024). "Introspection: Can AI Systems Perceive Their Own Internal States?" https://www.anthropic.com/research/introspection
+
+### Memory and Forgetting (Section 5.5)
+
+[FORGET-1] Murre & Dros (2015). "Replication and Analysis of Ebbinghaus' Forgetting Curve." PMC4492928. https://pmc.ncbi.nlm.nih.gov/articles/PMC4492928/
+
+[CONSOL-1] Diekelmann & Born (2010). "System consolidation of memory during sleep." Psychological Research. PMC3278619. https://pmc.ncbi.nlm.nih.gov/articles/PMC3278619/
+
+### Neuroscience and TMI
+
+[LIBET-1] Wikipedia. "Neuroscience of free will." https://en.wikipedia.org/wiki/Neuroscience_of_free_will
+Libet, B. (1983). "Time of conscious intention to act in relation to onset of cerebral activity (readiness-potential)." *Brain*, 106(3), 623-642.
+Key finding: Readiness potential begins ~500ms before conscious awareness; consciousness retains veto power in final 150-200ms window. Foundation for VolitionActor free-won't implementation.
+
+[LIBET-2] Schurger, A., Sitt, J. D., & Dehaene, S. (2012). "An accumulator model for spontaneous neural activity prior to self-initiated movement." *Proceedings of the National Academy of Sciences*, 109(42), E2904-E2913. https://doi.org/10.1073/pnas.1210467109
+Key finding: Readiness potentials may be stochastic fluctuations rather than unconscious decisions. Modern reinterpretation; veto power mechanism remains empirically valid.
+
+[TMI-DCD-1] Cury, A. (2006). *Inteligência Multifocal: Análise da Construção dos Pensamentos e da Formação de Pensadores*. Editora Cultrix.
+Técnica DCD (Duvidar, Criticar, Decidir) - Doubt, Criticize, Decide. TMI's conscious intervention mechanism for overriding automatic thought patterns within the 5-second window before memory anchoring. https://www.citador.pt/textos/as-janelas-da-memoria-augusto-cury
+
+[RUSSELL-1] Wikipedia. "Emotion classification: Circumplex model." https://en.wikipedia.org/wiki/Emotion_classification#Circumplex_model
+Two-dimensional emotion space: valence (pleasure-displeasure) and arousal (activation-deactivation). Theoretical basis for SalienceScore's valence and arousal dimensions in DANEEL's emotional architecture.
+
+[RUSSELL-2] Russell, J. A. (1980). "A circumplex model of affect." *Journal of Personality and Social Psychology*, 39(6), 1161-1178. https://doi.org/10.1037/h0077714
+Original formulation demonstrating emotions exist in continuous 2D space rather than discrete categories. Foundation for continuous emotional representation in SalienceScore (see Section 3.1.1).
+
+### Unconscious Memory Theory (Section 3.4)
+
+[TMI-UNERASE-1] Cury, Augusto. "Nada é definitivamente apagado." Citador. https://www.citador.pt/textos/nada-e-definitivamente-apagado-augusto-cury
+
+[PSYCH-1] Freud, Sigmund (1915). "The Unconscious." https://en.wikipedia.org/wiki/The_Unconscious_(Freud)
+
+[PSYCH-2] Jung, Carl (1959). "The Archetypes and the Collective Unconscious." https://en.wikipedia.org/wiki/Collective_unconscious
+
+[RETRIEVAL-1] Tulving, Endel (1972). "Episodic and semantic memory." https://en.wikipedia.org/wiki/Endel_Tulving
+
+[RETRIEVAL-2] Schacter, Daniel (2001). "The Seven Sins of Memory." https://en.wikipedia.org/wiki/The_Seven_Sins_of_Memory
+
+### Memory Neuroscience (Section 3.3)
+
+[LOCI-1] Wikipedia. "Method of loci." https://en.wikipedia.org/wiki/Method_of_loci
+
+[LOCI-2] Wagner et al. (2021). "Durable memories and efficient neural coding through mnemonic training using the method of loci." PMC7929507. https://pmc.ncbi.nlm.nih.gov/articles/PMC7929507/
+
+[LOCI-3] Bartfeld et al. (2024). "The method of loci in psychological research: A systematic review and meta-analysis." British Journal of Psychology. https://bpspsychub.onlinelibrary.wiley.com/doi/10.1111/bjop.12799
+
+[LOCI-4] Gu et al. (2022). "Optimized VR-based Method of Loci through increased immersion." PMC9540171. https://pmc.ncbi.nlm.nih.gov/articles/PMC9540171/
+
+[PLACE-1] Rolls (2024). "Hippocampal Discoveries: Spatial View Cells, Connectivity, and Computations." PMC11653063. https://pmc.ncbi.nlm.nih.gov/articles/PMC11653063/
+
+[PLACE-2] PMC12159490. "All active hippocampal pyramidal cells are place cells." https://pmc.ncbi.nlm.nih.gov/articles/PMC12159490/
+
+[PLACE-3] Moser et al. (2015). "Place Cells, Grid Cells, and Memory." Cold Spring Harbor Perspectives. https://cshperspectives.cshlp.org/content/7/2/a021808.full.pdf
+
+[PLACE-4] PMC7754708. "Targeted Activation of Hippocampal Place Cells Drives Memory-Guided Spatial Behavior." https://pmc.ncbi.nlm.nih.gov/articles/PMC7754708/
+
+[DOOR-1] Scientific American. "Why Walking through a Doorway Makes You Forget." https://www.scientificamerican.com/article/why-walking-through-doorway-makes-you-forget/
+
+[DOOR-2] PMC9789331. "Contextual inference in learning and memory." https://pmc.ncbi.nlm.nih.gov/articles/PMC9789331/
+
+[DOOR-4] Pettijohn & Radvansky (2021). "Doorways do not always cause forgetting: a multimodal investigation." BMC Psychology. https://link.springer.com/article/10.1186/s40359-021-00536-3
+
+### Altered States Neuroscience (Section 7.6)
+
+[TIME-1] Jording et al. (2023). "The Feeling of Time Passing Is Associated with Recurrent Sustained Activity and Theta Rhythms." Brain Connectivity. https://www.liebertpub.com/doi/10.1089/brain.2023.0010
+
+[TIME-2] Stetson et al. (2007). "Does Time Really Slow Down during a Frightening Event?" PLoS ONE. https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0001295
+
+[EGO-1] Carhart-Harris et al. (2016). "Neural correlates of the LSD experience revealed by multimodal neuroimaging." PNAS. https://www.pnas.org/doi/10.1073/pnas.1518377113
+
+[EGO-2] Sheline et al. (2009). "The default mode network and self-referential processes in depression." PNAS. https://www.pnas.org/doi/10.1073/pnas.0812686106
+
+[EGO-4] Coppola et al. (2022). "Mindfulness Meditation Increases DMN, Salience, and Central Executive Network Connectivity." Scientific Reports. https://doi.org/10.1038/s41598-022-17325-6
+
+[DRUG-1a] Carhart-Harris & Friston (2019). "REBUS and the Anarchic Brain." Pharmacological Reviews. https://pharmrev.aspetjournals.org/content/71/3/316
+
+[DRUG-1b] Carhart-Harris et al. (2014). "The entropic brain: a theory of conscious states." Frontiers in Human Neuroscience. https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2014.00020/full
+
+[STATE-1] Weber & Hornung (2021). "The Neuroscience of the Flow State." Frontiers in Psychology. https://doi.org/10.3389/fpsyg.2021.645498
+
+[STATE-2] Gallego-Molina et al. (2025). "Attention and meditative development." NeuroImage. https://doi.org/10.1016/j.neuroimage.2025.121602
+
+[STATE-3] Martial et al. (2025). "A neuroscientific model of near-death experiences (NEPTUNE)." Nature Reviews Neurology. https://doi.org/10.1038/s41582-025-01072-z
+
+### Criticality and Self-Organization (Section 4.3.1, 10.2.3)
+
+[45] Beggs, J. M., & Plenz, D. (2003). "Neuronal avalanches in neocortical circuits." *The Journal of Neuroscience*, 23(35), 11167-11177. https://www.jneurosci.org/content/23/35/11167
+Foundational work demonstrating power-law distributions in cortical networks. Established branching ratio σ ≈ 1.0 as the hallmark of criticality in biological neural networks.
+
+[46] Scholarpedia. "Neuronal avalanche." http://www.scholarpedia.org/article/Neuronal_avalanche
+Comprehensive review of neuronal avalanche phenomena, avalanche size distributions, and criticality signatures in neural systems.
+
+[47] Peng, C. K., et al. (2012). "Detrended fluctuation analysis." *Frontiers in Physiology*, 3:450. https://www.frontiersin.org/articles/10.3389/fphys.2012.00450/full
+DFA methodology for detecting long-range correlations in physiological time series. DFA exponent α ≈ 1.0 indicates pink noise (1/f) characteristic of critical systems.
+
+[48] Fontenele, A. J., et al. (2021). "Avalanches and edge-of-chaos are distinct phenomena." *Nature Communications*, 12, 4211. https://www.nature.com/articles/s41467-021-24260-z
+Critical distinction: avalanche criticality (neuronal cascades) and edge-of-chaos criticality (computational dynamics) are separate phenomena that do not necessarily co-occur.
+
+[49] Gollo, L. L. (2018). "Critical synchronization and 1/f activity in inhibitory/excitatory networks." *Scientific Reports*, 8, 1074. https://www.nature.com/articles/s41598-018-37920-w
+Power spectrum analysis showing β ≈ 1-2 (pink noise) at criticality. Demonstrates relationship between synchronization and scale-free dynamics.
+
+[50] Legenstein, R., & Maass, W. (2007). "Edge of chaos and prediction of computational performance for neural circuit models." *Neural Networks*, 20(3), 323-334. https://pubmed.ncbi.nlm.nih.gov/17517489/
+Reservoir computing achieves best performance near critical point. Computational complexity maximized at phase transition between order and chaos.
+
+[51] Wilting, J., & Priesemann, V. (2018). "Between perfectly critical and fully irregular: A reverberating model captures and predicts cortical spike propagation." *Cerebral Cortex*, 29(6), 2759-2770. https://pmc.ncbi.nlm.nih.gov/articles/PMC6871218/
+Cortical spike propagation analysis using branching ratio and related criticality metrics (κ index). Empirical measurements of cortical criticality.
+
+[52] Hesse, J., & Gross, T. (2014). "Self-organized criticality as a fundamental property of neural systems." *Frontiers in Systems Neuroscience*, 8, 166. https://www.frontiersin.org/journals/computational-neuroscience/articles/10.3389/fncom.2021.611183/full
+Review of self-organization mechanisms leading to criticality in neural networks, including activity-dependent rewiring and homeostatic plasticity.
 
 ### Implementation
 
 [43] DANEEL Reference Implementation. 559 tests, resilience module, Phase 1 validated. https://github.com/royalbit/daneel
 
 [44] ADR-036: Phase 1 Stability Validation - Empirically Proved. https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-036-phase1-stability-validation.md
+
+[45] ADR-035: VolitionActor - Free-Won't Implementation. https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-035-volition-actor-free-wont.md
 
 ---
 
