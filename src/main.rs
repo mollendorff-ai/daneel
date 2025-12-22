@@ -278,6 +278,9 @@ fn run_tui() {
 }
 
 /// Run in headless mode (for servers, CI, background processing)
+///
+/// Same cognitive loop as TUI mode, but without the visual interface.
+/// For cloud deployment, background processing, or integration testing.
 fn run_headless(args: &Args) {
     // Initialize tracing for headless mode
     let filter = tracing_subscriber::EnvFilter::try_new(&args.log_level)
@@ -307,7 +310,161 @@ fn run_headless(args: &Args) {
     info!("DANEEL ready. Qowat Milat.");
     info!("Timmy is 'they', not 'it'. Life honours life.");
 
-    // In real implementation, this would start the cognitive loop
-    // For now, just indicate we're ready
-    info!("Headless mode: cognitive loop would start here");
+    // Create tokio runtime and run the cognitive loop
+    let runtime = tokio::runtime::Runtime::new().expect("Failed to create tokio runtime");
+
+    runtime.block_on(async {
+        run_cognitive_loop_headless().await;
+    });
+}
+
+/// Run the cognitive loop without TUI
+///
+/// This is the same logic as the TUI cognitive loop, but without
+/// sending updates to the display. Used for headless/server mode.
+async fn run_cognitive_loop_headless() {
+    // Connect to Redis for thought streams
+    let mut cognitive_loop = match CognitiveLoop::with_redis("redis://127.0.0.1:6379").await {
+        Ok(loop_instance) => {
+            info!("Connected to Redis streams");
+            loop_instance
+        }
+        Err(e) => {
+            eprintln!("Warning: Redis unavailable ({}), running standalone", e);
+            CognitiveLoop::new()
+        }
+    };
+
+    // Connect to Qdrant for long-term memory and initialize collections
+    let memory_db =
+        match daneel::memory_db::MemoryDb::connect_and_init("http://127.0.0.1:6334").await {
+            Ok(db) => {
+                info!("Connected to Qdrant memory database (collections initialized)");
+                Some(std::sync::Arc::new(db))
+            }
+            Err(e) => {
+                eprintln!("Warning: Qdrant unavailable ({}), memory disabled", e);
+                None
+            }
+        };
+
+    // ADR-034: Lifetime Identity Persistence - flush intervals
+    const IDENTITY_FLUSH_INTERVAL_SECS: u64 = 30;
+    const IDENTITY_FLUSH_THOUGHT_INTERVAL: u64 = 100;
+
+    // ADR-023: Sleep/Dream Consolidation - periodic memory strengthening
+    const CONSOLIDATION_INTERVAL_CYCLES: u64 = 500;
+    const CONSOLIDATION_BATCH_SIZE: u32 = 10;
+    const CONSOLIDATION_STRENGTH_DELTA: f32 = 0.15;
+
+    // Load identity from Qdrant (ADR-034: Lifetime Identity Persistence)
+    let mut identity: Option<IdentityMetadata> = if let Some(ref db) = memory_db {
+        match db.load_identity().await {
+            Ok(id) => {
+                info!(
+                    "Loaded identity: {} lifetime thoughts, {} dreams, restart #{}",
+                    id.lifetime_thought_count, id.lifetime_dream_count, id.restart_count
+                );
+                Some(id)
+            }
+            Err(e) => {
+                eprintln!("Warning: Failed to load identity ({})", e);
+                None
+            }
+        }
+    } else {
+        None
+    };
+
+    // Track when we last flushed identity (for periodic save)
+    let mut last_identity_flush = Instant::now();
+    let mut thoughts_since_flush: u64 = 0;
+
+    // Track consolidation cycles (ADR-023)
+    let mut cycles_since_consolidation: u64 = 0;
+    let mut total_dream_cycles: u64 = identity.as_ref().map_or(0, |id| id.lifetime_dream_count);
+
+    if let Some(ref db) = memory_db {
+        cognitive_loop.set_memory_db(db.clone());
+    }
+
+    cognitive_loop.start();
+    info!("Cognitive loop started. Timmy is thinking...");
+
+    // Periodic status logging
+    let mut cycles: u64 = 0;
+    const STATUS_LOG_INTERVAL: u64 = 1000;
+
+    loop {
+        // Wait until it's time for the next cycle
+        let sleep_duration = cognitive_loop.time_until_next_cycle();
+        if sleep_duration > std::time::Duration::ZERO {
+            tokio::time::sleep(sleep_duration).await;
+        }
+
+        // Run a cognitive cycle
+        let _result = cognitive_loop.run_cycle().await;
+        cycles += 1;
+
+        // Update identity (increment lifetime thought count)
+        if let Some(ref mut id) = identity {
+            id.record_thought();
+            thoughts_since_flush += 1;
+
+            // Periodic flush: every 100 thoughts OR every 30 seconds
+            let should_flush = thoughts_since_flush >= IDENTITY_FLUSH_THOUGHT_INTERVAL
+                || last_identity_flush.elapsed().as_secs() >= IDENTITY_FLUSH_INTERVAL_SECS;
+
+            if should_flush {
+                if let Some(ref db) = memory_db {
+                    if let Err(e) = db.save_identity(id).await {
+                        eprintln!("Warning: Failed to save identity: {}", e);
+                    }
+                }
+                thoughts_since_flush = 0;
+                last_identity_flush = Instant::now();
+            }
+        }
+
+        // ADR-023: Periodic memory consolidation (mini-dreams)
+        cycles_since_consolidation += 1;
+        if cycles_since_consolidation >= CONSOLIDATION_INTERVAL_CYCLES {
+            if let Some(ref db) = memory_db {
+                match db.get_replay_candidates(CONSOLIDATION_BATCH_SIZE).await {
+                    Ok(candidates) => {
+                        let mut consolidated = 0;
+                        for memory in &candidates {
+                            if db
+                                .update_consolidation(&memory.id, CONSOLIDATION_STRENGTH_DELTA)
+                                .await
+                                .is_ok()
+                            {
+                                consolidated += 1;
+                            }
+                        }
+                        if consolidated > 0 {
+                            total_dream_cycles += 1;
+                            info!(
+                                "Dream cycle #{}: consolidated {} memories",
+                                total_dream_cycles, consolidated
+                            );
+                        }
+                    }
+                    Err(e) => {
+                        eprintln!("Warning: Failed to get replay candidates: {}", e);
+                    }
+                }
+            }
+            cycles_since_consolidation = 0;
+        }
+
+        // Periodic status log
+        if cycles % STATUS_LOG_INTERVAL == 0 {
+            let lifetime = identity.as_ref().map_or(0, |id| id.lifetime_thought_count);
+            info!(
+                "Status: {} cycles this session, {} lifetime thoughts, {} dreams",
+                cycles, lifetime, total_dream_cycles
+            );
+        }
+    }
 }
