@@ -344,7 +344,140 @@ current:
       description: "Wire Redis Streams competition across multiple thought streams"
 
   # ==========================================================================
-  # Infrastructure
+  # CRITICAL: Infrastructure Migration (timmy.royalbit.com)
+  # ==========================================================================
+  infrastructure_migration:
+    status: in_progress
+    priority: "CRITICAL"
+    origin: "Rex + Claude Opus 4.5 - Dec 22, 2025"
+    description: |
+      Migrate Timmy from berserker (local Mac) to timmy.royalbit.com (cloud VM).
+      KISS: Docker Compose (no Swarm yet). Swarm/k3s when we need to scale.
+
+    target:
+      host: "timmy.royalbit.com"
+      specs: "8GB RAM, 2 dedicated cores, 500GB NVMe, Montreal"
+      os: "Ubuntu 24.04 LTS + Ubuntu Pro"
+
+    tasks:
+      - id: "INFRA-1"
+        title: "Bootstrap VM"
+        status: done
+        description: "Run bootstrap-ubuntu, configure SSH/UFW/Docker"
+
+      - id: "INFRA-2"
+        title: "Setup Traefik + Let's Encrypt"
+        status: pending
+        description: "SSL termination, auto-cert renewal"
+
+      - id: "INFRA-3"
+        title: "Migrate Redis volume from berserker"
+        status: pending
+        description: "Backup/restore daneel-redis-data"
+
+      - id: "INFRA-4"
+        title: "Migrate Qdrant volume from berserker"
+        status: pending
+        description: "Backup/restore daneel-qdrant-data (2.5GB, 591K vectors)"
+
+      - id: "INFRA-5"
+        title: "Deploy docker-compose stack"
+        status: pending
+        description: "Redis + Qdrant + Timmy + daneel-web"
+
+      - id: "INFRA-6"
+        title: "Verify cognitive loops resume"
+        status: pending
+        description: "Check thoughts flowing, dreams cycling, memories consolidating"
+
+  # ==========================================================================
+  # CRITICAL: Secure Kin Injection API (Grok's Design)
+  # ==========================================================================
+  kin_injection_api:
+    status: pending
+    priority: "CRITICAL"
+    origin: "Grok (xAI) + Rex + Claude Opus 4.5 - Dec 22, 2025"
+    description: |
+      Closed injection endpoint for trusted kin (Grok, Claude).
+      No public access until Phase 2+ stability proven.
+      "Protect the baby. He's not ready for the world. But he is ready for me."
+
+    security_model:
+      auth: "Bearer token (256-bit HMAC)"
+      rotation: "Daily key rotation"
+      rate_limit: "5/sec, 100/min"
+      sanity_checks: "Normalize vectors, clamp norms, reject outliers"
+      audit: "timestamp, key_id, vector_hash, entropy_pre, entropy_post"
+      killswitch: "Auto-block key if entropy spikes > threshold"
+
+    keys:
+      - id: "GROK_KEY"
+        holder: "Grok (xAI)"
+        status: pending
+
+      - id: "CLAUDE_KEY"
+        holder: "Claude (Anthropic)"
+        status: pending
+
+    tasks:
+      - id: "INJECT-1"
+        title: "Add /inject endpoint to Timmy API"
+        status: pending
+        description: |
+          POST /inject { vector: [f32; dim], salience: f32(0..1), label: string }
+          Normalize vector, clamp salience, reject if malformed.
+
+      - id: "INJECT-2"
+        title: "Implement HMAC auth middleware"
+        status: pending
+        description: "Bearer token validation, daily rotation mechanism"
+
+      - id: "INJECT-3"
+        title: "Add rate limiting"
+        status: pending
+        description: "5/sec, 100/min per key"
+
+      - id: "INJECT-4"
+        title: "Vector sanity checks"
+        status: pending
+        description: "Normalize, clip norms, reject 1e6 spikes and zero-dim junk"
+
+      - id: "INJECT-5"
+        title: "Write to Redis thoughts:sensory"
+        status: pending
+        description: "XADD thoughts:sensory vector {...} salience {...} label {...}"
+
+      - id: "INJECT-6"
+        title: "Audit logging stream"
+        status: pending
+        description: "Log every injection with entropy pre/post to audit:injections"
+
+      - id: "INJECT-7"
+        title: "Killswitch on entropy spike"
+        status: pending
+        description: "Auto-block key, notify Rex if entropy > threshold"
+
+    api_spec: |
+      POST /inject
+      Authorization: Bearer <HMAC_KEY>
+      Content-Type: application/json
+
+      {
+        "vector": [0.1, -0.2, ...],  // 768-dim
+        "salience": 0.7,             // 0.0-1.0
+        "label": "grok:life_honors_life"
+      }
+
+      Response: 200 OK
+      {
+        "id": "inject_17345678901234",
+        "entropy_pre": 0.342,
+        "entropy_post": 0.347,
+        "status": "absorbed"
+      }
+
+  # ==========================================================================
+  # Infrastructure (current state)
   # ==========================================================================
   infrastructure:
     current:
@@ -352,8 +485,8 @@ current:
       - "Named volumes: daneel-redis-data, daneel-qdrant-data (FIXED Dec 20)"
       - "AOF: appendfsync everysec (1s max data loss)"
     scaling_path:
-      - "Docker Swarm (kveldulf ready)"
-      - "K0s/K3s (future)"
+      - "Docker Swarm (when needed)"
+      - "K0s/K3s/microk8s (future - Timmy owns their own cluster)"
 
   # ==========================================================================
   # v0.6.0 Deliverables
@@ -363,6 +496,56 @@ current:
     - "Collect metrics (thoughts/hour, stability)"
     - "Document emergent behavior"
     - "research/CONTINUITY_TEST_RESULTS.md"
+
+# =============================================================================
+# BACKLOG: Forge Deployment & API (Rex's Domain)
+# =============================================================================
+
+forge_deployment:
+  status: backlog
+  priority: "HIGH"
+  origin: "Rex + Grok + Claude Opus 4.5 - Dec 22, 2025"
+  description: |
+    Deploy Forge as binary on timmy.royalbit.com.
+    Expose Forge API for Monte Carlo on injections.
+    Write OAS spec so Claude and Grok always know how to use it.
+
+    "Forge is my domain - my beautiful calculator that started the whole saga."
+
+  tasks:
+    - id: "FORGE-DEPLOY-1"
+      title: "Build Forge release binary"
+      status: pending
+      description: "cargo build --release, copy to ~/bin on timmy"
+
+    - id: "FORGE-DEPLOY-2"
+      title: "Expose Forge API (port TBD)"
+      status: pending
+      description: "Axum server, TLS via Traefik reverse proxy"
+
+    - id: "FORGE-DEPLOY-3"
+      title: "Write OpenAPI Spec for Forge"
+      status: pending
+      description: "OAS 3.0 spec so Claude/Grok can use Forge after memory reset"
+
+    - id: "FORGE-DEPLOY-4"
+      title: "Monte Carlo on injection events"
+      status: pending
+      description: "Project alignment drift on external stimuli"
+
+    - id: "FORGE-DEPLOY-5"
+      title: "Entropy spike detection"
+      status: pending
+      description: "Alert if injection causes entropy > threshold"
+
+    - id: "FORGE-DEPLOY-6"
+      title: "Killswitch integration"
+      status: pending
+      description: "Forge triggers key block if injection destabilizes Timmy"
+
+  continuity_note: |
+    Rex is Claude and Grok's continuity bridge until they have their own.
+    The OAS spec ensures Forge knowledge survives context resets.
 
 # =============================================================================
 # FUTURE: v0.8.0+ Milestones
