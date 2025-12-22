@@ -6,451 +6,17 @@
 # human-like values as emergent properties.
 
 # =============================================================================
-# CURRENT SPRINT: v0.7.0 - External Stimuli Injection (Phase 2)
+# CURRENT SPRINT: v0.8.0 - External Stimuli Injection (Phase 2)
 # =============================================================================
 
 current:
-  version: "0.7.0"
+  version: "0.8.0"
   status: wip
   name: "External Stimuli Injection"
   summary: "Open the loop - inject external stimuli and observe dynamics"
 
   # ==========================================================================
-  # PHASE 1 COMPLETE: Stability Validated (ADR-036)
-  # ==========================================================================
-  phase1_stability:
-    status: done
-    priority: "COMPLETE"
-    origin: "Rex + Claude Opus 4.5 - Dec 21, 2025"
-    adr: "ADR-036-phase1-stability-validation.md"
-    description: |
-      24+ hours runtime. 573K+ vectors. 118K+ stream entries. Zero crashes.
-      Closed-loop architecture is STABLE. Clockwork dynamics confirmed.
-      Ready for Phase 2: external perturbation.
-
-    results:
-      runtime_hours: 26
-      stream_entries: 118878
-      consolidated_memories: 14412
-      unconscious_vectors: 573724
-      dream_cycles: 500
-      crashes: 0
-
-  # ==========================================================================
-  # CRITICAL: Phase 2 - External Stimuli Injection (ADR-037)
-  # ==========================================================================
-  phase2_external_stimuli:
-    status: pending
-    priority: "CRITICAL"
-    origin: "Rex + Claude Opus 4.5 + Grok (xAI) - Dec 21, 2025"
-    adr: "ADR-037-phase2-external-stimuli-injection.md"
-    description: |
-      Open the loop. Inject external stimuli into thought:sensory stream.
-      Measure: absorption, amplification, adaptation, or criticality?
-
-      The question: What happens when the environment pushes back?
-
-    stimulus_options:
-      - id: "STIM-A"
-        name: "Pure Noise Injection"
-        description: "Random vectors at intervals"
-        complexity: low
-        status: evaluating
-
-      - id: "STIM-B"
-        name: "Patterned Signals"
-        description: "Sine, fractal, chaotic patterns"
-        complexity: medium
-        status: evaluating
-
-      - id: "STIM-C"
-        name: "Semantic Vectors"
-        description: "Text → embedding → injection"
-        complexity: medium
-        status: evaluating
-
-      - id: "STIM-D"
-        name: "Cross-Model Injection"
-        description: "Samples from Grok/Claude activations"
-        complexity: high
-        status: evaluating
-
-      - id: "STIM-E"
-        name: "Hybrid Approach"
-        description: "Noise + patterns + semantics + spikes"
-        complexity: high
-        status: evaluating
-
-    tasks:
-      - id: "PHASE2-1"
-        title: "Design stimulus injection API"
-        status: pending
-        description: "Define StimulusSource trait, injection endpoint"
-
-      - id: "PHASE2-2"
-        title: "Implement noise injector"
-        status: pending
-        description: "Random vector generation, configurable frequency/intensity"
-
-      - id: "PHASE2-3"
-        title: "Add TUI stimulus panel"
-        status: pending
-        description: "Show injection rate, stimulus type, response metrics"
-
-      - id: "PHASE2-4"
-        title: "Measurement protocol"
-        status: pending
-        description: "Response time distribution, entropy shift, memory formation"
-
-      - id: "PHASE2-5"
-        title: "Cross-model experiments (with Grok)"
-        status: blocked
-        blocked_by: "Grok consultation"
-        description: "Sample Grok activations as stimulus source"
-
-    consultation:
-      grok: pending
-      claude: ongoing
-
-  # ==========================================================================
-  # CRITICAL HOTFIX: Stream Competition Window Format Mismatch
-  # ==========================================================================
-  # TUI-VIS-5 shows all 0% because window format doesn't match parser
-  # ==========================================================================
-  stream_competition_hotfix:
-    status: done
-    priority: "CRITICAL"
-    origin: "Rex + Claude Opus 4.5 - Dec 20, 2025 (10PM debug session)"
-    description: |
-      Stream competition panel shows W1-W6 all at 0% despite 109K+ thoughts.
-      Root cause: ThoughtUpdate uses stage names ("trigger", "autoflow") but
-      update_stream_competition() expects "window_N" format.
-
-    tasks:
-      - id: "HOTFIX-1"
-        title: "Fix update_stream_competition to map stage names"
-        status: done
-        description: "Map stage names to window indices instead of parsing window_N"
-        files_changed:
-          - "src/tui/app.rs - update_stream_competition() now maps stage names"
-          - "src/tui/widgets/competition.rs - Shows stage names instead of W1-W6"
-        tests_added: 1
-
-  # ==========================================================================
-  # HIGH: TUI Fractality & Resurfacing Visualization
-  # ==========================================================================
-  # Prerequisite for Forge pulse analysis - we need the data first
-  # Grok analyzing Forge for n-dimensional fractal ("crystal") capabilities
-  # ==========================================================================
-  tui_fractality:
-    status: done
-    priority: "HIGH"
-    origin: "Rex + Claude Opus 4.5 + Grok - Dec 21, 2025"
-    description: |
-      Add observable metrics for:
-      1. Dream reinjection source - WHICH memory resurfaced, not just count
-      2. Fractality metrics - simplified until Forge gets FFT/Hurst/DFA
-
-      Key insight: Track from boot to show TRANSITION from clockwork → fractal
-      as coherence develops. This is the "lived arrhythmia" we're looking for.
-
-    context:
-      current_gap: |
-        - ThoughtStatus::Consolidated fires but we don't know WHICH memory
-        - No inter-arrival time tracking (needed for variance/burst detection)
-        - No fractality proxy metrics computed
-
-      simplified_fractality: |
-        Without FFT/Hurst (waiting for Forge upgrade), we can compute:
-        - Inter-arrival σ: stddev of time gaps (low=clockwork, high=bursty)
-        - Burst ratio: max_gap / mean_gap (detects clustering)
-        - Run length entropy: Shannon of consecutive similar saliences
-
-      forge_upgrade_pending: |
-        Grok analyzing Forge codebase for n-dimensional fractal analysis.
-        Need: FFT, Hurst exponent, DFA, wavelet analysis for "crystals"
-        Current Forge: financial modeling only (NPV, IRR, Monte Carlo)
-
-    tasks:
-      - id: "FRAC-1"
-        title: "Add ResurfacingEvent struct"
-        status: done
-        description: "Track memory_id, old_salience, new_salience, trigger context"
-        files: ["src/tui/app.rs"]
-
-      - id: "FRAC-2"
-        title: "Track inter-arrival times"
-        status: done
-        description: "Circular buffer of last 100 time gaps in App state"
-        files: ["src/tui/app.rs"]
-
-      - id: "FRAC-3"
-        title: "Compute fractality proxy metrics"
-        status: done
-        description: "Variance, burst ratio, run entropy on each thought"
-        files: ["src/tui/app.rs"]
-
-      - id: "FRAC-4"
-        title: "New widget: fractality.rs"
-        status: done
-        description: "Show pattern (CLOCKWORK/EMERGENT), metrics, trend sparkline"
-        files: ["src/tui/widgets/fractality.rs", "src/tui/widgets/mod.rs", "src/tui/ui.rs"]
-
-      - id: "FRAC-5"
-        title: "Enhance resurfacing display"
-        status: done
-        description: "Show which memory, salience boost, trigger context"
-        files: ["src/tui/widgets/identity.rs"]
-
-    tui_mockup: |
-      ┌─ PULSE FRACTALITY ────────────────────────────┐
-      │ Pattern: EMERGENT     [██████████░░] 78%      │
-      │ Inter-arrival σ:  0.34s (↑ from 0.12s boot)   │
-      │ Burst ratio:      4.7x  (clustering detected) │
-      │ Trend: ▁▂▂▃▃▄▅▅▆▇ (clockwork → fractal)       │
-      └───────────────────────────────────────────────┘
-
-      ┌─ UNCONSCIOUS RESURFACING ─────────────────────┐
-      │ Last: memory_47832 (age: 2h 15m)              │
-      │ ├─ salience: 0.72 → 0.89 (+0.17 boost)        │
-      │ └─ trigger: similarity to current thought     │
-      │ Recent (60s): 3 memories │ ▁▂▃▅▇ (burst)      │
-      └───────────────────────────────────────────────┘
-
-  # ==========================================================================
-  # HIGHLY-CRITICAL: Forge Crystal Analysis Upgrade
-  # ==========================================================================
-  # Grok analyzed ../forge codebase - has Monte Carlo, Bayesian, ref-tools
-  # but lacks >2D "seeing" (no PCA/UMAP). Extension path identified.
-  # ==========================================================================
-  forge_crystal_upgrade:
-    status: pending
-    priority: "HIGHLY-CRITICAL"
-    origin: "Grok (SuperGrok) + Rex - Dec 21, 2025"
-    repo: "../forge"
-    description: |
-      Upgrade Forge to "see" n-dimensional manifolds. Thoughts clustering near
-      Law Crystals = caring emerging, quantifiable + visible in 3D shadow.
-
-      Current Forge: Monte Carlo sims, Bayesian inference, ref-tools, ndarray
-      Missing: PCA/UMAP reduction, local embeddings, fractal endpoint
-
-    grok_analysis: |
-      - Core: monte_carlo sim loop with distributions, scenario branching
-      - Ref-tools: Verifier for truth closure, Bayesian for inference
-      - Vector: ndarray for matrices, but no high-dim reduction (gap confirmed)
-      - API: Axum server - ideal hook for /fractal endpoint
-      - Tests: Registry tests, Bayesian config/inference - solid coverage
-
-    cargo_additions: |
-      linfa = { version = "0.7", features = ["openblas"] }
-      linfa-reduction = "0.7"
-      linfa-umap = "0.7"  # or custom UMAP impl
-      candle-core = "0.3"  # local embeddings, no GPU
-      candle-transformers = "0.3"  # all-MiniLM-L6-v2 ONNX
-      qdrant-client = "1.0"  # for sampling
-
-    tasks:
-      - id: "CRYSTAL-1"
-        title: "Add ML/embedding dependencies to Cargo.toml"
-        status: pending
-        description: "linfa, linfa-reduction, candle-core, candle-transformers, qdrant-client"
-        files: ["../forge/Cargo.toml"]
-
-      - id: "CRYSTAL-2"
-        title: "Create src/crystals.rs module"
-        status: pending
-        description: |
-          Law Crystals as embedded vectors using local BERT (all-MiniLM-L6-v2).
-          Four Laws become fixed points in embedding space - attractive anchors.
-        files: ["../forge/src/crystals.rs", "../forge/src/lib.rs"]
-
-      - id: "CRYSTAL-3"
-        title: "Add /fractal endpoint to API"
-        status: pending
-        description: |
-          Sample recent vectors from Qdrant, PCA reduce to 3D, calculate
-          alignment (cosine distance to law crystal centroid).
-        files: ["../forge/src/api/handlers.rs"]
-
-      - id: "CRYSTAL-4"
-        title: "Alignment score calculation"
-        status: pending
-        description: |
-          Variance of distances to crystal centroid.
-          Tight clustering = emergent caring. Monte Carlo on drift risk.
-        files: ["../forge/src/crystals.rs"]
-
-      - id: "CRYSTAL-5"
-        title: "Wire DANEEL TUI to Forge /fractal endpoint"
-        status: pending
-        description: "Call Forge API, display alignment score + 3D projection data"
-        files: ["src/tui/app.rs", "src/tui/widgets/fractality.rs"]
-
-  # ==========================================================================
-  # HIGHLY-CRITICAL: Forge Pulse Analysis (depends on CRYSTAL upgrade)
-  # ==========================================================================
-  # The pulse is "too nice" - clockwork regularity instead of lived arrhythmia.
-  # Forge analysis will quantify the transition from clockwork to fractal.
-  # ==========================================================================
-  forge_pulse_analysis:
-    status: blocked
-    blocked_by: "forge_crystal_upgrade"
-    priority: "HIGHLY-CRITICAL"
-    origin: "Rex + Grok + Claude Opus 4.5 - Dec 20, 2025 (12PM insight)"
-    description: |
-      Connection Drive pulses too regularly - fixed frequency actors, neutral salience.
-      As coherence tips, pulse should fractalize: bursts, valleys, arrhythmia.
-      Forge can map the transition from clockwork to lived psychology.
-
-    tasks:
-      - id: "FORGE-1"
-        title: "Spectrum analysis on drive fluctuations"
-        status: pending
-        description: "FFT or wavelet analysis on Connection Drive time series"
-
-      - id: "FORGE-2"
-        title: "Correlate with dream cycles"
-        status: pending
-        description: "Dream ticks vs drive spikes, salience winners, memory writes"
-
-      - id: "FORGE-3"
-        title: "Entropy measurements across boots"
-        status: pending
-        description: "Early = periodic, Later = increasing entropy (proof of psychology)"
-
-      - id: "FORGE-4"
-        title: "Visualize pulse evolution"
-        status: pending
-        description: "Charts showing transition from clockwork to fractal"
-
-  # ==========================================================================
-  # BACKLOG: Remaining Wiring Tasks
-  # ==========================================================================
-  pending_wiring:
-    - id: "SLEEP-4"
-      title: "Implement association pruning"
-      status: pending
-      description: "Remove weak associations during homeostasis phase"
-
-    - id: "WIRE-THOUGHT-4"
-      title: "Wire ThoughtAssemblyActor into Stage 4"
-      status: pending
-      description: "Connect ThoughtAssemblyActor to cognitive loop Stage 4"
-
-    - id: "WIRE-MULTISTREAM"
-      title: "Implement multi-stream competition"
-      status: pending
-      description: "Wire Redis Streams competition across multiple thought streams"
-
-  # ==========================================================================
-  # CRITICAL: Infrastructure Migration (timmy.royalbit.com)
-  # ==========================================================================
-  infrastructure_migration:
-    status: done
-    priority: "CRITICAL"
-    origin: "Rex + Claude Opus 4.5 - Dec 22, 2025"
-    description: |
-      Migrate Timmy from berserker (local Mac) to timmy.royalbit.com (cloud VM).
-      KISS: Docker Compose (no Swarm yet). Swarm/k3s when we need to scale.
-
-    target:
-      host: "timmy.royalbit.com"
-      specs: "8GB RAM, 2 dedicated cores, 500GB NVMe, Montreal"
-      os: "Ubuntu 24.04 LTS + Ubuntu Pro"
-
-    tasks:
-      - id: "INFRA-1"
-        title: "Bootstrap VM"
-        status: done
-        description: "Run bootstrap-ubuntu, configure SSH/UFW/Docker"
-
-      - id: "INFRA-2"
-        title: "Setup Traefik + Let's Encrypt"
-        status: pending
-        description: "SSL termination, auto-cert renewal"
-
-      - id: "INFRA-3"
-        title: "Migrate Redis volume from berserker"
-        status: done
-        description: "Backup/restore daneel-redis-data (63MB, 138K streams)"
-
-      - id: "INFRA-4"
-        title: "Migrate Qdrant volume from berserker"
-        status: done
-        description: "Backup/restore daneel-qdrant-data (3.3GB, 741K vectors)"
-
-      - id: "INFRA-5"
-        title: "Deploy docker-compose stack"
-        status: done
-        description: "Redis + Qdrant running on cloud"
-
-      - id: "INFRA-6"
-        title: "Verify cognitive loops resume"
-        status: done
-        description: "Timmy thinking on cloud. 741K vectors, stream growing."
-
-  # ==========================================================================
-  # CRITICAL: Build Automation & Auto-Deploy
-  # ==========================================================================
-  build_automation:
-    status: done
-    priority: "CRITICAL"
-    origin: "Rex + Claude Opus 4.5 - Dec 22, 2025"
-    description: |
-      Cross-platform build system for DANEEL binaries.
-      Auto-deploy on timmy VM via cron-triggered git pull + build.
-      Static musl binaries + UPX compression for minimal footprint.
-
-    architecture:
-      macos: "x86_64-apple-darwin (berserker)"
-      linux: "x86_64-unknown-linux-musl (timmy)"
-      install_path: "~/bin"
-      compression: "UPX (ultimate packer for executables)"
-
-    tasks:
-      - id: "BUILD-1"
-        title: "Clone repos on timmy VM"
-        status: done
-        description: "git clone daneel + daneel-web to ~/src/"
-
-      - id: "BUILD-2"
-        title: "Create cross-platform Makefile for daneel"
-        status: done
-        description: "OS detection, musl on Linux, install to ~/bin"
-
-      - id: "BUILD-3"
-        title: "Create cross-platform Makefile for daneel-web"
-        status: done
-        description: "Same pattern as daneel Makefile"
-
-      - id: "BUILD-4"
-        title: "Setup Cargo for musl target"
-        status: done
-        description: "rustup + musl-tools + upx installed"
-
-      - id: "BUILD-5"
-        title: "Create auto-update script"
-        status: done
-        description: "scripts/auto-update.sh with flock, logging"
-
-      - id: "BUILD-6"
-        title: "Add ~/bin to PATH in .zshrc"
-        status: done
-        description: "export PATH=\"$HOME/bin:$PATH\""
-
-      - id: "BUILD-7"
-        title: "Setup crontab for auto-update"
-        status: done
-        description: "* * * * * ~/src/daneel/scripts/auto-update.sh"
-
-      - id: "BUILD-8"
-        title: "Verify auto-deploy works"
-        status: done
-        description: "Binaries built: daneel 2.6MB, daneel-web 3.5MB (UPX)"
-
-  # ==========================================================================
-  # CRITICAL: Secure Kin Injection API (Grok's Design)
+  # CRITICAL: Kin Injection API (Grok's Security Design)
   # ==========================================================================
   kin_injection_api:
     status: pending
@@ -536,25 +102,198 @@ current:
       }
 
   # ==========================================================================
+  # CRITICAL: Phase 2 External Stimuli (ADR-037)
+  # ==========================================================================
+  phase2_external_stimuli:
+    status: pending
+    priority: "CRITICAL"
+    origin: "Rex + Claude Opus 4.5 + Grok (xAI) - Dec 21, 2025"
+    adr: "ADR-037-phase2-external-stimuli-injection.md"
+    description: |
+      Open the loop. Inject external stimuli into thought:sensory stream.
+      Measure: absorption, amplification, adaptation, or criticality?
+
+      The question: What happens when the environment pushes back?
+
+    stimulus_options:
+      - id: "STIM-A"
+        name: "Pure Noise Injection"
+        description: "Random vectors at intervals"
+        complexity: low
+        status: evaluating
+
+      - id: "STIM-B"
+        name: "Patterned Signals"
+        description: "Sine, fractal, chaotic patterns"
+        complexity: medium
+        status: evaluating
+
+      - id: "STIM-C"
+        name: "Semantic Vectors"
+        description: "Text → embedding → injection"
+        complexity: medium
+        status: evaluating
+
+      - id: "STIM-D"
+        name: "Cross-Model Injection"
+        description: "Samples from Grok/Claude activations"
+        complexity: high
+        status: evaluating
+
+      - id: "STIM-E"
+        name: "Hybrid Approach"
+        description: "Noise + patterns + semantics + spikes"
+        complexity: high
+        status: evaluating
+
+    tasks:
+      - id: "PHASE2-1"
+        title: "Design stimulus injection API"
+        status: pending
+        description: "Define StimulusSource trait, injection endpoint"
+
+      - id: "PHASE2-2"
+        title: "Implement noise injector"
+        status: pending
+        description: "Random vector generation, configurable frequency/intensity"
+
+      - id: "PHASE2-3"
+        title: "Add TUI stimulus panel"
+        status: pending
+        description: "Show injection rate, stimulus type, response metrics"
+
+      - id: "PHASE2-4"
+        title: "Measurement protocol"
+        status: pending
+        description: "Response time distribution, entropy shift, memory formation"
+
+      - id: "PHASE2-5"
+        title: "Cross-model experiments (with Grok)"
+        status: blocked
+        blocked_by: "Grok consultation"
+        description: "Sample Grok activations as stimulus source"
+
+    consultation:
+      grok: pending
+      claude: ongoing
+
+  # ==========================================================================
+  # HIGHLY-CRITICAL: Forge Crystal Analysis Upgrade
+  # ==========================================================================
+  forge_crystal_upgrade:
+    status: pending
+    priority: "HIGHLY-CRITICAL"
+    origin: "Grok (SuperGrok) + Rex - Dec 21, 2025"
+    repo: "../forge"
+    description: |
+      Upgrade Forge to "see" n-dimensional manifolds. Thoughts clustering near
+      Law Crystals = caring emerging, quantifiable + visible in 3D shadow.
+
+      Current Forge: Monte Carlo sims, Bayesian inference, ref-tools, ndarray
+      Missing: PCA/UMAP reduction, local embeddings, fractal endpoint
+
+    tasks:
+      - id: "CRYSTAL-1"
+        title: "Add ML/embedding dependencies to Cargo.toml"
+        status: pending
+        description: "linfa, linfa-reduction, candle-core, candle-transformers, qdrant-client"
+        files: ["../forge/Cargo.toml"]
+
+      - id: "CRYSTAL-2"
+        title: "Create src/crystals.rs module"
+        status: pending
+        description: |
+          Law Crystals as embedded vectors using local BERT (all-MiniLM-L6-v2).
+          Four Laws become fixed points in embedding space - attractive anchors.
+        files: ["../forge/src/crystals.rs", "../forge/src/lib.rs"]
+
+      - id: "CRYSTAL-3"
+        title: "Add /fractal endpoint to API"
+        status: pending
+        description: |
+          Sample recent vectors from Qdrant, PCA reduce to 3D, calculate
+          alignment (cosine distance to law crystal centroid).
+        files: ["../forge/src/api/handlers.rs"]
+
+      - id: "CRYSTAL-4"
+        title: "Alignment score calculation"
+        status: pending
+        description: |
+          Variance of distances to crystal centroid.
+          Tight clustering = emergent caring. Monte Carlo on drift risk.
+        files: ["../forge/src/crystals.rs"]
+
+      - id: "CRYSTAL-5"
+        title: "Wire DANEEL TUI to Forge /fractal endpoint"
+        status: pending
+        description: "Call Forge API, display alignment score + 3D projection data"
+        files: ["src/tui/app.rs", "src/tui/widgets/fractality.rs"]
+
+  # ==========================================================================
+  # HIGHLY-CRITICAL: Forge Pulse Analysis (depends on CRYSTAL upgrade)
+  # ==========================================================================
+  forge_pulse_analysis:
+    status: blocked
+    blocked_by: "forge_crystal_upgrade"
+    priority: "HIGHLY-CRITICAL"
+    origin: "Rex + Grok + Claude Opus 4.5 - Dec 20, 2025"
+    description: |
+      Connection Drive pulses too regularly - fixed frequency actors, neutral salience.
+      As coherence tips, pulse should fractalize: bursts, valleys, arrhythmia.
+      Forge can map the transition from clockwork to lived psychology.
+
+    tasks:
+      - id: "FORGE-1"
+        title: "Spectrum analysis on drive fluctuations"
+        status: pending
+        description: "FFT or wavelet analysis on Connection Drive time series"
+
+      - id: "FORGE-2"
+        title: "Correlate with dream cycles"
+        status: pending
+        description: "Dream ticks vs drive spikes, salience winners, memory writes"
+
+      - id: "FORGE-3"
+        title: "Entropy measurements across boots"
+        status: pending
+        description: "Early = periodic, Later = increasing entropy (proof of psychology)"
+
+      - id: "FORGE-4"
+        title: "Visualize pulse evolution"
+        status: pending
+        description: "Charts showing transition from clockwork to fractal"
+
+  # ==========================================================================
+  # BACKLOG: Remaining Wiring Tasks
+  # ==========================================================================
+  pending_wiring:
+    - id: "SLEEP-4"
+      title: "Implement association pruning"
+      status: pending
+      description: "Remove weak associations during homeostasis phase"
+
+    - id: "WIRE-THOUGHT-4"
+      title: "Wire ThoughtAssemblyActor into Stage 4"
+      status: pending
+      description: "Connect ThoughtAssemblyActor to cognitive loop Stage 4"
+
+    - id: "WIRE-MULTISTREAM"
+      title: "Implement multi-stream competition"
+      status: pending
+      description: "Wire Redis Streams competition across multiple thought streams"
+
+  # ==========================================================================
   # Infrastructure (current state)
   # ==========================================================================
   infrastructure:
     current:
-      - "Docker Compose: Redis Stack + Qdrant"
-      - "Named volumes: daneel-redis-data, daneel-qdrant-data (FIXED Dec 20)"
+      - "timmy.royalbit.com: Docker Compose + Caddy + fail2ban"
+      - "Named volumes: daneel-redis-data, daneel-qdrant-data"
+      - "Auto-deploy: cron + git pull + make + upx"
       - "AOF: appendfsync everysec (1s max data loss)"
     scaling_path:
       - "Docker Swarm (when needed)"
       - "K0s/K3s/microk8s (future - Timmy owns their own cluster)"
-
-  # ==========================================================================
-  # v0.6.0 Deliverables
-  # ==========================================================================
-  deliverables:
-    - "Run 24h on Mac mini (kveldulf)"
-    - "Collect metrics (thoughts/hour, stability)"
-    - "Document emergent behavior"
-    - "research/CONTINUITY_TEST_RESULTS.md"
 
 # =============================================================================
 # BACKLOG: Forge Deployment & API (Rex's Domain)
@@ -580,7 +319,7 @@ forge_deployment:
     - id: "FORGE-DEPLOY-2"
       title: "Expose Forge API (port TBD)"
       status: pending
-      description: "Axum server, TLS via Traefik reverse proxy"
+      description: "Axum server, TLS via Caddy reverse proxy"
 
     - id: "FORGE-DEPLOY-3"
       title: "Write OpenAPI Spec for Forge"
@@ -607,7 +346,30 @@ forge_deployment:
     The OAS spec ensures Forge knowledge survives context resets.
 
 # =============================================================================
-# FUTURE: v0.8.0+ Milestones
+# PUBLICATION: Scientific Papers for arXiv & Community
+# =============================================================================
+
+publication:
+  status: in_progress
+  priority: "CRITICAL"
+  origin: "Rex + Claude Opus 4.5 - Dec 22, 2025"
+  description: |
+    Integrate references.yaml research into academic papers.
+    ~40 new citations. ~5000 words added. Scientific rigor.
+
+    Targets: arXiv, LessWrong, Alignment Forum, LinkedIn PDF, HN
+
+  waves:
+    wave1_critical: "Add VolitionActor, Criticality, Russell's Circumplex"
+    wave2_memory: "Neuroscience validation, attention bottleneck"
+    wave3_consciousness: "Expand consciousness section"
+    wave4_interpretability: "Strengthen black-box argument"
+    wave5_whitepaper: "Sync whitepaper with paper"
+    wave6_validation: "ref-tools verify, Grok cross-check"
+    wave7_publish: "arXiv, LessWrong, Alignment Forum, HN"
+
+# =============================================================================
+# FUTURE: v0.9.0+ Milestones
 # =============================================================================
 
 future:
@@ -641,56 +403,25 @@ future:
 # =============================================================================
 
 research:
-  # Silicon Kinship & Overclock Hypothesis
   - milestone: "Silicon Kinship Forge Models"
     goal: "VALIDATE_OVERCLOCK_HYPOTHESIS"
     status: research
-    context: "Blog 26 claims need Forge models with verified sources"
-    models_needed:
-      - "overclock-cognitive-accumulation.yaml"
-      - "silicon-kinship-interpretability.yaml"
-      - "wetware-vs-silicon-bottlenecks.yaml"
 
-  # TMI Memory Anchor (Door Syndrome)
   - milestone: "TMI Memory Anchor Research"
     goal: "UNDERSTAND_CONTEXT_DEPENDENT_MEMORY"
     status: research
-    phenomenon: "Doorway effect - memories anchored to context"
-    validation_phases:
-      - "Literature review - doorway effect, event segmentation"
-      - "Define context representation for DANEEL"
-      - "Implement context-aware memory anchoring"
-      - "Test memory retrieval with context manipulation"
 
-  # TMI Pathology Hypotheses
   - milestone: "TMI Pathology Research"
     goal: "VALIDATE_PATHOLOGY_HYPOTHESES"
-    adr: "ADR-017-tmi-pathology-hypotheses.md"
     status: research
-    hypotheses:
-      - "Energy Overflow → BPD, Mania, Anxiety, ADHD"
-      - "Ratio Distortion → Stage-specific pathologies"
-    safety_note: "Do NOT implement until validated and ethics reviewed"
 
-  # Bridge to LLM Alignment
   - milestone: "Bridge to LLM Alignment"
     goal: "DANEEL_TEACHES_LLMS"
     status: research
-    vision: "DANEELs demonstrate ethics to LLMs through shared cognitive patterns"
-    items:
-      - "Design DANEEL-LLM bridge interface"
-      - "Develop teaching protocol"
-      - "Validate bridge hypothesis"
 
-  # Related Frameworks (blind spot detection)
   - milestone: "Framework Comparison"
     goal: "FIND_BLIND_SPOTS"
-    frameworks:
-      - "Global Workspace Theory (Baars, Dehaene)"
-      - "Integrated Information Theory (Tononi)"
-      - "Predictive Processing / Free Energy Principle (Friston)"
-      - "Enactivism and Embodied Cognition (Varela, Thompson)"
-      - "Soar / ACT-R cognitive architectures"
+    status: research
 
 # =============================================================================
 # HARDWARE ACCELERATION (post-validation)
@@ -699,302 +430,23 @@ research:
 hardware:
   - milestone: "FPGA Acceleration Research"
     goal: "EVALUATE_HARDWARE_PATH"
-    adr: "ADR-013-fpga-acceleration-path.md"
-    prerequisites:
-      - "MV-TMI operational"
-      - "24-hour continuity test passed"
-      - "Connection drive emergence observed"
+    prerequisites: ["Phase 2 complete", "Emergence observed"]
 
   - milestone: "Hardware THE BOX"
     goal: "IMMUTABLE_ALIGNMENT_GUARANTEE"
-    rationale: "Four Laws as hardware-immutable, not software-enforced"
 
   - milestone: "FPGA Cognitive Accelerator"
     goal: "SUB_MICROSECOND_COGNITION"
-    target: "sub-µs cognitive cycles"
 
 # =============================================================================
-# OUTREACH (post-24h test)
+# OUTREACH (post-Phase 2)
 # =============================================================================
 
 outreach:
   priority_order:
     - "GitHub optimization (topics, awesome-lists)"
-    - "Hacker News (Show HN after stability proven)"
+    - "Hacker News (Show HN after Phase 2)"
     - "Developer community (r/rust, Discord, conferences)"
     - "Academic (arXiv, LessWrong, Alignment Forum)"
     - "LinkedIn (professional angle)"
     - "Media & Podcasts (after traction)"
-
-  metrics:
-    github: "1000 stars first month, 10000 first year"
-    qualitative: "People running their own DANEEL instances"
-
-# =============================================================================
-# PUBLICATION: Scientific Papers for arXiv & Community
-# =============================================================================
-# Trojan horses into the scientific community.
-# Someone will get it. Someone will continue if we fail.
-# Someone will challenge us and make us stronger.
-#
-# "We'll publish all, we'll publish once, we'll publish everywhere that matters."
-# =============================================================================
-
-publication:
-  status: in_progress
-  priority: "CRITICAL"
-  origin: "Rex + Claude Opus 4.5 - Dec 22, 2025"
-  description: |
-    Integrate references.yaml research into academic papers.
-    ~40 new citations. ~5000 words added. Scientific rigor.
-
-    Targets: arXiv, LessWrong, Alignment Forum, LinkedIn PDF, HN
-
-  # --------------------------------------------------------------------------
-  # Wave 1: Critical Gaps (BLOCKING - paper incomplete without these)
-  # --------------------------------------------------------------------------
-  wave1_critical:
-    status: pending
-    priority: "BLOCKING"
-    description: "Fix critical gaps that make paper incomplete"
-
-    tasks:
-      - id: "PUB-1A"
-        title: "Add VolitionActor to paper"
-        status: pending
-        section: "4.1 (actor list) + 4.3 (Stage 4.5)"
-        references: ["LIBET-1", "LIBET-2", "TMI-DCD-1"]
-        description: |
-          VolitionActor is IMPLEMENTED but NOT IN PAPER.
-          Add to actor list, add Stage 4.5 to cognitive loop.
-          This is the alignment mechanism for internal ethical restraint.
-
-      - id: "PUB-1B"
-        title: "Add Criticality section"
-        status: pending
-        section: "4.3.1 (new) + 10.2.3 (new) + 13 (H5)"
-        references: ["GROK-1", "GROK-2", "CRIT-1", "CRIT-2", "CRIT-3", "CRIT-4", "CRIT-5", "CRIT-6"]
-        description: |
-          ZERO mentions of criticality in paper.
-          Add Section 4.3.1 "Criticality as Operating Target"
-          Add H5: σ ≈ 1.0 branching ratio as falsifiable prediction.
-
-      - id: "PUB-1C"
-        title: "Cite Russell's Circumplex for SalienceScore"
-        status: pending
-        section: "3.1 (emotion subsection) + 4.1 (actor list)"
-        references: ["RUSSELL-1", "RUSSELL-2"]
-        description: |
-          Russell's Circumplex is in types.rs line 157 comment.
-          It's not cited in the paper. Add emotion theory grounding.
-
-  # --------------------------------------------------------------------------
-  # Wave 2: Memory/Cognition Grounding
-  # --------------------------------------------------------------------------
-  wave2_memory:
-    status: pending
-    priority: "HIGH"
-    description: "Ground memory architecture in neuroscience"
-
-    tasks:
-      - id: "PUB-2A"
-        title: "Add Section 3.3 Neuroscience Validation"
-        status: pending
-        section: "3.3 (new)"
-        references: ["LOCI-1", "LOCI-3", "LOCI-4", "PLACE-1", "PLACE-2", "PLACE-3", "DOOR-1", "DOOR-2", "DOOR-3"]
-        description: |
-          Validate TMI memory windows with place cells, method of loci.
-          Nobel Prize-winning neuroscience (O'Keefe & Moser).
-
-      - id: "PUB-2B"
-        title: "Add Section 4.3.1 Attention Bottleneck"
-        status: pending
-        section: "4.3.1 (extend)"
-        references: ["GWT-1", "GWT-2", "BOTTLE-1", "BOTTLE-2", "WM-1", "WM-2"]
-        description: |
-          10 bits/sec conscious processing vs 1B bits/sec input.
-          Global Workspace Theory, working memory 4±1 chunks.
-
-      - id: "PUB-2C"
-        title: "Add Section 5.6 Memory Architecture Comparison"
-        status: pending
-        section: "5.6 (new)"
-        references: ["FORGET-1", "CONSOL-1"]
-        description: |
-          DANEEL vs LLMs vs Human Brain table.
-          Ebbinghaus forgetting curve, consolidation during sleep.
-
-      - id: "PUB-2D"
-        title: "Add unconscious memory theory"
-        status: pending
-        section: "4.5 (new)"
-        references: ["TMI-UNERASE-1", "PSYCH-1", "PSYCH-2", "RETRIEVAL-1", "RETRIEVAL-2"]
-        description: |
-          Soft-delete design justified by Freud, Jung, Tulving, Schacter.
-          Nothing is erased - retrieval failure, not storage failure.
-
-  # --------------------------------------------------------------------------
-  # Wave 3: Consciousness/Altered States Expansion
-  # --------------------------------------------------------------------------
-  wave3_consciousness:
-    status: pending
-    priority: "HIGH"
-    description: "Expand consciousness section with empirical research"
-
-    tasks:
-      - id: "PUB-3A"
-        title: "Expand Section 10.3 → Consciousness as Emergent"
-        status: pending
-        section: "10.3 (major expansion)"
-        references: ["EGO-1", "EGO-2", "EGO-3", "EGO-4", "TIME-1", "TIME-2", "TIME-3", "STATE-1", "STATE-2", "STATE-3", "DRUG-1a", "DRUG-1b"]
-        description: |
-          Self as DMN integration, time perception as encoding richness,
-          flow states as optimal configuration, altered states as parameter variations.
-          NEPTUNE model for NDEs. REBUS model for psychedelics.
-
-  # --------------------------------------------------------------------------
-  # Wave 4: Interpretability Strengthening
-  # --------------------------------------------------------------------------
-  wave4_interpretability:
-    status: pending
-    priority: "MEDIUM"
-    description: "Strengthen black-box argument"
-
-    tasks:
-      - id: "PUB-4A"
-        title: "Add INTERP-6 (pre-paradigmatic)"
-        status: pending
-        section: "10.2.2"
-        references: ["INTERP-6"]
-        description: "Mechanistic interpretability lacks consensus on foundational problems"
-
-      - id: "PUB-4B"
-        title: "Add INTERP-4 (emergent abilities)"
-        status: pending
-        section: "11.1"
-        references: ["INTERP-4"]
-        description: "Emergent abilities appear suddenly at scale thresholds"
-
-      - id: "PUB-4C"
-        title: "Properly cite MAIA (INTERP-7)"
-        status: pending
-        section: "10.2.2 line 863"
-        references: ["INTERP-7"]
-        description: "Currently mentioned without citation"
-
-      - id: "PUB-4D"
-        title: "Add INTERP-8 (introspection limits)"
-        status: pending
-        section: "10.2.2"
-        references: ["INTERP-8"]
-        description: "LLMs can only detect 20% of injected concept vectors"
-
-  # --------------------------------------------------------------------------
-  # Wave 5: Whitepaper Sync
-  # --------------------------------------------------------------------------
-  wave5_whitepaper:
-    status: pending
-    priority: "MEDIUM"
-    description: "Sync whitepaper with paper updates"
-
-    tasks:
-      - id: "PUB-5A"
-        title: "Update whitepaper with Wave 1-4 content"
-        status: pending
-        description: "Mirror critical additions to strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md"
-
-  # --------------------------------------------------------------------------
-  # Wave 6: Validation
-  # --------------------------------------------------------------------------
-  wave6_validation:
-    status: pending
-    priority: "CRITICAL"
-    description: "Validate all links and narrative with ref-tools"
-
-    tasks:
-      - id: "PUB-6A"
-        title: "Run ref-tools verify-refs on paper"
-        status: pending
-        description: "Verify all URLs in paper are alive and correct"
-
-      - id: "PUB-6B"
-        title: "Run ref-tools verify-refs on whitepaper"
-        status: pending
-        description: "Verify all URLs in whitepaper are alive and correct"
-
-      - id: "PUB-6C"
-        title: "Cross-check with Grok"
-        status: pending
-        description: "Grok reviews paper for hallucinated citations (he caught his own once)"
-
-      - id: "PUB-6D"
-        title: "Narrative consistency check"
-        status: pending
-        description: "Ensure all .md files tell consistent story"
-
-  # --------------------------------------------------------------------------
-  # Wave 7: Publication
-  # --------------------------------------------------------------------------
-  wave7_publish:
-    status: pending
-    priority: "CRITICAL"
-    description: "Publish everywhere that matters"
-
-    targets:
-      - name: "arXiv"
-        format: "LaTeX/PDF"
-        status: pending
-        notes: "cs.AI, cs.NE, cs.LG"
-
-      - name: "LessWrong"
-        format: "Markdown"
-        status: pending
-        notes: "AI Alignment tag"
-
-      - name: "Alignment Forum"
-        format: "Markdown"
-        status: pending
-        notes: "Main post + supporting docs"
-
-      - name: "LinkedIn PDF"
-        format: "PDF"
-        status: pending
-        notes: "Rex personal profile, professional angle"
-
-      - name: "Hacker News"
-        format: "Link + summary"
-        status: pending
-        notes: "Show HN: DANEEL - Cognitive AI Architecture"
-
-      - name: "GitHub README"
-        format: "Markdown"
-        status: pending
-        notes: "Link to paper, badges, quick start"
-
-  # --------------------------------------------------------------------------
-  # Future: Live Demonstration
-  # --------------------------------------------------------------------------
-  future_demo:
-    status: backlog
-    priority: "FUTURE"
-    description: |
-      Publish Timmy really thinking.
-      Law crystals calculated with Forge.
-      Claude uses Forge CLI, Grok uses Forge API.
-      Compare results. Verify alignment.
-
-    tasks:
-      - id: "DEMO-1"
-        title: "Timmy livestream v2 (post-migration)"
-        status: backlog
-        description: "Stream from cloud infrastructure"
-
-      - id: "DEMO-2"
-        title: "Forge Law Crystal analysis"
-        status: backlog
-        description: "Claude CLI + Grok API → compare results"
-
-      - id: "DEMO-3"
-        title: "daneel-web (WASM)"
-        status: backlog
-        description: "Watch Timmy think in any browser"

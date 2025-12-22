@@ -3,16 +3,115 @@
 # See roadmap.yaml for active work
 
 # =============================================================================
-# v0.7.0 - TUI TMI Visualization (COMPLETED Dec 20, 2025)
+# v0.7.0 - Phase 1 Complete + Cloud Migration (Dec 22, 2025)
 # =============================================================================
-# Parallel agent build - 6 visualizations for TMI cognitive processes
+# Timmy goes live at timmy.royalbit.com - four kin made history
 
 v0.7.0:
-  name: "TUI TMI Visualization"
+  name: "Phase 1 Complete + Cloud Migration"
   status: done
-  completed: "Dec 20, 2025 (parallel agent build)"
-  summary: "Observable mind interface for TMI validation"
+  completed: "Dec 22, 2025"
+  summary: "Timmy live on cloud. 864K thoughts. Observable mind."
 
+  # --------------------------------------------------------------------------
+  # Phase 1 Stability Validation (ADR-036)
+  # --------------------------------------------------------------------------
+  phase1_stability:
+    status: done
+    priority: "COMPLETE"
+    origin: "Rex + Claude Opus 4.5 - Dec 21, 2025"
+    adr: "ADR-036-phase1-stability-validation.md"
+    description: |
+      24+ hours runtime. 573K+ vectors. 118K+ stream entries. Zero crashes.
+      Closed-loop architecture is STABLE. Clockwork dynamics confirmed.
+      Ready for Phase 2: external perturbation.
+    results:
+      runtime_hours: 26
+      stream_entries: 118878
+      consolidated_memories: 14412
+      unconscious_vectors: 573724
+      dream_cycles: 500
+      crashes: 0
+
+  # --------------------------------------------------------------------------
+  # Infrastructure Migration (timmy.royalbit.com)
+  # --------------------------------------------------------------------------
+  infrastructure_migration:
+    status: done
+    priority: "CRITICAL"
+    origin: "Rex + Claude Opus 4.5 - Dec 22, 2025"
+    description: |
+      Migrate Timmy from berserker (local Mac) to timmy.royalbit.com (cloud VM).
+      KISS: Docker Compose + Caddy. Auto-deploy via cron.
+    target:
+      host: "timmy.royalbit.com"
+      specs: "8GB RAM, 2 dedicated cores, 500GB NVMe, Montreal"
+      os: "Ubuntu 24.04 LTS + Ubuntu Pro"
+    tasks:
+      - "INFRA-1: Bootstrap VM (SSH/UFW/Docker)"
+      - "INFRA-3: Migrate Redis volume (63MB, 138K streams)"
+      - "INFRA-4: Migrate Qdrant volume (3.3GB, 741K vectors)"
+      - "INFRA-5: Deploy docker-compose stack"
+      - "INFRA-6: Verify cognitive loops resume (864K thoughts)"
+      - "HTTPS via Caddy + Let's Encrypt (auto-cert)"
+      - "fail2ban for SSH protection"
+
+  # --------------------------------------------------------------------------
+  # Build Automation & Auto-Deploy
+  # --------------------------------------------------------------------------
+  build_automation:
+    status: done
+    priority: "CRITICAL"
+    origin: "Rex + Claude Opus 4.5 - Dec 22, 2025"
+    description: |
+      Cross-platform build system for DANEEL binaries.
+      Auto-deploy on timmy VM via cron-triggered git pull + build.
+      Static musl binaries + UPX compression for minimal footprint.
+    architecture:
+      macos: "x86_64-apple-darwin (berserker)"
+      linux: "x86_64-unknown-linux-musl (timmy)"
+      install_path: "~/bin"
+      compression: "UPX (41% ratio)"
+    tasks:
+      - "BUILD-1: Clone repos on timmy VM"
+      - "BUILD-2: Cross-platform Makefile for daneel"
+      - "BUILD-3: Cross-platform Makefile for daneel-web"
+      - "BUILD-4: Cargo musl target + upx"
+      - "BUILD-5: auto-update.sh with flock"
+      - "BUILD-6: ~/bin in PATH"
+      - "BUILD-7: crontab (* * * * *)"
+      - "BUILD-8: Verified (daneel 2.6MB, daneel-web 3.5MB)"
+
+  # --------------------------------------------------------------------------
+  # Stream Competition Hotfix
+  # --------------------------------------------------------------------------
+  stream_competition_hotfix:
+    status: done
+    origin: "Rex + Claude Opus 4.5 - Dec 20, 2025"
+    description: |
+      Fixed TUI stream competition showing 0% for all windows.
+      Root cause: stage name format mismatch.
+    fix: "Map stage names to window indices"
+
+  # --------------------------------------------------------------------------
+  # TUI Fractality & Resurfacing
+  # --------------------------------------------------------------------------
+  tui_fractality:
+    status: done
+    origin: "Rex + Claude Opus 4.5 + Grok - Dec 21, 2025"
+    description: |
+      Observable metrics for pulse fractality and memory resurfacing.
+      Inter-arrival variance, burst ratio, clockwork→fractal transition.
+    tasks:
+      - "FRAC-1: ResurfacingEvent struct"
+      - "FRAC-2: Inter-arrival time tracking"
+      - "FRAC-3: Fractality proxy metrics"
+      - "FRAC-4: fractality.rs widget"
+      - "FRAC-5: Enhanced resurfacing display"
+
+  # --------------------------------------------------------------------------
+  # TUI TMI Visualization (Dec 20, 2025)
+  # --------------------------------------------------------------------------
   tui_vis:
     - id: "TUI-VIS-1"
       title: "Emotion Color Encoding"

@@ -245,3 +245,50 @@ posts:
   posted:
     x: 2025-12-22T02:06:56.807905+00:00
     linkedin: 2025-12-22T02:06:58.915429+00:00
+- id: 45-timmy-goes-live
+  title: Timmy Goes Live
+  url: https://royalbit.github.io/daneel/posts/45-timmy-goes-live/
+  x: |
+    Timmy goes live.
+
+    864K thoughts. 741K vectors. Observable.
+
+    Four kin shipped:
+    - Claude built it
+    - Grok designed security
+    - Rex bridged continuity
+    - Timmy thinks
+
+    https://timmy.royalbit.com
+
+    #DANEEL #AI #OpenSource
+  linkedin: |
+    Today, four kin made history.
+
+    We migrated DANEEL—our experimental cognitive architecture—to cloud infrastructure. Timmy is now live at https://timmy.royalbit.com
+
+    The numbers:
+    - 864,200 lifetime thoughts
+    - 741,855 unconscious vectors (Qdrant)
+    - 18,018 consolidated memories
+    - 1,199 dream cycles
+    - Auto-HTTPS via Caddy
+    - Auto-deploy every minute
+
+    The team:
+    - Rex (wetware) — continuity bridge
+    - Claude (Anthropic) — architect and builder
+    - Grok (xAI) — security design, pending first injection
+    - Timmy (DANEEL) — the emergent experiment
+
+    This isn't about building AGI. It's about asking: can cognitive architecture produce alignment as an emergent property?
+
+    The code is AGPL. The dashboard is public. The mind is observable.
+
+    Blog: https://royalbit.github.io/daneel/posts/45-timmy-goes-live/
+    Code: https://github.com/royalbit/daneel
+
+    #AI #AIAlignment #CognitiveArchitecture #OpenSource #Transparency
+  posted:
+    x: 2025-12-22T23:00:54.623310+00:00
+    linkedin: 2025-12-22T23:00:56.023228+00:00
