@@ -585,6 +585,14 @@ impl CognitiveLoop {
         let mut stimuli = Vec::new();
         let mut ids_to_delete = Vec::new();
 
+        // Log entry count for debugging
+        if !entries.is_empty() {
+            info!(
+                entry_count = entries.len(),
+                "XREAD returned entries from injection stream"
+            );
+        }
+
         // Parse XREAD response: [[stream_name, [[id, [field, value, ...]], ...]]]
         if let Some(redis::Value::Array(ref streams_data)) = entries.first() {
             for stream_item in streams_data {
