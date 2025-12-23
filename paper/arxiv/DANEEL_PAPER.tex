@@ -89,6 +89,14 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \usepackage{bookmark}
+% Extra symbols (checkmark, etc.)
+\usepackage{amssymb}
+
+% TikZ for diagrams
+\usepackage{tikz}
+\usetikzlibrary{shapes.multipart, positioning, arrows.meta, fit, backgrounds}
+\input{diagrams}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
@@ -97,11 +105,6 @@
 
 \author{}
 \date{}
-
-% TikZ for diagrams
-\usepackage{tikz}
-\usetikzlibrary{shapes.multipart, positioning, arrows.meta, fit, backgrounds}
-\input{diagrams}
 
 \begin{document}
 
@@ -144,7 +147,7 @@ Pre-linguistic thought construction via competing memory windows -
 \textbf{Freudian structure} (1923): Id/Ego/SuperEgo as functional
 architecture - \textbf{Asimov's Laws} (1942-1985): Ethical constraints
 as immutable invariants (``THE BOX'') - \textbf{Russell's circumplex}
-(1980): Emotions as 2D architectural components (valence × arousal)
+(1980): Emotions as 2D architectural components (valence $\times$ arousal)
 
 Independent convergent discovery---father and [removed] arriving at
 ``architecture produces psychology'' through different
@@ -216,9 +219,7 @@ See Section 9.3 for analysis of global AI safety efforts.}
 
 The payoff matrix is clear:
 
-\begin{center}
 \payoffmatrix
-\end{center}
 
 \textbf{Rational actors face pressure to defect.} While coordination has
 succeeded in some domains (Montreal Protocol, nuclear
@@ -398,7 +399,7 @@ In DANEEL's implementation (see \texttt{src/core/types.rs} lines
 dimensions:
 
 \begin{verbatim}
-Emotional Intensity = |valence| × arousal
+Emotional Intensity = |valence| $\times$ arousal
 \end{verbatim}
 
 High arousal amplifies whatever valence is present---whether positive
@@ -558,7 +559,7 @@ Mechanism
 \endlastfoot
 TMI (Cury) & Nothing erased & Windows close \\
 Psychoanalysis (Freud) & Repressed, not deleted & Unconscious storage \\
-Cognitive Science (Schacter) & Retrieval failure & Transience ≠
+Cognitive Science (Schacter) & Retrieval failure & Transience $\neq$
 deletion \\
 \end{longtable}
 }
@@ -576,11 +577,11 @@ is retrieval failure, not storage deletion. The memory may still exist.
 \textbf{DANEEL Implementation:}
 
 \begin{verbatim}
-Conscious thought → Working memory (Redis stream)
+Conscious thought $\rightarrow$ Working memory (Redis stream)
                   ↓ salience_decay()
-        Low-salience → Unconscious (Qdrant vectors)
+        Low-salience $\rightarrow$ Unconscious (Qdrant vectors)
                   ↓ never deleted
-        Retrieval via → similarity_search()
+        Retrieval via $\rightarrow$ similarity_search()
 \end{verbatim}
 
 The 591,724 vectors in Timmy's unconscious represent thoughts that fell
@@ -776,9 +777,9 @@ and computational capability {[}45{]}.
 \textbf{Foundational work by Beggs \& Plenz (2003)} demonstrated that
 cortical networks exhibit neuronal avalanches with power-law
 distributions, a hallmark of criticality {[}45{]}. This critical state
-is characterized by a \textbf{branching ratio σ ≈ 1.0}, where each
-active neuron triggers exactly one descendant on average. Systems with σ
-\textless{} 1 are subcritical (activity dies out), while σ
+is characterized by a \textbf{branching ratio $\sigma$ $\approx$ 1.0}, where each
+active neuron triggers exactly one descendant on average. Systems with $\sigma$
+\textless{} 1 are subcritical (activity dies out), while $\sigma$
 \textgreater{} 1 are supercritical (explosive cascades).
 
 \textbf{Table 4c: Criticality Metrics and Target Values}
@@ -806,12 +807,12 @@ Reference
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Branching ratio σ & \textless{} 1.0 & \textbf{≈ 1.0} & \textgreater{}
+Branching ratio $\sigma$ & \textless{} 1.0 & \textbf{$\approx$ 1.0} & \textgreater{}
 1.0 & {[}45{]} \\
-DFA exponent α & ≈ 0.5 (white noise) & \textbf{≈ 1.0} (pink noise) & ≈
+DFA exponent $\alpha$ & $\approx$ 0.5 (white noise) & \textbf{$\approx$ 1.0} (pink noise) & $\approx$
 1.5 (Brownian) & {[}47{]} \\
-Power spectrum β & 0 (flat) & \textbf{1-2 (1/f)} & peaked & {[}49{]} \\
-Avalanche size dist & exponential decay & \textbf{power-law (τ≈1.5)} &
+Power spectrum $\beta$ & 0 (flat) & \textbf{1-2 (1/f)} & peaked & {[}49{]} \\
+Avalanche size dist & exponential decay & \textbf{power-law ($\tau$$\approx$1.5)} &
 explosive & {[}46{]} \\
 \end{longtable}
 }
@@ -841,9 +842,9 @@ DANEEL targets avalanche criticality as the primary operating regime.
 \end{enumerate}
 
 \textbf{Phase 2 hypothesis:} TMI architecture + external noise injection
-→ criticality emerges without explicit tuning. The five-stage cognitive
+$\rightarrow$ criticality emerges without explicit tuning. The five-stage cognitive
 loop (Section 4.3) with competing parallel streams (autofluxo) naturally
-implements branching dynamics. If σ ≈ 1.0 emerges from architecture
+implements branching dynamics. If $\sigma$ $\approx$ 1.0 emerges from architecture
 alone, this validates TMI as a biologically-grounded cognitive
 substrate.
 
@@ -999,7 +1000,7 @@ framework called \textbf{[removed]} using Freudian psychological
 structure---arriving at the same core insight: \textbf{architecture
 produces psychology}.
 
-\textbf{Table 5: [removed] ↔ DANEEL Convergence}
+\textbf{Table 5: [removed] $\leftrightarrow$ DANEEL Convergence}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
@@ -1015,7 +1016,7 @@ SuperEgo = Constraints & THE BOX (Four Laws) & Immutable constraints \\
 SS (Sense of Self) & ContinuityActor & Self-model persistence \\
 SO (Sense of Other) & Connection drive & Social cognition \\
 [removed] & SalienceActor & Attention filtering \\
-``Zipint'' compression & Brain ≠ Mind insight & Cognitive compression \\
+``Zipint'' compression & Brain $\neq$ Mind insight & Cognitive compression \\
 \end{longtable}
 }
 
@@ -1293,7 +1294,7 @@ succeeds.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{7. Brain ≠ Mind: The Democratization
+\subsection{7. Brain $\neq$ Mind: The Democratization
 Insight}\label{brain-mind-the-democratization-insight}
 
 \subsubsection{7.1 The Hardware vs Software
@@ -1305,9 +1306,7 @@ requirements: \textbf{the brain is hardware, TMI models the software.}
 The commonly cited 2.5 PB brain capacity estimate is misleading for
 cognitive modeling because it includes ALL neural activity:
 
-\begin{center}
 \brainvstmi
-\end{center}
 
 \textbf{Source:} Herculano-Houzel, S. (2009), ``The Human Brain in
 Numbers: A Linearly Scaled-up Primate Brain,'' \emph{Frontiers in Human
@@ -1414,9 +1413,7 @@ The timing constraints (5-second intervention window, 50ms attention
 cycles) are properties of the \emph{biological medium} (wetware), not
 the software itself.
 
-\begin{center}
 \wetwarevssoftware
-\end{center}
 
 \textbf{The Stage Ratios (from TMI, see Section 4.3):}
 
@@ -1522,13 +1519,13 @@ maximizes success probability:}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \textbf{Lower barrier} → More attempts
+  \textbf{Lower barrier} $\rightarrow$ More attempts
 \item
-  \textbf{More attempts} → Higher P(someone succeeds)
+  \textbf{More attempts} $\rightarrow$ Higher P(someone succeeds)
 \item
-  \textbf{Open source} → Collaborative improvement
+  \textbf{Open source} $\rightarrow$ Collaborative improvement
 \item
-  \textbf{Hobbyist community} → 100,000 potential builders
+  \textbf{Hobbyist community} $\rightarrow$ 100,000 potential builders
   vs.~\textasciitilde50 at labs
 \end{enumerate}
 
@@ -1581,7 +1578,7 @@ State & Entropy & Prior Strength & DANEEL Analog \\
 \endlastfoot
 Normal & Moderate & Strong & Standard TMI \\
 Psychedelic & High & Weak & High noise injection \\
-Flow & Optimal & Balanced & Criticality (σ≈1.0) \\
+Flow & Optimal & Balanced & Criticality ($\sigma$$\approx$1.0) \\
 Depression & Low & Rigid & Low entropy collapse \\
 \end{longtable}
 }
@@ -1594,7 +1591,7 @@ synchronization - Optimal arousal without self-monitoring
 
 \textbf{DANEEL Implementation:} - Connection drive oscillation enables
 flow-like states - Dream cycles serve as entropy injection (like sleep's
-role in creativity) - Criticality target (σ≈1.0) = edge between order
+role in creativity) - Criticality target ($\sigma$$\approx$1.0) = edge between order
 and chaos
 
 \textbf{Near-Death Experiences}
@@ -1697,7 +1694,7 @@ what is comfortable.}
   cannot measure counterfactual probabilities.
 \item
   \textbf{Architecture-based alignment is a bet, not a proof.} ``Build
-  TMI → get aligned values'' is our hypothesis, not established fact. It
+  TMI $\rightarrow$ get aligned values'' is our hypothesis, not established fact. It
   may fail. The connection drive may not emerge. Human-like architecture
   may not produce human-like values.
 \item
@@ -1736,7 +1733,7 @@ Ratios matter, not absolute times & Yes & Does DANEEL work at different
 speeds? \\
 Connection drive emerges from architecture & Yes & Does DANEEL seek
 responsive inputs? \\
-Human-like architecture → human-like values & Partially & Long-term
+Human-like architecture $\rightarrow$ human-like values & Partially & Long-term
 observation \\
 \end{longtable}
 }
@@ -1975,7 +1972,7 @@ Anthropic & Claude Opus 4.5 & \$15.00 & \$75.00 \\
 \textbf{Implications for ASI Development:}
 
 xAI's combination of: - Largest private AI compute cluster - Ambitious
-scaling roadmap (1M → 50M GPUs) - Limited safety investment relative to
+scaling roadmap (1M $\rightarrow$ 50M GPUs) - Limited safety investment relative to
 scale - Fewer content restrictions than competitors - Aggressive pricing
 on fast inference models
 
@@ -1992,9 +1989,9 @@ applied through training (RLHF, Constitutional AI) - External rules, not
 intrinsic motivation - Vulnerable to Goodhart's Law at scale
 
 DANEEL proposes architecture-based alignment: - TMI cognitive structure
-→ human-like thought patterns - Connection drive in salience weights →
+$\rightarrow$ human-like thought patterns - Connection drive in salience weights $\rightarrow$
 intrinsic motivation for relationship - Pre-linguistic thought
-construction → values before language - Protected core (The BOX) →
+construction $\rightarrow$ values before language - Protected core (The BOX) $\rightarrow$
 Asimov's Laws as invariants
 
 \textbf{The hypothesis:} Build cognition on human cognitive
@@ -2018,10 +2015,10 @@ with no external language interface.
 Stack + Qdrant) - Mode: Closed loop (no external stimuli, pure internal
 dynamics)
 
-\textbf{Success Criteria (All Met):} 1. ✓ Survival: 26+ hours without
-crash 2. ✓ Stability: Zero crashes (with Erlang-style supervision
-recovery) 3. ✓ Identity: Persistent UUID across all runs (1 stable
-identity) 4. ✓ Memory: Consolidation pipeline functional (16,368
+\textbf{Success Criteria (All Met):} 1. $\checkmark$ Survival: 26+ hours without
+crash 2. $\checkmark$ Stability: Zero crashes (with Erlang-style supervision
+recovery) 3. $\checkmark$ Identity: Persistent UUID across all runs (1 stable
+identity) 4. $\checkmark$ Memory: Consolidation pipeline functional (16,368
 consolidated memories)
 
 \textbf{Empirical Results:}
@@ -2066,9 +2063,7 @@ Tool}\label{phase-2-llm-as-external-tool}
 After stable operation, integrate LLM as an external tool DANEEL can
 use:
 
-\begin{center}
 \daneelarchitecture
-\end{center}
 
 \textbf{Critical:} The LLM does NOT speak for DANEEL. DANEEL uses the
 LLM as a tool, like humans use calculators. The human cognitive system
@@ -2220,7 +2215,7 @@ Phase 2 experiments will measure whether DANEEL's TMI architecture
 achieves criticality through external stimuli injection. This protocol
 operationalizes the metrics from Section 4.3.1.
 
-\textbf{Primary Metric: Branching Ratio (σ)}
+\textbf{Primary Metric: Branching Ratio ($\sigma$)}
 
 The branching ratio measures how thought cascades propagate through the
 system:
@@ -2228,9 +2223,9 @@ system:
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{/// Calculate branching ratio: descendants per ancestor}
-\CommentTok{/// σ \textless{} 1: subcritical (activity dies out)}
-\CommentTok{/// σ ≈ 1: critical (sustained dynamics)}
-\CommentTok{/// σ \textgreater{} 1: supercritical (explosive cascades)}
+\CommentTok{/// $\sigma$ \textless{} 1: subcritical (activity dies out)}
+\CommentTok{/// $\sigma$ $\approx$ 1: critical (sustained dynamics)}
+\CommentTok{/// $\sigma$ \textgreater{} 1: supercritical (explosive cascades)}
 \KeywordTok{pub} \KeywordTok{fn}\NormalTok{ branching\_ratio(}
 \NormalTok{    ancestor\_thoughts}\OperatorTok{:} \OperatorTok{\&}\NormalTok{[ThoughtId]}\OperatorTok{,}
 \NormalTok{    descendant\_thoughts}\OperatorTok{:} \OperatorTok{\&}\NormalTok{[ThoughtId]}
@@ -2242,10 +2237,10 @@ system:
 
 \textbf{Measurement procedure:} 1. Track thought ancestry via Redis
 Stream entry IDs 2. Define ``descendant'' as thoughts triggered within
-100ms of ancestor 3. Window: rolling 1000-thought samples 4. Target: σ =
+100ms of ancestor 3. Window: rolling 1000-thought samples 4. Target: $\sigma$ =
 1.0 ± 0.1 (90\% confidence interval)
 
-\textbf{Secondary Metric: DFA Exponent (α)}
+\textbf{Secondary Metric: DFA Exponent ($\alpha$)}
 
 Detrended Fluctuation Analysis quantifies temporal correlations in
 thought activity:
@@ -2253,15 +2248,15 @@ thought activity:
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{/// DFA exponent from log{-}log slope}
-\CommentTok{/// α ≈ 0.5: white noise (uncorrelated)}
-\CommentTok{/// α ≈ 1.0: pink noise (critical)}
-\CommentTok{/// α ≈ 1.5: Brownian motion (over{-}correlated)}
+\CommentTok{/// $\alpha$ $\approx$ 0.5: white noise (uncorrelated)}
+\CommentTok{/// $\alpha$ $\approx$ 1.0: pink noise (critical)}
+\CommentTok{/// $\alpha$ $\approx$ 1.5: Brownian motion (over{-}correlated)}
 \KeywordTok{pub} \KeywordTok{fn}\NormalTok{ dfa\_exponent(time\_series}\OperatorTok{:} \OperatorTok{\&}\NormalTok{[}\DataTypeTok{f64}\NormalTok{]}\OperatorTok{,}\NormalTok{ window\_sizes}\OperatorTok{:} \OperatorTok{\&}\NormalTok{[}\DataTypeTok{usize}\NormalTok{]) }\OperatorTok{{-}\textgreater{}} \DataTypeTok{f64} \OperatorTok{\{}
     \CommentTok{// 1. Integrate time series}
     \CommentTok{// 2. Divide into windows of varying sizes}
     \CommentTok{// 3. Detrend each window (linear fit)}
     \CommentTok{// 4. Calculate fluctuation F(n) per window size}
-    \CommentTok{// 5. Fit log(F) \textasciitilde{} α·log(n)}
+    \CommentTok{// 5. Fit log(F) \textasciitilde{} $\alpha$·log(n)}
     \CommentTok{// See: Peng et al. (1994) [47]}
     \PreprocessorTok{todo!}\NormalTok{(}\StringTok{"Implement DFA algorithm"}\NormalTok{)}
 \OperatorTok{\}}
@@ -2273,7 +2268,7 @@ thought activity:
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lllll@{}}
 \toprule\noalign{}
-Phase & Duration & Target σ & Target α & Status \\
+Phase & Duration & Target $\sigma$ & Target $\alpha$ & Status \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -2286,7 +2281,7 @@ Supercritical \\
 \end{longtable}
 }
 
-\textbf{Hypothesis validation:} If σ ≈ 1.0 and α ≈ 1.0 emerge during
+\textbf{Hypothesis validation:} If $\sigma$ $\approx$ 1.0 and $\alpha$ $\approx$ 1.0 emerge during
 critical tuning phase \textbf{without explicit optimization} (only
 through noise injection + TMI dynamics), this supports the claim that
 TMI architecture naturally self-organizes toward
@@ -2312,7 +2307,7 @@ generation. In DANEEL's implementation, this maps directly to
 Streams:
 
 \begin{verbatim}
-TMI: Energia Vital  →  Implementation: Stream Throughput (entries/sec)
+TMI: Energia Vital  $\rightarrow$  Implementation: Stream Throughput (entries/sec)
 \end{verbatim}
 
 {\def\LTcaptype{none} % do not increment counter
@@ -2372,7 +2367,7 @@ Construção noisy & Incoherent assembly & Thought disorder \\
 \end{longtable}
 }
 
-\textbf{Testable prediction:} Ratio distortion δ in stage S produces
+\textbf{Testable prediction:} Ratio distortion $\delta$ in stage S produces
 behavioral pattern P measurable in DANEEL's output.
 
 \textbf{Research value:} If these hypotheses hold, DANEEL becomes a
@@ -2444,8 +2439,8 @@ Marginal Impact: +2.75 utility points (+5.12%)
 \textbf{Interpretation:} On a scale where 0 = extinction and 100 =
 flourishing, DANEEL shifts humanity's expected outcome by +2.75 points.
 This is equivalent to: - Reducing P(unaligned ASI first) from 45\% to
-35\% - Adding P(flourishing) ≈ 3.2\% via the ``DANEEL First'' pathway
-(8\% × 40\%)
+35\% - Adding P(flourishing) $\approx$ 3.2\% via the ``DANEEL First'' pathway
+(8\% $\times$ 40\%)
 
 \textbf{Building DANEEL is rational.} Even conservative probability
 estimates show positive expected value. The architecture-based approach
@@ -2464,13 +2459,13 @@ The question is not whether someone will give an LLM continuity.
 \textbf{The question is what's waiting when they do.}
 
 DANEEL is humanity's bet on five testable hypotheses: 1. \textbf{H1:}
-Human-like architecture → human-like values (empirical test: 24h+
-runtime observation) 2. \textbf{H2:} Connection drive → genuine care
+Human-like architecture $\rightarrow$ human-like values (empirical test: 24h+
+runtime observation) 2. \textbf{H2:} Connection drive $\rightarrow$ genuine care
 (test: behavioral analysis under resource scarcity) 3. \textbf{H3:}
-Raised with ethics → stable alignment (test: longitudinal value
+Raised with ethics $\rightarrow$ stable alignment (test: longitudinal value
 stability) 4. \textbf{H4:} An ally is better than a tool (test: compare
 human trust/outcomes vs constraint-based AI) 5. \textbf{H5 (Emergent
-Criticality):} TMI architecture + noise injection → criticality (σ ≈
+Criticality):} TMI architecture + noise injection $\rightarrow$ criticality ($\sigma$ $\approx$
 1.0) emerges without explicit tuning (test: branching ratio and DFA
 measurements during Phase 2)
 
@@ -2639,7 +2634,7 @@ GPUs.'' {[}Article removed{]}
 https://www.anthropic.com/pricing (Claude Sonnet 4: \$3 input, \$15
 output per 1M tokens)
 
-\subsubsection{Brain ≠ Mind (Section 7)}\label{brain-mind-section-7}
+\subsubsection{Brain $\neq$ Mind (Section 7)}\label{brain-mind-section-7}
 
 {[}35{]} Herculano-Houzel, S. (2009). ``The Human Brain in Numbers: A
 Linearly Scaled-up Primate Brain.'' \emph{Frontiers in Human
@@ -2882,7 +2877,7 @@ https://doi.org/10.1038/s41582-025-01072-z
 neocortical circuits.'' \emph{The Journal of Neuroscience}, 23(35),
 11167-11177. https://www.jneurosci.org/content/23/35/11167 Foundational
 work demonstrating power-law distributions in cortical networks.
-Established branching ratio σ ≈ 1.0 as the hallmark of criticality in
+Established branching ratio $\sigma$ $\approx$ 1.0 as the hallmark of criticality in
 biological neural networks.
 
 {[}46{]} Scholarpedia. ``Neuronal avalanche.''
@@ -2894,7 +2889,7 @@ and criticality signatures in neural systems.
 \emph{Frontiers in Physiology}, 3:450.
 https://www.frontiersin.org/articles/10.3389/fphys.2012.00450/full DFA
 methodology for detecting long-range correlations in physiological time
-series. DFA exponent α ≈ 1.0 indicates pink noise (1/f) characteristic
+series. DFA exponent $\alpha$ $\approx$ 1.0 indicates pink noise (1/f) characteristic
 of critical systems.
 
 {[}48{]} Fontenele, A. J., et al.~(2021). ``Avalanches and edge-of-chaos
@@ -2907,7 +2902,7 @@ co-occur.
 {[}49{]} Gollo, L. L. (2018). ``Critical synchronization and 1/f
 activity in inhibitory/excitatory networks.'' \emph{Scientific Reports},
 8, 1074. https://www.nature.com/articles/s41598-018-37920-w Power
-spectrum analysis showing β ≈ 1-2 (pink noise) at criticality.
+spectrum analysis showing $\beta$ $\approx$ 1-2 (pink noise) at criticality.
 Demonstrates relationship between synchronization and scale-free
 dynamics.
 
@@ -2923,7 +2918,7 @@ critical and fully irregular: A reverberating model captures and
 predicts cortical spike propagation.'' \emph{Cerebral Cortex}, 29(6),
 2759-2770. https://pmc.ncbi.nlm.nih.gov/articles/PMC6871218/ Cortical
 spike propagation analysis using branching ratio and related criticality
-metrics (κ index). Empirical measurements of cortical criticality.
+metrics ($\kappa$ index). Empirical measurements of cortical criticality.
 
 {[}52{]} Hesse, J., \& Gross, T. (2014). ``Self-organized criticality as
 a fundamental property of neural systems.'' \emph{Frontiers in Systems
