@@ -595,10 +595,13 @@ impl CognitiveLoop {
 
         // Parse XREAD response: [[stream_name, [[id, [field, value, ...]], ...]]]
         if let Some(redis::Value::Array(ref streams_data)) = entries.first() {
+            info!(streams_count = streams_data.len(), "Parsing XREAD streams_data");
             for stream_item in streams_data {
                 if let redis::Value::Array(ref stream_parts) = stream_item {
+                    info!(parts_count = stream_parts.len(), "Found stream_parts array");
                     // stream_parts[0] = stream name, stream_parts[1] = entries
                     if let Some(redis::Value::Array(ref entries_list)) = stream_parts.get(1) {
+                        info!(entries_count = entries_list.len(), "Found entries_list");
                         for entry_item in entries_list {
                             if let redis::Value::Array(ref entry_parts) = entry_item {
                                 // entry_parts[0] = entry ID, entry_parts[1] = field-value array
