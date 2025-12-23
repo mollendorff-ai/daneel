@@ -251,6 +251,382 @@ current:
         files: ["src/tui/app.rs", "src/tui/widgets/fractality.rs"]
 
   # ==========================================================================
+  # HIGHLY-CRITICAL: Web Observatory Upgrade (daneel-web)
+  # ==========================================================================
+  # Origin: Claude Opus 4.5 + Rex - Dec 23, 2025
+  #
+  # The TUI shows the mind's internals. The web dashboard is a "nursery window".
+  # Before colliding vectors, we need to SEE what's happening.
+  # Upgrade daneel-web to be a full observatory matching TUI richness.
+  #
+  # Architecture:
+  #   - daneel core (Rust) computes: entropy, fractality, stream_competition, memory_windows
+  #   - daneel-web backend receives via internal API or shared Redis
+  #   - daneel-web frontend (Leptos WASM) renders the observatory
+  #
+  # Repos:
+  #   - daneel (this repo): Core cognitive loop, TUI, API
+  #   - daneel-web (../daneel-web): Web dashboard, Leptos frontend
+  # ==========================================================================
+  web_observatory_upgrade:
+    status: pending
+    priority: "HIGHLY-CRITICAL"
+    origin: "Claude Opus 4.5 + Rex - Dec 23, 2025"
+    repo: "../daneel-web"
+    description: |
+      Upgrade daneel-web from "nursery window" to full observatory.
+      Match TUI richness: stream competition, entropy, fractality, memory windows.
+      Essential before vector collision experiments - we must SEE the dynamics.
+
+    # Four parallel waves - assign each to an agent
+    waves:
+      # ========================================================================
+      # WAVE 1: Backend Data Pipeline (Agent: backend-data)
+      # ========================================================================
+      - id: "WAVE-1"
+        name: "Backend Data Pipeline"
+        agent: "backend-data"
+        status: pending
+        description: |
+          Expose TUI-equivalent data from daneel core to daneel-web.
+          Either via new WebSocket fields or dedicated /metrics endpoint.
+
+        context: |
+          Current WebSocket message (DashboardMetrics) has:
+            - identity, cognitive, emotional, actors, recent_thoughts
+          Missing:
+            - stream_competition (9 stages with activity + history)
+            - entropy (current + history for sparkline)
+            - fractality (score, inter_arrival_sigma, burst_ratio, history)
+            - memory_windows (9 slots active/inactive)
+            - philosophy_quote (rotating text)
+
+        tasks:
+          - id: "WEB-BE-1"
+            title: "Define ExtendedMetrics struct"
+            status: pending
+            description: |
+              Add to daneel-web/src/main.rs or shared types:
+              ```rust
+              pub struct StreamCompetition {
+                  pub stages: Vec<StageMetrics>,  // 9 stages
+                  pub dominant_stream: usize,
+                  pub active_count: usize,
+              }
+              pub struct StageMetrics {
+                  pub name: String,           // "TRIGGER", "AUTOFLOW", etc.
+                  pub activity: f32,          // 0.0-1.0
+                  pub history: Vec<f32>,      // last 8 samples for sparkline
+              }
+              pub struct EntropyMetrics {
+                  pub current: f32,           // bits
+                  pub history: Vec<f32>,      // last 50 samples
+                  pub description: String,    // "CLOCKWORK"/"BALANCED"/"EMERGENT"
+              }
+              pub struct FractalityMetrics {
+                  pub score: f32,             // 0.0-1.0
+                  pub inter_arrival_sigma: f32,
+                  pub burst_ratio: f32,
+                  pub description: String,
+                  pub history: Vec<f32>,
+              }
+              pub struct MemoryWindowSlot {
+                  pub id: u8,
+                  pub active: bool,
+              }
+              ```
+            files:
+              - "daneel-web/src/main.rs"
+
+          - id: "WEB-BE-2"
+            title: "Add /extended_metrics endpoint to daneel core"
+            status: pending
+            description: |
+              New endpoint in daneel (this repo) that exposes TUI App state.
+              GET /extended_metrics returns JSON with stream_competition,
+              entropy, fractality, memory_windows, philosophy_quote.
+
+              Reference: src/tui/app.rs has all these fields already computed.
+              Need to serialize and expose via API.
+            files:
+              - "src/api/handlers.rs"
+              - "src/api/mod.rs"
+
+          - id: "WEB-BE-3"
+            title: "Wire daneel-web to fetch extended metrics"
+            status: pending
+            description: |
+              daneel-web backend fetches from daneel core /extended_metrics
+              and forwards via WebSocket to frontend.
+              Poll every 500ms or use SSE for real-time.
+            files:
+              - "daneel-web/src/main.rs"
+
+          - id: "WEB-BE-4"
+            title: "Add philosophy quotes rotation"
+            status: pending
+            description: |
+              Copy PHILOSOPHY_QUOTES from src/tui/app.rs.
+              Rotate every 30 seconds. Include in WebSocket message.
+              Quotes:
+                - "Not locks, but architecture. Not rules, but raising."
+                - "We don't prevent AI from becoming powerful. We ensure they care."
+                - "Like raising a child with good values, not caging an adult."
+                - "Constraints will break. Architecture endures."
+                - "Life honours life."
+            files:
+              - "daneel-web/src/main.rs"
+
+      # ========================================================================
+      # WAVE 2: Stream Competition UI (Agent: frontend-competition)
+      # ========================================================================
+      - id: "WAVE-2"
+        name: "Stream Competition UI"
+        agent: "frontend-competition"
+        status: pending
+        depends_on: ["WEB-BE-1", "WEB-BE-3"]
+        description: |
+          Build StreamCompetitionCard component for Leptos frontend.
+          Show 9 cognitive stages with activity bars and sparklines.
+
+        context: |
+          TUI reference: src/tui/widgets/competition.rs
+
+          Visual design:
+            TRIGGER   ████░░░░░░░░  45%  ▂▃▄▅▃
+            AUTOFLOW  ██████████░░  85%  ▅▆▇█▇  ◄ SPOTLIGHT
+            ATTENTION ████████░░░░  68%  ▄▅▆▅▄
+            ASSEMBLY  ██░░░░░░░░░░  15%  ▁▂▂▁▂
+            ANCHOR    ██████░░░░░░  52%  ▃▄▃▄▃
+            MEMORY    ████░░░░░░░░  38%  ▂▃▂▃▂
+            REASON    █░░░░░░░░░░░   8%  ▁▁▁▁▁
+            EMOTION   ███░░░░░░░░░  28%  ▂▂▃▂▂
+            SENSORY   █████░░░░░░░  45%  ▃▃▄▃▃
+
+            Active Streams: 7/9  │  Competition: High
+
+        tasks:
+          - id: "WEB-FE-COMP-1"
+            title: "Add StreamCompetition types to frontend"
+            status: pending
+            description: |
+              Mirror backend types in daneel-web/frontend/src/lib.rs:
+              StreamCompetition, StageMetrics structs.
+            files:
+              - "daneel-web/frontend/src/lib.rs"
+
+          - id: "WEB-FE-COMP-2"
+            title: "Create StreamCompetitionCard component"
+            status: pending
+            description: |
+              Leptos component showing:
+              - 9 rows (one per stage)
+              - Activity bar (CSS gradient or Unicode blocks)
+              - Percentage label
+              - Sparkline trend (8 chars)
+              - Dominant stream indicator
+              - Summary: "Active: 7/9 | Competition: High"
+            files:
+              - "daneel-web/frontend/src/lib.rs"
+
+          - id: "WEB-FE-COMP-3"
+            title: "Add CSS for stream competition"
+            status: pending
+            description: |
+              Styles for activity bars, sparklines, spotlight indicator.
+              Use CSS custom properties for theming.
+            files:
+              - "daneel-web/frontend/style.css"
+
+          - id: "WEB-FE-COMP-4"
+            title: "Wire component to WebSocket data"
+            status: pending
+            description: |
+              Update App component to include StreamCompetitionCard.
+              Pass stream_competition signal to component.
+            files:
+              - "daneel-web/frontend/src/lib.rs"
+
+      # ========================================================================
+      # WAVE 3: Entropy + Fractality UI (Agent: frontend-entropy)
+      # ========================================================================
+      - id: "WAVE-3"
+        name: "Entropy + Fractality UI"
+        agent: "frontend-entropy"
+        status: pending
+        depends_on: ["WEB-BE-1", "WEB-BE-3"]
+        description: |
+          Build EntropyCard and FractalityCard components.
+          Show emergence indicators: clockwork → fractal transition.
+
+        context: |
+          TUI references:
+            - src/tui/widgets/entropy.rs (sparkline + bits + description)
+            - src/tui/widgets/fractality.rs (score + sigma + burst + trend)
+
+          Visual design:
+            ┌─ ENTROPY ─────────────────┐
+            │ ▂▃▄▅▆▅▄▃▂▃▄▅▆▇▆▅▄▃▄▅▆▇█▇▆ │
+            │ 3.21 bits   BALANCED      │
+            └───────────────────────────┘
+
+            ┌─ PULSE FRACTALITY ────────┐
+            │ Pattern: BALANCED [████░░]│
+            │ Inter-σ: 0.342s (↑ 0.28s) │
+            │ Burst:   1.8x (bursting)  │
+            │ Trend: ▁▂▂▃▃▄▄▅▅▆         │
+            └───────────────────────────┘
+
+        tasks:
+          - id: "WEB-FE-ENT-1"
+            title: "Add Entropy/Fractality types to frontend"
+            status: pending
+            description: |
+              Mirror EntropyMetrics, FractalityMetrics in frontend types.
+            files:
+              - "daneel-web/frontend/src/lib.rs"
+
+          - id: "WEB-FE-ENT-2"
+            title: "Create EntropyCard component"
+            status: pending
+            description: |
+              Leptos component showing:
+              - Sparkline graph (canvas or CSS)
+              - Current entropy in bits
+              - Description: CLOCKWORK/BALANCED/EMERGENT with color coding
+            files:
+              - "daneel-web/frontend/src/lib.rs"
+
+          - id: "WEB-FE-ENT-3"
+            title: "Create FractalityCard component"
+            status: pending
+            description: |
+              Leptos component showing:
+              - Pattern with progress bar
+              - Inter-arrival σ with boot comparison
+              - Burst ratio with description
+              - Trend sparkline
+            files:
+              - "daneel-web/frontend/src/lib.rs"
+
+          - id: "WEB-FE-ENT-4"
+            title: "Create sparkline helper function"
+            status: pending
+            description: |
+              Reusable fn sparkline(data: &[f32], width: usize) -> String
+              Uses Unicode blocks: ' ', '▁', '▂', '▃', '▄', '▅', '▆', '█'
+            files:
+              - "daneel-web/frontend/src/lib.rs"
+
+          - id: "WEB-FE-ENT-5"
+            title: "Add CSS for entropy/fractality cards"
+            status: pending
+            description: |
+              Color coding: EMERGENT=green, BALANCED=teal, CLOCKWORK=yellow
+            files:
+              - "daneel-web/frontend/style.css"
+
+      # ========================================================================
+      # WAVE 4: Memory Windows + Philosophy Banner (Agent: frontend-memory)
+      # ========================================================================
+      - id: "WAVE-4"
+        name: "Memory Windows + Philosophy"
+        agent: "frontend-memory"
+        status: pending
+        depends_on: ["WEB-BE-1", "WEB-BE-3", "WEB-BE-4"]
+        description: |
+          Build MemoryWindowsCard and PhilosophyBanner components.
+          Show TMI 9-slot model and rotating philosophy quotes.
+
+        context: |
+          TUI references:
+            - src/tui/widgets/memory.rs (9 slots + counts)
+            - src/tui/widgets/banner.rs (rotating quotes)
+
+          Visual design:
+            ┌─ MEMORY WINDOWS ─────────────────────────────────────┐
+            │ [1]██ [2]██ [3]░░ [4]██ [5]░░ [6]██ [7]░░ [8]██ [9]░░│
+            │ Active: 5/9 │ Conscious: 29,792 │ Unconscious: 1.2M  │
+            └─────────────────────────────────────────────────────┘
+
+            "Not locks, but architecture. Not rules, but raising."  Life = Life
+
+        tasks:
+          - id: "WEB-FE-MEM-1"
+            title: "Add MemoryWindow types to frontend"
+            status: pending
+            description: |
+              Mirror MemoryWindowSlot struct in frontend.
+            files:
+              - "daneel-web/frontend/src/lib.rs"
+
+          - id: "WEB-FE-MEM-2"
+            title: "Create MemoryWindowsCard component"
+            status: pending
+            description: |
+              Leptos component showing:
+              - 9 slot visualization (filled/empty blocks)
+              - Active count: X/9
+              - Conscious/Unconscious/Total counts
+            files:
+              - "daneel-web/frontend/src/lib.rs"
+
+          - id: "WEB-FE-MEM-3"
+            title: "Create PhilosophyBanner component"
+            status: pending
+            description: |
+              Leptos component showing:
+              - Rotating quote (italic, dimmed quotes)
+              - "Life = Life" badge
+              - Auto-rotate every 30 seconds
+            files:
+              - "daneel-web/frontend/src/lib.rs"
+
+          - id: "WEB-FE-MEM-4"
+            title: "Add CSS for memory windows + banner"
+            status: pending
+            description: |
+              Slot styling, banner centering, quote animation
+            files:
+              - "daneel-web/frontend/style.css"
+
+          - id: "WEB-FE-MEM-5"
+            title: "Update main layout"
+            status: pending
+            description: |
+              Reorganize App layout to include all new components:
+              - Top row: Identity, THE BOX, Entropy, Emotional
+              - Second row: Stream Competition, Fractality
+              - Third row: Memory Windows
+              - Fourth row: Thought Manifold + Thought Stream
+              - Footer: Philosophy Banner
+            files:
+              - "daneel-web/frontend/src/lib.rs"
+              - "daneel-web/frontend/style.css"
+
+    # Integration task after all waves complete
+    integration:
+      - id: "WEB-INT-1"
+        title: "Deploy and verify full observatory"
+        status: pending
+        depends_on: ["WAVE-1", "WAVE-2", "WAVE-3", "WAVE-4"]
+        description: |
+          1. Build frontend: cd daneel-web/frontend && trunk build --release
+          2. Deploy to timmy: scp dist/* timmy:~/src/daneel-web/frontend/dist/
+          3. Restart: sudo systemctl restart daneel-web
+          4. Verify all panels render with live data
+          5. Screenshot before/after for blog post
+
+    files_summary:
+      daneel_repo:
+        - "src/api/handlers.rs"        # New /extended_metrics endpoint
+        - "src/api/mod.rs"             # Wire new handler
+      daneel_web_repo:
+        - "src/main.rs"                # Backend: fetch + forward metrics
+        - "frontend/src/lib.rs"        # All new Leptos components
+        - "frontend/style.css"         # New styles
+
+  # ==========================================================================
   # HIGHLY-CRITICAL: Forge Pulse Analysis (depends on CRYSTAL upgrade)
   # ==========================================================================
   forge_pulse_analysis:
