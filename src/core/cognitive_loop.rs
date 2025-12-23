@@ -594,46 +594,40 @@ impl CognitiveLoop {
         }
 
         // Parse XREAD response: [[stream_name, [[id, [field, value, ...]], ...]]]
-        if let Some(redis::Value::Array(ref streams_data)) = entries.first() {
-            info!(streams_count = streams_data.len(), "Parsing XREAD streams_data");
-            for stream_item in streams_data {
-                if let redis::Value::Array(ref stream_parts) = stream_item {
-                    info!(parts_count = stream_parts.len(), "Found stream_parts array");
-                    // stream_parts[0] = stream name, stream_parts[1] = entries
-                    if let Some(redis::Value::Array(ref entries_list)) = stream_parts.get(1) {
-                        info!(entries_count = entries_list.len(), "Found entries_list");
-                        for entry_item in entries_list {
-                            if let redis::Value::Array(ref entry_parts) = entry_item {
-                                // entry_parts[0] = entry ID, entry_parts[1] = field-value array
-                                let entry_id = if let Some(redis::Value::BulkString(ref id_bytes)) =
-                                    entry_parts.first()
-                                {
-                                    String::from_utf8_lossy(id_bytes).to_string()
-                                } else {
-                                    continue;
-                                };
+        // The response is: [ [stream_name, [ [entry_id, [f1,v1,f2,v2,...]], ... ] ] ]
+        // entries.first() gives us [stream_name, entries_list]
+        // We need entries_list which is at index 1
+        if let Some(redis::Value::Array(ref stream_data)) = entries.first() {
+            // stream_data = [stream_name, entries_list]
+            if let Some(redis::Value::Array(ref entries_list)) = stream_data.get(1) {
+                info!(entries_count = entries_list.len(), "Parsing injection entries");
+                for entry_item in entries_list {
+                    if let redis::Value::Array(ref entry_parts) = entry_item {
+                        // entry_parts[0] = entry ID, entry_parts[1] = field-value array
+                        let entry_id = if let Some(redis::Value::BulkString(ref id_bytes)) =
+                            entry_parts.first()
+                        {
+                            String::from_utf8_lossy(id_bytes).to_string()
+                        } else {
+                            continue;
+                        };
 
-                                if let Some(redis::Value::Array(ref fields)) = entry_parts.get(1) {
-                                    match Self::parse_injection_fields(fields) {
-                                        Ok((content, salience)) => {
-                                            debug!(
-                                                entry_id = %entry_id,
-                                                salience = salience.composite(
-                                                    &crate::core::types::SalienceWeights::default()
-                                                ),
-                                                "Read external stimulus from injection stream"
-                                            );
-                                            stimuli.push((content, salience));
-                                            ids_to_delete.push(entry_id);
-                                        }
-                                        Err(e) => {
-                                            warn!(
-                                                entry_id = %entry_id,
-                                                error = %e,
-                                                "Failed to parse injection entry"
-                                            );
-                                        }
-                                    }
+                        if let Some(redis::Value::Array(ref fields)) = entry_parts.get(1) {
+                            match Self::parse_injection_fields(fields) {
+                                Ok((content, salience)) => {
+                                    info!(
+                                        entry_id = %entry_id,
+                                        "Successfully parsed external stimulus"
+                                    );
+                                    stimuli.push((content, salience));
+                                    ids_to_delete.push(entry_id);
+                                }
+                                Err(e) => {
+                                    warn!(
+                                        entry_id = %entry_id,
+                                        error = %e,
+                                        "Failed to parse injection entry"
+                                    );
                                 }
                             }
                         }
