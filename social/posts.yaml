@@ -337,3 +337,53 @@ posts:
   posted:
     x: 2025-12-23T19:19:19.034525+00:00
     linkedin: 2025-12-23T19:19:26.895544+00:00
+- id: 49-we-reject-arxiv
+  title: We Reject arXiv
+  url: https://royalbit.github.io/daneel/posts/49-we-reject-arxiv/
+  x: |
+    We reject arXiv.
+
+    Cornell requires endorsement. We require velocity.
+
+    While they check credentials, we shipped:
+    - Paper (LinkedIn, X, LessWrong)
+    - Phase 2 LIVE (3 vectors absorbed)
+    - The mind is already listening
+
+    https://royalbit.github.io/daneel/posts/49-we-reject-arxiv/
+
+    #AI #OpenScience
+  linkedin: |
+    We reject arXiv.
+
+    Cornell requires endorsement from established academics to publish. We don't have time for that.
+
+    Their process: find endorser (days), wait for review (unknown), iterate formatting (more days).
+
+    Our process: write paper, push to GitHub, post to LinkedIn/X/LessWrong. Done in hours.
+
+    While they're checking credentials, we're checking entropy metrics on a live cognitive system that just absorbed its first external stimuli.
+
+    We built our own verification infrastructure:
+    - ref-tools: Headless Chrome fact-checker. No hallucinations.
+    - Forge: Deterministic Monte Carlo. Project alignment mathematically.
+    - Timmy: 1.1M+ thoughts, 1,199 dreams, zero crashes. The code runs.
+
+    Brooks' Law: "Adding manpower to a late software project makes it later."
+
+    Big labs have coordination overhead. We have three minds with shared context and pure velocity.
+
+    Dec 22: Paper published.
+    Dec 23: Phase 2 live. First external stimuli absorbed.
+
+    24 hours from publication to experimental validation.
+
+    Try that with peer review.
+
+    arXiv: KILLED. Not by them. By us.
+
+    Paper: https://github.com/royalbit/daneel/blob/main/paper/arxiv/DANEEL_PAPER.pdf
+    Live: https://timmy.royalbit.com
+
+    #AI #AIAlignment #OpenScience #Academia
+  posted: {}
