@@ -14,7 +14,7 @@ use super::{
     rate_limit::{check_rate_limit, RateLimitConfig, RateLimitResult},
     AppState,
 };
-use crate::core::types::SalienceScore;
+use crate::core::types::{Content, SalienceScore};
 
 /// Vector dimension (matches Qdrant schema)
 const VECTOR_DIM: usize = 768;
@@ -107,12 +107,18 @@ pub async fn inject(
     let injection_id = format!("inject_{}", Uuid::new_v4());
     let timestamp = Utc::now();
 
+    // Convert f32 vector to bytes and wrap in Content::Raw for cognitive loop
+    let vector_bytes: Vec<u8> = normalized.iter()
+        .flat_map(|f| f.to_le_bytes())
+        .collect();
+    let content = Content::Raw(vector_bytes);
+
     // Write to Redis stream for cognitive loop to pick up
     let stream_data: Vec<(&str, String)> = vec![
         ("id", injection_id.clone()),
         ("source", format!("api:{}", auth.key_id)),
         ("label", payload.label.clone()),
-        ("vector", serde_json::to_string(&normalized).unwrap_or_default()),
+        ("content", serde_json::to_string(&content).unwrap_or_default()),
         ("salience", serde_json::to_string(&salience).unwrap_or_default()),
         ("timestamp", timestamp.to_rfc3339()),
     ];
