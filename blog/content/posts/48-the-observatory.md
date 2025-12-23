@@ -1,6 +1,6 @@
 +++
 title = "The Observatory"
-date = 2025-12-23
+date = 2025-12-23T12:00:00Z
 description = "Upgrading the nursery window to a full observatory. Before we collide vectors, we must see the dynamics."
 [taxonomies]
 tags = ["phase2", "architecture", "web", "observatory", "crystals"]
