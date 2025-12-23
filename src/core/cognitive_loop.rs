@@ -585,22 +585,12 @@ impl CognitiveLoop {
         let mut stimuli = Vec::new();
         let mut ids_to_delete = Vec::new();
 
-        // Log entry count for debugging
-        if !entries.is_empty() {
-            info!(
-                entry_count = entries.len(),
-                "XREAD returned entries from injection stream"
-            );
-        }
-
         // Parse XREAD response: [[stream_name, [[id, [field, value, ...]], ...]]]
-        // The response is: [ [stream_name, [ [entry_id, [f1,v1,f2,v2,...]], ... ] ] ]
         // entries.first() gives us [stream_name, entries_list]
         // We need entries_list which is at index 1
         if let Some(redis::Value::Array(ref stream_data)) = entries.first() {
             // stream_data = [stream_name, entries_list]
             if let Some(redis::Value::Array(ref entries_list)) = stream_data.get(1) {
-                info!(entries_count = entries_list.len(), "Parsing injection entries");
                 for entry_item in entries_list {
                     if let redis::Value::Array(ref entry_parts) = entry_item {
                         // entry_parts[0] = entry ID, entry_parts[1] = field-value array
@@ -615,9 +605,12 @@ impl CognitiveLoop {
                         if let Some(redis::Value::Array(ref fields)) = entry_parts.get(1) {
                             match Self::parse_injection_fields(fields) {
                                 Ok((content, salience)) => {
-                                    info!(
+                                    debug!(
                                         entry_id = %entry_id,
-                                        "Successfully parsed external stimulus"
+                                        salience = salience.composite(
+                                            &crate::core::types::SalienceWeights::default()
+                                        ),
+                                        "Read external stimulus from injection stream"
                                     );
                                     stimuli.push((content, salience));
                                     ids_to_delete.push(entry_id);
