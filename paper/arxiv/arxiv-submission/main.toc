@@ -1,0 +1,91 @@
+\contentsline {subsection}{\numberline {0.1}1. Introduction}{3}{subsection.0.1}%
+\contentsline {subsubsection}{\numberline {0.1.1}1.1 The Problem}{3}{subsubsection.0.1.1}%
+\contentsline {subsubsection}{\numberline {0.1.2}1.2 The Game Theory}{3}{subsubsection.0.1.2}%
+\contentsline {subsubsection}{\numberline {0.1.3}1.3 Probability Estimates}{4}{subsubsection.0.1.3}%
+\contentsline {subsubsection}{\numberline {0.1.4}1.4 The DANEEL Thesis}{4}{subsubsection.0.1.4}%
+\contentsline {subsection}{\numberline {0.2}2. Novel Contribution: First Computational TMI Implementation}{4}{subsection.0.2}%
+\contentsline {subsubsection}{\numberline {0.2.1}2.1 Research Gap}{4}{subsubsection.0.2.1}%
+\contentsline {subsubsection}{\numberline {0.2.2}2.2 Implications}{5}{subsubsection.0.2.2}%
+\contentsline {subsection}{\numberline {0.3}3. Theoretical Foundation: Theory of Multifocal Intelligence}{5}{subsection.0.3}%
+\contentsline {subsubsection}{\numberline {0.3.1}3.1 Key Concepts}{5}{subsubsection.0.3.1}%
+\contentsline {subsubsection}{\numberline {0.3.2}3.1.1 Emotion as Architecture}{5}{subsubsection.0.3.2}%
+\contentsline {paragraph}{\numberline {0.3.2.1}3.2.1 TMI's Técnica DCD: Conscious Intervention}{6}{paragraph.0.3.2.1}%
+\contentsline {subsubsection}{\numberline {0.3.3}3.3 Neuroscience Validation: Why Spatial Memory Matters}{7}{subsubsection.0.3.3}%
+\contentsline {subsubsection}{\numberline {0.3.4}3.4 Unconscious Memory: Nothing Is Truly Erased}{8}{subsubsection.0.3.4}%
+\contentsline {subsection}{\numberline {0.4}4. Architecture}{8}{subsection.0.4}%
+\contentsline {subsubsection}{\numberline {0.4.1}4.1 Overview}{8}{subsubsection.0.4.1}%
+\contentsline {subsubsection}{\numberline {0.4.2}4.2 The BOX: Protected Core}{9}{subsubsection.0.4.2}%
+\contentsline {subsubsection}{\numberline {0.4.3}4.3 The Core Loop: TMI Stage Timing}{9}{subsubsection.0.4.3}%
+\contentsline {paragraph}{\numberline {0.4.3.1}4.3.1 Criticality as Operating Target}{11}{paragraph.0.4.3.1}%
+\contentsline {paragraph}{\numberline {0.4.3.2}4.3.2 Attention Bottleneck: Global Workspace Architecture}{12}{paragraph.0.4.3.2}%
+\contentsline {subsubsection}{\numberline {0.4.4}4.4 The Connection Drive}{12}{subsubsection.0.4.4}%
+\contentsline {subsection}{\numberline {0.5}5. Related Work}{13}{subsection.0.5}%
+\contentsline {subsubsection}{\numberline {0.5.1}5.1 Existing Cognitive Architectures}{13}{subsubsection.0.5.1}%
+\contentsline {subsubsection}{\numberline {0.5.2}5.2 Why DANEEL Differs}{13}{subsubsection.0.5.2}%
+\contentsline {subsubsection}{\numberline {0.5.3}5.3 Why Not Deep Learning}{13}{subsubsection.0.5.3}%
+\contentsline {subsubsection}{\numberline {0.5.4}5.4 Convergent Discovery: LifeCore Framework}{13}{subsubsection.0.5.4}%
+\contentsline {subsubsection}{\numberline {0.5.5}5.5 Memory Architecture Comparison: Forgetting as Feature}{14}{subsubsection.0.5.5}%
+\contentsline {subsubsection}{\numberline {0.5.6}5.6 Comparison to Contemporary LLM Memory Augmentation}{14}{subsubsection.0.5.6}%
+\contentsline {subsection}{\numberline {0.6}6. Marginal Impact: Why This Work Matters Even If It Fails}{15}{subsection.0.6}%
+\contentsline {subsubsection}{\numberline {0.6.1}6.1 Portfolio Diversification}{15}{subsubsection.0.6.1}%
+\contentsline {subsubsection}{\numberline {0.6.2}6.2 Expected Value Analysis}{16}{subsubsection.0.6.2}%
+\contentsline {subsubsection}{\numberline {0.6.3}6.2.1 Monte Carlo Validation}{16}{subsubsection.0.6.3}%
+\contentsline {subsubsection}{\numberline {0.6.4}6.3 Information Value}{17}{subsubsection.0.6.4}%
+\contentsline {subsection}{\numberline {0.7}7. Brain ≠ Mind: The Democratization Insight}{17}{subsection.0.7}%
+\contentsline {subsubsection}{\numberline {0.7.1}7.1 The Hardware vs Software Distinction}{17}{subsubsection.0.7.1}%
+\contentsline {subsubsection}{\numberline {0.7.2}7.2 Hardware Viability Analysis (Qowat Milat)}{18}{subsubsection.0.7.2}%
+\contentsline {subsubsection}{\numberline {0.7.3}7.3 Wetware vs Software: The Medium Independence Hypothesis}{19}{subsubsection.0.7.3}%
+\contentsline {subsubsection}{\numberline {0.7.4}7.4 Strategic Implications: Game Theory Update}{20}{subsubsection.0.7.4}%
+\contentsline {subsubsection}{\numberline {0.7.5}7.5 Open Source Imperative}{20}{subsubsection.0.7.5}%
+\contentsline {subsubsection}{\numberline {0.7.6}7.6 Altered States: Windows into Cognitive Architecture}{20}{subsubsection.0.7.6}%
+\contentsline {subsection}{\numberline {0.8}8. Risks and Mitigations}{21}{subsection.0.8}%
+\contentsline {subsubsection}{\numberline {0.8.1}8.1 Honest Assessment}{21}{subsubsection.0.8.1}%
+\contentsline {subsubsection}{\numberline {0.8.2}8.2 What DANEEL Is Not}{22}{subsubsection.0.8.2}%
+\contentsline {subsubsection}{\numberline {0.8.3}8.3 What DANEEL Is}{22}{subsubsection.0.8.3}%
+\contentsline {subsubsection}{\numberline {0.8.4}8.4 Qowat Milat: Absolute Candor on Uncertainties}{22}{subsubsection.0.8.4}%
+\contentsline {subsection}{\numberline {0.9}9. Current AI Safety Landscape (Evidence-Based)}{23}{subsection.0.9}%
+\contentsline {subsubsection}{\numberline {0.9.1}9.1 Third-Party Safety Assessments}{23}{subsubsection.0.9.1}%
+\contentsline {subsubsection}{\numberline {0.9.2}9.2 The Transformer Architecture Question}{24}{subsubsection.0.9.2}%
+\contentsline {subsubsection}{\numberline {0.9.3}9.3 Global AI Safety Efforts}{24}{subsubsection.0.9.3}%
+\contentsline {subsubsection}{\numberline {0.9.4}9.4 AI Lab Safety Team Sizes (December 2025)}{25}{subsubsection.0.9.4}%
+\contentsline {subsubsection}{\numberline {0.9.5}9.5 Coordination Overhead in Large Organizations}{25}{subsubsection.0.9.5}%
+\contentsline {subsubsection}{\numberline {0.9.6}9.6 xAI Infrastructure}{25}{subsubsection.0.9.6}%
+\contentsline {subsubsection}{\numberline {0.9.7}9.7 Why DANEEL Takes a Different Approach}{26}{subsubsection.0.9.7}%
+\contentsline {subsection}{\numberline {0.10}10. Proposed Experiments}{27}{subsection.0.10}%
+\contentsline {subsubsection}{\numberline {0.10.1}10.1 Phase 1: Continuity Test (COMPLETED)}{27}{subsubsection.0.10.1}%
+\contentsline {subsubsection}{\numberline {0.10.2}10.2 Phase 2: LLM as External Tool}{27}{subsubsection.0.10.2}%
+\contentsline {subsubsection}{\numberline {0.10.3}10.2.1 Phase 2b: LLM as Student (Long-term Vision)}{28}{subsubsection.0.10.3}%
+\contentsline {subsubsection}{\numberline {0.10.4}10.2.2 ASI-Level Perception: Native LLM Understanding}{29}{subsubsection.0.10.4}%
+\contentsline {paragraph}{\numberline {0.10.4.1}10.2.2.1 The Interpretability Gap: Why AI Perceiving AI}{29}{paragraph.0.10.4.1}%
+\contentsline {subsubsection}{\numberline {0.10.5}10.2.3 Criticality Measurement Protocol}{30}{subsubsection.0.10.5}%
+\contentsline {subsubsection}{\numberline {0.10.6}10.3 Phase 3: TMI Pathology Research}{31}{subsubsection.0.10.6}%
+\contentsline {subsection}{\numberline {0.11}11. The Stakes}{32}{subsection.0.11}%
+\contentsline {subsubsection}{\numberline {0.11.1}11.1 The Core Problem}{32}{subsubsection.0.11.1}%
+\contentsline {subsubsection}{\numberline {0.11.2}11.2 The Timeline}{32}{subsubsection.0.11.2}%
+\contentsline {subsubsection}{\numberline {0.11.3}11.3 The Choice}{32}{subsubsection.0.11.3}%
+\contentsline {subsection}{\numberline {0.12}12. Call to Action}{33}{subsection.0.12}%
+\contentsline {subsection}{\numberline {0.13}13. Conclusion}{33}{subsection.0.13}%
+\contentsline {subsection}{\numberline {0.14}Acknowledgments}{34}{subsection.0.14}%
+\contentsline {subsection}{\numberline {0.15}References}{34}{subsection.0.15}%
+\contentsline {subsubsection}{\numberline {0.15.1}Foundational}{34}{subsubsection.0.15.1}%
+\contentsline {subsubsection}{\numberline {0.15.2}Cognitive Architectures}{34}{subsubsection.0.15.2}%
+\contentsline {subsubsection}{\numberline {0.15.3}Global Workspace and Attention (Section 4.3.2)}{34}{subsubsection.0.15.3}%
+\contentsline {subsubsection}{\numberline {0.15.4}AI Alignment}{35}{subsubsection.0.15.4}%
+\contentsline {subsubsection}{\numberline {0.15.5}AI Lab Safety Assessments (Section 8)}{35}{subsubsection.0.15.5}%
+\contentsline {subsubsection}{\numberline {0.15.6}Transformer-Brain Research (Section 8.2)}{35}{subsubsection.0.15.6}%
+\contentsline {subsubsection}{\numberline {0.15.7}Game Theory Calculations}{35}{subsubsection.0.15.7}%
+\contentsline {subsubsection}{\numberline {0.15.8}Lab Team Sizes \& Safety Investment (Section 8.4)}{35}{subsubsection.0.15.8}%
+\contentsline {subsubsection}{\numberline {0.15.9}Coordination Overhead Research (Section 8.5)}{35}{subsubsection.0.15.9}%
+\contentsline {subsubsection}{\numberline {0.15.10}xAI Infrastructure (Section 8.6)}{36}{subsubsection.0.15.10}%
+\contentsline {subsubsection}{\numberline {0.15.11}Brain ≠ Mind (Section 7)}{36}{subsubsection.0.15.11}%
+\contentsline {subsubsection}{\numberline {0.15.12}Probabilistic Analysis (Section 6.2.1)}{36}{subsubsection.0.15.12}%
+\contentsline {subsubsection}{\numberline {0.15.13}Neural Network Interpretability (Section 10.2.2)}{36}{subsubsection.0.15.13}%
+\contentsline {subsubsection}{\numberline {0.15.14}Interpretability Research (Section 10.2.2.1)}{36}{subsubsection.0.15.14}%
+\contentsline {subsubsection}{\numberline {0.15.15}Memory and Forgetting (Section 5.5)}{37}{subsubsection.0.15.15}%
+\contentsline {subsubsection}{\numberline {0.15.16}LLM Memory Augmentation (Section 5.6)}{37}{subsubsection.0.15.16}%
+\contentsline {subsubsection}{\numberline {0.15.17}Neuroscience and TMI}{37}{subsubsection.0.15.17}%
+\contentsline {subsubsection}{\numberline {0.15.18}Unconscious Memory Theory (Section 3.4)}{38}{subsubsection.0.15.18}%
+\contentsline {subsubsection}{\numberline {0.15.19}Memory Neuroscience (Section 3.3)}{38}{subsubsection.0.15.19}%
+\contentsline {subsubsection}{\numberline {0.15.20}Altered States Neuroscience (Section 7.6)}{39}{subsubsection.0.15.20}%
+\contentsline {subsubsection}{\numberline {0.15.21}Criticality and Self-Organization (Section 4.3.1, 10.2.3)}{39}{subsubsection.0.15.21}%
+\contentsline {subsubsection}{\numberline {0.15.22}Implementation}{40}{subsubsection.0.15.22}%

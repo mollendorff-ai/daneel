@@ -5,8 +5,8 @@
 | File | Status |
 |------|--------|
 | `DANEEL_PAPER.md` | Source of truth (edit this) |
-| `arxiv/DANEEL_PAPER.tex` | STALE - needs regeneration |
-| `arxiv/DANEEL_PAPER.pdf` | STALE - needs regeneration |
+| `arxiv/DANEEL_PAPER.tex` | Auto-generated via `make paper` |
+| `arxiv/DANEEL_PAPER.pdf` | Auto-generated via `make paper` |
 | `arxiv/diagrams.tex` | Ready - 8 TikZ diagrams |
 | `arxiv/SUBMISSION_INFO.md` | arXiv submission metadata |
 
@@ -122,12 +122,16 @@ pdftk paper/arxiv/DANEEL_PAPER.pdf cat 1-5 output paper/DANEEL_PREVIEW.pdf
 ## Quick Reference: Full Rebuild
 
 ```bash
-cd /Users/rex/src/royalbit/daneel && \
-pandoc paper/DANEEL_PAPER.md -o paper/arxiv/DANEEL_PAPER.tex --standalone --from markdown+raw_tex && \
-cd paper/arxiv && \
-xelatex -interaction=nonstopmode DANEEL_PAPER.tex && \
-xelatex -interaction=nonstopmode DANEEL_PAPER.tex && \
-open DANEEL_PAPER.pdf
+make paper
 ```
 
-**Note:** This quick rebuild doesn't include the manual diagram replacement step. For arXiv submission, follow the full workflow above.
+This single command:
+1. Converts markdown to LaTeX via pandoc
+2. Patches LaTeX (adds TikZ, replaces Unicode chars, swaps Mermaid for TikZ diagrams)
+3. Compiles PDF with XeLaTeX (2 passes for cross-references)
+4. Opens the PDF
+
+To clean and rebuild:
+```bash
+make paper-clean && make paper
+```

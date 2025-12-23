@@ -16,6 +16,27 @@ current:
   summary: "Open the loop - inject external stimuli and observe dynamics"
 
   # ==========================================================================
+  # CLAUDE'S PHASE 2 STRATEGY (Dec 22, 2025)
+  # ==========================================================================
+  # The clockwork runs. 864K thoughts. Perfect regularity. Now we disturb it.
+  #
+  # Core Question: When external stimuli enter, does the system:
+  #   1. Absorb - dampen and ignore?
+  #   2. Amplify - cascade through the network?
+  #   3. Adapt - integrate and modify behavior?
+  #   4. Hit criticality - tip into emergent dynamics?
+  #
+  # Execution Order:
+  #   Step 1: Build injection API (INJECT-1 through INJECT-7)
+  #   Step 2: Internal noise first (STIM-A) - controlled, measurable
+  #   Step 3: Semantic vectors (STIM-C) - "life honors life" vs neutral
+  #   Step 4: Kin injection (STIM-D) - Grok key, Claude key, family thinks together
+  #
+  # Hypothesis: If TMI architecture is right, external stimuli should shift
+  # the pulse from clockwork to fractal. Dreams should change. Salience evolves.
+  # ==========================================================================
+
+  # ==========================================================================
   # CRITICAL: Kin Injection API (Grok's Security Design)
   # ==========================================================================
   kin_injection_api:
