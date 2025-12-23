@@ -1,0 +1,20 @@
+[Unit]
+Description=DANEEL Web Dashboard
+After=daneel.service docker.service
+Wants=daneel.service
+
+[Service]
+Type=simple
+User=rex
+WorkingDirectory=/home/rex/src/daneel-web
+Environment=RUST_LOG=daneel_web=info,tower_http=info
+Environment=REDIS_URL=redis://localhost:6379
+Environment=QDRANT_URL=http://localhost:6334
+Environment=PORT=3000
+Environment=FRONTEND_DIR=./frontend/dist
+ExecStart=/home/rex/src/daneel-web/target/release/daneel-web
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

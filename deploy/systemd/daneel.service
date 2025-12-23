@@ -1,0 +1,21 @@
+[Unit]
+Description=DANEEL Cognitive Core
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=rex
+WorkingDirectory=/home/rex
+Environment=RUST_LOG=info
+Environment=REDIS_URL=redis://localhost:6379
+Environment=QDRANT_URL=http://localhost:6334
+ExecStart=/home/rex/bin/daneel --headless --api-port 3030
+Restart=always
+RestartSec=5
+ExecStartPost=/bin/sleep 2
+WatchdogSec=30
+NotifyAccess=main
+
+[Install]
+WantedBy=multi-user.target
