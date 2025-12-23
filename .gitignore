@@ -22,3 +22,4 @@
 # Redis data (Timmy's memories - don't commit)
 /data/
 backup/
+.env.injection
