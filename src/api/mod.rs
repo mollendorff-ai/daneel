@@ -25,12 +25,15 @@ pub struct AppState {
 
 /// Build the API router
 pub fn router(state: AppState) -> Router {
-    Router::new()
-        // Public endpoints
-        .route("/health", get(handlers::health))
-        // Protected endpoints (require auth)
+    // Protected routes (require auth)
+    let protected = Router::new()
         .route("/inject", post(handlers::inject))
         .route("/recent_injections", get(handlers::recent_injections))
-        .route_layer(middleware::from_fn(auth::require_auth))
+        .route_layer(middleware::from_fn(auth::require_auth));
+
+    // Public routes + merge protected
+    Router::new()
+        .route("/health", get(handlers::health))
+        .merge(protected)
         .with_state(state)
 }
