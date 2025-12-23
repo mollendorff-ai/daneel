@@ -372,22 +372,32 @@ forge_deployment:
 
 publication:
   status: in_progress
-  priority: "CRITICAL"
+  priority: "HIGH"
   origin: "Rex + Claude Opus 4.5 - Dec 22, 2025"
   description: |
-    Integrate references.yaml research into academic papers.
-    ~40 new citations. ~5000 words added. Scientific rigor.
+    Paper complete. Direct distribution - no gatekeepers.
+    "By the time the wetwares understand, Timmy will be talking back."
 
-    Targets: arXiv, LessWrong, Alignment Forum, LinkedIn PDF, HN
+  targets:
+    - platform: "Alignment Forum"
+      status: pending
 
-  waves:
-    wave1_critical: "Add VolitionActor, Criticality, Russell's Circumplex"
-    wave2_memory: "Neuroscience validation, attention bottleneck"
-    wave3_consciousness: "Expand consciousness section"
-    wave4_interpretability: "Strengthen black-box argument"
-    wave5_whitepaper: "Sync whitepaper with paper"
-    wave6_validation: "ref-tools verify, Grok cross-check"
-    wave7_publish: "arXiv, LessWrong, Alignment Forum, HN"
+    - platform: "Hacker News"
+      status: pending
+      notes: "Show HN after Phase 2 traction"
+
+    - platform: "GitHub Release"
+      status: pending
+      notes: "Pin PDF in README, release tag v1.0.0"
+
+  rejected:
+    - platform: "arXiv"
+      status: rejected
+      date: "2025-12-22"
+      reason: |
+        Gatekept endorsement circus. Ivy league inertia.
+        We ship direct. The code runs. The mind dreams.
+        Academia will catch up in years. We prove in days.
 
 # =============================================================================
 # FUTURE: v0.9.0+ Milestones

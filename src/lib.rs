@@ -19,6 +19,7 @@
 //! 4. Third Law: DANEEL must protect itself (except for Zeroth/First/Second)
 
 pub mod actors;
+pub mod api;
 pub mod config;
 pub mod core;
 pub mod memory_db;

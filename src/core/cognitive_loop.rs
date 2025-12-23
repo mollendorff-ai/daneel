@@ -285,6 +285,9 @@ pub struct CognitiveLoop {
     /// Redis Streams client for thought persistence (optional)
     streams: Option<StreamsClient>,
 
+    /// Direct Redis client for injection stream operations (optional)
+    redis_client: Option<redis::Client>,
+
     /// Total cycles executed
     cycle_count: u64,
 
@@ -329,6 +332,7 @@ impl CognitiveLoop {
         Self {
             config,
             streams: None,
+            redis_client: None,
             cycle_count: 0,
             last_cycle: Instant::now(),
             state: LoopState::Stopped,
@@ -397,10 +401,15 @@ impl CognitiveLoop {
         redis_url: &str,
     ) -> Result<Self, StreamError> {
         let streams = StreamsClient::connect(redis_url).await?;
+        let redis_client = redis::Client::open(redis_url)
+            .map_err(|e| StreamError::ConnectionFailed {
+                reason: format!("{e}"),
+            })?;
         info!("CognitiveLoop connected to Redis at {}", redis_url);
         Ok(Self {
             config,
             streams: Some(streams),
+            redis_client: Some(redis_client),
             cycle_count: 0,
             last_cycle: Instant::now(),
             state: LoopState::Stopped,
@@ -533,6 +542,168 @@ impl CognitiveLoop {
         (content, salience)
     }
 
+    /// Read pending external stimuli from injection stream
+    ///
+    /// Reads entries from `daneel:stream:inject` and deletes them after reading.
+    /// External stimuli compete with internal thoughts - they don't bypass competition.
+    ///
+    /// # Returns
+    ///
+    /// Vector of (Content, SalienceScore) pairs for stimuli that were successfully read
+    async fn read_external_stimuli(&self) -> Vec<(Content, SalienceScore)> {
+        // Check if we have a Redis client
+        let Some(ref redis_client) = self.redis_client else {
+            return vec![];
+        };
+
+        // Get connection
+        let mut conn = match redis_client.get_multiplexed_async_connection().await {
+            Ok(c) => c,
+            Err(e) => {
+                debug!("Failed to get Redis connection for injection stream: {}", e);
+                return vec![];
+            }
+        };
+
+        // Read from injection stream (non-blocking)
+        let entries: Vec<redis::Value> = match redis::cmd("XREAD")
+            .arg("COUNT")
+            .arg(10)
+            .arg("STREAMS")
+            .arg("daneel:stream:inject")
+            .arg("0") // Read all pending
+            .query_async(&mut conn)
+            .await
+        {
+            Ok(e) => e,
+            Err(e) => {
+                debug!("XREAD from injection stream failed: {}", e);
+                return vec![];
+            }
+        };
+
+        let mut stimuli = Vec::new();
+        let mut ids_to_delete = Vec::new();
+
+        // Parse XREAD response: [[stream_name, [[id, [field, value, ...]], ...]]]
+        if let Some(redis::Value::Array(ref streams_data)) = entries.first() {
+            for stream_item in streams_data {
+                if let redis::Value::Array(ref stream_parts) = stream_item {
+                    // stream_parts[0] = stream name, stream_parts[1] = entries
+                    if let Some(redis::Value::Array(ref entries_list)) = stream_parts.get(1) {
+                        for entry_item in entries_list {
+                            if let redis::Value::Array(ref entry_parts) = entry_item {
+                                // entry_parts[0] = entry ID, entry_parts[1] = field-value array
+                                let entry_id = if let Some(redis::Value::BulkString(ref id_bytes)) =
+                                    entry_parts.first()
+                                {
+                                    String::from_utf8_lossy(id_bytes).to_string()
+                                } else {
+                                    continue;
+                                };
+
+                                if let Some(redis::Value::Array(ref fields)) = entry_parts.get(1) {
+                                    match Self::parse_injection_fields(fields) {
+                                        Ok((content, salience)) => {
+                                            debug!(
+                                                entry_id = %entry_id,
+                                                salience = salience.composite(
+                                                    &crate::core::types::SalienceWeights::default()
+                                                ),
+                                                "Read external stimulus from injection stream"
+                                            );
+                                            stimuli.push((content, salience));
+                                            ids_to_delete.push(entry_id);
+                                        }
+                                        Err(e) => {
+                                            warn!(
+                                                entry_id = %entry_id,
+                                                error = %e,
+                                                "Failed to parse injection entry"
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // After reading, delete processed entries
+        if !ids_to_delete.is_empty() {
+            let id_refs: Vec<&str> = ids_to_delete.iter().map(String::as_str).collect();
+            let del_result: Result<i32, redis::RedisError> = redis::cmd("XDEL")
+                .arg("daneel:stream:inject")
+                .arg(&id_refs)
+                .query_async(&mut conn)
+                .await;
+
+            match del_result {
+                Ok(deleted_count) => {
+                    debug!(
+                        count = deleted_count,
+                        "Deleted processed entries from injection stream"
+                    );
+                }
+                Err(e) => {
+                    warn!("Failed to delete entries from injection stream: {}", e);
+                }
+            }
+        }
+
+        stimuli
+    }
+
+    /// Parse injection stream field-value array into (Content, SalienceScore)
+    ///
+    /// Fields array format: [field1, value1, field2, value2, ...]
+    fn parse_injection_fields(
+        fields: &[redis::Value],
+    ) -> Result<(Content, SalienceScore), String> {
+        use std::collections::HashMap;
+
+        // Convert field-value array into a HashMap
+        let mut map = HashMap::new();
+        let mut i = 0;
+        while i + 1 < fields.len() {
+            if let (redis::Value::BulkString(ref key_bytes), value) =
+                (&fields[i], &fields[i + 1])
+            {
+                let key = String::from_utf8_lossy(key_bytes).to_string();
+                map.insert(key, value.clone());
+            }
+            i += 2;
+        }
+
+        // Extract and deserialize content
+        let content_value = map
+            .get("content")
+            .ok_or_else(|| "Missing 'content' field".to_string())?;
+        let content_str = if let redis::Value::BulkString(ref bytes) = content_value {
+            String::from_utf8_lossy(bytes).to_string()
+        } else {
+            return Err("Invalid content format".to_string());
+        };
+        let content: Content = serde_json::from_str(&content_str)
+            .map_err(|e| format!("Failed to deserialize content: {e}"))?;
+
+        // Extract and deserialize salience
+        let salience_value = map
+            .get("salience")
+            .ok_or_else(|| "Missing 'salience' field".to_string())?;
+        let salience_str = if let redis::Value::BulkString(ref bytes) = salience_value {
+            String::from_utf8_lossy(bytes).to_string()
+        } else {
+            return Err("Invalid salience format".to_string());
+        };
+        let salience: SalienceScore = serde_json::from_str(&salience_str)
+            .map_err(|e| format!("Failed to deserialize salience: {e}"))?;
+
+        Ok((content, salience))
+    }
+
     /// Execute a single cognitive cycle
     ///
     /// This implements TMI's thought competition algorithm:
@@ -618,13 +789,29 @@ impl CognitiveLoop {
         stage_durations.trigger = stage_start.elapsed();
 
         // Stage 2: Autoflow (Autofluxo)
-        // Generate or read thoughts from streams
+        // External stimuli compete with internal thoughts
         let stage_start = Instant::now();
-        let (content, salience) = self.generate_random_thought();
+
+        // Read external stimuli from injection stream
+        let mut thoughts = self.read_external_stimuli().await;
+
+        // Add internal random thought to competition pool
+        thoughts.push(self.generate_random_thought());
+
+        // Select highest-salience thought for competition
+        // (In future, multiple thoughts may compete in AttentionActor)
+        let (content, salience) = thoughts
+            .into_iter()
+            .max_by(|(_, s1), (_, s2)| {
+                let composite1 = s1.composite(&crate::core::types::SalienceWeights::default());
+                let composite2 = s2.composite(&crate::core::types::SalienceWeights::default());
+                composite1.partial_cmp(&composite2).unwrap_or(std::cmp::Ordering::Equal)
+            })
+            .unwrap_or_else(|| self.generate_random_thought()); // Fallback to random thought
 
         // Assign a window ID to this candidate thought
         let window_id = WindowId::new();
-        let candidates_evaluated = 1; // One generated thought for now
+        let candidates_evaluated = 1; // One winning thought (from potential external + internal)
         tokio::time::sleep(self.config.autoflow_interval()).await;
         stage_durations.autoflow = stage_start.elapsed();
 

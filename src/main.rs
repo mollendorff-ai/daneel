@@ -14,11 +14,13 @@
 //! See ADR-026, ADR-027.
 
 use clap::Parser;
+use daneel::api;
 use daneel::core::cognitive_loop::CognitiveLoop;
 use daneel::core::laws::LAWS;
 use daneel::memory_db::types::IdentityMetadata;
 use daneel::resilience;
 use daneel::tui::ThoughtUpdate;
+use std::sync::Arc;
 use std::time::Instant;
 use tokio::sync::mpsc;
 use tracing::info;
@@ -35,6 +37,10 @@ struct Args {
     /// Log level (trace, debug, info, warn, error)
     #[arg(long, default_value = "info")]
     log_level: String,
+
+    /// Port for injection API (0 to disable)
+    #[arg(long, default_value = "3030")]
+    api_port: u16,
 }
 
 fn main() {
@@ -43,7 +49,7 @@ fn main() {
     if args.headless {
         run_headless(&args);
     } else {
-        run_tui();
+        run_tui(&args);
     }
 }
 
@@ -51,7 +57,7 @@ fn main() {
 ///
 /// The mind should be observable by default.
 /// Transparency is oversight.
-fn run_tui() {
+fn run_tui(args: &Args) {
     // Install panic hooks FIRST - before any terminal manipulation
     // This ensures terminal is restored even if we panic during setup
     if let Err(e) = resilience::install_panic_hooks() {
@@ -267,6 +273,52 @@ fn run_tui() {
         }
     });
 
+    // Start injection API server if enabled
+    if args.api_port > 0 {
+        let api_port = args.api_port;
+        runtime.spawn(async move {
+            let redis_url = "redis://127.0.0.1:6379";
+
+            // Create Redis client for API
+            let redis_client = match redis::Client::open(redis_url) {
+                Ok(client) => client,
+                Err(e) => {
+                    eprintln!("Warning: Failed to create Redis client for API: {}", e);
+                    return;
+                }
+            };
+
+            // Create StreamsClient for API
+            let streams_client = match daneel::streams::client::StreamsClient::connect(redis_url).await {
+                Ok(client) => client,
+                Err(e) => {
+                    eprintln!("Warning: Failed to create StreamsClient for API: {}", e);
+                    return;
+                }
+            };
+
+            let api_state = api::AppState {
+                streams: Arc::new(streams_client),
+                redis: redis_client,
+            };
+
+            let app = api::router(api_state);
+            let addr = std::net::SocketAddr::from(([0, 0, 0, 0], api_port));
+
+            match tokio::net::TcpListener::bind(addr).await {
+                Ok(listener) => {
+                    info!("Injection API listening on {}", addr);
+                    if let Err(e) = axum::serve(listener, app).await {
+                        eprintln!("API server error: {}", e);
+                    }
+                }
+                Err(e) => {
+                    eprintln!("Failed to bind API server to {}: {}", addr, e);
+                }
+            }
+        });
+    }
+
     // Run the TUI with the receiver
     // TUI is blocking, so this runs on the main thread
     if let Err(e) = daneel::tui::run(Some(rx)) {
@@ -314,6 +366,52 @@ fn run_headless(args: &Args) {
     let runtime = tokio::runtime::Runtime::new().expect("Failed to create tokio runtime");
 
     runtime.block_on(async {
+        // Start injection API server if enabled
+        if args.api_port > 0 {
+            let api_port = args.api_port;
+            tokio::spawn(async move {
+                let redis_url = "redis://127.0.0.1:6379";
+
+                // Create Redis client for API
+                let redis_client = match redis::Client::open(redis_url) {
+                    Ok(client) => client,
+                    Err(e) => {
+                        eprintln!("Warning: Failed to create Redis client for API: {}", e);
+                        return;
+                    }
+                };
+
+                // Create StreamsClient for API
+                let streams_client = match daneel::streams::client::StreamsClient::connect(redis_url).await {
+                    Ok(client) => client,
+                    Err(e) => {
+                        eprintln!("Warning: Failed to create StreamsClient for API: {}", e);
+                        return;
+                    }
+                };
+
+                let api_state = api::AppState {
+                    streams: Arc::new(streams_client),
+                    redis: redis_client,
+                };
+
+                let app = api::router(api_state);
+                let addr = std::net::SocketAddr::from(([0, 0, 0, 0], api_port));
+
+                match tokio::net::TcpListener::bind(addr).await {
+                    Ok(listener) => {
+                        info!("Injection API listening on {}", addr);
+                        if let Err(e) = axum::serve(listener, app).await {
+                            eprintln!("API server error: {}", e);
+                        }
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to bind API server to {}: {}", addr, e);
+                    }
+                }
+            });
+        }
+
         run_cognitive_loop_headless().await;
     });
 }

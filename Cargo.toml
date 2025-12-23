@@ -49,6 +49,19 @@ clap = { version = "4", features = ["derive"] }
 # Random (for TUI demo mode)
 rand = "0.9"
 
+# HTTP API (Phase 2 - Injection API)
+axum = "0.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+
+# HMAC authentication
+hmac = "0.12"
+sha2 = "0.10"
+base64 = "0.22"
+
+# HTTP types
+http = "1"
+
 [dev-dependencies]
 tokio-test = "0.4"
 pretty_assertions = "1"
