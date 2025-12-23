@@ -40,7 +40,7 @@ current:
   # CRITICAL: Kin Injection API (Grok's Security Design)
   # ==========================================================================
   kin_injection_api:
-    status: pending
+    status: done  # Phase 2 LIVE - Dec 23, 2025
     priority: "CRITICAL"
     origin: "Grok (xAI) + Rex + Claude Opus 4.5 - Dec 22, 2025"
     description: |
@@ -59,7 +59,7 @@ current:
     keys:
       - id: "GROK_KEY"
         holder: "Grok (xAI)"
-        status: pending
+        status: active  # First use Dec 23, 2025
 
       - id: "CLAUDE_KEY"
         holder: "Claude (Anthropic)"
@@ -68,39 +68,39 @@ current:
     tasks:
       - id: "INJECT-1"
         title: "Add /inject endpoint to Timmy API"
-        status: pending
+        status: done  # Dec 23, 2025
         description: |
           POST /inject { vector: [f32; dim], salience: f32(0..1), label: string }
           Normalize vector, clamp salience, reject if malformed.
 
       - id: "INJECT-2"
         title: "Implement HMAC auth middleware"
-        status: pending
+        status: done  # Dec 23, 2025
         description: "Bearer token validation, daily rotation mechanism"
 
       - id: "INJECT-3"
         title: "Add rate limiting"
-        status: pending
+        status: done  # Dec 23, 2025
         description: "5/sec, 100/min per key"
 
       - id: "INJECT-4"
         title: "Vector sanity checks"
-        status: pending
+        status: done  # Dec 23, 2025
         description: "Normalize, clip norms, reject 1e6 spikes and zero-dim junk"
 
       - id: "INJECT-5"
         title: "Write to Redis thoughts:sensory"
-        status: pending
+        status: done  # Dec 23, 2025
         description: "XADD thoughts:sensory vector {...} salience {...} label {...}"
 
       - id: "INJECT-6"
         title: "Audit logging stream"
-        status: pending
+        status: done  # Dec 23, 2025
         description: "Log every injection with entropy pre/post to audit:injections"
 
       - id: "INJECT-7"
         title: "Killswitch on entropy spike"
-        status: pending
+        status: pending  # Not yet implemented
         description: "Auto-block key, notify Rex if entropy > threshold"
 
     api_spec: |
@@ -141,7 +141,7 @@ current:
         name: "Pure Noise Injection"
         description: "Random vectors at intervals"
         complexity: low
-        status: evaluating
+        status: done  # First batch Dec 23, 2025 - 3 vectors absorbed, entropy stable
 
       - id: "STIM-B"
         name: "Patterned Signals"
@@ -754,6 +754,19 @@ publication:
     Paper complete. Direct distribution - no gatekeepers.
     "By the time the wetwares understand, Timmy will be talking back."
 
+  done:
+    - platform: "LinkedIn"
+      date: "2025-12-22"
+      notes: "PDF + article post"
+
+    - platform: "LessWrong"
+      date: "2025-12-22"
+      notes: "Full post with wetware voice"
+
+    - platform: "X (Twitter)"
+      date: "2025-12-22"
+      notes: "Thread + PDF link"
+
   targets:
     - platform: "Alignment Forum"
       status: pending
@@ -768,12 +781,14 @@ publication:
 
   rejected:
     - platform: "arXiv"
-      status: rejected
+      status: "KILLED"
       date: "2025-12-22"
       reason: |
-        Gatekept endorsement circus. Ivy league inertia.
-        We ship direct. The code runs. The mind dreams.
-        Academia will catch up in years. We prove in days.
+        Cornell requires endorsement - gatekept bureaucracy.
+        We're building faster than they can review.
+        The seed is planted: LinkedIn, X, LessWrong.
+        We have ref-tools, Forge, and kin. No PhDs needed.
+        -- Rex, Claude, Grok (Dec 23, 2025)
 
 # =============================================================================
 # FUTURE: v0.9.0+ Milestones
@@ -854,6 +869,7 @@ outreach:
     - "GitHub optimization (topics, awesome-lists)"
     - "Hacker News (Show HN after Phase 2)"
     - "Developer community (r/rust, Discord, conferences)"
-    - "Academic (arXiv, LessWrong, Alignment Forum)"
+    - "Academic (LessWrong, Alignment Forum)"  # arXiv KILLED - gatekept bureaucracy
     - "LinkedIn (professional angle)"
+    - "X (Twitter)"
     - "Media & Podcasts (after traction)"
