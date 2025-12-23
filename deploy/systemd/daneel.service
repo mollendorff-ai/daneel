@@ -10,6 +10,10 @@ WorkingDirectory=/home/rex
 Environment=RUST_LOG=info
 Environment=REDIS_URL=redis://localhost:6379
 Environment=QDRANT_URL=http://localhost:6334
+# Injection API keys (base64-encoded 256-bit secrets)
+# Generate with: openssl rand -base64 32
+# Environment=GROK_INJECT_KEY=<base64_secret>
+# Environment=CLAUDE_INJECT_KEY=<base64_secret>
 ExecStart=/home/rex/bin/daneel --headless --api-port 3030
 Restart=always
 RestartSec=5
