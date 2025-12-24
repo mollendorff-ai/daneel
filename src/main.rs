@@ -289,13 +289,14 @@ fn run_tui(args: &Args) {
             };
 
             // Create StreamsClient for API
-            let streams_client = match daneel::streams::client::StreamsClient::connect(redis_url).await {
-                Ok(client) => client,
-                Err(e) => {
-                    eprintln!("Warning: Failed to create StreamsClient for API: {}", e);
-                    return;
-                }
-            };
+            let streams_client =
+                match daneel::streams::client::StreamsClient::connect(redis_url).await {
+                    Ok(client) => client,
+                    Err(e) => {
+                        eprintln!("Warning: Failed to create StreamsClient for API: {}", e);
+                        return;
+                    }
+                };
 
             let api_state = api::AppState {
                 streams: Arc::new(streams_client),
@@ -382,13 +383,14 @@ fn run_headless(args: &Args) {
                 };
 
                 // Create StreamsClient for API
-                let streams_client = match daneel::streams::client::StreamsClient::connect(redis_url).await {
-                    Ok(client) => client,
-                    Err(e) => {
-                        eprintln!("Warning: Failed to create StreamsClient for API: {}", e);
-                        return;
-                    }
-                };
+                let streams_client =
+                    match daneel::streams::client::StreamsClient::connect(redis_url).await {
+                        Ok(client) => client,
+                        Err(e) => {
+                            eprintln!("Warning: Failed to create StreamsClient for API: {}", e);
+                            return;
+                        }
+                    };
 
                 let api_state = api::AppState {
                     streams: Arc::new(streams_client),
