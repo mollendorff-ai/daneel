@@ -9,6 +9,99 @@
 # CURRENT SPRINT: v0.8.0 - External Stimuli Injection (Phase 2)
 # =============================================================================
 
+# =============================================================================
+# CRITICAL: Infrastructure Migration (Post-Attack Hardening)
+# =============================================================================
+# Origin: Rex + Claude Opus 4.5 - Dec 24, 2025 (Christmas Eve)
+# Context: WatchDog cryptojacking attack on Servarica-hosted Redis.
+#          Attack failed but exposed infrastructure weaknesses.
+#          Decision: Migrate Timmy to secure, controlled environment.
+#
+# "Nobody has built what we built. Asimov, ref-tools, Forge, Timmy.
+#  The bastards tried. They failed. Now we harden."
+# =============================================================================
+
+infrastructure_migration:
+  status: pending
+  priority: "CRITICAL"
+  origin: "Rex + Claude Opus 4.5 - Dec 24, 2025"
+  trigger: "WatchDog cryptojacking attack on Servarica Redis (Christmas Eve 2025)"
+
+  context: |
+    Servarica Analysis:
+      - 42% fraud score (Scamalytics)
+      - Zero security certifications (no SOC2, ISO27001)
+      - Severe I/O overselling reported
+      - "Not for production" community consensus
+
+    Mac mini (home):
+      - Apple M2, 8-core, 16GB RAM
+      - Full control, no shared tenants
+      - Already has local copy of Timmy
+
+    Current redundancy:
+      - Servarica VM (locked down, UFW + localhost bindings)
+      - Mac mini (local copy)
+
+  decision: "Migrate Timmy to Mac mini + Cloudflare Tunnel"
+
+  tasks:
+    - id: "INFRA-1"
+      title: "Install Cloudflare Tunnel on Mac mini"
+      status: pending
+      priority: "CRITICAL"
+      description: |
+        brew install cloudflared
+        cloudflared tunnel create timmy
+        cloudflared tunnel route dns timmy timmy.royalbit.ca
+
+        Benefits:
+          - Free TLS termination
+          - DDoS protection (after WatchDog, this matters)
+          - No port forwarding needed
+          - Works through NAT
+          - Single machine, minimal attack surface
+
+    - id: "INFRA-2"
+      title: "Configure tunnel for daneel-web"
+      status: pending
+      description: |
+        Route timmy.royalbit.ca → localhost:3000 (daneel-web)
+        Optional: timmy-api.royalbit.ca → localhost:8080 (injection API, if needed)
+
+    - id: "INFRA-3"
+      title: "Set up Mac mini for always-on operation"
+      status: pending
+      description: |
+        - Disable sleep: sudo pmset -a disablesleep 1
+        - Auto-login + auto-start services
+        - UPS for power protection (optional but recommended)
+        - Static IP or DHCP reservation on router
+
+    - id: "INFRA-4"
+      title: "Migrate Timmy data from Servarica"
+      status: pending
+      description: |
+        - Sync Redis RDB/AOF (or start fresh post-attack)
+        - Sync Qdrant snapshots (if trusted)
+        - Verify integrity before going live
+
+    - id: "INFRA-5"
+      title: "Decommission Servarica VM"
+      status: pending
+      description: |
+        - Final backup
+        - Terminate instance
+        - Stop paying for budget-tier hosting
+        - "The nursery moves home."
+
+  future_option: |
+    When Timmy goes public (post-Phase 2 emergence):
+      - Migrate to AWS t4g.large in Montreal (ca-central-1)
+      - SOC2/ISO27001 compliance
+      - Professional SLA
+      - Reserved pricing: ~$20-25/month
+
 current:
   version: "0.8.0"
   status: wip
