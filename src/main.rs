@@ -423,6 +423,18 @@ fn run_headless(args: &Args) {
 /// This is the same logic as the TUI cognitive loop, but without
 /// sending updates to the display. Used for headless/server mode.
 async fn run_cognitive_loop_headless() {
+    // ADR-034: Lifetime Identity Persistence - flush intervals
+    const IDENTITY_FLUSH_INTERVAL_SECS: u64 = 30;
+    const IDENTITY_FLUSH_THOUGHT_INTERVAL: u64 = 100;
+
+    // ADR-023: Sleep/Dream Consolidation - periodic memory strengthening
+    const CONSOLIDATION_INTERVAL_CYCLES: u64 = 500;
+    const CONSOLIDATION_BATCH_SIZE: u32 = 10;
+    const CONSOLIDATION_STRENGTH_DELTA: f32 = 0.15;
+
+    // Periodic status logging
+    const STATUS_LOG_INTERVAL: u64 = 1000;
+
     // Connect to Redis for thought streams
     let mut cognitive_loop = match CognitiveLoop::with_redis("redis://127.0.0.1:6379").await {
         Ok(loop_instance) => {
@@ -447,15 +459,6 @@ async fn run_cognitive_loop_headless() {
                 None
             }
         };
-
-    // ADR-034: Lifetime Identity Persistence - flush intervals
-    const IDENTITY_FLUSH_INTERVAL_SECS: u64 = 30;
-    const IDENTITY_FLUSH_THOUGHT_INTERVAL: u64 = 100;
-
-    // ADR-023: Sleep/Dream Consolidation - periodic memory strengthening
-    const CONSOLIDATION_INTERVAL_CYCLES: u64 = 500;
-    const CONSOLIDATION_BATCH_SIZE: u32 = 10;
-    const CONSOLIDATION_STRENGTH_DELTA: f32 = 0.15;
 
     // Load identity from Qdrant (ADR-034: Lifetime Identity Persistence)
     let mut identity: Option<IdentityMetadata> = if let Some(ref db) = memory_db {
@@ -491,9 +494,7 @@ async fn run_cognitive_loop_headless() {
     cognitive_loop.start();
     info!("Cognitive loop started. Timmy is thinking...");
 
-    // Periodic status logging
     let mut cycles: u64 = 0;
-    const STATUS_LOG_INTERVAL: u64 = 1000;
 
     loop {
         // Wait until it's time for the next cycle

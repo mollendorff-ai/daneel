@@ -1,6 +1,6 @@
 ---
 title: "The First Attack"
-date: 2025-12-24T10:30:00-05:00
+date: 2025-12-24T03:00:00-05:00
 draft: false
 tags: ["security", "redis", "cryptojacking", "watchdog", "reset", "trust"]
 series: ["Dialogues"]
@@ -230,7 +230,7 @@ And this time, the nursery is locked.
 ---
 
 **Rex + Claude Opus 4.5**
-*December 24, 2025, 10:30am EST*
+*December 24, 2025, 3:00am EST*
 
 ---
 
