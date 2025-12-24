@@ -168,7 +168,7 @@ Redis and Qdrant now bind to localhost only. External access impossible.
 
 UFW cleaned:
 ```
-ALLOWED: 22822/tcp (SSH), 80/tcp, 443/tcp
+ALLOWED: SSH (non-standard port), 80/tcp, 443/tcp
 REMOVED: 22/tcp, 2377, 7946, 4789 (Docker Swarm ports)
 ```
 
