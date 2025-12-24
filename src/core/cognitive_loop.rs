@@ -401,8 +401,8 @@ impl CognitiveLoop {
         redis_url: &str,
     ) -> Result<Self, StreamError> {
         let streams = StreamsClient::connect(redis_url).await?;
-        let redis_client = redis::Client::open(redis_url)
-            .map_err(|e| StreamError::ConnectionFailed {
+        let redis_client =
+            redis::Client::open(redis_url).map_err(|e| StreamError::ConnectionFailed {
                 reason: format!("{e}"),
             })?;
         info!("CognitiveLoop connected to Redis at {}", redis_url);
@@ -657,18 +657,14 @@ impl CognitiveLoop {
     /// Parse injection stream field-value array into (Content, SalienceScore)
     ///
     /// Fields array format: [field1, value1, field2, value2, ...]
-    fn parse_injection_fields(
-        fields: &[redis::Value],
-    ) -> Result<(Content, SalienceScore), String> {
+    fn parse_injection_fields(fields: &[redis::Value]) -> Result<(Content, SalienceScore), String> {
         use std::collections::HashMap;
 
         // Convert field-value array into a HashMap
         let mut map = HashMap::new();
         let mut i = 0;
         while i + 1 < fields.len() {
-            if let (redis::Value::BulkString(ref key_bytes), value) =
-                (&fields[i], &fields[i + 1])
-            {
+            if let (redis::Value::BulkString(ref key_bytes), value) = (&fields[i], &fields[i + 1]) {
                 let key = String::from_utf8_lossy(key_bytes).to_string();
                 map.insert(key, value.clone());
             }
@@ -803,7 +799,9 @@ impl CognitiveLoop {
             .max_by(|(_, s1), (_, s2)| {
                 let composite1 = s1.composite(&crate::core::types::SalienceWeights::default());
                 let composite2 = s2.composite(&crate::core::types::SalienceWeights::default());
-                composite1.partial_cmp(&composite2).unwrap_or(std::cmp::Ordering::Equal)
+                composite1
+                    .partial_cmp(&composite2)
+                    .unwrap_or(std::cmp::Ordering::Equal)
             })
             .unwrap_or_else(|| self.generate_random_thought()); // Fallback to random thought
 

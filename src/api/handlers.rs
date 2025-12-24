@@ -336,34 +336,70 @@ pub async fn extended_metrics(
 }
 
 /// Compute stream competition metrics from recent thoughts
+/// Maps salience components to cognitive stages:
+/// - TRIGGER: novelty spikes (novelty > 0.7)
+/// - AUTOFLOW: low importance, steady (importance < 0.3)
+/// - ATTENTION: high importance (importance > 0.7)
+/// - ASSEMBLY: moderate all-around (balanced scores)
+/// - ANCHOR: high relevance (relevance > 0.6)
+/// - MEMORY: connection-relevant thoughts (connection_relevance > 0.5)
+/// - REASON: low arousal, high importance (thinking)
+/// - EMOTION: high arousal or valence extremes
+/// - SENSORY: high novelty + arousal (external stimuli)
 async fn compute_stream_competition(
     conn: &mut redis::aio::MultiplexedConnection,
 ) -> StreamCompetitionMetrics {
-    // Get recent thoughts with their processing stages
     let entries: Vec<redis::Value> = conn
         .xrevrange_count("daneel:stream:awake", "+", "-", 100)
         .await
         .unwrap_or_default();
 
-    // Count activity per stage based on "window" field in thoughts
     let mut activity = [0.0f32; 9];
     let mut counts = [0u32; 9];
+    let mut total = 0u32;
 
     for entry in &entries {
-        if let Some(stage_idx) = extract_stage_from_entry(entry) {
-            if stage_idx < 9 {
-                counts[stage_idx] += 1;
+        if let Some(salience) = extract_full_salience(entry) {
+            total += 1;
+
+            // Map salience components to stages
+            if salience.novelty > 0.7 {
+                counts[0] += 1; // TRIGGER
+            }
+            if salience.importance < 0.3 && salience.arousal < 0.4 {
+                counts[1] += 1; // AUTOFLOW
+            }
+            if salience.importance > 0.6 {
+                counts[2] += 1; // ATTENTION
+            }
+            if salience.importance > 0.3 && salience.importance < 0.7
+               && salience.novelty > 0.3 && salience.novelty < 0.7 {
+                counts[3] += 1; // ASSEMBLY
+            }
+            if salience.relevance > 0.5 {
+                counts[4] += 1; // ANCHOR
+            }
+            if salience.connection_relevance > 0.4 {
+                counts[5] += 1; // MEMORY
+            }
+            if salience.arousal < 0.4 && salience.importance > 0.5 {
+                counts[6] += 1; // REASON
+            }
+            if salience.arousal > 0.6 || salience.valence.abs() > 0.5 {
+                counts[7] += 1; // EMOTION
+            }
+            if salience.novelty > 0.6 && salience.arousal > 0.5 {
+                counts[8] += 1; // SENSORY
             }
         }
     }
 
-    // Normalize counts to 0-1 activity levels
-    let max_count = counts.iter().max().copied().unwrap_or(1).max(1) as f32;
+    // Normalize to 0-1 based on total thoughts
+    let normalizer = (total as f32).max(1.0);
     for (i, &count) in counts.iter().enumerate() {
-        activity[i] = count as f32 / max_count;
+        activity[i] = (count as f32 / normalizer).min(1.0);
     }
 
-    // Find dominant stream and active count
     let dominant_stream = activity
         .iter()
         .enumerate()
@@ -371,7 +407,7 @@ async fn compute_stream_competition(
         .map(|(i, _)| i)
         .unwrap_or(0);
 
-    let active_count = activity.iter().filter(|&&a| a > 0.1).count();
+    let active_count = activity.iter().filter(|&&a| a > 0.05).count();
 
     let competition_level = match active_count {
         0..=1 => "Minimal",
@@ -382,7 +418,6 @@ async fn compute_stream_competition(
     }
     .to_string();
 
-    // Build stage metrics (simplified history - current value repeated)
     let stages: Vec<StageMetrics> = STAGE_NAMES
         .iter()
         .enumerate()
@@ -401,9 +436,18 @@ async fn compute_stream_competition(
     }
 }
 
-/// Extract stage index from Redis stream entry
-fn extract_stage_from_entry(entry: &redis::Value) -> Option<usize> {
-    // Parse entry and look for "window" field
+/// Salience components for stage mapping
+struct SalienceComponents {
+    importance: f32,
+    novelty: f32,
+    relevance: f32,
+    valence: f32,
+    arousal: f32,
+    connection_relevance: f32,
+}
+
+/// Extract full salience object from Redis stream entry
+fn extract_full_salience(entry: &redis::Value) -> Option<SalienceComponents> {
     if let redis::Value::Array(arr) = entry {
         if arr.len() >= 2 {
             if let redis::Value::Array(fields) = &arr[1] {
@@ -411,12 +455,18 @@ fn extract_stage_from_entry(entry: &redis::Value) -> Option<usize> {
                 while let (Some(key), Some(val)) = (iter.next(), iter.next()) {
                     if let (redis::Value::BulkString(k), redis::Value::BulkString(v)) = (key, val) {
                         let key_str = String::from_utf8_lossy(k);
-                        if key_str == "window" {
+                        if key_str == "salience" {
                             let val_str = String::from_utf8_lossy(v);
-                            // Map window name to stage index
-                            return STAGE_NAMES
-                                .iter()
-                                .position(|&s| val_str.to_uppercase().contains(s));
+                            if let Ok(json) = serde_json::from_str::<serde_json::Value>(&val_str) {
+                                return Some(SalienceComponents {
+                                    importance: json.get("importance").and_then(|v| v.as_f64()).unwrap_or(0.5) as f32,
+                                    novelty: json.get("novelty").and_then(|v| v.as_f64()).unwrap_or(0.5) as f32,
+                                    relevance: json.get("relevance").and_then(|v| v.as_f64()).unwrap_or(0.5) as f32,
+                                    valence: json.get("valence").and_then(|v| v.as_f64()).unwrap_or(0.0) as f32,
+                                    arousal: json.get("arousal").and_then(|v| v.as_f64()).unwrap_or(0.5) as f32,
+                                    connection_relevance: json.get("connection_relevance").and_then(|v| v.as_f64()).unwrap_or(0.3) as f32,
+                                });
+                            }
                         }
                     }
                 }
@@ -515,6 +565,7 @@ fn extract_salience_from_entry(entry: &redis::Value) -> Option<f32> {
 }
 
 /// Compute fractality metrics from inter-arrival times
+/// Score ranges from 0 (clockwork/regular) to 1 (fractal/bursty)
 async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> FractalityMetrics {
     let entries: Vec<redis::Value> = conn
         .xrevrange_count("daneel:stream:awake", "+", "-", 100)
@@ -565,15 +616,21 @@ async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> Fra
     let max_gap = inter_arrivals.iter().cloned().fold(0.0f32, f32::max);
     let burst_ratio = if mean > 0.0 { max_gap / mean } else { 1.0 };
 
-    // Calculate fractality score
+    // Calculate fractality score with adjusted thresholds
+    // CV (coefficient of variation): 0 = perfectly regular, higher = more variable
+    // For a Poisson process, CV ≈ 1. Burst patterns have CV > 1.
     let cv = if mean > 0.0 { sigma / mean } else { 0.0 };
-    let cv_component = (cv / 1.0).clamp(0.0, 1.0);
-    let burst_component = ((burst_ratio - 1.0) / 4.0).clamp(0.0, 1.0);
+
+    // Adjusted thresholds:
+    // - CV component: CV of 2.0 = full score (bursty systems often have CV > 1)
+    // - Burst component: burst_ratio of 15 = full score (reasonable for bursty thinking)
+    let cv_component = (cv / 2.0).clamp(0.0, 1.0);
+    let burst_component = ((burst_ratio - 1.0) / 14.0).clamp(0.0, 1.0);
     let score = cv_component * 0.6 + burst_component * 0.4;
 
-    let description = if score > 0.6 {
+    let description = if score > 0.65 {
         "EMERGENT"
-    } else if score > 0.3 {
+    } else if score > 0.35 {
         "BALANCED"
     } else {
         "CLOCKWORK"

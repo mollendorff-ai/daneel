@@ -11,9 +11,9 @@ use axum::{
     middleware::Next,
     response::Response,
 };
+use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
 use hmac::{Hmac, Mac};
 use sha2::Sha256;
-use base64::{Engine as _, engine::general_purpose::STANDARD as BASE64};
 use std::env;
 
 use super::types::AuthenticatedKey;
@@ -86,17 +86,12 @@ pub fn extract_bearer_token(req: &Request) -> Option<&str> {
 }
 
 /// Auth middleware for protected endpoints
-pub async fn require_auth(
-    req: Request,
-    next: Next,
-) -> Result<Response, StatusCode> {
+pub async fn require_auth(req: Request, next: Next) -> Result<Response, StatusCode> {
     let keys = ApiKeys::from_env();
 
-    let token = extract_bearer_token(&req)
-        .ok_or(StatusCode::UNAUTHORIZED)?;
+    let token = extract_bearer_token(&req).ok_or(StatusCode::UNAUTHORIZED)?;
 
-    let auth_key = keys.validate(token)
-        .ok_or(StatusCode::UNAUTHORIZED)?;
+    let auth_key = keys.validate(token).ok_or(StatusCode::UNAUTHORIZED)?;
 
     // Store authenticated key in request extensions
     let mut req = req;
@@ -107,8 +102,7 @@ pub async fn require_auth(
 
 /// Generate a signed token for a key (utility for key generation)
 pub fn generate_token(key_id: &str, secret: &[u8]) -> String {
-    let mut mac = HmacSha256::new_from_slice(secret)
-        .expect("HMAC accepts any key size");
+    let mut mac = HmacSha256::new_from_slice(secret).expect("HMAC accepts any key size");
     mac.update(key_id.as_bytes());
     let sig = mac.finalize().into_bytes();
     format!("{}:{}", key_id, BASE64.encode(sig))

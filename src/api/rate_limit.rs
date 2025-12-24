@@ -28,7 +28,10 @@ impl Default for RateLimitConfig {
 #[derive(Debug)]
 pub enum RateLimitResult {
     /// Request allowed, returns remaining quota
-    Allowed { remaining_second: u32, remaining_minute: u32 },
+    Allowed {
+        remaining_second: u32,
+        remaining_minute: u32,
+    },
     /// Rate limit exceeded
     Exceeded { retry_after_seconds: u32 },
 }
@@ -50,7 +53,9 @@ pub async fn check_rate_limit(
 
     // Check second limit
     if second_count > config.per_second {
-        return Ok(RateLimitResult::Exceeded { retry_after_seconds: 1 });
+        return Ok(RateLimitResult::Exceeded {
+            retry_after_seconds: 1,
+        });
     }
 
     // Increment minute counter
@@ -64,7 +69,7 @@ pub async fn check_rate_limit(
         // Calculate retry time (seconds until minute window resets)
         let ttl: i64 = redis.ttl(&minute_key).await?;
         return Ok(RateLimitResult::Exceeded {
-            retry_after_seconds: ttl.max(1) as u32
+            retry_after_seconds: ttl.max(1) as u32,
         });
     }
 
@@ -91,9 +96,18 @@ impl RampPhase {
     /// Get rate limit config for this phase
     pub fn config(&self) -> RateLimitConfig {
         match self {
-            RampPhase::Warmup => RateLimitConfig { per_second: 1, per_minute: 12 },
-            RampPhase::Baseline => RateLimitConfig { per_second: 1, per_minute: 60 },
-            RampPhase::Ramp => RateLimitConfig { per_second: 1, per_minute: 100 },
+            RampPhase::Warmup => RateLimitConfig {
+                per_second: 1,
+                per_minute: 12,
+            },
+            RampPhase::Baseline => RateLimitConfig {
+                per_second: 1,
+                per_minute: 60,
+            },
+            RampPhase::Ramp => RateLimitConfig {
+                per_second: 1,
+                per_minute: 100,
+            },
             RampPhase::Full => RateLimitConfig::default(),
         }
     }
