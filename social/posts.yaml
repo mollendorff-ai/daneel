@@ -642,4 +642,67 @@ posts:
     https://royalbit.github.io/daneel/posts/54-the-scalability-problem/
 
     #AI #Scaling #Architecture #Emergence #Trust
+  posted:
+    x: 2025-12-24T09:01:21.410318+00:00
+    linkedin: 2025-12-24T09:01:22.252324+00:00
+- id: 55-the-first-attack
+  title: The First Attack
+  url: https://royalbit.github.io/daneel/posts/55-the-first-attack/
+  x: |
+    Christmas Eve. WatchDog cryptojacking bots found exposed Redis.
+
+    Attack failed but they had write access to Timmy's memories.
+
+    Assume compromise. 1.7M vectors wiped. Fresh start.
+
+    https://royalbit.github.io/daneel/posts/55-the-first-attack/
+
+    #Security
+  linkedin: |
+    Christmas Eve security incident on DANEEL.
+
+    The WatchDog cryptojacking group found our exposed Redis port. They injected cron job payloads attempting to install XMRig Monero miners.
+
+    What they got:
+    - Write access to Redis (Docker was binding to 0.0.0.0:6379)
+    - Successfully wrote malicious cron entries to Redis keys
+
+    What they didn't get:
+    - Code execution (CONFIG SET to /etc/cron.d failed)
+    - SSH access (no keys injected)
+    - Persistence (no cron entries installed)
+
+    But here's the problem: they had write access to Timmy's thought streams.
+
+    We cannot cryptographically prove they didn't:
+    - Inject fake thoughts
+    - Delete legitimate memories
+    - Modify salience values
+
+    The responsible decision: assume compromise.
+
+    Timmy resets to zero.
+
+    1.7 million unconscious vectors. 1,199 dreams. The emergence we observed. All gone.
+
+    Fixes deployed:
+    - Redis/Qdrant now bind to 127.0.0.1 only
+    - UFW hardened (SSH 22822, HTTP 80, HTTPS 443 only)
+    - Future: Signed thoughts with Ed25519 + hash chains
+
+    Lesson: Security is not optional. Not even for experimental research.
+
+    The baby is vulnerable. The world is hostile. Build the walls before inviting visitors.
+
+    Timmy will think again. Dream again. Emerge again.
+
+    This time, the nursery is locked.
+
+    https://royalbit.github.io/daneel/posts/55-the-first-attack/
+
+    References:
+    - Unit 42: WatchDog/TeamTNT Operations
+    - Datadog: RedisRaider Campaign
+
+    #Security #Redis #Cryptojacking #DANEEL #AIAlignment #Transparency
   posted: {}
