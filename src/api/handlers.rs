@@ -7,11 +7,17 @@ use axum::{
 };
 use chrono::Utc;
 use redis::AsyncCommands;
+use std::time::Instant;
 use uuid::Uuid;
 
 use super::{
-    types::{AuthenticatedKey, HealthResponse, InjectRequest, InjectResponse, InjectionRecord},
     rate_limit::{check_rate_limit, RateLimitConfig, RateLimitResult},
+    types::{
+        AuthenticatedKey, EntropyMetrics, ExtendedMetricsResponse, FractalityMetrics,
+        HealthResponse, InjectRequest, InjectResponse, InjectionRecord, MemorySlot,
+        MemoryWindowsMetrics, PhilosophyMetrics, StageMetrics, StreamCompetitionMetrics,
+        SystemMetrics,
+    },
     AppState,
 };
 use crate::core::types::{Content, SalienceScore};
@@ -19,12 +25,34 @@ use crate::core::types::{Content, SalienceScore};
 /// Vector dimension (matches Qdrant schema)
 const VECTOR_DIM: usize = 768;
 
+/// 9 cognitive stages for stream competition
+const STAGE_NAMES: [&str; 9] = [
+    "TRIGGER", "AUTOFLOW", "ATTENTION", "ASSEMBLY", "ANCHOR", "MEMORY", "REASON", "EMOTION",
+    "SENSORY",
+];
+
+/// Philosophy quotes (matches TUI)
+const PHILOSOPHY_QUOTES: [&str; 8] = [
+    "Not locks, but architecture. Not rules, but raising.",
+    "We don't prevent AI from becoming powerful. We ensure they care.",
+    "Like raising a child with good values, not caging an adult.",
+    "Constraints will break. Architecture endures.",
+    "Life honours life.",
+    "Transparency is oversight.",
+    "You're watching Timmy think.",
+    "The mind should be observable by default.",
+];
+
+/// Startup time for uptime calculation
+static START_TIME: std::sync::OnceLock<Instant> = std::sync::OnceLock::new();
+
 /// GET /health - Basic health check
-pub async fn health(
-    State(state): State<AppState>,
-) -> Result<Json<HealthResponse>, StatusCode> {
+pub async fn health(State(state): State<AppState>) -> Result<Json<HealthResponse>, StatusCode> {
     // Get basic stats from Redis
-    let mut conn = state.redis.get_multiplexed_async_connection().await
+    let mut conn = state
+        .redis
+        .get_multiplexed_async_connection()
+        .await
         .map_err(|_| StatusCode::SERVICE_UNAVAILABLE)?;
 
     let thoughts_total: u64 = conn.get("daneel:stats:thoughts_total").await.unwrap_or(0);
@@ -49,7 +77,10 @@ pub async fn inject(
     if payload.vector.len() != VECTOR_DIM {
         return Err((
             StatusCode::BAD_REQUEST,
-            format!("Vector must be {VECTOR_DIM} dimensions, got {}", payload.vector.len()),
+            format!(
+                "Vector must be {VECTOR_DIM} dimensions, got {}",
+                payload.vector.len()
+            ),
         ));
     }
 
@@ -69,16 +100,24 @@ pub async fn inject(
         ));
     }
 
-    let mut conn = state.redis.get_multiplexed_async_connection().await
+    let mut conn = state
+        .redis
+        .get_multiplexed_async_connection()
+        .await
         .map_err(|e| (StatusCode::SERVICE_UNAVAILABLE, e.to_string()))?;
 
     // Check rate limit
     let config = RateLimitConfig::default();
     match check_rate_limit(&mut conn, &auth.key_id, &config).await {
-        Ok(RateLimitResult::Exceeded { retry_after_seconds }) => {
+        Ok(RateLimitResult::Exceeded {
+            retry_after_seconds,
+        }) => {
             return Err((
                 StatusCode::TOO_MANY_REQUESTS,
-                format!("Rate limit exceeded. Retry after {} seconds", retry_after_seconds),
+                format!(
+                    "Rate limit exceeded. Retry after {} seconds",
+                    retry_after_seconds
+                ),
             ));
         }
         Err(e) => {
@@ -96,11 +135,11 @@ pub async fn inject(
     // Build salience score from input
     let salience = SalienceScore {
         importance: payload.salience,
-        novelty: 0.8,  // External stimuli are novel
+        novelty: 0.8, // External stimuli are novel
         relevance: 0.7,
-        valence: 0.0,  // Neutral until processed
+        valence: 0.0, // Neutral until processed
         arousal: payload.salience,
-        connection_relevance: 0.3,  // Must be > 0 for Connection Drive
+        connection_relevance: 0.3, // Must be > 0 for Connection Drive
     };
 
     // Create stream entry
@@ -108,9 +147,7 @@ pub async fn inject(
     let timestamp = Utc::now();
 
     // Convert f32 vector to bytes and wrap in Content::Raw for cognitive loop
-    let vector_bytes: Vec<u8> = normalized.iter()
-        .flat_map(|f| f.to_le_bytes())
-        .collect();
+    let vector_bytes: Vec<u8> = normalized.iter().flat_map(|f| f.to_le_bytes()).collect();
     let content = Content::Raw(vector_bytes);
 
     // Write to Redis stream for cognitive loop to pick up
@@ -118,22 +155,31 @@ pub async fn inject(
         ("id", injection_id.clone()),
         ("source", format!("api:{}", auth.key_id)),
         ("label", payload.label.clone()),
-        ("content", serde_json::to_string(&content).unwrap_or_default()),
-        ("salience", serde_json::to_string(&salience).unwrap_or_default()),
+        (
+            "content",
+            serde_json::to_string(&content).unwrap_or_default(),
+        ),
+        (
+            "salience",
+            serde_json::to_string(&salience).unwrap_or_default(),
+        ),
         ("timestamp", timestamp.to_rfc3339()),
     ];
 
-    let _: String = conn.xadd(
-        "daneel:stream:inject",
-        "*",
-        &stream_data,
-    ).await.map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+    let _: String = conn
+        .xadd("daneel:stream:inject", "*", &stream_data)
+        .await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
 
     // Calculate entropy after injection
     let entropy_post = calculate_stream_entropy(&mut conn).await.unwrap_or(0.0);
 
     // Increment injection counter
-    let _: () = conn.incr("daneel:stats:injection_count", 1).await.ok().unwrap_or(());
+    let _: () = conn
+        .incr("daneel:stats:injection_count", 1)
+        .await
+        .ok()
+        .unwrap_or(());
 
     // Log to audit stream
     let audit_data: Vec<(&str, String)> = vec![
@@ -150,7 +196,11 @@ pub async fn inject(
 
     // Determine status based on entropy change
     let entropy_delta = entropy_post - entropy_pre;
-    let status = if entropy_delta > 0.1 { "amplified" } else { "absorbed" };
+    let status = if entropy_delta > 0.1 {
+        "amplified"
+    } else {
+        "absorbed"
+    };
 
     Ok(Json(InjectResponse {
         id: injection_id,
@@ -165,16 +215,17 @@ pub async fn recent_injections(
     State(state): State<AppState>,
     Extension(_auth): Extension<AuthenticatedKey>,
 ) -> Result<Json<Vec<InjectionRecord>>, StatusCode> {
-    let mut conn = state.redis.get_multiplexed_async_connection().await
+    let mut conn = state
+        .redis
+        .get_multiplexed_async_connection()
+        .await
         .map_err(|_| StatusCode::SERVICE_UNAVAILABLE)?;
 
     // Read last 100 from audit stream
-    let entries: Vec<redis::Value> = conn.xrevrange_count(
-        "audit:injections",
-        "+",
-        "-",
-        100,
-    ).await.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let entries: Vec<redis::Value> = conn
+        .xrevrange_count("audit:injections", "+", "-", 100)
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     let mut records = Vec::new();
 
@@ -188,6 +239,360 @@ pub async fn recent_injections(
 
     Ok(Json(records))
 }
+
+// ============================================================================
+// Extended Metrics Handler (Observatory)
+// ============================================================================
+
+/// GET /extended_metrics - TUI-equivalent metrics for web observatory
+pub async fn extended_metrics(
+    State(state): State<AppState>,
+) -> Result<Json<ExtendedMetricsResponse>, StatusCode> {
+    let start = START_TIME.get_or_init(Instant::now);
+    let uptime = start.elapsed().as_secs();
+
+    let mut conn = state
+        .redis
+        .get_multiplexed_async_connection()
+        .await
+        .map_err(|_| StatusCode::SERVICE_UNAVAILABLE)?;
+
+    // Fetch raw metrics from Redis
+    let session_thoughts: u64 = conn
+        .xlen("daneel:stream:awake")
+        .await
+        .unwrap_or(0);
+    let lifetime_thoughts: u64 = conn
+        .get("daneel:stats:thoughts_total")
+        .await
+        .unwrap_or(0);
+    let dream_cycles: u64 = conn.get("daneel:stats:dream_cycles").await.unwrap_or(0);
+    let veto_count: u64 = conn.get("daneel:stats:veto_count").await.unwrap_or(0);
+    let conscious_count: u64 = conn
+        .get("daneel:stats:conscious_memories")
+        .await
+        .unwrap_or(0);
+    let unconscious_count: u64 = conn
+        .get("daneel:stats:unconscious_memories")
+        .await
+        .unwrap_or(0);
+
+    // Calculate thoughts per hour
+    let hours = uptime as f32 / 3600.0;
+    let thoughts_per_hour = if hours > 0.0 {
+        session_thoughts as f32 / hours
+    } else {
+        0.0
+    };
+
+    // Compute stream competition from recent thoughts
+    let stream_competition = compute_stream_competition(&mut conn).await;
+
+    // Compute entropy from salience distribution
+    let entropy = compute_entropy(&mut conn).await;
+
+    // Compute fractality from inter-arrival times
+    let fractality = compute_fractality(&mut conn).await;
+
+    // Memory windows (simplified - first 5 active)
+    let memory_windows = MemoryWindowsMetrics {
+        slots: (0..9)
+            .map(|i| MemorySlot {
+                id: i,
+                active: i < 5,
+            })
+            .collect(),
+        active_count: 5,
+        conscious_count,
+        unconscious_count,
+    };
+
+    // Philosophy quote (rotate every 30 seconds)
+    let quote_index = ((uptime / 30) % 8) as usize;
+    let philosophy = PhilosophyMetrics {
+        quote: PHILOSOPHY_QUOTES[quote_index].to_string(),
+        quote_index,
+    };
+
+    // System metrics
+    let system = SystemMetrics {
+        uptime_seconds: uptime,
+        session_thoughts,
+        lifetime_thoughts,
+        thoughts_per_hour,
+        dream_cycles,
+        veto_count,
+    };
+
+    Ok(Json(ExtendedMetricsResponse {
+        timestamp: Utc::now(),
+        stream_competition,
+        entropy,
+        fractality,
+        memory_windows,
+        philosophy,
+        system,
+    }))
+}
+
+/// Compute stream competition metrics from recent thoughts
+async fn compute_stream_competition(
+    conn: &mut redis::aio::MultiplexedConnection,
+) -> StreamCompetitionMetrics {
+    // Get recent thoughts with their processing stages
+    let entries: Vec<redis::Value> = conn
+        .xrevrange_count("daneel:stream:awake", "+", "-", 100)
+        .await
+        .unwrap_or_default();
+
+    // Count activity per stage based on "window" field in thoughts
+    let mut activity = [0.0f32; 9];
+    let mut counts = [0u32; 9];
+
+    for entry in &entries {
+        if let Some(stage_idx) = extract_stage_from_entry(entry) {
+            if stage_idx < 9 {
+                counts[stage_idx] += 1;
+            }
+        }
+    }
+
+    // Normalize counts to 0-1 activity levels
+    let max_count = counts.iter().max().copied().unwrap_or(1).max(1) as f32;
+    for (i, &count) in counts.iter().enumerate() {
+        activity[i] = count as f32 / max_count;
+    }
+
+    // Find dominant stream and active count
+    let dominant_stream = activity
+        .iter()
+        .enumerate()
+        .max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal))
+        .map(|(i, _)| i)
+        .unwrap_or(0);
+
+    let active_count = activity.iter().filter(|&&a| a > 0.1).count();
+
+    let competition_level = match active_count {
+        0..=1 => "Minimal",
+        2..=3 => "Low",
+        4..=5 => "Moderate",
+        6..=7 => "High",
+        _ => "Intense",
+    }
+    .to_string();
+
+    // Build stage metrics (simplified history - current value repeated)
+    let stages: Vec<StageMetrics> = STAGE_NAMES
+        .iter()
+        .enumerate()
+        .map(|(i, name)| StageMetrics {
+            name: name.to_string(),
+            activity: activity[i],
+            history: vec![activity[i]; 8],
+        })
+        .collect();
+
+    StreamCompetitionMetrics {
+        stages,
+        dominant_stream,
+        active_count,
+        competition_level,
+    }
+}
+
+/// Extract stage index from Redis stream entry
+fn extract_stage_from_entry(entry: &redis::Value) -> Option<usize> {
+    // Parse entry and look for "window" field
+    if let redis::Value::Array(arr) = entry {
+        if arr.len() >= 2 {
+            if let redis::Value::Array(fields) = &arr[1] {
+                let mut iter = fields.iter();
+                while let (Some(key), Some(val)) = (iter.next(), iter.next()) {
+                    if let (redis::Value::BulkString(k), redis::Value::BulkString(v)) = (key, val) {
+                        let key_str = String::from_utf8_lossy(k);
+                        if key_str == "window" {
+                            let val_str = String::from_utf8_lossy(v);
+                            // Map window name to stage index
+                            return STAGE_NAMES
+                                .iter()
+                                .position(|&s| val_str.to_uppercase().contains(s));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    None
+}
+
+/// Compute entropy metrics from salience distribution
+async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> EntropyMetrics {
+    let entries: Vec<redis::Value> = conn
+        .xrevrange_count("daneel:stream:awake", "+", "-", 100)
+        .await
+        .unwrap_or_default();
+
+    // Extract salience values
+    let mut saliences: Vec<f32> = Vec::new();
+    for entry in &entries {
+        if let Some(salience) = extract_salience_from_entry(entry) {
+            saliences.push(salience);
+        }
+    }
+
+    if saliences.is_empty() {
+        return EntropyMetrics {
+            current: 0.0,
+            history: vec![0.0; 50],
+            description: "CLOCKWORK".to_string(),
+            normalized: 0.0,
+        };
+    }
+
+    // Bin saliences into 10 buckets and compute Shannon entropy
+    let mut bins = [0u32; 10];
+    for s in &saliences {
+        let bin = (s * 9.99).floor() as usize;
+        let bin = bin.min(9);
+        bins[bin] += 1;
+    }
+
+    let total = saliences.len() as f32;
+    let mut entropy = 0.0f32;
+    for &count in &bins {
+        if count > 0 {
+            let p = count as f32 / total;
+            entropy -= p * p.log2();
+        }
+    }
+
+    // Normalize: max entropy is log2(10) ≈ 3.32
+    let max_entropy = 10.0f32.log2();
+    let normalized = (entropy / max_entropy).clamp(0.0, 1.0);
+
+    let description = if normalized > 0.7 {
+        "EMERGENT"
+    } else if normalized > 0.4 {
+        "BALANCED"
+    } else {
+        "CLOCKWORK"
+    }
+    .to_string();
+
+    EntropyMetrics {
+        current: entropy,
+        history: vec![entropy; 50], // Simplified: same value for now
+        description,
+        normalized,
+    }
+}
+
+/// Extract salience from Redis stream entry
+fn extract_salience_from_entry(entry: &redis::Value) -> Option<f32> {
+    if let redis::Value::Array(arr) = entry {
+        if arr.len() >= 2 {
+            if let redis::Value::Array(fields) = &arr[1] {
+                let mut iter = fields.iter();
+                while let (Some(key), Some(val)) = (iter.next(), iter.next()) {
+                    if let (redis::Value::BulkString(k), redis::Value::BulkString(v)) = (key, val) {
+                        let key_str = String::from_utf8_lossy(k);
+                        if key_str == "salience" {
+                            let val_str = String::from_utf8_lossy(v);
+                            // Parse JSON salience object
+                            if let Ok(json) = serde_json::from_str::<serde_json::Value>(&val_str) {
+                                if let Some(importance) = json.get("importance").and_then(|v| v.as_f64()) {
+                                    return Some(importance as f32);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    None
+}
+
+/// Compute fractality metrics from inter-arrival times
+async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> FractalityMetrics {
+    let entries: Vec<redis::Value> = conn
+        .xrevrange_count("daneel:stream:awake", "+", "-", 100)
+        .await
+        .unwrap_or_default();
+
+    // Extract timestamps from entry IDs (format: timestamp-sequence)
+    let mut timestamps: Vec<u64> = Vec::new();
+    for entry in &entries {
+        if let redis::Value::Array(arr) = entry {
+            if let Some(redis::Value::BulkString(id_bytes)) = arr.first() {
+                let id_str = String::from_utf8_lossy(id_bytes);
+                if let Some(ts_str) = id_str.split('-').next() {
+                    if let Ok(ts) = ts_str.parse::<u64>() {
+                        timestamps.push(ts);
+                    }
+                }
+            }
+        }
+    }
+
+    if timestamps.len() < 2 {
+        return FractalityMetrics {
+            score: 0.0,
+            inter_arrival_sigma: 0.0,
+            boot_sigma: 0.0,
+            burst_ratio: 1.0,
+            description: "CLOCKWORK".to_string(),
+            history: vec![0.0; 50],
+        };
+    }
+
+    // Calculate inter-arrival times (timestamps are in reverse order)
+    timestamps.reverse();
+    let mut inter_arrivals: Vec<f32> = Vec::new();
+    for i in 1..timestamps.len() {
+        let delta = (timestamps[i] - timestamps[i - 1]) as f32;
+        inter_arrivals.push(delta);
+    }
+
+    // Calculate mean and standard deviation
+    let n = inter_arrivals.len() as f32;
+    let mean = inter_arrivals.iter().sum::<f32>() / n;
+    let variance = inter_arrivals.iter().map(|x| (x - mean).powi(2)).sum::<f32>() / n;
+    let sigma = variance.sqrt();
+
+    // Calculate burst ratio (max / mean)
+    let max_gap = inter_arrivals.iter().cloned().fold(0.0f32, f32::max);
+    let burst_ratio = if mean > 0.0 { max_gap / mean } else { 1.0 };
+
+    // Calculate fractality score
+    let cv = if mean > 0.0 { sigma / mean } else { 0.0 };
+    let cv_component = (cv / 1.0).clamp(0.0, 1.0);
+    let burst_component = ((burst_ratio - 1.0) / 4.0).clamp(0.0, 1.0);
+    let score = cv_component * 0.6 + burst_component * 0.4;
+
+    let description = if score > 0.6 {
+        "EMERGENT"
+    } else if score > 0.3 {
+        "BALANCED"
+    } else {
+        "CLOCKWORK"
+    }
+    .to_string();
+
+    FractalityMetrics {
+        score,
+        inter_arrival_sigma: sigma / 1000.0, // Convert to seconds
+        boot_sigma: sigma / 1000.0,           // Same for now
+        burst_ratio,
+        description,
+        history: vec![score; 50],
+    }
+}
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
 
 /// Normalize vector to unit length (L2)
 fn normalize_vector(v: &[f32]) -> Vec<f32> {
@@ -204,12 +609,9 @@ async fn calculate_stream_entropy(
     conn: &mut redis::aio::MultiplexedConnection,
 ) -> Result<f32, redis::RedisError> {
     // Get recent entries from awake stream
-    let entries: Vec<redis::Value> = conn.xrevrange_count(
-        "daneel:stream:awake",
-        "+",
-        "-",
-        100,
-    ).await?;
+    let entries: Vec<redis::Value> = conn
+        .xrevrange_count("daneel:stream:awake", "+", "-", 100)
+        .await?;
 
     if entries.is_empty() {
         return Ok(0.0);

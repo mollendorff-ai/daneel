@@ -8,13 +8,13 @@ pub mod handlers;
 pub mod rate_limit;
 pub mod types;
 
+use crate::streams::client::StreamsClient;
 use axum::{
     middleware,
     routing::{get, post},
     Router,
 };
 use std::sync::Arc;
-use crate::streams::client::StreamsClient;
 
 /// Application state shared across handlers
 #[derive(Clone)]
@@ -34,6 +34,7 @@ pub fn router(state: AppState) -> Router {
     // Public routes + merge protected
     Router::new()
         .route("/health", get(handlers::health))
+        .route("/extended_metrics", get(handlers::extended_metrics))
         .merge(protected)
         .with_state(state)
 }
