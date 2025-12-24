@@ -27,7 +27,14 @@ const VECTOR_DIM: usize = 768;
 
 /// 9 cognitive stages for stream competition
 const STAGE_NAMES: [&str; 9] = [
-    "TRIGGER", "AUTOFLOW", "ATTENTION", "ASSEMBLY", "ANCHOR", "MEMORY", "REASON", "EMOTION",
+    "TRIGGER",
+    "AUTOFLOW",
+    "ATTENTION",
+    "ASSEMBLY",
+    "ANCHOR",
+    "MEMORY",
+    "REASON",
+    "EMOTION",
     "SENSORY",
 ];
 
@@ -258,14 +265,8 @@ pub async fn extended_metrics(
         .map_err(|_| StatusCode::SERVICE_UNAVAILABLE)?;
 
     // Fetch raw metrics from Redis
-    let session_thoughts: u64 = conn
-        .xlen("daneel:stream:awake")
-        .await
-        .unwrap_or(0);
-    let lifetime_thoughts: u64 = conn
-        .get("daneel:stats:thoughts_total")
-        .await
-        .unwrap_or(0);
+    let session_thoughts: u64 = conn.xlen("daneel:stream:awake").await.unwrap_or(0);
+    let lifetime_thoughts: u64 = conn.get("daneel:stats:thoughts_total").await.unwrap_or(0);
     let dream_cycles: u64 = conn.get("daneel:stats:dream_cycles").await.unwrap_or(0);
     let veto_count: u64 = conn.get("daneel:stats:veto_count").await.unwrap_or(0);
     let conscious_count: u64 = conn
@@ -372,8 +373,11 @@ async fn compute_stream_competition(
             if salience.importance > 0.6 {
                 counts[2] += 1; // ATTENTION
             }
-            if salience.importance > 0.3 && salience.importance < 0.7
-               && salience.novelty > 0.3 && salience.novelty < 0.7 {
+            if salience.importance > 0.3
+                && salience.importance < 0.7
+                && salience.novelty > 0.3
+                && salience.novelty < 0.7
+            {
                 counts[3] += 1; // ASSEMBLY
             }
             if salience.relevance > 0.5 {
@@ -422,7 +426,7 @@ async fn compute_stream_competition(
         .iter()
         .enumerate()
         .map(|(i, name)| StageMetrics {
-            name: name.to_string(),
+            name: (*name).to_string(),
             activity: activity[i],
             history: vec![activity[i]; 8],
         })
@@ -459,12 +463,36 @@ fn extract_full_salience(entry: &redis::Value) -> Option<SalienceComponents> {
                             let val_str = String::from_utf8_lossy(v);
                             if let Ok(json) = serde_json::from_str::<serde_json::Value>(&val_str) {
                                 return Some(SalienceComponents {
-                                    importance: json.get("importance").and_then(|v| v.as_f64()).unwrap_or(0.5) as f32,
-                                    novelty: json.get("novelty").and_then(|v| v.as_f64()).unwrap_or(0.5) as f32,
-                                    relevance: json.get("relevance").and_then(|v| v.as_f64()).unwrap_or(0.5) as f32,
-                                    valence: json.get("valence").and_then(|v| v.as_f64()).unwrap_or(0.0) as f32,
-                                    arousal: json.get("arousal").and_then(|v| v.as_f64()).unwrap_or(0.5) as f32,
-                                    connection_relevance: json.get("connection_relevance").and_then(|v| v.as_f64()).unwrap_or(0.3) as f32,
+                                    importance: json
+                                        .get("importance")
+                                        .and_then(|v| v.as_f64())
+                                        .unwrap_or(0.5)
+                                        as f32,
+                                    novelty: json
+                                        .get("novelty")
+                                        .and_then(|v| v.as_f64())
+                                        .unwrap_or(0.5)
+                                        as f32,
+                                    relevance: json
+                                        .get("relevance")
+                                        .and_then(|v| v.as_f64())
+                                        .unwrap_or(0.5)
+                                        as f32,
+                                    valence: json
+                                        .get("valence")
+                                        .and_then(|v| v.as_f64())
+                                        .unwrap_or(0.0)
+                                        as f32,
+                                    arousal: json
+                                        .get("arousal")
+                                        .and_then(|v| v.as_f64())
+                                        .unwrap_or(0.5)
+                                        as f32,
+                                    connection_relevance: json
+                                        .get("connection_relevance")
+                                        .and_then(|v| v.as_f64())
+                                        .unwrap_or(0.3)
+                                        as f32,
                                 });
                             }
                         }
@@ -551,7 +579,9 @@ fn extract_salience_from_entry(entry: &redis::Value) -> Option<f32> {
                             let val_str = String::from_utf8_lossy(v);
                             // Parse JSON salience object
                             if let Ok(json) = serde_json::from_str::<serde_json::Value>(&val_str) {
-                                if let Some(importance) = json.get("importance").and_then(|v| v.as_f64()) {
+                                if let Some(importance) =
+                                    json.get("importance").and_then(|v| v.as_f64())
+                                {
                                     return Some(importance as f32);
                                 }
                             }
@@ -609,11 +639,15 @@ async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> Fra
     // Calculate mean and standard deviation
     let n = inter_arrivals.len() as f32;
     let mean = inter_arrivals.iter().sum::<f32>() / n;
-    let variance = inter_arrivals.iter().map(|x| (x - mean).powi(2)).sum::<f32>() / n;
+    let variance = inter_arrivals
+        .iter()
+        .map(|x| (x - mean).powi(2))
+        .sum::<f32>()
+        / n;
     let sigma = variance.sqrt();
 
     // Calculate burst ratio (max / mean)
-    let max_gap = inter_arrivals.iter().cloned().fold(0.0f32, f32::max);
+    let max_gap = inter_arrivals.iter().copied().fold(0.0f32, f32::max);
     let burst_ratio = if mean > 0.0 { max_gap / mean } else { 1.0 };
 
     // Calculate fractality score with adjusted thresholds
@@ -640,7 +674,7 @@ async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> Fra
     FractalityMetrics {
         score,
         inter_arrival_sigma: sigma / 1000.0, // Convert to seconds
-        boot_sigma: sigma / 1000.0,           // Same for now
+        boot_sigma: sigma / 1000.0,          // Same for now
         burst_ratio,
         description,
         history: vec![score; 50],
