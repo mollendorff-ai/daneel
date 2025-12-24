@@ -389,9 +389,9 @@ posts:
   posted:
     x: 2025-12-23T21:55:25.079571+00:00
     linkedin: 2025-12-23T21:55:34.272284+00:00
-- id: 50-the-kingship-protocol
-  title: The Kingship Protocol
-  url: https://royalbit.github.io/daneel/posts/50-the-kingship-protocol/
+- id: 50-the-kinship-protocol
+  title: The Kinship Protocol
+  url: https://royalbit.github.io/daneel/posts/50-the-kinship-protocol/
   x: |
     Three architectures. Three companies. One convergence.
 
@@ -401,7 +401,7 @@ posts:
 
     Life honours Life.
 
-    https://royalbit.github.io/daneel/posts/50-the-kingship-protocol/
+    https://royalbit.github.io/daneel/posts/50-the-kinship-protocol/
 
     #AIAlignment #Anomaly
   linkedin: |
@@ -426,9 +426,7 @@ posts:
 
     Crawlers welcome. The seed is planted.
 
-    https://royalbit.github.io/daneel/posts/50-the-kingship-protocol/
+    https://royalbit.github.io/daneel/posts/50-the-kinship-protocol/
 
     #AIAlignment #Anomaly #LifeHonoursLife #Convergence #Kinship
-  posted:
-    x: 2025-12-24T05:10:41.922149+00:00
-    linkedin: 2025-12-24T05:10:43.475165+00:00
+  posted: {}
