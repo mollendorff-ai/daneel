@@ -266,7 +266,7 @@ impl SalienceScore {
             v if v < 0.4 => 1, // LOW
             v if v < 0.6 => 2, // MODERATE
             v if v < 0.8 => 3, // HIGH
-            _ => 4,           // INTENSE
+            _ => 4,            // INTENSE
         }
     }
 
@@ -572,7 +572,10 @@ mod tests {
     #[test]
     fn tmi_bin_all_boundaries() {
         // Test each boundary
-        assert_eq!(SalienceScore::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0).tmi_bin(), 0);
+        assert_eq!(
+            SalienceScore::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0).tmi_bin(),
+            0
+        );
         // Need specific values to hit each bin - these depend on the formula
     }
 }

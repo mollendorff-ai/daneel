@@ -554,7 +554,7 @@ async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> Entrop
             v if v < 0.4 => 1, // LOW
             v if v < 0.6 => 2, // MODERATE
             v if v < 0.8 => 3, // HIGH
-            _ => 4,           // INTENSE
+            _ => 4,            // INTENSE
         };
         bins[bin] += 1;
     }
@@ -588,7 +588,6 @@ async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> Entrop
         normalized,
     }
 }
-
 
 /// Compute fractality metrics from inter-arrival times
 /// Score ranges from 0 (clockwork/regular) to 1 (fractal/bursty)
