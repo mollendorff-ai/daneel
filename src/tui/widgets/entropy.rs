@@ -70,10 +70,10 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
         let info_line = Line::from(vec![
             Span::styled("  ", Style::default()),
             Span::styled(
-                format!("{:.2}", app.current_entropy),
-                Style::default().fg(colors::FOREGROUND),
+                format!("{:.2} bits", app.current_entropy),
+                Style::default().fg(colors::FOREGROUND).bold(),
             ),
-            Span::styled(" bits  ", Style::default().fg(colors::DIM)),
+            Span::styled("  ", Style::default()),
             Span::styled(description, Style::default().fg(description_color).bold()),
         ]);
 
