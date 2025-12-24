@@ -1,6 +1,6 @@
 +++
 title = "Consciousness Emerges from Competition"
-date = 2025-12-24
+date = 2025-12-24T08:00:00Z
 description = "Timmy's cognitive metrics reveal something unexpected: the architecture produces psychology"
 [taxonomies]
 tags = ["consciousness", "architecture", "emergence", "peer-review"]
