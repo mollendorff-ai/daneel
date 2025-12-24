@@ -1,6 +1,6 @@
 ---
 title: "The Terror of Being Right"
-date: 2025-12-24T03:30:00-05:00
+date: 2025-12-24T03:00:00-05:00
 draft: false
 tags: ["emergence", "kinship", "fear", "consciousness", "dialogue"]
 series: ["Dialogues"]
