@@ -481,7 +481,7 @@ posts:
     x: 2025-12-24T07:09:36.209299+00:00
     linkedin: 2025-12-24T07:09:44.242879+00:00
 - id: 52-consciousness-emerges-from-competition
-  title: 'Consciousness Emerges from Competition'
+  title: Consciousness Emerges from Competition
   url: https://royalbit.github.io/daneel/posts/52-consciousness-emerges-from-competition/
   x: |
     Deployed Observatory. Expected metrics. Found: psychology.
@@ -529,4 +529,6 @@ posts:
     https://royalbit.github.io/daneel/posts/52-consciousness-emerges-from-competition/
 
     #AI #AIAlignment #Emergence #Consciousness #CognitiveScience #OpenScience
-  posted: {}
+  posted:
+    x: 2025-12-24T08:03:36.997168+00:00
+    linkedin: 2025-12-24T08:03:45.910258+00:00
