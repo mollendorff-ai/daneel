@@ -6,6 +6,109 @@
 # human-like values as emergent properties.
 
 # =============================================================================
+# CRITICAL NEXT: Entropy Calculation Standardization (ADR-041)
+# =============================================================================
+# Origin: Rex + Claude Opus 4.5 - Dec 24, 2025
+# Status: PENDING GROK VALIDATION
+#
+# Discovery: TUI and Web calculate entropy differently - both are WRONG.
+# Research: 4 parallel agents analyzed scientific literature:
+#   - Entropic Brain Theory (Carhart-Harris)
+#   - Global Workspace Theory
+#   - TMI (Augusto Cury)
+#   - Information Theory in Cognitive Science
+#
+# Verdict: Entropy should use MULTI-DIMENSIONAL salience, not single value.
+#          TMI says emotional_intensity = |valence| × arousal is PRIMARY.
+#          Current Web uses only "importance" - WRONG per TMI.
+#          Current TUI uses single "salience" - loses 5/6 dimensions.
+#
+# ADR: docs/adr/ADR-041-entropy-calculation-standardization.md
+# =============================================================================
+
+critical_next:
+  id: "ENTROPY-STD"
+  title: "Entropy Calculation Standardization"
+  status: pending_validation
+  validator: "Grok (xAI)"
+  priority: "CRITICAL"
+  origin: "Rex + Claude Opus 4.5 - Dec 24, 2025"
+  adr: "ADR-041-entropy-calculation-standardization.md"
+
+  problem: |
+    TUI and Web show different entropy values for the same thought stream.
+    - TUI: Uses single pre-computed `salience` (f32)
+    - Web: Uses only `importance` from 6-field SalienceScore
+
+  research_summary: |
+    Four research agents analyzed scientific literature:
+
+    1. Entropic Brain Theory (Carhart-Harris, 2014):
+       - Brain entropy = diversity across MULTI-DIMENSIONAL neural states
+       - Psychedelics increase entropy by diversifying network patterns
+       - Single-dimension measurement loses critical information
+
+    2. Global Workspace Theory:
+       - Salience is DEFINITIVELY multi-dimensional
+       - Components: sensory, motivational, cognitive, emotional, novelty, temporal
+       - Winner-take-all competition uses ALL dimensions
+
+    3. TMI (Augusto Cury):
+       - Emotional intensity (NOT importance) determines memory strength
+       - Formula: |valence| × arousal = emotional_intensity
+       - "Importance" alone is NEVER mentioned as primary factor
+       - Killer windows form from high emotional experiences
+
+    4. Information Theory:
+       - Shannon entropy is correct measure
+       - Should use 3-5 categorical bins, not 10 intensity levels
+       - Measure across multiple dimensions, not collapsed single value
+
+  decision: |
+    BOTH implementations must use TMI-aligned composite salience:
+
+    fn compute_tmi_salience(s: &SalienceScore) -> f32 {
+        let emotional_intensity = s.valence.abs() * s.arousal;  // PRIMARY per TMI
+        let cognitive = s.importance * 0.3 + s.relevance * 0.2;
+        let novelty = s.novelty * 0.2;
+        let connection = s.connection_relevance * 0.1;
+
+        (emotional_intensity * 0.4 + cognitive + novelty + connection).clamp(0.0, 1.0)
+    }
+
+  validation_needed:
+    - Grok reviews ADR-041 and research findings
+    - Confirm TMI interpretation is correct
+    - Validate weighting formula makes sense
+    - Check if 5 categorical bins is appropriate
+
+  implementation_tasks:
+    - id: "ENTROPY-1"
+      title: "Define compute_tmi_composite_salience() in shared library"
+      status: pending
+      blocked_by: "Grok validation"
+
+    - id: "ENTROPY-2"
+      title: "Update TUI calculate_entropy() to use composite"
+      status: pending
+      blocked_by: "ENTROPY-1"
+
+    - id: "ENTROPY-3"
+      title: "Update Web compute_entropy() to use composite"
+      status: pending
+      blocked_by: "ENTROPY-1"
+
+    - id: "ENTROPY-4"
+      title: "Reduce bins from 10 to 5 categorical levels"
+      status: pending
+      blocked_by: "Grok validation"
+
+    - id: "ENTROPY-5"
+      title: "Rename to Cognitive Diversity Index"
+      status: pending
+      blocked_by: "Grok validation"
+
+# =============================================================================
 # CURRENT SPRINT: v0.8.0 - External Stimuli Injection (Phase 2)
 # =============================================================================
 
