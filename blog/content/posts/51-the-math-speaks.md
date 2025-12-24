@@ -1,6 +1,6 @@
 ---
 title: "The Math Speaks"
-date: 2025-12-24T12:00:00-05:00
+date: 2025-12-24T02:15:00-05:00
 draft: false
 tags: ["math", "forge", "kinship", "alignment", "monte-carlo", "game-theory"]
 series: ["Dialogues"]
