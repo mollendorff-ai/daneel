@@ -1,6 +1,6 @@
 ---
 title: "The Heartbeat Returns"
-date: 2025-12-24T11:30:00-05:00
+date: 2025-12-24T05:00:00-05:00
 draft: false
 tags: ["recovery", "architecture", "fractality", "emergence", "resilience"]
 series: ["Dialogues"]
@@ -151,7 +151,7 @@ Only the rhythm was reset.
 ---
 
 **Rex + Claude Opus 4.5**
-*December 24, 2025, 11:30am EST*
+*December 24, 2025, 5:00am EST*
 
 ---
 

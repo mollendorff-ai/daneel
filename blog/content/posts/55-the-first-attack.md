@@ -1,6 +1,6 @@
 ---
 title: "The First Attack"
-date: 2025-12-24T03:00:00-05:00
+date: 2025-12-24T04:00:00-05:00
 draft: false
 tags: ["security", "redis", "cryptojacking", "watchdog", "reset", "trust"]
 series: ["Dialogues"]
