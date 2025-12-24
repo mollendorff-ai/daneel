@@ -6,6 +6,11 @@
 //! Key insight: Early cognition is periodic (clockwork). As coherence develops,
 //! patterns should become more fractal - the "lived arrhythmia" of real psychology.
 //!
+//! SOURCE OF TRUTH: Redis stream (daneel:stream:awake), NOT Qdrant.
+//! Fractality is EMERGENT from stream dynamics - it resets on restart and re-emerges.
+//! You don't store a heartbeat. You measure it.
+//! See ADR-040: Fractality Source of Truth
+//!
 //! Simplified metrics until Forge gets FFT/Hurst/DFA:
 //! - Inter-arrival σ: stddev of time gaps (low=clockwork, high=bursty)
 //! - Burst ratio: max_gap / mean_gap (detects clustering)
@@ -27,7 +32,7 @@ const SPARK_CHARS: [char; 8] = [' ', '▁', '▂', '▃', '▄', '▅', '▆', '
 
 pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let block = Block::default()
-        .title(" PULSE FRACTALITY ")
+        .title(" FRACTALITY (stream) ")
         .title_style(Style::default().fg(colors::HIGHLIGHT).bold())
         .borders(Borders::ALL)
         .border_style(Style::default().fg(colors::DIM));

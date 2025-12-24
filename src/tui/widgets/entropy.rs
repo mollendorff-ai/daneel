@@ -3,6 +3,10 @@
 //! Shows: Shannon entropy of recent thought salience distribution
 //! Displays how "psychologically emergent" vs "clockwork" the mind appears
 //! High entropy = varied/emergent, Low entropy = repetitive/mechanical
+//!
+//! SOURCE OF TRUTH: Redis stream (daneel:stream:awake), NOT Qdrant.
+//! Entropy is EMERGENT from stream dynamics - it resets on restart and re-emerges.
+//! See ADR-040: Fractality Source of Truth
 
 use ratatui::{
     layout::Rect,
@@ -39,7 +43,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let sparkline = Sparkline::default()
         .block(
             Block::default()
-                .title(" ENTROPY ")
+                .title(" ENTROPY (stream) ")
                 .title_style(Style::default().fg(colors::SECONDARY).bold())
                 .borders(Borders::ALL)
                 .border_style(Style::default().fg(colors::DIM)),
