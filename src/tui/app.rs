@@ -12,8 +12,14 @@ const MAX_THOUGHTS: usize = 100;
 /// Number of recent entropy values to track for sparkline
 const MAX_ENTROPY_HISTORY: usize = 50;
 
-/// Number of bins for salience distribution when calculating entropy
-const ENTROPY_BINS: usize = 10;
+/// Number of categorical bins for cognitive diversity calculation (ADR-041)
+/// Reduced from 10 to 5 per cognitive science research (3-5 stable states):
+/// - 0: MINIMAL (neutral windows, background processing)
+/// - 1: LOW (routine cognition)
+/// - 2: MODERATE (active processing)
+/// - 3: HIGH (focused attention)
+/// - 4: INTENSE (killer window formation)
+const COGNITIVE_DIVERSITY_BINS: usize = 5;
 
 /// Maximum vetoes to keep in the visible log
 const MAX_VETOES: usize = 50;
@@ -569,26 +575,41 @@ impl App {
         }
     }
 
-    /// Calculate Shannon entropy from recent thought salience distribution
+    /// Calculate Cognitive Diversity Index using TMI-aligned composite salience (ADR-041)
     ///
-    /// Bins salience values into ENTROPY_BINS buckets and computes:
+    /// Computes TMI composite salience emphasizing emotional intensity:
+    /// - emotional_intensity = |valence| × arousal (PRIMARY per TMI/Cury)
+    /// - tmi_composite = emotional_intensity × 0.4 + cognitive_salience × 0.6
+    ///
+    /// Bins into 5 categorical cognitive states and computes Shannon entropy:
     /// H = -Σ(p_i * log2(p_i))
     ///
-    /// Higher entropy = more varied/emergent thinking
-    /// Lower entropy = more repetitive/mechanical patterns
+    /// Higher entropy = more varied/emergent thinking (diverse cognitive states)
+    /// Lower entropy = more repetitive/clockwork patterns (stuck in one state)
     ///
-    /// Returns entropy in bits (0.0 to log2(ENTROPY_BINS))
+    /// Returns entropy in bits (0.0 to log2(5) ≈ 2.32)
     pub fn calculate_entropy(&self) -> f32 {
         if self.thoughts.is_empty() {
             return 0.0;
         }
 
-        // Count salience values in each bin
-        let mut bins = [0u32; ENTROPY_BINS];
+        // Count TMI composite values in each categorical bin
+        let mut bins = [0u32; COGNITIVE_DIVERSITY_BINS];
         for thought in &self.thoughts {
-            let salience = thought.salience.clamp(0.0, 1.0);
-            #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
-            let bin_idx = ((salience * ENTROPY_BINS as f32).floor() as usize).min(ENTROPY_BINS - 1);
+            // TMI composite: emotional_intensity (40%) + cognitive_salience (60%)
+            // emotional_intensity = |valence| × arousal (PRIMARY per TMI)
+            let emotional_intensity = thought.valence.abs() * thought.arousal;
+            let tmi_composite =
+                (emotional_intensity * 0.4 + thought.salience * 0.6).clamp(0.0, 1.0);
+
+            // Bin into 5 categorical levels (ADR-041)
+            let bin_idx = match tmi_composite {
+                v if v < 0.2 => 0, // MINIMAL
+                v if v < 0.4 => 1, // LOW
+                v if v < 0.6 => 2, // MODERATE
+                v if v < 0.8 => 3, // HIGH
+                _ => 4,            // INTENSE
+            };
             bins[bin_idx] += 1;
         }
 
@@ -620,10 +641,15 @@ impl App {
         self.entropy_history.push_back(entropy);
     }
 
-    /// Get entropy description: "EMERGENT", "BALANCED", or "CLOCKWORK"
+    /// Get cognitive diversity description: "EMERGENT", "BALANCED", or "CLOCKWORK"
+    ///
+    /// Based on normalized entropy across 5 cognitive state bins (ADR-041):
+    /// - EMERGENT (>70%): High diversity, varied cognitive states
+    /// - BALANCED (40-70%): Healthy mix of states
+    /// - CLOCKWORK (<40%): Repetitive, stuck in few states
     pub fn entropy_description(&self) -> &'static str {
-        // Max possible entropy for our bin count
-        let max_entropy = (ENTROPY_BINS as f32).log2();
+        // Max possible entropy for 5 categorical bins: log2(5) ≈ 2.32
+        let max_entropy = (COGNITIVE_DIVERSITY_BINS as f32).log2();
         let normalized = self.current_entropy / max_entropy;
 
         if normalized > 0.7 {
@@ -1260,7 +1286,8 @@ mod tests {
 
         let entropy = app.calculate_entropy();
         // Uniform distribution should have high entropy
-        assert!(entropy > 2.0); // Should be close to log2(10) ≈ 3.32
+        // With 5 bins, max is log2(5) ≈ 2.32, so >1.5 is good diversity
+        assert!(entropy > 1.5);
     }
 
     #[test]
@@ -1334,8 +1361,8 @@ mod tests {
     #[test]
     fn entropy_description_high() {
         let mut app = App::new();
-        // Simulate high entropy
-        app.current_entropy = 2.5; // High value relative to max ~3.32
+        // Simulate high entropy (>70% of max log2(5) ≈ 2.32)
+        app.current_entropy = 1.8; // High value relative to max ~2.32
         let desc = app.entropy_description();
         assert_eq!(desc, "EMERGENT");
     }

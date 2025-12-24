@@ -1,12 +1,15 @@
-//! Entropy Sparkline Widget
+//! Cognitive Diversity Index Widget (ADR-041)
 //!
-//! Shows: Shannon entropy of recent thought salience distribution
+//! Shows: Shannon entropy of TMI-aligned composite salience distribution
 //! Displays how "psychologically emergent" vs "clockwork" the mind appears
-//! High entropy = varied/emergent, Low entropy = repetitive/mechanical
+//! High entropy = varied cognitive states, Low entropy = repetitive patterns
+//!
+//! TMI Composite: emotional_intensity (|valence| × arousal) is PRIMARY per Cury
+//! Bins thoughts into 5 categorical states (MINIMAL/LOW/MODERATE/HIGH/INTENSE)
 //!
 //! SOURCE OF TRUTH: Redis stream (daneel:stream:awake), NOT Qdrant.
 //! Entropy is EMERGENT from stream dynamics - it resets on restart and re-emerges.
-//! See ADR-040: Fractality Source of Truth
+//! See ADR-040: Fractality Source of Truth, ADR-041: Entropy Calculation
 
 use ratatui::{
     layout::Rect,
@@ -22,7 +25,8 @@ use crate::tui::colors;
 pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     // Prepare sparkline data - convert entropy history to u64 for sparkline
     // Scale entropy values to 0-100 range for better visualization
-    let max_entropy = 10.0f32.log2(); // log2(ENTROPY_BINS)
+    // 5 categorical bins (ADR-041): log2(5) ≈ 2.32
+    let max_entropy = 5.0f32.log2();
     let data: Vec<u64> = app
         .entropy_history
         .iter()
@@ -43,7 +47,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let sparkline = Sparkline::default()
         .block(
             Block::default()
-                .title(" ENTROPY (stream) ")
+                .title(" COGNITIVE DIVERSITY ")
                 .title_style(Style::default().fg(colors::SECONDARY).bold())
                 .borders(Borders::ALL)
                 .border_style(Style::default().fg(colors::DIM)),

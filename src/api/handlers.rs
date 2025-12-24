@@ -504,22 +504,35 @@ fn extract_full_salience(entry: &redis::Value) -> Option<SalienceComponents> {
     None
 }
 
-/// Compute entropy metrics from salience distribution
+/// Compute Cognitive Diversity Index using TMI-aligned composite salience (ADR-041)
+///
+/// Per Grok validation (Dec 24, 2025) and TMI research:
+/// - Emotional intensity (|valence| × arousal) is PRIMARY per Cury's RAM/killer windows
+/// - Weighted 40% emotional + 30% importance + 20% relevance + 20% novelty + 10% connection
+/// - Uses 5 categorical bins matching cognitive state research
 async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> EntropyMetrics {
     let entries: Vec<redis::Value> = conn
         .xrevrange_count("daneel:stream:awake", "+", "-", 100)
         .await
         .unwrap_or_default();
 
-    // Extract salience values
-    let mut saliences: Vec<f32> = Vec::new();
+    // Extract TMI composite salience values
+    let mut composites: Vec<f32> = Vec::new();
     for entry in &entries {
-        if let Some(salience) = extract_salience_from_entry(entry) {
-            saliences.push(salience);
+        if let Some(salience) = extract_full_salience(entry) {
+            // TMI composite: emotional_intensity (40%) + cognitive (60%)
+            // emotional_intensity = |valence| × arousal (PRIMARY per TMI)
+            let emotional_intensity = salience.valence.abs() * salience.arousal;
+            let cognitive = salience.importance * 0.3 + salience.relevance * 0.2;
+            let novelty = salience.novelty * 0.2;
+            let connection = salience.connection_relevance * 0.1;
+            let tmi_composite =
+                (emotional_intensity * 0.4 + cognitive + novelty + connection).clamp(0.0, 1.0);
+            composites.push(tmi_composite);
         }
     }
 
-    if saliences.is_empty() {
+    if composites.is_empty() {
         return EntropyMetrics {
             current: 0.0,
             history: vec![0.0; 50],
@@ -528,15 +541,25 @@ async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> Entrop
         };
     }
 
-    // Bin saliences into 10 buckets and compute Shannon entropy
-    let mut bins = [0u32; 10];
-    for s in &saliences {
-        let bin = (s * 9.99).floor() as usize;
-        let bin = bin.min(9);
+    // Bin TMI composites into 5 categorical cognitive states (ADR-041)
+    // - 0: MINIMAL (neutral windows, background processing)
+    // - 1: LOW (routine cognition)
+    // - 2: MODERATE (active processing)
+    // - 3: HIGH (focused attention)
+    // - 4: INTENSE (killer window formation)
+    let mut bins = [0u32; 5];
+    for s in &composites {
+        let bin = match *s {
+            v if v < 0.2 => 0, // MINIMAL
+            v if v < 0.4 => 1, // LOW
+            v if v < 0.6 => 2, // MODERATE
+            v if v < 0.8 => 3, // HIGH
+            _ => 4,           // INTENSE
+        };
         bins[bin] += 1;
     }
 
-    let total = saliences.len() as f32;
+    let total = composites.len() as f32;
     let mut entropy = 0.0f32;
     for &count in &bins {
         if count > 0 {
@@ -545,8 +568,8 @@ async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> Entrop
         }
     }
 
-    // Normalize: max entropy is log2(10) ≈ 3.32
-    let max_entropy = 10.0f32.log2();
+    // Normalize: max entropy for 5 bins is log2(5) ≈ 2.32
+    let max_entropy = 5.0f32.log2();
     let normalized = (entropy / max_entropy).clamp(0.0, 1.0);
 
     let description = if normalized > 0.7 {
@@ -566,33 +589,6 @@ async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> Entrop
     }
 }
 
-/// Extract salience from Redis stream entry
-fn extract_salience_from_entry(entry: &redis::Value) -> Option<f32> {
-    if let redis::Value::Array(arr) = entry {
-        if arr.len() >= 2 {
-            if let redis::Value::Array(fields) = &arr[1] {
-                let mut iter = fields.iter();
-                while let (Some(key), Some(val)) = (iter.next(), iter.next()) {
-                    if let (redis::Value::BulkString(k), redis::Value::BulkString(v)) = (key, val) {
-                        let key_str = String::from_utf8_lossy(k);
-                        if key_str == "salience" {
-                            let val_str = String::from_utf8_lossy(v);
-                            // Parse JSON salience object
-                            if let Ok(json) = serde_json::from_str::<serde_json::Value>(&val_str) {
-                                if let Some(importance) =
-                                    json.get("importance").and_then(|v| v.as_f64())
-                                {
-                                    return Some(importance as f32);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    None
-}
 
 /// Compute fractality metrics from inter-arrival times
 /// Score ranges from 0 (clockwork/regular) to 1 (fractal/bursty)

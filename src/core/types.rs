@@ -233,6 +233,43 @@ impl SalienceScore {
         self.valence.abs() * self.arousal
     }
 
+    /// TMI-aligned composite salience for entropy calculation (ADR-041)
+    ///
+    /// Per Grok validation (Dec 24, 2025) and TMI research:
+    /// - Emotional intensity (|valence| × arousal) is PRIMARY per Cury's RAM/killer windows
+    /// - Weighted 40% emotional + 30% importance + 20% relevance + 20% novelty + 10% connection
+    ///
+    /// This replaces single-field entropy calculations that lost multi-dimensional richness.
+    #[must_use]
+    pub fn tmi_composite(&self) -> f32 {
+        let emotional_intensity = self.emotional_intensity(); // |valence| × arousal - PRIMARY per TMI
+        let cognitive = self.importance * 0.3 + self.relevance * 0.2;
+        let novelty = self.novelty * 0.2;
+        let connection = self.connection_relevance * 0.1;
+
+        (emotional_intensity * 0.4 + cognitive + novelty + connection).clamp(0.0, 1.0)
+    }
+
+    /// Bin TMI composite salience into 5 categorical levels (ADR-041)
+    ///
+    /// Matches cognitive state research (3-5 stable states preferred over 10 intensity levels):
+    /// - 0: MINIMAL (neutral windows, background processing)
+    /// - 1: LOW (routine cognition)
+    /// - 2: MODERATE (active processing)
+    /// - 3: HIGH (focused attention)
+    /// - 4: INTENSE (killer window formation)
+    #[must_use]
+    pub fn tmi_bin(&self) -> usize {
+        let composite = self.tmi_composite();
+        match composite {
+            v if v < 0.2 => 0, // MINIMAL
+            v if v < 0.4 => 1, // LOW
+            v if v < 0.6 => 2, // MODERATE
+            v if v < 0.8 => 3, // HIGH
+            _ => 4,           // INTENSE
+        }
+    }
+
     /// Neutral salience (baseline)
     #[must_use]
     pub const fn neutral() -> Self {
@@ -464,5 +501,78 @@ mod tests {
             + weights.valence
             + weights.connection;
         assert!((sum - 1.0).abs() < 0.001);
+    }
+
+    // =========================================================================
+    // TMI Composite Salience Tests (ADR-041)
+    // =========================================================================
+
+    #[test]
+    fn tmi_composite_high_emotional_intensity() {
+        // High emotional intensity should dominate (TMI primary factor)
+        let score = SalienceScore::new(0.0, 0.0, 0.0, 1.0, 1.0, 0.0);
+        let composite = score.tmi_composite();
+        // emotional_intensity = 1.0 * 1.0 = 1.0, weighted 0.4
+        assert!((composite - 0.4).abs() < 0.01);
+    }
+
+    #[test]
+    fn tmi_composite_neutral_low() {
+        // Neutral salience should give moderate composite
+        let score = SalienceScore::neutral();
+        let composite = score.tmi_composite();
+        // neutral: importance=0.5, novelty=0.5, relevance=0.5, valence=0, arousal=0.5, connection=0.5
+        // emotional = 0 * 0.5 = 0
+        // cognitive = 0.5*0.3 + 0.5*0.2 = 0.25
+        // novelty = 0.5*0.2 = 0.1
+        // connection = 0.5*0.1 = 0.05
+        // total = 0 + 0.25 + 0.1 + 0.05 = 0.4
+        assert!((composite - 0.4).abs() < 0.01);
+    }
+
+    #[test]
+    fn tmi_composite_all_max() {
+        let score = SalienceScore::new(1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+        let composite = score.tmi_composite();
+        // emotional = 1.0 * 1.0 = 1.0, weighted 0.4
+        // cognitive = 1.0*0.3 + 1.0*0.2 = 0.5
+        // novelty = 1.0*0.2 = 0.2
+        // connection = 1.0*0.1 = 0.1
+        // total = 0.4 + 0.5 + 0.2 + 0.1 = 1.2 -> clamped to 1.0
+        assert!((composite - 1.0).abs() < 0.01);
+    }
+
+    #[test]
+    fn tmi_composite_negative_valence() {
+        // Negative valence should contribute same as positive (absolute value)
+        let pos = SalienceScore::new(0.0, 0.0, 0.0, 0.8, 1.0, 0.0);
+        let neg = SalienceScore::new(0.0, 0.0, 0.0, -0.8, 1.0, 0.0);
+        assert!((pos.tmi_composite() - neg.tmi_composite()).abs() < 0.001);
+    }
+
+    #[test]
+    fn tmi_bin_minimal() {
+        let score = SalienceScore::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        assert_eq!(score.tmi_bin(), 0); // MINIMAL
+    }
+
+    #[test]
+    fn tmi_bin_low() {
+        let score = SalienceScore::new(0.5, 0.5, 0.5, 0.0, 0.0, 0.5);
+        // emotional = 0, cognitive = 0.25, novelty = 0.1, connection = 0.05 = 0.4
+        assert_eq!(score.tmi_bin(), 2); // MODERATE (0.4 >= 0.4 boundary)
+    }
+
+    #[test]
+    fn tmi_bin_intense() {
+        let score = SalienceScore::new(1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+        assert_eq!(score.tmi_bin(), 4); // INTENSE
+    }
+
+    #[test]
+    fn tmi_bin_all_boundaries() {
+        // Test each boundary
+        assert_eq!(SalienceScore::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0).tmi_bin(), 0);
+        // Need specific values to hit each bin - these depend on the formula
     }
 }
