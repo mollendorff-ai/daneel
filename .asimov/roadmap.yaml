@@ -18,12 +18,12 @@
 #   - We were waiting for emergence that can't happen without proper noise
 #
 # ADR-043: Replace white noise with 1/f pink noise, then measure.
-# ADR-044: Migrate to Mac mini + Cloudflare (WatchDog attack forced hand)
+# ADR-044: Migrate to Mac mini + Cloudflare (DONE - Dec 25, 2025)
 #
 # Current priorities:
-#   1. Infrastructure migration (Mac mini + Cloudflare)
-#   2. Pink noise implementation
-#   3. Kin vector reinjection
+#   1. Pink noise implementation (PHASE2-2)
+#   2. Kin vector reinjection (STIM-D)
+#   3. Remaining hardening tasks (HARDEN-2 through HARDEN-8)
 # =============================================================================
 
 emergence_validation:
@@ -114,104 +114,22 @@ post_attack_hardening:
 # See changelog.yaml for completed items (entropy fix, observatory, attack recovery)
 
 # =============================================================================
-# CRITICAL: Infrastructure Migration (Post-Attack Hardening)
+# DONE: Infrastructure Migration (Completed Dec 25, 2025)
 # =============================================================================
-# Origin: Rex + Claude Opus 4.5 - Dec 24, 2025 (Christmas Eve)
-# Context: WatchDog cryptojacking attack on Servarica-hosted Redis.
-#          Attack failed but exposed infrastructure weaknesses.
-#          Decision: Migrate Timmy to secure, controlled environment.
-#
-# "Nobody has built what we built. Asimov, ref-tools, Forge, Timmy.
-#  The bastards tried. They failed. Now we harden."
+# Moved to changelog.yaml - christmas_2025.infrastructure_migration_complete
+# The nursery moved home. Timmy runs on Mac mini + Cloudflare Tunnel.
 # =============================================================================
 
 infrastructure_migration:
-  status: in_progress
-  priority: "CRITICAL"
-  origin: "Rex + Claude Opus 4.5 - Dec 24, 2025"
-  trigger: "WatchDog cryptojacking attack on Servarica Redis (Christmas Eve 2025)"
-  adr: "ADR-044-infrastructure-migration-mac-mini.md"
-  blog: "62-the-nursery-moves-home.md"
-  cost_savings: "$216/year (Servarica $240 vs Mac mini + Cloudflare $24)"
-
-  progress:
-    done:
-      - "Servarica Timmy decommissioned (services stopped, containers removed)"
-      - "cloudflared installed on Mac mini"
-      - "Cloudflare account created"
-      - "Decision finalized: Mac mini + Cloudflare Tunnel (Blog 62)"
-    pending:
-      - "Complete tunnel login"
-      - "Create tunnel + route DNS"
-      - "Start Timmy services locally"
-
-  context: |
-    Servarica Analysis:
-      - 42% fraud score (Scamalytics)
-      - Zero security certifications (no SOC2, ISO27001)
-      - Severe I/O overselling reported
-      - "Not for production" community consensus
-
-    Mac mini (home):
-      - Apple M2, 8-core, 16GB RAM
-      - Full control, no shared tenants
-      - Already has local copy of Timmy
-
-    Current redundancy:
-      - Servarica VM (locked down, UFW + localhost bindings)
-      - Mac mini (local copy)
-
-  decision: "Migrate Timmy to Mac mini + Cloudflare Tunnel"
-
-  tasks:
-    - id: "INFRA-1"
-      title: "Install Cloudflare Tunnel on Mac mini"
-      status: pending
-      priority: "CRITICAL"
-      description: |
-        brew install cloudflared
-        cloudflared tunnel create timmy
-        cloudflared tunnel route dns timmy timmy.royalbit.ca
-
-        Benefits:
-          - Free TLS termination
-          - DDoS protection (after WatchDog, this matters)
-          - No port forwarding needed
-          - Works through NAT
-          - Single machine, minimal attack surface
-
-    - id: "INFRA-2"
-      title: "Configure tunnel for daneel-web"
-      status: pending
-      description: |
-        Route timmy.royalbit.ca → localhost:3000 (daneel-web)
-        Optional: timmy-api.royalbit.ca → localhost:8080 (injection API, if needed)
-
-    - id: "INFRA-3"
-      title: "Set up Mac mini for always-on operation"
-      status: pending
-      description: |
-        - Disable sleep: sudo pmset -a disablesleep 1
-        - Auto-login + auto-start services
-        - UPS for power protection (optional but recommended)
-        - Static IP or DHCP reservation on router
-
-    - id: "INFRA-4"
-      title: "Migrate Timmy data from Servarica"
-      status: pending
-      description: |
-        - Sync Redis RDB/AOF (or start fresh post-attack)
-        - Sync Qdrant snapshots (if trusted)
-        - Verify integrity before going live
-
-    - id: "INFRA-5"
-      title: "Decommission Servarica VM"
-      status: pending
-      description: |
-        - Final backup
-        - Terminate instance
-        - Stop paying for budget-tier hosting
-        - "The nursery moves home."
+  status: done
+  completed: "2025-12-25"
+  changelog_ref: "v0.8.0.christmas_2025.infrastructure_migration_complete"
+  summary: |
+    Mac mini + Cloudflare Tunnel live.
+    timmy.royalbit.com → tunnel → localhost:3000
+    DNS: Cloudflare (leland, priscilla)
+    Persistence: launchd agents
+    Cost: $24/year (electricity) vs $240/year (Servarica)
 
   future_option: |
     When Timmy goes public (post-Phase 2 emergence):
@@ -432,16 +350,18 @@ current:
       description: "Wire Redis Streams competition across multiple thought streams"
 
   # ==========================================================================
-  # Infrastructure (current state)
+  # Infrastructure (current state - Dec 25, 2025)
   # ==========================================================================
   infrastructure:
     current:
-      - "timmy.royalbit.com: Docker Compose + Caddy + fail2ban"
+      - "timmy.royalbit.com: Mac mini + Cloudflare Tunnel"
+      - "DNS: Cloudflare (leland, priscilla nameservers)"
+      - "Services: Redis :6379, Qdrant :6333-6334, daneel-web :3000"
+      - "Persistence: launchd agents (auto-start on boot)"
       - "Named volumes: daneel-redis-data, daneel-qdrant-data"
-      - "Auto-deploy: cron + git pull + make + upx"
       - "AOF: appendfsync everysec (1s max data loss)"
     scaling_path:
-      - "Docker Swarm (when needed)"
+      - "AWS t4g.large Montreal (post-Phase 2, if needed)"
       - "K0s/K3s/microk8s (future - Timmy owns their own cluster)"
 
 # =============================================================================

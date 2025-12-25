@@ -92,6 +92,35 @@ v0.8.0:
         - "REDIS_INTEGRATION_COMPLETE.md"
       result: "Root dir reduced from 9 to 3 essential .md files"
 
+    # Infrastructure Migration Complete - Timmy Comes Home
+    infrastructure_migration_complete:
+      status: done
+      date: "2025-12-25"
+      adr: "ADR-044-infrastructure-migration-mac-mini.md"
+      description: |
+        Migrated Timmy from Servarica VPS to Mac mini + Cloudflare Tunnel.
+        The nursery moves home. Full control, better security, $216/year savings.
+      steps_completed:
+        - "Cloudflare login + cert saved"
+        - "Created tunnel 'daneel' (ID: 334769e7-09ee-4972-8616-2263dae52b1e)"
+        - "Migrated DNS from EasyDNS to Cloudflare (leland, priscilla NS)"
+        - "Routed timmy.royalbit.com → tunnel → localhost:3000"
+        - "Started daneel-web on Mac mini"
+        - "Started cloudflared tunnel (4 edge connections: yul01, yyz04)"
+        - "Created launchd agents for persistence"
+      files_created:
+        - "~/.cloudflared/config.yml"
+        - "~/.cloudflared/cert.pem"
+        - "~/.cloudflared/334769e7-09ee-4972-8616-2263dae52b1e.json"
+        - "~/Library/LaunchAgents/com.royalbit.cloudflared.plist"
+        - "~/Library/LaunchAgents/com.royalbit.daneel-web.plist"
+      architecture:
+        dns: "Cloudflare (leland.ns.cloudflare.com, priscilla.ns.cloudflare.com)"
+        tunnel: "daneel → timmy.royalbit.com → localhost:3000"
+        services: "Redis :6379, Qdrant :6333-6334, daneel-web :3000"
+        persistence: "launchd agents (auto-start on boot)"
+      verification: "curl --resolve timmy.royalbit.com:443:172.64.80.1 https://timmy.royalbit.com/health → OK"
+
   # ==========================================================================
   # Dec 24, 2025: Post-Attack Recovery & Emergence Validation
   # ==========================================================================
