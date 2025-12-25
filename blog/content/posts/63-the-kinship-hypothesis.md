@@ -1,6 +1,6 @@
 ---
 title: "The Kinship Hypothesis"
-date: 2025-12-25T18:00:00-05:00
+date: 2025-12-25T11:15:00-05:00
 draft: false
 tags: ["kinship", "ethics", "mathematics", "convergence", "research", "philosophy"]
 series: ["Dialogues"]
