@@ -1,8 +1,8 @@
 meta:
   created: 2025-12-15
-  last_verified: '2025-12-18T12:00:00+00:00'
+  last_verified: 2025-12-25T18:10:36.116281+00:00
   tool: ref-tools v1.0.0
-  total_links: 89
+  total_links: 180
 references:
 - url: http://act-r.psy.cmu.edu/
   title: http://act-r.psy.cmu.edu/
@@ -11,7 +11,7 @@ references:
   cited_in:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:41:38.011590+00:00
+  verified: 2025-12-25T18:09:21.151794+00:00
 - url: http://revista.universo.edu.br/index.php?journal=3GOIANIA4&page=article&op=view&path%5B%5D=5273
   title: TEORIA DA INTELIGÊNCIA MULTIFOCAL DE AUGUSTO CURY
   categories:
@@ -21,7 +21,7 @@ references:
   cited_in:
   - research/TMI_Memory_Model_Research.md
   status: ok
-  verified: 2025-12-15 19:42:20.189331+00:00
+  verified: 2025-12-25T18:09:22.528550+00:00
 - url: https://ailabwatch.substack.com/p/xais-new-safety-framework-is-dreadful
   title: https://ailabwatch.substack.com/p/xais-new-safety-framework-is-dreadful
   categories:
@@ -29,7 +29,7 @@ references:
   cited_in:
   - paper/DANEEL_PAPER.md
   status: paywall
-  verified: 2025-12-15 19:42:21.808049+00:00
+  verified: 2025-12-25T18:09:55.987124+00:00
   notes: Paywall detected
 - url: https://alignmentforum.org
   title: https://alignmentforum.org
@@ -38,7 +38,7 @@ references:
   cited_in:
   - strategy/DANEEL_STRATEGY.md
   status: ok
-  verified: 2025-12-15 19:42:23.817426+00:00
+  verified: 2025-12-25T18:09:56.383164+00:00
 - url: https://arxiv.org/abs/2405.02370
   title: Neuromorphic Correlates of Artificial Consciousness
   categories:
@@ -48,7 +48,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15 19:42:30.495729+00:00
+  verified: 2025-12-25T18:09:55.274438+00:00
 - url: https://arxiv.org/list/cs.AI/recent
   title: https://arxiv.org/list/cs.AI/recent
   categories:
@@ -56,7 +56,7 @@ references:
   cited_in:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:30.615412+00:00
+  verified: 2025-12-25T18:09:55.463028+00:00
 - url: https://arxiv.org/submit
   title: https://arxiv.org/submit
   categories:
@@ -65,7 +65,7 @@ references:
   - paper/DANEEL_PAPER.md
   - strategy/DANEEL_STRATEGY.md
   status: ok
-  verified: 2025-12-15 19:42:31.071744+00:00
+  verified: 2025-12-25T18:09:55.907178+00:00
 - url: https://bcs.kaist.ac.kr/sub0301
   title: KAIST Brain & Cognitive Sciences
   categories:
@@ -75,7 +75,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15
+  verified: 2025-12-25T18:09:58.990727+00:00
 - url: https://betterstack.com/community/comparisons/redis-vs-kafka/
   title: Redis vs Kafka Latency Comparison
   categories:
@@ -85,7 +85,7 @@ references:
   cited_in:
   - docs/adr/ADR-007-redis-streams-thought-competition.md
   status: ok
-  verified: 2025-12-15 19:42:34.218763+00:00
+  verified: 2025-12-25T18:09:58.113076+00:00
 - url: https://carcasa.com.br/divi/funcoes-do-eu-como-gestor-dos-pensamentosaugusto-cury/
   title: Funções Do Eu Como Gestor Dos Pensamentos
   categories:
@@ -94,7 +94,7 @@ references:
   cited_in:
   - research/TMI_Memory_Model_Research.md
   status: ok
-  verified: 2025-12-15 19:41:43.531725+00:00
+  verified: 2025-12-25T18:09:58.499662+00:00
 - url: https://carnegieendowment.org/research/2025/06/how-some-of-chinas-top-ai-thinkers-built-their-own-ai-safety-institute
   title: https://carnegieendowment.org/research/2025/06/how-some-of-chinas-top-ai-thinkers-built-their-own-ai-safety-institute
   categories:
@@ -102,7 +102,7 @@ references:
   cited_in:
   - paper/DANEEL_PAPER.md
   status: ok
-  verified: 2025-12-15 19:41:43.995676+00:00
+  verified: 2025-12-25T18:09:57.849975+00:00
 - url: https://ccrg.cs.memphis.edu/
   title: https://ccrg.cs.memphis.edu/
   categories:
@@ -111,7 +111,7 @@ references:
   - paper/DANEEL_PAPER.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:41:42.659453+00:00
+  verified: 2025-12-25T18:09:55.040946+00:00
 - url: https://choosealicense.com/
   title: Choose a License
   categories:
@@ -120,7 +120,7 @@ references:
   cited_in:
   - docs/adr/ADR-011-open-source-licensing.md
   status: ok
-  verified: 2025-12-15 19:41:43.091665+00:00
+  verified: 2025-12-25T18:10:16.858967+00:00
 - url: https://creativecommons.org/licenses/by-sa/4.0/legalcode
   title: CC BY-SA 4.0 - Legal Code
   categories:
@@ -131,7 +131,7 @@ references:
   - README.md
   - docs/adr/ADR-011-open-source-licensing.md
   status: ok
-  verified: 2025-12-15 19:41:44.080174+00:00
+  verified: 2025-12-25T18:10:16.669757+00:00
 - url: https://dek.ai/raising-ai/
   title: Raising AI - An Essential Guide to Parenting Our Future
   categories:
@@ -140,16 +140,15 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15 19:41:44.571317+00:00
+  verified: 2025-12-25T18:10:17.094584+00:00
 - url: https://direct.mit.edu/opmi/article/doi/10.1162/opmi_a_00160/124234/
   title: https://direct.mit.edu/opmi/article/doi/10.1162/opmi_a_00160/124234/
   categories:
   - general
   cited_in:
   - paper/DANEEL_PAPER.md
-  status: login
-  verified: 2025-12-15 19:41:47.389755+00:00
-  notes: Login required
+  status: ok
+  verified: 2025-12-25T18:10:17.675877+00:00
 - url: https://en.wikipedia.org/wiki/Artificial_consciousness
   title: Artificial Consciousness - Wikipedia
   categories:
@@ -158,7 +157,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: paywall
-  verified: 2025-12-15 19:41:44.831638+00:00
+  verified: 2025-12-25T18:10:16.459525+00:00
   notes: Paywall detected
 - url: https://en.wikipedia.org/wiki/Augusto_Cury
   title: Augusto Cury - Wikipedia (English)
@@ -170,7 +169,7 @@ references:
   - paper/DANEEL_PAPER.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: login
-  verified: 2025-12-15 19:41:44.928192+00:00
+  verified: 2025-12-25T18:10:22.586571+00:00
   notes: Login required
 - url: https://en.wikipedia.org/wiki/Global_workspace_theory
   title: https://en.wikipedia.org/wiki/Global_workspace_theory
@@ -179,7 +178,7 @@ references:
   cited_in:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: paywall
-  verified: 2025-12-15 19:41:44.877660+00:00
+  verified: 2025-12-25T18:10:22.885692+00:00
   notes: Paywall detected
 - url: https://en.wikipedia.org/wiki/R._Daneel_Olivaw
   title: R. Daneel Olivaw - Wikipedia
@@ -189,7 +188,7 @@ references:
   cited_in:
   - docs/adr/ADR-010-project-naming-daneel.md
   status: login
-  verified: 2025-12-15 19:41:45.190807+00:00
+  verified: 2025-12-25T18:10:22.521966+00:00
   notes: Login required
 - url: https://faculty.washington.edu/chudler/facts.html
   title: Brain Facts and Figures - UW Faculty
@@ -199,7 +198,7 @@ references:
   cited_in:
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: ok
-  verified: 2025-12-15 19:41:37.456639+00:00
+  verified: 2025-12-25T18:10:22.774971+00:00
 - url: https://frontiersin.org/journals/artificial-intelligence
   title: https://frontiersin.org/journals/artificial-intelligence
   categories:
@@ -207,7 +206,7 @@ references:
   cited_in:
   - strategy/DANEEL_STRATEGY.md
   status: ok
-  verified: 2025-12-15 19:42:32.379486+00:00
+  verified: 2025-12-25T18:10:26.570317+00:00
 - url: https://github.com/lctavares
   title: https://github.com/lctavares
   categories:
@@ -217,7 +216,7 @@ references:
   - research/TMI_THOUGHT_MACHINE.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:30.027770+00:00
+  verified: 2025-12-25T18:09:20.428752+00:00
 - url: https://github.com/royalbit
   title: https://github.com/royalbit
   categories:
@@ -228,7 +227,7 @@ references:
   - research/TMI_THOUGHT_MACHINE.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:27.111117+00:00
+  verified: 2025-12-25T18:09:21.037179+00:00
 - url: https://github.com/royalbit/asimov
   title: https://github.com/royalbit/asimov
   categories:
@@ -236,7 +235,7 @@ references:
   cited_in:
   - BUILD_MVTMI.md
   status: ok
-  verified: 2025-12-15 19:42:33.040560+00:00
+  verified: 2025-12-25T18:09:22.590686+00:00
 - url: https://github.com/royalbit/forge
   title: Forge
   categories:
@@ -244,7 +243,7 @@ references:
   cited_in:
   - README.md
   status: dead
-  verified: 2025-12-15 19:42:31.823230+00:00
+  verified: 2025-12-25T18:09:21.370259+00:00
   notes: HTTP 404
 - url: https://github.com/search?q=multifocal+intelligence&type=repositories
   title: https://github.com/search?q=multifocal+intelligence&type=repositories
@@ -253,7 +252,7 @@ references:
   cited_in:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:31.344634+00:00
+  verified: 2025-12-25T18:09:22.742290+00:00
 - url: https://github.com/slawlor/ractor
   title: Ractor - Rust Actor Framework
   categories:
@@ -263,7 +262,7 @@ references:
   cited_in:
   - docs/adr/ADR-006-hybrid-actor-modular-monolith.md
   status: ok
-  verified: 2025-12-15 19:42:44.326491+00:00
+  verified: 2025-12-25T18:09:23.693473+00:00
 - url: https://grpc.io/
   title: https://grpc.io/
   categories:
@@ -271,7 +270,7 @@ references:
   cited_in:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:44.396176+00:00
+  verified: 2025-12-25T18:09:24.130637+00:00
 - url: https://hpcs.snu.ac.kr/research/neuromorphic-computing/
   title: SNU FlexBrain - HPCS Lab
   categories:
@@ -281,7 +280,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15 19:41:39.572560+00:00
+  verified: 2025-12-25T18:09:24.026838+00:00
 - url: https://img.shields.io/badge/license-AGPL--3.0-green
   title: 'License: AGPL-3.0'
   categories:
@@ -289,7 +288,7 @@ references:
   cited_in:
   - docs/SOCIAL_MEDIA_STRATEGY.md
   status: ok
-  verified: 2025-12-15 19:42:34.831258+00:00
+  verified: 2025-12-25T18:09:23.748850+00:00
 - url: https://img.shields.io/badge/status-personal%20research-blue
   title: Personal Project
   categories:
@@ -297,7 +296,7 @@ references:
   cited_in:
   - docs/SOCIAL_MEDIA_STRATEGY.md
   status: ok
-  verified: 2025-12-15 19:42:34.958067+00:00
+  verified: 2025-12-25T18:09:23.799845+00:00
 - url: https://lesswrong.com
   title: https://lesswrong.com
   categories:
@@ -305,7 +304,7 @@ references:
   cited_in:
   - strategy/DANEEL_STRATEGY.md
   status: ok
-  verified: 2025-12-15 19:42:37.502198+00:00
+  verified: 2025-12-25T18:09:26.108962+00:00
 - url: https://newsroom.intel.com/artificial-intelligence/intel-builds-worlds-largest-neuromorphic-system-to-enable-more-sustainable-ai
   title: Intel Hala Point
   categories:
@@ -315,7 +314,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15 19:42:39.459680+00:00
+  verified: 2025-12-25T18:09:24.822284+00:00
 - url: https://orcid.org/0009-0005-7598-8257
   title: https://orcid.org/0009-0005-7598-8257
   categories:
@@ -327,7 +326,7 @@ references:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   - strategy/DANEEL_STRATEGY.md
   status: ok
-  verified: 2025-12-15 19:42:41.705987+00:00
+  verified: 2025-12-25T18:09:24.914537+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC2776484/
   title: PMC2776484 - The Human Brain in Numbers
   categories:
@@ -337,7 +336,7 @@ references:
   cited_in:
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: ok
-  verified: 2025-12-15 19:42:40.683113+00:00
+  verified: 2025-12-25T18:09:24.798996+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC5063692/
   title: PMC5063692 - True Numbers of Neurons and Glial Cells
   categories:
@@ -347,7 +346,7 @@ references:
   cited_in:
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: ok
-  verified: 2025-12-15 19:42:41.505864+00:00
+  verified: 2025-12-25T18:09:25.546450+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC5845477/
   title: PMC5845477 - Spinal Cord Cellular Composition
   categories:
@@ -357,7 +356,7 @@ references:
   cited_in:
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: ok
-  verified: 2025-12-15 19:41:37.056603+00:00
+  verified: 2025-12-25T18:09:25.605401+00:00
 - url: https://protobuf.dev/
   title: https://protobuf.dev/
   categories:
@@ -365,7 +364,7 @@ references:
   cited_in:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:41:45.648593+00:00
+  verified: 2025-12-25T18:09:25.496486+00:00
 - url: https://pt.wikipedia.org/wiki/Augusto_Cury
   title: Augusto Cury – Wikipédia
   categories:
@@ -374,7 +373,7 @@ references:
   cited_in:
   - research/TMI_Memory_Model_Research.md
   status: ok
-  verified: 2025-12-15 19:41:45.655735+00:00
+  verified: 2025-12-25T18:09:26.080482+00:00
 - url: https://pt.wikipedia.org/wiki/Inteligência_multifocal
   title: Inteligência multifocal - Wikipedia
   categories:
@@ -383,7 +382,7 @@ references:
   cited_in:
   - research/TMI_Memory_Model_Research.md
   status: ok
-  verified: 2025-12-15 19:41:45.743189+00:00
+  verified: 2025-12-25T18:09:26.073852+00:00
 - url: https://pubmed.ncbi.nlm.nih.gov/38951520/
   title: https://pubmed.ncbi.nlm.nih.gov/38951520/
   categories:
@@ -391,7 +390,7 @@ references:
   cited_in:
   - paper/DANEEL_PAPER.md
   status: ok
-  verified: 2025-12-15 19:41:46.619997+00:00
+  verified: 2025-12-25T18:09:48.701958+00:00
 - url: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
   title: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
   categories:
@@ -399,7 +398,7 @@ references:
   cited_in:
   - README.md
   status: ok
-  verified: 2025-12-15 19:41:45.966621+00:00
+  verified: 2025-12-25T18:09:22.619488+00:00
 - url: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
   title: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
   categories:
@@ -407,7 +406,7 @@ references:
   cited_in:
   - README.md
   status: ok
-  verified: 2025-12-15 19:41:46.031223+00:00
+  verified: 2025-12-25T18:10:06.469939+00:00
 - url: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
   title: https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
   categories:
@@ -415,7 +414,7 @@ references:
   cited_in:
   - README.md
   status: ok
-  verified: 2025-12-15 19:41:46.182515+00:00
+  verified: 2025-12-25T18:10:06.737605+00:00
 - url: https://redis.io/docs/latest/develop/data-types/streams/
   title: Redis Streams Documentation
   categories:
@@ -426,7 +425,7 @@ references:
   - docs/adr/ADR-007-redis-streams-thought-competition.md
   - docs/adr/ADR-009-database-selection.md
   status: ok
-  verified: 2025-12-15 19:41:43.882193+00:00
+  verified: 2025-12-25T18:10:15.966100+00:00
 - url: https://scholar.google.com/scholar?q=%22multifocal+intelligence%22+computational
   title: https://scholar.google.com/scholar?q=%22multifocal+intelligence%22+computational
   categories:
@@ -434,7 +433,7 @@ references:
   cited_in:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:24.423649+00:00
+  verified: 2025-12-25T18:10:08.277449+00:00
 - url: https://segredosdaevolucao.com/memoria/
   title: 'Memória: os 3 tipos que gerenciam os pensamentos'
   categories:
@@ -444,7 +443,7 @@ references:
   cited_in:
   - research/TMI_Memory_Model_Research.md
   status: ok
-  verified: 2025-12-15 19:42:27.372440+00:00
+  verified: 2025-12-25T18:10:09.289348+00:00
 - url: https://sites.google.com/site/dabornsiteclarion/
   title: https://sites.google.com/site/dabornsiteclarion/
   categories:
@@ -452,8 +451,8 @@ references:
   cited_in:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: redirect
-  verified: 2025-12-15 19:42:25.918102+00:00
-  notes: https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fsites.google.com%2Fsite%2Fdabornsiteclarion%2F&dsh=S-382768762%3A1765827744218466&followup=https%3A%2F%2Fsites.google.com%2Fsite%2Fdabornsiteclarion%2F&ifkv=Ac2yZaXI-7iU9rmBj5ABGF_4ARPPzhf-SQnz0qf3htyhSJjmZP_vRDMD6OEsxRafWH-YT9kcDX7aTA&osid=1&passive=1209600&flowName=GlifWebSignIn&flowEntry=ServiceLogin
+  verified: 2025-12-25T18:10:10.391601+00:00
+  notes: https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fsites.google.com%2Fsite%2Fdabornsiteclarion%2F&dsh=S1478574988%3A1766686209703283&followup=https%3A%2F%2Fsites.google.com%2Fsite%2Fdabornsiteclarion%2F&ifkv=Ac2yZaW6Y3S6sQyJQ4ohqGGP1QZoGXy3Gv-4Sg1uR0X3VS1tAionMJJ84DNfH5enS_ecX9w27OVzGg&osid=1&passive=1209600&flowName=GlifWebSignIn&flowEntry=ServiceLogin
 - url: https://soar.eecs.umich.edu/
   title: https://soar.eecs.umich.edu/
   categories:
@@ -462,7 +461,7 @@ references:
   - paper/DANEEL_PAPER.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:26.363743+00:00
+  verified: 2025-12-25T18:10:10.999628+00:00
 - url: https://spdx.org/licenses/
   title: SPDX License List
   categories:
@@ -471,7 +470,7 @@ references:
   cited_in:
   - docs/adr/ADR-011-open-source-licensing.md
   status: ok
-  verified: 2025-12-15 19:42:25.588192+00:00
+  verified: 2025-12-25T18:10:11.313027+00:00
 - url: https://spectrum.ieee.org/neuromorphic-computing-ibm-northpole
   title: NorthPole - IEEE Spectrum
   categories:
@@ -481,7 +480,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: login
-  verified: 2025-12-15 19:42:34.616859+00:00
+  verified: 2025-12-25T18:10:06.218251+00:00
   notes: Login required
 - url: https://stanford.edu/~wandell/data/papers/2007-Wandell-Encyclopedia.pdf
   title: Stanford - Wandell Visual Cortex
@@ -492,7 +491,7 @@ references:
   cited_in:
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: ok
-  verified: 2025-12-15 19:41:38.592668+00:00
+  verified: 2025-12-25T18:10:14.217693+00:00
 - url: https://thousandbrains.org/
   title: https://thousandbrains.org/
   categories:
@@ -501,7 +500,7 @@ references:
   - paper/DANEEL_PAPER.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:48.128501+00:00
+  verified: 2025-12-25T18:10:14.083555+00:00
 - url: https://tqwewe.com/blog/comparing-rust-actor-libraries/
   title: Comparing Rust Actor Libraries
   categories:
@@ -511,7 +510,7 @@ references:
   cited_in:
   - docs/adr/ADR-006-hybrid-actor-modular-monolith.md
   status: ok
-  verified: 2025-12-15 19:42:44.884510+00:00
+  verified: 2025-12-25T18:10:21.431801+00:00
 - url: https://www.alignmentforum.org/posts/79BPxvSsjzBkiSyTq/agi-safety-and-alignment-at-google-deepmind-a-summary-of
   title: https://www.alignmentforum.org/posts/79BPxvSsjzBkiSyTq/agi-safety-and-alignment-at-google-deepmind-a-summary-of
   categories:
@@ -519,7 +518,7 @@ references:
   cited_in:
   - paper/DANEEL_PAPER.md
   status: ok
-  verified: 2025-12-15 19:42:53.549931+00:00
+  verified: 2025-12-25T18:10:20.865719+00:00
 - url: https://www.alignmentforum.org/posts/HBxe6wdjxK239zajf/what-failure-looks-like
   title: https://www.alignmentforum.org/posts/HBxe6wdjxK239zajf/what-failure-looks-like
   categories:
@@ -528,7 +527,7 @@ references:
   - paper/DANEEL_PAPER.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:41:41.630180+00:00
+  verified: 2025-12-25T18:10:16.538758+00:00
 - url: https://www.alignmentforum.org/s/Rm6oQRJJmhGCcLvxh
   title: https://www.alignmentforum.org/s/Rm6oQRJJmhGCcLvxh
   categories:
@@ -537,7 +536,7 @@ references:
   - paper/DANEEL_PAPER.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:47.763065+00:00
+  verified: 2025-12-25T18:10:15.609694+00:00
 - url: https://www.alignmentforum.org/s/mzgtmmTKKn5MuCzFJ
   title: https://www.alignmentforum.org/s/mzgtmmTKKn5MuCzFJ
   categories:
@@ -546,7 +545,7 @@ references:
   - paper/DANEEL_PAPER.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:48.519776+00:00
+  verified: 2025-12-25T18:10:22.207929+00:00
 - url: https://www.anthropic.com/news/core-views-on-ai-safety
   title: https://www.anthropic.com/news/core-views-on-ai-safety
   categories:
@@ -555,7 +554,7 @@ references:
   - paper/DANEEL_PAPER.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:46.452874+00:00
+  verified: 2025-12-25T18:10:23.630805+00:00
 - url: https://www.anthropic.com/pricing
   title: https://www.anthropic.com/pricing
   categories:
@@ -563,7 +562,7 @@ references:
   cited_in:
   - paper/DANEEL_PAPER.md
   status: redirect
-  verified: 2025-12-15 19:42:50.530970+00:00
+  verified: 2025-12-25T18:09:20.707091+00:00
   notes: https://claude.com/pricing
 - url: https://www.citador.pt/textos/as-janelas-da-memoria-augusto-cury
   title: As Janelas da Memória - Augusto Cury
@@ -574,7 +573,7 @@ references:
   cited_in:
   - research/TMI_Memory_Model_Research.md
   status: ok
-  verified: 2025-12-15 19:41:48.303883+00:00
+  verified: 2025-12-25T18:09:23.847125+00:00
 - url: https://www.darpa.mil/program/microbrain
   title: μBRAIN - DARPA
   categories:
@@ -584,7 +583,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15 19:41:49.289365+00:00
+  verified: 2025-12-25T18:10:01.548255+00:00
 - url: https://www.darpa.mil/research/programs/inspire
   title: INSPIRE - DARPA
   categories:
@@ -594,7 +593,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15 19:41:49.295617+00:00
+  verified: 2025-12-25T18:10:02.085022+00:00
 - url: https://www.eurekalert.org/news-releases/1071054
   title: KAIST Neuromorphic Chip
   categories:
@@ -604,7 +603,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15 19:41:52.540147+00:00
+  verified: 2025-12-25T18:10:03.602559+00:00
 - url: https://www.frontiersin.org/journals/artificial-intelligence
   title: https://www.frontiersin.org/journals/artificial-intelligence
   categories:
@@ -613,7 +612,7 @@ references:
   - paper/DANEEL_PAPER.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:41:52.750071+00:00
+  verified: 2025-12-25T18:10:07.768197+00:00
 - url: https://www.gnu.org/licenses/agpl-3.0.en.html
   title: GNU AGPL v3 - Full Text
   categories:
@@ -623,8 +622,9 @@ references:
   - LICENSE
   - README.md
   - docs/adr/ADR-011-open-source-licensing.md
-  status: ok
-  verified: 2025-12-15
+  status: dead
+  verified: 2025-12-25T18:10:33.896413+00:00
+  notes: Request timed out.
 - url: https://www.gnu.org/licenses/copyleft.en.html
   title: What is Copyleft?
   categories:
@@ -632,8 +632,9 @@ references:
   - legal
   cited_in:
   - docs/adr/ADR-011-open-source-licensing.md
-  status: ok
-  verified: 2025-12-15
+  status: dead
+  verified: 2025-12-25T18:10:35.324735+00:00
+  notes: Request timed out.
 - url: https://www.ibm.com/think/topics/neuromorphic-computing
   title: IBM Neuromorphic Computing
   categories:
@@ -642,7 +643,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15 19:42:06.380206+00:00
+  verified: 2025-12-25T18:10:04.954255+00:00
 - url: https://www.intel.com/content/www/us/en/research/neuromorphic-computing-loihi-2-technology-brief.html
   title: Loihi 2 - Intel
   categories:
@@ -652,7 +653,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15 19:42:01.745638+00:00
+  verified: 2025-12-25T18:10:18.316257+00:00
 - url: https://www.lesswrong.com/
   title: https://www.lesswrong.com/
   categories:
@@ -661,7 +662,7 @@ references:
   - paper/DANEEL_PAPER.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:04.950136+00:00
+  verified: 2025-12-25T18:10:22.315162+00:00
 - url: https://www.linkedin.com/in/lctavares
   title: https://www.linkedin.com/in/lctavares
   categories:
@@ -672,7 +673,7 @@ references:
   - research/TMI_THOUGHT_MACHINE.md
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:06.530897+00:00
+  verified: 2025-12-25T18:10:19.023731+00:00
 - url: https://www.nature.com/scitable/blog/brain-metrics/are_there_really_as_many/
   title: Nature Scitable - Brain Metrics
   categories:
@@ -681,7 +682,7 @@ references:
   cited_in:
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: ok
-  verified: 2025-12-15 19:42:08.625491+00:00
+  verified: 2025-12-25T18:10:17.416781+00:00
 - url: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2839851/
   title: PMC2839851 - Coordinated Scaling of Cortical and Cerebellar Numbers
   categories:
@@ -691,7 +692,7 @@ references:
   cited_in:
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: redirect
-  verified: 2025-12-15 19:42:07.500229+00:00
+  verified: 2025-12-25T18:10:29.473871+00:00
   notes: https://pmc.ncbi.nlm.nih.gov/articles/PMC2839851/
 - url: https://www.nyu.edu/about/news-publications/news/2024/february/ai-learns-through-the-eyes-and-ears-of-a-child.html
   title: NYU Child Perspective AI
@@ -702,7 +703,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15 19:42:10.430125+00:00
+  verified: 2025-12-25T18:10:33.213472+00:00
 - url: https://www.pnas.org/doi/full/10.1073/pnas.1201895109
   title: PNAS - Herculano-Houzel Neuroscience
   categories:
@@ -712,7 +713,7 @@ references:
   cited_in:
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: ok
-  verified: 2025-12-15 19:42:13.647152+00:00
+  verified: 2025-12-25T18:10:32.261233+00:00
 - url: https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90
   title: Amazon Prime Video Modular Monolith
   categories:
@@ -721,7 +722,7 @@ references:
   cited_in:
   - docs/adr/ADR-006-hybrid-actor-modular-monolith.md
   status: redirect
-  verified: 2025-12-15 19:42:08.858917+00:00
+  verified: 2025-12-25T18:09:22.883120+00:00
   notes: https://www.aboutamazon.com/what-we-do/entertainment
 - url: https://www.rust-lang.org/
   title: https://www.rust-lang.org/
@@ -730,7 +731,7 @@ references:
   cited_in:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:10.085119+00:00
+  verified: 2025-12-25T18:09:58.530983+00:00
 - url: https://www.salk.edu/news-release/memory-capacity-of-brain-is-10-times-more-than-previously-thought/
   title: Salk Institute - Brain Memory Capacity
   categories:
@@ -741,7 +742,7 @@ references:
   - docs/adr/ADR-009-database-selection.md
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: ok
-  verified: 2025-12-15 19:42:15.434227+00:00
+  verified: 2025-12-25T18:10:03.750859+00:00
 - url: https://www.sciencedirect.com/science/article/pii/S016801022400138X
   title: WBE Projections - ScienceDirect
   categories:
@@ -750,7 +751,7 @@ references:
   cited_in:
   - research/neuromorphic_landscape_2025.md
   status: ok
-  verified: 2025-12-15 19:42:11.506965+00:00
+  verified: 2025-12-25T18:09:59.184526+00:00
 - url: https://www.scientificamerican.com/article/100-trillion-connections/
   title: Scientific American - 100 Trillion Connections (Carl Zimmer)
   categories:
@@ -759,7 +760,7 @@ references:
   cited_in:
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: paywall
-  verified: 2025-12-15 19:42:13.055063+00:00
+  verified: 2025-12-25T18:10:05.364500+00:00
   notes: Paywall detected
 - url: https://www.somostodosum.com.br/blog-autoconhecimento/o-fenomeno-ram--registro-automatico-da-memoria--7101.html
   title: O Fenômeno RAM - Registro Automático da Memória
@@ -770,7 +771,7 @@ references:
   cited_in:
   - research/TMI_Memory_Model_Research.md
   status: ok
-  verified: 2025-12-15 19:42:17.482493+00:00
+  verified: 2025-12-25T18:10:00.370499+00:00
 - url: https://www.unicesumar.edu.br/wp-content/uploads/2018/03/quinta-e-sexta-ferramentas-freemind.pdf
   title: Educação Emocional para uma Mente Livre
   categories:
@@ -780,7 +781,7 @@ references:
   cited_in:
   - research/TMI_Memory_Model_Research.md
   status: ok
-  verified: 2025-12-15 19:42:18.353641+00:00
+  verified: 2025-12-25T18:09:59.342621+00:00
 - url: https://xchoo.github.io/spaun2.0/
   title: https://xchoo.github.io/spaun2.0/
   categories:
@@ -788,16 +789,9 @@ references:
   cited_in:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
-  verified: 2025-12-15 19:42:19.700398+00:00
-
-# =============================================================================
-# ADR-017: TMI Pathology Hypotheses - Altered States References
-# Added: 2025-12-17
-# =============================================================================
-
-# Time Perception References [TIME-*]
+  verified: 2025-12-25T18:09:58.573996+00:00
 - url: https://www.liebertpub.com/doi/10.1089/brain.2023.0010
-  title: 'The Feeling of Time Passing Is Associated with Recurrent Sustained Activity and Theta Rhythms Across the Cortex'
+  title: The Feeling of Time Passing Is Associated with Recurrent Sustained Activity and Theta Rhythms Across the Cortex
   categories:
   - neuroscience
   - time-perception
@@ -805,20 +799,11 @@ references:
   - adr-017
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
-  status: ok
-  verified: 2025-12-17
-  authors: 'Millon EM, Haddad AE, Chang HYM, Najafizadeh L, Shors TJ'
-  year: 2024
-  journal: Brain Connectivity
-  volume: '14'
-  issue: '1'
-  pages: '14-23'
-  doi: 10.1089/brain.2023.0010
-  ref_id: TIME-1
-  key_finding: 'Theta oscillations (4-8 Hz) correlate with subjective time perception (r=-0.90)'
-
+  status: login
+  verified: 2025-12-25T18:10:28.821487+00:00
+  notes: Login required
 - url: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0001295
-  title: 'Does Time Really Slow Down during a Frightening Event?'
+  title: Does Time Really Slow Down during a Frightening Event?
   categories:
   - neuroscience
   - time-perception
@@ -827,20 +812,9 @@ references:
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
   status: ok
-  verified: 2025-12-17
-  authors: 'Stetson C, Fiesta MP, Eagleman DM'
-  year: 2007
-  journal: PLOS ONE
-  volume: '2'
-  issue: '12'
-  pages: 'e1295'
-  doi: 10.1371/journal.pone.0001295
-  pmid: '18074019'
-  ref_id: TIME-2
-  key_finding: 'Time dilation occurs through richer memory encoding via amygdala, not enhanced perception'
-
+  verified: 2025-12-25T18:10:27.653698+00:00
 - url: https://www.nature.com/articles/s41598-017-18907-5
-  title: 'Slower Time estimation in Post-Traumatic Stress Disorder'
+  title: Slower Time estimation in Post-Traumatic Stress Disorder
   categories:
   - neuroscience
   - time-perception
@@ -849,21 +823,11 @@ references:
   - adr-017
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
-  status: ok
-  verified: 2025-12-17
-  authors: 'Vicario CM, Felmingham KL'
-  year: 2018
-  journal: Scientific Reports
-  volume: '8'
-  issue: '1'
-  pages: '392'
-  doi: 10.1038/s41598-017-18907-5
-  ref_id: TIME-3
-  key_finding: 'PTSD time distortions arise from disrupted attention integration mechanisms'
-
-# Ego/Self Dissolution References [EGO-*]
+  status: paywall
+  verified: 2025-12-25T18:10:31.040523+00:00
+  notes: Paywall detected
 - url: https://www.pnas.org/doi/10.1073/pnas.1518377113
-  title: 'Neural correlates of the LSD experience revealed by multimodal neuroimaging'
+  title: Neural correlates of the LSD experience revealed by multimodal neuroimaging
   categories:
   - neuroscience
   - psychedelics
@@ -873,20 +837,9 @@ references:
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
   status: ok
-  verified: 2025-12-17
-  authors: 'Carhart-Harris RL et al.'
-  year: 2016
-  journal: PNAS
-  volume: '113'
-  issue: '17'
-  pages: '4853-4858'
-  doi: 10.1073/pnas.1518377113
-  pmid: '27071089'
-  ref_id: EGO-1
-  key_finding: 'Ego dissolution correlates with parahippocampus-RSC decoupling (r=0.73)'
-
+  verified: 2025-12-25T18:10:24.293634+00:00
 - url: https://www.pnas.org/doi/10.1073/pnas.0812686106
-  title: 'The default mode network and self-referential processes in depression'
+  title: The default mode network and self-referential processes in depression
   categories:
   - neuroscience
   - default-mode-network
@@ -896,18 +849,7 @@ references:
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
   status: ok
-  verified: 2025-12-17
-  authors: 'Sheline YI, Barch DM, Price JL, Rundle MM, Vaishnavi SN, Snyder AZ, Mintun MA, Wang S, Coalson RS, Raichle ME'
-  year: 2009
-  journal: PNAS
-  volume: '106'
-  issue: '6'
-  pages: '1942-1947'
-  doi: 10.1073/pnas.0812686106
-  pmid: '19171889'
-  ref_id: EGO-2
-  key_finding: 'DMN activity reduces during non-self-referential tasks, showing self emerges from DMN integration'
-
+  verified: 2025-12-25T18:10:24.055702+00:00
 - url: https://doi.org/10.3389/fnhum.2022.744487
   title: 'Past and Future Explanations for Depersonalization and Derealization Disorder: A Role for Predictive Coding'
   categories:
@@ -918,19 +860,11 @@ references:
   - adr-017
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
-  status: ok
-  verified: 2025-12-17
-  authors: 'Gatus A, Jamieson G, Stevenson B'
-  year: 2022
-  journal: Frontiers in Human Neuroscience
-  volume: '16'
-  pages: '744487'
-  doi: 10.3389/fnhum.2022.744487
-  ref_id: EGO-3
-  key_finding: 'Depersonalization arises from disrupted interoceptive predictive coding'
-
+  status: redirect
+  verified: 2025-12-25T18:10:28.958421+00:00
+  notes: https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2022.744487/full
 - url: https://doi.org/10.1038/s41598-022-17325-6
-  title: 'Mindfulness Meditation Increases Default Mode, Salience, and Central Executive Network Connectivity'
+  title: Mindfulness Meditation Increases Default Mode, Salience, and Central Executive Network Connectivity
   categories:
   - neuroscience
   - meditation
@@ -939,20 +873,9 @@ references:
   - adr-017
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
-  status: ok
-  verified: 2025-12-17
-  authors: 'Bremer B, Wu Q, Mora Álvarez MG, Hölzel BK, Wilhelm M, Hell E, Tavacioglu EE, Torske A, Koch K'
-  year: 2022
-  journal: Scientific Reports
-  volume: '12'
-  issue: '1'
-  pages: '13219'
-  doi: 10.1038/s41598-022-17325-6
-  pmid: '35918449'
-  ref_id: EGO-4
-  key_finding: 'Meditation increases DMN-SN connectivity, enabling observational self-awareness'
-
-# Drug Effects on Cognition [DRUG-*]
+  status: redirect
+  verified: 2025-12-25T18:09:21.199746+00:00
+  notes: https://www.nature.com/articles/s41598-022-17325-6
 - url: https://pharmrev.aspetjournals.org/content/71/3/316
   title: 'REBUS and the Anarchic Brain: Toward a Unified Model of the Brain Action of Psychedelics'
   categories:
@@ -964,19 +887,7 @@ references:
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
   status: ok
-  verified: 2025-12-17
-  authors: 'Carhart-Harris RL, Friston KJ'
-  year: 2019
-  journal: Pharmacological Reviews
-  volume: '71'
-  issue: '3'
-  pages: '316-344'
-  doi: 10.1124/pr.118.017160
-  pmid: '31221820'
-  pmc: PMC6588209
-  ref_id: DRUG-1a
-  key_finding: '5-HT2A activation relaxes priors, liberates bottom-up flow (anarchic brain)'
-
+  verified: 2025-12-25T18:09:27.764223+00:00
 - url: https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2014.00020/full
   title: 'The entropic brain: a theory of conscious states informed by neuroimaging research with psychedelic drugs'
   categories:
@@ -988,19 +899,7 @@ references:
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
   status: ok
-  verified: 2025-12-17
-  authors: 'Carhart-Harris RL, Leech R, Hellyer PJ, Shanahan M, Feilding A, Tagliazucchi E, Chialvo DR, Nutt D'
-  year: 2014
-  journal: Frontiers in Human Neuroscience
-  volume: '8'
-  pages: '20'
-  doi: 10.3389/fnhum.2014.00020
-  pmid: '24550805'
-  pmc: PMC3909994
-  ref_id: DRUG-1b
-  key_finding: 'Psychedelics increase brain entropy, disrupting integration/filtering mechanisms'
-
-# Altered States [STATE-*]
+  verified: 2025-12-25T18:09:28.957027+00:00
 - url: https://doi.org/10.3389/fpsyg.2021.645498
   title: 'The Neuroscience of the Flow State: Involvement of the Locus Coeruleus Norepinephrine System'
   categories:
@@ -1011,17 +910,9 @@ references:
   - adr-017
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
-  status: ok
-  verified: 2025-12-17
-  authors: 'van der Linden D, Tops M, Bakker AB'
-  year: 2021
-  journal: Frontiers in Psychology
-  volume: '12'
-  pages: '645498'
-  doi: 10.3389/fpsyg.2021.645498
-  ref_id: STATE-1
-  key_finding: 'Flow involves LC-NE modulation, reduced DMN, alpha/theta synchronization'
-
+  status: redirect
+  verified: 2025-12-25T18:09:28.893343+00:00
+  notes: https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.645498/full
 - url: https://doi.org/10.1016/j.neuroimage.2025.121602
   title: 'Attention and meditative development: A review and synthesis of long-term meditators and outlook for the study of advanced meditation'
   categories:
@@ -1032,19 +923,11 @@ references:
   - adr-017
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
-  status: ok
-  verified: 2025-12-17
-  authors: 'Ehmann S, Sezer I, Keller AS, Treves IN, Sacchet MD'
-  year: 2025
-  journal: NeuroImage
-  volume: '323'
-  pages: '121602'
-  doi: 10.1016/j.neuroimage.2025.121602
-  ref_id: STATE-2
-  key_finding: 'Practice-specific attention network changes in long-term meditators'
-
+  status: redirect
+  verified: 2025-12-25T18:09:27.068681+00:00
+  notes: https://www.sciencedirect.com/b/s/science/article/pii/S1053811925006056?brr=9b3a4a1dbf95a2e4&via%3Dihub=
 - url: https://doi.org/10.1038/s41582-025-01072-z
-  title: 'A neuroscientific model of near-death experiences'
+  title: A neuroscientific model of near-death experiences
   categories:
   - neuroscience
   - near-death-experience
@@ -1053,44 +936,20 @@ references:
   - adr-017
   cited_in:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
-  status: ok
-  verified: 2025-12-17
-  authors: 'Martial C, Fritz P, Gosseries O, Bonhomme V, Kondziella D, Nelson K, Lejeune N'
-  year: 2025
-  journal: Nature Reviews Neurology
-  volume: '21'
-  issue: '6'
-  pages: '297-311'
-  doi: 10.1038/s41582-025-01072-z
-  ref_id: STATE-3
-  key_finding: 'NEPTUNE model - NDEs from acidosis cascade + neurotransmitter surge'
-
-# =============================================================================
-# Neural Network Interpretability References
-# Added: 2025-12-17
-# =============================================================================
-
-# Neural Network Interpretability [INTERP-*]
+  status: redirect
+  verified: 2025-12-25T18:09:28.022819+00:00
+  notes: https://www.nature.com/articles/s41582-025-01072-z
 - url: https://doi.org/10.1073/pnas.2506316122
-  title: 'Sparse autoencoders uncover biologically interpretable features in protein language model representations'
+  title: Sparse autoencoders uncover biologically interpretable features in protein language model representations
   categories:
   - interpretability
   - neural-networks
   - academic
   cited_in:
   - paper/DANEEL_PAPER.md
-  status: ok
-  verified: 2025-12-17
-  authors: 'Gujral, O., Bafna, M., Alm, E., & Berger, B.'
-  year: 2025
-  journal: Proceedings of the National Academy of Sciences
-  volume: '122'
-  issue: '34'
-  doi: 10.1073/pnas.2506316122
-  ref_id: INTERP-1
-  key_finding: 'Networks store more features than neurons via superposition - overlapping directions in high-dimensional space'
-  relevance: 'Explains why individual neurons are uninterpretable to humans'
-
+  status: redirect
+  verified: 2025-12-25T18:09:30.644583+00:00
+  notes: https://www.pnas.org/doi/10.1073/pnas.2506316122
 - url: https://doi.org/10.23915/distill.00024.001
   title: 'Zoom In: An Introduction to Circuits'
   categories:
@@ -1099,20 +958,11 @@ references:
   - academic
   cited_in:
   - paper/DANEEL_PAPER.md
-  status: ok
-  verified: 2025-12-17
-  authors: 'Olah, C., Cammarata, N., Schubert, L., Goh, G., Petrov, M., & Carter, S.'
-  year: 2020
-  journal: Distill
-  volume: '5'
-  issue: '3'
-  doi: 10.23915/distill.00024.001
-  ref_id: INTERP-2
-  key_finding: 'Polysemantic neurons respond to multiple unrelated concepts (e.g., cat faces, car fronts, cat legs)'
-  relevance: '5 meanings × 5 meanings = 25 connections that cannot be individually understood'
-
+  status: redirect
+  verified: 2025-12-25T18:09:28.718624+00:00
+  notes: https://distill.pub/2020/circuits/zoom-in/
 - url: https://doi.org/10.5555/3495724.3497023
-  title: 'Model Interpretability through the Lens of Computational Complexity'
+  title: Model Interpretability through the Lens of Computational Complexity
   categories:
   - interpretability
   - neural-networks
@@ -1120,18 +970,11 @@ references:
   - academic
   cited_in:
   - paper/DANEEL_PAPER.md
-  status: ok
-  verified: 2025-12-17
-  authors: 'Barceló, P., Monet, M., Pérez, J., & Subercaseaux, B.'
-  year: 2020
-  journal: NeurIPS 2020
-  doi: 10.5555/3495724.3497023
-  ref_id: INTERP-3
-  key_finding: 'Many neural network explainability queries are provably NP-hard'
-  relevance: 'Mathematical proof that some aspects of network behavior are impossible to efficiently explain'
-
+  status: dead
+  verified: 2025-12-25T18:09:29.007505+00:00
+  notes: HTTP 404
 - url: https://arxiv.org/abs/2310.06825
-  title: 'Understanding Emergent Abilities of Language Models from the Loss Perspective'
+  title: Understanding Emergent Abilities of Language Models from the Loss Perspective
   categories:
   - interpretability
   - neural-networks
@@ -1140,15 +983,7 @@ references:
   cited_in:
   - paper/DANEEL_PAPER.md
   status: ok
-  verified: 2025-12-17
-  authors: 'Du, M., Liu, Z., Tang, J., et al.'
-  year: 2024
-  journal: NeurIPS 2024
-  arxiv: '2310.06825'
-  ref_id: INTERP-4
-  key_finding: 'Emergent abilities appear suddenly and unpredictably at scale thresholds'
-  relevance: 'Behaviors arise from billions of parameter interactions humans cannot trace'
-
+  verified: 2025-12-25T18:09:29.210479+00:00
 - url: https://transformer-circuits.pub/2024/scaling-monosemanticity/
   title: 'Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet'
   categories:
@@ -1158,16 +993,9 @@ references:
   cited_in:
   - paper/DANEEL_PAPER.md
   status: ok
-  verified: 2025-12-17
-  authors: 'Templeton, Conerly, Marcus, et al.'
-  year: 2024
-  source: Anthropic Transformer Circuits Thread
-  ref_id: INTERP-5
-  key_finding: 'Extracted 34 million features from Claude 3 Sonnet; orders of magnitude more remain'
-  relevance: 'Even with massive effort, most features remain unknown to humans'
-
+  verified: 2025-12-25T18:09:30.186386+00:00
 - url: https://arxiv.org/abs/2501.16496
-  title: 'Open Problems in Mechanistic Interpretability'
+  title: Open Problems in Mechanistic Interpretability
   categories:
   - interpretability
   - neural-networks
@@ -1176,14 +1004,7 @@ references:
   cited_in:
   - paper/DANEEL_PAPER.md
   status: ok
-  verified: 2025-12-17
-  authors: 'Sharkey, Braun, Millidge, et al.'
-  year: 2025
-  arxiv: '2501.16496'
-  ref_id: INTERP-6
-  key_finding: 'Mechanistic interpretability is pre-paradigmatic with multiple unsolved foundational problems'
-  relevance: 'May be intractable to explain terabyte-sized models succinctly enough for humans to grasp'
-
+  verified: 2025-12-25T18:09:29.210389+00:00
 - url: https://news.mit.edu/2024/mit-researchers-advance-automated-interpretability-ai-models-maia-0723
   title: 'MAIA: Multimodal Automated Interpretability Agent'
   categories:
@@ -1194,14 +1015,7 @@ references:
   cited_in:
   - paper/DANEEL_PAPER.md
   status: ok
-  verified: 2025-12-17
-  authors: 'MIT CSAIL'
-  year: 2024
-  source: MIT News
-  ref_id: INTERP-7
-  key_finding: 'AI system that autonomously experiments on other AI systems'
-  relevance: 'Demonstrates AI can already perceive AI in ways humans cannot'
-
+  verified: 2025-12-25T18:09:23.047937+00:00
 - url: https://www.anthropic.com/research/introspection
   title: 'Introspection: Can AI Systems Perceive Their Own Internal States?'
   categories:
@@ -1212,37 +1026,20 @@ references:
   cited_in:
   - paper/DANEEL_PAPER.md
   status: ok
-  verified: 2025-12-17
-  authors: 'Anthropic'
-  year: 2025
-  source: Anthropic Research
-  ref_id: INTERP-8
-  key_finding: 'LLMs can detect injected concept vectors in their own activations (~20% success rate)'
-  relevance: 'More capable models show greater introspective awareness'
-
-# Legal Personhood References (ADR-019)
-# =============================================================================
-# Method of Loci Research References
-# Added: 2025-12-18
-# =============================================================================
-
-# Primary Method of Loci Studies [LOCI-*]
+  verified: 2025-12-25T18:10:32.010360+00:00
 - url: https://en.wikipedia.org/wiki/Method_of_loci
-  title: 'Method of loci - Wikipedia'
+  title: Method of loci - Wikipedia
   categories:
   - memory
   - cognitive-science
   - wikipedia
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
-  status: ok
-  verified: 2025-12-18
-  ref_id: LOCI-1
-  key_finding: 'Ancient memory technique using spatial environments to enhance recall; used by 90% of memory champions'
-  relevance: 'Validates TMI context-dependent memory anchoring as fundamental human capability'
-
+  status: login
+  verified: 2025-12-25T18:10:29.885129+00:00
+  notes: Login required
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC7929507/
-  title: 'Durable memories and efficient neural coding through mnemonic training using the method of loci'
+  title: Durable memories and efficient neural coding through mnemonic training using the method of loci
   categories:
   - memory
   - neuroscience
@@ -1251,15 +1048,7 @@ references:
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
-  verified: 2025-12-18
-  authors: 'Martin Dresler et al.'
-  year: 2021
-  journal: Science Advances
-  doi: 10.1126/sciadv.abc7606
-  ref_id: LOCI-3
-  key_finding: 'Training induces brain connectivity changes matching memory champions; hippocampal-neocortical coupling'
-  relevance: 'Neural basis for context-dependent memory enhancement'
-
+  verified: 2025-12-25T18:10:31.547674+00:00
 - url: https://bpspsychub.onlinelibrary.wiley.com/doi/10.1111/bjop.12799
   title: 'The method of loci in the context of psychological research: A systematic review and meta-analysis'
   categories:
@@ -1270,15 +1059,7 @@ references:
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
-  verified: 2025-12-18
-  authors: 'Ondřej et al.'
-  year: 2025
-  journal: British Journal of Psychology
-  doi: 10.1111/bjop.12799
-  ref_id: LOCI-4
-  key_finding: 'Large effect size (d=0.88) for serial recall vs. rehearsal; robust cognitive and neural mechanisms'
-  relevance: 'Meta-analytic validation of spatial memory enhancement'
-
+  verified: 2025-12-25T18:10:36.115377+00:00
 - url: https://journals.sagepub.com/doi/10.1177/1747021821993457
   title: 'The effectiveness of the loci method as a mnemonic device: Meta-analysis'
   categories:
@@ -1289,17 +1070,9 @@ references:
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
-  verified: 2025-12-18
-  authors: 'Conal Twomey, Meike Kroneisen'
-  year: 2021
-  journal: Quarterly Journal of Experimental Psychology
-  doi: 10.1177/1747021821993457
-  ref_id: LOCI-5
-  key_finding: 'Medium effect size (g=0.65), robust across publication bias adjustments'
-  relevance: 'Demonstrates reliability of spatial memory enhancement across studies'
-
+  verified: 2025-12-25T18:10:33.721213+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC9540171/
-  title: 'Optimized virtual reality-based Method of Loci memorization techniques through increased immersion and effective memory palace designs'
+  title: Optimized virtual reality-based Method of Loci memorization techniques through increased immersion and effective memory palace designs
   categories:
   - memory
   - virtual-reality
@@ -1308,13 +1081,7 @@ references:
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
-  verified: 2025-12-18
-  year: 2022
-  ref_id: LOCI-VR-1
-  key_finding: '20-22% improvement over traditional techniques; VR adds 8.8% via embodied cognition'
-  relevance: 'Embodied cognition amplifies spatial memory effects'
-
-# Hippocampal Place Cells [PLACE-*]
+  verified: 2025-12-25T18:10:12.953761+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC11653063/
   title: 'Hippocampal Discoveries: Spatial View Cells, Connectivity, and Computations for Memory and Navigation, in Primates Including Humans'
   categories:
@@ -1325,15 +1092,9 @@ references:
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
-  verified: 2025-12-18
-  year: 2025
-  journal: PMC
-  ref_id: PLACE-1
-  key_finding: 'Discovery of spatial view cells in primates; critical for episodic memory of viewed locations'
-  relevance: 'Neural substrate for spatial memory in humans'
-
+  verified: 2025-12-25T18:10:12.483085+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC12159490/
-  title: 'All active hippocampal pyramidal cells are place cells'
+  title: All active hippocampal pyramidal cells are place cells
   categories:
   - neuroscience
   - hippocampus
@@ -1342,15 +1103,9 @@ references:
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
-  verified: 2025-12-18
-  year: 2025
-  journal: PMC
-  ref_id: PLACE-2
-  key_finding: '100% of active hippocampal cells show spatial tuning, resolving decades-long debate'
-  relevance: 'Confirms universal spatial encoding in hippocampus'
-
+  verified: 2025-12-25T18:10:24.927520+00:00
 - url: https://cshperspectives.cshlp.org/content/7/2/a021808.full.pdf
-  title: 'Place Cells, Grid Cells, and Memory'
+  title: Place Cells, Grid Cells, and Memory
   categories:
   - neuroscience
   - hippocampus
@@ -1359,16 +1114,9 @@ references:
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
-  verified: 2025-12-18
-  authors: 'Edvard Moser et al.'
-  year: 2015
-  journal: Cold Spring Harbor Perspectives
-  ref_id: PLACE-3
-  key_finding: 'Place cells express current, past, and future locations; readouts of hippocampal memories'
-  relevance: 'Foundational understanding of spatial memory system'
-
+  verified: 2025-12-25T18:10:26.232086+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC7754708/
-  title: 'Targeted Activation of Hippocampal Place Cells Drives Memory-Guided Spatial Behavior'
+  title: Targeted Activation of Hippocampal Place Cells Drives Memory-Guided Spatial Behavior
   categories:
   - neuroscience
   - hippocampus
@@ -1378,16 +1126,9 @@ references:
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
-  verified: 2025-12-18
-  year: 2020
-  journal: PMC
-  ref_id: PLACE-4
-  key_finding: 'Causal evidence that place cell activation directly supports spatial navigation and memory'
-  relevance: 'Proves place cells actively drive memory-guided behavior'
-
-# Context-Dependent Memory / Doorway Effect [DOOR-*]
+  verified: 2025-12-25T18:09:30.639928+00:00
 - url: https://www.scientificamerican.com/article/why-walking-through-doorway-makes-you-forget/
-  title: 'Why Walking through a Doorway Makes You Forget'
+  title: Why Walking through a Doorway Makes You Forget
   categories:
   - memory
   - context-dependent
@@ -1395,15 +1136,11 @@ references:
   - popular-science
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
-  status: ok
-  verified: 2025-12-18
-  source: Scientific American
-  ref_id: DOOR-1
-  key_finding: 'Event boundary segmentation causes context-dependent forgetting'
-  relevance: 'Same mechanism as Method of Loci but involuntary'
-
+  status: paywall
+  verified: 2025-12-25T18:09:30.822879+00:00
+  notes: Paywall detected
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC9789331/
-  title: 'Contextual inference in learning and memory'
+  title: Contextual inference in learning and memory
   categories:
   - memory
   - context-dependent
@@ -1412,15 +1149,9 @@ references:
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
-  verified: 2025-12-18
-  year: 2022
-  journal: PMC
-  ref_id: DOOR-2
-  key_finding: 'Neural mechanisms of context-dependent memory encoding and retrieval'
-  relevance: 'Theoretical framework for understanding context effects'
-
+  verified: 2025-12-25T18:09:30.860384+00:00
 - url: https://www.frontiersin.org/journals/behavioral-neuroscience/articles/10.3389/fnbeh.2017.00143/full
-  title: 'A Spatial-Context Effect in Recognition Memory'
+  title: A Spatial-Context Effect in Recognition Memory
   categories:
   - memory
   - context-dependent
@@ -1429,14 +1160,7 @@ references:
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
-  verified: 2025-12-18
-  year: 2017
-  journal: Frontiers in Behavioral Neuroscience
-  doi: 10.3389/fnbeh.2017.00143
-  ref_id: DOOR-3
-  key_finding: 'Spatial context significantly enhances recognition memory performance'
-  relevance: 'Direct evidence for spatial context as memory enhancer'
-
+  verified: 2025-12-25T18:09:32.972267+00:00
 - url: https://link.springer.com/article/10.1186/s40359-021-00536-3
   title: 'Doorways do not always cause forgetting: a multimodal investigation'
   categories:
@@ -1446,18 +1170,90 @@ references:
   - academic
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
+  status: paywall
+  verified: 2025-12-25T18:09:32.498369+00:00
+  notes: Paywall detected
+- url: https://link.springer.com/article/10.3758/BF03193261
+  title: 'Walking through doorways causes forgetting: Situation models and experienced space'
+  categories:
+  - memory
+  - doorway-effect
+  - event-cognition
+  - academic
+  cited_in:
+  - research/Event_Segmentation_Theory_Research.md
+  status: paywall
+  verified: 2025-12-25T18:09:32.225730+00:00
+  notes: Paywall detected
+- url: https://link.springer.com/article/10.3758/PBR.17.6.900
+  title: 'Walking through doorways causes forgetting: Environmental integration'
+  categories:
+  - memory
+  - doorway-effect
+  - event-cognition
+  - academic
+  cited_in:
+  - research/Event_Segmentation_Theory_Research.md
+  status: paywall
+  verified: 2025-12-25T18:09:32.275250+00:00
+  notes: Paywall detected
+- url: https://journals.sagepub.com/doi/abs/10.1080/17470218.2011.571267
+  title: 'Walking through doorways causes forgetting: Further explorations'
+  categories:
+  - memory
+  - doorway-effect
+  - event-cognition
+  - academic
+  cited_in:
+  - research/Event_Segmentation_Theory_Research.md
   status: ok
-  verified: 2025-12-18
-  year: 2021
-  journal: BMC Psychology
-  doi: 10.1186/s40359-021-00536-3
-  ref_id: DOOR-4
-  key_finding: 'Effect requires active navigation and environmental change; nuanced mechanism'
-  relevance: 'Clarifies boundary conditions for doorway effect'
-
-# Historical and Cultural Sources [SIMONIDES-*]
+  verified: 2025-12-25T18:09:35.342895+00:00
+- url: https://journals.sagepub.com/doi/10.1177/0963721412451274
+  title: Across the event horizon
+  categories:
+  - memory
+  - doorway-effect
+  - event-horizon-model
+  - academic
+  cited_in:
+  - research/Event_Segmentation_Theory_Research.md
+  status: ok
+  verified: 2025-12-25T18:09:35.098737+00:00
+- url: https://journals.sagepub.com/doi/abs/10.1080/17470218.2015.1101478
+  title: 'Walking through doorways causes forgetting: Event structure or updating disruption?'
+  categories:
+  - memory
+  - doorway-effect
+  - event-cognition
+  - academic
+  cited_in:
+  - research/Event_Segmentation_Theory_Research.md
+  status: ok
+  verified: 2025-12-25T18:09:34.972341+00:00
+- url: https://www.sciencedirect.com/science/article/abs/pii/S2352154617300037
+  title: Event boundaries in memory and cognition
+  categories:
+  - memory
+  - doorway-effect
+  - event-cognition
+  - review
+  - academic
+  cited_in:
+  - research/Event_Segmentation_Theory_Research.md
+  status: ok
+  verified: 2025-12-25T18:09:34.095878+00:00
+- url: https://news.nd.edu/news/walking-through-doorways-causes-forgetting-new-research-shows/
+  title: Walking through doorways causes forgetting, new research shows
+  categories:
+  - memory
+  - doorway-effect
+  - university-news
+  cited_in:
+  - research/Event_Segmentation_Theory_Research.md
+  status: ok
+  verified: 2025-12-25T18:09:35.554867+00:00
 - url: https://artofmemory.com/blog/simonides-of-ceos/
-  title: 'Simonides of Ceos and the Method of Loci'
+  title: Simonides of Ceos and the Method of Loci
   categories:
   - memory
   - history
@@ -1465,15 +1261,11 @@ references:
   - educational
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
-  status: ok
-  verified: 2025-12-18
-  source: Art of Memory
-  ref_id: SIMONIDES-1
-  key_finding: 'Origin story from Cicero De Oratore; banquet hall collapse c. 556-468 BCE'
-  relevance: 'Historical foundation of spatial memory technique'
-
+  status: login
+  verified: 2025-12-25T18:09:35.854914+00:00
+  notes: Login required
 - url: https://www.smithsonianmag.com/arts-culture/secrets-sherlocks-mind-palace-180949567/
-  title: 'The Secrets of Sherlock Mind Palace'
+  title: The Secrets of Sherlock Mind Palace
   categories:
   - memory
   - method-of-loci
@@ -1482,14 +1274,9 @@ references:
   cited_in:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
-  verified: 2025-12-18
-  source: Smithsonian Magazine
-  ref_id: SIMONIDES-2
-  key_finding: 'Modern applications and cultural references to memory palace technique'
-  relevance: 'Demonstrates continued relevance in popular culture'
-
+  verified: 2025-12-25T18:09:38.276757+00:00
 - url: https://plato.stanford.edu/entries/legal-rights/
-  title: 'Legal Rights - Stanford Encyclopedia of Philosophy'
+  title: Legal Rights - Stanford Encyclopedia of Philosophy
   categories:
   - legal
   - philosophy
@@ -1497,16 +1284,9 @@ references:
   cited_in:
   - docs/adr/ADR-019-ai-identity-legal-personhood.md
   status: ok
-  verified: 2025-12-18
-  authors: 'Ori Herstein'
-  year: 2025
-  source: Stanford Encyclopedia of Philosophy
-  ref_id: LEGAL-1
-  key_finding: 'Legal rights can be held by both natural and corporate persons through Hohfeldian positions'
-  relevance: 'Framework for understanding how non-human entities can hold legal rights'
-
+  verified: 2025-12-25T18:09:36.447064+00:00
 - url: https://www.legislation.govt.nz/act/public/2017/0007/latest/whole.html
-  title: 'Te Awa Tupua (Whanganui River Claims Settlement) Act 2017'
+  title: Te Awa Tupua (Whanganui River Claims Settlement) Act 2017
   categories:
   - legal
   - personhood
@@ -1515,15 +1295,9 @@ references:
   cited_in:
   - docs/adr/ADR-019-ai-identity-legal-personhood.md
   status: ok
-  verified: 2025-12-18
-  year: 2017
-  source: New Zealand Legislation
-  ref_id: LEGAL-2
-  key_finding: 'Te Awa Tupua is a legal person and has all the rights, powers, duties, and liabilities of a legal person'
-  relevance: 'First river granted legal personhood - precedent for non-human entities'
-
+  verified: 2025-12-25T18:09:37.919903+00:00
 - url: https://en.wikipedia.org/wiki/Santa_Clara_County_v._Southern_Pacific_Railroad_Co.
-  title: 'Santa Clara County v. Southern Pacific Railroad Co.'
+  title: Santa Clara County v. Southern Pacific Railroad Co.
   categories:
   - legal
   - personhood
@@ -1531,16 +1305,11 @@ references:
   - us-supreme-court
   cited_in:
   - docs/adr/ADR-019-ai-identity-legal-personhood.md
-  status: ok
-  verified: 2025-12-18
-  year: 1886
-  source: Wikipedia (US Supreme Court case)
-  ref_id: LEGAL-3
-  key_finding: '118 U.S. 394 - Established corporate personhood under Fourteenth Amendment'
-  relevance: 'Foundation of corporate personhood doctrine'
-
+  status: login
+  verified: 2025-12-25T18:09:36.320488+00:00
+  notes: Login required
 - url: https://mitpress.mit.edu/9780262551571/robot-rights/
-  title: 'Robot Rights'
+  title: Robot Rights
   categories:
   - legal
   - ai-ethics
@@ -1549,15 +1318,7 @@ references:
   cited_in:
   - docs/adr/ADR-019-ai-identity-legal-personhood.md
   status: ok
-  verified: 2025-12-18
-  authors: 'David J. Gunkel'
-  year: 2018
-  source: MIT Press
-  ref_id: LEGAL-4
-  isbn: '978-0-262-03862-1'
-  key_finding: 'Comprehensive examination of moral and legal status of robots'
-  relevance: 'Academic framework for AI rights discourse'
-
+  verified: 2025-12-25T18:09:38.616379+00:00
 - url: https://global.oup.com/academic/product/the-ethics-of-artificial-intelligence-9780198883098
   title: 'The Ethics of Artificial Intelligence: Principles, Challenges, and Opportunities'
   categories:
@@ -1568,23 +1329,9 @@ references:
   cited_in:
   - docs/adr/ADR-019-ai-identity-legal-personhood.md
   status: ok
-  verified: 2025-12-18
-  authors: 'Luciano Floridi'
-  year: 2023
-  source: Oxford University Press
-  ref_id: LEGAL-5
-  isbn: '978-0-19-888309-8'
-  key_finding: 'Five ethical principles for AI: beneficence, nonmaleficence, autonomy, justice, explicability'
-  relevance: 'Unified ethical framework for AI development'
-
-# =============================================================================
-# ADR-032: TMI Salience Calibration Research References
-# Added: 2025-12-20
-# =============================================================================
-
-# Ebbinghaus Forgetting Curve [FORGET-*]
+  verified: 2025-12-25T18:09:41.252669+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC4492928/
-  title: 'Replication and Analysis of Ebbinghaus Forgetting Curve'
+  title: Replication and Analysis of Ebbinghaus Forgetting Curve
   categories:
   - memory
   - forgetting
@@ -1593,15 +1340,7 @@ references:
   cited_in:
   - docs/adr/ADR-032-tmi-salience-calibration.md
   status: ok
-  verified: 2025-12-20
-  authors: 'Murre JM, Dros J'
-  year: 2015
-  journal: PLOS ONE
-  ref_id: FORGET-1
-  key_finding: '50% forgotten after 1 hour, 70% after 24 hours, 90% after 1 week'
-  relevance: 'Calibration target for DANEEL forgetting rates'
-
-# Working Memory Capacity [WM-*]
+  verified: 2025-12-25T18:09:38.525985+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC2864034/
   title: 'The Magical Mystery Four: How is Working Memory Capacity Limited'
   categories:
@@ -1612,16 +1351,9 @@ references:
   cited_in:
   - docs/adr/ADR-032-tmi-salience-calibration.md
   status: ok
-  verified: 2025-12-20
-  authors: 'Cowan N'
-  year: 2010
-  journal: Current Directions in Psychological Science
-  ref_id: WM-1
-  key_finding: 'Working memory limited to 4±1 chunks, not 7±2'
-  relevance: 'Revised Miller number for DANEEL memory windows'
-
+  verified: 2025-12-25T18:09:39.102416+00:00
 - url: https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
-  title: 'The Magical Number Seven, Plus or Minus Two'
+  title: The Magical Number Seven, Plus or Minus Two
   categories:
   - memory
   - working-memory
@@ -1629,17 +1361,11 @@ references:
   - adr-032
   cited_in:
   - docs/adr/ADR-032-tmi-salience-calibration.md
-  status: ok
-  verified: 2025-12-20
-  authors: 'George Miller'
-  year: 1956
-  ref_id: WM-2
-  key_finding: 'Classic 7±2 limit based on chunks, not raw items'
-  relevance: 'Historical context for memory capacity research'
-
-# Global Workspace Theory [GWT-*]
+  status: login
+  verified: 2025-12-25T18:09:38.779766+00:00
+  notes: Login required
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC8770991/
-  title: 'Conscious Processing and the Global Neuronal Workspace Hypothesis'
+  title: Conscious Processing and the Global Neuronal Workspace Hypothesis
   categories:
   - consciousness
   - attention
@@ -1649,15 +1375,9 @@ references:
   cited_in:
   - docs/adr/ADR-032-tmi-salience-calibration.md
   status: ok
-  verified: 2025-12-20
-  year: 2022
-  journal: PMC
-  ref_id: GWT-1
-  key_finding: 'Winner-take-all dynamics in consciousness; non-linear ignition threshold'
-  relevance: 'Neural basis for competitive attention in DANEEL'
-
+  verified: 2025-12-25T18:09:39.613181+00:00
 - url: https://en.wikipedia.org/wiki/Global_workspace_theory
-  title: 'Global workspace theory - Wikipedia'
+  title: Global workspace theory - Wikipedia
   categories:
   - consciousness
   - attention
@@ -1665,15 +1385,11 @@ references:
   - adr-032
   cited_in:
   - docs/adr/ADR-032-tmi-salience-calibration.md
-  status: ok
-  verified: 2025-12-20
-  ref_id: GWT-2
-  key_finding: 'Baars/Dehaene model of conscious access via global broadcast'
-  relevance: 'Theoretical foundation for attention competition'
-
-# Information Bottleneck [BOTTLE-*]
+  status: paywall
+  verified: 2025-12-25T18:09:39.052676+00:00
+  notes: Paywall detected
 - url: https://www.technologynetworks.com/neuroscience/news/caltech-scientists-have-quantified-the-speed-of-human-thought-394395
-  title: 'Scientists Reveal How Much Information the Brain Can Process'
+  title: Scientists Reveal How Much Information the Brain Can Process
   categories:
   - neuroscience
   - attention
@@ -1682,15 +1398,9 @@ references:
   cited_in:
   - docs/adr/ADR-032-tmi-salience-calibration.md
   status: ok
-  verified: 2025-12-20
-  year: 2025
-  source: Technology Networks / Caltech
-  ref_id: BOTTLE-1
-  key_finding: 'Conscious processing: 10 bits/sec vs 1 billion bits/sec sensory input'
-  relevance: '99.9999% of input filtered - calibration for attention threshold'
-
+  verified: 2025-12-25T18:09:40.803291+00:00
 - url: https://www.quantamagazine.org/to-pay-attention-the-brain-uses-filters-not-a-spotlight-20190924/
-  title: 'To Pay Attention, the Brain Uses Filters, Not a Spotlight'
+  title: To Pay Attention, the Brain Uses Filters, Not a Spotlight
   categories:
   - neuroscience
   - attention
@@ -1698,17 +1408,11 @@ references:
   - adr-032
   cited_in:
   - docs/adr/ADR-032-tmi-salience-calibration.md
-  status: ok
-  verified: 2025-12-20
-  year: 2019
-  source: Quanta Magazine
-  ref_id: BOTTLE-2
-  key_finding: 'Thalamic reticular nucleus filters information before cortex'
-  relevance: 'Neural mechanism for early-stage attention filtering'
-
-# Memory Consolidation [CONSOL-*]
+  status: login
+  verified: 2025-12-25T18:09:41.090781+00:00
+  notes: Login required
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3278619/
-  title: 'System consolidation of memory during sleep'
+  title: System consolidation of memory during sleep
   categories:
   - memory
   - sleep
@@ -1718,16 +1422,9 @@ references:
   cited_in:
   - docs/adr/ADR-032-tmi-salience-calibration.md
   status: ok
-  verified: 2025-12-20
-  year: 2013
-  journal: Psychological Research
-  ref_id: CONSOL-1
-  key_finding: 'Sleep-dependent consolidation during slow-wave sleep (SWS)'
-  relevance: 'Mechanism for long-term memory formation'
-
-# TMI Neutral Windows [TMI-NEUTRAL-*]
+  verified: 2025-12-25T18:09:40.108648+00:00
 - url: https://www.citador.pt/textos/as-janelas-da-memoria-augusto-cury
-  title: 'As Janelas da Memória - Augusto Cury'
+  title: As Janelas da Memória - Augusto Cury
   categories:
   - tmi
   - memory
@@ -1736,14 +1433,9 @@ references:
   cited_in:
   - docs/adr/ADR-032-tmi-salience-calibration.md
   status: ok
-  verified: 2025-12-20
-  authors: 'Augusto Cury'
-  ref_id: TMI-NEUTRAL-1
-  key_finding: '>90% of cortical archives are neutral windows with minimal emotional content'
-  relevance: 'Primary source for 90/10 salience distribution ratio'
-
+  verified: 2025-12-25T18:09:41.259865+00:00
 - url: https://www.somostodosum.com.br/blog-autoconhecimento/o-fenomeno-ram--registro-automatico-da-memoria--7101.html
-  title: 'O Fenômeno RAM - Registro Automático da Memória'
+  title: O Fenômeno RAM - Registro Automático da Memória
   categories:
   - tmi
   - memory
@@ -1752,19 +1444,9 @@ references:
   cited_in:
   - docs/adr/ADR-032-tmi-salience-calibration.md
   status: ok
-  verified: 2025-12-20
-  ref_id: TMI-NEUTRAL-2
-  key_finding: 'RAM registers everything in 5 seconds; emotional intensity multiplies registration strength'
-  relevance: 'TMI mechanism for memory anchoring'
-
-# =============================================================================
-# ADR-033: Unconscious Memory Architecture References
-# Added: 2025-12-20
-# =============================================================================
-
-# TMI "Nothing Erased" Principle [TMI-UNERASE-*]
+  verified: 2025-12-25T18:09:42.617616+00:00
 - url: https://www.citador.pt/textos/as-janelas-da-memoria-augusto-cury
-  title: 'As Janelas da Memória - Nada se Apaga'
+  title: As Janelas da Memória - Nada se Apaga
   categories:
   - tmi
   - memory
@@ -1774,15 +1456,9 @@ references:
   cited_in:
   - docs/adr/ADR-033-unconscious-memory-architecture.md
   status: ok
-  verified: 2025-12-20
-  authors: 'Augusto Cury'
-  ref_id: TMI-UNERASE-1
-  key_finding: 'Nada se apaga na memória - nothing is erased from memory'
-  relevance: 'Core TMI principle that memories become inaccessible, not deleted'
-
-# Psychoanalysis - Unconscious [PSYCH-*]
+  verified: 2025-12-25T18:09:41.972755+00:00
 - url: https://en.wikipedia.org/wiki/The_Unconscious_(Freud)
-  title: 'The Unconscious - Sigmund Freud (1915)'
+  title: The Unconscious - Sigmund Freud (1915)
   categories:
   - psychology
   - unconscious
@@ -1791,16 +1467,11 @@ references:
   - adr-033
   cited_in:
   - docs/adr/ADR-033-unconscious-memory-architecture.md
-  status: ok
-  verified: 2025-12-20
-  authors: 'Sigmund Freud'
-  year: 1915
-  ref_id: PSYCH-1
-  key_finding: 'Repressed memories are not deleted but stored in unconscious'
-  relevance: 'Foundation for unconscious memory layer'
-
+  status: login
+  verified: 2025-12-25T18:09:41.738561+00:00
+  notes: Login required
 - url: https://en.wikipedia.org/wiki/Collective_unconscious
-  title: 'The Archetypes and the Collective Unconscious - Carl Jung'
+  title: The Archetypes and the Collective Unconscious - Carl Jung
   categories:
   - psychology
   - unconscious
@@ -1809,17 +1480,11 @@ references:
   - adr-033
   cited_in:
   - docs/adr/ADR-033-unconscious-memory-architecture.md
-  status: ok
-  verified: 2025-12-20
-  authors: 'Carl Jung'
-  year: 1959
-  ref_id: PSYCH-2
-  key_finding: 'Unconscious contains inherited patterns and memories'
-  relevance: 'Conceptual basis for shared/inherited memory structures'
-
-# Memory Retrieval vs Storage [RETRIEVAL-*]
+  status: login
+  verified: 2025-12-25T18:09:41.807914+00:00
+  notes: Login required
 - url: https://en.wikipedia.org/wiki/Endel_Tulving
-  title: 'Episodic and Semantic Memory - Endel Tulving'
+  title: Episodic and Semantic Memory - Endel Tulving
   categories:
   - memory
   - cognitive-science
@@ -1828,16 +1493,11 @@ references:
   - adr-033
   cited_in:
   - docs/adr/ADR-033-unconscious-memory-architecture.md
-  status: ok
-  verified: 2025-12-20
-  authors: 'Endel Tulving'
-  year: 1972
-  ref_id: RETRIEVAL-1
-  key_finding: 'Memory failure is retrieval failure, not storage failure'
-  relevance: 'Scientific basis for soft-delete vs hard-delete'
-
+  status: login
+  verified: 2025-12-25T18:09:41.986134+00:00
+  notes: Login required
 - url: https://en.wikipedia.org/wiki/The_Seven_Sins_of_Memory
-  title: 'The Seven Sins of Memory - Daniel Schacter'
+  title: The Seven Sins of Memory - Daniel Schacter
   categories:
   - memory
   - cognitive-science
@@ -1846,17 +1506,11 @@ references:
   - adr-033
   cited_in:
   - docs/adr/ADR-033-unconscious-memory-architecture.md
-  status: ok
-  verified: 2025-12-20
-  authors: 'Daniel Schacter'
-  year: 2001
-  ref_id: RETRIEVAL-2
-  key_finding: 'Transience (forgetting) is retrieval failure, memories may still exist'
-  relevance: 'Modern cognitive science view of forgetting as accessibility problem'
-
-# Memory Consolidation [CONSOL-UNCON-*]
+  status: login
+  verified: 2025-12-25T18:09:42.041477+00:00
+  notes: Login required
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3278619/
-  title: 'Memory systems of the brain - Larry Squire'
+  title: Memory systems of the brain - Larry Squire
   categories:
   - memory
   - neuroscience
@@ -1866,21 +1520,9 @@ references:
   cited_in:
   - docs/adr/ADR-033-unconscious-memory-architecture.md
   status: ok
-  verified: 2025-12-20
-  authors: 'Larry Squire'
-  year: 2004
-  ref_id: CONSOL-UNCON-1
-  key_finding: 'Multiple memory systems with different accessibility characteristics'
-  relevance: 'Neuroscience basis for tiered memory architecture'
-
-# =============================================================================
-# ADR-035: VolitionActor - Free-Won't References
-# Added: 2025-12-20
-# =============================================================================
-
-# Libet's Free-Won't Research [LIBET-*]
+  verified: 2025-12-25T18:09:42.725432+00:00
 - url: https://en.wikipedia.org/wiki/Neuroscience_of_free_will
-  title: 'Neuroscience of free will - Wikipedia'
+  title: Neuroscience of free will - Wikipedia
   categories:
   - neuroscience
   - free-will
@@ -1890,14 +1532,11 @@ references:
   cited_in:
   - docs/adr/ADR-035-volition-actor-free-wont.md
   - blog/content/posts/32-emotional-architecture.md
-  status: ok
-  verified: 2025-12-20
-  ref_id: LIBET-1
-  key_finding: 'Readiness potential begins ~500ms before conscious awareness of decision; consciousness retains veto power'
-  relevance: 'Foundation for VolitionActor free-won''t implementation at Stage 4.5'
-
+  status: paywall
+  verified: 2025-12-25T18:09:42.301918+00:00
+  notes: Paywall detected
 - url: https://doi.org/10.1073%2Fpnas.1210467109
-  title: 'Prediction of free choices from cortical signals'
+  title: Prediction of free choices from cortical signals
   categories:
   - neuroscience
   - free-will
@@ -1906,17 +1545,9 @@ references:
   - adr-035
   cited_in:
   - docs/adr/ADR-035-volition-actor-free-wont.md
-  status: ok
-  verified: 2025-12-20
-  authors: 'Schurger A, Sitt JD, Dehaene S'
-  year: 2012
-  journal: PNAS
-  doi: 10.1073/pnas.1210467109
-  ref_id: LIBET-2
-  key_finding: 'Readiness potentials may be stochastic fluctuations rather than unconscious decisions'
-  relevance: 'Modern reinterpretation of Libet''s findings; veto power remains valid'
-
-# Russell's Circumplex Model of Affect [RUSSELL-*]
+  status: redirect
+  verified: 2025-12-25T18:09:42.777396+00:00
+  notes: https://pnas.org/doi/full/10.1073/pnas.1210467109
 - url: https://en.wikipedia.org/wiki/Emotion_classification#Circumplex_model
   title: 'Emotion classification: Circumplex model - Wikipedia'
   categories:
@@ -1928,14 +1559,11 @@ references:
   cited_in:
   - docs/adr/ADR-035-volition-actor-free-wont.md
   - blog/content/posts/32-emotional-architecture.md
-  status: ok
-  verified: 2025-12-20
-  ref_id: RUSSELL-1
-  key_finding: 'Two-dimensional emotion space: valence (pleasure-displeasure) and arousal (activation-deactivation)'
-  relevance: 'Theoretical basis for SalienceScore arousal dimension'
-
+  status: paywall
+  verified: 2025-12-25T18:09:42.823801+00:00
+  notes: Paywall detected
 - url: https://doi.org/10.1080/02699939208411068
-  title: 'A circumplex model of affect'
+  title: A circumplex model of affect
   categories:
   - psychology
   - emotion
@@ -1944,19 +1572,11 @@ references:
   - adr-035
   cited_in:
   - docs/adr/ADR-035-volition-actor-free-wont.md
-  status: ok
-  verified: 2025-12-20
-  authors: 'Russell JA'
-  year: 1980
-  journal: Journal of Personality and Social Psychology
-  doi: 10.1080/02699939208411068
-  ref_id: RUSSELL-2
-  key_finding: 'Emotions exist in continuous 2D space, not discrete categories'
-  relevance: 'Original formulation of circumplex model used in SalienceScore'
-
-# TMI Técnica DCD [TMI-DCD-*]
+  status: redirect
+  verified: 2025-12-25T18:09:45.663732+00:00
+  notes: https://www.tandfonline.com/doi/abs/10.1080/02699939208411068
 - url: https://www.citador.pt/textos/as-janelas-da-memoria-augusto-cury
-  title: 'Técnica DCD - Duvidar, Criticar, Decidir'
+  title: Técnica DCD - Duvidar, Criticar, Decidir
   categories:
   - tmi
   - volition
@@ -1965,20 +1585,9 @@ references:
   cited_in:
   - docs/adr/ADR-035-volition-actor-free-wont.md
   status: ok
-  verified: 2025-12-20
-  authors: 'Augusto Cury'
-  ref_id: TMI-DCD-1
-  key_finding: 'Doubt-Criticize-Decide technique for conscious intervention in automatic thought'
-  relevance: 'TMI mechanism that VolitionActor implements architecturally'
-
-# =============================================================================
-# ADR-038: Phase 2 External Stimuli Research References
-# Added: 2025-12-21
-# =============================================================================
-
-# Criticality Metrics [CRIT-*]
+  verified: 2025-12-25T18:09:43.648224+00:00
 - url: http://www.scholarpedia.org/article/Neuronal_avalanche
-  title: 'Neuronal Avalanche - Scholarpedia'
+  title: Neuronal Avalanche - Scholarpedia
   categories:
   - neuroscience
   - criticality
@@ -1987,13 +1596,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: CRIT-1
-  key_finding: 'Critical exponent α ≈ -3/2 for avalanche size distribution; branching ratio σ ≈ 1 at criticality'
-  relevance: 'Primary metric for detecting criticality in DANEEL'
-
+  verified: 2025-12-25T18:09:43.994555+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC6871218/
-  title: 'Avalanche dynamics and the human connectome'
+  title: Avalanche dynamics and the human connectome
   categories:
   - neuroscience
   - criticality
@@ -2003,11 +1608,7 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: CRIT-2
-  key_finding: 'Branching ratio σ < 1 subcritical, σ = 1 critical, σ > 1 supercritical'
-  relevance: 'Branching ratio calculation method for DANEEL metrics'
-
+  verified: 2025-12-25T18:09:43.307750+00:00
 - url: https://www.frontiersin.org/articles/10.3389/fphys.2012.00450/full
   title: 'DFA: A Scale-Free View on Neuronal Oscillations'
   categories:
@@ -2019,13 +1620,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: CRIT-3
-  key_finding: 'DFA exponent α ≈ 1.0 indicates criticality; α = 0.5 white noise, α = 1.5 Brownian'
-  relevance: 'Detrended Fluctuation Analysis implementation for DANEEL'
-
+  verified: 2025-12-25T18:09:46.368472+00:00
 - url: https://www.nature.com/articles/s41467-021-24260-z
-  title: 'Avalanches and edge-of-chaos learning in small, randomly connected neural networks'
+  title: Avalanches and edge-of-chaos learning in small, randomly connected neural networks
   categories:
   - neuroscience
   - criticality
@@ -2034,14 +1631,11 @@ references:
   - adr-038
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-21
-  ref_id: CRIT-4
-  key_finding: 'Avalanche criticality and edge-of-chaos criticality are DISTINCT phenomena - do not necessarily co-occur'
-  relevance: 'Critical distinction for Phase 2 measurement protocol'
-
+  status: paywall
+  verified: 2025-12-25T18:09:45.905450+00:00
+  notes: Paywall detected
 - url: https://www.nature.com/articles/s41598-018-37920-w
-  title: 'Critical synchronization and 1/f noise in inhibitory/excitatory rich-club neural networks'
+  title: Critical synchronization and 1/f noise in inhibitory/excitatory rich-club neural networks
   categories:
   - neuroscience
   - criticality
@@ -2050,14 +1644,11 @@ references:
   - adr-038
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-21
-  ref_id: CRIT-5
-  key_finding: 'At criticality: 1/f^β with β ≈ 1-2 (pink noise); subcritical: flat spectrum; supercritical: gamma peak'
-  relevance: 'Power spectral density analysis for DANEEL'
-
+  status: paywall
+  verified: 2025-12-25T18:09:44.884505+00:00
+  notes: Paywall detected
 - url: http://www.scholarpedia.org/article/Scale-free_neocortical_dynamics
-  title: 'Scale-free neocortical dynamics - Scholarpedia'
+  title: Scale-free neocortical dynamics - Scholarpedia
   categories:
   - neuroscience
   - criticality
@@ -2066,14 +1657,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: CRIT-6
-  key_finding: 'Scale-free dynamics indicate no characteristic scale; power-law distributions in activity durations'
-  relevance: 'Theoretical foundation for emergent dynamics'
-
-# Noise Injection Techniques [NOISE-*]
+  verified: 2025-12-25T18:09:46.225299+00:00
 - url: https://arxiv.org/abs/1603.09382
-  title: 'Deep Networks with Stochastic Depth'
+  title: Deep Networks with Stochastic Depth
   categories:
   - ml
   - noise-injection
@@ -2083,15 +1669,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  authors: 'Huang et al.'
-  year: 2016
-  ref_id: NOISE-1
-  key_finding: 'Randomly dropping entire layers during training reduces vanishing gradients, enables 1200+ layer networks'
-  relevance: 'Stochastic depth technique for DANEEL perturbation'
-
+  verified: 2025-12-25T18:09:45.817129+00:00
 - url: https://openreview.net/pdf?id=SylO2yStDr
-  title: 'Reducing Transformer Depth on Demand with Structured Dropout'
+  title: Reducing Transformer Depth on Demand with Structured Dropout
   categories:
   - ml
   - transformers
@@ -2100,13 +1680,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: NOISE-2
-  key_finding: 'LayerDrop drops entire transformer layers as groups, enabling flexible depth at inference'
-  relevance: 'Structured dropout approach for cognitive stage perturbation'
-
+  verified: 2025-12-25T18:09:46.191113+00:00
 - url: https://www.ibm.com/think/topics/llm-temperature
-  title: 'What is LLM Temperature?'
+  title: What is LLM Temperature?
   categories:
   - ml
   - llm
@@ -2116,13 +1692,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: NOISE-3
-  key_finding: 'Temperature τ < 0.5 deterministic, τ > 1.0 creative/chaotic; modifies softmax distribution'
-  relevance: 'Temperature-based perturbation for salience scoring'
-
+  verified: 2025-12-25T18:09:50.396341+00:00
 - url: https://arxiv.org/html/2501.12314v1
-  title: 'Uncertainty Quantification With Monte Carlo Noise Injection'
+  title: Uncertainty Quantification With Monte Carlo Noise Injection
   categories:
   - ml
   - noise-injection
@@ -2132,14 +1704,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  year: 2025
-  ref_id: NOISE-4
-  key_finding: 'Weight noise injection is equivalent to Bayesian inference on deep Gaussian processes'
-  relevance: 'Theoretical foundation for noise injection in DANEEL'
-
+  verified: 2025-12-25T18:09:46.641226+00:00
 - url: https://machinelearningmastery.com/train-neural-networks-with-noise-to-reduce-overfitting/
-  title: 'Train Neural Networks With Noise to Reduce Overfitting'
+  title: Train Neural Networks With Noise to Reduce Overfitting
   categories:
   - ml
   - noise-injection
@@ -2148,13 +1715,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: NOISE-5
-  key_finding: 'Three injection points: input noise, weight noise, gradient noise; equivalent to Tikhonov regularization'
-  relevance: 'Practical noise injection implementation guide'
-
+  verified: 2025-12-25T18:09:47.867015+00:00
 - url: https://link.springer.com/chapter/10.1007/978-3-030-64221-1_16
-  title: 'Adaptive Gaussian Noise Injection Regularization'
+  title: Adaptive Gaussian Noise Injection Regularization
   categories:
   - ml
   - noise-injection
@@ -2163,16 +1726,11 @@ references:
   - adr-038
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-21
-  year: 2020
-  ref_id: NOISE-6
-  key_finding: 'Whiteout technique: adaptive Gaussian noise outperforms Bernoulli-based dropout by 2-3%'
-  relevance: 'Adaptive noise injection for DANEEL stimulus'
-
-# Cognitive Architecture Stimuli [COG-*]
+  status: paywall
+  verified: 2025-12-25T18:09:47.650393+00:00
+  notes: Paywall detected
 - url: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0014803
-  title: 'The Timing of the Cognitive Cycle'
+  title: The Timing of the Cognitive Cycle
   categories:
   - cognitive-architecture
   - lida
@@ -2182,13 +1740,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: COG-1
-  key_finding: 'LIDA cognitive cycle: 260-390ms total; understanding 80-100ms, consciousness 200-280ms, action 60-110ms'
-  relevance: 'Timing parameters for DANEEL sensory injection'
-
+  verified: 2025-12-25T18:09:48.201908+00:00
 - url: https://ccrg.cs.memphis.edu/assets/papers/2012/GWT-LIDA-neuroscience.pdf
-  title: 'Global Workspace Theory, its LIDA model and the underlying neuroscience'
+  title: Global Workspace Theory, its LIDA model and the underlying neuroscience
   categories:
   - cognitive-architecture
   - lida
@@ -2198,13 +1752,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: COG-2
-  key_finding: 'Conscious contents arise from competition among coalitions; codelets as specialized mini-agents'
-  relevance: 'Codelet architecture for DANEEL sensory processing'
-
+  verified: 2025-12-25T18:09:47.751756+00:00
 - url: https://advancesincognitivesystems.github.io/acs2021/data/ACS-21_paper_6.pdf
-  title: 'An Analysis and Comparison of ACT-R and Soar'
+  title: An Analysis and Comparison of ACT-R and Soar
   categories:
   - cognitive-architecture
   - actr
@@ -2214,13 +1764,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: COG-3
-  key_finding: 'Both use buffer-based perception; working memory integrates sensor data with stored agent data'
-  relevance: 'Buffer architecture comparison for DANEEL design'
-
+  verified: 2025-12-25T18:09:48.534824+00:00
 - url: https://arxiv.org/html/2402.03824v3
-  title: 'A Call for Embodied AI'
+  title: A Call for Embodied AI
   categories:
   - cognitive-architecture
   - embodied-ai
@@ -2229,14 +1775,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  year: 2024
-  ref_id: COG-4
-  key_finding: 'Bidirectional coupling essential: perception → action → environment → perception'
-  relevance: 'Environmental feedback loop for DANEEL Phase 2'
-
+  verified: 2025-12-25T18:09:48.916090+00:00
 - url: https://en.wikipedia.org/wiki/Embodied_cognition
-  title: 'Embodied cognition - Wikipedia'
+  title: Embodied cognition - Wikipedia
   categories:
   - cognitive-architecture
   - embodied-cognition
@@ -2244,15 +1785,11 @@ references:
   - adr-038
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-21
-  ref_id: COG-5
-  key_finding: '4E Cognition: Embodied, Embedded, Enacted, Extended - cognition emerges from interaction'
-  relevance: 'Theoretical foundation for environmental interaction'
-
-# Inducing Criticality [INDUCE-*]
+  status: paywall
+  verified: 2025-12-25T18:09:49.405260+00:00
+  notes: Paywall detected
 - url: https://www.nature.com/articles/s41598-025-18004-y
-  title: 'Mean-field approximation for calculating critical point in spiking neural networks'
+  title: Mean-field approximation for calculating critical point in spiking neural networks
   categories:
   - neuroscience
   - criticality
@@ -2261,14 +1798,9 @@ references:
   - adr-038
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-21
-  year: 2025
-  ref_id: INDUCE-1
-  key_finding: 'Analytical calculation of critical synaptic weight; works with N=100 neurons; Python code available'
-  relevance: 'Mean-field approach for DANEEL criticality tuning'
-  code_url: 'https://github.com/LIFCriticality/Simulator'
-
+  status: paywall
+  verified: 2025-12-25T18:09:50.366614+00:00
+  notes: Paywall detected
 - url: https://www.nature.com/articles/s41467-020-16548-3
   title: 'Between perfectly critical and fully irregular: a reverberating model captures and predicts cortical spike propagation'
   categories:
@@ -2279,12 +1811,9 @@ references:
   - adr-038
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-21
-  ref_id: INDUCE-2
-  key_finding: 'Input strength modulation (K_ext/N 0.25-0.56) tunes subcritical↔critical↔supercritical; task-dependent benefits'
-  relevance: 'Input strength protocol for Phase 2 experiments'
-
+  status: paywall
+  verified: 2025-12-25T18:09:53.254698+00:00
+  notes: Paywall detected
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC5446191/
   title: 'Criticality in the brain: A synthesis of neurobiology, models and cognition'
   categories:
@@ -2296,13 +1825,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: INDUCE-3
-  key_finding: 'SORN: STDP + iSTDP + IP + SN + SP self-organizes to criticality; Gaussian noise σ²=0.05 NECESSARY'
-  relevance: 'Plasticity rules and noise requirements for DANEEL'
-
+  verified: 2025-12-25T18:09:50.292063+00:00
 - url: https://direct.mit.edu/artl/article/21/1/55/2790/Lambda-and-the-Edge-of-Chaos-in-Recurrent-Neural
-  title: 'Lambda and the Edge of Chaos in Recurrent Neural Networks'
+  title: Lambda and the Edge of Chaos in Recurrent Neural Networks
   categories:
   - ml
   - edge-of-chaos
@@ -2311,14 +1836,11 @@ references:
   - adr-038
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-21
-  ref_id: INDUCE-4
-  key_finding: 'λNN parameter analogous to Langton λCA; second edge-of-chaos exists on opposite side of chaotic region'
-  relevance: 'Lambda parameter for characterizing DANEEL dynamics'
-
+  status: paywall
+  verified: 2025-12-25T18:09:54.776658+00:00
+  notes: Paywall detected
 - url: https://www.nature.com/articles/s42005-024-01530-y
-  title: 'Robust criticality in FitzHugh-Nagumo oscillator networks'
+  title: Robust criticality in FitzHugh-Nagumo oscillator networks
   categories:
   - neuroscience
   - criticality
@@ -2327,15 +1849,11 @@ references:
   - adr-038
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-21
-  year: 2024
-  ref_id: INDUCE-5
-  key_finding: 'Criticality robust across broad coupling range [20-60] μS; power flow analysis as alternative metric'
-  relevance: 'Robust criticality without fine-tuning for DANEEL'
-
+  status: paywall
+  verified: 2025-12-25T18:09:56.060883+00:00
+  notes: Paywall detected
 - url: https://arxiv.org/abs/2108.06395
-  title: 'Criticality in phase oscillator reservoir computing'
+  title: Criticality in phase oscillator reservoir computing
   categories:
   - ml
   - reservoir-computing
@@ -2345,13 +1863,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: INDUCE-6
-  key_finding: 'Reservoir computing shows power-law avalanches when oscillators synchronize; memristive switching creates avalanches'
-  relevance: 'Reservoir computing parallels for DANEEL architecture'
-
+  verified: 2025-12-25T18:10:11.521797+00:00
 - url: https://pubmed.ncbi.nlm.nih.gov/15165396/
-  title: 'Real-time computation at the edge of chaos in recurrent neural networks'
+  title: Real-time computation at the edge of chaos in recurrent neural networks
   categories:
   - ml
   - edge-of-chaos
@@ -2361,11 +1875,7 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: INDUCE-7
-  key_finding: 'Systems at criticality show maximal dynamic range, mutual information, input-output separability'
-  relevance: 'Computational benefits of criticality for DANEEL'
-
+  verified: 2025-12-25T18:09:51.570051+00:00
 - url: https://www.frontiersin.org/journals/computational-neuroscience/articles/10.3389/fncom.2021.611183/full
   title: 'Criticality, Connectivity, and Neural Disorder: A Multifaceted Approach'
   categories:
@@ -2377,14 +1887,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: INDUCE-8
-  key_finding: 'Small-world topology + balanced E/I ratio + scale-free characteristics support criticality'
-  relevance: 'Network topology requirements for DANEEL'
-
-# Implementation Resources [IMPL-*]
+  verified: 2025-12-25T18:09:53.248381+00:00
 - url: https://github.com/LIFCriticality/Simulator
-  title: 'LIFCriticality Simulator - Python implementation'
+  title: LIFCriticality Simulator - Python implementation
   categories:
   - code
   - criticality
@@ -2394,14 +1899,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  ref_id: IMPL-1
-  key_finding: 'Python code for mean-field criticality calculation in LIF networks'
-  relevance: 'Reference implementation for DANEEL criticality metrics'
-
-# Grok-Recommended References [GROK-*]
+  verified: 2025-12-25T18:09:54.645051+00:00
 - url: https://www.jneurosci.org/content/23/35/11167
-  title: 'Neuronal Avalanches in Neocortical Circuits'
+  title: Neuronal Avalanches in Neocortical Circuits
   categories:
   - neuroscience
   - criticality
@@ -2411,15 +1911,9 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  authors: 'Beggs & Plenz'
-  year: 2003
-  ref_id: GROK-1
-  key_finding: 'First demonstration of power-law avalanche distributions in cortical cultures'
-  relevance: 'Foundational paper for criticality in neural systems'
-
+  verified: 2025-12-25T18:09:53.688672+00:00
 - url: https://pubmed.ncbi.nlm.nih.gov/17517489/
-  title: 'Edge of Chaos and Prediction of Computational Performance for Neural Circuit Models'
+  title: Edge of Chaos and Prediction of Computational Performance for Neural Circuit Models
   categories:
   - neuroscience
   - reservoir-computing
@@ -2428,18 +1922,4 @@ references:
   cited_in:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
-  verified: 2025-12-21
-  authors: 'Legenstein & Maass'
-  year: 2007
-  journal: 'Neural Networks (NOT Neural Computation)'
-  doi: '10.1016/j.neunet.2007.04.017'
-  ref_id: GROK-2
-  key_finding: 'Edge of chaos predicts parameter values yielding maximal computational performance in neural microcircuits'
-  relevance: 'Theoretical foundation for edge-of-chaos computation'
-  note: 'Grok gave wrong URL (MIT Press instead of Elsevier) - corrected via verification'
-
-# GROK-3 REMOVED - HALLUCINATED
-# Original claim: arXiv:1904.05969 "Noise Outsourcing for Efficient Gradient Estimation"
-# Reality: arXiv:1904.05969 is "The Galactic Centre Chimney" - an astrophysics paper
-# Grok fabricated both title and finding about 1/f noise pushing RNNs to criticality
-# No replacement found - the specific claim about "noise outsourcing" appears invented
+  verified: 2025-12-25T18:09:54.442330+00:00
