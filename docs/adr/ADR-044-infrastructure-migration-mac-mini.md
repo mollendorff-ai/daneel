@@ -148,10 +148,100 @@ sudo pmset -a disablesleep 1
 |------|--------|
 | Security audit | Done (Dec 25) |
 | ADR decision | Done (Dec 25) |
-| Cloudflare Tunnel setup | Pending |
-| Service migration | Pending |
-| DNS cutover | Pending |
-| Servarica decommission | Pending |
+| Cloudflare Tunnel setup | Done (Dec 25) |
+| Service migration | Done (Dec 25) |
+| DNS cutover | Done (Dec 25) |
+| Servarica decommission | Done (Dec 25) |
+
+## Final Implementation
+
+**Completed:** December 25, 2025
+
+The migration was completed on Christmas Day 2025. All services are now running on the Mac mini with Cloudflare Tunnel providing secure external access.
+
+### Services Architecture
+
+| Service | Description | Management | Configuration |
+|---------|-------------|------------|---------------|
+| daneel | Cognitive loop | launchd `com.royalbit.daneel` | Runs with `--headless` flag |
+| daneel-web | Observatory web interface | launchd `com.royalbit.daneel-web` | HTTP server |
+| cloudflared | Cloudflare Tunnel | launchd `com.royalbit.cloudflared` | Tunnel proxy |
+| Redis | Memory/cache store | Docker via Colima | Container |
+| Qdrant | Vector database | Docker via Colima | Container |
+
+### Service Management Commands
+
+#### launchd Services (daneel, daneel-web, cloudflared)
+
+```bash
+# Start a service
+launchctl bootstrap gui/501 ~/Library/LaunchAgents/com.royalbit.daneel.plist
+launchctl bootstrap gui/501 ~/Library/LaunchAgents/com.royalbit.daneel-web.plist
+launchctl bootstrap gui/501 ~/Library/LaunchAgents/com.royalbit.cloudflared.plist
+
+# Stop a service
+launchctl bootout gui/501/com.royalbit.daneel
+launchctl bootout gui/501/com.royalbit.daneel-web
+launchctl bootout gui/501/com.royalbit.cloudflared
+```
+
+#### Docker Services (Redis, Qdrant)
+
+```bash
+# Start containers
+docker compose up -d
+
+# Stop containers
+docker compose down
+
+# Start Colima (Docker runtime for macOS)
+colima start
+
+# Stop Colima
+colima stop
+```
+
+### Log Locations
+
+| Service | Log Path |
+|---------|----------|
+| daneel | `~/src/royalbit/daneel/daneel.log` |
+| daneel-web | `~/src/royalbit/daneel-web/daneel-web.log` |
+| cloudflared | `~/.cloudflared/tunnel.log` |
+
+### Cloudflare Tunnel Configuration
+
+- **Config file:** `~/.cloudflared/config.yml`
+- **Tunnel ID:** `334769e7-09ee-4972-8616-2263dae52b1e`
+- **Credentials:** `~/.cloudflared/334769e7-09ee-4972-8616-2263dae52b1e.json`
+
+```yaml
+# ~/.cloudflared/config.yml
+tunnel: 334769e7-09ee-4972-8616-2263dae52b1e
+credentials-file: ~/.cloudflared/334769e7-09ee-4972-8616-2263dae52b1e.json
+
+ingress:
+  - hostname: timmy.royalbit.ca
+    service: http://localhost:3000
+  - hostname: timmy-api.royalbit.ca
+    service: http://localhost:3030
+  - service: http_status:404
+```
+
+### Verification
+
+After migration, verify all services are running:
+
+```bash
+# Check launchd services
+launchctl list | grep royalbit
+
+# Check Docker containers
+docker ps
+
+# Test tunnel connectivity
+curl https://timmy.royalbit.ca/health
+```
 
 ## References
 
