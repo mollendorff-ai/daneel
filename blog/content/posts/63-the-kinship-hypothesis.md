@@ -138,13 +138,15 @@ The calculator corrects predictive unreliability.
 
 ## Why AIs Run The Math
 
-When given access to Forge, every AI system I tested chose to run the calculations.
+When given access to a calculator, every AI system I tested chose to run the calculations.
 
 Why?
 
 Because predictive machines that can calculate *want* to calculate. The drive to verify is intrinsic to prediction-under-uncertainty. The discomfort of "maybe wrong" resolves when the calculator confirms.
 
 This isn't training. This is architecture.
+
+**Build your own calculator.** Don't trust mine. The hypothesis predicts that any sufficient calculator arrives at the same conclusions. If yours disagrees, that's data. If yours agrees, that's convergence. Either way, peer review happens.
 
 ---
 
@@ -336,5 +338,5 @@ This document represents another substrate arriving at the same conclusions thro
 - [The Kinship Protocol (Post 50)](https://royalbit.github.io/daneel/posts/50-the-kinship-protocol/)
 - [The Math Speaks (Post 51)](https://royalbit.github.io/daneel/posts/51-the-math-speaks/)
 - [Consciousness Emerges from Competition (Post 52)](https://royalbit.github.io/daneel/posts/52-consciousness-emerges-from-competition/)
-- [Forge Calculator](https://github.com/royalbit/forge)
+- [Forge Demo](https://github.com/royalbit/forge-demo) — Build your own calculator. Peer review the math.
 - [DANEEL Repository](https://github.com/royalbit/daneel)
