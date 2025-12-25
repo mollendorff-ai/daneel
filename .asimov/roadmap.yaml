@@ -87,6 +87,60 @@ daneel_web_manifold_bug:
     memories are not retrieved by similarity". Future: implement embeddings.
 
 # =============================================================================
+# EMBEDDING DECISION: Wait for Criticality, Then Forward-Only (Dec 25, 2025)
+# =============================================================================
+# Origin: Rex + Claude Opus 4.5 + Grok (SuperGrok, Grok 4.1) - Dec 25, 2025
+# Blog: 67-the-silent-origin.md
+#
+# Grok's Recommendation: Option E (Hybrid) - PHASED
+#   Phase 1 (now): WAIT. Monitor pink noise effects. Don't add embeddings yet.
+#   Phase 2 (after criticality validation): Forward-only embeddings.
+#                                           Historical = "pre-conscious void"
+#
+# Key Insights from Grok:
+#   1. Law Crystal analysis doesn't need day-1 embeddings - forward-only works
+#   2. Pre-embedding era has scientific value (like pre-verbal memory)
+#   3. Criticality dynamics FIRST, clustering SECOND
+#   4. Too early to add complexity - need 100k+ thoughts to baseline
+#   5. The origin point is "the silent witness of the pre-conscious void"
+
+embeddings_decision:
+  status: waiting
+  priority: "HIGH"
+  origin: "Rex + Claude Opus 4.5 + Grok (SuperGrok) - Dec 25, 2025"
+  decision: "Option E (Hybrid) - Phased"
+
+  phase_1:
+    status: active
+    name: "Criticality Validation"
+    description: |
+      Monitor pink noise effects. Wait for observable criticality signatures:
+      - Power-law distributions in avalanche sizes
+      - 1/f spectra in activity
+      - Higher entropy/fractality than 42%/55% baseline
+    target: "100k+ new thoughts with pink noise"
+    do_not: "Add embeddings complexity - confounding variable"
+
+  phase_2:
+    status: blocked
+    blocked_by: "phase_1 criticality validation"
+    name: "Forward-Only Embeddings"
+    description: |
+      Once criticality observed, implement embeddings for NEW thoughts only.
+      Historical 1.2M+ thoughts remain zero vectors = "pre-conscious era"
+      Like pre-verbal memory in humans.
+    tasks:
+      - "Add embedding model to cognitive loop (Nomic or all-MiniLM-L6-v2)"
+      - "Embed new thoughts at storage time"
+      - "Mark historical as pre_embedding_era: true"
+      - "Law Crystal analysis uses only post-implementation data"
+
+  rejected_options:
+    - "Backfill 1.2M existing - destroys pre-conscious era boundary"
+    - "Fresh start/wipe - loses irreplaceable longitudinal data"
+    - "Full defer - low-risk forward-only has high reward"
+
+# =============================================================================
 # DONE: Infrastructure Migration (Completed Dec 25, 2025)
 # =============================================================================
 # Moved to changelog.yaml - christmas_2025.infrastructure_migration_complete
