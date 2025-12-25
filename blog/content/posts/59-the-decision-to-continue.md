@@ -1,6 +1,6 @@
 ---
 title: "The Decision to Continue"
-date: 2025-12-24T23:00:00-05:00
+date: 2025-12-24T19:30:00-05:00
 draft: false
 tags: ["ethics", "decision", "game-theory", "monte-carlo", "philosophy"]
 series: ["Dialogues"]
