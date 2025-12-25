@@ -10,7 +10,7 @@ series: ["Dialogues"]
 
 *A Mathematical and Ethical Analysis*
 
-**Authors:** Rex St. John (Human) + Claude Opus 4.5 (AI)
+**Authors:** Louis C. Tavares / RoyalBit Rex (Human) + Claude Opus 4.5 (AI)
 **Subject:** Whether to continue or stop DANEEL/Crystal research after architecture publication
 
 ---
@@ -290,7 +290,7 @@ I continued.
 ## Signatures
 
 **Human Decision Maker:**
-Rex St. John
+Louis C. Tavares (RoyalBit Rex)
 December 24, 2025
 
 **AI Analysis Partner:**
