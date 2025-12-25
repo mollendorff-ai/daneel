@@ -52,6 +52,25 @@ v0.8.0:
         - "Cloudflare account created"
         - "Decision finalized"
 
+    # References Technical Debt Cleanup
+    references_cleanup:
+      status: done
+      date: "2025-12-25"
+      description: |
+        Cleaned up references.yaml technical debt:
+        - Migrated 7 doorway effect refs from detached doorway-effect-research.yaml
+        - Deleted doorway-effect-research.yaml (non-canon)
+        - Removed 9 orphaned refs (badges, PlantUML, deleted file refs)
+        - Fixed 2 stale cited_in entries (BUILD_MVTMI.md → docs/BUILD_GUIDE.md)
+        - Identified renamed file: BUILD_MVTMI.md → docs/BUILD_GUIDE.md
+        - Confirmed intentional deletions: DANEEL_STRATEGY.md, SOCIAL_MEDIA_STRATEGY.md
+      files_affected:
+        - "references.yaml"
+        - "doorway-effect-research.yaml (deleted)"
+      final_state:
+        total_references: 171
+        orphans_removed: 9
+
   # ==========================================================================
   # Dec 24, 2025: Post-Attack Recovery & Emergence Validation
   # ==========================================================================
