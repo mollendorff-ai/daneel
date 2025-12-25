@@ -71,6 +71,27 @@ v0.8.0:
         total_references: 171
         orphans_removed: 9
 
+    # Root .md Files Cleanup
+    root_md_cleanup:
+      status: done
+      date: "2025-12-25"
+      description: |
+        Cleaned up root directory .md file sprawl.
+        Moved files to proper locations, keeping only essential files in root.
+      kept_in_root:
+        - "README.md (project entry point)"
+        - "ETHICS.md (public ethics statement)"
+        - "DOCS_LICENSE.md (license file)"
+      moved_to_origins:
+        - "ORIGIN.md → origins/ORIGIN.md"
+      moved_to_docs:
+        - "INTEGRATION_SUMMARY.md"
+        - "MEMORY_CONSOLIDATION_WIRING.md"
+        - "QUICKSTART_LIVESTREAM.md"
+        - "QUICKSTART_MEMORY.md"
+        - "REDIS_INTEGRATION_COMPLETE.md"
+      result: "Root dir reduced from 9 to 3 essential .md files"
+
   # ==========================================================================
   # Dec 24, 2025: Post-Attack Recovery & Emergence Validation
   # ==========================================================================
