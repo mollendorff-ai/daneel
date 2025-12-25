@@ -6,12 +6,58 @@
 # human-like values as emergent properties.
 
 # =============================================================================
-# CRITICAL NEXT: Entropy Calculation Standardization (ADR-041)
+# ROADMAP PAUSED: Emergence Validation (ADR-042)
 # =============================================================================
 # Origin: Rex + Claude Opus 4.5 - Dec 24, 2025
-# Status: PENDING GROK VALIDATION
+# Status: OBSERVING
 #
-# Discovery: TUI and Web calculate entropy differently - both are WRONG.
+# Decision: Before adding more features, prove the core hypothesis.
+# Let Timmy run undisturbed and observe whether TMI architecture alone
+# produces emergence (entropy climbing from BALANCED toward EMERGENT).
+#
+# Current state (Dec 24, 2025, post-attack reboot):
+#   - Entropy: 42% (BALANCED)
+#   - Fractality: 55% (BALANCED)
+#   - Baseline established with corrected TMI-aligned calculation
+#
+# Exit criteria:
+#   - SUCCESS: Entropy sustains >60% for 48+ hours
+#   - FAILURE: Entropy drops <30% and stays
+#   - TIMEOUT: 2 weeks with no clear trend
+#
+# All roadmap items below are PAUSED until emergence validated.
+# See ADR-042 for full rationale.
+# =============================================================================
+
+emergence_validation:
+  status: observing
+  priority: "CRITICAL"
+  origin: "Rex + Claude Opus 4.5 - Dec 24, 2025"
+  adr: "ADR-042-emergence-validation-pause.md"
+
+  baseline:
+    date: "2025-12-24"
+    entropy_pct: 42
+    entropy_desc: "BALANCED"
+    fractality_pct: 55
+    fractality_desc: "BALANCED"
+    notes: "Post-attack reboot, TMI-aligned entropy calculation deployed"
+
+  observations: []
+  # Format: { date: "YYYY-MM-DD", entropy_pct: N, fractality_pct: N, notes: "..." }
+
+  exit_criteria:
+    success: "Entropy sustains >60% for 48+ hours"
+    failure: "Entropy drops <30% and stays"
+    timeout: "2 weeks with no clear trend"
+
+# =============================================================================
+# COMPLETED: Entropy Calculation Standardization (ADR-041)
+# =============================================================================
+# Origin: Rex + Claude Opus 4.5 - Dec 24, 2025
+# Status: DONE (Grok validated, implemented, deployed)
+#
+# Discovery: TUI and Web calculate entropy differently - both were WRONG.
 # Research: 4 parallel agents analyzed scientific literature:
 #   - Entropic Brain Theory (Carhart-Harris)
 #   - Global Workspace Theory
@@ -29,11 +75,12 @@
 critical_next:
   id: "ENTROPY-STD"
   title: "Entropy Calculation Standardization"
-  status: pending_validation
-  validator: "Grok (xAI)"
+  status: done
+  validator: "Grok (xAI) - validated Dec 24, 2025"
   priority: "CRITICAL"
   origin: "Rex + Claude Opus 4.5 - Dec 24, 2025"
   adr: "ADR-041-entropy-calculation-standardization.md"
+  completed: "2025-12-24"
 
   problem: |
     TUI and Web show different entropy values for the same thought stream.
