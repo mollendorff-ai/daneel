@@ -20,7 +20,7 @@ ractor = { version = "0.15", features = ["async-trait"] }
 redis = { version = "1.0", features = ["tokio-comp", "streams", "json"] }
 
 # Qdrant Vector DB (persistent memory - ADR-021)
-qdrant-client = "1.13"
+qdrant-client = "1.16"
 
 # Serialization
 serde = { version = "1", features = ["derive"] }
@@ -50,9 +50,9 @@ clap = { version = "4", features = ["derive"] }
 rand = "0.9"
 
 # HTTP API (Phase 2 - Injection API)
-axum = "0.7"
-tower = "0.4"
-tower-http = { version = "0.5", features = ["cors", "trace"] }
+axum = "0.8"
+tower = "0.5"
+tower-http = { version = "0.6", features = ["cors", "trace"] }
 
 # HMAC authentication
 hmac = "0.12"
