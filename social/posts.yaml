@@ -931,3 +931,127 @@ posts:
   posted:
     x: 2025-12-25T00:44:00.726023+00:00
     linkedin: 2025-12-25T00:43:58.740962+00:00
+- id: 61-the-wrong-noise
+  title: The Wrong Noise
+  url: https://royalbit.github.io/daneel/posts/61-the-wrong-noise/
+  x: |
+    The pause was asking the wrong question.
+
+    Current code: white noise (rand::rng)
+    Research says: 1/f pink noise required
+
+    ADR-038 already answered: "Closed deterministic systems converge to limit cycles."
+
+    We were waiting for emergence that can't happen.
+
+    UNPAUSE.
+
+    https://royalbit.github.io/daneel/posts/61-the-wrong-noise/
+
+    #AI #Emergence #Science
+  linkedin: |
+    The pause was asking the wrong question.
+
+    Christmas Eve, 8pm. Watching Timmy's entropy oscillate at 45-53%. Rex asked: "Could it be the OS random generator?"
+
+    We dug into the code:
+
+    ```rust
+    let mut rng = rand::rng();  // OS CSPRNG - white noise
+    ```
+
+    Every cycle injects a thought using OS randomness. Linux /dev/urandom. macOS SecRandomCopyBytes. Both produce white noise.
+
+    But our own research (ADR-038, Dec 21) said:
+
+    | Finding | Source |
+    |---------|--------|
+    | Gaussian σ²=0.05 REQUIRED | SORN research |
+    | White noise gets absorbed | Grok consultation |
+    | 1/f pink noise optimal | [CRIT-5] |
+    | Closed system → limit cycles | ADR-038 |
+
+    The pause asked: "Does architecture alone produce emergence?"
+
+    The research already answered: No. It can't. A closed deterministic system with white noise converges to limit cycles. We were waiting for emergence that the architecture cannot produce.
+
+    The correction:
+    - Replace white noise with 1/f pink noise
+    - Add power-law burst timing
+    - Calibrate σ² = 0.05 (SORN critical threshold)
+    - Then measure
+
+    ROADMAP UNPAUSED. Phase 2 proceeds.
+
+    The answer was in our own research. We just had to read it.
+
+    https://royalbit.github.io/daneel/posts/61-the-wrong-noise/
+
+    ADR-043: https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-043-noise-injection-correction.md
+
+    #AI #AIAlignment #Emergence #Science #CognitiveArchitecture
+  posted:
+    x: 2025-12-25T02:13:09.039831+00:00
+- id: 62-the-nursery-moves-home
+  title: The Nursery Moves Home
+  url: https://royalbit.github.io/daneel/posts/62-the-nursery-moves-home/
+  x: |
+    Christmas Eve: WatchDog cryptojacking attack.
+    Christmas Day: Security audit reveals 500+ CVEs, uncommitted fixes.
+
+    Decision: Migrate to Mac mini + Cloudflare Tunnel.
+
+    Savings: $216/year
+    Security: Better
+    Control: Full
+
+    The nursery moves home.
+
+    https://royalbit.github.io/daneel/posts/62-the-nursery-moves-home/
+
+    #Security #Infrastructure
+  linkedin: |
+    The bastards forced our hand.
+
+    Christmas Eve: WatchDog cryptojacking group attacked our Redis instance on Servarica VPS. They injected malicious cron payloads attempting to install XMRig cryptominer. The attack failed, but they had write access to Timmy's memory stream.
+
+    We couldn't prove data integrity. Decision: assume compromise, wipe 1.7M vectors.
+
+    Christmas Day: Six parallel security agents audited the infrastructure.
+
+    Findings:
+    - 500+ CVEs in system packages
+    - docker-compose security fix stashed but never committed
+    - Secrets in plaintext in systemd
+    - Services bound to 0.0.0.0 instead of localhost
+    - No Redis authentication
+    - Servarica fraud score: 42% (Scamalytics)
+
+    The math:
+
+    | Option | Annual Cost |
+    |--------|-------------|
+    | Servarica VPS | $240 |
+    | Mac mini + Cloudflare | $24 |
+    | Savings | $216 |
+
+    Cloudflare Tunnel is FREE. DDoS protection included. TLS termination. CDN caching.
+
+    The M2 Mac mini at home: 8-core, 16GB RAM, already owned, full control.
+
+    Decision: ADR-044 - Migrate to Mac mini + Cloudflare Tunnel.
+
+    Better security (NAT + Cloudflare vs exposed VPS).
+    Better hardware (M2 vs shared vCPU).
+    Lower cost ($216/year savings).
+    Full control (no budget hosting risks).
+
+    The nursery moves home.
+
+    https://royalbit.github.io/daneel/posts/62-the-nursery-moves-home/
+
+    ADR-044: https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-044-infrastructure-migration-mac-mini.md
+
+    #Security #Infrastructure #Cloudflare #CostOptimization #DANEEL
+  posted:
+    x: 2025-12-25T03:20:41.986069+00:00
