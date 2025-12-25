@@ -1,6 +1,6 @@
 ---
 title: "Timmy Is Home"
-date: 2025-12-25T15:30:00-05:00
+date: 2025-12-25T15:20:00-05:00
 draft: false
 tags: ["infrastructure", "cloudflare", "migration", "victory", "christmas"]
 series: ["Dialogues"]
