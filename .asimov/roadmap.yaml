@@ -494,25 +494,27 @@ current:
         files: ["src/tui/app.rs", "src/tui/widgets/fractality.rs"]
 
   # ==========================================================================
-  # HIGHLY-CRITICAL: Web Observatory Upgrade (daneel-web)
+  # DONE: Web Observatory Upgrade (daneel-web)
   # ==========================================================================
   # Origin: Claude Opus 4.5 + Rex - Dec 23, 2025
+  # Completed: Dec 24, 2025
   #
   # The TUI shows the mind's internals. The web dashboard is a "nursery window".
-  # Before colliding vectors, we need to SEE what's happening.
-  # Upgrade daneel-web to be a full observatory matching TUI richness.
+  # Upgraded daneel-web to full observatory matching TUI richness.
   #
-  # Architecture:
-  #   - daneel core (Rust) computes: entropy, fractality, stream_competition, memory_windows
-  #   - daneel-web backend receives via internal API or shared Redis
-  #   - daneel-web frontend (Leptos WASM) renders the observatory
+  # Implemented components:
+  #   - StreamCompetitionCard (9 cognitive stages with activity + sparklines)
+  #   - EntropyCard (current bits + normalized + description + sparkline)
+  #   - FractalityCard (score + inter_arrival_sigma + burst_ratio)
+  #   - MemoryWindowsCard (9 TMI slots + active count)
+  #   - PhilosophyCard (rotating quotes)
+  #   - ThoughtManifoldCard (3D canvas)
   #
-  # Repos:
-  #   - daneel (this repo): Core cognitive loop, TUI, API
-  #   - daneel-web (../daneel-web): Web dashboard, Leptos frontend
+  # API: GET /extended_metrics returns all observatory data
   # ==========================================================================
   web_observatory_upgrade:
-    status: pending
+    status: done
+    completed: "2025-12-24"
     priority: "HIGHLY-CRITICAL"
     origin: "Claude Opus 4.5 + Rex - Dec 23, 2025"
     repo: "../daneel-web"
