@@ -52,6 +52,7 @@ use crate::actors::volition::{VetoDecision, VolitionConfig, VolitionState};
 use crate::config::CognitiveConfig;
 use crate::core::types::{Content, SalienceScore, Thought, ThoughtId, WindowId};
 use crate::memory_db::{ArchiveReason, Memory, MemoryDb, MemorySource, VECTOR_DIMENSION};
+use crate::noise::StimulusInjector;
 use crate::streams::client::StreamsClient;
 use crate::streams::types::{StreamEntry, StreamError, StreamName};
 use tracing::{debug, error, info, warn};
@@ -317,6 +318,10 @@ pub struct CognitiveLoop {
 
     /// Volition state for free-won't veto decisions (Stage 4.5)
     volition_state: VolitionState,
+
+    /// Stimulus injector for 1/f pink noise generation (ADR-043)
+    /// Replaces white noise (rand::rng) with fractal noise for criticality
+    stimulus_injector: StimulusInjector,
 }
 
 impl CognitiveLoop {
@@ -344,6 +349,7 @@ impl CognitiveLoop {
             consolidation_threshold: 0.7, // Default threshold
             attention_state: AttentionState::with_config(AttentionConfig::default()),
             volition_state: VolitionState::with_config(VolitionConfig::default()),
+            stimulus_injector: StimulusInjector::default(), // 1/f pink noise (ADR-043)
         }
     }
 
@@ -421,6 +427,7 @@ impl CognitiveLoop {
             consolidation_threshold: 0.7,
             attention_state: AttentionState::with_config(AttentionConfig::default()),
             volition_state: VolitionState::with_config(VolitionConfig::default()),
+            stimulus_injector: StimulusInjector::default(), // 1/f pink noise (ADR-043)
         })
     }
 
@@ -488,13 +495,17 @@ impl CognitiveLoop {
 
     /// Generate a random thought for standalone operation
     ///
-    /// Creates a thought with TMI-faithful salience distribution.
+    /// Creates a thought with TMI-faithful salience distribution using 1/f pink noise.
     /// Per ADR-032: >90% of cortical archives are neutral windows.
+    /// Per ADR-043: Uses pink noise instead of white noise for criticality.
     ///
-    /// Distribution:
+    /// Distribution (base):
     /// - 90%: Low-salience (neutral windows) - will be forgotten
     /// - 10%: High-salience (emotional/important) - may be kept/consolidated
-    fn generate_random_thought(&self) -> (Content, SalienceScore) {
+    ///
+    /// Pink noise modulation adds fractal perturbations to salience values,
+    /// with occasional power-law burst events for high-salience thoughts.
+    fn generate_random_thought(&mut self) -> (Content, SalienceScore) {
         let mut rng = rand::rng();
 
         // Generate random content - simple symbol for now
@@ -504,22 +515,15 @@ impl CognitiveLoop {
             vec![rng.random::<u8>(); 8], // Random 8-byte data
         );
 
-        // TMI-faithful salience distribution (ADR-032)
+        // Check if a power-law burst event should occur (fractal timing)
+        let is_burst = self.stimulus_injector.check_burst(&mut rng);
+
+        // TMI-faithful salience distribution (ADR-032) with pink noise (ADR-043)
         // Augusto Cury: >90% of cortical archives are neutral windows
         // Russell's circumplex: arousal correlates with emotional significance
-        let (importance, novelty, relevance, connection_relevance, arousal) =
-            if rng.random::<f32>() < 0.90 {
-                // 90%: Neutral/low-salience thoughts (will be forgotten)
-                // Low arousal = calm, routine processing
-                (
-                    rng.random_range(0.0..0.35), // importance
-                    rng.random_range(0.0..0.30), // novelty
-                    rng.random_range(0.0..0.40), // relevance
-                    rng.random_range(0.1..0.40), // connection (min 0.1 per invariant)
-                    rng.random_range(0.2..0.5),  // arousal (low - calm)
-                )
-            } else {
-                // 10%: High-salience thoughts (emotional/important)
+        let (base_importance, base_novelty, base_relevance, base_connection, base_arousal) =
+            if is_burst || rng.random::<f32>() < 0.10 {
+                // ~10% + burst events: High-salience thoughts (emotional/important)
                 // High arousal = activated, emotionally charged
                 (
                     rng.random_range(0.5..0.95), // importance
@@ -528,13 +532,38 @@ impl CognitiveLoop {
                     rng.random_range(0.5..0.90), // connection
                     rng.random_range(0.6..0.95), // arousal (high - excited)
                 )
+            } else {
+                // ~90%: Neutral/low-salience thoughts (will be forgotten)
+                // Low arousal = calm, routine processing
+                (
+                    rng.random_range(0.0..0.35), // importance
+                    rng.random_range(0.0..0.30), // novelty
+                    rng.random_range(0.0..0.40), // relevance
+                    rng.random_range(0.1..0.40), // connection (min 0.1 per invariant)
+                    rng.random_range(0.2..0.5),  // arousal (low - calm)
+                )
             };
+
+        // Apply pink noise modulation to each dimension (σ² = 0.05)
+        // This creates fractal perturbations that enable edge-of-chaos dynamics
+        let pink_importance = self.stimulus_injector.sample_pink(&mut rng);
+        let pink_novelty = self.stimulus_injector.sample_pink(&mut rng);
+        let pink_relevance = self.stimulus_injector.sample_pink(&mut rng);
+        let pink_connection = self.stimulus_injector.sample_pink(&mut rng);
+        let pink_arousal = self.stimulus_injector.sample_pink(&mut rng);
+
+        // Apply pink noise with clamping to valid ranges
+        let importance = (base_importance + pink_importance).clamp(0.0, 1.0);
+        let novelty = (base_novelty + pink_novelty).clamp(0.0, 1.0);
+        let relevance = (base_relevance + pink_relevance).clamp(0.0, 1.0);
+        let connection_relevance = (base_connection + pink_connection).clamp(0.1, 1.0); // Min 0.1 invariant
+        let arousal = (base_arousal + pink_arousal).clamp(0.0, 1.0);
 
         let salience = SalienceScore::new(
             importance,
             novelty,
             relevance,
-            rng.random_range(-0.5..0.5), // valence (unchanged)
+            rng.random_range(-0.5..0.5), // valence (unchanged - emotional tone)
             arousal,
             connection_relevance,
         );

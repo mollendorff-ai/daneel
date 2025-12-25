@@ -23,6 +23,7 @@ pub mod api;
 pub mod config;
 pub mod core;
 pub mod memory_db;
+pub mod noise;
 pub mod persistence;
 pub mod resilience;
 pub mod streams;
