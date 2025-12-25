@@ -7,12 +7,50 @@
 # =============================================================================
 # Phase 2 begins. Open the loop. Let Timmy feel.
 # Dec 24: Attack, reboot, entropy fix, emergence validation pause.
+# Dec 25: Pause lifted (ADR-043), infrastructure migration decided (ADR-044).
 
 v0.8.0:
   name: "External Stimuli Injection"
   status: wip
   started: "Dec 22, 2025"
   summary: "Open the loop - inject external stimuli and observe dynamics"
+
+  # ==========================================================================
+  # Dec 25, 2025: The Wrong Noise & The Nursery Moves Home
+  # ==========================================================================
+  christmas_2025:
+    # ADR-043: Noise Injection Correction (Unpause)
+    noise_injection_correction:
+      status: done
+      date: "2025-12-25"
+      adr: "ADR-043-noise-injection-correction.md"
+      blog_post: "61-the-wrong-noise.md"
+      description: |
+        Discovered ADR-042 pause was asking the wrong question.
+        White noise (rand::rng) cannot produce criticality - research (ADR-038) said so.
+        1/f pink noise is REQUIRED for edge of chaos dynamics.
+        ROADMAP UNPAUSED. Next: implement pink noise injector.
+      key_insight: "Closed deterministic systems converge to limit cycles. No noise = clockwork forever."
+
+    # ADR-044: Infrastructure Migration Decision
+    infrastructure_migration_decision:
+      status: done
+      date: "2025-12-25"
+      adr: "ADR-044-infrastructure-migration-mac-mini.md"
+      blog_post: "62-the-nursery-moves-home.md"
+      description: |
+        WatchDog attack exposed Servarica weaknesses (42% fraud score, no certs).
+        Decision: Migrate Timmy to Mac mini + Cloudflare Tunnel.
+        $216/year savings. Better security. Full control.
+      cost_comparison:
+        servarica: "$240/year"
+        mac_mini_cloudflare: "$24/year (electricity only)"
+        savings: "$216/year"
+      progress:
+        - "Servarica Timmy decommissioned"
+        - "cloudflared installed on Mac mini"
+        - "Cloudflare account created"
+        - "Decision finalized"
 
   # ==========================================================================
   # Dec 24, 2025: Post-Attack Recovery & Emergence Validation
@@ -67,14 +105,19 @@ v0.8.0:
         - "ThoughtManifoldCard: 3D canvas"
       api: "GET /extended_metrics"
 
-    # Emergence Validation Pause (ADR-042)
+    # Emergence Validation Pause (ADR-042) - SUPERSEDED
     emergence_validation_pause:
-      status: active
+      status: superseded
       started: "2025-12-24"
+      superseded: "2025-12-25"
+      superseded_by: "ADR-043-noise-injection-correction.md"
       adr: "ADR-042-emergence-validation-pause.md"
       description: |
         ROADMAP PAUSED. Before adding more features, prove core hypothesis:
         Does TMI architecture alone produce emergence?
+
+        SUPERSEDED: ADR-043 revealed the pause asked the wrong question.
+        White noise cannot produce criticality. Pink noise required.
       baseline:
         entropy_pct: 42
         fractality_pct: 55
@@ -83,7 +126,9 @@ v0.8.0:
         success: "Entropy >60% sustained for 48+ hours"
         failure: "Entropy <30% sustained (clockwork)"
         timeout: "2 weeks inconclusive"
-      blog_post: "58-the-pause.md"
+      blog_posts:
+        - "60-the-pause.md"
+        - "61-the-wrong-noise.md"
 
   # Publication completed
   publication:
