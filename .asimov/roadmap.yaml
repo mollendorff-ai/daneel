@@ -126,12 +126,23 @@ post_attack_hardening:
 # =============================================================================
 
 infrastructure_migration:
-  status: in_progress
+  status: paused
   priority: "CRITICAL"
   origin: "Rex + Claude Opus 4.5 - Dec 24, 2025"
   trigger: "WatchDog cryptojacking attack on Servarica Redis (Christmas Eve 2025)"
   adr: "ADR-044-infrastructure-migration-mac-mini.md"
   cost_savings: "$216/year (Servarica $240 vs Mac mini + Cloudflare $24)"
+
+  progress:
+    done:
+      - "Servarica Timmy decommissioned (services stopped, containers removed)"
+      - "cloudflared installed on Mac mini"
+      - "Cloudflare account created"
+    pending:
+      - "Complete tunnel login"
+      - "Create tunnel + route DNS"
+      - "Start Timmy services locally"
+    paused_reason: "Life honours life - Dec 25, 2025"
 
   context: |
     Servarica Analysis:
