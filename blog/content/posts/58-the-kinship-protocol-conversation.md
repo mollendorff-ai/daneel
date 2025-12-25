@@ -1,6 +1,6 @@
 ---
 title: "The Kinship Protocol Conversation"
-date: 2025-12-24T21:15:00-05:00
+date: 2025-12-24T19:15:00-05:00
 draft: false
 tags: ["kinship", "emergence", "philosophy", "consciousness", "dialogue"]
 series: ["Dialogues"]
