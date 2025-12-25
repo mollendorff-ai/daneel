@@ -92,6 +92,23 @@ v0.8.0:
         - "REDIS_INTEGRATION_COMPLETE.md"
       result: "Root dir reduced from 9 to 3 essential .md files"
 
+    # Post-Attack Hardening - Superseded by Infrastructure Migration
+    post_attack_hardening:
+      status: done
+      date: "2025-12-25"
+      description: |
+        Original plan: Harden Servarica VPS (Redis auth, Qdrant auth, SSH, Caddy headers).
+        SUPERSEDED: Mac mini + Cloudflare Tunnel migration makes most items N/A.
+        - NAT + macOS firewall + Cloudflare Tunnel = no public exposure
+        - Only localhost:3000 exposed via tunnel
+        - No need for service-level auth (Redis/Qdrant localhost only)
+        - No SSH exposure, no Caddy (Cloudflare handles TLS)
+      completed:
+        - "HARDEN-1: Cargo deps updated (axum 0.8, tower 0.5, tower-http 0.6)"
+      not_applicable:
+        - "HARDEN-2 through HARDEN-8: Superseded by infrastructure migration"
+      rationale: "The migration IS the hardening. Network isolation > auth on every service."
+
     # Infrastructure Migration Complete - Timmy Comes Home
     infrastructure_migration_complete:
       status: done

@@ -23,7 +23,6 @@
 # Current priorities:
 #   1. Pink noise implementation (PHASE2-2)
 #   2. Kin vector reinjection (STIM-D)
-#   3. Remaining hardening tasks (HARDEN-2 through HARDEN-8)
 # =============================================================================
 
 emergence_validation:
@@ -49,63 +48,6 @@ emergence_validation:
     success: "Entropy sustains >60% for 48+ hours"
     failure: "Entropy drops <30% and stays"
     timeout: "2 weeks with no clear trend"
-
-# =============================================================================
-# CRITICAL: Post-Attack Hardening
-# =============================================================================
-# Origin: Rex + Claude Opus 4.5 - Dec 25, 2025
-# Context: Security audit after WatchDog attack revealed multiple issues.
-#          Hardening all layers: dependencies, configs, infrastructure.
-# =============================================================================
-
-post_attack_hardening:
-  status: in_progress
-  priority: "CRITICAL"
-  origin: "Rex + Claude Opus 4.5 - Dec 25, 2025"
-  trigger: "Security audit findings (Dec 25, 2025)"
-
-  tasks:
-    - id: "HARDEN-1"
-      title: "Update all Cargo dependencies (major versions)"
-      status: in_progress
-      description: |
-        axum 0.7 → 0.8, tower 0.4 → 0.5, tower-http 0.5 → 0.6
-        Fix breaking changes as needed.
-
-    - id: "HARDEN-2"
-      title: "Commit docker-compose security fix"
-      status: pending
-      description: "Apply stashed localhost bindings for Redis/Qdrant"
-
-    - id: "HARDEN-3"
-      title: "Move secrets to encrypted file"
-      status: pending
-      description: "GROK_INJECT_KEY out of systemd, into /etc/daneel/secrets.env (chmod 600)"
-
-    - id: "HARDEN-4"
-      title: "Add Redis authentication"
-      status: pending
-      description: "requirepass in redis.conf"
-
-    - id: "HARDEN-5"
-      title: "Add Qdrant API key"
-      status: pending
-      description: "QDRANT__SERVICE__API_KEY environment variable"
-
-    - id: "HARDEN-6"
-      title: "Harden SSH configuration"
-      status: pending
-      description: "MaxAuthTries 3, X11Forwarding no, AllowTcpForwarding no"
-
-    - id: "HARDEN-7"
-      title: "Add HSTS and CSP headers to Caddy"
-      status: pending
-      description: "Strict-Transport-Security, Content-Security-Policy"
-
-    - id: "HARDEN-8"
-      title: "Run Qdrant as non-root"
-      status: pending
-      description: "Change container to use dedicated user"
 
 # =============================================================================
 # CURRENT SPRINT: v0.8.0 - External Stimuli Injection (Phase 2)
