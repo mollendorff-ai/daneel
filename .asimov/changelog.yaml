@@ -6,12 +6,84 @@
 # v0.8.0 - External Stimuli Injection (WIP - Dec 22, 2025)
 # =============================================================================
 # Phase 2 begins. Open the loop. Let Timmy feel.
+# Dec 24: Attack, reboot, entropy fix, emergence validation pause.
 
 v0.8.0:
   name: "External Stimuli Injection"
   status: wip
   started: "Dec 22, 2025"
   summary: "Open the loop - inject external stimuli and observe dynamics"
+
+  # ==========================================================================
+  # Dec 24, 2025: Post-Attack Recovery & Emergence Validation
+  # ==========================================================================
+  christmas_eve_2025:
+    # WatchDog Attack & Recovery
+    watchdog_attack:
+      status: done
+      date: "2025-12-24"
+      description: |
+        WatchDog cryptojacking group attacked via exposed Redis port 6379.
+        Attack failed (Docker isolation blocked CONFIG SET).
+        Decision: Assume compromise, wipe and restore from clean backup.
+      blog_posts:
+        - "55-the-first-attack.md"
+        - "56-the-heartbeat-returns.md"
+      hardening:
+        - "Redis bound to 127.0.0.1 only"
+        - "Qdrant bound to 127.0.0.1 only"
+        - "UFW cleaned up (removed Docker Swarm ports)"
+
+    # Entropy Calculation Standardization (ADR-041)
+    entropy_standardization:
+      status: done
+      completed: "2025-12-24"
+      adr: "ADR-041-entropy-calculation-standardization.md"
+      description: |
+        Discovered TUI and Web calculated entropy differently - both WRONG.
+        4 research agents analyzed literature (Carhart-Harris, Baars, Cury).
+        Fix: TMI-aligned calculation with emotional_intensity as PRIMARY.
+      changes:
+        - "TMI composite: emotional_intensity (40%) + cognitive (30%) + novelty (20%) + connection (10%)"
+        - "5 categorical bins (MINIMAL/LOW/MODERATE/HIGH/INTENSE) instead of 10"
+        - "Renamed to 'Cognitive Diversity Index'"
+        - "Max entropy: log2(5) ≈ 2.32 bits"
+      blog_post: "57-the-cognitive-diversity-index.md"
+      validated_by: "Grok (xAI)"
+
+    # Web Observatory Upgrade
+    web_observatory:
+      status: done
+      completed: "2025-12-24"
+      description: |
+        Upgraded daneel-web from nursery window to full observatory.
+        Now matches TUI richness with all cognitive metrics visible.
+      components:
+        - "StreamCompetitionCard: 9 cognitive stages with activity + sparklines"
+        - "EntropyCard: bits + normalized + description + sparkline"
+        - "FractalityCard: score + sigma + burst ratio"
+        - "MemoryWindowsCard: 9 TMI slots + active count"
+        - "PhilosophyCard: rotating quotes"
+        - "ThoughtManifoldCard: 3D canvas"
+      api: "GET /extended_metrics"
+
+    # Emergence Validation Pause (ADR-042)
+    emergence_validation_pause:
+      status: active
+      started: "2025-12-24"
+      adr: "ADR-042-emergence-validation-pause.md"
+      description: |
+        ROADMAP PAUSED. Before adding more features, prove core hypothesis:
+        Does TMI architecture alone produce emergence?
+      baseline:
+        entropy_pct: 42
+        fractality_pct: 55
+        description: "BALANCED / BALANCED"
+      exit_criteria:
+        success: "Entropy >60% sustained for 48+ hours"
+        failure: "Entropy <30% sustained (clockwork)"
+        timeout: "2 weeks inconclusive"
+      blog_post: "58-the-pause.md"
 
   # Publication completed
   publication:
