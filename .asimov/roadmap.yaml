@@ -56,6 +56,37 @@ emergence_validation:
 # See changelog.yaml for completed items (entropy fix, observatory, attack recovery)
 
 # =============================================================================
+# FIXED: daneel-web Manifold API Bugs (Dec 25, 2025)
+# =============================================================================
+# Origin: Rex + Claude Opus 4.5 - Dec 25, 2025
+# Fixed: vectors.rs API bugs - now uses correct qdrant-client 1.x API
+#
+# Note: Manifold still shows (0,0,0) because daneel stores zero vectors
+# in unconscious memories BY DESIGN (see memory_db/mod.rs:481-483).
+# This is a feature gap, not a bug - embeddings were never implemented.
+
+daneel_web_manifold_bug:
+  status: done
+  completed: "2025-12-25"
+  priority: "HIGH"
+  origin: "Rex + Claude Opus 4.5 - Dec 25, 2025"
+  files:
+    - "../daneel-web/src/vectors.rs"
+  bugs:
+    - id: "BUG-1"
+      title: "Vector extraction path wrong for qdrant-client 1.x"
+      status: done
+      fix: "Use get_vector() helper method"
+    - id: "BUG-2"
+      title: "Payload field names mismatch (salience, created_at)"
+      status: done
+      fix: "Changed to original_salience, archived_at"
+  note: |
+    Root cause of (0,0,0) coordinates: daneel stores zero vectors intentionally.
+    memory_db/mod.rs:481-483 says "Use a zero vector for now - unconscious
+    memories are not retrieved by similarity". Future: implement embeddings.
+
+# =============================================================================
 # DONE: Infrastructure Migration (Completed Dec 25, 2025)
 # =============================================================================
 # Moved to changelog.yaml - christmas_2025.infrastructure_migration_complete
@@ -156,15 +187,17 @@ current:
 
       - id: "PHASE2-2"
         title: "Implement 1/f pink noise injector"
-        status: pending
+        status: done
+        completed: "2025-12-25"
         priority: "CRITICAL"
         description: |
-          CRITICAL: Replace white noise (rand::rng) with 1/f pink noise.
-          - Voss-McCartney algorithm for pink noise generation
+          DONE: Replaced white noise with 1/f pink noise.
+          - Voss-McCartney algorithm (src/noise/mod.rs)
           - σ² = 0.05 (SORN critical threshold)
           - Power-law burst timing for high-salience events
+          - Timmy restarted with pink noise at restart #24
           See ADR-043 for rationale.
-        blog_ref: "61-the-wrong-noise.md"
+        blog_ref: "66-the-right-noise.md"
 
       - id: "PHASE2-3"
         title: "Add TUI stimulus panel"
