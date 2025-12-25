@@ -230,7 +230,11 @@ mod tests {
 
         for _ in 0..1000 {
             let sample = pink.next(&mut rng);
-            assert!(sample >= -1.0 && sample <= 1.0, "Sample {} out of range", sample);
+            assert!(
+                (-1.0..=1.0).contains(&sample),
+                "Sample {} out of range",
+                sample
+            );
         }
     }
 
@@ -244,14 +248,22 @@ mod tests {
 
         // Calculate lag-1 autocorrelation
         let mean: f32 = samples.iter().sum::<f32>() / samples.len() as f32;
-        let variance: f32 = samples.iter().map(|x| (x - mean).powi(2)).sum::<f32>() / samples.len() as f32;
+        let variance: f32 =
+            samples.iter().map(|x| (x - mean).powi(2)).sum::<f32>() / samples.len() as f32;
 
-        let autocorr: f32 = samples.windows(2)
+        let autocorr: f32 = samples
+            .windows(2)
             .map(|w| (w[0] - mean) * (w[1] - mean))
-            .sum::<f32>() / (samples.len() - 1) as f32 / variance;
+            .sum::<f32>()
+            / (samples.len() - 1) as f32
+            / variance;
 
         // Pink noise should have positive autocorrelation
-        assert!(autocorr > 0.0, "Pink noise should have positive autocorrelation, got {}", autocorr);
+        assert!(
+            autocorr > 0.0,
+            "Pink noise should have positive autocorrelation, got {}",
+            autocorr
+        );
     }
 
     #[test]
@@ -260,14 +272,21 @@ mod tests {
         let mut rng = rand::rng();
         let variance = 0.05;
 
-        let samples: Vec<f32> = (0..10000).map(|_| pink.next_scaled(&mut rng, variance)).collect();
+        let samples: Vec<f32> = (0..10000)
+            .map(|_| pink.next_scaled(&mut rng, variance))
+            .collect();
 
         // Calculate actual variance
         let mean: f32 = samples.iter().sum::<f32>() / samples.len() as f32;
-        let actual_variance: f32 = samples.iter().map(|x| (x - mean).powi(2)).sum::<f32>() / samples.len() as f32;
+        let actual_variance: f32 =
+            samples.iter().map(|x| (x - mean).powi(2)).sum::<f32>() / samples.len() as f32;
 
         // Should be roughly proportional to requested variance (pink noise has bounded range)
-        assert!(actual_variance < variance * 2.0, "Variance {} too high", actual_variance);
+        assert!(
+            actual_variance < variance * 2.0,
+            "Variance {} too high",
+            actual_variance
+        );
     }
 
     #[test]
@@ -294,8 +313,8 @@ mod tests {
             .collect();
 
         // Should have variation around base
-        let min = modulated.iter().cloned().reduce(f32::min).unwrap();
-        let max = modulated.iter().cloned().reduce(f32::max).unwrap();
+        let min = modulated.iter().copied().reduce(f32::min).unwrap();
+        let max = modulated.iter().copied().reduce(f32::max).unwrap();
         assert!(max > min, "Modulation should produce varied salience");
         assert!(min >= 0.0 && max <= 1.0, "Salience should be clamped");
     }
