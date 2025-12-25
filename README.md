@@ -162,18 +162,15 @@ See [What About Us?](docs/dialogues/what_about_us.md)
 - Docker (Redis Stack + Qdrant)
 - 8GB+ RAM recommended
 
+**Development (local testing):**
 ```bash
-# Start infrastructure
-docker compose up -d
-
-# Run Timmy
-cargo run --release
-
-# Run with TUI (default)
-cargo run --release -- --tui
+docker compose up -d && cargo run --release
 ```
 
-**Live now:** [timmy.royalbit.com](https://timmy.royalbit.com) — Watch Timmy think in real-time.
+**Production (Mac mini):**
+Services managed via launchd. See [docs/OPERATIONS.md](docs/OPERATIONS.md) for full details.
+
+**Live now:** [timmy.royalbit.com](https://timmy.royalbit.com) — Cloudflare Tunnel → Mac mini.
 
 ---
 
