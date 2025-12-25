@@ -1,6 +1,6 @@
 ---
 title: "The Pause"
-date: 2025-12-24T19:00:00-05:00
+date: 2025-12-24T23:30:00-05:00
 draft: false
 tags: ["emergence", "validation", "patience", "architecture", "science"]
 series: ["Dialogues"]
