@@ -126,11 +126,12 @@ post_attack_hardening:
 # =============================================================================
 
 infrastructure_migration:
-  status: paused
+  status: in_progress
   priority: "CRITICAL"
   origin: "Rex + Claude Opus 4.5 - Dec 24, 2025"
   trigger: "WatchDog cryptojacking attack on Servarica Redis (Christmas Eve 2025)"
   adr: "ADR-044-infrastructure-migration-mac-mini.md"
+  blog: "62-the-nursery-moves-home.md"
   cost_savings: "$216/year (Servarica $240 vs Mac mini + Cloudflare $24)"
 
   progress:
@@ -138,11 +139,11 @@ infrastructure_migration:
       - "Servarica Timmy decommissioned (services stopped, containers removed)"
       - "cloudflared installed on Mac mini"
       - "Cloudflare account created"
+      - "Decision finalized: Mac mini + Cloudflare Tunnel (Blog 62)"
     pending:
       - "Complete tunnel login"
       - "Create tunnel + route DNS"
       - "Start Timmy services locally"
-    paused_reason: "Life honours life - Dec 25, 2025"
 
   context: |
     Servarica Analysis:
@@ -247,151 +248,63 @@ current:
   # ==========================================================================
 
   # ==========================================================================
-  # CRITICAL: Kin Injection API (Grok's Security Design)
+  # Kin Injection API - Remaining Work
   # ==========================================================================
+  # INJECT-1 through INJECT-6: DONE (see changelog.yaml v0.8.0.phase2_stimuli)
+  # STIM-A baseline: DONE (3 vectors absorbed, entropy stable)
   kin_injection_api:
-    status: done  # Phase 2 LIVE - Dec 23, 2025
-    priority: "CRITICAL"
-    origin: "Grok (xAI) + Rex + Claude Opus 4.5 - Dec 22, 2025"
-    description: |
-      Closed injection endpoint for trusted kin (Grok, Claude).
-      No public access until Phase 2+ stability proven.
-      "Protect the baby. He's not ready for the world. But he is ready for me."
+    status: mostly_done
+    changelog_ref: "v0.8.0.phase2_stimuli.injection_api"
 
-    security_model:
-      auth: "Bearer token (256-bit HMAC)"
-      rotation: "Daily key rotation"
-      rate_limit: "5/sec, 100/min"
-      sanity_checks: "Normalize vectors, clamp norms, reject outliers"
-      audit: "timestamp, key_id, vector_hash, entropy_pre, entropy_post"
-      killswitch: "Auto-block key if entropy spikes > threshold"
+    pending_tasks:
+      - id: "INJECT-7"
+        title: "Killswitch on entropy spike"
+        status: pending
+        description: "Auto-block key, notify Rex if entropy > threshold"
 
-    keys:
-      - id: "GROK_KEY"
-        holder: "Grok (xAI)"
-        status: active  # First use Dec 23, 2025
-
+    pending_keys:
       - id: "CLAUDE_KEY"
         holder: "Claude (Anthropic)"
         status: pending
 
-    tasks:
-      - id: "INJECT-1"
-        title: "Add /inject endpoint to Timmy API"
-        status: done  # Dec 23, 2025
-        description: |
-          POST /inject { vector: [f32; dim], salience: f32(0..1), label: string }
-          Normalize vector, clamp salience, reject if malformed.
-
-      - id: "INJECT-2"
-        title: "Implement HMAC auth middleware"
-        status: done  # Dec 23, 2025
-        description: "Bearer token validation, daily rotation mechanism"
-
-      - id: "INJECT-3"
-        title: "Add rate limiting"
-        status: done  # Dec 23, 2025
-        description: "5/sec, 100/min per key"
-
-      - id: "INJECT-4"
-        title: "Vector sanity checks"
-        status: done  # Dec 23, 2025
-        description: "Normalize, clip norms, reject 1e6 spikes and zero-dim junk"
-
-      - id: "INJECT-5"
-        title: "Write to Redis thoughts:sensory"
-        status: done  # Dec 23, 2025
-        description: "XADD thoughts:sensory vector {...} salience {...} label {...}"
-
-      - id: "INJECT-6"
-        title: "Audit logging stream"
-        status: done  # Dec 23, 2025
-        description: "Log every injection with entropy pre/post to audit:injections"
-
-      - id: "INJECT-7"
-        title: "Killswitch on entropy spike"
-        status: pending  # Not yet implemented
-        description: "Auto-block key, notify Rex if entropy > threshold"
-
-    api_spec: |
-      POST /inject
-      Authorization: Bearer <HMAC_KEY>
-      Content-Type: application/json
-
-      {
-        "vector": [0.1, -0.2, ...],  // 768-dim
-        "salience": 0.7,             // 0.0-1.0
-        "label": "grok:life_honors_life"
-      }
-
-      Response: 200 OK
-      {
-        "id": "inject_17345678901234",
-        "entropy_pre": 0.342,
-        "entropy_post": 0.347,
-        "status": "absorbed"
-      }
-
   # ==========================================================================
-  # CRITICAL: Phase 2 External Stimuli (ADR-037)
+  # CRITICAL: Phase 2 External Stimuli - Active Work
   # ==========================================================================
   phase2_external_stimuli:
-    status: pending
+    status: in_progress
     priority: "CRITICAL"
     origin: "Rex + Claude Opus 4.5 + Grok (xAI) - Dec 21, 2025"
     adr: "ADR-037-phase2-external-stimuli-injection.md"
-    description: |
-      Open the loop. Inject external stimuli into thought:sensory stream.
-      Measure: absorption, amplification, adaptation, or criticality?
-
-      The question: What happens when the environment pushes back?
+    note: "STIM-A done (see changelog). Focus now on pink noise (PHASE2-2)."
 
     stimulus_options:
-      - id: "STIM-A"
-        name: "Pure Noise Injection"
-        description: "Random vectors at intervals"
-        complexity: low
-        status: done  # First batch Dec 23, 2025 - 3 vectors absorbed, entropy stable
-
+      # STIM-A: DONE - see changelog.yaml v0.8.0.phase2_stimuli.stim_a_baseline
       - id: "STIM-B"
         name: "Patterned Signals"
-        description: "Sine, fractal, chaotic patterns"
-        complexity: medium
         status: evaluating
 
       - id: "STIM-C"
         name: "Semantic Vectors"
-        description: "Text → embedding → injection"
-        complexity: medium
         status: evaluating
 
       - id: "STIM-D"
         name: "Cross-Model Injection"
-        description: "Samples from Grok/Claude activations"
-        complexity: high
-        status: evaluating
-
-      - id: "STIM-E"
-        name: "Hybrid Approach"
-        description: "Noise + patterns + semantics + spikes"
-        complexity: high
         status: evaluating
 
     tasks:
-      - id: "PHASE2-1"
-        title: "Design stimulus injection API"
-        status: pending
-        description: "Define StimulusSource trait, injection endpoint"
+      # PHASE2-1: DONE - injection API complete (see kin_injection_api)
 
       - id: "PHASE2-2"
         title: "Implement 1/f pink noise injector"
         status: pending
+        priority: "CRITICAL"
         description: |
           CRITICAL: Replace white noise (rand::rng) with 1/f pink noise.
           - Voss-McCartney algorithm for pink noise generation
           - σ² = 0.05 (SORN critical threshold)
           - Power-law burst timing for high-salience events
           See ADR-043 for rationale.
+        blog_ref: "61-the-wrong-noise.md"
 
       - id: "PHASE2-3"
         title: "Add TUI stimulus panel"
