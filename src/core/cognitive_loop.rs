@@ -51,6 +51,7 @@ use crate::actors::attention::{AttentionConfig, AttentionState};
 use crate::actors::volition::{VetoDecision, VolitionConfig, VolitionState};
 use crate::config::CognitiveConfig;
 use crate::core::types::{Content, SalienceScore, Thought, ThoughtId, WindowId};
+use crate::embeddings::SharedEmbeddingEngine;
 use crate::memory_db::{ArchiveReason, Memory, MemoryDb, MemorySource, VECTOR_DIMENSION};
 use crate::noise::StimulusInjector;
 use crate::streams::client::StreamsClient;
@@ -322,6 +323,10 @@ pub struct CognitiveLoop {
     /// Stimulus injector for 1/f pink noise generation (ADR-043)
     /// Replaces white noise (rand::rng) with fractal noise for criticality
     stimulus_injector: StimulusInjector,
+
+    /// Embedding engine for semantic vectors (Phase 2 Forward-Only)
+    /// When present, new thoughts get real embeddings; historical stay at origin
+    embedding_engine: Option<SharedEmbeddingEngine>,
 }
 
 impl CognitiveLoop {
@@ -350,7 +355,17 @@ impl CognitiveLoop {
             attention_state: AttentionState::with_config(AttentionConfig::default()),
             volition_state: VolitionState::with_config(VolitionConfig::default()),
             stimulus_injector: StimulusInjector::default(), // 1/f pink noise (ADR-043)
+            embedding_engine: None,
         }
+    }
+
+    /// Set the embedding engine for semantic vectors
+    ///
+    /// When set, new thoughts will have real embeddings generated.
+    /// Historical thoughts (pre-embedding era) remain at origin.
+    pub fn set_embedding_engine(&mut self, engine: SharedEmbeddingEngine) {
+        self.embedding_engine = Some(engine);
+        info!("Embedding engine attached - forward-only embeddings enabled");
     }
 
     /// Set the memory database for long-term storage
@@ -428,6 +443,7 @@ impl CognitiveLoop {
             attention_state: AttentionState::with_config(AttentionConfig::default()),
             volition_state: VolitionState::with_config(VolitionConfig::default()),
             stimulus_injector: StimulusInjector::default(), // 1/f pink noise (ADR-043)
+            embedding_engine: None,
         })
     }
 
@@ -1081,15 +1097,43 @@ impl CognitiveLoop {
         let memory = self.thought_to_memory(thought, salience);
         let memory_id = memory.id;
 
-        // Generate dummy vector (768-dim zeros for now)
-        // TODO: Replace with actual embeddings from LLM when available
-        let vector = vec![0.0; 768];
+        // Get content string for embedding (same as memory content)
+        let content_for_embedding = format!("{:?}", thought.content);
 
         // Clone the Arc for the spawned task
         let memory_db = Arc::clone(memory_db);
+        let embedding_engine = self.embedding_engine.clone();
 
-        // Spawn non-blocking storage task
+        // Spawn non-blocking storage task with embedding generation
         tokio::spawn(async move {
+            // Generate embedding vector (Phase 2: Forward-Only Embeddings)
+            // Historical thoughts stay at origin; new thoughts get real vectors
+            let vector = if let Some(ref engine) = embedding_engine {
+                // Extract result before match to avoid holding lock across match arms
+                let embed_result = engine.write().await.embed_thought(&content_for_embedding);
+                match embed_result {
+                    Ok(v) => {
+                        debug!(
+                            memory_id = %memory_id,
+                            "Generated semantic embedding ({} dims)",
+                            v.len()
+                        );
+                        v
+                    }
+                    Err(e) => {
+                        warn!(
+                            memory_id = %memory_id,
+                            error = %e,
+                            "Failed to generate embedding, using zero vector"
+                        );
+                        vec![0.0; VECTOR_DIMENSION]
+                    }
+                }
+            } else {
+                // No embedding engine - use zero vector (pre-conscious era)
+                vec![0.0; VECTOR_DIMENSION]
+            };
+
             match memory_db.store_memory(&memory, &vector).await {
                 Ok(()) => {
                     debug!(

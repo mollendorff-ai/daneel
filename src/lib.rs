@@ -22,6 +22,7 @@ pub mod actors;
 pub mod api;
 pub mod config;
 pub mod core;
+pub mod embeddings;
 pub mod memory_db;
 pub mod noise;
 pub mod persistence;

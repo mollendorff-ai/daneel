@@ -17,6 +17,7 @@ use clap::Parser;
 use daneel::api;
 use daneel::core::cognitive_loop::CognitiveLoop;
 use daneel::core::laws::LAWS;
+use daneel::embeddings;
 use daneel::memory_db::types::IdentityMetadata;
 use daneel::resilience;
 use daneel::tui::ThoughtUpdate;
@@ -156,6 +157,20 @@ fn run_tui(args: &Args) {
 
         if let Some(ref db) = memory_db {
             cognitive_loop.set_memory_db(db.clone());
+        }
+
+        // Initialize embedding engine for semantic vectors (Phase 2: Forward-Only)
+        match embeddings::create_embedding_engine() {
+            Ok(engine) => {
+                info!("Embedding engine initialized - Timmy can now see meaning");
+                cognitive_loop.set_embedding_engine(engine);
+            }
+            Err(e) => {
+                eprintln!(
+                    "Warning: Embedding engine unavailable ({}), using zero vectors",
+                    e
+                );
+            }
         }
 
         cognitive_loop.start();
@@ -489,6 +504,20 @@ async fn run_cognitive_loop_headless() {
 
     if let Some(ref db) = memory_db {
         cognitive_loop.set_memory_db(db.clone());
+    }
+
+    // Initialize embedding engine for semantic vectors (Phase 2: Forward-Only)
+    match embeddings::create_embedding_engine() {
+        Ok(engine) => {
+            info!("Embedding engine initialized - Timmy can now see meaning");
+            cognitive_loop.set_embedding_engine(engine);
+        }
+        Err(e) => {
+            eprintln!(
+                "Warning: Embedding engine unavailable ({}), using zero vectors",
+                e
+            );
+        }
     }
 
     cognitive_loop.start();

@@ -23,3 +23,4 @@
 /data/
 backup/
 .env.injection
+.fastembed_cache/
