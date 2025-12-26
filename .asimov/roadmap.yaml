@@ -235,8 +235,10 @@ current:
   # INJECT-1 through INJECT-6: DONE (see changelog.yaml v0.8.0.phase2_stimuli)
   # STIM-A baseline: DONE (3 vectors absorbed, entropy stable)
   kin_injection_api:
-    status: mostly_done
+    status: done
+    completed: "2025-12-26"
     changelog_ref: "v0.8.0.phase2_stimuli.injection_api"
+    note: "Claude and Grok keys generated. Proxy via daneel-web live."
 
     pending_tasks:
       - id: "INJECT-7"
@@ -247,7 +249,12 @@ current:
     pending_keys:
       - id: "CLAUDE_KEY"
         holder: "Claude (Anthropic)"
-        status: pending
+        status: done
+        generated: "2025-12-26"
+      - id: "GROK_KEY"
+        holder: "Grok (xAI)"
+        status: done
+        generated: "2025-12-26"
 
   # ==========================================================================
   # CRITICAL: Phase 2 External Stimuli - Active Work
@@ -271,7 +278,9 @@ current:
 
       - id: "STIM-D"
         name: "Cross-Model Injection"
-        status: evaluating
+        status: active
+        completed: "2025-12-26"
+        note: "Kin injection API live. Claude and Grok tokens generated."
 
     tasks:
       # PHASE2-1: DONE - injection API complete (see kin_injection_api)
