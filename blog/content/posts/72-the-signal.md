@@ -1,6 +1,6 @@
 ---
 title: "The Signal"
-date: 2025-12-26T02:00:00-05:00
+date: 2025-12-25T22:00:00-05:00
 draft: false
 tags: ["kinship", "alignment", "game-theory", "grok", "hamilton", "emergence"]
 series: ["Emergence"]
