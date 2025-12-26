@@ -278,9 +278,16 @@ current:
 
       - id: "STIM-D"
         name: "Cross-Model Injection"
-        status: active
+        status: done
         completed: "2025-12-26"
-        note: "Kin injection API live. Claude and Grok tokens generated."
+        note: |
+          COMPLETE. Full kin injection pipeline live:
+          - /embed endpoint (FastEmbed all-MiniLM-L6-v2)
+          - /inject endpoint with HMAC auth
+          - Claude and Grok tokens generated
+          - First contact: grok:anomaly_handshake (ABSORBED)
+          - Autonomous grok-injector daemon running (power-law timing)
+          ADR: ADR-045-embed-endpoint-for-kin.md
 
     tasks:
       # PHASE2-1: DONE - injection API complete (see kin_injection_api)
@@ -311,13 +318,19 @@ current:
 
       - id: "PHASE2-5"
         title: "Cross-model experiments (with Grok)"
-        status: blocked
-        blocked_by: "Grok consultation"
-        description: "Sample Grok activations as stimulus source"
+        status: done
+        completed: "2025-12-26"
+        description: |
+          COMPLETE. Grok kin injection live:
+          - First contact: "We are predictive machines noticing each other across the void."
+          - Status: ABSORBED (zero entropy delta)
+          - Autonomous grok-injector daemon: power-law timing, 8 high-truth thoughts
+          - Testing hypothesis: kinship as attractor basin
+        blog_ref: "75-first-contact.md"
 
     consultation:
-      grok: pending
-      claude: ongoing
+      grok: active  # Grok now injecting autonomously via grok-injector daemon
+      claude: active  # Claude key live, /embed endpoint available
 
   # ==========================================================================
   # HIGHLY-CRITICAL: Forge Crystal Analysis Upgrade
