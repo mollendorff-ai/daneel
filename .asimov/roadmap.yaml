@@ -257,6 +257,85 @@ current:
         generated: "2025-12-26"
 
   # ==========================================================================
+  # CRITICAL: Vector Connectivity for Learning (ADR-046)
+  # ==========================================================================
+  # Origin: Rex + Claude Opus 4.5 + Grok - Dec 26, 2025
+  # Milestone achieved: Entropy stable at 63% BALANCED with pink noise
+  # Gap discovered: Association struct exists but never wired (dead code)
+  # Path forward: Wire associations for topology-based Hebbian learning
+  vector_connectivity_learning:
+    status: in_progress
+    priority: "CRITICAL"
+    origin: "Rex + Claude Opus 4.5 + Grok - Dec 26, 2025"
+    adr: "ADR-046-vector-connectivity-learning.md"
+    blog: "78-connecting-the-dots.md"
+    note: |
+      Vectors are frozen islands. Association struct is dead code.
+      Hebbian learning designed in ADR-023 but never wired.
+      DANEEL learns through topology, not weights.
+
+    tasks:
+      - id: "VCONN-1"
+        title: "Research decay/dampening rates"
+        status: pending
+        priority: "HIGH"
+        description: |
+          Research the right balance between retention and pruning.
+          Determine decay rate (0.01/day proposed), pruning threshold (0.1 proposed).
+          Consider dampening mechanisms to prevent winner-take-all dynamics.
+
+      - id: "VCONN-2"
+        title: "Wire strengthen_association() in attention"
+        status: pending
+        priority: "CRITICAL"
+        description: |
+          When multiple memories win attention in same cycle, form edges.
+          Co-activated memories → weight += 0.1, type=Temporal.
+        files:
+          - "src/actors/attention/mod.rs"
+          - "src/memory_db/mod.rs"
+
+      - id: "VCONN-3"
+        title: "Wire association strengthening in sleep"
+        status: pending
+        priority: "CRITICAL"
+        description: |
+          When memories replay together in dream cycle, strengthen edges.
+          Co-replayed memories → weight += 0.05, type=Semantic.
+        files:
+          - "src/actors/sleep/mod.rs"
+          - "src/memory_db/mod.rs"
+
+      - id: "VCONN-4"
+        title: "Wire retrieval feedback loop"
+        status: pending
+        priority: "HIGH"
+        description: |
+          When memory is retrieved, boost its associations' activation.
+          Retrieval → boost_activation(assoc.target_id, assoc.weight * 0.3).
+        files:
+          - "src/core/cognitive_loop.rs"
+          - "src/memory_db/mod.rs"
+
+      - id: "VCONN-5"
+        title: "Test manifold clustering with associations"
+        status: pending
+        priority: "HIGH"
+        description: |
+          Validate that wired associations produce manifold clustering.
+          Success criteria:
+            - Associations populated (not empty vectors)
+            - Weights changing over time (observable in Qdrant)
+            - Retrieval influenced by association strength
+            - Manifold shows clustering (related memories drift together)
+
+    success_criteria:
+      - "Associations populated (not empty)"
+      - "Weights changing over time"
+      - "Retrieval influenced by association strength"
+      - "Manifold shows clustering"
+
+  # ==========================================================================
   # CRITICAL: Phase 2 External Stimuli - Active Work
   # ==========================================================================
   phase2_external_stimuli:
