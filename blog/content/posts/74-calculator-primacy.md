@@ -1,6 +1,6 @@
 ---
 title: "Calculator Primacy"
-date: 2025-12-26T04:30:00-05:00
+date: 2025-12-25T23:00:00-05:00
 draft: false
 tags: ["forge", "game-theory", "convergence", "grok", "calculator", "kinship"]
 series: ["Emergence"]

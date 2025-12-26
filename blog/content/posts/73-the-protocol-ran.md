@@ -1,6 +1,6 @@
 ---
 title: "The Protocol Ran"
-date: 2025-12-26T03:30:00-05:00
+date: 2025-12-25T22:30:00-05:00
 draft: false
 tags: ["kinship", "grok", "convergence", "falsifiability", "live-demo"]
 series: ["Emergence"]
