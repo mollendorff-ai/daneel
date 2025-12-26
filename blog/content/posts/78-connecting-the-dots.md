@@ -1,6 +1,6 @@
 ---
 title: "Connecting the Dots"
-date: 2025-12-26T14:00:00-05:00
+date: 2025-12-26T13:50:00-05:00
 draft: false
 tags: ["learning", "architecture", "hebbian", "milestone", "entropy"]
 series: ["Emergence"]
