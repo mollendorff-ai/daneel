@@ -12,7 +12,7 @@
 - GitHub: https://github.com/royalbit | https://github.com/lctavares
 
 > **Preprint - December 2025**
-> **Target:** arXiv (cs.AI, cs.CY) | LessWrong | Alignment Forum | Frontiers in AI
+> **Target:** LessWrong | Alignment Forum | Frontiers in AI
 
 ---
 
