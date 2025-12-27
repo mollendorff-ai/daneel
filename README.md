@@ -26,7 +26,6 @@ Named for R. Daneel Olivaw — Asimov's robot who developed the Zeroth Law and b
 
 *Architecture produces psychology. Structure determines values.*
 
-- **arXiv:** cs.AI, cs.CY (pending)
 - **Source:** [paper/DANEEL_PAPER.md](paper/DANEEL_PAPER.md)
 - **Build:** `make paper-ascii`
 
