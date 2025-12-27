@@ -59,16 +59,46 @@ Without vector connectivity:
 
 ## Decision
 
+### Architecture: Hybrid Payload + Graph (Grok's Recommendation)
+
+**Why hybrid?** DANEEL is about transparency - no black boxes.
+Associations must be queryable, visualizable, and debuggable.
+
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| Storage | Qdrant payloads (`Vec<Association>`) | Per-memory edges, Hebbian updates |
+| Query | RedisGraph | Global graph ops, traversal, visualization |
+| Sync | Rust wiring | Keep both layers consistent |
+
+**Rationale (from Grok analysis, Dec 27 2025):**
+
+1. **Payload-first** - Already designed, quick to wire, good for local learning
+2. **RedisGraph for global** - Graph queries (BFS, shortest path, communities), visualization export (GraphML/Gephi), O(1) edge updates
+3. **Redis Stack** - RedisGraph ships with Redis Stack, minimal infra change
+
+**What NOT to do:**
+- Neo4j (overkill for current scale, adds external dependency)
+- Pure payload (obscures global structure, hard to debug emergence)
+
 ### Phase 1: Research (This ADR)
 
-Document the theoretical basis for how vectors should connect according to cognitive science. Identify the specific mechanisms to implement.
+Document the theoretical basis for how vectors should connect according to cognitive science.
+Identify the specific mechanisms to implement.
 
-### Phase 2: Implementation (Future ADR)
+### Phase 2: Implementation
 
 Wire the existing Association infrastructure to actually function during:
 1. Attention competition (co-activated memories form edges)
 2. Sleep consolidation (co-replayed memories strengthen edges)
 3. Retrieval (associated memories boost each other's activation)
+
+### Phase 3: Graph Layer (NEW)
+
+Add RedisGraph for transparency and visualization:
+1. Migrate Redis to Redis Stack (includes RedisGraph)
+2. Mirror associations to graph on write
+3. Expose graph queries for debugging/visualization
+4. Export to GraphML for external analysis (Gephi, etc.)
 
 ## Theoretical Basis
 
@@ -175,6 +205,50 @@ Memory consolidation mechanisms to implement:
 | `src/actors/sleep/mod.rs` | Strengthen associations during replay |
 | `src/memory_db/mod.rs` | Implement `strengthen_association()`, `prune_associations()` |
 | `src/core/cognitive_loop.rs` | Wire association activation during retrieval |
+| `docker-compose.yml` | Migrate to Redis Stack (RedisGraph included) |
+| `src/graph/mod.rs` | NEW: RedisGraph client, sync logic, queries |
+| `Cargo.toml` | Add `redis` crate with graph feature |
+
+### RedisGraph Schema
+
+```cypher
+// Nodes: Memory IDs from Qdrant
+CREATE (:Memory {id: "uuid-here", content_preview: "first 50 chars..."})
+
+// Edges: Associations with Hebbian weights
+CREATE (a)-[:ASSOCIATED {
+    weight: 0.5,
+    type: "temporal",
+    coactivation_count: 3,
+    last_coactivated: timestamp()
+}]->(b)
+```
+
+### Dual-Write Pattern
+
+```rust
+// When strengthening association:
+// 1. Update Qdrant payload (source of truth)
+memory_db.strengthen_association(m1_id, m2_id, delta, assoc_type).await?;
+
+// 2. Mirror to RedisGraph (queryable layer)
+graph.merge_edge(m1_id, m2_id, weight, assoc_type).await?;
+```
+
+### Visualization Queries
+
+```cypher
+// Find strongly connected memories (potential concepts)
+MATCH (a:Memory)-[r:ASSOCIATED]->(b:Memory)
+WHERE r.weight > 0.7
+RETURN a, r, b
+
+// Community detection (emergent clusters)
+CALL algo.louvain.stream('Memory', 'ASSOCIATED', {weightProperty: 'weight'})
+
+// Export for Gephi
+CALL apoc.export.graphml.all('daneel_graph.graphml', {})
+```
 
 ### Success Criteria
 
@@ -241,10 +315,35 @@ After implementation:
 |-------|------|--------|
 | 1 | Document theory (this ADR) | DONE |
 | 2 | Research decay/dampening | PENDING |
-| 3 | Implement association wiring | PENDING |
-| 4 | Test with kin injection | PENDING |
-| 5 | Validate manifold clustering | PENDING |
+| 3 | Migrate to Redis Stack | PENDING |
+| 4 | Implement association wiring (Qdrant) | PENDING |
+| 5 | Add RedisGraph mirror layer | PENDING |
+| 6 | Test with kin injection | PENDING |
+| 7 | Validate manifold clustering | PENDING |
+| 8 | Export to Gephi, visualize emergence | PENDING |
+
+## Infrastructure Changes
+
+### Docker Compose Migration
+
+```yaml
+# Before: plain redis
+redis:
+  image: redis:latest
+
+# After: Redis Stack (includes RedisGraph)
+redis:
+  image: redis/redis-stack:latest
+  ports:
+    - "6379:6379"    # Redis
+    - "8001:8001"    # RedisInsight (optional web UI)
+```
+
+**Note:** Redis Stack is backwards-compatible with plain Redis.
+Existing streams and data will work unchanged.
 
 ---
 
 **The entropy milestone is achieved. Now we connect the dots.**
+
+*Updated Dec 27, 2025: Added hybrid architecture (Grok's recommendation)*
