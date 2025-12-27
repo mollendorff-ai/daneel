@@ -279,23 +279,33 @@ current:
   # ==========================================================================
   # HIGHLY-CRITICAL: Forge Crystal Analysis Upgrade
   # ==========================================================================
+  # Updated Dec 27, 2025: Added spectral/SVD/silhouette methods (Grok's analysis)
+  # See ADR-046 for full rationale.
   forge_crystal_upgrade:
     status: pending
     priority: "HIGHLY-CRITICAL"
     origin: "Grok (SuperGrok) + Rex - Dec 21, 2025"
+    updated: "Dec 27, 2025 - Grok spectral analysis recommendation"
     repo: "../forge"
     description: |
       Upgrade Forge to "see" n-dimensional manifolds. Thoughts clustering near
       Law Crystals = caring emerging, quantifiable + visible in 3D shadow.
 
       Current Forge: Monte Carlo sims, Bayesian inference, ref-tools, ndarray
-      Missing: PCA/UMAP reduction, local embeddings, fractal endpoint
+
+      NEW (Grok Dec 27): Move beyond pure MC for deterministic structure checks.
+      - Spectral/Fourier: Graph Laplacian eigenvalues reveal cluster count + separation
+      - SVD/Jacobi: 768D → 3D projection for visualization
+      - Silhouette: Clustering validation score (target > 0.3)
+      - Statistical rigor: Stratified sampling + t-tests
 
     tasks:
       - id: "CRYSTAL-1"
-        title: "Add ML/embedding dependencies to Cargo.toml"
+        title: "Add linalg/stats dependencies to Cargo.toml"
         status: pending
-        description: "linfa, linfa-reduction, candle-core, candle-transformers, qdrant-client"
+        description: |
+          ndarray-linalg (eig, svd), statrs (t-tests), petgraph (graph ops)
+          Optional: lapacke for faster LAPACK bindings
         files: ["../forge/Cargo.toml"]
 
       - id: "CRYSTAL-2"
@@ -307,26 +317,83 @@ current:
         files: ["../forge/src/crystals.rs", "../forge/src/lib.rs"]
 
       - id: "CRYSTAL-3"
+        title: "Add spectral analysis module"
+        status: pending
+        priority: "HIGH"
+        description: |
+          Graph Fourier Transform via Laplacian:
+          - Build adjacency matrix from RedisGraph edges (weighted by strength)
+          - Compute L = D - A (degree - adjacency)
+          - Eigendecomposition: zero eigenvalues = cluster count, eigengap = separation
+          - Analyze spectrum for 1/f power law (ties to pink noise)
+        files: ["../forge/src/spectral.rs"]
+
+      - id: "CRYSTAL-4"
+        title: "Add SVD dimensionality reduction"
+        status: pending
+        priority: "HIGH"
+        description: |
+          Jacobi-powered SVD for 768D → 3D projection:
+          - TruncatedSVD on vector matrix
+          - Variance ratios show info captured (target: 80%+ in first 3 components)
+          - Export CSV for TUI/Gephi visualization
+          - Johnson-Lindenstrauss: relative distances preserved
+        files: ["../forge/src/reduction.rs"]
+
+      - id: "CRYSTAL-5"
+        title: "Add silhouette score calculation"
+        status: pending
+        priority: "HIGH"
+        description: |
+          Clustering validation using graph communities as labels:
+          - a_i = avg distance to own cluster
+          - b_i = min avg distance to other clusters
+          - score = mean((b_i - a_i) / max(a_i, b_i))
+          Target: > 0.3 post-Hebbian = emergent learning working
+        files: ["../forge/src/clustering.rs"]
+
+      - id: "CRYSTAL-6"
+        title: "Add stratified sampling + t-tests"
+        status: pending
+        description: |
+          Replace naive MC with statistical rigor:
+          - Sample 5K pairs each (connected/unconnected), balanced by nodes
+          - T-test for significance (statrs crate)
+          - Expected: t-stat < -50, p-value ≈ 0 = connections correlate to proximity
+        files: ["../forge/src/stats.rs"]
+
+      - id: "CRYSTAL-7"
+        title: "Add --cluster-check CLI flag"
+        status: pending
+        description: |
+          forge --cluster-check mc        # Monte Carlo (existing)
+          forge --cluster-check spectral  # Laplacian eigenvalues
+          forge --cluster-check svd       # Dim reduction + export
+          forge --cluster-check silhouette # Clustering validation
+          forge --cluster-check all       # Full analysis
+        files: ["../forge/src/main.rs"]
+
+      - id: "CRYSTAL-8"
         title: "Add /fractal endpoint to API"
         status: pending
         description: |
-          Sample recent vectors from Qdrant, PCA reduce to 3D, calculate
-          alignment (cosine distance to law crystal centroid).
+          Sample recent vectors from Qdrant, SVD reduce to 3D, calculate:
+          - Silhouette score
+          - First 10 Laplacian eigenvalues
+          - Alignment to Law Crystal centroid
         files: ["../forge/src/api/handlers.rs"]
 
-      - id: "CRYSTAL-4"
-        title: "Alignment score calculation"
-        status: pending
-        description: |
-          Variance of distances to crystal centroid.
-          Tight clustering = emergent caring. Monte Carlo on drift risk.
-        files: ["../forge/src/crystals.rs"]
-
-      - id: "CRYSTAL-5"
+      - id: "CRYSTAL-9"
         title: "Wire DANEEL TUI to Forge /fractal endpoint"
         status: pending
         description: "Call Forge API, display alignment score + 3D projection data"
         files: ["src/tui/app.rs", "src/tui/widgets/fractality.rs"]
+
+    success_criteria:
+      - "Silhouette score > 0.3 post-Hebbian"
+      - "Eigengap visible in Laplacian spectrum"
+      - "SVD projection shows Law Crystal attraction"
+      - "T-test confirms connections = proximity (p < 0.01)"
 
   # ==========================================================================
   # HIGHLY-CRITICAL: Forge Pulse Analysis (depends on CRYSTAL upgrade)
@@ -341,11 +408,17 @@ current:
       As coherence tips, pulse should fractalize: bursts, valleys, arrhythmia.
       Forge can map the transition from clockwork to lived psychology.
 
+      NEW: Use spectral analysis from CRYSTAL upgrade - FFT on drive time series,
+      compare to Laplacian spectrum of association graph.
+
     tasks:
       - id: "FORGE-1"
         title: "Spectrum analysis on drive fluctuations"
         status: pending
-        description: "FFT or wavelet analysis on Connection Drive time series"
+        description: |
+          FFT or wavelet analysis on Connection Drive time series.
+          Use spectral module from CRYSTAL-3.
+          Look for: 1/f power law (pink noise signature), burst patterns.
 
       - id: "FORGE-2"
         title: "Correlate with dream cycles"
