@@ -1,5 +1,7 @@
 # DANEEL
 
+[Timmy/DANEEL "Brain Observatory"](https://timmy.royalbit.com)
+
 > **This is a hobby project, not a serious AGI attempt.**
 >
 > DANEEL is an experimental "thought machine" blending ideas from cognitive science, neuroscience, and Asimov's science fiction.
