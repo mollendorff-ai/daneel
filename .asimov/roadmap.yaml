@@ -95,6 +95,11 @@ current:
       Hebbian learning designed in ADR-023 but never wired.
       DANEEL learns through topology, not weights.
 
+    # Architecture: Hybrid Payload + Graph (Grok's recommendation, Dec 27 2025)
+    # - Qdrant payloads: source of truth, Hebbian updates
+    # - RedisGraph: global queries, visualization, transparency
+    # See ADR-046 for rationale.
+
     tasks:
       - id: "VCONN-1"
         title: "Research decay/dampening rates"
@@ -106,28 +111,55 @@ current:
           Consider dampening mechanisms to prevent winner-take-all dynamics.
 
       - id: "VCONN-2"
+        title: "Migrate to Redis Stack (RedisGraph)"
+        status: pending
+        priority: "CRITICAL"
+        description: |
+          Replace redis:latest with redis/redis-stack:latest in docker-compose.
+          Backwards-compatible - existing streams preserved.
+          Adds RedisGraph + RedisInsight (web UI on :8001).
+        files:
+          - "docker-compose.yml"
+
+      - id: "VCONN-3"
         title: "Wire strengthen_association() in attention"
         status: pending
         priority: "CRITICAL"
         description: |
           When multiple memories win attention in same cycle, form edges.
           Co-activated memories → weight += 0.1, type=Temporal.
+          Dual-write: Qdrant payload + RedisGraph edge.
         files:
           - "src/actors/attention/mod.rs"
           - "src/memory_db/mod.rs"
 
-      - id: "VCONN-3"
+      - id: "VCONN-4"
         title: "Wire association strengthening in sleep"
         status: pending
         priority: "CRITICAL"
         description: |
           When memories replay together in dream cycle, strengthen edges.
           Co-replayed memories → weight += 0.05, type=Semantic.
+          Dual-write: Qdrant payload + RedisGraph edge.
         files:
           - "src/actors/sleep/mod.rs"
           - "src/memory_db/mod.rs"
 
-      - id: "VCONN-4"
+      - id: "VCONN-5"
+        title: "Add RedisGraph client module"
+        status: pending
+        priority: "HIGH"
+        description: |
+          New src/graph/mod.rs for RedisGraph operations.
+          - merge_edge(m1, m2, weight, type)
+          - query_neighbors(id, min_weight)
+          - export_graphml() for Gephi
+        files:
+          - "src/graph/mod.rs"
+          - "src/lib.rs"
+          - "Cargo.toml"
+
+      - id: "VCONN-6"
         title: "Wire retrieval feedback loop"
         status: pending
         priority: "HIGH"
@@ -138,7 +170,7 @@ current:
           - "src/core/cognitive_loop.rs"
           - "src/memory_db/mod.rs"
 
-      - id: "VCONN-5"
+      - id: "VCONN-7"
         title: "Test manifold clustering with associations"
         status: pending
         priority: "HIGH"
@@ -146,15 +178,27 @@ current:
           Validate that wired associations produce manifold clustering.
           Success criteria:
             - Associations populated (not empty vectors)
-            - Weights changing over time (observable in Qdrant)
+            - Weights changing over time (observable in Qdrant + RedisGraph)
             - Retrieval influenced by association strength
             - Manifold shows clustering (related memories drift together)
+
+      - id: "VCONN-8"
+        title: "Gephi visualization export"
+        status: pending
+        priority: "MEDIUM"
+        description: |
+          Export graph to GraphML for external analysis.
+          Visualize emergence: clusters, communities, Law Crystal attraction.
+        files:
+          - "src/graph/mod.rs"
 
     success_criteria:
       - "Associations populated (not empty)"
       - "Weights changing over time"
       - "Retrieval influenced by association strength"
       - "Manifold shows clustering"
+      - "Graph queryable via RedisGraph"
+      - "Exportable to Gephi for visualization"
 
   # ==========================================================================
   # CRITICAL: Phase 2 External Stimuli - Active Work
