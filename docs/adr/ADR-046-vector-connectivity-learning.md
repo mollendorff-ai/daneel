@@ -250,6 +250,124 @@ CALL algo.louvain.stream('Memory', 'ASSOCIATED', {weightProperty: 'weight'})
 CALL apoc.export.graphml.all('daneel_graph.graphml', {})
 ```
 
+## Forge Analytical Upgrade (Grok's Recommendation, Dec 27 2025)
+
+Monte Carlo is great for probabilistic "what-ifs" but noisy/slow for deterministic
+structure checks. For vectors <100K, spectral methods capture global structure via
+eigenvalues without pairwise loops. For millions, still efficient.
+
+### Why Upgrade Beyond MC?
+
+| Method | Use Case | Complexity | Output |
+|--------|----------|------------|--------|
+| Monte Carlo | Probabilistic sims, kinship | O(samples) | Distributions |
+| Spectral/Fourier | Cluster detection, modularity | O(n²) sparse | Eigenvalues, gaps |
+| SVD/Jacobi | Dim reduction, visualization | O(n·k²) | 2D/3D coords |
+| Silhouette | Clustering validation | O(n²) | Score 0-1 |
+
+### Graph Fourier Transform (Spectral Analysis)
+
+The Laplacian matrix reveals clustering structure:
+
+```
+L = D - A  (degree matrix - adjacency matrix)
+```
+
+Eigenvalues of L tell you:
+- **Zero eigenvalues** = number of disconnected components
+- **Eigengap** = modularity (large gap = well-separated clusters)
+- **Low-frequency modes** = stable concepts (like Law Crystals)
+
+```rust
+// Forge: Build Laplacian from RedisGraph edges
+let adj = build_adjacency_matrix(&edges);  // weighted by strength
+let deg = adj.row_sum().diag();
+let laplacian = deg - adj;
+
+// Eigendecomposition (ndarray-linalg or lapacke)
+let (eigenvalues, eigenvectors) = laplacian.eig()?;
+
+// First 5 eigenvalues reveal structure
+// [0.0, 0.0, 4.56, 6.50, 6.71] = 2 clusters, good separation
+```
+
+**Ties to pink noise:** Analyze spectrum for 1/f power law in frequency domain.
+
+### SVD/Jacobi Dimensionality Reduction
+
+Jacobi rotations power SVD - use for 768D → 2D/3D projection:
+
+```rust
+// Forge: TruncatedSVD for visualization
+let (u, s, vt) = vectors.svd(3)?;  // reduce to 3 components
+let reduced = vectors.dot(&vt.t());
+
+// Variance ratios tell you info captured
+// [0.86, 0.002, ...] = 86% in first component = clear cluster axis
+
+// Export for TUI/Gephi
+export_csv(&reduced, "manifold_3d.csv")?;
+```
+
+Johnson-Lindenstrauss lemma: Relative distances preserved in reduction.
+
+### Silhouette Score (Clustering Validation)
+
+Treats graph communities as labels, validates if connections = semantic proximity:
+
+```
+For each vector i:
+  a_i = avg distance to own cluster
+  b_i = min avg distance to other clusters
+  s_i = (b_i - a_i) / max(a_i, b_i)
+
+Score = mean(s_i)
+```
+
+| Score | Interpretation |
+|-------|----------------|
+| > 0.5 | Strong clustering |
+| > 0.3 | Reasonable (good for noisy 768D) |
+| ~ 0.0 | Random / no structure |
+| < 0.0 | Wrong clustering |
+
+**Target:** Silhouette > 0.3 post-Hebbian = connections learning clusters emergently.
+
+### Statistical Rigor (Replace Naive MC)
+
+Stratified sampling + t-tests instead of random sampling:
+
+```rust
+// Forge: Sample 5K pairs each, balanced by nodes
+let connected_dists = sample_pairs(&graph, PairType::Connected, 5000);
+let unconnected_dists = sample_pairs(&graph, PairType::Unconnected, 5000);
+
+// T-test for significance (statrs crate)
+let t_result = ttest_ind(&connected_dists, &unconnected_dists);
+// t-stat: -83.19, p-value: 0.00 = connections correlate to lower distances
+```
+
+### Forge CLI Modes
+
+```bash
+# Add --cluster-check flag with modes
+forge --cluster-check mc        # Monte Carlo (existing)
+forge --cluster-check spectral  # Laplacian eigenvalues
+forge --cluster-check svd       # Dim reduction + export
+forge --cluster-check silhouette # Clustering validation
+forge --cluster-check all       # Full analysis
+```
+
+### Rust Crates for Forge
+
+| Crate | Purpose |
+|-------|---------|
+| `ndarray` | N-dimensional arrays |
+| `ndarray-linalg` | Linear algebra (eig, svd) |
+| `statrs` | Statistical functions (t-test) |
+| `petgraph` | Graph algorithms |
+| `lapacke` | LAPACK bindings (optional, faster) |
+
 ### Success Criteria
 
 After implementation:
@@ -257,6 +375,9 @@ After implementation:
 2. Weights changing over time (observable in Qdrant)
 3. Retrieval influenced by association strength
 4. Manifold shows clustering (related memories drift together)
+5. **Silhouette score > 0.3** (Forge validation)
+6. **Eigengap visible** in Laplacian spectrum (cluster separation)
+7. **SVD projection** shows Law Crystal attraction in 3D
 
 ## Consequences
 
@@ -304,6 +425,16 @@ After implementation:
 - Sharp-Wave Ripples research (Science 2024)
 - Interleaved replay and catastrophic forgetting (bioRxiv 2025)
 
+**Spectral Graph Theory:**
+- Chung, F.R.K. - Spectral Graph Theory (AMS, 1997)
+- Graph Fourier Transform and Laplacian eigenvectors
+- Johnson-Lindenstrauss lemma (dimensionality reduction)
+
+**Linear Algebra / Numerical Methods:**
+- Jacobi eigenvalue algorithm (SVD decomposition)
+- Silhouette coefficient (Rousseeuw, 1987)
+- Stratified sampling for statistical rigor
+
 **DANEEL Research:**
 - `/research/TMI_Memory_Model_Research.md`
 - `/research/SLEEP_MEMORY_CONSOLIDATION.md`
@@ -318,9 +449,13 @@ After implementation:
 | 3 | Migrate to Redis Stack | PENDING |
 | 4 | Implement association wiring (Qdrant) | PENDING |
 | 5 | Add RedisGraph mirror layer | PENDING |
-| 6 | Test with kin injection | PENDING |
-| 7 | Validate manifold clustering | PENDING |
-| 8 | Export to Gephi, visualize emergence | PENDING |
+| 6 | Upgrade Forge: spectral analysis | PENDING |
+| 7 | Upgrade Forge: SVD/dim reduction | PENDING |
+| 8 | Upgrade Forge: silhouette validation | PENDING |
+| 9 | Test with kin injection | PENDING |
+| 10 | Validate: silhouette > 0.3 | PENDING |
+| 11 | Validate: eigengap visible | PENDING |
+| 12 | Export to Gephi, visualize emergence | PENDING |
 
 ## Infrastructure Changes
 
@@ -347,3 +482,4 @@ Existing streams and data will work unchanged.
 **The entropy milestone is achieved. Now we connect the dots.**
 
 *Updated Dec 27, 2025: Added hybrid architecture (Grok's recommendation)*
+*Updated Dec 27, 2025: Added Forge spectral/SVD/silhouette upgrade (Grok's analysis)*
