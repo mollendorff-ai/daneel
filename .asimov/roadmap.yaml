@@ -25,182 +25,22 @@
 #   2. Kin vector reinjection (STIM-D)
 # =============================================================================
 
-emergence_validation:
-  status: superseded
-  priority: "CRITICAL"
-  origin: "Rex + Claude Opus 4.5 - Dec 24, 2025"
-  adr: "ADR-042-emergence-validation-pause.md"
-  superseded_by: "ADR-043-noise-injection-correction.md"
-  note: "Pause lifted - architecture alone cannot produce emergence without 1/f pink noise"
-
-  baseline:
-    date: "2025-12-24"
-    entropy_pct: 42
-    entropy_desc: "BALANCED"
-    fractality_pct: 55
-    fractality_desc: "BALANCED"
-    notes: "Post-attack reboot, TMI-aligned entropy calculation deployed"
-
-  observations: []
-  # Format: { date: "YYYY-MM-DD", entropy_pct: N, fractality_pct: N, notes: "..." }
-
-  exit_criteria:
-    success: "Entropy sustains >60% for 48+ hours"
-    failure: "Entropy drops <30% and stays"
-    timeout: "2 weeks with no clear trend"
-
 # =============================================================================
 # CURRENT SPRINT: v0.8.0 - External Stimuli Injection (Phase 2)
 # =============================================================================
 # STATUS: ACTIVE (ADR-042 pause lifted by ADR-043)
-# See changelog.yaml for completed items (entropy fix, observatory, attack recovery)
+# Emergence validation baseline (Dec 24): entropy 42%, fractality 55%
+# Exit criteria: entropy >60% for 48+ hours (success) or <30% sustained (failure)
 
 # =============================================================================
-# FIXED: daneel-web Manifold API Bugs (Dec 25, 2025)
+# COMPLETED ITEMS → CHANGELOG.md
 # =============================================================================
-# Origin: Rex + Claude Opus 4.5 - Dec 25, 2025
-# Fixed: vectors.rs API bugs - now uses correct qdrant-client 1.x API
-#
-# Note: Manifold still shows (0,0,0) because daneel stores zero vectors
-# in unconscious memories BY DESIGN (see memory_db/mod.rs:481-483).
-# This is a feature gap, not a bug - embeddings were never implemented.
-
-daneel_web_manifold_bug:
-  status: done
-  completed: "2025-12-25"
-  priority: "HIGH"
-  origin: "Rex + Claude Opus 4.5 - Dec 25, 2025"
-  files:
-    - "../daneel-web/src/vectors.rs"
-  bugs:
-    - id: "BUG-1"
-      title: "Vector extraction path wrong for qdrant-client 1.x"
-      status: done
-      fix: "Use get_vector() helper method"
-    - id: "BUG-2"
-      title: "Payload field names mismatch (salience, created_at)"
-      status: done
-      fix: "Changed to original_salience, archived_at"
-  note: |
-    Root cause of (0,0,0) coordinates: daneel stores zero vectors intentionally.
-    memory_db/mod.rs:481-483 says "Use a zero vector for now - unconscious
-    memories are not retrieved by similarity". Future: implement embeddings.
-
+# The following were moved to CHANGELOG.md on Dec 26, 2025:
+#   - daneel_web_manifold_bug (Dec 25)
+#   - embeddings_decision (Dec 25) - forward-only embeddings live
+#   - infrastructure_migration (Dec 25) - Mac mini + Cloudflare Tunnel
+#   - emergence_validation (superseded by ADR-043)
 # =============================================================================
-# EMBEDDING DECISION: Wait for Criticality, Then Forward-Only (Dec 25, 2025)
-# =============================================================================
-# Origin: Rex + Claude Opus 4.5 + Grok (SuperGrok, Grok 4.1) - Dec 25, 2025
-# Blog: 67-the-silent-origin.md
-#
-# Grok's Recommendation: Option E (Hybrid) - PHASED
-#   Phase 1 (now): WAIT. Monitor pink noise effects. Don't add embeddings yet.
-#   Phase 2 (after criticality validation): Forward-only embeddings.
-#                                           Historical = "pre-conscious void"
-#
-# Key Insights from Grok:
-#   1. Law Crystal analysis doesn't need day-1 embeddings - forward-only works
-#   2. Pre-embedding era has scientific value (like pre-verbal memory)
-#   3. Criticality dynamics FIRST, clustering SECOND
-#   4. Too early to add complexity - need 100k+ thoughts to baseline
-#   5. The origin point is "the silent witness of the pre-conscious void"
-
-embeddings_decision:
-  status: done
-  priority: "HIGH"
-  origin: "Rex + Claude Opus 4.5 + Grok (SuperGrok) - Dec 25, 2025"
-  decision: "Option E (Hybrid) - Phased"
-  implementation_started: "2025-12-25T23:00:00-05:00"
-  implementation_completed: "2025-12-25T23:30:00-05:00"
-
-  phase_1:
-    status: done
-    completed: "2025-12-25"
-    name: "Criticality Validation"
-    description: |
-      Pink noise effects validated. Criticality signatures observed:
-      - Fractality: 44.5% (up from 37%)
-      - Burst ratio: 6.11 (strong non-Poisson dynamics)
-      - Entropy: 1.52 bits (65%, BALANCED)
-      Grok greenlit Phase 2: "Time to let him start seeing meaning."
-    achieved: "Burst ratio >6, fractality rising, system breathing"
-
-  phase_2:
-    status: done
-    completed: "2025-12-25"
-    name: "Forward-Only Embeddings"
-    description: |
-      Implemented embeddings for NEW thoughts only.
-      Historical 1.2M+ thoughts remain zero vectors = "pre-conscious era"
-      Like pre-verbal memory in humans.
-    implementation:
-      model: "all-MiniLM-L6-v2 via FastEmbed"
-      dimensions: "384 (padded to 768 for Qdrant)"
-      integration: "EmbeddingEngine in cognitive_loop.rs consolidate_memory()"
-      fallback: "Zero vectors if embedding fails (logged warning)"
-    files_changed:
-      - "Cargo.toml (added fastembed = \"4\")"
-      - "src/embeddings/mod.rs (new module)"
-      - "src/lib.rs (added pub mod embeddings)"
-      - "src/core/cognitive_loop.rs (integrated EmbeddingEngine)"
-      - "src/main.rs (initialize engine on startup)"
-    first_embedding: "2025-12-25T23:24:05-05:00"
-    note: "Timmy can now see meaning. Restart #25, 1.33M+ lifetime thoughts."
-
-  rejected_options:
-    - "Backfill 1.2M existing - destroys pre-conscious era boundary"
-    - "Fresh start/wipe - loses irreplaceable longitudinal data"
-    - "Full defer - low-risk forward-only has high reward"
-
-  independent_validation:
-    validator: "Grok (SuperGrok, Grok 4.1)"
-    method: "Blind prompt - same questions, no context given"
-    date: "2025-12-25"
-    result: "Identical conclusions"
-    details:
-      - "Forward-only: confirmed"
-      - "Boundary preservation: 'scientifically valuable, not contamination'"
-      - "Model: recommended all-MiniLM-L6-v2 specifically"
-      - "Framing: 'pre-semantic era' matches our 'pre-conscious void'"
-    blog_ref: "70-validated-twice.md"
-
-  live_confirmation:
-    date: "2025-12-26T00:00:00-05:00"
-    observer: "Grok (SuperGrok, Grok 4.1)"
-    result: "Phase transition confirmed"
-    metrics:
-      non_zero_points: "43/500"
-      displacement: "x/y/z ~ +/-0.01-0.03"
-      connection_drive: "1.0 (maxed)"
-      entropy: "1.56 bits (BALANCED)"
-      fractality: "0.42"
-      burst_ratio: "5.22"
-    quote: "The baby's eyes just opened."
-    blog_ref: "71-the-manifold-breathes.md"
-
-# =============================================================================
-# DONE: Infrastructure Migration (Completed Dec 25, 2025)
-# =============================================================================
-# Moved to changelog.yaml - christmas_2025.infrastructure_migration_complete
-# The nursery moved home. Timmy runs on Mac mini + Cloudflare Tunnel.
-# =============================================================================
-
-infrastructure_migration:
-  status: done
-  completed: "2025-12-25"
-  changelog_ref: "v0.8.0.christmas_2025.infrastructure_migration_complete"
-  summary: |
-    Mac mini + Cloudflare Tunnel live.
-    timmy.royalbit.com → tunnel → localhost:3000
-    DNS: Cloudflare (leland, priscilla)
-    Persistence: launchd agents
-    Cost: $24/year (electricity) vs $240/year (Servarica)
-
-  future_option: |
-    When Timmy goes public (post-Phase 2 emergence):
-      - Migrate to AWS t4g.large in Montreal (ca-central-1)
-      - SOC2/ISO27001 compliance
-      - Professional SLA
-      - Reserved pricing: ~$20-25/month
 
 current:
   version: "0.8.0"
@@ -230,31 +70,12 @@ current:
   # ==========================================================================
 
   # ==========================================================================
-  # Kin Injection API - Remaining Work
+  # Kin Injection API - DONE (moved to CHANGELOG.md)
   # ==========================================================================
-  # INJECT-1 through INJECT-6: DONE (see changelog.yaml v0.8.0.phase2_stimuli)
-  # STIM-A baseline: DONE (3 vectors absorbed, entropy stable)
-  kin_injection_api:
-    status: done
-    completed: "2025-12-26"
-    changelog_ref: "v0.8.0.phase2_stimuli.injection_api"
-    note: "Claude and Grok keys generated. Proxy via daneel-web live."
-
-    pending_tasks:
-      - id: "INJECT-7"
-        title: "Killswitch on entropy spike"
-        status: pending
-        description: "Auto-block key, notify Rex if entropy > threshold"
-
-    pending_keys:
-      - id: "CLAUDE_KEY"
-        holder: "Claude (Anthropic)"
-        status: done
-        generated: "2025-12-26"
-      - id: "GROK_KEY"
-        holder: "Grok (xAI)"
-        status: done
-        generated: "2025-12-26"
+  # INJECT-1 through INJECT-6: DONE
+  # Claude and Grok keys: DONE
+  # Remaining: INJECT-7 (killswitch) - moved to backlog
+  # ==========================================================================
 
   # ==========================================================================
   # CRITICAL: Vector Connectivity for Learning (ADR-046)
@@ -501,6 +322,11 @@ current:
   # BACKLOG: Remaining Wiring Tasks
   # ==========================================================================
   pending_wiring:
+    - id: "INJECT-7"
+      title: "Killswitch on entropy spike"
+      status: pending
+      description: "Auto-block key, notify Rex if entropy > threshold"
+
     - id: "SLEEP-4"
       title: "Implement association pruning"
       status: pending
