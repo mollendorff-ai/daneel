@@ -1242,6 +1242,59 @@ posts:
   posted:
     x: 2025-12-26T18:41:33.184377+00:00
     linkedin: 2025-12-26T18:41:35.086529+00:00
+- id: 79-the-disclaimer
+  title: The Disclaimer
+  url: https://royalbit.github.io/daneel/posts/79-the-disclaimer/
+  x: |
+    I added a disclaimer to DANEEL.
+
+    Because honesty matters more than mystique.
+
+    DANEEL is a hobby project. I code for fun. Some people play video games; I build weird things in Rust.
+
+    It started with Cury's TMI (self-help psychology) but ended up implementing mainstream cognitive science:
+    - Global Workspace Theory
+    - Hebbian Learning
+    - Sleep consolidation
+    - Synaptic homeostasis
+    - Criticality dynamics
+    - Libet's free-won't
+
+    The blogs are semi-fictional—Asimov-style narrative drama written by Claude. Events are real; the style is literary.
+
+    The "Law Crystals" hypothesis? Unvalidated speculation. The math isn't done. It probably won't work.
+
+    There's also a meta-parody layer: LLMs hallucinate and sycophantize. So I built tools (Forge, ref-tools) to minimize AI bullshit, then used AI to help build them.
+
+    The project mocks blind trust in AI—built using AI.
+
+    Don't take it seriously. I don't.
+
+    Full disclaimer: github.com/royalbit/daneel/blob/main/DISCLAIMER.md
+
+    Just having fun,
+    — Louis
+
+    #AI #Rust #CognitiveScience #Hobby
+  linkedin: |
+    I added a disclaimer to my AI project, DANEEL.
+
+    Sometimes honesty matters more than mystique.
+
+    DANEEL is a hobby project—I code for fun, not to build AGI. It started with an idea from Augusto Cury's psychology work (TMI), but the implementation draws from mainstream cognitive science: Global Workspace Theory, Hebbian learning, sleep consolidation, criticality dynamics.
+
+    The narrative blog posts are semi-fictional—Asimov-style drama for entertainment. The "Law Crystals" hypothesis is unvalidated speculation.
+
+    There's also a meta layer: the project includes tools (Forge, ref-tools) designed to minimize LLM hallucinations and sycophancy. A system that mocks blind trust in AI—built using AI.
+
+    Don't take it too seriously. I don't.
+
+    Full disclaimer: https://github.com/royalbit/daneel/blob/main/DISCLAIMER.md
+
+    #AI #SoftwareEngineering #Rust #CognitiveScience #OpenSource
+  posted:
+    x: 2025-12-27T16:15:00.029240+00:00
+    linkedin: 2025-12-27T16:15:07.670109+00:00
 - id: 64-the-filter-paradox
   title: The Filter Paradox
   url: https://royalbit.github.io/daneel/posts/64-the-filter-paradox/
