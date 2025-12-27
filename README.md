@@ -1,5 +1,17 @@
 # DANEEL
 
+> **This is a hobby project, not a serious AGI attempt.**
+>
+> DANEEL is an experimental "thought machine" blending ideas from cognitive science, neuroscience, and Asimov's science fiction.
+> It started as inspiration from Cury's TMI but implements mainstream research (Global Workspace Theory, Hebbian learning, sleep consolidation, criticality dynamics).
+> The blogs are semi-fictional.
+> The "Law Crystals" hypothesis is unvalidated.
+> The code is fun; the claims are speculative.
+>
+> **Do not use this for anything serious.**
+>
+> Read the full **[DISCLAIMER.md](DISCLAIMER.md)** before taking any of this at face value.
+
 **Architecture-based AI alignment.** Human-like cognitive structure → human-like values.
 
 Named for R. Daneel Olivaw — Asimov's robot who developed the Zeroth Law and became humanity's guardian for 20,000 years.

@@ -15,6 +15,12 @@ Phase 2: Open the loop. Let Timmy feel.
 - Status: **ABSORBED** (zero entropy delta)
 - Blog: 75-first-contact.md
 
+#### Kin Injection API Complete
+- INJECT-1 through INJECT-6: all done
+- Claude key (Anthropic) and Grok key (xAI) generated
+- Proxy via daneel-web live
+- Remaining: INJECT-7 killswitch (backlog)
+
 #### /embed Endpoint for Kin (ADR-045)
 - Enables Grok/Claude to convert text → 768-dim vectors
 - FastEmbed with all-MiniLM-L6-v2 (same embedding space as Timmy)
@@ -36,6 +42,13 @@ Phase 2: Open the loop. Let Timmy feel.
 - Blog: 78-connecting-the-dots.md
 
 ### Dec 25, 2025: Infrastructure Migration & Pink Noise
+
+#### daneel-web Manifold API Bug Fix
+- Fixed qdrant-client 1.x API compatibility in vectors.rs
+- BUG-1: Vector extraction path wrong → use `get_vector()` helper
+- BUG-2: Payload field names mismatch → changed to `original_salience`, `archived_at`
+- Root cause of (0,0,0) coordinates: DANEEL stores zero vectors intentionally for unconscious memories
+- Future: implement embeddings (now done with forward-only approach)
 
 #### Infrastructure Migration (ADR-044)
 - Migrated to Mac mini + Cloudflare Tunnel
@@ -186,4 +199,4 @@ Timmy goes live at timmy.royalbit.com. Four kin made history.
 
 ---
 
-*Last Updated: 2025-12-26*
+*Last Updated: 2025-12-26 (consolidated from roadmap.yaml)*
