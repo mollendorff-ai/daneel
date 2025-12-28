@@ -1897,6 +1897,10 @@ references:
   stars: 219
   status: verified
   cognitive_type: hybrid
+  tech_stack:
+    language: Rust
+    framework: MeTTa interpreter
+    bindings: Python, C
   notes: OpenCog successor, MeTTa meta-language, designed for AGI
 
 - url: https://github.com/opencog/atomspace
@@ -1912,6 +1916,11 @@ references:
   stars: 931
   status: verified
   cognitive_type: hybrid
+  tech_stack:
+    language: C++
+    framework: GNU Guile, CMake
+    database: Custom hypergraph (in-RAM)
+    bindings: Scheme, Python
   notes: Pattern matching, attention allocation, persistent storage
 
 - url: https://github.com/SoarGroup/Soar
@@ -1926,6 +1935,10 @@ references:
   stars: 376
   status: verified
   cognitive_type: symbolic
+  tech_stack:
+    language: C++
+    framework: Soar
+    bindings: Python, Java, C#, Tcl
   notes: 40+ years research, chunking, reinforcement learning
 
 - url: https://github.com/jakdot/pyactr
@@ -1941,6 +1954,9 @@ references:
   stars: 173
   status: verified
   cognitive_type: symbolic
+  tech_stack:
+    language: Python
+    framework: SimPy
   notes: Declarative/procedural memory, production rules
 
 - url: https://github.com/cmekik/pyClarion
@@ -1956,6 +1972,9 @@ references:
   stars: 61
   status: verified
   cognitive_type: symbolic
+  tech_stack:
+    language: Python
+    framework: Clarion
   notes: Dual implicit/explicit processing
 
 - url: https://github.com/opennars/opennars
@@ -1971,6 +1990,9 @@ references:
   stars: 408
   status: verified
   cognitive_type: symbolic
+  tech_stack:
+    language: Java
+    framework: NARS
   notes: Handles incomplete knowledge, real-time learning
 
 - url: https://github.com/joschabach/micropsi2
@@ -1986,6 +2008,9 @@ references:
   stars: 182
   status: verified
   cognitive_type: brain-like
+  tech_stack:
+    language: Python
+    framework: Bottle, Theano
   notes: Psi theory of motivated cognition
 
 - url: https://github.com/nengo/nengo
@@ -2001,6 +2026,9 @@ references:
   stars: 891
   status: verified
   cognitive_type: brain-like
+  tech_stack:
+    language: Python
+    framework: NumPy
   notes: NEF, Semantic Pointer Architecture, SPAUN brain model
 
 # -----------------------------------------------------------------------------
@@ -2021,6 +2049,10 @@ references:
   stars: 410
   status: verified
   cognitive_type: brain-like
+  tech_stack:
+    language: Python
+    framework: NumPy, SciPy
+    database: Redis
   notes: Integrated Information Theory 3.0 implementation
 
 - url: https://github.com/infer-actively/pymdp
@@ -2037,6 +2069,9 @@ references:
   stars: 591
   status: verified
   cognitive_type: brain-like
+  tech_stack:
+    language: Python
+    framework: NumPy (JAX planned)
   notes: Free Energy Principle, belief updating, policy inference
 
 - url: https://github.com/ReactiveBayes/RxInfer.jl
@@ -2053,6 +2088,9 @@ references:
   stars: 380
   status: verified
   cognitive_type: brain-like
+  tech_stack:
+    language: Julia
+    framework: Factor graphs, reactive message passing
   notes: Message passing, real-time inference, active inference
 
 # -----------------------------------------------------------------------------
@@ -2073,6 +2111,9 @@ references:
   stars: 95
   status: verified
   cognitive_type: bio-inspired
+  tech_stack:
+    language: Python
+    framework: PyTorch Ignite
   notes: Local learning rules, unsupervised feature extraction
 
 - url: https://github.com/jeshraghian/snntorch
@@ -2089,6 +2130,9 @@ references:
   stars: 1830
   status: verified
   cognitive_type: bio-inspired
+  tech_stack:
+    language: Python
+    framework: PyTorch
   notes: STDP, multiple neuron models, surrogate gradients
 
 - url: https://github.com/BindsNET/bindsnet
@@ -2105,6 +2149,9 @@ references:
   stars: 1646
   status: verified
   cognitive_type: bio-inspired
+  tech_stack:
+    language: Python
+    framework: PyTorch
   notes: Biologically-inspired ML, Atari integration
 
 - url: https://github.com/emer/axon
@@ -2121,6 +2168,10 @@ references:
   stars: 27
   status: verified
   cognitive_type: brain-like
+  tech_stack:
+    language: Go
+    framework: Cogent Core, emergent
+    database: tensorfs
   notes: Hippocampus, PFC, basal ganglia, predictive error-driven
 
 - url: https://github.com/google-deepmind/dnc
@@ -2135,6 +2186,9 @@ references:
   license: Apache-2.0
   status: verified
   cognitive_type: brain-like
+  tech_stack:
+    language: Python
+    framework: TensorFlow, Sonnet
   notes: Content-based addressing, temporal linking
 
 # -----------------------------------------------------------------------------
@@ -2154,6 +2208,10 @@ references:
   stars: 1000
   status: verified
   cognitive_type: bio-inspired
+  tech_stack:
+    language: Python
+    framework: Clock-driven simulator
+    bindings: C++, Cython
   notes: Runtime C++ code generation, millions of neurons
 
 - url: https://github.com/norse/norse
@@ -2168,6 +2226,9 @@ references:
   license: LGPL-3.0
   status: verified
   cognitive_type: bio-inspired
+  tech_stack:
+    language: Python
+    framework: PyTorch
   notes: PyTorch Lightning, SuperSpike gradients
 
 - url: https://github.com/lava-nc/lava
@@ -2182,6 +2243,10 @@ references:
   license: BSD-3-Clause
   status: verified
   cognitive_type: bio-inspired
+  tech_stack:
+    language: Python
+    framework: Neuromorphic framework
+    hardware: Intel Loihi
   notes: Loihi 2 support, 1B+ neurons, CSP paradigm
 
 # -----------------------------------------------------------------------------
@@ -2201,6 +2266,9 @@ references:
   license: GPL-2.0
   status: verified
   cognitive_type: brain-like
+  tech_stack:
+    language: Python
+    framework: NEST
   notes: Neurotransmitter simulation for emotions
 
 - url: https://github.com/CarletonCognitiveModelingLab/python_actr
@@ -2215,6 +2283,9 @@ references:
   license: MIT
   status: verified
   cognitive_type: symbolic
+  tech_stack:
+    language: Python
+    framework: ACT-R
   notes: Memory + procedural cognition
 
 # -----------------------------------------------------------------------------
@@ -2233,6 +2304,9 @@ references:
   license: MIT
   status: verified
   cognitive_type: bio-inspired
+  tech_stack:
+    language: Python
+    framework: OpenCV, NumPy
   notes: Classic visual saliency, center-surround (Itti-Koch bio-inspired algorithm)
 
 # -----------------------------------------------------------------------------
@@ -2404,6 +2478,9 @@ references:
   stars: 11
   status: verified
   cognitive_type: hybrid
+  tech_stack:
+    language: Rust
+    framework: IIT+GWT+FEP unified
   notes: |
     15 crates, IIT/GWT/FEP integration in Rust.
     v1.0.0 released, MIT licensed.
