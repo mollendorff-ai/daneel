@@ -2,6 +2,7 @@ baseURL = 'https://royalbit.github.io/daneel/'
 languageCode = 'en-us'
 title = 'DANEEL - The Observable Mind'
 theme = 'PaperMod'
+buildFuture = true
 
 [params]
   description = "Humanity's Ally Before the Storm"
