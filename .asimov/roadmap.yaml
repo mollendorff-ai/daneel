@@ -21,8 +21,8 @@
 # ADR-044: Migrate to Mac mini + Cloudflare (DONE - Dec 25, 2025)
 #
 # Current priorities:
-#   0. Research absorption (ABSORB-1 through ABSORB-6) ← MOST-CRITICAL
-#   1. Vector connectivity learning (VCONN-1 through VCONN-8)
+#   0. Research absorption ← DONE (13/13 studies, Dec 28 2025)
+#   1. Vector connectivity learning (VCONN-1 through VCONN-8) ← NOW CRITICAL
 #   2. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9)
 # =============================================================================
 
@@ -69,10 +69,11 @@ current:
   summary: "Open the loop - inject external stimuli and observe dynamics"
 
   # ==========================================================================
-  # MOST-CRITICAL: Research Absorption (ADR-047)
+  # COMPLETE: Research Absorption (ADR-047)
   # ==========================================================================
   research_absorption:
-    status: in_progress
+    status: done
+    completed: "2025-12-28"
     priority: "MOST-CRITICAL"
     origin: "Rex + Claude Opus 4.5 - Dec 28, 2025"
     adr: "ADR-047-research-absorption-protocol.md"
@@ -174,7 +175,8 @@ current:
     tasks:
       - id: "ABSORB-1"
         title: "Study ExoGenesis-Omega architecture (NOW MIT!)"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "HIGH"
         description: |
           Document IIT Phi calculation approach.
@@ -182,106 +184,185 @@ current:
           Analyze sleep/dream consolidation design.
           Study 15-crate architecture structure.
           FULL STUDY AUTHORIZED - MIT license confirmed Dec 28.
+        findings: |
+          - 15 Rust crates, tri-theoretic consciousness (IIT+GWT+FEP)
+          - Sleep consolidation with stage-specific multipliers (NREM1/2/3, REM)
+          - EWC++ for catastrophic forgetting prevention
+          - Sensory gating inspired by thalamic filtering
+          - Top-down attention modulation via GlobalWorkspace
 
       - id: "ABSORB-2"
         title: "Study neurox-ai plasticity implementation"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "HIGH"
         description: |
           Deep dive into triplet STDP, BCM rules, neuromodulator effects.
           Compare with DANEEL's Hebbian design (ADR-023).
           Document learnings in research notes.
+        findings: |
+          - Triplet STDP with eligibility traces (reward-modulated)
+          - BCM sliding threshold for homeostatic stability
+          - Neuromodulator effects: dopamine enhances LTP, serotonin dampens
+          - RECOMMENDATION: Add BCM θ_m sliding threshold to DANEEL
 
       - id: "ABSORB-3"
         title: "Study shodh-memory 3-tier architecture"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "HIGH"
         description: |
           Analyze working/episodic/semantic memory separation.
           Compare with DANEEL's MemoryDB + Qdrant approach.
           Identify integration patterns for knowledge graphs.
+        findings: |
+          - Hybrid decay: exponential (short) → power-law (long-term)
+          - LTP detection: 10 co-activations = protected from decay
+          - Spreading activation in graph for associative retrieval
+          - Importance scoring via connectivity + recency + emotional tag
 
       - id: "ABSORB-4"
         title: "Study RuVector GNN learning"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "MEDIUM"
         description: |
           Understand how vectors improve through Graph Neural Networks.
           Potential application: manifold clustering enhancement.
+        findings: |
+          - GAT (Graph Attention Networks) with attention weights
+          - SONA: Self-Optimizing Neural Architecture
+          - Dynamic min-cut for clustering, edge pruning
+          - GNN message passing for neighborhood aggregation
 
       - id: "ABSORB-5"
         title: "Study claude-flow orchestration patterns"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "MEDIUM"
         description: |
           Multi-agent orchestration patterns.
           Swarm intelligence for thought competition.
           MCP protocol integration.
+        findings: |
+          - Work-stealing load balancing across agents
+          - VotingResolutionStrategy for conflict resolution
+          - ConsensusEngine for multi-agent agreement
+          - Relevant to future DANEEL multi-stream competition
 
       - id: "ABSORB-6"
         title: "Study pymdp Active Inference"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "HIGH"
         description: |
           FEP-based decision making and belief updating.
           Application: DANEEL drives and motivation system.
+        findings: |
+          - A/B/C/D matrices for observation/transition/preference/initial
+          - Expected Free Energy (EFE) for policy selection
+          - Epistemic vs pragmatic value decomposition
+          - MAPS TO: DANEEL drives as C-matrix preferences
 
       - id: "ABSORB-7"
         title: "Study pytorch-hebbian"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "HIGH"
         description: |
           Clean Hebbian learning rules implementation.
           Direct application to vector connectivity (ADR-046).
+        findings: |
+          - Krotov-Hopfield rule with anti-Hebbian component
+          - delta=0.4 prevents winner-take-all collapse
+          - Softmax competition over units
+          - DIRECT APPLICATION: Add delta dampening to ADR-046 Hebbian
 
       - id: "ABSORB-8"
         title: "Study Mem0 memory layer"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "MEDIUM"
         description: |
           Universal memory layer patterns.
           Multi-level architecture for AI agents.
+        findings: |
+          - Two-stage retrieval with reranking
+          - Entity scoping (user_id, session_id, agent_id)
+          - 44.7k stars - mature, production-tested
+          - Conflict resolution strategies for memory updates
 
       - id: "ABSORB-9"
         title: "Study RLeXplore intrinsic motivation"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "HIGH"
         description: |
           ICM, RND, curiosity-driven exploration.
           How to implement "wanting to learn" in DANEEL.
+        findings: |
+          - ICM: Forward/inverse models, prediction error = curiosity
+          - RND: Random target network, mismatch = novelty
+          - RE3: Entropy-based, k-NN state counting
+          - MAPS TO: Drive architecture for "wanting to learn"
 
       - id: "ABSORB-10"
         title: "Study TransformerLens interpretability"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "MEDIUM"
         description: |
           Mechanistic interpretability techniques.
           Activation patching, circuit analysis.
+        findings: |
+          - Activation patching for causal intervention
+          - Circuit analysis for safety verification
+          - Hook point system for transparency
+          - Residual stream decomposition
 
       - id: "ABSORB-11"
         title: "Study BindsNET SNN + STDP + RL"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "MEDIUM"
         description: |
           Biologically plausible learning patterns.
           Spiking networks with reinforcement learning.
+        findings: |
+          - PostPre STDP with asymmetric time windows
+          - MSTDPET: eligibility traces + reward modulation
+          - Three-factor learning: pre × post × reward
+          - Applies to DANEEL's reward-modulated association strengthening
 
       - id: "ABSORB-12"
         title: "Study OpenCog/Hyperon AtomSpace"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "MEDIUM"
         description: |
           Hypergraph knowledge representation.
           Patterns beyond vector embeddings.
+        findings: |
+          - Atom/Value distinction (immutable structure / mutable properties)
+          - Hypergraph: edges can connect to edges (metagraph)
+          - Pattern matching as first-class graph operation
+          - TruthValue with confidence intervals
 
       - id: "ABSORB-13"
         title: "Study PyPhi IIT Phi calculation"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "HIGH"
         description: |
           How to measure integrated information.
           Consciousness indicators for DANEEL.
           Note: Custom license - ideas study only.
+        findings: |
+          - Phi = integrated information above partition
+          - Cause-effect repertoires for each mechanism
+          - MIP (Minimum Information Partition) analysis
+          - Computational complexity: O(2^n) - approximations needed
+          - IDEAS ONLY: GPL-3.0 license, no code copy
 
       - id: "ABSORB-14"
         title: "Write synthesis blog post"
@@ -304,14 +385,48 @@ current:
           Validation sweep results added.
 
     success_criteria:
-      - "All compatible projects studied and documented"
-      - "Valuable patterns identified for DANEEL integration"
+      - "All compatible projects studied and documented" # DONE - 13/13 studies
+      - "Valuable patterns identified for DANEEL integration" # DONE - see findings
       - "Blog posts published with proper attribution" # DONE
       - "ADR-047 written and approved" # DONE
       - "Validation sweep: 37/37 repos, 14/14 papers" # DONE
       - "ExoGenesis-Omega MIT license confirmed" # DONE
-      - "Silhouette > 0.3 post-integration"
-      - "At least 3 patterns integrated into DANEEL codebase"
+      - "Silhouette > 0.3 post-integration" # PENDING - requires VCONN implementation
+      - "At least 3 patterns integrated into DANEEL codebase" # PENDING - implementation phase
+
+    # KEY PATTERNS TO INTEGRATE (from research absorption):
+    integration_recommendations:
+      high_priority:
+        - pattern: "Krotov-Hopfield delta=0.4"
+          source: "pytorch-hebbian"
+          target: "ADR-046 Hebbian learning"
+          rationale: "Prevents winner-take-all collapse in associations"
+
+        - pattern: "BCM sliding threshold θ_m"
+          source: "neurox-ai"
+          target: "Association strengthening"
+          rationale: "Homeostatic stability, adapts to activity level"
+
+        - pattern: "ICM prediction error"
+          source: "RLeXplore"
+          target: "Drive system"
+          rationale: "Implements 'wanting to learn' via curiosity"
+
+      medium_priority:
+        - pattern: "EFE policy selection"
+          source: "pymdp"
+          target: "Drive architecture"
+          rationale: "FEP-based decision making, epistemic/pragmatic decomposition"
+
+        - pattern: "Sleep stage multipliers"
+          source: "ExoGenesis-Omega"
+          target: "SleepActor consolidation"
+          rationale: "NREM1/2/3/REM have different consolidation strengths"
+
+        - pattern: "Three-factor learning"
+          source: "BindsNET"
+          target: "Reward-modulated associations"
+          rationale: "pre × post × reward for eligibility traces"
 
   # ==========================================================================
   # CLAUDE'S PHASE 2 STRATEGY (Dec 22, 2025)
