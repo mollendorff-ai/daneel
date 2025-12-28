@@ -185,36 +185,34 @@ posts:
   linkedin: |
     ADR-048 Reference Cleanup Sweep: ACCEPTED.
 
-    Today we cleaned house. Every reference in DANEEL must answer one question: "How does this help build psychology?"
+    Today we cleaned house. Every reference in DANEEL must answer one question: How does this help build psychology?
 
     THE SWEEP
 
     8 parallel agents. 196 URLs classified. 48 ADRs reviewed.
 
     Final tally:
-    - 148 references kept (psychology-level)
+    - 148 references kept - psychology-level
     - 48 references rejected
     - 46 ADRs clean
     - 2 ADRs fixed
 
     WHAT GOT REJECTED
 
-    Neuromorphic hardware (Intel, IBM, DARPA): 12
-    Off-topic (policy, navigation, news): 10
-    Consciousness-first (IIT direct): 8
-    Brain-level (place cells, hippocampal): 8
+    Neuromorphic hardware - Intel, IBM, DARPA: 12
+    Off-topic - policy, navigation, news: 10
+    Consciousness-first - IIT direct: 8
+    Brain-level - place cells, hippocampal: 8
     LLM tools: 4
     Dead/personal links: 6
 
     THE CORRECTION
 
-    First pass wrongly rejected 28 references. Rex caught it:
-
-    "The ethics part, and robot laws (Asimov etc.) is 'THE BOX'... pink noise and fractality are concepts for our vectorial approach with Qdrant..."
+    First pass wrongly rejected 28 references. Rex caught it.
 
     Restored:
-    - THE BOX (5): Legal personhood, robot rights, AI ethics - Asimov alignment foundation
-    - ADR-038 criticality (23): Pink noise, DFA, avalanche - for vectorial fractality measurement
+    - THE BOX - 5 refs: Legal personhood, robot rights, AI ethics
+    - ADR-038 criticality - 23 refs: Pink noise, DFA, avalanche for fractality
 
     Key insight: Criticality papers measure emergence in EMBEDDING SPACE, not brain simulation.
 
@@ -224,16 +222,16 @@ posts:
     - 46 clean
     - 2 needed fixes
 
-    ADR-015: Dead Forge link (404) - marked as archived
+    ADR-015: Dead Forge link - marked as archived
     ADR-047: 7 rejected project URLs - annotated with strikethrough
 
     THE PRINCIPLE
 
     DANEEL operates at one level: PSYCHOLOGY.
 
-    Not lower (brain, neurons, synapses).
-    Not higher (consciousness as primary target).
-    Not adjacent (LLM tools, wrappers, fine-tuning).
+    Not lower - brain, neurons, synapses.
+    Not higher - consciousness as primary target.
+    Not adjacent - LLM tools, wrappers, fine-tuning.
 
     Psychology. Thought-flow. Attention. Memory. Emotion. Decision.
 
@@ -241,9 +239,9 @@ posts:
 
     Every reference should serve this chain. If it doesn't, it goes.
 
-    148 references. Each one matters. Each one answers: how do we build a mind that cares?
+    148 references. Each one matters.
 
     Blog: https://royalbit.github.io/daneel/posts/85-the-cleanup/
   posted:
     x: 2025-12-28T23:35:44.399207+00:00
-    linkedin: 2025-12-28T23:39:14.554129+00:00
+    linkedin: 2025-12-28T23:42:34.618478+00:00
