@@ -21,10 +21,9 @@
 # ADR-044: Migrate to Mac mini + Cloudflare (DONE - Dec 25, 2025)
 #
 # Current priorities:
-#   0. Research absorption ← IN REVIEW (46 refs need classification, Dec 28 2025)
-#   0b. ADR index generation ← DONE (8 parallel agents, Dec 28 2025)
-#   1. Vector connectivity learning (VCONN-1 through VCONN-8) ← NOW CRITICAL
-#   2. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9)
+#   1. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL
+#   2. Drive system upgrade (DRIVE-1 through DRIVE-3) ← HIGH
+#   3. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← HIGH
 # =============================================================================
 
 # =============================================================================
@@ -35,32 +34,13 @@
 # Exit criteria: entropy >60% for 48+ hours (success) or <30% sustained (failure)
 
 # =============================================================================
-# MOST-CRITICAL: Cognitive Architecture Research Absorption (ADR-047)
+# COMPLETED → CHANGELOG.md (Dec 28, 2025)
 # =============================================================================
-# Origin: Rex + Claude Opus 4.5 - Dec 28, 2025
-# Goal: Study compatible projects, absorb knowledge, strengthen DANEEL
-#
-# License compatibility verified (DANEEL is AGPL-3.0):
-#   ✅ TheRemyyy/neurox-ai (MIT) - GPU spiking nets, STDP, neuromodulation
-#   ✅ varun29ankuS/shodh-memory (Apache-2.0) - 3-tier memory, Hebbian, graphs
-#   ✅ ruvnet/RuVector (MIT) - Distributed vector DB, Cypher, GNN learning
-#   ✅ ruvnet/claude-flow (MIT) - Multi-agent orchestration, swarm intelligence
-#   ❌ prancer-io/ExoGenesis-Omega (NO LICENSE) - Ideas only, no code
-#
-# Note on ExoGenesis-Omega:
-#   - Cannot absorb code (no license = all rights reserved)
-#   - CAN study architecture/ideas (not copyrightable)
-#   - CAN cite as reference in papers/blog
-# =============================================================================
-
-# =============================================================================
-# COMPLETED ITEMS → CHANGELOG.md
-# =============================================================================
-# The following were moved to CHANGELOG.md on Dec 26, 2025:
-#   - daneel_web_manifold_bug (Dec 25)
-#   - embeddings_decision (Dec 25) - forward-only embeddings live
-#   - infrastructure_migration (Dec 25) - Mac mini + Cloudflare Tunnel
-#   - emergence_validation (superseded by ADR-043)
+# - ADR-047 Research Absorption: ACCEPTED (18 kept, 28 rejected)
+# - 13 project studies complete (ABSORB-1 through ABSORB-13)
+# - ADR index generation complete (8 agents, 47 ADRs indexed)
+# - TMI-mainstream mapping documented
+# - ExoGenesis-Omega deep dive complete (MIT license)
 # =============================================================================
 
 current:
@@ -70,652 +50,52 @@ current:
   summary: "Open the loop - inject external stimuli and observe dynamics"
 
   # ==========================================================================
-  # IN REVIEW: Research Absorption (ADR-047)
+  # DONE: Research Absorption (ADR-047) - Moved to CHANGELOG.md
   # ==========================================================================
-  # Rex's review (Dec 28): Some projects are NOT brain/cognitive implementations.
-  # Each reference needs classification before ADR-047 can be accepted.
+  # Status: ACCEPTED (Dec 28, 2025)
+  # Final: 18 kept (psychology-level), 28 rejected (brain/consciousness/LLM)
+  # All 13 project studies complete, patterns identified for VCONN/DRIVE
   # ==========================================================================
   research_absorption:
-    status: in_progress
-    priority: "MOST-CRITICAL"
-    origin: "Rex + Claude Opus 4.5 - Dec 28, 2025"
+    status: done
+    completed: "2025-12-28"
     adr: "ADR-047-research-absorption-protocol.md"
-    blogs:
-      - "81-we-want-the-knowledge.md"
-      - "82-the-absorption.md"
-    description: |
-      Study compatible cognitive architecture projects, absorb knowledge,
-      integrate valuable patterns into DANEEL. No code copy without attribution.
+    summary: |
+      ADR-047 ACCEPTED. Psychology-level projects only.
+      18 kept, 28 rejected. See CHANGELOG.md for full details.
 
-      VALIDATION SWEEP COMPLETE (Dec 28, 2025):
-      - 9 parallel agents, 51 URLs validated
-      - 37/37 GitHub repos confirmed
-      - 14/14 arXiv papers confirmed
-      - 100,000+ combined community stars
-      - Zero license conflicts
-
-      REVIEW REQUIRED (Dec 28, 2025):
-      - Rex identified some projects are NOT brain/cognitive implementations
-      - 46 references in references.yaml set to status: review
-      - Each needs classification before ADR-047 can be accepted
-
-    # ==========================================================================
-    # PENDING REVIEW: 46 references need classification
-    # ==========================================================================
-    # DANEEL is TMI-based cognitive architecture.
-    # We do NOT want: LLMs, LLM-wrappers, deep learning without bio-inspiration.
-    # We WANT: Real cognitive implementations, bio-inspired, brain-like.
-    # ==========================================================================
-    review_task:
-      status: pending
-      references_under_review: 46
-
-      # ========================================================================
-      # CLASSIFICATION SCHEMA
-      # ========================================================================
-      classification_criteria:
-        cognitive_type:
-          description: "What kind of system is this?"
-          values:
-            - brain-like       # Real cognitive architecture (SOAR, ACT-R, etc.)
-            - bio-inspired     # Spiking nets, Hebbian, neuromorphic
-            - symbolic         # Logic-based, production rules
-            - hybrid           # Mix of approaches
-            - paper            # Research paper, not implementation
-            # REJECT TYPES (not compatible with DANEEL's approach):
-            - llm              # Large Language Model based - REJECT
-            - llm-wrapper      # Memory/tools for LLMs - REJECT
-            - deep-learning    # Pure DL without bio-inspiration - REJECT
-            - ml-tool          # ML utilities, not cognitive - REJECT
-
-        tech_stack:
-          description: "For implementations only"
-          fields:
-            - language: "Primary programming language"
-            - database: "Storage backend (if any)"
-            - framework: "Key frameworks/libs"
-            - architecture_summary: "1-2 sentence overview"
-
-        maturity:
-          values:
-            - production       # Battle-tested, widely used
-            - research         # Academic, experimental but working
-            - experimental     # Early stage, proof of concept
-            - abandoned        # No recent commits
-
-        relevance_to_daneel:
-          values:
-            - high             # Direct applicability to TMI/DANEEL
-            - medium           # Some useful patterns
-            - low              # Marginal relevance
-            - none             # Not applicable, should remove
-
-      # ========================================================================
-      # CATEGORIES TO REVIEW
-      # ========================================================================
-      categories_to_review:
-        - name: "Cognitive Architectures"
-          count: 8
-          expected_type: "brain-like | symbolic"
-          refs:
-            - name: "Hyperon/MeTTa"
-              likely_type: "symbolic"
-              needs: "tech_stack review"
-            - name: "AtomSpace"
-              likely_type: "symbolic (hypergraph)"
-              needs: "tech_stack review"
-            - name: "SOAR"
-              likely_type: "brain-like (production rules)"
-              needs: "tech_stack review"
-            - name: "pyACTR"
-              likely_type: "brain-like (declarative/procedural)"
-              needs: "tech_stack review"
-            - name: "pyClarion"
-              likely_type: "brain-like (dual-process)"
-              needs: "tech_stack review"
-            - name: "OpenNARS"
-              likely_type: "symbolic (reasoning)"
-              needs: "tech_stack review"
-            - name: "MicroPsi2"
-              likely_type: "brain-like (motivation)"
-              needs: "tech_stack review"
-            - name: "Nengo/SPAUN"
-              likely_type: "bio-inspired (neural)"
-              needs: "tech_stack review"
-
-        - name: "Consciousness Implementations"
-          count: 3
-          expected_type: "brain-like"
-          refs:
-            - name: "PyPhi (IIT)"
-              likely_type: "brain-like"
-              needs: "tech_stack review"
-            - name: "pymdp (Active Inference)"
-              likely_type: "brain-like"
-              needs: "tech_stack review"
-            - name: "RxInfer.jl"
-              likely_type: "brain-like (Bayesian)"
-              needs: "tech_stack review"
-
-        - name: "Memory & Learning"
-          count: 7
-          expected_type: "MIXED - careful review needed"
-          concern: "Some may be LLM-wrappers or pure DL"
-          refs:
-            - name: "Mem0"
-              likely_type: "llm-wrapper"  # REJECT
-              concern: "Memory layer for LLMs, not cognitive"
-              action: "LIKELY REMOVE"
-            - name: "pytorch-hebbian"
-              likely_type: "bio-inspired"
-              needs: "verify not just DL"
-            - name: "snnTorch"
-              likely_type: "bio-inspired (spiking)"
-              needs: "tech_stack review"
-            - name: "BindsNET"
-              likely_type: "bio-inspired (SNN+STDP)"
-              needs: "tech_stack review"
-            - name: "Axon/Leabra"
-              likely_type: "bio-inspired (hippocampus)"
-              needs: "tech_stack review"
-            - name: "DNC"
-              likely_type: "deep-learning"  # REJECT?
-              concern: "DeepMind - pure neural network"
-              action: "REVIEW - may be DL only"
-            - name: "Graphiti"
-              likely_type: "llm-wrapper?"
-              concern: "AI agent memory - check if LLM-focused"
-              action: "REVIEW"
-            - name: "REMO"
-              likely_type: "llm-wrapper?"
-              concern: "Dave Shapiro - likely LLM-focused"
-              action: "REVIEW"
-
-        - name: "Neuromorphic/Spiking"
-          count: 5
-          expected_type: "bio-inspired"
-          refs:
-            - name: "Brian2"
-              likely_type: "bio-inspired"
-              needs: "tech_stack review"
-            - name: "NEST"
-              likely_type: "bio-inspired"
-              needs: "tech_stack review"
-            - name: "Norse"
-              likely_type: "bio-inspired"
-              needs: "tech_stack review"
-            - name: "Intel Lava"
-              likely_type: "bio-inspired (neuromorphic HW)"
-              needs: "tech_stack review"
-            - name: "NEURON"
-              likely_type: "bio-inspired (biophysical)"
-              needs: "tech_stack review"
-
-        - name: "Emotion & Drive"
-          count: 4
-          expected_type: "MIXED"
-          refs:
-            - name: "RLeXplore"
-              likely_type: "deep-learning"  # REJECT?
-              concern: "RL exploration - may be pure DL"
-              action: "REVIEW"
-            - name: "NEUCOGAR"
-              likely_type: "bio-inspired (neuromodulation)"
-              needs: "tech_stack review"
-            - name: "python_actr"
-              likely_type: "brain-like"
-              needs: "tech_stack review"
-            - name: "LibEER"
-              likely_type: "ml-tool"  # REJECT
-              concern: "EEG classification, not cognitive"
-              action: "LIKELY REMOVE"
-
-        - name: "Attention & Salience"
-          count: 5
-          expected_type: "ml-tool - LIKELY ALL REJECT"
-          concern: "ML explainability, not cognitive architecture"
-          refs:
-            - name: "Google Saliency"
-              likely_type: "ml-tool"
-              action: "REMOVE"
-            - name: "pytorch-grad-cam"
-              likely_type: "ml-tool"
-              action: "REMOVE"
-            - name: "pySaliencyMap"
-              likely_type: "ml-tool"
-              action: "REMOVE - unless Itti-Koch bio-inspired?"
-            - name: "Attention-Gated-Networks"
-              likely_type: "deep-learning"
-              action: "REMOVE"
-            - name: "recurrent-visual-attention"
-              likely_type: "deep-learning"
-              action: "REMOVE"
-
-        - name: "AI Alignment"
-          count: 3
-          expected_type: "llm-wrapper / ml-tool - LIKELY ALL REJECT"
-          concern: "RLHF/DPO tools for LLMs, not cognitive"
-          refs:
-            - name: "Safe-RLHF"
-              likely_type: "llm"
-              action: "REMOVE"
-            - name: "TransformerLens"
-              likely_type: "llm"
-              action: "REMOVE"
-            - name: "TRL"
-              likely_type: "llm"
-              action: "REMOVE"
-
-        - name: "Papers"
-          count: 11
-          expected_type: "paper"
-          note: "Keep all - foundational research references"
-          action: "KEEP ALL"
-
-    # ==========================================================================
-    # COMPATIBLE PROJECTS (MIT/Apache/BSD/GPL - full study + reference)
-    # ==========================================================================
-    compatible_projects:
-      # Original discoveries
-      - repo: "prancer-io/ExoGenesis-Omega"
-        license: "MIT"  # UPDATED Dec 28 - was NONE, now MIT!
-        focus: "15 crates, IIT/GWT/FEP, consciousness models, sleep consolidation"
-        value_to_daneel: "Full architecture study now authorized"
-        stars: 11
-
-      - repo: "TheRemyyy/neurox-ai"
-        license: "MIT"
-        focus: "GPU spiking nets, triplet STDP, neuromodulation, oscillations"
-        value_to_daneel: "Advanced plasticity rules, hippocampal modules"
-
-      - repo: "varun29ankuS/shodh-memory"
-        license: "Apache-2.0"
-        focus: "3-tier memory, Hebbian learning, knowledge graphs"
-        value_to_daneel: "Memory architecture patterns, graph integration"
-
-      - repo: "ruvnet/RuVector"
-        license: "MIT"
-        focus: "Distributed vector DB, Cypher queries, GNN self-improvement"
-        value_to_daneel: "Vector learning patterns, graph neural networks"
-
-      - repo: "ruvnet/claude-flow"
-        license: "MIT"
-        focus: "Multi-agent orchestration, swarm intelligence, MCP"
-        value_to_daneel: "Agent coordination, swarm patterns, scaling"
-
-      # Top priority from validation sweep
-      - repo: "infer-actively/pymdp"
-        license: "MIT"
-        focus: "Active Inference, FEP-based decision making"
-        value_to_daneel: "Drives and motivation architecture"
-        stars: 591
-
-      - repo: "julestalloen/pytorch-hebbian"
-        license: "MIT"
-        focus: "Clean Hebbian learning rules"
-        value_to_daneel: "Direct relevance to vector connectivity"
-        stars: 95
-
-      - repo: "mem0ai/mem0"
-        license: "Apache-2.0"
-        focus: "Universal memory layer"
-        value_to_daneel: "Multi-level memory architecture patterns"
-        stars: 44700
-
-      - repo: "RLE-Foundation/RLeXplore"
-        license: "MIT"
-        focus: "Intrinsic motivation (ICM, RND, curiosity)"
-        value_to_daneel: "How to implement 'wanting to learn'"
-        stars: 454
-
-      - repo: "TransformerLensOrg/TransformerLens"
-        license: "MIT"
-        focus: "Mechanistic interpretability"
-        value_to_daneel: "Transparency techniques"
-        stars: 2900
-
-      - repo: "BindsNET/bindsnet"
-        license: "AGPL-3.0"
-        focus: "SNN + STDP + RL integration"
-        value_to_daneel: "Biologically plausible learning"
-        stars: 1600
-
-      - repo: "opencog/atomspace"
-        license: "AGPL-3.0"
-        focus: "Hypergraph knowledge representation"
-        value_to_daneel: "Knowledge representation beyond vectors"
-        stars: 932
-
-      - repo: "wmayner/pyphi"
-        license: "Custom"
-        focus: "IIT Phi calculation"
-        value_to_daneel: "Consciousness measurement approach"
-        stars: 410
-        note: "Ideas study - custom license"
-
-    tasks:
-      - id: "ABSORB-1"
-        title: "Study ExoGenesis-Omega architecture (NOW MIT!)"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          Document IIT Phi calculation approach.
-          Study GWT implementation patterns.
-          Analyze sleep/dream consolidation design.
-          Study 15-crate architecture structure.
-          FULL STUDY AUTHORIZED - MIT license confirmed Dec 28.
-        findings: |
-          - 15 Rust crates, tri-theoretic consciousness (IIT+GWT+FEP)
-          - Sleep consolidation with stage-specific multipliers (NREM1/2/3, REM)
-          - EWC++ for catastrophic forgetting prevention
-          - Sensory gating inspired by thalamic filtering
-          - Top-down attention modulation via GlobalWorkspace
-
-      - id: "ABSORB-2"
-        title: "Study neurox-ai plasticity implementation"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          Deep dive into triplet STDP, BCM rules, neuromodulator effects.
-          Compare with DANEEL's Hebbian design (ADR-023).
-          Document learnings in research notes.
-        findings: |
-          - Triplet STDP with eligibility traces (reward-modulated)
-          - BCM sliding threshold for homeostatic stability
-          - Neuromodulator effects: dopamine enhances LTP, serotonin dampens
-          - RECOMMENDATION: Add BCM θ_m sliding threshold to DANEEL
-
-      - id: "ABSORB-3"
-        title: "Study shodh-memory 3-tier architecture"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          Analyze working/episodic/semantic memory separation.
-          Compare with DANEEL's MemoryDB + Qdrant approach.
-          Identify integration patterns for knowledge graphs.
-        findings: |
-          - Hybrid decay: exponential (short) → power-law (long-term)
-          - LTP detection: 10 co-activations = protected from decay
-          - Spreading activation in graph for associative retrieval
-          - Importance scoring via connectivity + recency + emotional tag
-
-      - id: "ABSORB-4"
-        title: "Study RuVector GNN learning"
-        status: done
-        completed: "2025-12-28"
-        priority: "MEDIUM"
-        description: |
-          Understand how vectors improve through Graph Neural Networks.
-          Potential application: manifold clustering enhancement.
-        findings: |
-          - GAT (Graph Attention Networks) with attention weights
-          - SONA: Self-Optimizing Neural Architecture
-          - Dynamic min-cut for clustering, edge pruning
-          - GNN message passing for neighborhood aggregation
-
-      - id: "ABSORB-5"
-        title: "Study claude-flow orchestration patterns"
-        status: done
-        completed: "2025-12-28"
-        priority: "MEDIUM"
-        description: |
-          Multi-agent orchestration patterns.
-          Swarm intelligence for thought competition.
-          MCP protocol integration.
-        findings: |
-          - Work-stealing load balancing across agents
-          - VotingResolutionStrategy for conflict resolution
-          - ConsensusEngine for multi-agent agreement
-          - Relevant to future DANEEL multi-stream competition
-
-      - id: "ABSORB-6"
-        title: "Study pymdp Active Inference"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          FEP-based decision making and belief updating.
-          Application: DANEEL drives and motivation system.
-        findings: |
-          - A/B/C/D matrices for observation/transition/preference/initial
-          - Expected Free Energy (EFE) for policy selection
-          - Epistemic vs pragmatic value decomposition
-          - MAPS TO: DANEEL drives as C-matrix preferences
-
-      - id: "ABSORB-7"
-        title: "Study pytorch-hebbian"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          Clean Hebbian learning rules implementation.
-          Direct application to vector connectivity (ADR-046).
-        findings: |
-          - Krotov-Hopfield rule with anti-Hebbian component
-          - delta=0.4 prevents winner-take-all collapse
-          - Softmax competition over units
-          - DIRECT APPLICATION: Add delta dampening to ADR-046 Hebbian
-
-      - id: "ABSORB-8"
-        title: "Study Mem0 memory layer"
-        status: done
-        completed: "2025-12-28"
-        priority: "MEDIUM"
-        description: |
-          Universal memory layer patterns.
-          Multi-level architecture for AI agents.
-        findings: |
-          - Two-stage retrieval with reranking
-          - Entity scoping (user_id, session_id, agent_id)
-          - 44.7k stars - mature, production-tested
-          - Conflict resolution strategies for memory updates
-
-      - id: "ABSORB-9"
-        title: "Study RLeXplore intrinsic motivation"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          ICM, RND, curiosity-driven exploration.
-          How to implement "wanting to learn" in DANEEL.
-        findings: |
-          - ICM: Forward/inverse models, prediction error = curiosity
-          - RND: Random target network, mismatch = novelty
-          - RE3: Entropy-based, k-NN state counting
-          - MAPS TO: Drive architecture for "wanting to learn"
-
-      - id: "ABSORB-10"
-        title: "Study TransformerLens interpretability"
-        status: done
-        completed: "2025-12-28"
-        priority: "MEDIUM"
-        description: |
-          Mechanistic interpretability techniques.
-          Activation patching, circuit analysis.
-        findings: |
-          - Activation patching for causal intervention
-          - Circuit analysis for safety verification
-          - Hook point system for transparency
-          - Residual stream decomposition
-
-      - id: "ABSORB-11"
-        title: "Study BindsNET SNN + STDP + RL"
-        status: done
-        completed: "2025-12-28"
-        priority: "MEDIUM"
-        description: |
-          Biologically plausible learning patterns.
-          Spiking networks with reinforcement learning.
-        findings: |
-          - PostPre STDP with asymmetric time windows
-          - MSTDPET: eligibility traces + reward modulation
-          - Three-factor learning: pre × post × reward
-          - Applies to DANEEL's reward-modulated association strengthening
-
-      - id: "ABSORB-12"
-        title: "Study OpenCog/Hyperon AtomSpace"
-        status: done
-        completed: "2025-12-28"
-        priority: "MEDIUM"
-        description: |
-          Hypergraph knowledge representation.
-          Patterns beyond vector embeddings.
-        findings: |
-          - Atom/Value distinction (immutable structure / mutable properties)
-          - Hypergraph: edges can connect to edges (metagraph)
-          - Pattern matching as first-class graph operation
-          - TruthValue with confidence intervals
-
-      - id: "ABSORB-13"
-        title: "Study PyPhi IIT Phi calculation"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          How to measure integrated information.
-          Consciousness indicators for DANEEL.
-          Note: Custom license - ideas study only.
-        findings: |
-          - Phi = integrated information above partition
-          - Cause-effect repertoires for each mechanism
-          - MIP (Minimum Information Partition) analysis
-          - Computational complexity: O(2^n) - approximations needed
-          - IDEAS ONLY: GPL-3.0 license, no code copy
-
-      - id: "ABSORB-14"
-        title: "Write synthesis blog post"
-        status: done
-        completed: "2025-12-28"
-        priority: "MEDIUM"
-        description: |
-          Blog posts 81 & 82 published.
-          Documented research landscape and validation sweep.
-
-      - id: "ABSORB-ADR"
-        title: "Create ADR-047: Research Absorption Protocol"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          Formal decision record for research integration.
-          License compatibility analysis.
-          Attribution requirements.
-          Validation sweep results added.
-
-    success_criteria:
-      - "All compatible projects studied and documented" # DONE - 13/13 studies
-      - "Valuable patterns identified for DANEEL integration" # DONE - see findings
-      - "Blog posts published with proper attribution" # DONE
-      - "ADR-047 written and approved" # DONE
-      - "Validation sweep: 37/37 repos, 14/14 papers" # DONE
-      - "ExoGenesis-Omega MIT license confirmed" # DONE
-      - "Silhouette > 0.3 post-integration" # PENDING - requires VCONN implementation
-      - "At least 3 patterns integrated into DANEEL codebase" # PENDING - implementation phase
-
-    # KEY PATTERNS TO INTEGRATE (from research absorption):
-    integration_recommendations:
-      high_priority:
-        - pattern: "Krotov-Hopfield delta=0.4"
-          source: "pytorch-hebbian"
-          target: "ADR-046 Hebbian learning"
-          rationale: "Prevents winner-take-all collapse in associations"
-
-        - pattern: "BCM sliding threshold θ_m"
-          source: "neurox-ai"
-          target: "Association strengthening"
-          rationale: "Homeostatic stability, adapts to activity level"
-
-        - pattern: "ICM prediction error"
-          source: "RLeXplore"
-          target: "Drive system"
-          rationale: "Implements 'wanting to learn' via curiosity"
-
-      medium_priority:
-        - pattern: "EFE policy selection"
-          source: "pymdp"
-          target: "Drive architecture"
-          rationale: "FEP-based decision making, epistemic/pragmatic decomposition"
-
-        - pattern: "Sleep stage multipliers"
-          source: "ExoGenesis-Omega"
-          target: "SleepActor consolidation"
-          rationale: "NREM1/2/3/REM have different consolidation strengths"
-
-        - pattern: "Three-factor learning"
-          source: "BindsNET"
-          target: "Reward-modulated associations"
-          rationale: "pre × post × reward for eligibility traces"
+    # Remaining implementation work (moved to VCONN and DRIVE sections):
+    pending_integration:
+      - "Krotov-Hopfield δ=0.4 → VCONN-3"
+      - "BCM θ_m sliding threshold → VCONN-1"
+      - "ICM prediction error → DRIVE-1"
+      - "Sleep stage multipliers → VCONN-4"
+      - "Three-factor learning → VCONN-3"
 
   # ==========================================================================
-  # NEW: ExoGenesis Analysis & Improvements (Dec 28, 2025)
+  # ExoGenesis Learnings (Done items → CHANGELOG.md)
+  # ==========================================================================
+  # EXO-2: TMI-mainstream mapping DONE (docs/TMI_MAINSTREAM_MAPPING.md)
+  # EXO-4: THE BOX confirmed as unique contribution
   # ==========================================================================
   exogenesis_findings:
-    status: in_progress
-    priority: "HIGH"
-    origin: "Rex + Claude Opus 4.5 - Dec 28, 2025"
-    description: |
-      Deep dive into ExoGenesis-Omega revealed opportunities.
-      MIT license confirmed - can incorporate their patterns.
+    status: mostly_done
+    completed_items: ["EXO-2", "EXO-4"]
 
-      KEY FINDING: TMI is mainstream cognitive science with different names.
-      DANEEL simulates PSYCHOLOGY, not brain circuitry.
-      This is the stronger approach.
-
-    tasks:
+    pending_tasks:
       - id: "EXO-1"
         title: "Add proptest for property-based testing"
         status: pending
-        priority: "HIGH"
-        source: "ExoGenesis-Omega"
-        description: |
-          DANEEL lacks property-based testing.
-          ExoGenesis uses proptest extensively for mathematical invariants.
-          Add proptest to test TMI composite salience, memory consolidation, etc.
-        files:
-          - "Cargo.toml"
-          - "src/core/tests.rs"
-
-      - id: "EXO-2"
-        title: "Document TMI-mainstream equivalences"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          DONE: Created docs/TMI_MAINSTREAM_MAPPING.md
-          DONE: Updated README with psychological approach + consciousness emergence
-          TMI = GWT + Attention + Memory Consolidation with Portuguese names
-          Our unique value: connection_relevance (THE BOX)
-          Key insight: Architecture → Psychology → Consciousness (O Eu) → Values
-        files:
-          - "docs/TMI_MAINSTREAM_MAPPING.md"
-          - "README.md"
+        priority: "MEDIUM"
+        description: "Add proptest for TMI composite salience, memory consolidation"
+        files: ["Cargo.toml", "src/core/tests.rs"]
 
       - id: "EXO-3"
         title: "Consider sharp-wave ripple enhancement"
         status: pending
-        priority: "MEDIUM"
-        source: "ExoGenesis-Omega"
-        description: |
-          ExoGenesis has sophisticated sleep consolidation:
-          - Sharp-wave ripple replay (150-250 Hz)
-          - Priority Experience Replay
-          - Stage-specific consolidation multipliers
-          Evaluate if DANEEL's SleepActor should adopt these patterns.
-        files:
-          - "src/actors/sleep/mod.rs"
-
-      - id: "EXO-4"
-        title: "Keep THE BOX - unique alignment contribution"
-        status: done
-        priority: "CRITICAL"
-        description: |
-          connection_relevance is DANEEL's unique contribution.
-          No mainstream theory has this.
-          This is what makes DANEEL an ALIGNMENT project, not just cognitive architecture.
-          THE BOX stays. Immutable.
+        priority: "LOW"
+        description: "Evaluate sleep consolidation patterns from ExoGenesis"
+        files: ["src/actors/sleep/mod.rs"]
 
   # ==========================================================================
   # NARRATIVE: Psychology Over Brain Simulation
@@ -789,90 +169,11 @@ current:
   # ==========================================================================
 
   # ==========================================================================
-  # COMPLETE: ADR Index Generation (.asimov/ADRs.yaml)
+  # DONE: ADR Index Generation (.asimov/ADRs.yaml) - Dec 28, 2025
   # ==========================================================================
-  # Origin: Rex + Claude Opus 4.5 - Dec 28, 2025
-  # Goal: Machine-readable index of all 47 ADRs for quick lookup
-  adr_index_generation:
-    status: done
-    completed: "2025-12-28"
-    priority: "HIGH"
-    origin: "Rex + Claude Opus 4.5 - Dec 28, 2025"
-    output: ".asimov/ADRs.yaml"
-    description: |
-      Created machine-readable YAML index of all ADRs similar to references.yaml.
-      Enables quick lookup, dependency tracking, and session warmup.
-
-      PARALLEL AGENT SWEEP:
-      - 8 agents launched simultaneously
-      - Each agent parsed ~6 ADRs
-      - Single wave, ~15 seconds total execution
-
-    tasks:
-      - id: "ADRINDEX-1"
-        title: "Parse ADRs 001-006"
-        status: done
-        agent: "Wave 1, Agent 1"
-
-      - id: "ADRINDEX-2"
-        title: "Parse ADRs 007-012"
-        status: done
-        agent: "Wave 1, Agent 2"
-
-      - id: "ADRINDEX-3"
-        title: "Parse ADRs 013-018"
-        status: done
-        agent: "Wave 1, Agent 3"
-
-      - id: "ADRINDEX-4"
-        title: "Parse ADRs 019-024"
-        status: done
-        agent: "Wave 1, Agent 4"
-
-      - id: "ADRINDEX-5"
-        title: "Parse ADRs 025-030"
-        status: done
-        agent: "Wave 1, Agent 5"
-
-      - id: "ADRINDEX-6"
-        title: "Parse ADRs 031-036"
-        status: done
-        agent: "Wave 1, Agent 6"
-
-      - id: "ADRINDEX-7"
-        title: "Parse ADRs 037-042"
-        status: done
-        agent: "Wave 1, Agent 7"
-
-      - id: "ADRINDEX-8"
-        title: "Parse ADRs 043-047"
-        status: done
-        agent: "Wave 1, Agent 8"
-
-      - id: "ADRINDEX-9"
-        title: "Consolidate and write ADRs.yaml"
-        status: done
-        description: "Merge all agent results, order by ID, add statistics"
-
-    statistics:
-      total_adrs: 47
-      by_status:
-        accepted: 40
-        proposed: 5
-        superseded: 2
-      top_categories:
-        - architecture: 24
-        - tmi: 21
-        - theoretical: 14
-        - infrastructure: 14
-        - safety: 10
-        - learning: 8
-
-    success_criteria:
-      - "All 47 ADRs parsed and indexed"  # DONE
-      - "Metadata extracted: status, date, deciders, categories"  # DONE
-      - "Cross-references captured: supersedes, depends_on, related_to"  # DONE
-      - "Statistics computed"  # DONE
+  # 47 ADRs indexed, 8 parallel agents, machine-readable YAML
+  # Statistics: 40 accepted, 5 proposed, 2 superseded
+  # ==========================================================================
 
   # ==========================================================================
   # CRITICAL: Vector Connectivity for Learning (ADR-046)

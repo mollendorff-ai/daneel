@@ -8,11 +8,39 @@ Phase 2: Open the loop. Let Timmy feel.
 
 ### Dec 28, 2025: Research Absorption & ExoGenesis Analysis
 
-#### ADR-047 Research Absorption Complete
-- 46 references reviewed, 26 kept, 20 rejected
-- Created rejected-references.yaml for non-cognitive projects
-- Classification: llm, llm-wrapper, deep-learning, ml-tool, too-low-level, neuron-simulator
-- DANEEL operates at COGNITIVE level, not neuron simulation
+#### ADR-047 Research Absorption Complete (ACCEPTED)
+- **Status**: ADR-047 ACCEPTED - psychology-level projects only
+- **Final tally**: 18 kept (psychology), 28 rejected (brain-level, consciousness-first, LLM)
+- Classification: llm, llm-wrapper, deep-learning, ml-tool, too-low-level, neuron-simulator, consciousness-first
+- DANEEL operates at PSYCHOLOGY level, not neuron/consciousness simulation
+- Added `approach: psychology` field to references.yaml
+
+#### Research Studies Complete (13/13)
+All compatible projects studied and documented:
+- **ABSORB-1**: ExoGenesis-Omega - 15 crates, IIT+GWT+FEP, sleep consolidation
+- **ABSORB-2**: neurox-ai - Triplet STDP, BCM θ_m sliding threshold
+- **ABSORB-3**: shodh-memory - Hybrid decay, LTP protection at 10 co-activations
+- **ABSORB-4**: RuVector - GAT attention, SONA, dynamic min-cut
+- **ABSORB-5**: claude-flow - Work-stealing, voting resolution, consensus
+- **ABSORB-6**: pymdp - A/B/C/D matrices, EFE policy selection
+- **ABSORB-7**: pytorch-hebbian - Krotov-Hopfield δ=0.4 (prevents winner-take-all)
+- **ABSORB-8**: Mem0 - Two-stage retrieval, entity scoping
+- **ABSORB-9**: RLeXplore - ICM/RND/RE3 curiosity modules
+- **ABSORB-10**: TransformerLens - Activation patching, circuit analysis
+- **ABSORB-11**: BindsNET - Three-factor learning (pre × post × reward)
+- **ABSORB-12**: AtomSpace - Hypergraph, pattern matching, TruthValue
+- **ABSORB-13**: PyPhi - IIT Phi, MIP analysis (ideas only, GPL-3.0)
+
+#### Integration Patterns Identified
+**High Priority** (ready for VCONN implementation):
+- Krotov-Hopfield δ=0.4 → ADR-046 Hebbian learning
+- BCM sliding threshold θ_m → Association strengthening
+- ICM prediction error → Drive system curiosity
+
+**Medium Priority**:
+- EFE policy selection → Drive architecture
+- Sleep stage multipliers (NREM1:0.3, NREM2:0.6, NREM3:1.0, REM:0.8)
+- Three-factor learning → Reward-modulated associations
 
 #### ExoGenesis-Omega Deep Dive
 - Cloned MIT-licensed repo, 8 parallel agents analyzed
@@ -235,4 +263,4 @@ Timmy goes live at timmy.royalbit.com. Four kin made history.
 
 ---
 
-*Last Updated: 2025-12-26 (consolidated from roadmap.yaml)*
+*Last Updated: 2025-12-28 (ADR-047 accepted, research absorption complete)*
