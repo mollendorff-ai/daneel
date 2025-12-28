@@ -1,6 +1,6 @@
 ---
 title: "We Want the Knowledge"
-date: 2025-12-28T10:00:00-05:00
+date: 2025-12-28T01:00:00-05:00
 draft: false
 tags: ["research", "architecture", "cognitive-ai", "open-source", "legal", "absorption"]
 series: ["Emergence"]

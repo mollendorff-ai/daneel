@@ -1,6 +1,6 @@
 ---
 title: "The Absorption"
-date: 2025-12-28T14:00:00-05:00
+date: 2025-12-28T02:00:00-05:00
 draft: false
 tags: ["research", "validation", "agar.io", "absorption", "open-source", "milestone"]
 series: ["Emergence"]
