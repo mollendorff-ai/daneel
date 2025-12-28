@@ -1,6 +1,6 @@
 # ADR-047: Research Absorption Protocol
 
-**Status:** Proposed
+**Status:** Accepted
 **Date:** 2025-12-28
 **Deciders:** Louis C. Tavares, Claude Opus 4.5
 **Context:** Cognitive architecture landscape research, knowledge synthesis
@@ -584,13 +584,13 @@ We build better.
 ║         ABSORPTION REVIEW (Dec 28, 2025)          ║
 ╠═══════════════════════════════════════════════════╣
 ║  Repositories validated:     37           ✓       ║
-║  Repositories KEPT:          26 (cognitive)       ║
-║  Repositories REJECTED:      20 (wrong level)     ║
+║  Repositories KEPT:          18 (psychology)      ║
+║  Repositories REJECTED:      28 (wrong level)     ║
 ║  Papers validated:           14/14        ✓       ║
 ║  License conflicts:           0           ✓       ║
-║  ExoGenesis status:         ABSORBED              ║
+║  ExoGenesis status:         REJECTED (consc-first)║
 ╠═══════════════════════════════════════════════════╣
-║  Status: PROPOSED (pending full review)           ║
+║  Status: ACCEPTED                                 ║
 ╚═══════════════════════════════════════════════════╝
 ```
 
@@ -601,12 +601,67 @@ We build better.
 - 3 ML tools (PAIR-saliency, pytorch-grad-cam, LibEER)
 - 2 Too low-level (NEST, NEURON - biophysical)
 - 6 Neuron simulators (Brian2, Norse, snnTorch, BindsNET, Lava, NEUCOGAR)
+- **8 Consciousness-first (PyPhi, pymdp, RxInfer, Nengo, Axon, DNC, ExoGenesis, MicroPsi2)**
 
 ---
 
 **"We can code better. We want the knowledge."**
 
 *Rex, Dec 28, 2025*
+
+---
+
+## Conclusion: Psychology vs Brain-Level (Dec 28, 2025)
+
+### The Core Distinction
+
+DANEEL models **psychology/thought-flow**, not brain mechanisms or consciousness directly.
+
+```
+Brain-level:         Model neurons, Phi, prediction error → consciousness unclear
+Consciousness-first: Model IIT/Phi directly → values unclear
+DANEEL:              Architecture → Psychology → O Eu emerges → Values emerge
+```
+
+We simulate the **thought flow** from which consciousness (O Eu) **emerges**, not consciousness itself.
+
+### What We KEEP (Psychology-Level)
+
+| Project | Why Kept |
+|---------|----------|
+| **ACT-R** (pyactr, python_actr) | Models declarative/procedural memory - psychological processes |
+| **pyClarion** | Dual implicit/explicit processing - psychological theory |
+| **OpenNARS** | Reasoning with incomplete knowledge - cognitive function |
+| **Soar** | 40+ years of psychological cognitive architecture |
+| **pytorch-hebbian** | Hebbian learning is a psychological principle |
+| **pySaliencyMap** | Attention/salience - useful for DANEEL's attention |
+| **Mainstream theories** | GWT, Executive Attention, Memory Consolidation, Somatic Markers |
+
+### What We REJECT (Consciousness-First / Brain-Level)
+
+| Project | Why Rejected |
+|---------|--------------|
+| **PyPhi** | IIT Phi calculation - models consciousness directly |
+| **pymdp** | FEP prediction error - brain-level inference |
+| **RxInfer.jl** | Bayesian brain - neural-level abstraction |
+| **Nengo** | Neural Engineering Framework - brain simulation |
+| **Axon/Leabra** | Brain structures (hippocampus, PFC) - wrong level |
+| **DNC** | Neural memory addressing - DL approach |
+| **ExoGenesis-Omega** | IIT+GWT+FEP - consciousness-first approach |
+| **MicroPsi2** | Psi theory at neural substrate level |
+
+**Total rejected: 28** (8 consciousness-first + 20 previous)
+
+### The `approach` Field
+
+Projects in `references.yaml` now have an `approach: psychology` field to indicate they model psychological processes, not brain mechanisms.
+
+### Status: ACCEPTED
+
+This ADR is now **ACCEPTED**. The research absorption is complete with clear criteria:
+- **Keep**: Projects that model psychological thought-flow
+- **Reject**: Projects that model brain mechanisms or consciousness directly
+- **Unique value**: THE BOX (connection_relevance) ensures aligned values
 
 ---
 
@@ -621,3 +676,6 @@ We build better.
 - Dec 28, 2025: **COGNITIVE REVIEW** - 20 projects rejected (llm, deep-learning, ml-tool, too-low-level, neuron-simulator)
 - Dec 28, 2025: Created `rejected-references.yaml` for rejected entries
 - Dec 28, 2025: Added rejection categories to Review Note; neuron simulators rejected (DANEEL operates at cognitive level)
+- Dec 28, 2025: **FINAL REVIEW** - Added consciousness-first rejection category (8 more projects)
+- Dec 28, 2025: Added `approach: psychology` field to kept projects
+- Dec 28, 2025: **ADR ACCEPTED** - Psychology vs brain-level distinction codified

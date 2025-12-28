@@ -1935,11 +1935,12 @@ references:
   stars: 376
   status: verified
   cognitive_type: symbolic
+  approach: psychology
   tech_stack:
     language: C++
     framework: Soar
     bindings: Python, Java, C#, Tcl
-  notes: 40+ years research, chunking, reinforcement learning
+  notes: 40+ years research, chunking, reinforcement learning. Classic psychological cognitive architecture.
 
 - url: https://github.com/jakdot/pyactr
   title: pyACTR - Python ACT-R
@@ -1954,10 +1955,11 @@ references:
   stars: 173
   status: verified
   cognitive_type: symbolic
+  approach: psychology
   tech_stack:
     language: Python
     framework: SimPy
-  notes: Declarative/procedural memory, production rules
+  notes: Declarative/procedural memory, production rules. Models cognitive processes, not brain mechanisms.
 
 - url: https://github.com/cmekik/pyClarion
   title: pyClarion - CLARION Architecture
@@ -1972,10 +1974,11 @@ references:
   stars: 61
   status: verified
   cognitive_type: symbolic
+  approach: psychology
   tech_stack:
     language: Python
     framework: Clarion
-  notes: Dual implicit/explicit processing
+  notes: Dual implicit/explicit processing. Psychological dual-process theory, not neural.
 
 - url: https://github.com/opennars/opennars
   title: OpenNARS - Non-Axiomatic Reasoning
@@ -1990,108 +1993,19 @@ references:
   stars: 408
   status: verified
   cognitive_type: symbolic
+  approach: psychology
   tech_stack:
     language: Java
     framework: NARS
-  notes: Handles incomplete knowledge, real-time learning
+  notes: Reasoning with incomplete knowledge. Models cognitive reasoning, not neural mechanisms.
 
-- url: https://github.com/joschabach/micropsi2
-  title: MicroPsi2 - Psi Theory
-  categories:
-  - cognitive-architecture
-  - motivation
-  - joscha-bach
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  stars: 182
-  status: verified
-  cognitive_type: brain-like
-  tech_stack:
-    language: Python
-    framework: Bottle, Theano
-  notes: Psi theory of motivated cognition
-
-- url: https://github.com/nengo/nengo
-  title: Nengo - Neural Engineering Framework
-  categories:
-  - cognitive-architecture
-  - neural
-  - spaun
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: GPL-2.0
-  stars: 891
-  status: verified
-  cognitive_type: brain-like
-  tech_stack:
-    language: Python
-    framework: NumPy
-  notes: NEF, Semantic Pointer Architecture, SPAUN brain model
+# MicroPsi2 and Nengo moved to rejected-references.yaml (consciousness-first/brain-level)
 
 # -----------------------------------------------------------------------------
-# CONSCIOUSNESS IMPLEMENTATIONS
+# CONSCIOUSNESS IMPLEMENTATIONS - MOVED TO rejected-references.yaml
+# PyPhi, pymdp, RxInfer.jl rejected: consciousness-first approach
+# DANEEL models psychology/thought-flow, not consciousness directly
 # -----------------------------------------------------------------------------
-
-- url: https://github.com/wmayner/pyphi
-  title: PyPhi - IIT Phi Calculation
-  categories:
-  - consciousness
-  - iit
-  - phi
-  - tononi
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: Custom
-  stars: 410
-  status: verified
-  cognitive_type: brain-like
-  tech_stack:
-    language: Python
-    framework: NumPy, SciPy
-    database: Redis
-  notes: Integrated Information Theory 3.0 implementation
-
-- url: https://github.com/infer-actively/pymdp
-  title: pymdp - Active Inference
-  categories:
-  - consciousness
-  - fep
-  - active-inference
-  - friston
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  stars: 591
-  status: verified
-  cognitive_type: brain-like
-  tech_stack:
-    language: Python
-    framework: NumPy (JAX planned)
-  notes: Free Energy Principle, belief updating, policy inference
-
-- url: https://github.com/ReactiveBayes/RxInfer.jl
-  title: RxInfer.jl - Reactive Bayesian Inference
-  categories:
-  - consciousness
-  - fep
-  - bayesian
-  - julia
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  stars: 380
-  status: verified
-  cognitive_type: brain-like
-  tech_stack:
-    language: Julia
-    framework: Factor graphs, reactive message passing
-  notes: Message passing, real-time inference, active inference
 
 # -----------------------------------------------------------------------------
 # MEMORY & LEARNING SYSTEMS
@@ -2111,47 +2025,11 @@ references:
   stars: 95
   status: verified
   cognitive_type: bio-inspired
+  approach: psychology
   tech_stack:
     language: Python
     framework: PyTorch Ignite
-  notes: Local learning rules, unsupervised feature extraction
-
-- url: https://github.com/emer/axon
-  title: Axon/Leabra - Biologically Realistic
-  categories:
-  - memory
-  - hippocampus
-  - pfc
-  - basal-ganglia
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: BSD-3-Clause
-  stars: 27
-  status: verified
-  cognitive_type: brain-like
-  tech_stack:
-    language: Go
-    framework: Cogent Core, emergent
-    database: tensorfs
-  notes: Hippocampus, PFC, basal ganglia, predictive error-driven
-
-- url: https://github.com/google-deepmind/dnc
-  title: DeepMind DNC - Differentiable Neural Computer
-  categories:
-  - memory
-  - working-memory
-  - attention
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: Apache-2.0
-  status: verified
-  cognitive_type: brain-like
-  tech_stack:
-    language: Python
-    framework: TensorFlow, Sonnet
-  notes: Content-based addressing, temporal linking
+  notes: Local learning rules. Kept because Hebbian learning is a psychological principle (what fires together wires together).
 
 # -----------------------------------------------------------------------------
 # EMOTION & DRIVE SYSTEMS
@@ -2169,10 +2047,11 @@ references:
   license: MIT
   status: verified
   cognitive_type: symbolic
+  approach: psychology
   tech_stack:
     language: Python
     framework: ACT-R
-  notes: Memory + procedural cognition
+  notes: Memory + procedural cognition. ACT-R models psychological processes.
 
 # -----------------------------------------------------------------------------
 # ATTENTION & SALIENCE
@@ -2190,10 +2069,11 @@ references:
   license: MIT
   status: verified
   cognitive_type: bio-inspired
+  approach: psychology
   tech_stack:
     language: Python
     framework: OpenCV, NumPy
-  notes: Classic visual saliency, center-surround (Itti-Koch bio-inspired algorithm)
+  notes: Visual saliency attention. Useful for DANEEL's attention system.
 
 # -----------------------------------------------------------------------------
 # FOUNDATIONAL PAPERS (arXiv)
@@ -2346,31 +2226,10 @@ references:
   notes: Bottom-up model linking neurons to computation
 
 # -----------------------------------------------------------------------------
-# EXTERNAL PROJECTS
+# EXTERNAL PROJECTS - MOVED TO rejected-references.yaml
+# ExoGenesis-Omega rejected: consciousness-first approach (models Phi directly)
+# DANEEL models psychology/thought-flow, not consciousness directly
 # -----------------------------------------------------------------------------
-
-- url: https://github.com/nburnet1/ExoGenesis-Omega
-  title: ExoGenesis-Omega - IIT+GWT+FEP in Rust
-  categories:
-  - cognitive-architecture
-  - consciousness
-  - iit
-  - gwt
-  - fep
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  stars: 11
-  status: verified
-  cognitive_type: hybrid
-  tech_stack:
-    language: Rust
-    framework: IIT+GWT+FEP unified
-  notes: |
-    15 crates, IIT/GWT/FEP integration in Rust.
-    v1.0.0 released, MIT licensed.
-    Highly relevant architecture patterns for DANEEL.
 
 # -----------------------------------------------------------------------------
 # MAINSTREAM COGNITIVE SCIENCE THEORIES (TMI Mapping)
