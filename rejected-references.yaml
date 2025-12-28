@@ -1,14 +1,14 @@
-# Rejected References for ADR-047
+# Rejected References for DANEEL
 # These projects were reviewed but don't fit DANEEL's cognitive architecture requirements
-# Rejection criteria: llm, llm-wrapper, deep-learning, ml-tool, too-low-level, neuron-simulator, consciousness-first
+# Rejection criteria: llm, llm-wrapper, deep-learning, ml-tool, too-low-level, neuron-simulator, consciousness-first, brain, navigation, off-topic, dead-link
 # Created: 2025-12-28
-# Updated: 2025-12-28 - Added consciousness-first category (DANEEL models psychology, not consciousness directly)
+# Updated: 2025-12-28 - ADR-048 psychology-first cleanup sweep (76 removed)
 
 meta:
   created: 2025-12-28
   updated: 2025-12-28
-  reason: ADR-047 review - DANEEL models psychology/thought-flow, not brain functions or consciousness directly
-  total_rejected: 28
+  reason: Psychology-first architecture - DANEEL models thought-flow, not brain functions or consciousness directly
+  total_rejected: 76
 
 # -----------------------------------------------------------------------------
 # LLM WRAPPERS (3)
@@ -544,3 +544,574 @@ meta:
     language: Python
     framework: Bottle, Theano
   notes: Joscha Bach's motivated cognition. Borderline - has psychological concepts but neural framing.
+
+# -----------------------------------------------------------------------------
+# ADR-048 REFERENCE CLEANUP SWEEP (48 - CORRECTED)
+# Psychology-first cleanup - removed brain-first, consciousness-first, LLM tools
+# CORRECTED: Restored 28 refs (THE BOX + ADR-038 criticality for fractality)
+# Date: 2025-12-28
+# -----------------------------------------------------------------------------
+
+- url: http://revista.universo.edu.br/index.php?journal=3GOIANIA4&page=article&op=view&path%5B%5D=5273
+  title: TEORIA DA INTELIGÊNCIA MULTIFOCAL DE AUGUSTO CURY
+  categories:
+  - tmi
+  - portuguese
+  - academic
+  cited_in:
+  - research/TMI_Memory_Model_Research.md
+  status: ok
+  verified: 2025-12-25 18:09:22.528550+00:00
+
+- url: https://ailabwatch.substack.com/p/xais-new-safety-framework-is-dreadful
+  title: https://ailabwatch.substack.com/p/xais-new-safety-framework-is-dreadful
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: paywall
+  verified: 2025-12-25 18:09:55.987124+00:00
+  notes: Paywall detected
+
+- url: https://arxiv.org/abs/2405.02370
+  title: Neuromorphic Correlates of Artificial Consciousness
+  categories:
+  - consciousness
+  - arxiv
+  - academic
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-25 18:09:55.274438+00:00
+
+- url: https://arxiv.org/list/cs.AI/recent
+  title: https://arxiv.org/list/cs.AI/recent
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-25 18:09:55.463028+00:00
+
+- url: https://arxiv.org/submit
+  title: https://arxiv.org/submit
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-25 18:09:55.907178+00:00
+
+- url: https://bcs.kaist.ac.kr/sub0301
+  title: KAIST Brain & Cognitive Sciences
+  categories:
+  - neuromorphic
+  - korean
+  - kaist
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-25 18:09:58.990727+00:00
+
+- url: https://carnegieendowment.org/research/2025/06/how-some-of-chinas-top-ai-thinkers-built-their-own-ai-safety-institute
+  title: https://carnegieendowment.org/research/2025/06/how-some-of-chinas-top-ai-thinkers-built-their-own-ai-safety-institute
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-25 18:09:57.849975+00:00
+
+- url: https://dek.ai/raising-ai/
+  title: Raising AI - An Essential Guide to Parenting Our Future
+  categories:
+  - ai-child
+  - book
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-25 18:10:17.094584+00:00
+
+- url: https://direct.mit.edu/opmi/article/doi/10.1162/opmi_a_00160/124234/
+  title: https://direct.mit.edu/opmi/article/doi/10.1162/opmi_a_00160/124234/
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-25 18:10:17.675877+00:00
+
+- url: https://faculty.washington.edu/chudler/facts.html
+  title: Brain Facts and Figures - UW Faculty
+  categories:
+  - neuroscience
+  - education
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: ok
+  verified: 2025-12-25 18:10:22.774971+00:00
+
+- url: https://github.com/lctavares
+  title: https://github.com/lctavares
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - research/TMI_THOUGHT_MACHINE.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-25 18:09:20.428752+00:00
+
+- url: https://github.com/royalbit/forge
+  title: Forge
+  categories:
+  - readme
+  cited_in:
+  - README.md
+  status: dead
+  verified: 2025-12-25 18:09:21.370259+00:00
+  notes: HTTP 404
+
+- url: https://github.com/search?q=multifocal+intelligence&type=repositories
+  title: https://github.com/search?q=multifocal+intelligence&type=repositories
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-25 18:09:22.742290+00:00
+
+- url: https://hpcs.snu.ac.kr/research/neuromorphic-computing/
+  title: SNU FlexBrain - HPCS Lab
+  categories:
+  - neuromorphic
+  - korean
+  - snu
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-25 18:09:24.026838+00:00
+
+- url: https://newsroom.intel.com/artificial-intelligence/intel-builds-worlds-largest-neuromorphic-system-to-enable-more-sustainable-ai
+  title: Intel Hala Point
+  categories:
+  - neuromorphic
+  - intel
+  - hardware
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-25 18:09:24.822284+00:00
+
+- url: https://orcid.org/0009-0005-7598-8257
+  title: https://orcid.org/0009-0005-7598-8257
+  categories:
+  - readme
+  cited_in:
+  - README.md
+  - paper/DANEEL_PAPER.md
+  - research/TMI_THOUGHT_MACHINE.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-25 18:09:24.914537+00:00
+
+- url: https://scholar.google.com/scholar?q=%22multifocal+intelligence%22+computational
+  title: https://scholar.google.com/scholar?q=%22multifocal+intelligence%22+computational
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-25 18:10:08.277449+00:00
+
+- url: https://spectrum.ieee.org/neuromorphic-computing-ibm-northpole
+  title: NorthPole - IEEE Spectrum
+  categories:
+  - neuromorphic
+  - ibm
+  - ieee
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: login
+  verified: 2025-12-25 18:10:06.218251+00:00
+  notes: Login required
+
+- url: https://stanford.edu/~wandell/data/papers/2007-Wandell-Encyclopedia.pdf
+  title: Stanford - Wandell Visual Cortex
+  categories:
+  - neuroscience
+  - stanford
+  - pdf
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: ok
+  verified: 2025-12-25 18:10:14.217693+00:00
+
+- url: https://thousandbrains.org/
+  title: https://thousandbrains.org/
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-25 18:10:14.083555+00:00
+
+- url: https://www.anthropic.com/pricing
+  title: https://www.anthropic.com/pricing
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: redirect
+  verified: 2025-12-25 18:09:20.707091+00:00
+  notes: https://claude.com/pricing
+
+- url: https://www.darpa.mil/program/microbrain
+  title: μBRAIN - DARPA
+  categories:
+  - neuromorphic
+  - darpa
+  - government
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-25 18:10:01.548255+00:00
+
+- url: https://www.darpa.mil/research/programs/inspire
+  title: INSPIRE - DARPA
+  categories:
+  - neuromorphic
+  - darpa
+  - government
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-25 18:10:02.085022+00:00
+
+- url: https://www.eurekalert.org/news-releases/1071054
+  title: KAIST Neuromorphic Chip
+  categories:
+  - neuromorphic
+  - korean
+  - kaist
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-25 18:10:03.602559+00:00
+
+- url: https://www.frontiersin.org/journals/artificial-intelligence
+  title: https://www.frontiersin.org/journals/artificial-intelligence
+  categories:
+  - general
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-25 18:10:07.768197+00:00
+
+- url: https://www.ibm.com/think/topics/neuromorphic-computing
+  title: IBM Neuromorphic Computing
+  categories:
+  - neuromorphic
+  - ibm
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-25 18:10:04.954255+00:00
+
+- url: https://www.intel.com/content/www/us/en/research/neuromorphic-computing-loihi-2-technology-brief.html
+  title: Loihi 2 - Intel
+  categories:
+  - neuromorphic
+  - intel
+  - hardware
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-25 18:10:18.316257+00:00
+
+- url: https://www.linkedin.com/in/lctavares
+  title: https://www.linkedin.com/in/lctavares
+  categories:
+  - readme
+  cited_in:
+  - README.md
+  - paper/DANEEL_PAPER.md
+  - research/TMI_THOUGHT_MACHINE.md
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-25 18:10:19.023731+00:00
+
+- url: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2839851/
+  title: PMC2839851 - Coordinated Scaling of Cortical and Cerebellar Numbers
+  categories:
+  - neuroscience
+  - pmc
+  - academic
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: redirect
+  verified: 2025-12-25 18:10:29.473871+00:00
+  notes: https://pmc.ncbi.nlm.nih.gov/articles/PMC2839851/
+
+- url: https://www.pnas.org/doi/full/10.1073/pnas.1201895109
+  title: PNAS - Herculano-Houzel Neuroscience
+  categories:
+  - neuroscience
+  - pnas
+  - academic
+  cited_in:
+  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
+  status: ok
+  verified: 2025-12-25 18:10:32.261233+00:00
+
+- url: https://www.sciencedirect.com/science/article/pii/S016801022400138X
+  title: WBE Projections - ScienceDirect
+  categories:
+  - wbe
+  - academic
+  cited_in:
+  - research/neuromorphic_landscape_2025.md
+  status: ok
+  verified: 2025-12-25 18:09:59.184526+00:00
+
+- url: https://xchoo.github.io/spaun2.0/
+  title: https://xchoo.github.io/spaun2.0/
+  categories:
+  - general
+  cited_in:
+  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
+  status: ok
+  verified: 2025-12-25 18:09:58.573996+00:00
+
+- url: https://www.liebertpub.com/doi/10.1089/brain.2023.0010
+  title: The Feeling of Time Passing Is Associated with Recurrent Sustained Activity
+    and Theta Rhythms Across the Cortex
+  categories:
+  - neuroscience
+  - time-perception
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: login
+  verified: 2025-12-25 18:10:28.821487+00:00
+  notes: Login required
+
+- url: https://www.pnas.org/doi/10.1073/pnas.1518377113
+  title: Neural correlates of the LSD experience revealed by multimodal neuroimaging
+  categories:
+  - neuroscience
+  - psychedelics
+  - ego-dissolution
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-25 18:10:24.293634+00:00
+
+- url: https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2014.00020/full
+  title: 'The entropic brain: a theory of conscious states informed by neuroimaging
+    research with psychedelic drugs'
+  categories:
+  - neuroscience
+  - psychedelics
+  - consciousness
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: ok
+  verified: 2025-12-25 18:09:28.957027+00:00
+
+- url: https://doi.org/10.1038/s41582-025-01072-z
+  title: A neuroscientific model of near-death experiences
+  categories:
+  - neuroscience
+  - near-death-experience
+  - consciousness
+  - academic
+  - adr-017
+  cited_in:
+  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
+  status: redirect
+  verified: 2025-12-25 18:09:28.022819+00:00
+  notes: https://www.nature.com/articles/s41582-025-01072-z
+
+- url: https://doi.org/10.1073/pnas.2506316122
+  title: Sparse autoencoders uncover biologically interpretable features in protein
+    language model representations
+  categories:
+  - interpretability
+  - neural-networks
+  - academic
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: redirect
+  verified: 2025-12-25 18:09:30.644583+00:00
+  notes: https://www.pnas.org/doi/10.1073/pnas.2506316122
+
+- url: https://doi.org/10.5555/3495724.3497023
+  title: Model Interpretability through the Lens of Computational Complexity
+  categories:
+  - interpretability
+  - neural-networks
+  - complexity-theory
+  - academic
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: dead
+  verified: 2025-12-25 18:09:29.007505+00:00
+  notes: HTTP 404
+
+- url: https://arxiv.org/abs/2310.06825
+  title: Understanding Emergent Abilities of Language Models from the Loss Perspective
+  categories:
+  - interpretability
+  - neural-networks
+  - emergent-abilities
+  - arxiv
+  cited_in:
+  - paper/DANEEL_PAPER.md
+  status: ok
+  verified: 2025-12-25 18:09:29.210479+00:00
+
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC11653063/
+  title: 'Hippocampal Discoveries: Spatial View Cells, Connectivity, and Computations
+    for Memory and Navigation, in Primates Including Humans'
+  categories:
+  - neuroscience
+  - hippocampus
+  - place-cells
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-25 18:10:12.483085+00:00
+
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC12159490/
+  title: All active hippocampal pyramidal cells are place cells
+  categories:
+  - neuroscience
+  - hippocampus
+  - place-cells
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-25 18:10:24.927520+00:00
+
+- url: https://cshperspectives.cshlp.org/content/7/2/a021808.full.pdf
+  title: Place Cells, Grid Cells, and Memory
+  categories:
+  - neuroscience
+  - hippocampus
+  - place-cells
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-25 18:10:26.232086+00:00
+
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC7754708/
+  title: Targeted Activation of Hippocampal Place Cells Drives Memory-Guided Spatial
+    Behavior
+  categories:
+  - neuroscience
+  - hippocampus
+  - place-cells
+  - optogenetics
+  - academic
+  cited_in:
+  - research/METHOD_OF_LOCI_RESEARCH.md
+  status: ok
+  verified: 2025-12-25 18:09:30.639928+00:00
+
+- url: https://github.com/julestalloen/pytorch-hebbian
+  title: pytorch-hebbian - Hebbian Learning
+  categories:
+  - memory
+  - hebbian
+  - learning
+  - pytorch
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 95
+  status: verified
+  cognitive_type: bio-inspired
+  approach: psychology
+  tech_stack:
+    language: Python
+    framework: PyTorch Ignite
+  notes: Local learning rules. Kept because Hebbian learning is a psychological principle
+    (what fires together wires together).
+
+- url: https://arxiv.org/abs/2510.25998
+  title: 'IIT: A Consciousness-First Approach to What Exists'
+  categories:
+  - paper
+  - consciousness
+  - iit
+  - tononi
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Tononi, Boly
+  year: 2025
+  status: verified
+  cognitive_type: paper
+  notes: Definitive IIT overview, intrinsic cause-effect power
+
+- url: https://arxiv.org/abs/2510.04084
+  title: Bridging IIT and FEP in living neuronal networks
+  categories:
+  - paper
+  - consciousness
+  - iit
+  - fep
+  - unification
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Mayama, Shimizu et al.
+  year: 2025
+  status: verified
+  cognitive_type: paper
+  notes: Phi correlates with Bayesian surprise
+
+- url: https://arxiv.org/abs/2410.06633
+  title: On the Minimal Theory of Consciousness in Active Inference
+  categories:
+  - paper
+  - consciousness
+  - fep
+  - minimal-theory
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Whyte, Corcoran, Friston et al.
+  year: 2024
+  status: verified
+  cognitive_type: paper
+  notes: Testable theory from active inference
+
+- url: https://arxiv.org/abs/2204.01675
+  title: Mesoscopic description of hippocampal replay and metastability
+  categories:
+  - paper
+  - memory
+  - hippocampus
+  - replay
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Pietras, Schmutz, Schwalger
+  year: 2022
+  status: verified
+  cognitive_type: paper
+  notes: Bottom-up model linking neurons to computation
+

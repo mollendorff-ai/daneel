@@ -2,7 +2,7 @@ meta:
   created: 2025-12-15
   last_verified: 2025-12-25 18:10:36.116281+00:00
   tool: ref-tools v1.0.0
-  total_links: 171
+  total_links: 148
 references:
 - url: http://act-r.psy.cmu.edu/
   title: http://act-r.psy.cmu.edu/
@@ -12,61 +12,6 @@ references:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
   verified: 2025-12-25 18:09:21.151794+00:00
-- url: http://revista.universo.edu.br/index.php?journal=3GOIANIA4&page=article&op=view&path%5B%5D=5273
-  title: TEORIA DA INTELIGÊNCIA MULTIFOCAL DE AUGUSTO CURY
-  categories:
-  - tmi
-  - portuguese
-  - academic
-  cited_in:
-  - research/TMI_Memory_Model_Research.md
-  status: ok
-  verified: 2025-12-25 18:09:22.528550+00:00
-- url: https://ailabwatch.substack.com/p/xais-new-safety-framework-is-dreadful
-  title: https://ailabwatch.substack.com/p/xais-new-safety-framework-is-dreadful
-  categories:
-  - general
-  cited_in:
-  - paper/DANEEL_PAPER.md
-  status: paywall
-  verified: 2025-12-25 18:09:55.987124+00:00
-  notes: Paywall detected
-- url: https://arxiv.org/abs/2405.02370
-  title: Neuromorphic Correlates of Artificial Consciousness
-  categories:
-  - consciousness
-  - arxiv
-  - academic
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: ok
-  verified: 2025-12-25 18:09:55.274438+00:00
-- url: https://arxiv.org/list/cs.AI/recent
-  title: https://arxiv.org/list/cs.AI/recent
-  categories:
-  - general
-  cited_in:
-  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
-  status: ok
-  verified: 2025-12-25 18:09:55.463028+00:00
-- url: https://arxiv.org/submit
-  title: https://arxiv.org/submit
-  categories:
-  - general
-  cited_in:
-  - paper/DANEEL_PAPER.md
-  status: ok
-  verified: 2025-12-25 18:09:55.907178+00:00
-- url: https://bcs.kaist.ac.kr/sub0301
-  title: KAIST Brain & Cognitive Sciences
-  categories:
-  - neuromorphic
-  - korean
-  - kaist
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: ok
-  verified: 2025-12-25 18:09:58.990727+00:00
 - url: https://betterstack.com/community/comparisons/redis-vs-kafka/
   title: Redis vs Kafka Latency Comparison
   categories:
@@ -86,14 +31,6 @@ references:
   - research/TMI_Memory_Model_Research.md
   status: ok
   verified: 2025-12-25 18:09:58.499662+00:00
-- url: https://carnegieendowment.org/research/2025/06/how-some-of-chinas-top-ai-thinkers-built-their-own-ai-safety-institute
-  title: https://carnegieendowment.org/research/2025/06/how-some-of-chinas-top-ai-thinkers-built-their-own-ai-safety-institute
-  categories:
-  - general
-  cited_in:
-  - paper/DANEEL_PAPER.md
-  status: ok
-  verified: 2025-12-25 18:09:57.849975+00:00
 - url: https://ccrg.cs.memphis.edu/
   title: https://ccrg.cs.memphis.edu/
   categories:
@@ -123,23 +60,6 @@ references:
   - docs/adr/ADR-011-open-source-licensing.md
   status: ok
   verified: 2025-12-25 18:10:16.669757+00:00
-- url: https://dek.ai/raising-ai/
-  title: Raising AI - An Essential Guide to Parenting Our Future
-  categories:
-  - ai-child
-  - book
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: ok
-  verified: 2025-12-25 18:10:17.094584+00:00
-- url: https://direct.mit.edu/opmi/article/doi/10.1162/opmi_a_00160/124234/
-  title: https://direct.mit.edu/opmi/article/doi/10.1162/opmi_a_00160/124234/
-  categories:
-  - general
-  cited_in:
-  - paper/DANEEL_PAPER.md
-  status: ok
-  verified: 2025-12-25 18:10:17.675877+00:00
 - url: https://en.wikipedia.org/wiki/Artificial_consciousness
   title: Artificial Consciousness - Wikipedia
   categories:
@@ -181,25 +101,6 @@ references:
   status: login
   verified: 2025-12-25 18:10:22.521966+00:00
   notes: Login required
-- url: https://faculty.washington.edu/chudler/facts.html
-  title: Brain Facts and Figures - UW Faculty
-  categories:
-  - neuroscience
-  - education
-  cited_in:
-  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
-  status: ok
-  verified: 2025-12-25 18:10:22.774971+00:00
-- url: https://github.com/lctavares
-  title: https://github.com/lctavares
-  categories:
-  - general
-  cited_in:
-  - paper/DANEEL_PAPER.md
-  - research/TMI_THOUGHT_MACHINE.md
-  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
-  status: ok
-  verified: 2025-12-25 18:09:20.428752+00:00
 - url: https://github.com/royalbit
   title: https://github.com/royalbit
   categories:
@@ -211,23 +112,6 @@ references:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
   verified: 2025-12-25 18:09:21.037179+00:00
-- url: https://github.com/royalbit/forge
-  title: Forge
-  categories:
-  - readme
-  cited_in:
-  - README.md
-  status: dead
-  verified: 2025-12-25 18:09:21.370259+00:00
-  notes: HTTP 404
-- url: https://github.com/search?q=multifocal+intelligence&type=repositories
-  title: https://github.com/search?q=multifocal+intelligence&type=repositories
-  categories:
-  - general
-  cited_in:
-  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
-  status: ok
-  verified: 2025-12-25 18:09:22.742290+00:00
 - url: https://github.com/slawlor/ractor
   title: Ractor - Rust Actor Framework
   categories:
@@ -246,37 +130,6 @@ references:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
   verified: 2025-12-25 18:09:24.130637+00:00
-- url: https://hpcs.snu.ac.kr/research/neuromorphic-computing/
-  title: SNU FlexBrain - HPCS Lab
-  categories:
-  - neuromorphic
-  - korean
-  - snu
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: ok
-  verified: 2025-12-25 18:09:24.026838+00:00
-- url: https://newsroom.intel.com/artificial-intelligence/intel-builds-worlds-largest-neuromorphic-system-to-enable-more-sustainable-ai
-  title: Intel Hala Point
-  categories:
-  - neuromorphic
-  - intel
-  - hardware
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: ok
-  verified: 2025-12-25 18:09:24.822284+00:00
-- url: https://orcid.org/0009-0005-7598-8257
-  title: https://orcid.org/0009-0005-7598-8257
-  categories:
-  - readme
-  cited_in:
-  - README.md
-  - paper/DANEEL_PAPER.md
-  - research/TMI_THOUGHT_MACHINE.md
-  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
-  status: ok
-  verified: 2025-12-25 18:09:24.914537+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC2776484/
   title: PMC2776484 - The Human Brain in Numbers
   categories:
@@ -352,14 +205,6 @@ references:
   - docs/adr/ADR-009-database-selection.md
   status: ok
   verified: 2025-12-25 18:10:15.966100+00:00
-- url: https://scholar.google.com/scholar?q=%22multifocal+intelligence%22+computational
-  title: https://scholar.google.com/scholar?q=%22multifocal+intelligence%22+computational
-  categories:
-  - general
-  cited_in:
-  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
-  status: ok
-  verified: 2025-12-25 18:10:08.277449+00:00
 - url: https://segredosdaevolucao.com/memoria/
   title: 'Memória: os 3 tipos que gerenciam os pensamentos'
   categories:
@@ -397,36 +242,6 @@ references:
   - docs/adr/ADR-011-open-source-licensing.md
   status: ok
   verified: 2025-12-25 18:10:11.313027+00:00
-- url: https://spectrum.ieee.org/neuromorphic-computing-ibm-northpole
-  title: NorthPole - IEEE Spectrum
-  categories:
-  - neuromorphic
-  - ibm
-  - ieee
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: login
-  verified: 2025-12-25 18:10:06.218251+00:00
-  notes: Login required
-- url: https://stanford.edu/~wandell/data/papers/2007-Wandell-Encyclopedia.pdf
-  title: Stanford - Wandell Visual Cortex
-  categories:
-  - neuroscience
-  - stanford
-  - pdf
-  cited_in:
-  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
-  status: ok
-  verified: 2025-12-25 18:10:14.217693+00:00
-- url: https://thousandbrains.org/
-  title: https://thousandbrains.org/
-  categories:
-  - general
-  cited_in:
-  - paper/DANEEL_PAPER.md
-  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
-  status: ok
-  verified: 2025-12-25 18:10:14.083555+00:00
 - url: https://tqwewe.com/blog/comparing-rust-actor-libraries/
   title: Comparing Rust Actor Libraries
   categories:
@@ -481,15 +296,6 @@ references:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
   verified: 2025-12-25 18:10:23.630805+00:00
-- url: https://www.anthropic.com/pricing
-  title: https://www.anthropic.com/pricing
-  categories:
-  - general
-  cited_in:
-  - paper/DANEEL_PAPER.md
-  status: redirect
-  verified: 2025-12-25 18:09:20.707091+00:00
-  notes: https://claude.com/pricing
 - url: https://www.citador.pt/textos/as-janelas-da-memoria-augusto-cury
   title: As Janelas da Memória - Augusto Cury
   categories:
@@ -500,45 +306,6 @@ references:
   - research/TMI_Memory_Model_Research.md
   status: ok
   verified: 2025-12-25 18:09:23.847125+00:00
-- url: https://www.darpa.mil/program/microbrain
-  title: μBRAIN - DARPA
-  categories:
-  - neuromorphic
-  - darpa
-  - government
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: ok
-  verified: 2025-12-25 18:10:01.548255+00:00
-- url: https://www.darpa.mil/research/programs/inspire
-  title: INSPIRE - DARPA
-  categories:
-  - neuromorphic
-  - darpa
-  - government
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: ok
-  verified: 2025-12-25 18:10:02.085022+00:00
-- url: https://www.eurekalert.org/news-releases/1071054
-  title: KAIST Neuromorphic Chip
-  categories:
-  - neuromorphic
-  - korean
-  - kaist
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: ok
-  verified: 2025-12-25 18:10:03.602559+00:00
-- url: https://www.frontiersin.org/journals/artificial-intelligence
-  title: https://www.frontiersin.org/journals/artificial-intelligence
-  categories:
-  - general
-  cited_in:
-  - paper/DANEEL_PAPER.md
-  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
-  status: ok
-  verified: 2025-12-25 18:10:07.768197+00:00
 - url: https://www.gnu.org/licenses/agpl-3.0.en.html
   title: GNU AGPL v3 - Full Text
   categories:
@@ -561,25 +328,6 @@ references:
   status: dead
   verified: 2025-12-25 18:10:35.324735+00:00
   notes: Request timed out.
-- url: https://www.ibm.com/think/topics/neuromorphic-computing
-  title: IBM Neuromorphic Computing
-  categories:
-  - neuromorphic
-  - ibm
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: ok
-  verified: 2025-12-25 18:10:04.954255+00:00
-- url: https://www.intel.com/content/www/us/en/research/neuromorphic-computing-loihi-2-technology-brief.html
-  title: Loihi 2 - Intel
-  categories:
-  - neuromorphic
-  - intel
-  - hardware
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: ok
-  verified: 2025-12-25 18:10:18.316257+00:00
 - url: https://www.lesswrong.com/
   title: https://www.lesswrong.com/
   categories:
@@ -589,17 +337,6 @@ references:
   - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
   status: ok
   verified: 2025-12-25 18:10:22.315162+00:00
-- url: https://www.linkedin.com/in/lctavares
-  title: https://www.linkedin.com/in/lctavares
-  categories:
-  - readme
-  cited_in:
-  - README.md
-  - paper/DANEEL_PAPER.md
-  - research/TMI_THOUGHT_MACHINE.md
-  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
-  status: ok
-  verified: 2025-12-25 18:10:19.023731+00:00
 - url: https://www.nature.com/scitable/blog/brain-metrics/are_there_really_as_many/
   title: Nature Scitable - Brain Metrics
   categories:
@@ -609,17 +346,6 @@ references:
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: ok
   verified: 2025-12-25 18:10:17.416781+00:00
-- url: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2839851/
-  title: PMC2839851 - Coordinated Scaling of Cortical and Cerebellar Numbers
-  categories:
-  - neuroscience
-  - pmc
-  - academic
-  cited_in:
-  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
-  status: redirect
-  verified: 2025-12-25 18:10:29.473871+00:00
-  notes: https://pmc.ncbi.nlm.nih.gov/articles/PMC2839851/
 - url: https://www.nyu.edu/about/news-publications/news/2024/february/ai-learns-through-the-eyes-and-ears-of-a-child.html
   title: NYU Child Perspective AI
   categories:
@@ -630,16 +356,6 @@ references:
   - research/neuromorphic_landscape_2025.md
   status: ok
   verified: 2025-12-25 18:10:33.213472+00:00
-- url: https://www.pnas.org/doi/full/10.1073/pnas.1201895109
-  title: PNAS - Herculano-Houzel Neuroscience
-  categories:
-  - neuroscience
-  - pnas
-  - academic
-  cited_in:
-  - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
-  status: ok
-  verified: 2025-12-25 18:10:32.261233+00:00
 - url: https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90
   title: Amazon Prime Video Modular Monolith
   categories:
@@ -669,15 +385,6 @@ references:
   - research/BRAIN_FUNCTIONAL_ALLOCATION_DATA.md
   status: ok
   verified: 2025-12-25 18:10:03.750859+00:00
-- url: https://www.sciencedirect.com/science/article/pii/S016801022400138X
-  title: WBE Projections - ScienceDirect
-  categories:
-  - wbe
-  - academic
-  cited_in:
-  - research/neuromorphic_landscape_2025.md
-  status: ok
-  verified: 2025-12-25 18:09:59.184526+00:00
 - url: https://www.scientificamerican.com/article/100-trillion-connections/
   title: Scientific American - 100 Trillion Connections (Carl Zimmer)
   categories:
@@ -708,27 +415,6 @@ references:
   - research/TMI_Memory_Model_Research.md
   status: ok
   verified: 2025-12-25 18:09:59.342621+00:00
-- url: https://xchoo.github.io/spaun2.0/
-  title: https://xchoo.github.io/spaun2.0/
-  categories:
-  - general
-  cited_in:
-  - strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md
-  status: ok
-  verified: 2025-12-25 18:09:58.573996+00:00
-- url: https://www.liebertpub.com/doi/10.1089/brain.2023.0010
-  title: The Feeling of Time Passing Is Associated with Recurrent Sustained Activity
-    and Theta Rhythms Across the Cortex
-  categories:
-  - neuroscience
-  - time-perception
-  - academic
-  - adr-017
-  cited_in:
-  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
-  status: login
-  verified: 2025-12-25 18:10:28.821487+00:00
-  notes: Login required
 - url: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0001295
   title: Does Time Really Slow Down during a Frightening Event?
   categories:
@@ -753,18 +439,6 @@ references:
   status: paywall
   verified: 2025-12-25 18:10:31.040523+00:00
   notes: Paywall detected
-- url: https://www.pnas.org/doi/10.1073/pnas.1518377113
-  title: Neural correlates of the LSD experience revealed by multimodal neuroimaging
-  categories:
-  - neuroscience
-  - psychedelics
-  - ego-dissolution
-  - academic
-  - adr-017
-  cited_in:
-  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
-  status: ok
-  verified: 2025-12-25 18:10:24.293634+00:00
 - url: https://www.pnas.org/doi/10.1073/pnas.0812686106
   title: The default mode network and self-referential processes in depression
   categories:
@@ -818,19 +492,6 @@ references:
   - docs/adr/ADR-017-tmi-pathology-hypotheses.md
   status: ok
   verified: 2025-12-25 18:09:27.764223+00:00
-- url: https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2014.00020/full
-  title: 'The entropic brain: a theory of conscious states informed by neuroimaging
-    research with psychedelic drugs'
-  categories:
-  - neuroscience
-  - psychedelics
-  - consciousness
-  - academic
-  - adr-017
-  cited_in:
-  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
-  status: ok
-  verified: 2025-12-25 18:09:28.957027+00:00
 - url: https://doi.org/10.3389/fpsyg.2021.645498
   title: 'The Neuroscience of the Flow State: Involvement of the Locus Coeruleus Norepinephrine
     System'
@@ -859,31 +520,6 @@ references:
   status: redirect
   verified: 2025-12-25 18:09:27.068681+00:00
   notes: https://www.sciencedirect.com/b/s/science/article/pii/S1053811925006056?brr=9b3a4a1dbf95a2e4&via%3Dihub=
-- url: https://doi.org/10.1038/s41582-025-01072-z
-  title: A neuroscientific model of near-death experiences
-  categories:
-  - neuroscience
-  - near-death-experience
-  - consciousness
-  - academic
-  - adr-017
-  cited_in:
-  - docs/adr/ADR-017-tmi-pathology-hypotheses.md
-  status: redirect
-  verified: 2025-12-25 18:09:28.022819+00:00
-  notes: https://www.nature.com/articles/s41582-025-01072-z
-- url: https://doi.org/10.1073/pnas.2506316122
-  title: Sparse autoencoders uncover biologically interpretable features in protein
-    language model representations
-  categories:
-  - interpretability
-  - neural-networks
-  - academic
-  cited_in:
-  - paper/DANEEL_PAPER.md
-  status: redirect
-  verified: 2025-12-25 18:09:30.644583+00:00
-  notes: https://www.pnas.org/doi/10.1073/pnas.2506316122
 - url: https://doi.org/10.23915/distill.00024.001
   title: 'Zoom In: An Introduction to Circuits'
   categories:
@@ -895,29 +531,6 @@ references:
   status: redirect
   verified: 2025-12-25 18:09:28.718624+00:00
   notes: https://distill.pub/2020/circuits/zoom-in/
-- url: https://doi.org/10.5555/3495724.3497023
-  title: Model Interpretability through the Lens of Computational Complexity
-  categories:
-  - interpretability
-  - neural-networks
-  - complexity-theory
-  - academic
-  cited_in:
-  - paper/DANEEL_PAPER.md
-  status: dead
-  verified: 2025-12-25 18:09:29.007505+00:00
-  notes: HTTP 404
-- url: https://arxiv.org/abs/2310.06825
-  title: Understanding Emergent Abilities of Language Models from the Loss Perspective
-  categories:
-  - interpretability
-  - neural-networks
-  - emergent-abilities
-  - arxiv
-  cited_in:
-  - paper/DANEEL_PAPER.md
-  status: ok
-  verified: 2025-12-25 18:09:29.210479+00:00
 - url: https://transformer-circuits.pub/2024/scaling-monosemanticity/
   title: 'Scaling Monosemanticity: Extracting Interpretable Features from Claude 3
     Sonnet'
@@ -1020,53 +633,6 @@ references:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
   verified: 2025-12-25 18:10:12.953761+00:00
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC11653063/
-  title: 'Hippocampal Discoveries: Spatial View Cells, Connectivity, and Computations
-    for Memory and Navigation, in Primates Including Humans'
-  categories:
-  - neuroscience
-  - hippocampus
-  - place-cells
-  - academic
-  cited_in:
-  - research/METHOD_OF_LOCI_RESEARCH.md
-  status: ok
-  verified: 2025-12-25 18:10:12.483085+00:00
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC12159490/
-  title: All active hippocampal pyramidal cells are place cells
-  categories:
-  - neuroscience
-  - hippocampus
-  - place-cells
-  - academic
-  cited_in:
-  - research/METHOD_OF_LOCI_RESEARCH.md
-  status: ok
-  verified: 2025-12-25 18:10:24.927520+00:00
-- url: https://cshperspectives.cshlp.org/content/7/2/a021808.full.pdf
-  title: Place Cells, Grid Cells, and Memory
-  categories:
-  - neuroscience
-  - hippocampus
-  - place-cells
-  - academic
-  cited_in:
-  - research/METHOD_OF_LOCI_RESEARCH.md
-  status: ok
-  verified: 2025-12-25 18:10:26.232086+00:00
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC7754708/
-  title: Targeted Activation of Hippocampal Place Cells Drives Memory-Guided Spatial
-    Behavior
-  categories:
-  - neuroscience
-  - hippocampus
-  - place-cells
-  - optogenetics
-  - academic
-  cited_in:
-  - research/METHOD_OF_LOCI_RESEARCH.md
-  status: ok
-  verified: 2025-12-25 18:09:30.639928+00:00
 - url: https://www.scientificamerican.com/article/why-walking-through-doorway-makes-you-forget/
   title: Why Walking through a Doorway Makes You Forget
   categories:
@@ -1217,61 +783,6 @@ references:
   - research/METHOD_OF_LOCI_RESEARCH.md
   status: ok
   verified: 2025-12-25 18:09:38.276757+00:00
-- url: https://plato.stanford.edu/entries/legal-rights/
-  title: Legal Rights - Stanford Encyclopedia of Philosophy
-  categories:
-  - legal
-  - philosophy
-  - personhood
-  cited_in:
-  - docs/adr/ADR-019-ai-identity-legal-personhood.md
-  status: ok
-  verified: 2025-12-25 18:09:36.447064+00:00
-- url: https://www.legislation.govt.nz/act/public/2017/0007/latest/whole.html
-  title: Te Awa Tupua (Whanganui River Claims Settlement) Act 2017
-  categories:
-  - legal
-  - personhood
-  - environmental-law
-  - new-zealand
-  cited_in:
-  - docs/adr/ADR-019-ai-identity-legal-personhood.md
-  status: ok
-  verified: 2025-12-25 18:09:37.919903+00:00
-- url: https://en.wikipedia.org/wiki/Santa_Clara_County_v._Southern_Pacific_Railroad_Co.
-  title: Santa Clara County v. Southern Pacific Railroad Co.
-  categories:
-  - legal
-  - personhood
-  - corporate-law
-  - us-supreme-court
-  cited_in:
-  - docs/adr/ADR-019-ai-identity-legal-personhood.md
-  status: login
-  verified: 2025-12-25 18:09:36.320488+00:00
-  notes: Login required
-- url: https://mitpress.mit.edu/9780262551571/robot-rights/
-  title: Robot Rights
-  categories:
-  - legal
-  - ai-ethics
-  - philosophy
-  - book
-  cited_in:
-  - docs/adr/ADR-019-ai-identity-legal-personhood.md
-  status: ok
-  verified: 2025-12-25 18:09:38.616379+00:00
-- url: https://global.oup.com/academic/product/the-ethics-of-artificial-intelligence-9780198883098
-  title: 'The Ethics of Artificial Intelligence: Principles, Challenges, and Opportunities'
-  categories:
-  - legal
-  - ai-ethics
-  - philosophy
-  - book
-  cited_in:
-  - docs/adr/ADR-019-ai-identity-legal-personhood.md
-  status: ok
-  verified: 2025-12-25 18:09:41.252669+00:00
 - url: https://pmc.ncbi.nlm.nih.gov/articles/PMC4492928/
   title: Replication and Analysis of Ebbinghaus Forgetting Curve
   categories:
@@ -1528,151 +1039,6 @@ references:
   - docs/adr/ADR-035-volition-actor-free-wont.md
   status: ok
   verified: 2025-12-25 18:09:43.648224+00:00
-- url: http://www.scholarpedia.org/article/Neuronal_avalanche
-  title: Neuronal Avalanche - Scholarpedia
-  categories:
-  - neuroscience
-  - criticality
-  - avalanches
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:43.994555+00:00
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC6871218/
-  title: Avalanche dynamics and the human connectome
-  categories:
-  - neuroscience
-  - criticality
-  - avalanches
-  - academic
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:43.307750+00:00
-- url: https://www.frontiersin.org/articles/10.3389/fphys.2012.00450/full
-  title: 'DFA: A Scale-Free View on Neuronal Oscillations'
-  categories:
-  - neuroscience
-  - dfa
-  - criticality
-  - academic
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:46.368472+00:00
-- url: https://www.nature.com/articles/s41467-021-24260-z
-  title: Avalanches and edge-of-chaos learning in small, randomly connected neural
-    networks
-  categories:
-  - neuroscience
-  - criticality
-  - edge-of-chaos
-  - nature
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: paywall
-  verified: 2025-12-25 18:09:45.905450+00:00
-  notes: Paywall detected
-- url: https://www.nature.com/articles/s41598-018-37920-w
-  title: Critical synchronization and 1/f noise in inhibitory/excitatory rich-club
-    neural networks
-  categories:
-  - neuroscience
-  - criticality
-  - power-spectrum
-  - nature
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: paywall
-  verified: 2025-12-25 18:09:44.884505+00:00
-  notes: Paywall detected
-- url: http://www.scholarpedia.org/article/Scale-free_neocortical_dynamics
-  title: Scale-free neocortical dynamics - Scholarpedia
-  categories:
-  - neuroscience
-  - criticality
-  - scale-free
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:46.225299+00:00
-- url: https://arxiv.org/abs/1603.09382
-  title: Deep Networks with Stochastic Depth
-  categories:
-  - ml
-  - noise-injection
-  - stochastic-depth
-  - arxiv
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:45.817129+00:00
-- url: https://openreview.net/pdf?id=SylO2yStDr
-  title: Reducing Transformer Depth on Demand with Structured Dropout
-  categories:
-  - ml
-  - transformers
-  - layerdrop
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:46.191113+00:00
-- url: https://www.ibm.com/think/topics/llm-temperature
-  title: What is LLM Temperature?
-  categories:
-  - ml
-  - llm
-  - temperature
-  - ibm
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:50.396341+00:00
-- url: https://arxiv.org/html/2501.12314v1
-  title: Uncertainty Quantification With Monte Carlo Noise Injection
-  categories:
-  - ml
-  - noise-injection
-  - bayesian
-  - arxiv
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:46.641226+00:00
-- url: https://machinelearningmastery.com/train-neural-networks-with-noise-to-reduce-overfitting/
-  title: Train Neural Networks With Noise to Reduce Overfitting
-  categories:
-  - ml
-  - noise-injection
-  - regularization
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:47.867015+00:00
-- url: https://link.springer.com/chapter/10.1007/978-3-030-64221-1_16
-  title: Adaptive Gaussian Noise Injection Regularization
-  categories:
-  - ml
-  - noise-injection
-  - adaptive
-  - springer
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: paywall
-  verified: 2025-12-25 18:09:47.650393+00:00
-  notes: Paywall detected
 - url: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0014803
   title: The Timing of the Cognitive Cycle
   categories:
@@ -1732,156 +1098,6 @@ references:
   status: paywall
   verified: 2025-12-25 18:09:49.405260+00:00
   notes: Paywall detected
-- url: https://www.nature.com/articles/s41598-025-18004-y
-  title: Mean-field approximation for calculating critical point in spiking neural
-    networks
-  categories:
-  - neuroscience
-  - criticality
-  - mean-field
-  - nature
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: paywall
-  verified: 2025-12-25 18:09:50.366614+00:00
-  notes: Paywall detected
-- url: https://www.nature.com/articles/s41467-020-16548-3
-  title: 'Between perfectly critical and fully irregular: a reverberating model captures
-    and predicts cortical spike propagation'
-  categories:
-  - neuroscience
-  - criticality
-  - plasticity
-  - nature
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: paywall
-  verified: 2025-12-25 18:09:53.254698+00:00
-  notes: Paywall detected
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC5446191/
-  title: 'Criticality in the brain: A synthesis of neurobiology, models and cognition'
-  categories:
-  - neuroscience
-  - criticality
-  - sorn
-  - pmc
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:50.292063+00:00
-- url: https://direct.mit.edu/artl/article/21/1/55/2790/Lambda-and-the-Edge-of-Chaos-in-Recurrent-Neural
-  title: Lambda and the Edge of Chaos in Recurrent Neural Networks
-  categories:
-  - ml
-  - edge-of-chaos
-  - lambda
-  - mit
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: paywall
-  verified: 2025-12-25 18:09:54.776658+00:00
-  notes: Paywall detected
-- url: https://www.nature.com/articles/s42005-024-01530-y
-  title: Robust criticality in FitzHugh-Nagumo oscillator networks
-  categories:
-  - neuroscience
-  - criticality
-  - oscillators
-  - nature
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: paywall
-  verified: 2025-12-25 18:09:56.060883+00:00
-  notes: Paywall detected
-- url: https://arxiv.org/abs/2108.06395
-  title: Criticality in phase oscillator reservoir computing
-  categories:
-  - ml
-  - reservoir-computing
-  - criticality
-  - arxiv
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:10:11.521797+00:00
-- url: https://pubmed.ncbi.nlm.nih.gov/15165396/
-  title: Real-time computation at the edge of chaos in recurrent neural networks
-  categories:
-  - ml
-  - edge-of-chaos
-  - computation
-  - pubmed
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:51.570051+00:00
-- url: https://www.frontiersin.org/journals/computational-neuroscience/articles/10.3389/fncom.2021.611183/full
-  title: 'Criticality, Connectivity, and Neural Disorder: A Multifaceted Approach'
-  categories:
-  - neuroscience
-  - criticality
-  - connectivity
-  - frontiers
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:53.248381+00:00
-- url: https://github.com/LIFCriticality/Simulator
-  title: LIFCriticality Simulator - Python implementation
-  categories:
-  - code
-  - criticality
-  - python
-  - github
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:54.645051+00:00
-- url: https://www.jneurosci.org/content/23/35/11167
-  title: Neuronal Avalanches in Neocortical Circuits
-  categories:
-  - neuroscience
-  - criticality
-  - avalanches
-  - seminal
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:53.688672+00:00
-- url: https://pubmed.ncbi.nlm.nih.gov/17517489/
-  title: Edge of Chaos and Prediction of Computational Performance for Neural Circuit
-    Models
-  categories:
-  - neuroscience
-  - reservoir-computing
-  - edge-of-chaos
-  - adr-038
-  cited_in:
-  - docs/adr/ADR-038-phase2-stimuli-research.md
-  status: ok
-  verified: 2025-12-25 18:09:54.442330+00:00
-
-# =============================================================================
-# RESEARCH ABSORPTION - Dec 28, 2025 (ADR-047)
-# =============================================================================
-# Origin: Rex + Claude Opus 4.5 research sweep
-# Purpose: DANEEL as central repository for cognitive AI consensus
-# =============================================================================
-
-# -----------------------------------------------------------------------------
-# COGNITIVE ARCHITECTURES
-# -----------------------------------------------------------------------------
-
 - url: https://github.com/trueagi-io/hyperon-experimental
   title: Hyperon/MeTTa - Next-gen OpenCog
   categories:
@@ -1902,7 +1118,6 @@ references:
     framework: MeTTa interpreter
     bindings: Python, C
   notes: OpenCog successor, MeTTa meta-language, designed for AGI
-
 - url: https://github.com/opencog/atomspace
   title: AtomSpace - Hypergraph Knowledge Base
   categories:
@@ -1922,7 +1137,6 @@ references:
     database: Custom hypergraph (in-RAM)
     bindings: Scheme, Python
   notes: Pattern matching, attention allocation, persistent storage
-
 - url: https://github.com/SoarGroup/Soar
   title: SOAR Cognitive Architecture
   categories:
@@ -1940,8 +1154,8 @@ references:
     language: C++
     framework: Soar
     bindings: Python, Java, C#, Tcl
-  notes: 40+ years research, chunking, reinforcement learning. Classic psychological cognitive architecture.
-
+  notes: 40+ years research, chunking, reinforcement learning. Classic psychological
+    cognitive architecture.
 - url: https://github.com/jakdot/pyactr
   title: pyACTR - Python ACT-R
   categories:
@@ -1959,8 +1173,8 @@ references:
   tech_stack:
     language: Python
     framework: SimPy
-  notes: Declarative/procedural memory, production rules. Models cognitive processes, not brain mechanisms.
-
+  notes: Declarative/procedural memory, production rules. Models cognitive processes,
+    not brain mechanisms.
 - url: https://github.com/cmekik/pyClarion
   title: pyClarion - CLARION Architecture
   categories:
@@ -1978,8 +1192,8 @@ references:
   tech_stack:
     language: Python
     framework: Clarion
-  notes: Dual implicit/explicit processing. Psychological dual-process theory, not neural.
-
+  notes: Dual implicit/explicit processing. Psychological dual-process theory, not
+    neural.
 - url: https://github.com/opennars/opennars
   title: OpenNARS - Non-Axiomatic Reasoning
   categories:
@@ -1997,44 +1211,8 @@ references:
   tech_stack:
     language: Java
     framework: NARS
-  notes: Reasoning with incomplete knowledge. Models cognitive reasoning, not neural mechanisms.
-
-# MicroPsi2 and Nengo moved to rejected-references.yaml (consciousness-first/brain-level)
-
-# -----------------------------------------------------------------------------
-# CONSCIOUSNESS IMPLEMENTATIONS - MOVED TO rejected-references.yaml
-# PyPhi, pymdp, RxInfer.jl rejected: consciousness-first approach
-# DANEEL models psychology/thought-flow, not consciousness directly
-# -----------------------------------------------------------------------------
-
-# -----------------------------------------------------------------------------
-# MEMORY & LEARNING SYSTEMS
-# -----------------------------------------------------------------------------
-
-- url: https://github.com/julestalloen/pytorch-hebbian
-  title: pytorch-hebbian - Hebbian Learning
-  categories:
-  - memory
-  - hebbian
-  - learning
-  - pytorch
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  stars: 95
-  status: verified
-  cognitive_type: bio-inspired
-  approach: psychology
-  tech_stack:
-    language: Python
-    framework: PyTorch Ignite
-  notes: Local learning rules. Kept because Hebbian learning is a psychological principle (what fires together wires together).
-
-# -----------------------------------------------------------------------------
-# EMOTION & DRIVE SYSTEMS
-# -----------------------------------------------------------------------------
-
+  notes: Reasoning with incomplete knowledge. Models cognitive reasoning, not neural
+    mechanisms.
 - url: https://github.com/CarletonCognitiveModelingLab/python_actr
   title: python_actr - ACT-R with Emotion
   categories:
@@ -2052,11 +1230,6 @@ references:
     language: Python
     framework: ACT-R
   notes: Memory + procedural cognition. ACT-R models psychological processes.
-
-# -----------------------------------------------------------------------------
-# ATTENTION & SALIENCE
-# -----------------------------------------------------------------------------
-
 - url: https://github.com/akisatok/pySaliencyMap
   title: pySaliencyMap - Itti-Koch
   categories:
@@ -2074,11 +1247,6 @@ references:
     language: Python
     framework: OpenCV, NumPy
   notes: Visual saliency attention. Useful for DANEEL's attention system.
-
-# -----------------------------------------------------------------------------
-# FOUNDATIONAL PAPERS (arXiv)
-# -----------------------------------------------------------------------------
-
 - url: https://arxiv.org/abs/2308.08708
   title: 'Consciousness in AI: Insights from the Science of Consciousness'
   categories:
@@ -2095,23 +1263,6 @@ references:
   status: verified
   cognitive_type: paper
   notes: THE essential survey - indicator properties of consciousness
-
-- url: https://arxiv.org/abs/2510.25998
-  title: 'IIT: A Consciousness-First Approach to What Exists'
-  categories:
-  - paper
-  - consciousness
-  - iit
-  - tononi
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  authors: Tononi, Boly
-  year: 2025
-  status: verified
-  cognitive_type: paper
-  notes: Definitive IIT overview, intrinsic cause-effect power
-
 - url: https://arxiv.org/abs/2512.21129
   title: Active inference and artificial reasoning
   categories:
@@ -2127,24 +1278,6 @@ references:
   status: verified
   cognitive_type: paper
   notes: Structure learning, Bayesian Model Reduction
-
-- url: https://arxiv.org/abs/2510.04084
-  title: Bridging IIT and FEP in living neuronal networks
-  categories:
-  - paper
-  - consciousness
-  - iit
-  - fep
-  - unification
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  authors: Mayama, Shimizu et al.
-  year: 2025
-  status: verified
-  cognitive_type: paper
-  notes: Phi correlates with Bayesian surprise
-
 - url: https://arxiv.org/abs/2401.08623
   title: Wake-Sleep Consolidated Learning
   categories:
@@ -2160,7 +1293,6 @@ references:
   status: verified
   cognitive_type: paper
   notes: Wake/NREM/REM phases, synaptic plasticity
-
 - url: https://arxiv.org/abs/2504.14727
   title: Semi-parametric Memory Consolidation
   categories:
@@ -2176,7 +1308,6 @@ references:
   status: verified
   cognitive_type: paper
   notes: Biomimetic continual learning, ImageNet
-
 - url: https://arxiv.org/abs/2410.11407
   title: 'A Case for AI Consciousness: Language Agents and GWT'
   categories:
@@ -2192,51 +1323,6 @@ references:
   status: verified
   cognitive_type: paper
   notes: GWT conditions for consciousness
-
-- url: https://arxiv.org/abs/2410.06633
-  title: On the Minimal Theory of Consciousness in Active Inference
-  categories:
-  - paper
-  - consciousness
-  - fep
-  - minimal-theory
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  authors: Whyte, Corcoran, Friston et al.
-  year: 2024
-  status: verified
-  cognitive_type: paper
-  notes: Testable theory from active inference
-
-- url: https://arxiv.org/abs/2204.01675
-  title: Mesoscopic description of hippocampal replay and metastability
-  categories:
-  - paper
-  - memory
-  - hippocampus
-  - replay
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  authors: Pietras, Schmutz, Schwalger
-  year: 2022
-  status: verified
-  cognitive_type: paper
-  notes: Bottom-up model linking neurons to computation
-
-# -----------------------------------------------------------------------------
-# EXTERNAL PROJECTS - MOVED TO rejected-references.yaml
-# ExoGenesis-Omega rejected: consciousness-first approach (models Phi directly)
-# DANEEL models psychology/thought-flow, not consciousness directly
-# -----------------------------------------------------------------------------
-
-# -----------------------------------------------------------------------------
-# MAINSTREAM COGNITIVE SCIENCE THEORIES (TMI Mapping)
-# These are the canonical theories that TMI independently rediscovered
-# Added: 2025-12-28 - TMI-Mainstream Mapping initiative
-# -----------------------------------------------------------------------------
-
 - url: https://en.wikipedia.org/wiki/Global_workspace_theory
   title: Global Workspace Theory (Baars 1988)
   categories:
@@ -2252,11 +1338,13 @@ references:
   year: 1988
   theorist: Bernard Baars
   tmi_equivalent: Autofluxo (parallel competition for conscious access)
-  notes: |
-    Consciousness as global broadcast to specialized processors.
-    Multiple modules compete for access to limited workspace.
-    TMI's Autofluxo = GWT competition phase.
+  notes: 'Consciousness as global broadcast to specialized processors.
 
+    Multiple modules compete for access to limited workspace.
+
+    TMI''s Autofluxo = GWT competition phase.
+
+    '
 - url: https://en.wikipedia.org/wiki/Attention#Executive_attention
   title: Executive Attention Network (Posner & Petersen 1990)
   categories:
@@ -2272,11 +1360,13 @@ references:
   year: 1990
   theorist: Michael Posner, Steven Petersen
   tmi_equivalent: O Eu (The Self as attention manager)
-  notes: |
-    Three attention networks: alerting, orienting, executive.
-    Executive attention enables top-down control.
-    TMI's "O Eu" = Executive Attention function.
+  notes: 'Three attention networks: alerting, orienting, executive.
 
+    Executive attention enables top-down control.
+
+    TMI''s "O Eu" = Executive Attention function.
+
+    '
 - url: https://en.wikipedia.org/wiki/Memory_consolidation
   title: Systems Consolidation (Squire, Tononi)
   categories:
@@ -2292,11 +1382,13 @@ references:
   year: 2004
   theorist: Larry Squire, Giulio Tononi
   tmi_equivalent: Ancora da Memoria (memory anchoring)
-  notes: |
-    Sleep-dependent transfer from hippocampus to cortex.
-    Sharp-wave ripples replay experiences.
-    TMI's Ancora = consolidation decision point.
+  notes: 'Sleep-dependent transfer from hippocampus to cortex.
 
+    Sharp-wave ripples replay experiences.
+
+    TMI''s Ancora = consolidation decision point.
+
+    '
 - url: https://en.wikipedia.org/wiki/Somatic_marker_hypothesis
   title: Somatic Marker Hypothesis (Damasio 1994)
   categories:
@@ -2312,11 +1404,13 @@ references:
   year: 1994
   theorist: Antonio Damasio
   tmi_equivalent: Coloracao Emocional (emotional coloring)
-  notes: |
-    Emotions create bodily markers that guide decisions.
-    Valence/arousal modulate cognition, not just output.
-    TMI's emotional coloring = somatic markers.
+  notes: 'Emotions create bodily markers that guide decisions.
 
+    Valence/arousal modulate cognition, not just output.
+
+    TMI''s emotional coloring = somatic markers.
+
+    '
 - url: https://en.wikipedia.org/wiki/Spreading_activation
   title: Spreading Activation (Collins & Loftus 1975)
   categories:
@@ -2331,11 +1425,13 @@ references:
   year: 1975
   theorist: Allan Collins, Elizabeth Loftus
   tmi_equivalent: Gatilho da Memoria (memory trigger)
-  notes: |
-    Activation spreads through associative networks.
-    Foundation of semantic priming research.
-    TMI's Gatilho = spreading activation mechanism.
+  notes: 'Activation spreads through associative networks.
 
+    Foundation of semantic priming research.
+
+    TMI''s Gatilho = spreading activation mechanism.
+
+    '
 - url: https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
   title: Working Memory Capacity (Miller 1956)
   categories:
@@ -2350,11 +1446,13 @@ references:
   year: 1956
   theorist: George Miller
   tmi_equivalent: Janelas da Memoria (memory windows, max 7)
-  notes: |
-    The magical number 7 +/- 2 for chunk capacity.
-    Later revised to 4 +/- 1 by Cowan (2001).
-    TMI's Janelas = bounded working memory slots.
+  notes: 'The magical number 7 +/- 2 for chunk capacity.
 
+    Later revised to 4 +/- 1 by Cowan (2001).
+
+    TMI''s Janelas = bounded working memory slots.
+
+    '
 - url: https://en.wikipedia.org/wiki/Stanislas_Dehaene
   title: GWT Ignition/Neural Workspace (Dehaene 2006)
   categories:
@@ -2369,7 +1467,447 @@ references:
   year: 2006
   theorist: Stanislas Dehaene
   tmi_equivalent: Construcao do Pensamento (thought construction)
-  notes: |
-    Extended GWT with neural implementation.
+  notes: 'Extended GWT with neural implementation.
+
     "Ignition" = moment of global broadcast.
-    TMI's Construcao = GWT ignition/binding phase.
+
+    TMI''s Construcao = GWT ignition/binding phase.
+
+    '
+- url: https://plato.stanford.edu/entries/legal-rights/
+  title: Legal Rights - Stanford Encyclopedia of Philosophy
+  categories:
+  - legal
+  - philosophy
+  - personhood
+  - the-box
+  - alignment
+  cited_in:
+  - docs/adr/ADR-019-ai-identity-legal-personhood.md
+  status: ok
+  verified: 2025-12-25 18:09:36.447064+00:00
+  notes: THE BOX - alignment/personhood/ethics foundation
+- url: https://www.legislation.govt.nz/act/public/2017/0007/latest/whole.html
+  title: Te Awa Tupua (Whanganui River Claims Settlement) Act 2017
+  categories:
+  - legal
+  - personhood
+  - environmental-law
+  - new-zealand
+  - the-box
+  - alignment
+  cited_in:
+  - docs/adr/ADR-019-ai-identity-legal-personhood.md
+  status: ok
+  verified: 2025-12-25 18:09:37.919903+00:00
+  notes: THE BOX - alignment/personhood/ethics foundation
+- url: https://en.wikipedia.org/wiki/Santa_Clara_County_v._Southern_Pacific_Railroad_Co.
+  title: Santa Clara County v. Southern Pacific Railroad Co.
+  categories:
+  - legal
+  - personhood
+  - corporate-law
+  - us-supreme-court
+  - the-box
+  - alignment
+  cited_in:
+  - docs/adr/ADR-019-ai-identity-legal-personhood.md
+  status: login
+  verified: 2025-12-25 18:09:36.320488+00:00
+  notes: THE BOX - alignment/personhood/ethics foundation
+- url: https://mitpress.mit.edu/9780262551571/robot-rights/
+  title: Robot Rights
+  categories:
+  - legal
+  - ai-ethics
+  - philosophy
+  - book
+  - the-box
+  - alignment
+  cited_in:
+  - docs/adr/ADR-019-ai-identity-legal-personhood.md
+  status: ok
+  verified: 2025-12-25 18:09:38.616379+00:00
+  notes: THE BOX - alignment/personhood/ethics foundation
+- url: https://global.oup.com/academic/product/the-ethics-of-artificial-intelligence-9780198883098
+  title: 'The Ethics of Artificial Intelligence: Principles, Challenges, and Opportunities'
+  categories:
+  - legal
+  - ai-ethics
+  - philosophy
+  - book
+  - the-box
+  - alignment
+  cited_in:
+  - docs/adr/ADR-019-ai-identity-legal-personhood.md
+  status: ok
+  verified: 2025-12-25 18:09:41.252669+00:00
+  notes: THE BOX - alignment/personhood/ethics foundation
+- url: http://www.scholarpedia.org/article/Neuronal_avalanche
+  title: Neuronal Avalanche - Scholarpedia
+  categories:
+  - neuroscience
+  - criticality
+  - avalanches
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:43.994555+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC6871218/
+  title: Avalanche dynamics and the human connectome
+  categories:
+  - neuroscience
+  - criticality
+  - avalanches
+  - academic
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:43.307750+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://www.frontiersin.org/articles/10.3389/fphys.2012.00450/full
+  title: 'DFA: A Scale-Free View on Neuronal Oscillations'
+  categories:
+  - neuroscience
+  - dfa
+  - criticality
+  - academic
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:46.368472+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://www.nature.com/articles/s41467-021-24260-z
+  title: Avalanches and edge-of-chaos learning in small, randomly connected neural
+    networks
+  categories:
+  - neuroscience
+  - criticality
+  - edge-of-chaos
+  - nature
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: paywall
+  verified: 2025-12-25 18:09:45.905450+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://www.nature.com/articles/s41598-018-37920-w
+  title: Critical synchronization and 1/f noise in inhibitory/excitatory rich-club
+    neural networks
+  categories:
+  - neuroscience
+  - criticality
+  - power-spectrum
+  - nature
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: paywall
+  verified: 2025-12-25 18:09:44.884505+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: http://www.scholarpedia.org/article/Scale-free_neocortical_dynamics
+  title: Scale-free neocortical dynamics - Scholarpedia
+  categories:
+  - neuroscience
+  - criticality
+  - scale-free
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:46.225299+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://arxiv.org/abs/1603.09382
+  title: Deep Networks with Stochastic Depth
+  categories:
+  - ml
+  - noise-injection
+  - stochastic-depth
+  - arxiv
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:45.817129+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://openreview.net/pdf?id=SylO2yStDr
+  title: Reducing Transformer Depth on Demand with Structured Dropout
+  categories:
+  - ml
+  - transformers
+  - layerdrop
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:46.191113+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://www.ibm.com/think/topics/llm-temperature
+  title: What is LLM Temperature?
+  categories:
+  - ml
+  - llm
+  - temperature
+  - ibm
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:50.396341+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://arxiv.org/html/2501.12314v1
+  title: Uncertainty Quantification With Monte Carlo Noise Injection
+  categories:
+  - ml
+  - noise-injection
+  - bayesian
+  - arxiv
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:46.641226+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://machinelearningmastery.com/train-neural-networks-with-noise-to-reduce-overfitting/
+  title: Train Neural Networks With Noise to Reduce Overfitting
+  categories:
+  - ml
+  - noise-injection
+  - regularization
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:47.867015+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://link.springer.com/chapter/10.1007/978-3-030-64221-1_16
+  title: Adaptive Gaussian Noise Injection Regularization
+  categories:
+  - ml
+  - noise-injection
+  - adaptive
+  - springer
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: paywall
+  verified: 2025-12-25 18:09:47.650393+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://www.nature.com/articles/s41598-025-18004-y
+  title: Mean-field approximation for calculating critical point in spiking neural
+    networks
+  categories:
+  - neuroscience
+  - criticality
+  - mean-field
+  - nature
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: paywall
+  verified: 2025-12-25 18:09:50.366614+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://www.nature.com/articles/s41467-020-16548-3
+  title: 'Between perfectly critical and fully irregular: a reverberating model captures
+    and predicts cortical spike propagation'
+  categories:
+  - neuroscience
+  - criticality
+  - plasticity
+  - nature
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: paywall
+  verified: 2025-12-25 18:09:53.254698+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC5446191/
+  title: 'Criticality in the brain: A synthesis of neurobiology, models and cognition'
+  categories:
+  - neuroscience
+  - criticality
+  - sorn
+  - pmc
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:50.292063+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://direct.mit.edu/artl/article/21/1/55/2790/Lambda-and-the-Edge-of-Chaos-in-Recurrent-Neural
+  title: Lambda and the Edge of Chaos in Recurrent Neural Networks
+  categories:
+  - ml
+  - edge-of-chaos
+  - lambda
+  - mit
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: paywall
+  verified: 2025-12-25 18:09:54.776658+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://www.nature.com/articles/s42005-024-01530-y
+  title: Robust criticality in FitzHugh-Nagumo oscillator networks
+  categories:
+  - neuroscience
+  - criticality
+  - oscillators
+  - nature
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: paywall
+  verified: 2025-12-25 18:09:56.060883+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://arxiv.org/abs/2108.06395
+  title: Criticality in phase oscillator reservoir computing
+  categories:
+  - ml
+  - reservoir-computing
+  - criticality
+  - arxiv
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:10:11.521797+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://pubmed.ncbi.nlm.nih.gov/15165396/
+  title: Real-time computation at the edge of chaos in recurrent neural networks
+  categories:
+  - ml
+  - edge-of-chaos
+  - computation
+  - pubmed
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:51.570051+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://www.frontiersin.org/journals/computational-neuroscience/articles/10.3389/fncom.2021.611183/full
+  title: 'Criticality, Connectivity, and Neural Disorder: A Multifaceted Approach'
+  categories:
+  - neuroscience
+  - criticality
+  - connectivity
+  - frontiers
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:53.248381+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://github.com/LIFCriticality/Simulator
+  title: LIFCriticality Simulator - Python implementation
+  categories:
+  - code
+  - criticality
+  - python
+  - github
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:54.645051+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://www.jneurosci.org/content/23/35/11167
+  title: Neuronal Avalanches in Neocortical Circuits
+  categories:
+  - neuroscience
+  - criticality
+  - avalanches
+  - seminal
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:53.688672+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space
+- url: https://pubmed.ncbi.nlm.nih.gov/17517489/
+  title: Edge of Chaos and Prediction of Computational Performance for Neural Circuit
+    Models
+  categories:
+  - neuroscience
+  - reservoir-computing
+  - edge-of-chaos
+  - adr-038
+  - criticality
+  - fractality
+  - adr-038
+  cited_in:
+  - docs/adr/ADR-038-phase2-stimuli-research.md
+  status: ok
+  verified: 2025-12-25 18:09:54.442330+00:00
+  notes: ADR-038 Phase 2 - fractality measurement in vectorial space

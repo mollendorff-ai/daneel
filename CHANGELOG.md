@@ -8,6 +8,23 @@ Phase 2: Open the loop. Let Timmy feel.
 
 ### Dec 28, 2025: Research Absorption & ExoGenesis Analysis
 
+#### ADR-048 Reference Cleanup Sweep (ACCEPTED - CORRECTED)
+- **Status**: ADR-048 ACCEPTED - psychology-first reference cleanup
+- **Final tally**: 148 kept, 48 rejected (from 196 total)
+- **8 parallel agents** classified all references by URL
+- **Correction**: Restored 28 references wrongly rejected:
+  - **THE BOX** (5): Legal personhood, robot rights, AI ethics (Asimov alignment foundation)
+  - **ADR-038 criticality** (23): Pink noise, DFA, avalanche papers (for vectorial fractality)
+- **Final breakdown of removals**:
+  - neuromorphic hardware (Intel, IBM, DARPA): 12
+  - off-topic (policy, navigation, news): 10
+  - consciousness-first (IIT direct): 8
+  - brain (place cells, hippocampal): 8
+  - llm-tool: 4
+  - dead-link/personal: 6
+- `references.yaml`: 196 → 148 entries
+- `rejected-references.yaml`: 28 → 76 entries
+
 #### ADR-047 Research Absorption Complete (ACCEPTED)
 - **Status**: ADR-047 ACCEPTED - psychology-level projects only
 - **Final tally**: 18 kept (psychology), 28 rejected (brain-level, consciousness-first, LLM)

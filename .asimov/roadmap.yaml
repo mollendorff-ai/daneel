@@ -34,38 +34,12 @@
 # Exit criteria: entropy >60% for 48+ hours (success) or <30% sustained (failure)
 
 # =============================================================================
-# IN PROGRESS: Reference Cleanup Sweep (ADR-048)
-# =============================================================================
-# Origin: Rex + Claude Opus 4.5 - Dec 28, 2025
-# Goal: Clean references.yaml - remove brain-first, keep psychology-first
-# Method: 8 parallel agents with ref-tools classification
-# =============================================================================
-  reference_cleanup:
-    status: wip
-    priority: "HIGH"
-    adr: "ADR-048-reference-cleanup-sweep.md"
-    description: |
-      Sweep all 196 references in references.yaml.
-      Classify each as psychology-first (KEEP) or brain-first (REJECT).
-      Move brain-first to rejected-references.yaml.
-
-    tasks:
-      - id: "CLEAN-1"
-        title: "Agent swarm classification (8 agents)"
-        status: in_progress
-      - id: "CLEAN-2"
-        title: "Consolidate results"
-        status: pending
-      - id: "CLEAN-3"
-        title: "Move rejected to rejected-references.yaml"
-        status: pending
-      - id: "CLEAN-4"
-        title: "Update ADR-048 with results"
-        status: pending
-
-# =============================================================================
 # COMPLETED → CHANGELOG.md (Dec 28, 2025)
 # =============================================================================
+# - ADR-048 Reference Cleanup Sweep: ACCEPTED (148 kept, 48 rejected) - CORRECTED
+#   - 8 parallel agents + 1 manual batch
+#   - Restored 28 refs (THE BOX ethics + ADR-038 criticality for fractality)
+#   - Removed: neuromorphic (12), consciousness-first (8), brain (8), off-topic (10)
 # - ADR-047 Research Absorption: ACCEPTED (18 kept, 28 rejected)
 # - 13 project studies complete (ABSORB-1 through ABSORB-13)
 # - ADR index generation complete (8 agents, 47 ADRs indexed)
