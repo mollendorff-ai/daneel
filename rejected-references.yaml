@@ -1,0 +1,255 @@
+# Rejected References for ADR-047
+# These projects were reviewed but don't fit DANEEL's cognitive architecture requirements
+# Rejection criteria: llm, llm-wrapper, deep-learning, ml-tool, too-low-level
+# Created: 2025-12-28
+
+meta:
+  created: 2025-12-28
+  reason: ADR-047 review - not brain-like/bio-inspired cognitive architectures
+  total_rejected: 14
+
+# -----------------------------------------------------------------------------
+# LLM WRAPPERS (3)
+# These wrap LLMs for memory - not brain-like architecture
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/mem0ai/mem0
+  title: Mem0 - Universal Memory Layer
+  categories:
+  - memory
+  - episodic
+  - semantic
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  stars: 44700
+  status: rejected
+  cognitive_type: llm-wrapper
+  rejection_reason: LLM wrapper for memory - not brain-like cognitive architecture
+  notes: Multi-level memory, user/session/agent memory
+
+- url: https://github.com/getzep/graphiti
+  title: Graphiti - Temporal Knowledge Graphs
+  categories:
+  - memory
+  - knowledge-graph
+  - temporal
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  status: rejected
+  cognitive_type: llm-wrapper
+  rejection_reason: LLM wrapper for knowledge graphs - not brain-like architecture
+  notes: AI agent memory, historical queries
+
+- url: https://github.com/daveshap/REMO_Framework
+  title: REMO - Rolling Episodic Memory
+  categories:
+  - memory
+  - episodic
+  - temporal
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 451
+  status: rejected
+  cognitive_type: llm-wrapper
+  rejection_reason: LLM memory wrapper - not brain-like architecture
+  notes: Autonomous AI memory, temporal organization
+
+# -----------------------------------------------------------------------------
+# LLM TOOLS (3)
+# These are for training/interpreting LLMs - DANEEL has no transformers
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/PKU-Alignment/safe-rlhf
+  title: Safe-RLHF - Constrained Value Alignment
+  categories:
+  - alignment
+  - rlhf
+  - safety
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  stars: 1569
+  status: rejected
+  cognitive_type: llm
+  rejection_reason: LLM training library - not applicable to DANEEL architecture
+  notes: Lagrangian methods, safety-helpfulness balance
+
+- url: https://github.com/TransformerLensOrg/TransformerLens
+  title: TransformerLens - Mechanistic Interpretability
+  categories:
+  - alignment
+  - interpretability
+  - mechanistic
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 2927
+  status: rejected
+  cognitive_type: llm
+  rejection_reason: LLM interpretability tool - DANEEL has no transformers
+  notes: Activation patching, circuit discovery
+
+- url: https://github.com/huggingface/trl
+  title: TRL - RLHF/DPO Training
+  categories:
+  - alignment
+  - rlhf
+  - dpo
+  - huggingface
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  stars: 16808
+  status: rejected
+  cognitive_type: llm
+  rejection_reason: LLM training library - not applicable to DANEEL
+  notes: PPO trainer, reward modeling, SFT
+
+# -----------------------------------------------------------------------------
+# DEEP LEARNING (3)
+# Pure DL without bio-inspiration
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/RLE-Foundation/RLeXplore
+  title: RLeXplore - Intrinsic Motivation
+  categories:
+  - emotion
+  - intrinsic-motivation
+  - curiosity
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  status: rejected
+  cognitive_type: deep-learning
+  rejection_reason: Pure DL exploration algorithms - not bio-inspired motivation system
+  notes: ICM, RND, RE3, RIDE - exploration baselines
+
+- url: https://github.com/ozan-oktay/Attention-Gated-Networks
+  title: Attention-Gated Networks
+  categories:
+  - attention
+  - gating
+  - medical-imaging
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  status: rejected
+  cognitive_type: deep-learning
+  rejection_reason: DL attention mechanism for medical imaging - not brain-like
+  notes: Additive attention gates, U-Net
+
+- url: https://github.com/kevinzakka/recurrent-visual-attention
+  title: Recurrent Visual Attention
+  categories:
+  - attention
+  - sequential
+  - policy-gradient
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  status: rejected
+  cognitive_type: deep-learning
+  rejection_reason: DL recurrent attention - not bio-inspired attention system
+  notes: Foveated glimpse, REINFORCE training
+
+# -----------------------------------------------------------------------------
+# ML TOOLS (3)
+# Classification/interpretability tools, not cognitive architectures
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/PAIR-code/saliency
+  title: Google PAIR Saliency
+  categories:
+  - attention
+  - saliency
+  - interpretability
+  - google
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  status: rejected
+  cognitive_type: ml-tool
+  rejection_reason: ML interpretability tool (GradCAM, etc) - not bio-inspired attention
+  notes: XRAI, SmoothGrad, Integrated Gradients, GradCAM
+
+- url: https://github.com/jacobgil/pytorch-grad-cam
+  title: pytorch-grad-cam - 15+ CAM Methods
+  categories:
+  - attention
+  - saliency
+  - cam
+  - pytorch
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 10000
+  status: rejected
+  cognitive_type: ml-tool
+  rejection_reason: ML interpretability library - not bio-inspired attention mechanism
+  notes: GradCAM, ScoreCAM, EigenCAM, ShapleyCAM
+
+- url: https://github.com/XJTU-EEG/LibEER
+  title: LibEER - EEG Emotion Recognition
+  categories:
+  - emotion
+  - eeg
+  - benchmark
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  status: rejected
+  cognitive_type: ml-tool
+  rejection_reason: ML benchmark library for EEG classification - not cognitive architecture
+  notes: Multiple algorithms, standardized evaluation
+
+# -----------------------------------------------------------------------------
+# TOO LOW-LEVEL (2)
+# Biophysical simulators - 3 abstraction levels below cognitive architecture
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/nest/nest-simulator
+  title: NEST - Large-Scale SNN
+  categories:
+  - neuromorphic
+  - spiking
+  - hpc
+  - human-brain-project
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: GPL-2.0+
+  stars: 615
+  status: rejected
+  cognitive_type: too-low-level
+  rejection_reason: Biophysical neuron simulator - operates below cognitive abstraction level
+  notes: MPI parallelization, 50+ neuron models
+
+- url: https://github.com/neuronsimulator/nrn
+  title: NEURON - Morphologically Detailed
+  categories:
+  - neuromorphic
+  - biophysical
+  - hpc
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: BSD-3-Clause
+  status: rejected
+  cognitive_type: too-low-level
+  rejection_reason: Biophysical simulator (Hodgkin-Huxley, ion channels) - 3 abstraction levels below cognitive architecture
+  notes: CoreNEURON for large-scale, NMODL mechanisms

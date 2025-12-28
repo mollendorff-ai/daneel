@@ -58,6 +58,7 @@ coding_standards:
       - "One sentence per line (for git diffs)"
   architecture:
     decisions: "ADR format in docs/adr/"
+    adr_index: ".asimov/ADRs.yaml"
     diagrams: "Mermaid preferred (text-based, version controlled)"
 
 # v8.8.0: Standard deliverables for coding projects (ADR-034)

@@ -1,9 +1,18 @@
 # ADR-047: Research Absorption Protocol
 
-**Status:** Accepted
+**Status:** Proposed
 **Date:** 2025-12-28
 **Deciders:** Louis C. Tavares, Claude Opus 4.5
 **Context:** Cognitive architecture landscape research, knowledge synthesis
+
+> **Review Note (Dec 28, 2025):** Rex's review identified that some catalogued projects
+> are NOT about brain or cognitive implementations. Each project requires proper
+> classification for:
+> - Human-like cognition
+> - Biological brain-like architecture
+> - Real cognitive implementation
+> - Maturity level
+> - Working code status (for projects with code)
 
 ## Context
 

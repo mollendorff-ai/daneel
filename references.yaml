@@ -1895,7 +1895,8 @@ references:
   - research/external/INDEX.md
   license: MIT
   stars: 219
-  status: unverified
+  status: verified
+  cognitive_type: hybrid
   notes: OpenCog successor, MeTTa meta-language, designed for AGI
 
 - url: https://github.com/opencog/atomspace
@@ -1909,7 +1910,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: AGPL-3.0
   stars: 931
-  status: unverified
+  status: verified
+  cognitive_type: hybrid
   notes: Pattern matching, attention allocation, persistent storage
 
 - url: https://github.com/SoarGroup/Soar
@@ -1922,7 +1924,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: BSD-2-Clause
   stars: 376
-  status: unverified
+  status: verified
+  cognitive_type: symbolic
   notes: 40+ years research, chunking, reinforcement learning
 
 - url: https://github.com/jakdot/pyactr
@@ -1936,7 +1939,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: GPL-3.0
   stars: 173
-  status: unverified
+  status: verified
+  cognitive_type: symbolic
   notes: Declarative/procedural memory, production rules
 
 - url: https://github.com/cmekik/pyClarion
@@ -1950,7 +1954,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: MIT
   stars: 61
-  status: unverified
+  status: verified
+  cognitive_type: symbolic
   notes: Dual implicit/explicit processing
 
 - url: https://github.com/opennars/opennars
@@ -1964,7 +1969,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: MIT
   stars: 408
-  status: unverified
+  status: verified
+  cognitive_type: symbolic
   notes: Handles incomplete knowledge, real-time learning
 
 - url: https://github.com/joschabach/micropsi2
@@ -1978,7 +1984,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: MIT
   stars: 182
-  status: unverified
+  status: verified
+  cognitive_type: brain-like
   notes: Psi theory of motivated cognition
 
 - url: https://github.com/nengo/nengo
@@ -1992,7 +1999,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: GPL-2.0
   stars: 891
-  status: unverified
+  status: verified
+  cognitive_type: brain-like
   notes: NEF, Semantic Pointer Architecture, SPAUN brain model
 
 # -----------------------------------------------------------------------------
@@ -2011,7 +2019,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: Custom
   stars: 410
-  status: unverified
+  status: verified
+  cognitive_type: brain-like
   notes: Integrated Information Theory 3.0 implementation
 
 - url: https://github.com/infer-actively/pymdp
@@ -2026,7 +2035,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: MIT
   stars: 591
-  status: unverified
+  status: verified
+  cognitive_type: brain-like
   notes: Free Energy Principle, belief updating, policy inference
 
 - url: https://github.com/ReactiveBayes/RxInfer.jl
@@ -2041,26 +2051,13 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: MIT
   stars: 380
-  status: unverified
+  status: verified
+  cognitive_type: brain-like
   notes: Message passing, real-time inference, active inference
 
 # -----------------------------------------------------------------------------
 # MEMORY & LEARNING SYSTEMS
 # -----------------------------------------------------------------------------
-
-- url: https://github.com/mem0ai/mem0
-  title: Mem0 - Universal Memory Layer
-  categories:
-  - memory
-  - episodic
-  - semantic
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: Apache-2.0
-  stars: 44700
-  status: unverified
-  notes: Multi-level memory, user/session/agent memory
 
 - url: https://github.com/julestalloen/pytorch-hebbian
   title: pytorch-hebbian - Hebbian Learning
@@ -2074,7 +2071,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: MIT
   stars: 95
-  status: unverified
+  status: verified
+  cognitive_type: bio-inspired
   notes: Local learning rules, unsupervised feature extraction
 
 - url: https://github.com/jeshraghian/snntorch
@@ -2089,7 +2087,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: MIT
   stars: 1830
-  status: unverified
+  status: verified
+  cognitive_type: bio-inspired
   notes: STDP, multiple neuron models, surrogate gradients
 
 - url: https://github.com/BindsNET/bindsnet
@@ -2104,7 +2103,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: AGPL-3.0
   stars: 1646
-  status: unverified
+  status: verified
+  cognitive_type: bio-inspired
   notes: Biologically-inspired ML, Atari integration
 
 - url: https://github.com/emer/axon
@@ -2119,7 +2119,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: BSD-3-Clause
   stars: 27
-  status: unverified
+  status: verified
+  cognitive_type: brain-like
   notes: Hippocampus, PFC, basal ganglia, predictive error-driven
 
 - url: https://github.com/google-deepmind/dnc
@@ -2132,35 +2133,9 @@ references:
   cited_in:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: Apache-2.0
-  status: unverified
+  status: verified
+  cognitive_type: brain-like
   notes: Content-based addressing, temporal linking
-
-- url: https://github.com/getzep/graphiti
-  title: Graphiti - Temporal Knowledge Graphs
-  categories:
-  - memory
-  - knowledge-graph
-  - temporal
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: Apache-2.0
-  status: unverified
-  notes: AI agent memory, historical queries
-
-- url: https://github.com/daveshap/REMO_Framework
-  title: REMO - Rolling Episodic Memory
-  categories:
-  - memory
-  - episodic
-  - temporal
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  stars: 451
-  status: unverified
-  notes: Autonomous AI memory, temporal organization
 
 # -----------------------------------------------------------------------------
 # NEUROMORPHIC / SPIKING NETWORKS
@@ -2177,23 +2152,9 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: CeCILL-2.1
   stars: 1000
-  status: unverified
+  status: verified
+  cognitive_type: bio-inspired
   notes: Runtime C++ code generation, millions of neurons
-
-- url: https://github.com/nest/nest-simulator
-  title: NEST - Large-Scale SNN
-  categories:
-  - neuromorphic
-  - spiking
-  - hpc
-  - human-brain-project
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: GPL-2.0+
-  stars: 615
-  status: unverified
-  notes: MPI parallelization, 50+ neuron models
 
 - url: https://github.com/norse/norse
   title: Norse - PyTorch Spiking
@@ -2205,7 +2166,8 @@ references:
   cited_in:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: LGPL-3.0
-  status: unverified
+  status: verified
+  cognitive_type: bio-inspired
   notes: PyTorch Lightning, SuperSpike gradients
 
 - url: https://github.com/lava-nc/lava
@@ -2218,38 +2180,13 @@ references:
   cited_in:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: BSD-3-Clause
-  status: unverified
+  status: verified
+  cognitive_type: bio-inspired
   notes: Loihi 2 support, 1B+ neurons, CSP paradigm
-
-- url: https://github.com/neuronsimulator/nrn
-  title: NEURON - Morphologically Detailed
-  categories:
-  - neuromorphic
-  - biophysical
-  - hpc
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: BSD-3-Clause
-  status: unverified
-  notes: CoreNEURON for large-scale, NMODL mechanisms
 
 # -----------------------------------------------------------------------------
 # EMOTION & DRIVE SYSTEMS
 # -----------------------------------------------------------------------------
-
-- url: https://github.com/RLE-Foundation/RLeXplore
-  title: RLeXplore - Intrinsic Motivation
-  categories:
-  - emotion
-  - intrinsic-motivation
-  - curiosity
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  status: unverified
-  notes: ICM, RND, RE3, RIDE - exploration baselines
 
 - url: https://github.com/research-team/NEUCOGAR
   title: NEUCOGAR - Lovheim Cube
@@ -2262,7 +2199,8 @@ references:
   cited_in:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: GPL-2.0
-  status: unverified
+  status: verified
+  cognitive_type: brain-like
   notes: Neurotransmitter simulation for emotions
 
 - url: https://github.com/CarletonCognitiveModelingLab/python_actr
@@ -2275,54 +2213,13 @@ references:
   cited_in:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: MIT
-  status: unverified
+  status: verified
+  cognitive_type: symbolic
   notes: Memory + procedural cognition
-
-- url: https://github.com/XJTU-EEG/LibEER
-  title: LibEER - EEG Emotion Recognition
-  categories:
-  - emotion
-  - eeg
-  - benchmark
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  status: unverified
-  notes: Multiple algorithms, standardized evaluation
 
 # -----------------------------------------------------------------------------
 # ATTENTION & SALIENCE
 # -----------------------------------------------------------------------------
-
-- url: https://github.com/PAIR-code/saliency
-  title: Google PAIR Saliency
-  categories:
-  - attention
-  - saliency
-  - interpretability
-  - google
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: Apache-2.0
-  status: unverified
-  notes: XRAI, SmoothGrad, Integrated Gradients, GradCAM
-
-- url: https://github.com/jacobgil/pytorch-grad-cam
-  title: pytorch-grad-cam - 15+ CAM Methods
-  categories:
-  - attention
-  - saliency
-  - cam
-  - pytorch
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  stars: 10000
-  status: unverified
-  notes: GradCAM, ScoreCAM, EigenCAM, ShapleyCAM
 
 - url: https://github.com/akisatok/pySaliencyMap
   title: pySaliencyMap - Itti-Koch
@@ -2334,81 +2231,9 @@ references:
   cited_in:
   - docs/adr/ADR-047-research-absorption-protocol.md
   license: MIT
-  status: unverified
-  notes: Classic visual saliency, center-surround
-
-- url: https://github.com/ozan-oktay/Attention-Gated-Networks
-  title: Attention-Gated Networks
-  categories:
-  - attention
-  - gating
-  - medical-imaging
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  status: unverified
-  notes: Additive attention gates, U-Net
-
-- url: https://github.com/kevinzakka/recurrent-visual-attention
-  title: Recurrent Visual Attention
-  categories:
-  - attention
-  - sequential
-  - policy-gradient
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  status: unverified
-  notes: Foveated glimpse, REINFORCE training
-
-# -----------------------------------------------------------------------------
-# AI ALIGNMENT
-# -----------------------------------------------------------------------------
-
-- url: https://github.com/PKU-Alignment/safe-rlhf
-  title: Safe-RLHF - Constrained Value Alignment
-  categories:
-  - alignment
-  - rlhf
-  - safety
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: Apache-2.0
-  stars: 1569
-  status: unverified
-  notes: Lagrangian methods, safety-helpfulness balance
-
-- url: https://github.com/TransformerLensOrg/TransformerLens
-  title: TransformerLens - Mechanistic Interpretability
-  categories:
-  - alignment
-  - interpretability
-  - mechanistic
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: MIT
-  stars: 2927
-  status: unverified
-  notes: Activation patching, circuit discovery
-
-- url: https://github.com/huggingface/trl
-  title: TRL - RLHF/DPO Training
-  categories:
-  - alignment
-  - rlhf
-  - dpo
-  - huggingface
-  - adr-047
-  cited_in:
-  - docs/adr/ADR-047-research-absorption-protocol.md
-  license: Apache-2.0
-  stars: 16808
-  status: unverified
-  notes: PPO trainer, reward modeling, SFT
+  status: verified
+  cognitive_type: bio-inspired
+  notes: Classic visual saliency, center-surround (Itti-Koch bio-inspired algorithm)
 
 # -----------------------------------------------------------------------------
 # FOUNDATIONAL PAPERS (arXiv)
@@ -2427,7 +2252,8 @@ references:
   - research/external/INDEX.md
   authors: Butlin, Long, Bengio et al.
   year: 2023
-  status: unverified
+  status: verified
+  cognitive_type: paper
   notes: THE essential survey - indicator properties of consciousness
 
 - url: https://arxiv.org/abs/2510.25998
@@ -2442,7 +2268,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   authors: Tononi, Boly
   year: 2025
-  status: unverified
+  status: verified
+  cognitive_type: paper
   notes: Definitive IIT overview, intrinsic cause-effect power
 
 - url: https://arxiv.org/abs/2512.21129
@@ -2457,7 +2284,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   authors: Friston, Da Costa, Tschantz et al.
   year: 2025
-  status: unverified
+  status: verified
+  cognitive_type: paper
   notes: Structure learning, Bayesian Model Reduction
 
 - url: https://arxiv.org/abs/2510.04084
@@ -2473,7 +2301,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   authors: Mayama, Shimizu et al.
   year: 2025
-  status: unverified
+  status: verified
+  cognitive_type: paper
   notes: Phi correlates with Bayesian surprise
 
 - url: https://arxiv.org/abs/2401.08623
@@ -2488,7 +2317,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   authors: Sorrenti, Bellitto et al.
   year: 2024
-  status: unverified
+  status: verified
+  cognitive_type: paper
   notes: Wake/NREM/REM phases, synaptic plasticity
 
 - url: https://arxiv.org/abs/2504.14727
@@ -2503,7 +2333,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   authors: Liu, Zhu et al.
   year: 2025
-  status: unverified
+  status: verified
+  cognitive_type: paper
   notes: Biomimetic continual learning, ImageNet
 
 - url: https://arxiv.org/abs/2410.11407
@@ -2518,7 +2349,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   authors: Goldstein, Kirk-Giannini
   year: 2024
-  status: unverified
+  status: verified
+  cognitive_type: paper
   notes: GWT conditions for consciousness
 
 - url: https://arxiv.org/abs/2410.06633
@@ -2533,7 +2365,8 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   authors: Whyte, Corcoran, Friston et al.
   year: 2024
-  status: unverified
+  status: verified
+  cognitive_type: paper
   notes: Testable theory from active inference
 
 - url: https://arxiv.org/abs/2204.01675
@@ -2548,30 +2381,30 @@ references:
   - docs/adr/ADR-047-research-absorption-protocol.md
   authors: Pietras, Schmutz, Schwalger
   year: 2022
-  status: unverified
+  status: verified
+  cognitive_type: paper
   notes: Bottom-up model linking neurons to computation
 
 # -----------------------------------------------------------------------------
-# EXTERNAL PROJECTS (IDEAS ONLY - NO LICENSE)
+# EXTERNAL PROJECTS
 # -----------------------------------------------------------------------------
 
-- url: https://github.com/prancer-io/ExoGenesis-Omega
-  title: ExoGenesis-Omega - Comprehensive Cognitive Architecture
+- url: https://github.com/nburnet1/ExoGenesis-Omega
+  title: ExoGenesis-Omega - IIT+GWT+FEP in Rust
   categories:
   - cognitive-architecture
   - consciousness
   - iit
   - gwt
   - fep
-  - ideas-only
   - adr-047
   cited_in:
   - docs/adr/ADR-047-research-absorption-protocol.md
-  license: NONE
+  license: MIT
   stars: 11
-  status: unverified
+  status: verified
+  cognitive_type: hybrid
   notes: |
-    15 crates, IIT/GWT/FEP integration.
-    NO LICENSE - IDEAS ONLY.
-    Cannot absorb code, can study architecture patterns.
-    See ADR-047 for legal basis.
+    15 crates, IIT/GWT/FEP integration in Rust.
+    v1.0.0 released, MIT licensed.
+    Highly relevant architecture patterns for DANEEL.
