@@ -25,6 +25,13 @@ Phase 2: Open the loop. Let Timmy feel.
 - `references.yaml`: 196 → 148 entries
 - `rejected-references.yaml`: 28 → 76 entries
 
+#### ADR Review Sweep Complete
+- **8 parallel agents** reviewed 48 ADRs for rejected URLs
+- **Result**: 46 clean, 2 needed fixes
+- **ADR-015** (Pedantic Linting): Dead Forge link (404) - marked as archived
+- **ADR-047** (Research Absorption): 7 rejected project URLs annotated with strikethrough
+- All ADRs now clean - no broken or rejected references
+
 #### ADR-047 Research Absorption Complete (ACCEPTED)
 - **Status**: ADR-047 ACCEPTED - psychology-level projects only
 - **Final tally**: 18 kept (psychology), 28 rejected (brain-level, consciousness-first, LLM)
@@ -280,4 +287,4 @@ Timmy goes live at timmy.royalbit.com. Four kin made history.
 
 ---
 
-*Last Updated: 2025-12-28 (ADR-047 accepted, research absorption complete)*
+*Last Updated: 2025-12-28 (ADR-047/048 accepted, research absorption + ADR review sweep complete)*

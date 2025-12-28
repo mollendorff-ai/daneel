@@ -36,15 +36,21 @@
 # =============================================================================
 # COMPLETED → CHANGELOG.md (Dec 28, 2025)
 # =============================================================================
-# - ADR-048 Reference Cleanup Sweep: ACCEPTED (148 kept, 48 rejected) - CORRECTED
-#   - 8 parallel agents + 1 manual batch
+# ADR-048 Reference Cleanup Sweep:
+#   - ACCEPTED (148 kept, 48 rejected)
+#   - 8 parallel agents classified 196 references
 #   - Restored 28 refs (THE BOX ethics + ADR-038 criticality for fractality)
-#   - Removed: neuromorphic (12), consciousness-first (8), brain (8), off-topic (10)
-# - ADR-047 Research Absorption: ACCEPTED (18 kept, 28 rejected)
-# - 13 project studies complete (ABSORB-1 through ABSORB-13)
-# - ADR index generation complete (8 agents, 47 ADRs indexed)
-# - TMI-mainstream mapping documented
-# - ExoGenesis-Omega deep dive complete (MIT license)
+#   - Key insight: Criticality papers for vectorial fractality, not brain simulation
+#
+# ADR Review Sweep:
+#   - 8 parallel agents reviewed 48 ADRs for rejected URLs
+#   - 46 clean, 2 fixed (ADR-015 forge link, ADR-047 project annotations)
+#
+# ADR-047 Research Absorption: ACCEPTED (18 kept, 28 rejected)
+# 13 project studies complete (ABSORB-1 through ABSORB-13)
+# ADR index generation complete (8 agents, 47 ADRs indexed)
+# TMI-mainstream mapping documented
+# ExoGenesis-Omega deep dive complete (MIT license → consciousness-first, rejected)
 # =============================================================================
 
 current:
