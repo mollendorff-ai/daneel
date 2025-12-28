@@ -81,9 +81,11 @@ research/external/
    - https://github.com/wmayner/pyphi
    - Value: Consciousness measurement approach
 
-4. **ExoGenesis-Omega** (NO LICENSE) - IDEAS ONLY
+4. **ExoGenesis-Omega** (MIT) - Full absorption permitted
    - https://github.com/prancer-io/ExoGenesis-Omega
-   - Value: Architecture patterns, IIT/GWT/FEP integration
+   - Analysis: research/external/cognitive-architectures/EXOGENESIS_OMEGA_ANALYSIS.md
+   - Value: IIT Phi calculation, GWT workspace, FEP active inference,
+     sleep consolidation stages, strange loops / self-awareness
 
 ## Essential Papers
 
