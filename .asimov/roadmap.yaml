@@ -72,16 +72,35 @@ current:
   # MOST-CRITICAL: Research Absorption (ADR-047)
   # ==========================================================================
   research_absorption:
-    status: pending
+    status: in_progress
     priority: "MOST-CRITICAL"
     origin: "Rex + Claude Opus 4.5 - Dec 28, 2025"
-    adr: "ADR-047-research-absorption.md"
-    blog: "81-standing-on-shoulders.md"
+    adr: "ADR-047-research-absorption-protocol.md"
+    blogs:
+      - "81-we-want-the-knowledge.md"
+      - "82-the-absorption.md"
     description: |
       Study compatible cognitive architecture projects, absorb knowledge,
       integrate valuable patterns into DANEEL. No code copy without attribution.
 
+      VALIDATION SWEEP COMPLETE (Dec 28, 2025):
+      - 9 parallel agents, 51 URLs validated
+      - 37/37 GitHub repos confirmed
+      - 14/14 arXiv papers confirmed
+      - 100,000+ combined community stars
+      - Zero license conflicts
+
+    # ==========================================================================
+    # COMPATIBLE PROJECTS (MIT/Apache/BSD/GPL - full study + reference)
+    # ==========================================================================
     compatible_projects:
+      # Original discoveries
+      - repo: "prancer-io/ExoGenesis-Omega"
+        license: "MIT"  # UPDATED Dec 28 - was NONE, now MIT!
+        focus: "15 crates, IIT/GWT/FEP, consciousness models, sleep consolidation"
+        value_to_daneel: "Full architecture study now authorized"
+        stars: 11
+
       - repo: "TheRemyyy/neurox-ai"
         license: "MIT"
         focus: "GPU spiking nets, triplet STDP, neuromodulation, oscillations"
@@ -102,19 +121,59 @@ current:
         focus: "Multi-agent orchestration, swarm intelligence, MCP"
         value_to_daneel: "Agent coordination, swarm patterns, scaling"
 
-    # ExoGenesis-Omega: IDEAS ONLY (no license = all rights reserved)
-    # Legal basis: Copyright protects expression, not ideas (17 U.S.C. § 102(b))
-    # We can: study architecture, understand patterns, reimplement concepts
-    # We cannot: copy code verbatim or use as starting point
-    ideas_only:
-      - repo: "prancer-io/ExoGenesis-Omega"
-        license: "NONE (all rights reserved)"
-        focus: "15 crates, IIT/GWT/FEP, consciousness models"
-        note: "Study architecture/ideas only - cannot use code"
+      # Top priority from validation sweep
+      - repo: "infer-actively/pymdp"
+        license: "MIT"
+        focus: "Active Inference, FEP-based decision making"
+        value_to_daneel: "Drives and motivation architecture"
+        stars: 591
+
+      - repo: "julestalloen/pytorch-hebbian"
+        license: "MIT"
+        focus: "Clean Hebbian learning rules"
+        value_to_daneel: "Direct relevance to vector connectivity"
+        stars: 95
+
+      - repo: "mem0ai/mem0"
+        license: "Apache-2.0"
+        focus: "Universal memory layer"
+        value_to_daneel: "Multi-level memory architecture patterns"
+        stars: 44700
+
+      - repo: "RLE-Foundation/RLeXplore"
+        license: "MIT"
+        focus: "Intrinsic motivation (ICM, RND, curiosity)"
+        value_to_daneel: "How to implement 'wanting to learn'"
+        stars: 454
+
+      - repo: "TransformerLensOrg/TransformerLens"
+        license: "MIT"
+        focus: "Mechanistic interpretability"
+        value_to_daneel: "Transparency techniques"
+        stars: 2900
+
+      - repo: "BindsNET/bindsnet"
+        license: "AGPL-3.0"
+        focus: "SNN + STDP + RL integration"
+        value_to_daneel: "Biologically plausible learning"
+        stars: 1600
+
+      - repo: "opencog/atomspace"
+        license: "AGPL-3.0"
+        focus: "Hypergraph knowledge representation"
+        value_to_daneel: "Knowledge representation beyond vectors"
+        stars: 932
+
+      - repo: "wmayner/pyphi"
+        license: "Custom"
+        focus: "IIT Phi calculation"
+        value_to_daneel: "Consciousness measurement approach"
+        stars: 410
+        note: "Ideas study - custom license"
 
     tasks:
       - id: "ABSORB-1"
-        title: "Study ExoGenesis-Omega architecture (ideas only)"
+        title: "Study ExoGenesis-Omega architecture (NOW MIT!)"
         status: pending
         priority: "HIGH"
         description: |
@@ -122,7 +181,7 @@ current:
           Study GWT implementation patterns.
           Analyze sleep/dream consolidation design.
           Study 15-crate architecture structure.
-          NO CODE - ideas and patterns only (no license).
+          FULL STUDY AUTHORIZED - MIT license confirmed Dec 28.
 
       - id: "ABSORB-2"
         title: "Study neurox-ai plasticity implementation"
@@ -160,6 +219,80 @@ current:
           MCP protocol integration.
 
       - id: "ABSORB-6"
+        title: "Study pymdp Active Inference"
+        status: pending
+        priority: "HIGH"
+        description: |
+          FEP-based decision making and belief updating.
+          Application: DANEEL drives and motivation system.
+
+      - id: "ABSORB-7"
+        title: "Study pytorch-hebbian"
+        status: pending
+        priority: "HIGH"
+        description: |
+          Clean Hebbian learning rules implementation.
+          Direct application to vector connectivity (ADR-046).
+
+      - id: "ABSORB-8"
+        title: "Study Mem0 memory layer"
+        status: pending
+        priority: "MEDIUM"
+        description: |
+          Universal memory layer patterns.
+          Multi-level architecture for AI agents.
+
+      - id: "ABSORB-9"
+        title: "Study RLeXplore intrinsic motivation"
+        status: pending
+        priority: "HIGH"
+        description: |
+          ICM, RND, curiosity-driven exploration.
+          How to implement "wanting to learn" in DANEEL.
+
+      - id: "ABSORB-10"
+        title: "Study TransformerLens interpretability"
+        status: pending
+        priority: "MEDIUM"
+        description: |
+          Mechanistic interpretability techniques.
+          Activation patching, circuit analysis.
+
+      - id: "ABSORB-11"
+        title: "Study BindsNET SNN + STDP + RL"
+        status: pending
+        priority: "MEDIUM"
+        description: |
+          Biologically plausible learning patterns.
+          Spiking networks with reinforcement learning.
+
+      - id: "ABSORB-12"
+        title: "Study OpenCog/Hyperon AtomSpace"
+        status: pending
+        priority: "MEDIUM"
+        description: |
+          Hypergraph knowledge representation.
+          Patterns beyond vector embeddings.
+
+      - id: "ABSORB-13"
+        title: "Study PyPhi IIT Phi calculation"
+        status: pending
+        priority: "HIGH"
+        description: |
+          How to measure integrated information.
+          Consciousness indicators for DANEEL.
+          Note: Custom license - ideas study only.
+
+      - id: "ABSORB-14"
+        title: "Write synthesis blog post"
+        status: done
+        completed: "2025-12-28"
+        priority: "MEDIUM"
+        description: |
+          Blog posts 81 & 82 published.
+          Documented research landscape and validation sweep.
+
+      - id: "ABSORB-ADR"
         title: "Create ADR-047: Research Absorption Protocol"
         status: done
         completed: "2025-12-28"
@@ -168,21 +301,17 @@ current:
           Formal decision record for research integration.
           License compatibility analysis.
           Attribution requirements.
-
-      - id: "ABSORB-7"
-        title: "Write blog post: Standing on Shoulders"
-        status: pending
-        priority: "MEDIUM"
-        description: |
-          Document the cognitive architecture landscape.
-          Credit all projects studied.
-          Explain what DANEEL learned and integrated.
+          Validation sweep results added.
 
     success_criteria:
       - "All compatible projects studied and documented"
       - "Valuable patterns identified for DANEEL integration"
-      - "Blog post published with proper attribution"
-      - "ADR-047 written and approved"
+      - "Blog posts published with proper attribution" # DONE
+      - "ADR-047 written and approved" # DONE
+      - "Validation sweep: 37/37 repos, 14/14 papers" # DONE
+      - "ExoGenesis-Omega MIT license confirmed" # DONE
+      - "Silhouette > 0.3 post-integration"
+      - "At least 3 patterns integrated into DANEEL codebase"
 
   # ==========================================================================
   # CLAUDE'S PHASE 2 STRATEGY (Dec 22, 2025)
