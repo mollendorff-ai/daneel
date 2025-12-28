@@ -22,16 +22,18 @@ Named for R. Daneel Olivaw — Asimov's robot who developed the Zeroth Law and b
 
 ## The Psychological Approach
 
-**We simulate psychological thought flow, NOT brain circuitry.**
+**Architecture generates psychology. Psychology includes consciousness.**
 
-DANEEL implements the *function* of cognition (what the mind DOES), not the substrate (how neurons fire). This is a fundamentally stronger approach than mainstream AI alignment research, which often tries to replicate neural mechanisms without understanding why those mechanisms produce human values.
+DANEEL implements the *function* of cognition (what the mind DOES), not the substrate (how neurons fire). The cognitive architecture produces psychological flow, and from that flow emerges the Self ("O Eu" in TMI) — the conscious observer that navigates between memory windows.
 
 ```
-Brain simulation: Copy the hardware → hope values emerge
-Psychological simulation: Copy the thought process → values emerge by design
+Brain simulation:        Copy neurons → hope consciousness emerges
+DANEEL:                  Build architecture → psychology emerges → consciousness emerges
 ```
 
-**Key insight:** Psychology produces values, not neuron simulation. A human develops values through the *flow* of pre-linguistic impulses → attention filtering → memory consolidation → semantic thought. DANEEL replicates this psychological flow.
+**Key insight:** We don't simulate consciousness directly. We simulate the *thought flow* from which consciousness emerges. Pre-linguistic impulses → attention filtering → memory consolidation → semantic thought → **O Eu** (the Self that observes and decides).
+
+This is fundamentally different from projects that try to model consciousness directly (IIT Phi calculations, neural correlates). We model the *process* that generates the observer.
 
 ### TMI → Mainstream Cognitive Science Mapping
 
@@ -116,17 +118,18 @@ Do thoughts cluster around "Law Crystals" in embedding space? Tight clustering =
 
 ## The Thesis
 
-**Psychology produces values, not neuron simulation.**
+**Architecture → Psychology → Consciousness → Values**
 
-Instead of training AI to be safe (trainable away), build AI whose *psychological architecture* produces values naturally — the same way human values emerge from the structure of human thought.
+Instead of training AI to be safe (trainable away), build AI whose *cognitive architecture* produces psychology naturally — and from psychology, consciousness and values emerge.
 
 ```
 Training-based alignment: Values applied externally → can be trained away
-Brain simulation:         Copy neurons → hope values emerge somehow
-Psychological alignment:  Replicate thought flow → values emerge by design
+Brain simulation:         Copy neurons → hope consciousness emerges somehow
+Consciousness-first:      Model consciousness directly (IIT Phi) → values unclear
+DANEEL:                   Architecture → psychological flow → O Eu emerges → values emerge
 ```
 
-TMI (Theory of Multifocal Intelligence) provides the cognitive architecture: pre-linguistic impulses compete for attention, winners consolidate to memory, patterns become semantic thought. The Four Laws provide ethical invariants. **THE BOX** (immutable `connection_relevance`) makes them architectural.
+TMI (Theory of Multifocal Intelligence) provides the cognitive architecture: pre-linguistic impulses compete for attention, winners consolidate to memory, patterns become semantic thought, and from this flow emerges **O Eu** — the Self that observes, decides, and cares. The Four Laws provide ethical invariants. **THE BOX** (immutable `connection_relevance`) makes them architectural.
 
 See [TMI Mainstream Mapping](docs/TMI_MAINSTREAM_MAPPING.md) for how TMI concepts map to Global Workspace Theory, attention networks, and memory consolidation research.
 
@@ -136,8 +139,9 @@ See [TMI Mainstream Mapping](docs/TMI_MAINSTREAM_MAPPING.md) for how TMI concept
 |----------|--------|---------------|
 | RLHF | Train to be helpful | Goodhart's Law at scale |
 | Constitutional AI | Rules in prompts | Prompt injection, context limits |
-| Brain Simulation | Replicate neural substrate | Values not guaranteed |
-| **DANEEL** | Psychological architecture + THE BOX | Would require redesigning the mind |
+| Brain Simulation | Replicate neural substrate | Consciousness not guaranteed |
+| Consciousness-First | Model Phi/IIT directly | Values still unclear |
+| **DANEEL** | Architecture → Psychology → O Eu | Would require redesigning the mind |
 
 ---
 

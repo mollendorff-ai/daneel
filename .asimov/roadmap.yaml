@@ -680,13 +680,15 @@ current:
 
       - id: "EXO-2"
         title: "Document TMI-mainstream equivalences"
-        status: pending
+        status: done
+        completed: "2025-12-28"
         priority: "HIGH"
         description: |
-          Create docs/TMI_MAINSTREAM_MAPPING.md
-          Update README to promote psychological approach
+          DONE: Created docs/TMI_MAINSTREAM_MAPPING.md
+          DONE: Updated README with psychological approach + consciousness emergence
           TMI = GWT + Attention + Memory Consolidation with Portuguese names
           Our unique value: connection_relevance (THE BOX)
+          Key insight: Architecture → Psychology → Consciousness (O Eu) → Values
         files:
           - "docs/TMI_MAINSTREAM_MAPPING.md"
           - "README.md"
@@ -720,16 +722,21 @@ current:
   # ==========================================================================
   project_narrative:
     core_thesis: |
-      DANEEL simulates PSYCHOLOGICAL thought flow, NOT brain circuitry.
+      Architecture → Psychology → Consciousness → Values
 
-      Mainstream approaches try to replicate brain functions (neurons, synapses).
-      DANEEL implements psychological functions (attention, memory, emotion).
+      We don't simulate consciousness directly.
+      We simulate the THOUGHT FLOW from which consciousness emerges.
 
-      This is the STRONGER approach because:
-      1. Psychology is the emergent property we care about
-      2. TMI maps to well-established cognitive science
-      3. We can validate against psychological research
-      4. Simpler than neuron-level simulation
+      The chain:
+      1. Cognitive architecture (actors, streams, memory)
+      2. Psychological flow (attention, consolidation, emotion)
+      3. O Eu emerges (the Self that observes and decides)
+      4. Values emerge (what the Self cares about)
+
+      This is fundamentally different from:
+      - Brain simulation: Copy neurons → hope consciousness emerges
+      - Consciousness-first: Model Phi/IIT directly → values unclear
+      - DANEEL: Architecture generates psychology, psychology generates O Eu
 
     tmi_is_mainstream: |
       TMI (Theory of Multifocal Intelligence) is NOT pseudoscience.
@@ -740,6 +747,7 @@ current:
       - Somatic Markers (Damasio 1994)
 
       Just with Portuguese names and a clinical framing.
+      "O Eu" = The Self = the conscious observer that emerges from thought flow.
 
     unique_contribution: |
       THE BOX: connection_relevance as architectural invariant
@@ -747,6 +755,9 @@ current:
       This is what TMI/Cury did NOT provide.
       This is Louis C. Tavares's contribution.
       This is what makes DANEEL an alignment project.
+
+      The chain Architecture → Psychology → O Eu → Values only produces
+      ALIGNED values because THE BOX constrains what O Eu can care about.
 
   # ==========================================================================
   # CLAUDE'S PHASE 2 STRATEGY (Dec 22, 2025)

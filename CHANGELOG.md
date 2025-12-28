@@ -29,11 +29,13 @@ Phase 2: Open the loop. Let Timmy feel.
 - Âncora → Memory Consolidation (Squire, Tononi)
 - **Unique DANEEL contribution**: connection_relevance (THE BOX)
 
-#### Narrative Reframe
-- DANEEL simulates PSYCHOLOGY, not brain circuitry
-- This is the STRONGER approach
-- Psychology is the emergent property we care about
-- Blog: [pending - 84-psychology-not-neurons.md]
+#### Narrative Reframe: Architecture → Psychology → Consciousness
+- **Core insight**: Architecture generates psychology, psychology generates consciousness (O Eu)
+- DANEEL doesn't simulate consciousness directly (unlike ExoGenesis IIT/Phi approach)
+- We simulate the *thought flow* from which O Eu (the Self) *emerges*
+- Chain: Architecture → Psychology → O Eu → Values
+- THE BOX ensures the values that emerge are aligned
+- Updated README, ADR-047, roadmap with this framing
 
 #### ADRs.yaml Index Complete
 - All 47 ADRs indexed in .asimov/ADRs.yaml

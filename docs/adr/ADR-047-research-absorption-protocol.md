@@ -26,6 +26,26 @@
 > level. Spiking networks simulate the substrate of cognition, not cognition itself.
 > See `rejected-references.yaml` for full list.
 
+> **DANEEL's Approach vs Consciousness-First Projects (Dec 28, 2025):**
+>
+> Projects like ExoGenesis-Omega model consciousness *directly* (IIT Phi calculation,
+> neural correlates). DANEEL takes a different path:
+>
+> ```
+> ExoGenesis:  Model consciousness directly → hope values emerge
+> DANEEL:      Architecture → Psychology → Consciousness (O Eu) → Values
+> ```
+>
+> We don't simulate consciousness. We simulate the *thought flow* from which
+> consciousness emerges. TMI's "O Eu" (The Self) is not a module we build — it's
+> the observer that *emerges* from the psychological process of attention selection,
+> memory consolidation, and semantic thought construction.
+>
+> This is why we keep projects like pyphi and pymdp for reference (useful theories)
+> but don't adopt their consciousness-first approach. Our alignment thesis is:
+> **Architecture generates psychology, psychology generates consciousness, consciousness
+> generates values.** THE BOX (connection_relevance) ensures the values are aligned.
+
 ## Context
 
 ### The Vision
