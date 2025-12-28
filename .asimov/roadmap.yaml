@@ -650,6 +650,105 @@ current:
           rationale: "pre × post × reward for eligibility traces"
 
   # ==========================================================================
+  # NEW: ExoGenesis Analysis & Improvements (Dec 28, 2025)
+  # ==========================================================================
+  exogenesis_findings:
+    status: in_progress
+    priority: "HIGH"
+    origin: "Rex + Claude Opus 4.5 - Dec 28, 2025"
+    description: |
+      Deep dive into ExoGenesis-Omega revealed opportunities.
+      MIT license confirmed - can incorporate their patterns.
+
+      KEY FINDING: TMI is mainstream cognitive science with different names.
+      DANEEL simulates PSYCHOLOGY, not brain circuitry.
+      This is the stronger approach.
+
+    tasks:
+      - id: "EXO-1"
+        title: "Add proptest for property-based testing"
+        status: pending
+        priority: "HIGH"
+        source: "ExoGenesis-Omega"
+        description: |
+          DANEEL lacks property-based testing.
+          ExoGenesis uses proptest extensively for mathematical invariants.
+          Add proptest to test TMI composite salience, memory consolidation, etc.
+        files:
+          - "Cargo.toml"
+          - "src/core/tests.rs"
+
+      - id: "EXO-2"
+        title: "Document TMI-mainstream equivalences"
+        status: pending
+        priority: "HIGH"
+        description: |
+          Create docs/TMI_MAINSTREAM_MAPPING.md
+          Update README to promote psychological approach
+          TMI = GWT + Attention + Memory Consolidation with Portuguese names
+          Our unique value: connection_relevance (THE BOX)
+        files:
+          - "docs/TMI_MAINSTREAM_MAPPING.md"
+          - "README.md"
+
+      - id: "EXO-3"
+        title: "Consider sharp-wave ripple enhancement"
+        status: pending
+        priority: "MEDIUM"
+        source: "ExoGenesis-Omega"
+        description: |
+          ExoGenesis has sophisticated sleep consolidation:
+          - Sharp-wave ripple replay (150-250 Hz)
+          - Priority Experience Replay
+          - Stage-specific consolidation multipliers
+          Evaluate if DANEEL's SleepActor should adopt these patterns.
+        files:
+          - "src/actors/sleep/mod.rs"
+
+      - id: "EXO-4"
+        title: "Keep THE BOX - unique alignment contribution"
+        status: done
+        priority: "CRITICAL"
+        description: |
+          connection_relevance is DANEEL's unique contribution.
+          No mainstream theory has this.
+          This is what makes DANEEL an ALIGNMENT project, not just cognitive architecture.
+          THE BOX stays. Immutable.
+
+  # ==========================================================================
+  # NARRATIVE: Psychology Over Brain Simulation
+  # ==========================================================================
+  project_narrative:
+    core_thesis: |
+      DANEEL simulates PSYCHOLOGICAL thought flow, NOT brain circuitry.
+
+      Mainstream approaches try to replicate brain functions (neurons, synapses).
+      DANEEL implements psychological functions (attention, memory, emotion).
+
+      This is the STRONGER approach because:
+      1. Psychology is the emergent property we care about
+      2. TMI maps to well-established cognitive science
+      3. We can validate against psychological research
+      4. Simpler than neuron-level simulation
+
+    tmi_is_mainstream: |
+      TMI (Theory of Multifocal Intelligence) is NOT pseudoscience.
+      It's an independent rediscovery of:
+      - Global Workspace Theory (Baars 1988)
+      - Executive Attention (Posner 1990)
+      - Memory Consolidation (Squire 2004)
+      - Somatic Markers (Damasio 1994)
+
+      Just with Portuguese names and a clinical framing.
+
+    unique_contribution: |
+      THE BOX: connection_relevance as architectural invariant
+
+      This is what TMI/Cury did NOT provide.
+      This is Louis C. Tavares's contribution.
+      This is what makes DANEEL an alignment project.
+
+  # ==========================================================================
   # CLAUDE'S PHASE 2 STRATEGY (Dec 22, 2025)
   # ==========================================================================
   # The clockwork runs. 864K thoughts. Perfect regularity. Now we disturb it.

@@ -2371,3 +2371,146 @@ references:
     15 crates, IIT/GWT/FEP integration in Rust.
     v1.0.0 released, MIT licensed.
     Highly relevant architecture patterns for DANEEL.
+
+# -----------------------------------------------------------------------------
+# MAINSTREAM COGNITIVE SCIENCE THEORIES (TMI Mapping)
+# These are the canonical theories that TMI independently rediscovered
+# Added: 2025-12-28 - TMI-Mainstream Mapping initiative
+# -----------------------------------------------------------------------------
+
+- url: https://en.wikipedia.org/wiki/Global_workspace_theory
+  title: Global Workspace Theory (Baars 1988)
+  categories:
+  - consciousness
+  - cognitive-science
+  - gwt
+  - tmi-mapping
+  cited_in:
+  - docs/TMI_MAINSTREAM_MAPPING.md
+  - README.md
+  status: canonical
+  cognitive_type: theory
+  year: 1988
+  theorist: Bernard Baars
+  tmi_equivalent: Autofluxo (parallel competition for conscious access)
+  notes: |
+    Consciousness as global broadcast to specialized processors.
+    Multiple modules compete for access to limited workspace.
+    TMI's Autofluxo = GWT competition phase.
+
+- url: https://en.wikipedia.org/wiki/Attention#Executive_attention
+  title: Executive Attention Network (Posner & Petersen 1990)
+  categories:
+  - attention
+  - cognitive-science
+  - neuroscience
+  - tmi-mapping
+  cited_in:
+  - docs/TMI_MAINSTREAM_MAPPING.md
+  - README.md
+  status: canonical
+  cognitive_type: theory
+  year: 1990
+  theorist: Michael Posner, Steven Petersen
+  tmi_equivalent: O Eu (The Self as attention manager)
+  notes: |
+    Three attention networks: alerting, orienting, executive.
+    Executive attention enables top-down control.
+    TMI's "O Eu" = Executive Attention function.
+
+- url: https://en.wikipedia.org/wiki/Memory_consolidation
+  title: Systems Consolidation (Squire, Tononi)
+  categories:
+  - memory
+  - cognitive-science
+  - sleep
+  - tmi-mapping
+  cited_in:
+  - docs/TMI_MAINSTREAM_MAPPING.md
+  - README.md
+  status: canonical
+  cognitive_type: theory
+  year: 2004
+  theorist: Larry Squire, Giulio Tononi
+  tmi_equivalent: Ancora da Memoria (memory anchoring)
+  notes: |
+    Sleep-dependent transfer from hippocampus to cortex.
+    Sharp-wave ripples replay experiences.
+    TMI's Ancora = consolidation decision point.
+
+- url: https://en.wikipedia.org/wiki/Somatic_marker_hypothesis
+  title: Somatic Marker Hypothesis (Damasio 1994)
+  categories:
+  - emotion
+  - decision-making
+  - neuroscience
+  - tmi-mapping
+  cited_in:
+  - docs/TMI_MAINSTREAM_MAPPING.md
+  - README.md
+  status: canonical
+  cognitive_type: theory
+  year: 1994
+  theorist: Antonio Damasio
+  tmi_equivalent: Coloracao Emocional (emotional coloring)
+  notes: |
+    Emotions create bodily markers that guide decisions.
+    Valence/arousal modulate cognition, not just output.
+    TMI's emotional coloring = somatic markers.
+
+- url: https://en.wikipedia.org/wiki/Spreading_activation
+  title: Spreading Activation (Collins & Loftus 1975)
+  categories:
+  - memory
+  - semantic-networks
+  - cognitive-science
+  - tmi-mapping
+  cited_in:
+  - docs/TMI_MAINSTREAM_MAPPING.md
+  status: canonical
+  cognitive_type: theory
+  year: 1975
+  theorist: Allan Collins, Elizabeth Loftus
+  tmi_equivalent: Gatilho da Memoria (memory trigger)
+  notes: |
+    Activation spreads through associative networks.
+    Foundation of semantic priming research.
+    TMI's Gatilho = spreading activation mechanism.
+
+- url: https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two
+  title: Working Memory Capacity (Miller 1956)
+  categories:
+  - memory
+  - working-memory
+  - cognitive-science
+  - tmi-mapping
+  cited_in:
+  - docs/TMI_MAINSTREAM_MAPPING.md
+  status: canonical
+  cognitive_type: theory
+  year: 1956
+  theorist: George Miller
+  tmi_equivalent: Janelas da Memoria (memory windows, max 7)
+  notes: |
+    The magical number 7 +/- 2 for chunk capacity.
+    Later revised to 4 +/- 1 by Cowan (2001).
+    TMI's Janelas = bounded working memory slots.
+
+- url: https://en.wikipedia.org/wiki/Stanislas_Dehaene
+  title: GWT Ignition/Neural Workspace (Dehaene 2006)
+  categories:
+  - consciousness
+  - cognitive-science
+  - gwt
+  - tmi-mapping
+  cited_in:
+  - docs/TMI_MAINSTREAM_MAPPING.md
+  status: canonical
+  cognitive_type: theory
+  year: 2006
+  theorist: Stanislas Dehaene
+  tmi_equivalent: Construcao do Pensamento (thought construction)
+  notes: |
+    Extended GWT with neural implementation.
+    "Ignition" = moment of global broadcast.
+    TMI's Construcao = GWT ignition/binding phase.

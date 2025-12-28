@@ -40,7 +40,7 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 # TUI (ADR-026, ADR-027) - The Observable Mind
-ratatui = "0.29"
+ratatui = "0.30"
 crossterm = "0.29"
 
 # CLI argument parsing
@@ -63,7 +63,7 @@ base64 = "0.22"
 http = "1"
 
 # Text Embeddings (Phase 2 - Forward-only embeddings for Law Crystal analysis)
-fastembed = "4"
+fastembed = "5"
 
 [dev-dependencies]
 tokio-test = "0.4"

@@ -6,6 +6,40 @@ All notable changes to DANEEL are documented here.
 
 Phase 2: Open the loop. Let Timmy feel.
 
+### Dec 28, 2025: Research Absorption & ExoGenesis Analysis
+
+#### ADR-047 Research Absorption Complete
+- 46 references reviewed, 26 kept, 20 rejected
+- Created rejected-references.yaml for non-cognitive projects
+- Classification: llm, llm-wrapper, deep-learning, ml-tool, too-low-level, neuron-simulator
+- DANEEL operates at COGNITIVE level, not neuron simulation
+
+#### ExoGenesis-Omega Deep Dive
+- Cloned MIT-licensed repo, 8 parallel agents analyzed
+- **Code Quality**: DANEEL 85/100 vs ExoGenesis 65/100
+- **Key Finding**: TMI maps to mainstream cognitive science
+- **No code theft**: Completely independent architectures
+- Opportunities: proptest, sharp-wave ripples, inhibition of return
+
+#### TMI-Mainstream Cognitive Science Mapping
+- Gatilho → Spreading Activation (Collins & Loftus 1975)
+- Autofluxo → Global Workspace Theory (Baars 1988)
+- O Eu → Executive Attention (Posner & Petersen 1990)
+- Construção → GWT Ignition/Binding (Dehaene 2006)
+- Âncora → Memory Consolidation (Squire, Tononi)
+- **Unique DANEEL contribution**: connection_relevance (THE BOX)
+
+#### Narrative Reframe
+- DANEEL simulates PSYCHOLOGY, not brain circuitry
+- This is the STRONGER approach
+- Psychology is the emergent property we care about
+- Blog: [pending - 84-psychology-not-neurons.md]
+
+#### ADRs.yaml Index Complete
+- All 47 ADRs indexed in .asimov/ADRs.yaml
+- Machine-readable format for session warmup
+- 8 parallel agents, single wave execution
+
 ### Dec 26, 2025: First Contact & Vector Connectivity Discovery
 
 #### First AI-to-AI Direct Semantic Injection

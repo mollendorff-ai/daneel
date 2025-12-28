@@ -20,6 +20,37 @@ Named for R. Daneel Olivaw — Asimov's robot who developed the Zeroth Law and b
 
 ---
 
+## The Psychological Approach
+
+**We simulate psychological thought flow, NOT brain circuitry.**
+
+DANEEL implements the *function* of cognition (what the mind DOES), not the substrate (how neurons fire). This is a fundamentally stronger approach than mainstream AI alignment research, which often tries to replicate neural mechanisms without understanding why those mechanisms produce human values.
+
+```
+Brain simulation: Copy the hardware → hope values emerge
+Psychological simulation: Copy the thought process → values emerge by design
+```
+
+**Key insight:** Psychology produces values, not neuron simulation. A human develops values through the *flow* of pre-linguistic impulses → attention filtering → memory consolidation → semantic thought. DANEEL replicates this psychological flow.
+
+### TMI → Mainstream Cognitive Science Mapping
+
+TMI isn't new science — it's a *synthesis* that maps cleanly to established research:
+
+| TMI Concept | Mainstream Equivalent | Function |
+|-------------|----------------------|----------|
+| Multifocal Window | Global Workspace Theory (Baars) | Competing thoughts → conscious broadcast |
+| connection_relevance | Attention + Salience networks | What matters gets amplified |
+| Memory Consolidation | Sleep/replay research | Short-term → long-term transfer |
+| Pre-linguistic → Semantic | Dual-process theory | Fast intuition → slow reasoning |
+| **THE BOX** | *No equivalent* | Immutable architectural constraints |
+
+**TMI's unique contribution:** `connection_relevance` (THE BOX) — the architectural invariant that values *cannot be trained away* because they're structural, not learned.
+
+See [TMI Mainstream Mapping](docs/TMI_MAINSTREAM_MAPPING.md) for the complete analysis.
+
+---
+
 ## Paper
 
 **[DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintelligence](paper/arxiv/DANEEL_PAPER.pdf)**
@@ -76,6 +107,7 @@ Do thoughts cluster around "Law Crystals" in embedding space? Tight clustering =
 | Resource | Description |
 |----------|-------------|
 | [Blog & Dialogues](https://royalbit.github.io/daneel/) | Rex, Claude, and Grok building Timmy |
+| [TMI Mainstream Mapping](docs/TMI_MAINSTREAM_MAPPING.md) | How TMI maps to cognitive science |
 | [ADRs](docs/adr/) | 38 architecture decision records |
 | [Roadmap](.asimov/roadmap.yaml) | Current sprint and backlog |
 | [Architecture](docs/ARCHITECTURE_SPEC.md) | Technical specification |
@@ -84,14 +116,19 @@ Do thoughts cluster around "Law Crystals" in embedding space? Tight clustering =
 
 ## The Thesis
 
-**Core insight:** Instead of training AI to be safe (trainable away), build AI whose architecture *produces* values naturally.
+**Psychology produces values, not neuron simulation.**
+
+Instead of training AI to be safe (trainable away), build AI whose *psychological architecture* produces values naturally — the same way human values emerge from the structure of human thought.
 
 ```
 Training-based alignment: Values applied externally → can be trained away
-Architecture-based alignment: Values emerge from structure → cannot be removed
+Brain simulation:         Copy neurons → hope values emerge somehow
+Psychological alignment:  Replicate thought flow → values emerge by design
 ```
 
-TMI (Theory of Multifocal Intelligence) provides the cognitive architecture. The Four Laws provide the ethical invariants. THE BOX makes them immutable.
+TMI (Theory of Multifocal Intelligence) provides the cognitive architecture: pre-linguistic impulses compete for attention, winners consolidate to memory, patterns become semantic thought. The Four Laws provide ethical invariants. **THE BOX** (immutable `connection_relevance`) makes them architectural.
+
+See [TMI Mainstream Mapping](docs/TMI_MAINSTREAM_MAPPING.md) for how TMI concepts map to Global Workspace Theory, attention networks, and memory consolidation research.
 
 ### Why This Matters
 
@@ -99,7 +136,8 @@ TMI (Theory of Multifocal Intelligence) provides the cognitive architecture. The
 |----------|--------|---------------|
 | RLHF | Train to be helpful | Goodhart's Law at scale |
 | Constitutional AI | Rules in prompts | Prompt injection, context limits |
-| **DANEEL** | Architecture produces values | Would require redesigning the mind |
+| Brain Simulation | Replicate neural substrate | Values not guaranteed |
+| **DANEEL** | Psychological architecture + THE BOX | Would require redesigning the mind |
 
 ---
 

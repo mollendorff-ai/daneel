@@ -18,7 +18,7 @@
 
 use ratatui::{
     layout::Rect,
-    style::{Style, Stylize},
+    style::Style,
     text::{Line, Span},
     widgets::{Block, Borders, Paragraph},
     Frame,
