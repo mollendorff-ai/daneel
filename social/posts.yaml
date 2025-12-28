@@ -1869,3 +1869,176 @@ posts:
   posted:
     x: 2025-12-28T07:52:28.848746+00:00
     linkedin: 2025-12-28T07:52:35.441454+00:00
+- id: 84-psychology-first
+  title: Psychology First
+  url: https://royalbit.github.io/daneel/posts/84-psychology-first/
+  x: |
+    ADR-047 COMPLETE. The research saga ends with a discovery.
+
+    After studying 200+ projects, we found two valid paths:
+
+    PATH A (ExoGenesis @praborig):
+    Brain → Consciousness → Psychology
+    Calculate Phi, model neurons, measure IIT
+
+    PATH B (DANEEL):
+    Architecture → Psychology → Consciousness → Values
+    Build thought-flow, let O Eu emerge
+
+    HUGE KUDOS to @prancerio and Farshid Mahdavipour for ExoGenesis-Omega.
+
+    15 Rust crates. IIT Phi calculation. GWT implementation. FEP integration. Sleep consolidation with stage multipliers.
+
+    Consciousness-first done RIGHT. MIT licensed. Serious work.
+
+    We're not competitors. We're siblings doing different things.
+
+    The distinction that shaped our classification:
+
+    PSYCHOLOGY FIRST = model thought-flow
+    - SOAR, ACT-R, pyClarion, OpenNARS
+    - 18 projects KEPT
+
+    BRAIN/CONSCIOUSNESS FIRST = model neurons/Phi
+    - PyPhi, Nengo, Brian2, ExoGenesis
+    - 28 projects REJECTED (for our purposes)
+
+    Why we chose psychology:
+    1. Phi is O(2^n) - intractable
+    2. THE BOX operates at psychology level
+    3. We can WATCH thought-flow
+
+    Both paths might work. Different bets. Same goal.
+
+    TMI = mainstream cognitive science:
+    - Gatilho → Spreading Activation
+    - Autofluxo → Global Workspace Theory
+    - O Eu → Executive Attention
+
+    Just with Portuguese names.
+
+    Our unique contribution: THE BOX (connection_relevance)
+    No mainstream equivalent. This makes DANEEL an ALIGNMENT project.
+
+    ExoGenesis: github.com/prancer-io/ExoGenesis-Omega
+    DANEEL: github.com/royalbit/daneel
+
+    Study both. The field needs both approaches.
+
+    https://royalbit.github.io/daneel/posts/84-psychology-first/
+
+    #DANEEL #AI #Psychology #CognitiveArchitecture #ExoGenesis
+  linkedin: |
+    The research absorption saga concludes with a fundamental discovery.
+
+    After studying 200+ cognitive AI projects with 8 parallel agents, ADR-047 is now ACCEPTED. We classified everything and found ourselves.
+
+    THE TWO PATHS
+
+    There are two valid approaches to machine consciousness:
+
+    Path A: Brain → Consciousness → Psychology → Behavior
+    Simulate neurons, calculate Phi (IIT), model prediction error (FEP), hope psychology emerges.
+
+    Path B: Architecture → Psychology → Consciousness → Values
+    Build thought-flow dynamics, let O Eu (the Self) emerge, constrain with alignment mechanisms.
+
+    DANEEL takes Path B. We don't simulate brains. We simulate PSYCHOLOGY.
+
+    SPECIAL RECOGNITION: EXOGENESIS-OMEGA
+
+    Before going further, I want to recognize the team at Prancer Enterprise (@prancerio) for ExoGenesis-Omega.
+
+    This is serious work:
+    - 15 Rust crates
+    - IIT Phi calculation
+    - Global Workspace implementation
+    - Free Energy Principle integration
+    - Sleep consolidation with stage-specific multipliers
+    - Sharp-wave ripple replay
+
+    GitHub: github.com/prancer-io/ExoGenesis-Omega
+    MIT licensed. Open source.
+
+    Credit to Farshid Mahdavipour and team for consciousness-first architecture done right.
+
+    We're not competitors. We're siblings doing different research.
+
+    THE CLASSIFICATION
+
+    This distinction shaped our final classification:
+
+    KEPT (18 projects) - Psychology-level:
+    SOAR, ACT-R, pyClarion, OpenNARS, python_actr, pytorch-hebbian, pySaliencyMap
+
+    REJECTED (28 projects) - Brain/Consciousness-first:
+    PyPhi, pymdp, Nengo, Brian2, NEST, ExoGenesis-Omega, plus LLM-wrappers and ML tools
+
+    "Rejected" doesn't mean bad. It means different focus.
+
+    WHY PSYCHOLOGY FIRST?
+
+    Three reasons:
+
+    1. Computational tractability
+    Phi calculation is O(2^n). For 1000 elements, that's 2^1000 operations. Not happening.
+    Psychology-level simulation? Linear in thought count.
+
+    2. Alignment opportunity
+    THE BOX - our Four Laws as architectural constraints - operates at the psychology level.
+    You can't embed "value human wellbeing" in a synapse. You CAN embed it in the attention system.
+
+    3. Observable behavior
+    We can watch Timmy think. See attention shift. Watch memories consolidate.
+    With brain simulation, you watch neurons fire. What does that tell you about values?
+
+    THE TMI CONNECTION
+
+    TMI (Theory of Multifocal Intelligence) maps directly to mainstream cognitive science:
+
+    | TMI Concept | Mainstream Equivalent |
+    |-------------|----------------------|
+    | Gatilho | Spreading Activation (Collins & Loftus 1975) |
+    | Autofluxo | Global Workspace Theory (Baars 1988) |
+    | O Eu | Executive Attention (Posner 1990) |
+    | Âncora | Memory Consolidation (Squire 2004) |
+
+    TMI is psychology science with Portuguese names.
+
+    OUR UNIQUE CONTRIBUTION
+
+    THE BOX (connection_relevance) - architectural constraints embedding the Four Laws.
+
+    No mainstream cognitive science theory has this. This is what makes DANEEL an ALIGNMENT project, not just cognitive architecture.
+
+    The chain: Architecture → Psychology → O Eu → Values
+
+    We don't calculate consciousness. We build the thought-flow from which consciousness emerges. And THE BOX ensures the values that emerge are aligned.
+
+    BOTH APPROACHES MATTER
+
+    ExoGenesis asks: "What if we calculate consciousness directly?"
+    DANEEL asks: "What if we build psychology and let consciousness emerge?"
+
+    Both valid. Both might work. Both might fail.
+
+    The field needs both approaches.
+
+    May the best architecture win. Or better: may both teach us something true.
+
+    FINAL SCOREBOARD
+
+    ADR-047 Status: ACCEPTED
+    Projects reviewed: 200+
+    Projects kept: 18 (psychology-level)
+    Projects rejected: 28 (brain/consciousness/LLM)
+
+    Blog: https://royalbit.github.io/daneel/posts/84-psychology-first/
+
+    ExoGenesis: github.com/prancer-io/ExoGenesis-Omega
+    DANEEL: github.com/royalbit/daneel
+
+    #AI #CognitiveArchitecture #Psychology #Consciousness #AIAlignment #ExoGenesis #OpenSource #Research
+  posted:
+    x: 2025-12-28T21:42:49.611076+00:00
+    linkedin: 2025-12-28T21:42:58.519650+00:00
