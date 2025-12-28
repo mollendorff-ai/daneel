@@ -1,12 +1,12 @@
 # Rejected References for ADR-047
 # These projects were reviewed but don't fit DANEEL's cognitive architecture requirements
-# Rejection criteria: llm, llm-wrapper, deep-learning, ml-tool, too-low-level
+# Rejection criteria: llm, llm-wrapper, deep-learning, ml-tool, too-low-level, neuron-simulator
 # Created: 2025-12-28
 
 meta:
   created: 2025-12-28
   reason: ADR-047 review - not brain-like/bio-inspired cognitive architectures
-  total_rejected: 14
+  total_rejected: 20
 
 # -----------------------------------------------------------------------------
 # LLM WRAPPERS (3)
@@ -253,3 +253,124 @@ meta:
   cognitive_type: too-low-level
   rejection_reason: Biophysical simulator (Hodgkin-Huxley, ion channels) - 3 abstraction levels below cognitive architecture
   notes: CoreNEURON for large-scale, NMODL mechanisms
+
+# -----------------------------------------------------------------------------
+# NEURON SIMULATORS (6)
+# DANEEL operates at cognitive level, not neuron simulation
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/brian-team/brian2
+  title: Brian2 - Equation-Based SNN
+  categories:
+  - neuromorphic
+  - spiking
+  - simulation
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: CeCILL-2.1
+  stars: 1000
+  status: rejected
+  cognitive_type: neuron-simulator
+  rejection_reason: Spiking neuron simulator - DANEEL operates at cognitive level, not neuron simulation
+  tech_stack:
+    language: Python
+    framework: Clock-driven simulator
+    bindings: C++, Cython
+  notes: Runtime C++ code generation, millions of neurons
+
+- url: https://github.com/norse/norse
+  title: Norse - PyTorch Spiking
+  categories:
+  - neuromorphic
+  - spiking
+  - pytorch
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: LGPL-3.0
+  status: rejected
+  cognitive_type: neuron-simulator
+  rejection_reason: Spiking neural network library - DANEEL operates at cognitive level
+  tech_stack:
+    language: Python
+    framework: PyTorch
+  notes: PyTorch Lightning, SuperSpike gradients
+
+- url: https://github.com/jeshraghian/snntorch
+  title: snnTorch - Spiking Neural Networks
+  categories:
+  - memory
+  - stdp
+  - spiking
+  - pytorch
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 1830
+  status: rejected
+  cognitive_type: neuron-simulator
+  rejection_reason: Spiking neural network library - DANEEL operates at cognitive level
+  tech_stack:
+    language: Python
+    framework: PyTorch
+  notes: STDP, multiple neuron models, surrogate gradients
+
+- url: https://github.com/BindsNET/bindsnet
+  title: BindsNET - SNN + STDP + RL
+  categories:
+  - memory
+  - stdp
+  - spiking
+  - reinforcement-learning
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: AGPL-3.0
+  stars: 1646
+  status: rejected
+  cognitive_type: neuron-simulator
+  rejection_reason: Spiking neural network simulator - DANEEL operates at cognitive level
+  tech_stack:
+    language: Python
+    framework: PyTorch
+  notes: Biologically-inspired ML, Atari integration
+
+- url: https://github.com/lava-nc/lava
+  title: Lava - Intel Neuromorphic
+  categories:
+  - neuromorphic
+  - loihi
+  - intel
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: BSD-3-Clause
+  status: rejected
+  cognitive_type: neuron-simulator
+  rejection_reason: Neuromorphic hardware framework - DANEEL operates at cognitive level
+  tech_stack:
+    language: Python
+    framework: Neuromorphic framework
+    hardware: Intel Loihi
+  notes: Loihi 2 support, 1B+ neurons, CSP paradigm
+
+- url: https://github.com/research-team/NEUCOGAR
+  title: NEUCOGAR - Lovheim Cube
+  categories:
+  - emotion
+  - neuromodulation
+  - dopamine
+  - serotonin
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: GPL-2.0
+  status: rejected
+  cognitive_type: neuron-simulator
+  rejection_reason: NEST-based neuron simulator - DANEEL operates at cognitive level
+  tech_stack:
+    language: Python
+    framework: NEST
+  notes: Neurotransmitter simulation for emotions (Lövheim cube model is interesting but implementation is neuron-level)

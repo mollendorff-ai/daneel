@@ -13,6 +13,18 @@
 > - Real cognitive implementation
 > - Maturity level
 > - Working code status (for projects with code)
+>
+> **Rejection Categories (cognitive_type):**
+> - `llm` / `llm-wrapper` - LLM tools/wrappers (DANEEL has no transformers)
+> - `deep-learning` - Pure DL without bio-inspiration
+> - `ml-tool` - ML classification/interpretability tools
+> - `too-low-level` - Biophysical simulators (ion channels, Hodgkin-Huxley)
+> - `neuron-simulator` - Spiking neural network simulators
+>
+> **Why neuron simulators are rejected:** DANEEL operates at the **cognitive level**
+> (thoughts, memory consolidation, attention, emotion), not at the neuron simulation
+> level. Spiking networks simulate the substrate of cognition, not cognition itself.
+> See `rejected-references.yaml` for full list.
 
 ## Context
 
@@ -64,16 +76,19 @@ December 2025 comprehensive research sweep (8 parallel agents) revealed a massiv
 | GWTNext | Apache-2.0 | Global Workspace Theory |
 | consc-models | MIT | IIT + GWT hybrid |
 
-#### Neuromorphic & Spiking Networks
+#### ~~Neuromorphic & Spiking Networks~~ (REJECTED)
 
-| Project | License | Focus |
-|---------|---------|-------|
-| Brian2 | CeCILL-2.1 | Spiking neural networks (Python) |
-| NEST | GPL-2.0+ | Large-scale neural simulation |
-| BindsNET | AGPL-3.0 | SNN + STDP + RL |
-| snnTorch | MIT | PyTorch spiking networks |
-| Lava (Intel) | BSD-3 | Neuromorphic computing framework |
-| spyx | Apache-2.0 | JAX spiking networks |
+> **Rejected:** These are neuron-level simulators. DANEEL operates at the cognitive
+> level (thoughts, memory, attention), not neuron simulation. Moved to `rejected-references.yaml`.
+
+| Project | License | Status | Reason |
+|---------|---------|--------|--------|
+| Brian2 | CeCILL-2.1 | REJECTED | Neuron simulator |
+| NEST | GPL-2.0+ | REJECTED | Biophysical simulator |
+| BindsNET | AGPL-3.0 | REJECTED | Neuron simulator |
+| snnTorch | MIT | REJECTED | Neuron simulator |
+| Lava (Intel) | BSD-3 | REJECTED | Neuron simulator |
+| Norse | LGPL-3.0 | REJECTED | Neuron simulator |
 
 #### Memory & Learning Systems
 
@@ -133,17 +148,20 @@ December 2025 comprehensive research sweep (8 parallel agents) revealed a massiv
 | predcoding | MIT | Rao & Ballard predictive coding | Local Hebbian approximates backprop |
 | artificial-consciousness-blueprint | MIT | HOT + metacognition | Recursive self-modeling |
 
-#### Gap-Fill: Neuromorphic Hardware SDKs (Dec 28)
+#### ~~Gap-Fill: Neuromorphic Hardware SDKs~~ (REJECTED)
 
-| Platform | License | Key Capability |
-|----------|---------|----------------|
-| Intel Lava-NC | BSD-3 | Loihi 2 neuromorphic framework |
-| Lava-DL | BSD-3 | SLAYER training + ANN-SNN conversion |
-| SpiNNaker sPyNNaker | Apache-2.0 | PyNN for million-core SpiNNaker |
-| BrainScaleS hxtorch | LGPL-2.1 | PyTorch for analog BrainScaleS-2 |
-| SNN Toolbox | MIT | Universal ANN-to-SNN converter |
-| Brain-Cog | Apache-2.0 | 50+ SNN implementations; cognitive functions |
-| snnTorch | MIT | PyTorch SNN; surrogate gradients; NIR export |
+> **Rejected:** Neuromorphic hardware frameworks operate at neuron/spiking level.
+> DANEEL uses standard CPU/GPU compute at the cognitive abstraction level.
+
+| Platform | License | Status | Reason |
+|----------|---------|--------|--------|
+| Intel Lava-NC | BSD-3 | REJECTED | Neuron simulator |
+| Lava-DL | BSD-3 | REJECTED | Neuron simulator |
+| SpiNNaker sPyNNaker | Apache-2.0 | Not catalogued | Hardware-specific |
+| BrainScaleS hxtorch | LGPL-2.1 | Not catalogued | Hardware-specific |
+| SNN Toolbox | MIT | Not catalogued | SNN conversion |
+| Brain-Cog | Apache-2.0 | Not catalogued | SNN implementations |
+| snnTorch | MIT | REJECTED | Neuron simulator |
 
 #### Gap-Fill: Major Brain Projects (Dec 28)
 
@@ -327,7 +345,7 @@ For patterns from ExoGenesis-Omega (now MIT):
 | ABSORB-8 | Study Mem0 memory layer architecture | MEDIUM | PENDING |
 | ABSORB-9 | Study RLeXplore intrinsic motivation (ICM, RND, curiosity) | HIGH | PENDING |
 | ABSORB-10 | Study TransformerLens mechanistic interpretability | MEDIUM | PENDING |
-| ABSORB-11 | Study BindsNET SNN + STDP + RL integration | MEDIUM | PENDING |
+| ~~ABSORB-11~~ | ~~Study BindsNET SNN + STDP + RL integration~~ | ~~MEDIUM~~ | REJECTED (neuron-level) |
 | ABSORB-12 | Study OpenCog/Hyperon AtomSpace patterns (ideas only) | MEDIUM | PENDING |
 | ABSORB-13 | Study PyPhi IIT Phi calculation approach (ideas only) | HIGH | PENDING |
 | ABSORB-14 | Write synthesis blog post | MEDIUM | PENDING |
@@ -482,7 +500,7 @@ We build better.
 **Projects Studied (Ideas):**
 - https://github.com/prancer-io/ExoGenesis-Omega - Consciousness architecture (NO LICENSE)
 - https://github.com/opencog/atomspace - Hypergraph knowledge (AGPL-3.0)
-- https://github.com/BindsNET/bindsnet - SNN + STDP + RL (AGPL-3.0)
+- ~~https://github.com/BindsNET/bindsnet~~ - REJECTED (neuron-level simulator)
 - https://github.com/wmayner/pyphi - IIT Phi (Custom)
 
 **Projects Studied (Original Discovery):**
@@ -497,17 +515,19 @@ We build better.
 
 9 parallel agents validated all references using `ref-tools fetch`:
 
-### GitHub Repositories: 37/37 VALID
+### GitHub Repositories: 37 Validated → 26 Kept, 20 Rejected
 
-| Category | Repos | All Valid | Top by Stars |
-|----------|-------|-----------|--------------|
-| Cognitive Architectures | 10 | YES | atomspace (932), nengo (891), opennars (408) |
-| Consciousness/Inference | 4 | YES | pymdp (591), pyphi (410), RxInfer (380) |
-| Memory Systems | 4 | YES | mem0 (44.7k), graphiti (21.4k), DNC (2.5k) |
-| Neuromorphic | 8 | YES | snntorch (1.8k), bindsnet (1.6k), brian2 (1.1k) |
-| Learning/Hebbian | 3 | YES | RLeXplore (454), LibEER (142), pytorch-hebbian (95) |
-| Attention/Saliency | 5 | YES | pytorch-grad-cam (12.5k), Attention-Gated (2k) |
-| Alignment | 3 | YES | trl (16.8k), TransformerLens (2.9k), safe-rlhf (1.6k) |
+| Category | Repos | Status | Notes |
+|----------|-------|--------|-------|
+| Cognitive Architectures | 10 | KEPT | atomspace (932), nengo (891), opennars (408) |
+| Consciousness/Inference | 4 | KEPT | pymdp (591), pyphi (410), RxInfer (380) |
+| Memory Systems | 4 | 1 KEPT | mem0, graphiti, REMO → REJECTED (llm-wrapper) |
+| ~~Neuromorphic~~ | 8 | REJECTED | Neuron-level simulators (not cognitive level) |
+| Learning/Hebbian | 3 | KEPT | pytorch-hebbian (95), plasticity rules |
+| Attention/Saliency | 5 | 2 REJECTED | pytorch-grad-cam, PAIR-saliency → ml-tool |
+| Alignment | 3 | REJECTED | trl, TransformerLens, safe-rlhf → llm tools |
+
+**See `rejected-references.yaml` for full rejection details (20 projects).**
 
 ### arXiv Papers: 14/14 VALID
 
@@ -540,16 +560,27 @@ We build better.
 ### The Scoreboard
 
 ```
-╔═══════════════════════════════════════════╗
-║         ABSORPTION COMPLETE               ║
-╠═══════════════════════════════════════════╣
-║  Repositories validated:     37/37  ✓     ║
-║  Papers validated:           14/14  ✓     ║
-║  License conflicts:           0     ✓     ║
-║  Combined community stars:  100,000+      ║
-║  ExoGenesis status:         ABSORBED      ║
-╚═══════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════╗
+║         ABSORPTION REVIEW (Dec 28, 2025)          ║
+╠═══════════════════════════════════════════════════╣
+║  Repositories validated:     37           ✓       ║
+║  Repositories KEPT:          26 (cognitive)       ║
+║  Repositories REJECTED:      20 (wrong level)     ║
+║  Papers validated:           14/14        ✓       ║
+║  License conflicts:           0           ✓       ║
+║  ExoGenesis status:         ABSORBED              ║
+╠═══════════════════════════════════════════════════╣
+║  Status: PROPOSED (pending full review)           ║
+╚═══════════════════════════════════════════════════╝
 ```
+
+**Rejection Breakdown:**
+- 3 LLM wrappers (mem0, graphiti, REMO)
+- 3 LLM tools (safe-rlhf, TransformerLens, trl)
+- 3 Deep learning (RLeXplore, Attention-Gated, recurrent-visual-attention)
+- 3 ML tools (PAIR-saliency, pytorch-grad-cam, LibEER)
+- 2 Too low-level (NEST, NEURON - biophysical)
+- 6 Neuron simulators (Brian2, Norse, snnTorch, BindsNET, Lava, NEUCOGAR)
 
 ---
 
@@ -567,3 +598,6 @@ We build better.
 - Dec 28, 2025: Expanded ABSORB tasks from 6 to 14
 - Dec 28, 2025: **VALIDATION SWEEP** - 9 parallel agents, 51 URLs, 100% valid
 - Dec 28, 2025: **ExoGenesis-Omega license changed from NONE to MIT** - full absorption authorized
+- Dec 28, 2025: **COGNITIVE REVIEW** - 20 projects rejected (llm, deep-learning, ml-tool, too-low-level, neuron-simulator)
+- Dec 28, 2025: Created `rejected-references.yaml` for rejected entries
+- Dec 28, 2025: Added rejection categories to Review Note; neuron simulators rejected (DANEEL operates at cognitive level)
