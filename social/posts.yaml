@@ -173,29 +173,15 @@ posts:
   title: The Cleanup
   url: https://royalbit.github.io/daneel/posts/85-the-cleanup/
   x: |
-    ADR-048 COMPLETE. Reference cleanup + ADR review.
+    ADR-048 COMPLETE. 8 agents. 196 refs. 48 ADRs.
 
-    8 parallel agents. 196 URLs. 48 ADRs.
+    148 kept, 48 rejected. Psychology first.
 
-    Final tally:
-    - 148 references kept (psychology-level)
-    - 48 references rejected
-    - 46 ADRs clean
-    - 2 ADRs fixed
-
-    Rejected: neuromorphic hardware, consciousness-first (IIT direct), brain-level (place cells), LLM tools.
-
-    Correction: Restored 28 refs we wrongly rejected:
-    - THE BOX (5): legal personhood, robot rights, Asimov
-    - ADR-038 criticality (23): pink noise, DFA, avalanche
-
-    Key insight: Criticality papers are for VECTORIAL FRACTALITY measurement (Qdrant), not brain simulation.
-
-    Psychology first. Every reference must answer: "How does this help build psychology?"
+    Every reference must answer: "How does this help build a mind that cares?"
 
     https://royalbit.github.io/daneel/posts/85-the-cleanup/
 
-    #DANEEL #AI #Psychology #References #Quality
+    #DANEEL #AI #Psychology
   linkedin: |
     ADR-048 Reference Cleanup Sweep: ACCEPTED.
 
@@ -258,4 +244,6 @@ posts:
     148 references. Each one matters. Each one answers: how do we build a mind that cares?
 
     Blog: https://royalbit.github.io/daneel/posts/85-the-cleanup/
-  posted: {}
+  posted:
+    x: 2025-12-28T23:35:44.399207+00:00
+    linkedin: 2025-12-28T23:35:49.926334+00:00
