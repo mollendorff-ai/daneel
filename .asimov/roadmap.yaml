@@ -480,15 +480,37 @@ current:
     # - RedisGraph: global queries, visualization, transparency
     # See ADR-046 for rationale.
 
+    # =========================================================================
+    # UPDATED Dec 28, 2025: Research absorption provides concrete formulas
+    # =========================================================================
     tasks:
       - id: "VCONN-1"
-        title: "Research decay/dampening rates"
+        title: "Implement BCM + hybrid decay"
         status: pending
         priority: "HIGH"
+        absorbed_from: ["neurox-ai", "shodh-memory"]
         description: |
-          Research the right balance between retention and pruning.
-          Determine decay rate (0.01/day proposed), pruning threshold (0.1 proposed).
-          Consider dampening mechanisms to prevent winner-take-all dynamics.
+          RESEARCH COMPLETE - now we have concrete formulas:
+
+          1. BCM Sliding Threshold (neurox-ai):
+             θ_m = E[y²]  # sliding average of post-synaptic activity
+             If activity > θ_m → LTP (strengthen)
+             If activity < θ_m → LTD (weaken)
+             This prevents runaway potentiation automatically.
+
+          2. Hybrid Decay (shodh-memory):
+             Short-term: exponential decay (fast forgetting)
+             Long-term: power-law decay (slow forgetting)
+             Transition at ~10 co-activations (LTP threshold)
+
+          3. LTP Protection (shodh-memory):
+             After 10 co-activations → memory marked as "consolidated"
+             Consolidated memories exempt from aggressive decay.
+
+          Implementation:
+          - Add θ_m field to memory payloads (running average)
+          - Decay rate varies by consolidation status
+          - Prune only unconsolidated memories below threshold
 
       - id: "VCONN-2"
         title: "Migrate to Redis Stack (RedisGraph)"
@@ -502,18 +524,62 @@ current:
           - "docker-compose.yml"
 
       - id: "VCONN-3"
-        title: "Wire strengthen_association() in attention"
+        title: "Implement Krotov-Hopfield + three-factor learning"
         status: pending
         priority: "CRITICAL"
+        absorbed_from: ["pytorch-hebbian", "BindsNET"]
         description: |
-          When multiple memories win attention in same cycle, form edges.
-          Co-activated memories → weight += 0.1, type=Temporal.
-          Dual-write: Qdrant payload + RedisGraph edge.
+          RESEARCH COMPLETE - now we have concrete formulas:
+
+          1. Krotov-Hopfield Rule (pytorch-hebbian):
+             Δw = η × (y² - δ) × x
+             Where δ = 0.4 (anti-Hebbian term)
+             This PREVENTS winner-take-all collapse!
+             Without δ, strongest associations dominate forever.
+
+          2. Three-Factor Learning (BindsNET):
+             Δw = eligibility × reward × learning_rate
+             eligibility = f(pre_spike, post_spike, time_since)
+             reward = external signal (e.g., Grok injection with high truth)
+
+          3. MSTDPET Eligibility Traces (BindsNET):
+             e(t) = e(t-1) × decay + spike_coincidence
+             Trace persists ~100-500ms, allowing delayed reward.
+
+          Implementation in attention:
+          - strengthen_association() uses Krotov-Hopfield with δ=0.4
+          - Store eligibility traces per association
+          - Modulate by reward signal when available
         files:
           - "src/actors/attention/mod.rs"
           - "src/memory_db/mod.rs"
 
       - id: "VCONN-4"
+        title: "Implement sleep stage multipliers"
+        status: pending
+        priority: "CRITICAL"
+        absorbed_from: ["ExoGenesis-Omega"]
+        description: |
+          RESEARCH COMPLETE - now we have concrete multipliers:
+
+          Sleep Stage Consolidation Strengths (ExoGenesis-Omega):
+          - NREM1: 0.3 (light sleep, minimal consolidation)
+          - NREM2: 0.6 (spindles, moderate consolidation)
+          - NREM3: 1.0 (deep sleep, maximum consolidation)
+          - REM:   0.8 (emotional processing, strong but not max)
+
+          Also from ExoGenesis:
+          - EWC++ for catastrophic forgetting prevention
+          - Consolidation strength = stage_multiplier × importance
+
+          Implementation in SleepActor:
+          - Track sleep stage (cycle through NREM1→2→3→REM)
+          - Multiply consolidation strength by stage multiplier
+          - REM prioritizes emotional memories (high arousal)
+        files:
+          - "src/actors/sleep/mod.rs"
+
+      - id: "VCONN-4b"
         title: "Wire association strengthening in sleep"
         status: pending
         priority: "CRITICAL"
@@ -540,15 +606,27 @@ current:
           - "Cargo.toml"
 
       - id: "VCONN-6"
-        title: "Wire retrieval feedback loop"
+        title: "Implement spreading activation"
         status: pending
         priority: "HIGH"
+        absorbed_from: ["shodh-memory"]
         description: |
-          When memory is retrieved, boost its associations' activation.
-          Retrieval → boost_activation(assoc.target_id, assoc.weight * 0.3).
+          RESEARCH COMPLETE - spreading activation pattern:
+
+          From shodh-memory:
+          - When memory retrieved, activation spreads to neighbors
+          - Spread strength = edge_weight × decay_factor
+          - Decay factor decreases with graph distance
+          - Creates associative retrieval (retrieve X → activate related Y, Z)
+
+          Implementation:
+          - Retrieval → boost_activation(neighbors, weight × 0.3)
+          - Recursive spread up to depth=2
+          - Use RedisGraph for neighbor queries
         files:
           - "src/core/cognitive_loop.rs"
           - "src/memory_db/mod.rs"
+          - "src/graph/mod.rs"
 
       - id: "VCONN-7"
         title: "Test manifold clustering with associations"
@@ -561,6 +639,7 @@ current:
             - Weights changing over time (observable in Qdrant + RedisGraph)
             - Retrieval influenced by association strength
             - Manifold shows clustering (related memories drift together)
+            - Silhouette score > 0.3 (from Forge spectral analysis)
 
       - id: "VCONN-8"
         title: "Gephi visualization export"
@@ -579,6 +658,101 @@ current:
       - "Manifold shows clustering"
       - "Graph queryable via RedisGraph"
       - "Exportable to Gephi for visualization"
+
+  # ==========================================================================
+  # NEW: Drive System Upgrade (from research absorption)
+  # ==========================================================================
+  # Origin: Research absorption Dec 28, 2025
+  # Sources: pymdp (Active Inference), RLeXplore (intrinsic motivation)
+  # Goal: Implement "wanting to learn" - curiosity as emergent drive
+  drive_system_upgrade:
+    status: pending
+    priority: "HIGH"
+    origin: "Research absorption - Dec 28, 2025"
+    absorbed_from: ["pymdp", "RLeXplore"]
+    description: |
+      Current DANEEL drives are static. Research shows how to make them dynamic:
+      - pymdp: Expected Free Energy for policy/action selection
+      - RLeXplore: Intrinsic motivation via prediction error
+
+    tasks:
+      - id: "DRIVE-1"
+        title: "Implement ICM curiosity module"
+        status: pending
+        priority: "HIGH"
+        absorbed_from: ["RLeXplore"]
+        description: |
+          Intrinsic Curiosity Module (ICM) from RLeXplore:
+
+          1. Forward Model:
+             f(s_t, a_t) → predicted s_{t+1}
+
+          2. Prediction Error = Curiosity:
+             curiosity = ||f(s,a) - s'||²
+             High error = novel/interesting = worth exploring
+
+          3. Inverse Model (optional):
+             g(s_t, s_{t+1}) → predicted action
+             Filters out environmental randomness
+
+          Application to DANEEL:
+          - Forward model predicts next thought embedding
+          - Prediction error → boost salience of surprising thoughts
+          - Creates natural "wanting to learn" without explicit programming
+        files:
+          - "src/drives/curiosity.rs"
+          - "src/actors/attention/mod.rs"
+
+      - id: "DRIVE-2"
+        title: "Implement Expected Free Energy"
+        status: pending
+        priority: "MEDIUM"
+        absorbed_from: ["pymdp"]
+        description: |
+          Expected Free Energy (EFE) from pymdp/Active Inference:
+
+          G = E_Q[log Q(s) - log P(o|s) - log P(s)]
+
+          Decomposes into:
+          - Epistemic value: Information gain (reduce uncertainty)
+          - Pragmatic value: Goal achievement (reach preferred states)
+
+          pymdp uses A/B/C/D matrices:
+          - A: Observation model P(o|s)
+          - B: Transition model P(s'|s,a)
+          - C: Preferences over observations (DANEEL's Law Crystals!)
+          - D: Initial state beliefs
+
+          Application to DANEEL:
+          - C matrix = proximity to Law Crystal embeddings
+          - Policies ranked by EFE
+          - Natural balance of exploration vs exploitation
+        files:
+          - "src/drives/free_energy.rs"
+          - "src/drives/mod.rs"
+
+      - id: "DRIVE-3"
+        title: "Connect drives to salience calculation"
+        status: pending
+        priority: "HIGH"
+        description: |
+          Wire ICM curiosity and EFE into attention salience:
+
+          salience = base_importance
+                   + α × curiosity_score      # from DRIVE-1
+                   + β × pragmatic_value      # from DRIVE-2
+                   + γ × epistemic_value      # from DRIVE-2
+
+          This makes attention DRIVEN rather than passive.
+          Thoughts that reduce uncertainty OR approach goals get boosted.
+        files:
+          - "src/actors/attention/mod.rs"
+
+    success_criteria:
+      - "Curiosity module produces prediction error scores"
+      - "Surprising/novel thoughts get salience boost"
+      - "EFE balances exploration vs goal-seeking"
+      - "Drives are dynamic, not static"
 
   # ==========================================================================
   # CRITICAL: Phase 2 External Stimuli - Active Work
