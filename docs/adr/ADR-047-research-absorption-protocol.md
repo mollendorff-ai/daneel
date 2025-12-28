@@ -20,7 +20,9 @@ We want the *knowledge*.
 
 December 2025 comprehensive research sweep (8 parallel agents) revealed a massive ecosystem of cognitive AI implementations across multiple domains:
 
-**Summary:** 200+ projects, 50+ papers catalogued across 8 research domains.
+**Summary:** 200+ projects, 50+ papers catalogued across 12 research domains.
+
+**UPDATE Dec 28, 2025 (Gap-Fill Sweep):** 8 parallel agents filled gaps, adding 130+ new projects.
 
 #### Indie Cognitive Architectures (Original Discovery)
 
@@ -101,6 +103,95 @@ December 2025 comprehensive research sweep (8 parallel agents) revealed a massiv
 | baukit | MIT | Activation patching |
 | transformer-circuits | MIT | Circuit analysis |
 | tuned-lens | MIT | Model introspection |
+
+#### Gap-Fill: Classic Cognitive Architectures (Dec 28)
+
+| Project | License | Key Pattern | Value for DANEEL |
+|---------|---------|-------------|------------------|
+| MicroPsi2 (Joscha Bach) | MIT | Psi Theory + motivation-emotion integration | Motivation-driven goal selection; affective modulation |
+| EPIC / EPICpy | MIT | Parallel perceptual-motor processors (50ms cycle) | Precise timing; multi-modal coordination |
+| CHREST | Open Works | Chunking + discrimination networks; 4-chunk STM | Bounded rationality; expertise modeling |
+| Soar | BSD-2 | Decision cycle; production rules; semantic/episodic memory | 30+ years research; mature architecture |
+
+#### Gap-Fill: Consciousness & Predictive Processing (Dec 28)
+
+| Project | License | Theory | Value for DANEEL |
+|---------|---------|--------|------------------|
+| QuantumAttention | MIT | Attention Schema Theory (Graziano) | AST implementation; attention-as-model |
+| Conscious-Planning (MILA) | MIT | GWT + 8-dim bottleneck | Information bottleneck for selective broadcast |
+| PyHGF | GPL-3.0 | Hierarchical Gaussian Filters | Precision-weighted prediction errors |
+| PredNet | MIT | Deep predictive coding | Top-down prediction vs bottom-up error |
+| predcoding | MIT | Rao & Ballard predictive coding | Local Hebbian approximates backprop |
+| artificial-consciousness-blueprint | MIT | HOT + metacognition | Recursive self-modeling |
+
+#### Gap-Fill: Neuromorphic Hardware SDKs (Dec 28)
+
+| Platform | License | Key Capability |
+|----------|---------|----------------|
+| Intel Lava-NC | BSD-3 | Loihi 2 neuromorphic framework |
+| Lava-DL | BSD-3 | SLAYER training + ANN-SNN conversion |
+| SpiNNaker sPyNNaker | Apache-2.0 | PyNN for million-core SpiNNaker |
+| BrainScaleS hxtorch | LGPL-2.1 | PyTorch for analog BrainScaleS-2 |
+| SNN Toolbox | MIT | Universal ANN-to-SNN converter |
+| Brain-Cog | Apache-2.0 | 50+ SNN implementations; cognitive functions |
+| snnTorch | MIT | PyTorch SNN; surrogate gradients; NIR export |
+
+#### Gap-Fill: Major Brain Projects (Dec 28)
+
+| Project | License | Key Pattern | Value for DANEEL |
+|---------|---------|-------------|------------------|
+| Numenta NuPIC | MIT | HTM: Spatial Pooler + Temporal Memory | SDR encoding; online learning |
+| htm.core | AGPL-3.0 | NetworkAPI: modular algorithm regions | Pluggable components |
+| GoodAI BrainSimulator | Apache-2.0 | Visual flow-graph AI composition | GPU-accelerated prototyping |
+| GoodAI-LTM | MIT | RAG + Memory Stream | Long-term memory persistence |
+| BlueBrain Nexus | Apache-2.0 | Knowledge Graph + SHACL validation | Semantic data organization |
+| Allen BMTK | BSD-3 | Multi-scale simulation framework | Layered abstraction |
+| PyNN | CeCILL | Simulator abstraction layer | Backend-agnostic API |
+
+#### Gap-Fill: Memory & Sequence Learning (Dec 28)
+
+| Project | License | Memory Type | Value for DANEEL |
+|---------|---------|-------------|------------------|
+| DeepMind DNC | Apache-2.0 | Differentiable Neural Computer | Content/location addressing |
+| TorchHD | MIT | Sparse Distributed Memory / HDC | Kanerva SDM in PyTorch |
+| NTM-tensorflow | MIT | Neural Turing Machine | LSTM + external memory |
+| pytorch-ntm | BSD-3 | Neural Turing Machine | Clean PyTorch implementation |
+| Memorizing Transformers | MIT | KNN External Memory | Faiss integration |
+| RETRO | Apache-2.0 | Retrieval-Augmented | Chunk-based retrieval |
+| Compressive Transformer | MIT | Compressed Memory | Memory hierarchy |
+
+#### Gap-Fill: Developmental & Embodied Cognition (Dec 28)
+
+| Project | License | Approach | Value for DANEEL |
+|---------|---------|----------|------------------|
+| iCub (IIT) | GPL-2.0 | Humanoid developmental robotics | Embodied cognition reference |
+| Explauto (FLOWERS) | GPL-3.0 | Intelligent Adaptive Curiosity | Progress-driven exploration |
+| Imagine (FLOWERS) | MIT | Language for goal imagination | Piaget/Vygotsky implementation |
+| CURIOUS | MIT | Modular multi-goal RL | Competence progress as reward |
+| ARC-AGI (Chollet) | Apache-2.0 | Abstraction benchmark | Piagetian milestones |
+| ICM Curiosity (Pathak) | MIT | Prediction-error curiosity | Original ICM implementation |
+
+#### Gap-Fill: Biologically-Inspired Learning Rules (Dec 28)
+
+| Project | License | Learning Rule | Value for DANEEL |
+|---------|---------|---------------|------------------|
+| Nico-Curti/plasticity | MIT | BCM, Oja, Hopfield | Production-quality BCM |
+| smonsays/equilibrium-propagation | MIT | Equilibrium Propagation | Energy-based local learning |
+| olokshyn/RaoPredictiveCoding | MIT | Rao & Ballard predictive coding | Hierarchical PC networks |
+| ChFrenkel/DirectRandomTargetProjection | Apache-2.0 | FA, DFA, DRTP | Backprop alternatives |
+| fmi-basel/latent-predictive-learning | MIT | Hebbian + Predictive (LPL) | Nature Neuroscience 2023 |
+| augustwester/chl | Unlicensed | Contrastive Hebbian Learning | Local learning without backprop |
+
+#### Gap-Fill: Cognitive Robotics & Agent Architectures (Dec 28)
+
+| Project | License | Architecture | Value for DANEEL |
+|---------|---------|--------------|------------------|
+| BehaviorTree.CPP | MIT | Async behavior trees | Industry-standard BTs |
+| Jason | LGPL-3.0 | BDI reasoning | Belief-Desire-Intention reference |
+| crashkonijn/GOAP | Apache-2.0 | Goal-Oriented Action Planning | Practical GOAP implementation |
+| SPADE | MIT | Python agent framework | Clean BDI plugin |
+| Semantic Kernel | MIT | Model-agnostic agent SDK | Enterprise agent patterns |
+| Mesa | Apache-2.0 | Agent-based modeling | Emergence testing |
 
 Each project has strengths DANEEL can learn from.
 None of them have DANEEL's running system + alignment focus + TMI theoretical basis.
