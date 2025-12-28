@@ -102,7 +102,7 @@ The `-D warnings` flag treats all warnings as errors, ensuring no code with lint
 
 ## Comparison with Forge
 
-This decision mirrors the linting strategy in [RoyalBit Forge](https://github.com/royalbit/forge), which has successfully used pedantic linting across 89% code coverage and 2,486 tests.
+This decision mirrors the linting strategy in RoyalBit Forge (now archived), which successfully used pedantic linting across 89% code coverage and 2,486 tests.
 
 ## References
 

@@ -511,17 +511,17 @@ We build better.
 - 17 U.S.C. § 102(b) - Copyright does not extend to ideas
 
 **Projects Studied (Priority):**
-- https://github.com/infer-actively/pymdp - Active Inference (MIT)
-- https://github.com/julestalloen/pytorch-hebbian - Hebbian learning (MIT)
-- https://github.com/mem0ai/mem0 - Memory layer (Apache-2.0)
-- https://github.com/RLE-Foundation/RLeXplore - Intrinsic motivation (MIT)
-- https://github.com/TransformerLensOrg/TransformerLens - Interpretability (MIT)
+- ~~https://github.com/infer-actively/pymdp~~ - REJECTED (FEP brain-level, not psychology)
+- ~~https://github.com/julestalloen/pytorch-hebbian~~ - REJECTED (neuron-level Hebbian)
+- ~~https://github.com/mem0ai/mem0~~ - REJECTED (LLM wrapper)
+- ~~https://github.com/RLE-Foundation/RLeXplore~~ - REJECTED (pure DL exploration)
+- ~~https://github.com/TransformerLensOrg/TransformerLens~~ - REJECTED (LLM interpretability)
 
 **Projects Studied (Ideas):**
-- https://github.com/prancer-io/ExoGenesis-Omega - Consciousness architecture (NO LICENSE)
-- https://github.com/opencog/atomspace - Hypergraph knowledge (AGPL-3.0)
+- ~~https://github.com/prancer-io/ExoGenesis-Omega~~ - REJECTED (consciousness-first, IIT+GWT+FEP)
+- https://github.com/opencog/atomspace - Hypergraph knowledge (AGPL-3.0) - KEPT
 - ~~https://github.com/BindsNET/bindsnet~~ - REJECTED (neuron-level simulator)
-- https://github.com/wmayner/pyphi - IIT Phi (Custom)
+- ~~https://github.com/wmayner/pyphi~~ - REJECTED (IIT Phi direct calculation)
 
 **Projects Studied (Original Discovery):**
 - https://github.com/TheRemyyy/neurox-ai
