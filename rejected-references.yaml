@@ -1,12 +1,14 @@
 # Rejected References for ADR-047
 # These projects were reviewed but don't fit DANEEL's cognitive architecture requirements
-# Rejection criteria: llm, llm-wrapper, deep-learning, ml-tool, too-low-level, neuron-simulator
+# Rejection criteria: llm, llm-wrapper, deep-learning, ml-tool, too-low-level, neuron-simulator, consciousness-first
 # Created: 2025-12-28
+# Updated: 2025-12-28 - Added consciousness-first category (DANEEL models psychology, not consciousness directly)
 
 meta:
   created: 2025-12-28
-  reason: ADR-047 review - not brain-like/bio-inspired cognitive architectures
-  total_rejected: 20
+  updated: 2025-12-28
+  reason: ADR-047 review - DANEEL models psychology/thought-flow, not brain functions or consciousness directly
+  total_rejected: 28
 
 # -----------------------------------------------------------------------------
 # LLM WRAPPERS (3)
@@ -374,3 +376,171 @@ meta:
     language: Python
     framework: NEST
   notes: Neurotransmitter simulation for emotions (Lövheim cube model is interesting but implementation is neuron-level)
+
+# -----------------------------------------------------------------------------
+# CONSCIOUSNESS-FIRST (8)
+# These model consciousness/brain directly - DANEEL models psychology/thought-flow
+# Key distinction: We simulate the process from which O Eu emerges, not O Eu directly
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/wmayner/pyphi
+  title: PyPhi - IIT Phi Calculation
+  categories:
+  - consciousness
+  - iit
+  - phi
+  - tononi
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Custom
+  stars: 410
+  status: rejected
+  cognitive_type: consciousness-first
+  rejection_reason: Models consciousness directly (Phi metric) - DANEEL models thought-flow from which consciousness emerges
+  tech_stack:
+    language: Python
+    framework: NumPy, SciPy
+  notes: IIT 3.0 implementation. Useful theory but wrong abstraction level for DANEEL.
+
+- url: https://github.com/infer-actively/pymdp
+  title: pymdp - Active Inference
+  categories:
+  - consciousness
+  - fep
+  - active-inference
+  - friston
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 591
+  status: rejected
+  cognitive_type: consciousness-first
+  rejection_reason: FEP models brain-level prediction error - DANEEL models psychological attention/memory
+  tech_stack:
+    language: Python
+    framework: NumPy
+  notes: Free Energy Principle implementation. Brain-level, not psychology-level.
+
+- url: https://github.com/ReactiveBayes/RxInfer.jl
+  title: RxInfer.jl - Reactive Bayesian Inference
+  categories:
+  - consciousness
+  - fep
+  - bayesian
+  - julia
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 380
+  status: rejected
+  cognitive_type: consciousness-first
+  rejection_reason: FEP/Bayesian brain implementation - operates at neural inference level
+  tech_stack:
+    language: Julia
+    framework: Factor graphs
+  notes: Message passing for active inference. Brain-level abstraction.
+
+- url: https://github.com/nengo/nengo
+  title: Nengo - Neural Engineering Framework
+  categories:
+  - cognitive-architecture
+  - neural
+  - spaun
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: GPL-2.0
+  stars: 891
+  status: rejected
+  cognitive_type: consciousness-first
+  rejection_reason: Neural Engineering Framework - simulates brain structures, not psychological processes
+  tech_stack:
+    language: Python
+    framework: NumPy
+  notes: SPAUN brain model. Impressive but wrong abstraction level - brain, not psychology.
+
+- url: https://github.com/emer/axon
+  title: Axon/Leabra - Biologically Realistic
+  categories:
+  - memory
+  - hippocampus
+  - pfc
+  - basal-ganglia
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: BSD-3-Clause
+  stars: 27
+  status: rejected
+  cognitive_type: consciousness-first
+  rejection_reason: Models brain structures (hippocampus, PFC, basal ganglia) - DANEEL models thought-flow
+  tech_stack:
+    language: Go
+    framework: Cogent Core
+  notes: Biologically realistic learning. Brain structures, not psychological functions.
+
+- url: https://github.com/google-deepmind/dnc
+  title: DeepMind DNC - Differentiable Neural Computer
+  categories:
+  - memory
+  - working-memory
+  - attention
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  status: rejected
+  cognitive_type: consciousness-first
+  rejection_reason: Neural memory addressing - brain-inspired DL, not psychological modeling
+  tech_stack:
+    language: Python
+    framework: TensorFlow
+  notes: Content-based addressing. DL approach to memory, not psychological.
+
+- url: https://github.com/nburnet1/ExoGenesis-Omega
+  title: ExoGenesis-Omega - IIT+GWT+FEP in Rust
+  categories:
+  - cognitive-architecture
+  - consciousness
+  - iit
+  - gwt
+  - fep
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 11
+  status: rejected
+  cognitive_type: consciousness-first
+  rejection_reason: Models consciousness directly (Phi calculation, FEP) - DANEEL models psychology from which consciousness emerges
+  tech_stack:
+    language: Rust
+    framework: IIT+GWT+FEP unified
+  notes: |
+    Impressive Rust implementation. MIT licensed.
+    But consciousness-first approach: they model Phi, we model thought-flow.
+    Their chain: brain mechanisms → consciousness
+    Our chain: architecture → psychology → O Eu emerges → values emerge
+    Keep for reference but not for integration.
+
+- url: https://github.com/joschabach/micropsi2
+  title: MicroPsi2 - Psi Theory
+  categories:
+  - cognitive-architecture
+  - motivation
+  - joscha-bach
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 182
+  status: rejected
+  cognitive_type: consciousness-first
+  rejection_reason: Psi theory models motivation at neural substrate level - closer to brain than psychology
+  tech_stack:
+    language: Python
+    framework: Bottle, Theano
+  notes: Joscha Bach's motivated cognition. Borderline - has psychological concepts but neural framing.
