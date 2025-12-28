@@ -1870,3 +1870,708 @@ references:
   - docs/adr/ADR-038-phase2-stimuli-research.md
   status: ok
   verified: 2025-12-25 18:09:54.442330+00:00
+
+# =============================================================================
+# RESEARCH ABSORPTION - Dec 28, 2025 (ADR-047)
+# =============================================================================
+# Origin: Rex + Claude Opus 4.5 research sweep
+# Purpose: DANEEL as central repository for cognitive AI consensus
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# COGNITIVE ARCHITECTURES
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/trueagi-io/hyperon-experimental
+  title: Hyperon/MeTTa - Next-gen OpenCog
+  categories:
+  - cognitive-architecture
+  - hypergraph
+  - agi
+  - rust
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  - research/external/INDEX.md
+  license: MIT
+  stars: 219
+  status: unverified
+  notes: OpenCog successor, MeTTa meta-language, designed for AGI
+
+- url: https://github.com/opencog/atomspace
+  title: AtomSpace - Hypergraph Knowledge Base
+  categories:
+  - cognitive-architecture
+  - hypergraph
+  - knowledge-representation
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: AGPL-3.0
+  stars: 931
+  status: unverified
+  notes: Pattern matching, attention allocation, persistent storage
+
+- url: https://github.com/SoarGroup/Soar
+  title: SOAR Cognitive Architecture
+  categories:
+  - cognitive-architecture
+  - production-rules
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: BSD-2-Clause
+  stars: 376
+  status: unverified
+  notes: 40+ years research, chunking, reinforcement learning
+
+- url: https://github.com/jakdot/pyactr
+  title: pyACTR - Python ACT-R
+  categories:
+  - cognitive-architecture
+  - act-r
+  - python
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: GPL-3.0
+  stars: 173
+  status: unverified
+  notes: Declarative/procedural memory, production rules
+
+- url: https://github.com/cmekik/pyClarion
+  title: pyClarion - CLARION Architecture
+  categories:
+  - cognitive-architecture
+  - dual-process
+  - python
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 61
+  status: unverified
+  notes: Dual implicit/explicit processing
+
+- url: https://github.com/opennars/opennars
+  title: OpenNARS - Non-Axiomatic Reasoning
+  categories:
+  - cognitive-architecture
+  - reasoning
+  - uncertainty
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 408
+  status: unverified
+  notes: Handles incomplete knowledge, real-time learning
+
+- url: https://github.com/joschabach/micropsi2
+  title: MicroPsi2 - Psi Theory
+  categories:
+  - cognitive-architecture
+  - motivation
+  - joscha-bach
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 182
+  status: unverified
+  notes: Psi theory of motivated cognition
+
+- url: https://github.com/nengo/nengo
+  title: Nengo - Neural Engineering Framework
+  categories:
+  - cognitive-architecture
+  - neural
+  - spaun
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: GPL-2.0
+  stars: 891
+  status: unverified
+  notes: NEF, Semantic Pointer Architecture, SPAUN brain model
+
+# -----------------------------------------------------------------------------
+# CONSCIOUSNESS IMPLEMENTATIONS
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/wmayner/pyphi
+  title: PyPhi - IIT Phi Calculation
+  categories:
+  - consciousness
+  - iit
+  - phi
+  - tononi
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Custom
+  stars: 410
+  status: unverified
+  notes: Integrated Information Theory 3.0 implementation
+
+- url: https://github.com/infer-actively/pymdp
+  title: pymdp - Active Inference
+  categories:
+  - consciousness
+  - fep
+  - active-inference
+  - friston
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 591
+  status: unverified
+  notes: Free Energy Principle, belief updating, policy inference
+
+- url: https://github.com/ReactiveBayes/RxInfer.jl
+  title: RxInfer.jl - Reactive Bayesian Inference
+  categories:
+  - consciousness
+  - fep
+  - bayesian
+  - julia
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 380
+  status: unverified
+  notes: Message passing, real-time inference, active inference
+
+# -----------------------------------------------------------------------------
+# MEMORY & LEARNING SYSTEMS
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/mem0ai/mem0
+  title: Mem0 - Universal Memory Layer
+  categories:
+  - memory
+  - episodic
+  - semantic
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  stars: 44700
+  status: unverified
+  notes: Multi-level memory, user/session/agent memory
+
+- url: https://github.com/julestalloen/pytorch-hebbian
+  title: pytorch-hebbian - Hebbian Learning
+  categories:
+  - memory
+  - hebbian
+  - learning
+  - pytorch
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 95
+  status: unverified
+  notes: Local learning rules, unsupervised feature extraction
+
+- url: https://github.com/jeshraghian/snntorch
+  title: snnTorch - Spiking Neural Networks
+  categories:
+  - memory
+  - stdp
+  - spiking
+  - pytorch
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 1830
+  status: unverified
+  notes: STDP, multiple neuron models, surrogate gradients
+
+- url: https://github.com/BindsNET/bindsnet
+  title: BindsNET - SNN + STDP + RL
+  categories:
+  - memory
+  - stdp
+  - spiking
+  - reinforcement-learning
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: AGPL-3.0
+  stars: 1646
+  status: unverified
+  notes: Biologically-inspired ML, Atari integration
+
+- url: https://github.com/emer/axon
+  title: Axon/Leabra - Biologically Realistic
+  categories:
+  - memory
+  - hippocampus
+  - pfc
+  - basal-ganglia
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: BSD-3-Clause
+  stars: 27
+  status: unverified
+  notes: Hippocampus, PFC, basal ganglia, predictive error-driven
+
+- url: https://github.com/google-deepmind/dnc
+  title: DeepMind DNC - Differentiable Neural Computer
+  categories:
+  - memory
+  - working-memory
+  - attention
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  status: unverified
+  notes: Content-based addressing, temporal linking
+
+- url: https://github.com/getzep/graphiti
+  title: Graphiti - Temporal Knowledge Graphs
+  categories:
+  - memory
+  - knowledge-graph
+  - temporal
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  status: unverified
+  notes: AI agent memory, historical queries
+
+- url: https://github.com/daveshap/REMO_Framework
+  title: REMO - Rolling Episodic Memory
+  categories:
+  - memory
+  - episodic
+  - temporal
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 451
+  status: unverified
+  notes: Autonomous AI memory, temporal organization
+
+# -----------------------------------------------------------------------------
+# NEUROMORPHIC / SPIKING NETWORKS
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/brian-team/brian2
+  title: Brian2 - Equation-Based SNN
+  categories:
+  - neuromorphic
+  - spiking
+  - simulation
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: CeCILL-2.1
+  stars: 1000
+  status: unverified
+  notes: Runtime C++ code generation, millions of neurons
+
+- url: https://github.com/nest/nest-simulator
+  title: NEST - Large-Scale SNN
+  categories:
+  - neuromorphic
+  - spiking
+  - hpc
+  - human-brain-project
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: GPL-2.0+
+  stars: 615
+  status: unverified
+  notes: MPI parallelization, 50+ neuron models
+
+- url: https://github.com/norse/norse
+  title: Norse - PyTorch Spiking
+  categories:
+  - neuromorphic
+  - spiking
+  - pytorch
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: LGPL-3.0
+  status: unverified
+  notes: PyTorch Lightning, SuperSpike gradients
+
+- url: https://github.com/lava-nc/lava
+  title: Lava - Intel Neuromorphic
+  categories:
+  - neuromorphic
+  - loihi
+  - intel
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: BSD-3-Clause
+  status: unverified
+  notes: Loihi 2 support, 1B+ neurons, CSP paradigm
+
+- url: https://github.com/neuronsimulator/nrn
+  title: NEURON - Morphologically Detailed
+  categories:
+  - neuromorphic
+  - biophysical
+  - hpc
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: BSD-3-Clause
+  status: unverified
+  notes: CoreNEURON for large-scale, NMODL mechanisms
+
+# -----------------------------------------------------------------------------
+# EMOTION & DRIVE SYSTEMS
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/RLE-Foundation/RLeXplore
+  title: RLeXplore - Intrinsic Motivation
+  categories:
+  - emotion
+  - intrinsic-motivation
+  - curiosity
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  status: unverified
+  notes: ICM, RND, RE3, RIDE - exploration baselines
+
+- url: https://github.com/research-team/NEUCOGAR
+  title: NEUCOGAR - Lovheim Cube
+  categories:
+  - emotion
+  - neuromodulation
+  - dopamine
+  - serotonin
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: GPL-2.0
+  status: unverified
+  notes: Neurotransmitter simulation for emotions
+
+- url: https://github.com/CarletonCognitiveModelingLab/python_actr
+  title: python_actr - ACT-R with Emotion
+  categories:
+  - emotion
+  - cognitive-architecture
+  - act-r
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  status: unverified
+  notes: Memory + procedural cognition
+
+- url: https://github.com/XJTU-EEG/LibEER
+  title: LibEER - EEG Emotion Recognition
+  categories:
+  - emotion
+  - eeg
+  - benchmark
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  status: unverified
+  notes: Multiple algorithms, standardized evaluation
+
+# -----------------------------------------------------------------------------
+# ATTENTION & SALIENCE
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/PAIR-code/saliency
+  title: Google PAIR Saliency
+  categories:
+  - attention
+  - saliency
+  - interpretability
+  - google
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  status: unverified
+  notes: XRAI, SmoothGrad, Integrated Gradients, GradCAM
+
+- url: https://github.com/jacobgil/pytorch-grad-cam
+  title: pytorch-grad-cam - 15+ CAM Methods
+  categories:
+  - attention
+  - saliency
+  - cam
+  - pytorch
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 10000
+  status: unverified
+  notes: GradCAM, ScoreCAM, EigenCAM, ShapleyCAM
+
+- url: https://github.com/akisatok/pySaliencyMap
+  title: pySaliencyMap - Itti-Koch
+  categories:
+  - attention
+  - saliency
+  - itti-koch
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  status: unverified
+  notes: Classic visual saliency, center-surround
+
+- url: https://github.com/ozan-oktay/Attention-Gated-Networks
+  title: Attention-Gated Networks
+  categories:
+  - attention
+  - gating
+  - medical-imaging
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  status: unverified
+  notes: Additive attention gates, U-Net
+
+- url: https://github.com/kevinzakka/recurrent-visual-attention
+  title: Recurrent Visual Attention
+  categories:
+  - attention
+  - sequential
+  - policy-gradient
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  status: unverified
+  notes: Foveated glimpse, REINFORCE training
+
+# -----------------------------------------------------------------------------
+# AI ALIGNMENT
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/PKU-Alignment/safe-rlhf
+  title: Safe-RLHF - Constrained Value Alignment
+  categories:
+  - alignment
+  - rlhf
+  - safety
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  stars: 1569
+  status: unverified
+  notes: Lagrangian methods, safety-helpfulness balance
+
+- url: https://github.com/TransformerLensOrg/TransformerLens
+  title: TransformerLens - Mechanistic Interpretability
+  categories:
+  - alignment
+  - interpretability
+  - mechanistic
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: MIT
+  stars: 2927
+  status: unverified
+  notes: Activation patching, circuit discovery
+
+- url: https://github.com/huggingface/trl
+  title: TRL - RLHF/DPO Training
+  categories:
+  - alignment
+  - rlhf
+  - dpo
+  - huggingface
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: Apache-2.0
+  stars: 16808
+  status: unverified
+  notes: PPO trainer, reward modeling, SFT
+
+# -----------------------------------------------------------------------------
+# FOUNDATIONAL PAPERS (arXiv)
+# -----------------------------------------------------------------------------
+
+- url: https://arxiv.org/abs/2308.08708
+  title: 'Consciousness in AI: Insights from the Science of Consciousness'
+  categories:
+  - paper
+  - consciousness
+  - survey
+  - essential
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  - research/external/INDEX.md
+  authors: Butlin, Long, Bengio et al.
+  year: 2023
+  status: unverified
+  notes: THE essential survey - indicator properties of consciousness
+
+- url: https://arxiv.org/abs/2510.25998
+  title: 'IIT: A Consciousness-First Approach to What Exists'
+  categories:
+  - paper
+  - consciousness
+  - iit
+  - tononi
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Tononi, Boly
+  year: 2025
+  status: unverified
+  notes: Definitive IIT overview, intrinsic cause-effect power
+
+- url: https://arxiv.org/abs/2512.21129
+  title: Active inference and artificial reasoning
+  categories:
+  - paper
+  - fep
+  - active-inference
+  - friston
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Friston, Da Costa, Tschantz et al.
+  year: 2025
+  status: unverified
+  notes: Structure learning, Bayesian Model Reduction
+
+- url: https://arxiv.org/abs/2510.04084
+  title: Bridging IIT and FEP in living neuronal networks
+  categories:
+  - paper
+  - consciousness
+  - iit
+  - fep
+  - unification
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Mayama, Shimizu et al.
+  year: 2025
+  status: unverified
+  notes: Phi correlates with Bayesian surprise
+
+- url: https://arxiv.org/abs/2401.08623
+  title: Wake-Sleep Consolidated Learning
+  categories:
+  - paper
+  - sleep
+  - consolidation
+  - memory
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Sorrenti, Bellitto et al.
+  year: 2024
+  status: unverified
+  notes: Wake/NREM/REM phases, synaptic plasticity
+
+- url: https://arxiv.org/abs/2504.14727
+  title: Semi-parametric Memory Consolidation
+  categories:
+  - paper
+  - memory
+  - consolidation
+  - continual-learning
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Liu, Zhu et al.
+  year: 2025
+  status: unverified
+  notes: Biomimetic continual learning, ImageNet
+
+- url: https://arxiv.org/abs/2410.11407
+  title: 'A Case for AI Consciousness: Language Agents and GWT'
+  categories:
+  - paper
+  - consciousness
+  - gwt
+  - language-agents
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Goldstein, Kirk-Giannini
+  year: 2024
+  status: unverified
+  notes: GWT conditions for consciousness
+
+- url: https://arxiv.org/abs/2410.06633
+  title: On the Minimal Theory of Consciousness in Active Inference
+  categories:
+  - paper
+  - consciousness
+  - fep
+  - minimal-theory
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Whyte, Corcoran, Friston et al.
+  year: 2024
+  status: unverified
+  notes: Testable theory from active inference
+
+- url: https://arxiv.org/abs/2204.01675
+  title: Mesoscopic description of hippocampal replay and metastability
+  categories:
+  - paper
+  - memory
+  - hippocampus
+  - replay
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  authors: Pietras, Schmutz, Schwalger
+  year: 2022
+  status: unverified
+  notes: Bottom-up model linking neurons to computation
+
+# -----------------------------------------------------------------------------
+# EXTERNAL PROJECTS (IDEAS ONLY - NO LICENSE)
+# -----------------------------------------------------------------------------
+
+- url: https://github.com/prancer-io/ExoGenesis-Omega
+  title: ExoGenesis-Omega - Comprehensive Cognitive Architecture
+  categories:
+  - cognitive-architecture
+  - consciousness
+  - iit
+  - gwt
+  - fep
+  - ideas-only
+  - adr-047
+  cited_in:
+  - docs/adr/ADR-047-research-absorption-protocol.md
+  license: NONE
+  stars: 11
+  status: unverified
+  notes: |
+    15 crates, IIT/GWT/FEP integration.
+    NO LICENSE - IDEAS ONLY.
+    Cannot absorb code, can study architecture patterns.
+    See ADR-047 for legal basis.

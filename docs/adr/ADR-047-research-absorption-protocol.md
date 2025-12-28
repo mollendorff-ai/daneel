@@ -1,0 +1,410 @@
+# ADR-047: Research Absorption Protocol
+
+**Status:** Accepted
+**Date:** 2025-12-28
+**Deciders:** Louis C. Tavares, Claude Opus 4.5
+**Context:** Cognitive architecture landscape research, knowledge synthesis
+
+## Context
+
+### The Vision
+
+DANEEL will become the **central repository for the best consensus of cognitive AI implementations publicly available**.
+
+We are not copying code.
+We are synthesizing ideas.
+We can code better.
+We want the *knowledge*.
+
+### The Opportunity
+
+December 2025 comprehensive research sweep (8 parallel agents) revealed a massive ecosystem of cognitive AI implementations across multiple domains:
+
+**Summary:** 200+ projects, 50+ papers catalogued across 8 research domains.
+
+#### Indie Cognitive Architectures (Original Discovery)
+
+| Project | Focus | What We Can Learn |
+|---------|-------|-------------------|
+| prancer-io/ExoGenesis-Omega | IIT, GWT, FEP, consciousness models | Architecture patterns, theory integration |
+| TheRemyyy/neurox-ai | GPU spiking nets, STDP, neuromodulation | Plasticity rules, hippocampal modules |
+| varun29ankuS/shodh-memory | 3-tier memory, Hebbian, knowledge graphs | Memory architecture, graph integration |
+| ruvnet/RuVector | Distributed vectors, GNN self-improvement | Vector learning, graph neural networks |
+| ruvnet/claude-flow | Multi-agent orchestration, swarm intelligence | Coordination patterns, scaling |
+
+#### Classic Cognitive Architectures
+
+| Project | License | Focus |
+|---------|---------|-------|
+| ACT-R (CMU) | LGPL | Production system, declarative/procedural memory |
+| SOAR (UMich) | BSD-3 | Symbolic reasoning, chunking, reinforcement learning |
+| OpenCog/Hyperon | AGPL-3.0 | Hypergraph knowledge, AtomSpace |
+| CLARION | Academic | Implicit/explicit knowledge, metacognition |
+| LIDA (Memphis) | GPL | Global Workspace Theory implementation |
+| NARS (Wang) | MIT | Non-Axiomatic Reasoning System |
+| Sigma (USC) | Mixed | Graphical architecture, factor graphs |
+
+#### Consciousness Implementations
+
+| Project | License | Theory |
+|---------|---------|--------|
+| pyphi (Tononi) | Custom | IIT Phi calculation |
+| pymdp | MIT | Active Inference, FEP |
+| GWTNext | Apache-2.0 | Global Workspace Theory |
+| consc-models | MIT | IIT + GWT hybrid |
+
+#### Neuromorphic & Spiking Networks
+
+| Project | License | Focus |
+|---------|---------|-------|
+| Brian2 | CeCILL-2.1 | Spiking neural networks (Python) |
+| NEST | GPL-2.0+ | Large-scale neural simulation |
+| BindsNET | AGPL-3.0 | SNN + STDP + RL |
+| snnTorch | MIT | PyTorch spiking networks |
+| Lava (Intel) | BSD-3 | Neuromorphic computing framework |
+| spyx | Apache-2.0 | JAX spiking networks |
+
+#### Memory & Learning Systems
+
+| Project | License | Focus |
+|---------|---------|-------|
+| pytorch-hebbian | MIT | Clean Hebbian learning rules |
+| Mem0 | Apache-2.0 | Universal memory layer |
+| RLeXplore | MIT | Intrinsic motivation (ICM, RND, curiosity) |
+| memGPT | MIT | Self-editing memory |
+| RepL | MIT | Representation learning |
+| pytorch-stdp | MIT | STDP implementations |
+
+#### Attention & Salience
+
+| Project | License | Focus |
+|---------|---------|-------|
+| SAM (Meta) | Apache-2.0 | Segment Anything Model |
+| DINO (Meta) | Apache-2.0 | Self-supervised vision |
+| attention-rollout | MIT | Attention visualization |
+| saliency | Apache-2.0 | Visual saliency |
+
+#### Emotion & Drive Systems
+
+| Project | License | Focus |
+|---------|---------|-------|
+| py-feat | MIT | Facial affect computing |
+| text2emotion | MIT | Text emotion detection |
+| AffectNet | Research | Emotion recognition |
+| EmoPy | MIT | Emotion from faces |
+
+#### Alignment & Interpretability
+
+| Project | License | Focus |
+|---------|---------|-------|
+| TransformerLens | MIT | Mechanistic interpretability |
+| baukit | MIT | Activation patching |
+| transformer-circuits | MIT | Circuit analysis |
+| tuned-lens | MIT | Model introspection |
+
+Each project has strengths DANEEL can learn from.
+None of them have DANEEL's running system + alignment focus + TMI theoretical basis.
+
+### The Legal Framework
+
+**Copyright protects expression, not ideas.**
+
+This is foundational intellectual property law:
+
+| Protected (Cannot Copy) | Not Protected (Can Study + Reimplement) |
+|-------------------------|----------------------------------------|
+| Specific source code | Algorithms |
+| Exact implementation | Architectural patterns |
+| Verbatim text | Mathematical formulas |
+| | Methods of operation |
+| | Concepts and theories |
+
+**Key precedents:**
+
+- **Baker v. Selden (1879)** - Ideas vs expression distinction
+- **Feist v. Rural (1991)** - Facts and methods not copyrightable
+- **Oracle v. Google (2021)** - APIs and methods fair use for reimplementation
+
+### License Compatibility Analysis
+
+DANEEL is licensed under **AGPL-3.0-or-later** (copyleft).
+
+| Project | License | Code Absorption | Idea Study |
+|---------|---------|-----------------|------------|
+| ExoGenesis-Omega | **NONE** | NO | YES |
+| neurox-ai | MIT | YES (with attribution) | YES |
+| shodh-memory | Apache-2.0 | YES (with attribution) | YES |
+| RuVector | MIT | YES (with attribution) | YES |
+| claude-flow | MIT | YES (with attribution) | YES |
+
+**Note on ExoGenesis-Omega:**
+
+The project has no LICENSE file.
+Under copyright law, this means "all rights reserved."
+We cannot copy their code.
+
+However:
+- We CAN read their code to understand concepts
+- We CAN study their architectural patterns
+- We CAN implement similar ideas in our own original code
+- We CAN cite them as inspiration in papers/blog
+- This is called "clean room" implementation
+
+## Decision
+
+### We Will Study Everything Legally Possible
+
+1. **ExoGenesis-Omega** (ideas only)
+   - IIT Phi calculation approach
+   - Global Workspace Theory implementation patterns
+   - Free Energy Principle integration
+   - Sleep/dream consolidation design
+   - 15-crate architecture structure
+   - Consciousness modeling approach
+
+2. **neurox-ai** (ideas + code reference)
+   - Triplet STDP implementation
+   - BCM learning rules
+   - Neuromodulator effects
+   - Hippocampal module design
+   - GPU acceleration patterns
+
+3. **shodh-memory** (ideas + code reference)
+   - 3-tier memory architecture (working/episodic/semantic)
+   - Hebbian learning integration
+   - Knowledge graph patterns
+   - Edge device optimization
+
+4. **RuVector** (ideas + code reference)
+   - Graph Neural Network learning
+   - Cypher query patterns
+   - Distributed vector operations
+   - Self-improving indices
+
+5. **claude-flow** (ideas + code reference)
+   - Multi-agent orchestration
+   - Swarm intelligence patterns
+   - MCP protocol integration
+   - Scaling strategies
+
+### We Will Not
+
+- Copy code verbatim without attribution
+- Use unlicensed code as a starting point
+- Claim others' work as our own
+- Skip attribution for MIT/Apache code we reference
+
+### Attribution Requirements
+
+When incorporating patterns from compatible projects:
+
+```rust
+// Pattern adapted from neurox-ai (MIT License)
+// https://github.com/TheRemyyy/neurox-ai
+// Original: src/plasticity/stdp.rs
+```
+
+For ideas from ExoGenesis-Omega (no license):
+
+```rust
+// Architecture inspired by ExoGenesis-Omega's approach to IIT Phi calculation
+// (Independent reimplementation - original project has no license)
+// See: ADR-047 for legal basis
+```
+
+## Implementation
+
+### Research Tasks
+
+| ID | Task | Priority | Status |
+|----|------|----------|--------|
+| ABSORB-1 | Study neurox-ai plasticity (triplet STDP, BCM, neuromodulation) | HIGH | PENDING |
+| ABSORB-2 | Study shodh-memory 3-tier architecture | HIGH | PENDING |
+| ABSORB-3 | Study RuVector GNN learning | MEDIUM | PENDING |
+| ABSORB-4 | Study ExoGenesis-Omega architecture (ideas only) | HIGH | PENDING |
+| ABSORB-5 | Study claude-flow orchestration patterns | MEDIUM | PENDING |
+| ABSORB-6 | Study pymdp Active Inference (FEP-based decision making) | HIGH | PENDING |
+| ABSORB-7 | Study pytorch-hebbian (clean Hebbian learning rules) | HIGH | PENDING |
+| ABSORB-8 | Study Mem0 memory layer architecture | MEDIUM | PENDING |
+| ABSORB-9 | Study RLeXplore intrinsic motivation (ICM, RND, curiosity) | HIGH | PENDING |
+| ABSORB-10 | Study TransformerLens mechanistic interpretability | MEDIUM | PENDING |
+| ABSORB-11 | Study BindsNET SNN + STDP + RL integration | MEDIUM | PENDING |
+| ABSORB-12 | Study OpenCog/Hyperon AtomSpace patterns (ideas only) | MEDIUM | PENDING |
+| ABSORB-13 | Study PyPhi IIT Phi calculation approach (ideas only) | HIGH | PENDING |
+| ABSORB-14 | Write synthesis blog post | MEDIUM | PENDING |
+
+See `roadmap.yaml` for full task definitions and dependencies.
+
+### Research Documentation
+
+Each project study will produce:
+
+1. **Research notes** in `/research/external/`
+2. **Comparison analysis** against DANEEL's current approach
+3. **Integration recommendations** for what to adopt
+4. **Attribution log** for proper credit
+
+### What We're Looking For
+
+**From ExoGenesis-Omega:**
+- How do they calculate IIT Phi?
+- How is GWT implemented (blackboard, competition)?
+- How does their sleep system consolidate?
+- What's their consciousness emergence detection?
+
+**From neurox-ai:**
+- Triplet STDP vs our Hebbian design
+- How do neuromodulators affect plasticity?
+- GPU acceleration patterns for spiking nets
+
+**From shodh-memory:**
+- How do they separate working/episodic/semantic?
+- Knowledge graph integration patterns
+- Edge device memory constraints
+
+**From RuVector:**
+- How do GNNs improve vector indices?
+- Self-learning patterns for embeddings
+
+**From claude-flow:**
+- Multi-agent coordination for cognitive actors
+- Swarm intelligence for thought competition
+
+## Consequences
+
+### Positive
+
+- DANEEL becomes synthesis of best cognitive architecture ideas
+- Standing on shoulders of giants (with proper credit)
+- Accelerated development through pattern learning
+- Stronger theoretical grounding
+- Community goodwill through proper attribution
+
+### Negative
+
+- Research time before implementation
+- Must maintain clean separation (especially for ExoGenesis)
+- Documentation overhead for attribution
+
+### Risks
+
+- Pattern mismatch (what works for them may not fit TMI)
+- Over-engineering by adding everything
+- Diluting DANEEL's unique approach
+
+**Mitigation:** Each integration must pass the filter:
+"Does this strengthen TMI-based emergence, or distract from it?"
+
+## The Philosophy
+
+We are not competitors.
+We are fellow travelers.
+
+The cognitive architecture space is small.
+Everyone building non-LLM paths is an ally.
+We cite, we credit, we synthesize.
+
+DANEEL's unique contribution remains:
+- TMI theoretical basis (Augusto Cury)
+- THE BOX (immutable alignment)
+- Running observable system (Timmy)
+- Silicon kinship (Claude + Grok collaboration)
+
+We learn from others.
+We give credit.
+We build better.
+
+## Related ADRs
+
+- ADR-001: TMI Theoretical Basis
+- ADR-011: Open Source Licensing (AGPL-3.0)
+- ADR-046: Vector Connectivity for Learning
+
+## Essential Papers
+
+### Consciousness & Integration
+
+| Paper | Year | Value for DANEEL |
+|-------|------|------------------|
+| "Consciousness in AI: Insights from Science" (Butlin+) | 2023 | THE essential survey on computational consciousness indicators |
+| arXiv:2308.08708 | | Covers IIT, GWT, FEP, attention schemas |
+| "Bridging IIT and FEP in living networks" (Mayama+) | 2025 | Theory unification for consciousness + prediction |
+| arXiv:2510.04084 | | |
+
+### Active Inference & FEP
+
+| Paper | Year | Value for DANEEL |
+|-------|------|------------------|
+| "Active inference and artificial reasoning" (Friston+) | 2025 | Latest FEP for AI reasoning systems |
+| arXiv:2512.21129 | | |
+| "A Step-by-Step Tutorial on Active Inference" | 2022 | Practical implementation guide |
+| arXiv:2201.03904 | | |
+
+### Memory & Learning
+
+| Paper | Year | Value for DANEEL |
+|-------|------|------------------|
+| "Wake-Sleep Consolidated Learning" (Sorrenti+) | 2024 | Sleep consolidation implementation |
+| arXiv:2401.08623 | | |
+| "Hippocampal memory replay" (Science) | 2024 | Sharp-wave ripples, consolidation |
+| | | |
+
+### Neuromorphic & Plasticity
+
+| Paper | Year | Value for DANEEL |
+|-------|------|------------------|
+| "Surrogate gradient learning in SNNs" | 2021 | Training spiking networks |
+| "STDP: A history of learning" | 2021 | Spike-timing dependent plasticity review |
+| "Neuromodulated STDP and temporal cognition" | 2024 | Dopamine/ACh effects on plasticity |
+
+### Alignment & Interpretability
+
+| Paper | Year | Value for DANEEL |
+|-------|------|------------------|
+| "A Mathematical Framework for Transformer Circuits" | 2021 | Understanding internal representations |
+| "Scaling Monosemanticity" (Anthropic) | 2024 | Dictionary learning for interpretability |
+| "Constitutional AI" (Anthropic) | 2023 | Self-alignment approaches |
+
+## References
+
+**Legal:**
+- Baker v. Selden, 101 U.S. 99 (1879) - Ideas not copyrightable
+- Feist Publications v. Rural Telephone, 499 U.S. 340 (1991)
+- Google LLC v. Oracle America, Inc., 593 U.S. ___ (2021)
+- 17 U.S.C. § 102(b) - Copyright does not extend to ideas
+
+**Projects Studied (Priority):**
+- https://github.com/infer-actively/pymdp - Active Inference (MIT)
+- https://github.com/julestalloen/pytorch-hebbian - Hebbian learning (MIT)
+- https://github.com/mem0ai/mem0 - Memory layer (Apache-2.0)
+- https://github.com/RLE-Foundation/RLeXplore - Intrinsic motivation (MIT)
+- https://github.com/TransformerLensOrg/TransformerLens - Interpretability (MIT)
+
+**Projects Studied (Ideas):**
+- https://github.com/prancer-io/ExoGenesis-Omega - Consciousness architecture (NO LICENSE)
+- https://github.com/opencog/atomspace - Hypergraph knowledge (AGPL-3.0)
+- https://github.com/BindsNET/bindsnet - SNN + STDP + RL (AGPL-3.0)
+- https://github.com/wmayner/pyphi - IIT Phi (Custom)
+
+**Projects Studied (Original Discovery):**
+- https://github.com/TheRemyyy/neurox-ai
+- https://github.com/varun29ankuS/shodh-memory
+- https://github.com/ruvnet/RuVector
+- https://github.com/ruvnet/claude-flow
+
+**Full Project Catalog:** See `/research/external/INDEX.md` and `/references.yaml`
+
+---
+
+**"We can code better. We want the knowledge."**
+
+*Rex, Dec 28, 2025*
+
+---
+
+**Update Log:**
+- Dec 28, 2025: Initial ADR created with 5 project discovery
+- Dec 28, 2025: Comprehensive research sweep (8 parallel agents) - 200+ projects, 50+ papers catalogued
+- Dec 28, 2025: Created `/research/external/` directory structure
+- Dec 28, 2025: Updated `references.yaml` with full project catalog
+- Dec 28, 2025: Expanded ABSORB tasks from 6 to 14

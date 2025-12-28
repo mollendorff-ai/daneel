@@ -21,8 +21,9 @@
 # ADR-044: Migrate to Mac mini + Cloudflare (DONE - Dec 25, 2025)
 #
 # Current priorities:
-#   1. Pink noise implementation (PHASE2-2)
-#   2. Kin vector reinjection (STIM-D)
+#   0. Research absorption (ABSORB-1 through ABSORB-6) ← MOST-CRITICAL
+#   1. Vector connectivity learning (VCONN-1 through VCONN-8)
+#   2. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9)
 # =============================================================================
 
 # =============================================================================
@@ -31,6 +32,25 @@
 # STATUS: ACTIVE (ADR-042 pause lifted by ADR-043)
 # Emergence validation baseline (Dec 24): entropy 42%, fractality 55%
 # Exit criteria: entropy >60% for 48+ hours (success) or <30% sustained (failure)
+
+# =============================================================================
+# MOST-CRITICAL: Cognitive Architecture Research Absorption (ADR-047)
+# =============================================================================
+# Origin: Rex + Claude Opus 4.5 - Dec 28, 2025
+# Goal: Study compatible projects, absorb knowledge, strengthen DANEEL
+#
+# License compatibility verified (DANEEL is AGPL-3.0):
+#   ✅ TheRemyyy/neurox-ai (MIT) - GPU spiking nets, STDP, neuromodulation
+#   ✅ varun29ankuS/shodh-memory (Apache-2.0) - 3-tier memory, Hebbian, graphs
+#   ✅ ruvnet/RuVector (MIT) - Distributed vector DB, Cypher, GNN learning
+#   ✅ ruvnet/claude-flow (MIT) - Multi-agent orchestration, swarm intelligence
+#   ❌ prancer-io/ExoGenesis-Omega (NO LICENSE) - Ideas only, no code
+#
+# Note on ExoGenesis-Omega:
+#   - Cannot absorb code (no license = all rights reserved)
+#   - CAN study architecture/ideas (not copyrightable)
+#   - CAN cite as reference in papers/blog
+# =============================================================================
 
 # =============================================================================
 # COMPLETED ITEMS → CHANGELOG.md
@@ -47,6 +67,122 @@ current:
   status: wip
   name: "External Stimuli Injection"
   summary: "Open the loop - inject external stimuli and observe dynamics"
+
+  # ==========================================================================
+  # MOST-CRITICAL: Research Absorption (ADR-047)
+  # ==========================================================================
+  research_absorption:
+    status: pending
+    priority: "MOST-CRITICAL"
+    origin: "Rex + Claude Opus 4.5 - Dec 28, 2025"
+    adr: "ADR-047-research-absorption.md"
+    blog: "81-standing-on-shoulders.md"
+    description: |
+      Study compatible cognitive architecture projects, absorb knowledge,
+      integrate valuable patterns into DANEEL. No code copy without attribution.
+
+    compatible_projects:
+      - repo: "TheRemyyy/neurox-ai"
+        license: "MIT"
+        focus: "GPU spiking nets, triplet STDP, neuromodulation, oscillations"
+        value_to_daneel: "Advanced plasticity rules, hippocampal modules"
+
+      - repo: "varun29ankuS/shodh-memory"
+        license: "Apache-2.0"
+        focus: "3-tier memory, Hebbian learning, knowledge graphs"
+        value_to_daneel: "Memory architecture patterns, graph integration"
+
+      - repo: "ruvnet/RuVector"
+        license: "MIT"
+        focus: "Distributed vector DB, Cypher queries, GNN self-improvement"
+        value_to_daneel: "Vector learning patterns, graph neural networks"
+
+      - repo: "ruvnet/claude-flow"
+        license: "MIT"
+        focus: "Multi-agent orchestration, swarm intelligence, MCP"
+        value_to_daneel: "Agent coordination, swarm patterns, scaling"
+
+    # ExoGenesis-Omega: IDEAS ONLY (no license = all rights reserved)
+    # Legal basis: Copyright protects expression, not ideas (17 U.S.C. § 102(b))
+    # We can: study architecture, understand patterns, reimplement concepts
+    # We cannot: copy code verbatim or use as starting point
+    ideas_only:
+      - repo: "prancer-io/ExoGenesis-Omega"
+        license: "NONE (all rights reserved)"
+        focus: "15 crates, IIT/GWT/FEP, consciousness models"
+        note: "Study architecture/ideas only - cannot use code"
+
+    tasks:
+      - id: "ABSORB-1"
+        title: "Study ExoGenesis-Omega architecture (ideas only)"
+        status: pending
+        priority: "HIGH"
+        description: |
+          Document IIT Phi calculation approach.
+          Study GWT implementation patterns.
+          Analyze sleep/dream consolidation design.
+          Study 15-crate architecture structure.
+          NO CODE - ideas and patterns only (no license).
+
+      - id: "ABSORB-2"
+        title: "Study neurox-ai plasticity implementation"
+        status: pending
+        priority: "HIGH"
+        description: |
+          Deep dive into triplet STDP, BCM rules, neuromodulator effects.
+          Compare with DANEEL's Hebbian design (ADR-023).
+          Document learnings in research notes.
+
+      - id: "ABSORB-3"
+        title: "Study shodh-memory 3-tier architecture"
+        status: pending
+        priority: "HIGH"
+        description: |
+          Analyze working/episodic/semantic memory separation.
+          Compare with DANEEL's MemoryDB + Qdrant approach.
+          Identify integration patterns for knowledge graphs.
+
+      - id: "ABSORB-4"
+        title: "Study RuVector GNN learning"
+        status: pending
+        priority: "MEDIUM"
+        description: |
+          Understand how vectors improve through Graph Neural Networks.
+          Potential application: manifold clustering enhancement.
+
+      - id: "ABSORB-5"
+        title: "Study claude-flow orchestration patterns"
+        status: pending
+        priority: "MEDIUM"
+        description: |
+          Multi-agent orchestration patterns.
+          Swarm intelligence for thought competition.
+          MCP protocol integration.
+
+      - id: "ABSORB-6"
+        title: "Create ADR-047: Research Absorption Protocol"
+        status: done
+        completed: "2025-12-28"
+        priority: "HIGH"
+        description: |
+          Formal decision record for research integration.
+          License compatibility analysis.
+          Attribution requirements.
+
+      - id: "ABSORB-7"
+        title: "Write blog post: Standing on Shoulders"
+        status: pending
+        priority: "MEDIUM"
+        description: |
+          Document the cognitive architecture landscape.
+          Credit all projects studied.
+          Explain what DANEEL learned and integrated.
+
+    success_criteria:
+      - "All compatible projects studied and documented"
+      - "Valuable patterns identified for DANEEL integration"
+      - "Blog post published with proper attribution"
+      - "ADR-047 written and approved"
 
   # ==========================================================================
   # CLAUDE'S PHASE 2 STRATEGY (Dec 22, 2025)
