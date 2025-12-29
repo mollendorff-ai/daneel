@@ -1,0 +1,227 @@
+# DANEEL Release Pipeline
+#
+# Multi-architecture builds with MUSL for Linux (fully static binaries).
+# See ADR-050 for rationale (green coding, portability).
+#
+# Targets:
+#   - x86_64-unknown-linux-musl  (static, UPX compressed)
+#   - aarch64-unknown-linux-musl (static, UPX compressed)
+#   - aarch64-apple-darwin       (macOS ARM)
+#   - x86_64-apple-darwin        (macOS Intel)
+#   - x86_64-pc-windows-msvc     (Windows, UPX compressed)
+#
+# Trigger: Tag push (v*)
+# Example: git tag v0.8.0 && git push origin v0.8.0
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  CARGO_TERM_COLOR: always
+  BINARY_NAME: daneel
+
+jobs:
+  # ==========================================================================
+  # Gate: All tests must pass before building release artifacts
+  # ==========================================================================
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-release-test-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Run tests
+        run: cargo test --all-features
+
+      - name: Run THE BOX tests (alignment invariants)
+        run: |
+          cargo test --lib core::laws -- --nocapture
+          cargo test --lib core::invariants -- --nocapture
+
+  # ==========================================================================
+  # Build matrix: 5 platforms, native musl (no Docker)
+  # ==========================================================================
+  build:
+    name: Build ${{ matrix.target }}
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Linux x64 (musl - fully static)
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+            upx: true
+            archive: tar.gz
+
+          # Linux ARM64 (musl - fully static, native ARM runner)
+          - target: aarch64-unknown-linux-musl
+            os: ubuntu-24.04-arm
+            upx: true
+            archive: tar.gz
+
+          # macOS ARM (M1/M2/M3/M4)
+          - target: aarch64-apple-darwin
+            os: macos-14
+            upx: false
+            archive: tar.gz
+
+          # macOS Intel
+          - target: x86_64-apple-darwin
+            os: macos-13
+            upx: false
+            archive: tar.gz
+
+          # Windows x64
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            upx: true
+            archive: zip
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ----------------------------------------------------------------------
+      # Install musl toolchain (Linux only)
+      # ----------------------------------------------------------------------
+      - name: Install musl tools
+        if: contains(matrix.target, 'musl')
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+
+      # ----------------------------------------------------------------------
+      # Install Rust with target
+      # ----------------------------------------------------------------------
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-${{ matrix.target }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}
+
+      # ----------------------------------------------------------------------
+      # Build release binary
+      # ----------------------------------------------------------------------
+      - name: Build release
+        run: cargo build --release --target ${{ matrix.target }}
+
+      # ----------------------------------------------------------------------
+      # UPX compression (Linux + Windows only, ~40-60% size reduction)
+      # macOS: UPX breaks code signing - DO NOT USE
+      # ----------------------------------------------------------------------
+      - name: Install UPX (Linux)
+        if: matrix.upx && contains(matrix.os, 'ubuntu')
+        run: sudo apt-get install -y upx
+
+      - name: Install UPX (Windows)
+        if: matrix.upx && matrix.os == 'windows-latest'
+        run: choco install upx
+
+      - name: Compress with UPX
+        if: matrix.upx
+        shell: bash
+        run: |
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            upx --best --lzma target/${{ matrix.target }}/release/${{ env.BINARY_NAME }}.exe || true
+          else
+            upx --best --lzma target/${{ matrix.target }}/release/${{ env.BINARY_NAME }} || true
+          fi
+
+      # ----------------------------------------------------------------------
+      # Create release archive
+      # ----------------------------------------------------------------------
+      - name: Create archive (Unix)
+        if: matrix.archive == 'tar.gz'
+        run: |
+          cd target/${{ matrix.target }}/release
+          tar -czvf ${{ env.BINARY_NAME }}-${{ matrix.target }}.tar.gz ${{ env.BINARY_NAME }}
+
+      - name: Create archive (Windows)
+        if: matrix.archive == 'zip'
+        shell: pwsh
+        run: |
+          cd target/${{ matrix.target }}/release
+          Compress-Archive -Path ${{ env.BINARY_NAME }}.exe -DestinationPath ${{ env.BINARY_NAME }}-${{ matrix.target }}.zip -Force
+
+      # ----------------------------------------------------------------------
+      # Upload artifact for release job
+      # ----------------------------------------------------------------------
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.BINARY_NAME }}-${{ matrix.target }}
+          path: target/${{ matrix.target }}/release/${{ env.BINARY_NAME }}-${{ matrix.target }}.${{ matrix.archive }}
+
+  # ==========================================================================
+  # Create GitHub Release with all artifacts
+  # ==========================================================================
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List artifacts
+        run: find artifacts -type f
+
+      - name: Generate SHA256 checksums
+        run: |
+          cd artifacts
+          for dir in */; do
+            for file in "$dir"*; do
+              sha256sum "$file" >> ../SHA256SUMS.txt
+            done
+          done
+          echo "=== SHA256 Checksums ==="
+          cat ../SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            artifacts/**/*.tar.gz
+            artifacts/**/*.zip
+            SHA256SUMS.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

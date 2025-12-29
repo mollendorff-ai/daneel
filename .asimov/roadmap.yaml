@@ -828,6 +828,118 @@ current:
       - "K0s/K3s/microk8s (future - Timmy owns their own cluster)"
 
 # =============================================================================
+# IN PROGRESS: Multi-Arch Build & Release (ADR-050)
+# =============================================================================
+# Origin: Rex + Claude Opus 4.5 - Dec 29, 2025
+# Status: IMPLEMENTATION IN PROGRESS
+#
+# DECISION: MUSL for Linux (static linking, zero glibc dependencies)
+# DECISION: Native builds (no Docker/cross-rs) - green coding
+#
+# Target platforms (MUSL for Linux, native for macOS/Windows):
+#   - x86_64-unknown-linux-musl  (ubuntu-latest, UPX: yes)
+#   - aarch64-unknown-linux-musl (ubuntu-24.04-arm, UPX: yes)
+#   - aarch64-apple-darwin       (macos-14, UPX: no - code signing)
+#   - x86_64-apple-darwin        (macos-13, UPX: no - code signing)
+#   - x86_64-pc-windows-msvc     (windows-latest, UPX: yes)
+#
+# Green Coding Justification (ADR-050):
+#   - MUSL static = no runtime deps = faster startup = less CPU
+#   - UPX compression = 40-60% smaller = less bandwidth = less energy
+#   - Native builds = no Docker overhead = less CI compute
+#   - Smaller binaries = less storage = less disk I/O
+#
+# UPX Compression Matrix:
+#   - Linux x64 musl:   ✅ apt-get install upx
+#   - Linux ARM64 musl: ✅ apt-get install upx (native ARM runner)
+#   - Windows x64:      ✅ choco install upx
+#   - macOS (both):     ❌ Breaks code signing - DO NOT USE
+# =============================================================================
+multi_arch_build:
+  status: in_progress
+  priority: "HIGH"
+  origin: "Rex + Claude Opus 4.5 - Dec 29, 2025"
+  adr: "ADR-050-multi-arch-release.md"
+  description: |
+    Multi-architecture builds via GitHub Actions.
+    MUSL for Linux (fully static, portable).
+    Native builds (no Docker) - green coding.
+    UPX compression for Linux and Windows.
+
+  tasks:
+    - id: "BUILD-1"
+      title: "Create .github/workflows/release.yml"
+      status: done
+      completed: "2025-12-29"
+      priority: "HIGH"
+      description: |
+        Release workflow with native MUSL builds:
+        - Trigger: tag push (v*)
+        - Jobs: test → build (matrix) → release
+        - Linux: native musl-tools (apt-get install musl-tools)
+        - ARM64: ubuntu-24.04-arm runner (native, no cross-compile)
+        - macOS: macos-14 (ARM), macos-13 (Intel)
+        - Windows: windows-latest
+        - UPX compression for Linux + Windows
+        - SHA256 checksums
+        - softprops/action-gh-release@v2
+      files: [".github/workflows/release.yml"]
+
+    - id: "BUILD-1b"
+      title: "Create ADR-050"
+      status: done
+      completed: "2025-12-29"
+      priority: "HIGH"
+      description: |
+        ADR documenting multi-arch release strategy.
+        Green coding justification included.
+      files: ["docs/adr/ADR-050-multi-arch-release.md"]
+
+    - id: "BUILD-2"
+      title: "Update Makefile with local build targets"
+      status: pending
+      priority: "MEDIUM"
+      description: |
+        Add targets for local multi-arch builds:
+        - make build-musl (x86_64-unknown-linux-musl)
+        - make build-compressed (musl + UPX)
+        - make dist (create release archives)
+        No cross-rs needed - native toolchain only.
+      files: ["Makefile"]
+
+    - id: "BUILD-3"
+      title: "Test release workflow"
+      status: pending
+      priority: "HIGH"
+      description: |
+        Create test tag to trigger workflow:
+        git tag v0.8.1-rc1 && git push origin v0.8.1-rc1
+        Verify all 5 binaries build and upload correctly.
+        Test Linux binary on Alpine (musl validation).
+
+    - id: "BUILD-4"
+      title: "Update ADRs.yaml index"
+      status: pending
+      priority: "LOW"
+      description: "Add ADR-050 to .asimov/ADRs.yaml index"
+      files: [".asimov/ADRs.yaml"]
+
+  success_criteria:
+    - "✅ release.yml created"
+    - "✅ ADR-050 documents green coding rationale"
+    - "Linux binaries are fully static (ldd shows 'not a dynamic executable')"
+    - "All 5 platforms build successfully"
+    - "UPX compresses Linux and Windows binaries"
+    - "Checksums generated and uploaded"
+    - "GitHub release created with all artifacts"
+    - "Binaries work on Alpine Linux (musl validation)"
+
+  reference_files:
+    forge_demo_release: "../forge-demo/.github/workflows/release.yml"
+    asimov_release: "../asimov/.github/workflows/release.yml"
+    green_software: "https://greensoftware.foundation/"
+
+# =============================================================================
 # BACKLOG: Forge Deployment & API (Rex's Domain)
 # =============================================================================
 
