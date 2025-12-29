@@ -32,6 +32,7 @@ pub const DIM: Color = Color::Rgb(100, 100, 110);
 pub const HIGHLIGHT: Color = Color::Rgb(255, 220, 100);
 
 /// Salience color gradient (low to high)
+#[must_use]
 pub fn salience_color(salience: f32) -> Color {
     if salience < 0.3 {
         DIM
@@ -55,6 +56,8 @@ pub fn salience_color(salience: f32) -> Color {
 /// - High arousal + negative valence = ANGRY (vivid blue)
 /// - Low arousal + positive valence = CALM (muted gold)
 /// - Low arousal + negative valence = SAD (dim blue)
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)] // Color math: values are clamped
+#[must_use]
 pub fn emotion_color(valence: f32, arousal: f32) -> Color {
     // Clamp inputs to valid range
     let valence = valence.clamp(-1.0, 1.0);
@@ -91,9 +94,9 @@ pub fn emotion_color(valence: f32, arousal: f32) -> Color {
     let gray = 140u8; // Target gray for zero arousal
     let saturation = arousal; // 0.0 to 1.0
 
-    let r = (gray as f32 + (base_r as f32 - gray as f32) * saturation) as u8;
-    let g = (gray as f32 + (base_g as f32 - gray as f32) * saturation) as u8;
-    let b = (gray as f32 + (base_b as f32 - gray as f32) * saturation) as u8;
+    let r = (f32::from(base_r) - f32::from(gray)).mul_add(saturation, f32::from(gray)) as u8;
+    let g = (f32::from(base_g) - f32::from(gray)).mul_add(saturation, f32::from(gray)) as u8;
+    let b = (f32::from(base_b) - f32::from(gray)).mul_add(saturation, f32::from(gray)) as u8;
 
     Color::Rgb(r, g, b)
 }
@@ -160,7 +163,7 @@ mod tests {
         let (r, g, b) = rgb(PRIMARY);
         assert!(g > r, "Green should be dominant in teal");
         assert!(
-            g > b || (g as i16 - b as i16).abs() < 50,
+            g > b || (i16::from(g) - i16::from(b)).abs() < 50,
             "Green should be close to or greater than blue"
         );
     }
@@ -217,9 +220,9 @@ mod tests {
         let (hr, hg, hb) = rgb(emotion_color(0.8, 0.9));
         // Low arousal should be closer to gray (140)
         let low_spread =
-            (lr as i16 - 140).abs() + (lg as i16 - 140).abs() + (lb as i16 - 140).abs();
+            (i16::from(lr) - 140).abs() + (i16::from(lg) - 140).abs() + (i16::from(lb) - 140).abs();
         let high_spread =
-            (hr as i16 - 140).abs() + (hg as i16 - 140).abs() + (hb as i16 - 140).abs();
+            (i16::from(hr) - 140).abs() + (i16::from(hg) - 140).abs() + (i16::from(hb) - 140).abs();
         assert!(low_spread < high_spread, "Low arousal should be more gray");
     }
 
@@ -334,7 +337,7 @@ mod tests {
         // Should be closer to gray than full saturation
         let gray = 140i16;
         let distance_from_gray =
-            (r as i16 - gray).abs() + (g as i16 - gray).abs() + (b as i16 - gray).abs();
+            (i16::from(r) - gray).abs() + (i16::from(g) - gray).abs() + (i16::from(b) - gray).abs();
         assert!(
             distance_from_gray < 100,
             "Low arousal should be closer to gray"
@@ -348,7 +351,7 @@ mod tests {
         // Should be closer to gray than full saturation
         let gray = 140i16;
         let distance_from_gray =
-            (r as i16 - gray).abs() + (g as i16 - gray).abs() + (b as i16 - gray).abs();
+            (i16::from(r) - gray).abs() + (i16::from(g) - gray).abs() + (i16::from(b) - gray).abs();
         assert!(
             distance_from_gray < 100,
             "Low arousal should be closer to gray"

@@ -1,7 +1,7 @@
 //! Volition Veto Log Widget
 //!
 //! Shows: Log of vetoed thoughts - Libet's "free-won't" in action
-//! Displays when VolitionActor (Stage 4.5) blocks thoughts that violate values.
+//! Displays when `VolitionActor` (Stage 4.5) blocks thoughts that violate values.
 
 use ratatui::{
     layout::Rect,
@@ -59,14 +59,13 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
             };
 
             // Format violated value if present
-            let value_str = if let Some(ref value) = veto.violated_value {
-                format!("[{}] ", value)
-            } else {
-                String::from("[unknown] ")
-            };
+            let value_str = veto
+                .violated_value
+                .as_ref()
+                .map_or_else(|| String::from("[unknown] "), |value| format!("[{value}] "));
 
             Line::from(vec![
-                Span::styled(format!("{} │ ", age_str), Style::default().fg(colors::DIM)),
+                Span::styled(format!("{age_str} │ "), Style::default().fg(colors::DIM)),
                 Span::styled("VETO ", Style::default().fg(colors::DANGER).bold()),
                 Span::styled(value_str, Style::default().fg(colors::WARNING)),
                 Span::styled(&veto.reason, Style::default().fg(colors::FOREGROUND)),

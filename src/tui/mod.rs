@@ -63,17 +63,18 @@ pub struct ThoughtUpdate {
     /// Total candidates evaluated across ALL dreams
     /// TUI-VIS-4: For efficiency tracking (strengthened / candidates)
     pub cumulative_dream_candidates: u64,
-    /// Veto event if one occurred this cycle: (reason, violated_value)
+    /// Veto event if one occurred this cycle: (reason, `violated_value`)
     /// TUI-VIS-6: Volition Veto Log
     pub veto_occurred: Option<(String, Option<String>)>,
 }
 
 impl ThoughtUpdate {
-    /// Convert a CycleResult into a ThoughtUpdate for the TUI
+    /// Convert a `CycleResult` into a `ThoughtUpdate` for the TUI
     ///
     /// Uses real salience data from the cognitive loop.
     /// Memory counts should be queried from Qdrant and passed separately.
     #[allow(clippy::too_many_arguments)]
+    #[must_use]
     pub fn from_cycle_result(
         result: &CycleResult,
         memory_count: u64,
@@ -117,6 +118,7 @@ impl ThoughtUpdate {
             "emotion",
             "sensory",
         ];
+        #[allow(clippy::cast_possible_truncation)] // Modulo keeps index in bounds
         let window = stage_names[result.cycle_number as usize % stage_names.len()].to_string();
 
         Self {
@@ -316,6 +318,9 @@ fn simulate_thought(app: &mut App) {
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
+#[allow(clippy::cast_precision_loss)] // Test calculations
+#[allow(clippy::cast_possible_truncation)] // Test indices
 mod tests {
     use super::*;
     use crate::core::cognitive_loop::{CycleResult, StageDurations};

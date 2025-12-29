@@ -1,10 +1,10 @@
 //! Thought Assembly Actor Types
 //!
-//! Message and response types for the ThoughtAssemblyActor.
+//! Message and response types for the `ThoughtAssemblyActor`.
 //!
 //! # TMI Concept: "Construção do Pensamento" (Thought Construction)
 //!
-//! The ThoughtAssemblyActor is the final stage before consciousness. It takes
+//! The `ThoughtAssemblyActor` is the final stage before consciousness. It takes
 //! raw content (from competition) and emotional state (salience) and assembles
 //! them into coherent Thought objects. This is where pre-linguistic patterns
 //! become structured cognitive units.
@@ -20,7 +20,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use thiserror::Error;
 
-/// Messages that can be sent to the ThoughtAssemblyActor
+/// Messages that can be sent to the `ThoughtAssemblyActor`
 #[derive(Debug)]
 pub enum ThoughtMessage {
     /// Assemble a single thought from content and emotion
@@ -58,7 +58,7 @@ pub enum ThoughtMessage {
     },
 }
 
-/// Responses from the ThoughtAssemblyActor
+/// Responses from the `ThoughtAssemblyActor`
 #[derive(Debug, Clone, PartialEq)]
 pub enum ThoughtResponse {
     /// Single thought successfully assembled
@@ -122,7 +122,7 @@ impl AssemblyRequest {
     /// * `content` - The pre-linguistic content to assemble
     /// * `salience` - Emotional/importance weighting
     #[must_use]
-    pub fn new(content: Content, salience: SalienceScore) -> Self {
+    pub const fn new(content: Content, salience: SalienceScore) -> Self {
         Self {
             content,
             salience,
@@ -137,7 +137,7 @@ impl AssemblyRequest {
     /// This creates a thought chain, allowing thoughts to reference
     /// their causal history.
     #[must_use]
-    pub fn with_parent(mut self, parent_id: ThoughtId) -> Self {
+    pub const fn with_parent(mut self, parent_id: ThoughtId) -> Self {
         self.parent_id = Some(parent_id);
         self
     }
@@ -154,7 +154,7 @@ impl AssemblyRequest {
 
     /// Set the assembly strategy
     #[must_use]
-    pub fn with_strategy(mut self, strategy: AssemblyStrategy) -> Self {
+    pub const fn with_strategy(mut self, strategy: AssemblyStrategy) -> Self {
         self.strategy = strategy;
         self
     }
@@ -180,7 +180,7 @@ pub enum AssemblyStrategy {
 }
 
 /// Errors that can occur during thought assembly
-#[derive(Debug, Clone, Error, PartialEq)]
+#[derive(Debug, Clone, Error, PartialEq, Eq)]
 pub enum AssemblyError {
     /// Attempted to assemble empty content
     #[error("Cannot assemble empty content")]
@@ -222,7 +222,7 @@ pub enum AssemblyError {
 /// bounded size to prevent unbounded growth.
 #[derive(Debug, Clone)]
 pub struct ThoughtCache {
-    /// Internal storage mapping ThoughtId to Thought
+    /// Internal storage mapping `ThoughtId` to Thought
     cache: HashMap<ThoughtId, Thought>,
 
     /// Maximum number of thoughts to cache
@@ -283,7 +283,7 @@ impl ThoughtCache {
     /// Evict the oldest thought from the cache
     ///
     /// This is called automatically when the cache reaches capacity.
-    /// ADR-049: Empty insertion_order branch cannot happen (called only when full)
+    /// ADR-049: Empty `insertion_order` branch cannot happen (called only when full)
     #[cfg_attr(coverage_nightly, coverage(off))]
     fn evict_oldest(&mut self) {
         if let Some(oldest_id) = self.insertion_order.first().copied() {
@@ -478,23 +478,23 @@ mod tests {
     #[test]
     fn assembly_error_display() {
         let error = AssemblyError::EmptyContent;
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("empty content"));
 
         let error = AssemblyError::InvalidSalience {
             reason: "negative values".to_string(),
         };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("Invalid salience"));
         assert!(message.contains("negative values"));
 
         let thought_id = ThoughtId::new();
         let error = AssemblyError::ThoughtNotFound { thought_id };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("not found"));
 
         let error = AssemblyError::ChainTooDeep { max_depth: 10 };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("too deep"));
         assert!(message.contains("10"));
     }
@@ -552,7 +552,7 @@ mod tests {
         let error = AssemblyError::AssemblyFailed {
             reason: "timeout occurred".to_string(),
         };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("Assembly failed"));
         assert!(message.contains("timeout occurred"));
     }

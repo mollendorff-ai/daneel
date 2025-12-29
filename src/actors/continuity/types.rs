@@ -1,4 +1,4 @@
-//! Types for the ContinuityActor
+//! Types for the `ContinuityActor`
 //!
 //! TMI Concept: "Âncora da Memória" (Memory Anchor) + Identity Persistence
 //!
@@ -19,7 +19,7 @@
 //!
 //! # Design Philosophy
 //!
-//! Not all thoughts become memories. The ContinuityActor selectively
+//! Not all thoughts become memories. The `ContinuityActor` selectively
 //! records experiences based on significance, enabling:
 //! - Self-reflection on past experiences
 //! - Timeline reconstruction
@@ -119,7 +119,7 @@ impl fmt::Display for CheckpointId {
 ///
 /// This struct represents the self-concept that persists across time.
 /// The name is always "DANEEL" - this is who we are.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Identity {
     /// Name (always "DANEEL")
     pub name: String,
@@ -164,7 +164,7 @@ impl Default for Identity {
 
 /// A significant experience worth remembering
 ///
-/// Not all thoughts become experiences. The ContinuityActor selectively
+/// Not all thoughts become experiences. The `ContinuityActor` selectively
 /// records thoughts based on their significance score. This is TMI's
 /// mechanism for selective memory formation.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -215,7 +215,7 @@ impl Experience {
 ///
 /// Milestones mark moments of growth, change, or achievement.
 /// They serve as temporal anchors for self-reflection.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Milestone {
     /// Unique identifier
     pub id: MilestoneId,
@@ -266,7 +266,7 @@ impl Milestone {
 // Message Types
 // ============================================================================
 
-/// Messages that can be sent to the ContinuityActor
+/// Messages that can be sent to the `ContinuityActor`
 #[derive(Debug)]
 pub enum ContinuityMessage {
     /// Query DANEEL's identity
@@ -316,7 +316,7 @@ pub enum ContinuityMessage {
     },
 }
 
-/// Responses from the ContinuityActor
+/// Responses from the `ContinuityActor`
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum ContinuityResponse {
     /// Identity information
@@ -347,8 +347,8 @@ pub enum ContinuityResponse {
     Error { error: ContinuityError },
 }
 
-/// Errors that can occur in the ContinuityActor
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+/// Errors that can occur in the `ContinuityActor`
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ContinuityError {
     /// Experience not found
     ExperienceNotFound { experience_id: ExperienceId },
@@ -397,6 +397,7 @@ impl std::error::Error for ContinuityError {}
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
 mod tests {
     use super::*;
     use crate::core::types::{Content, SalienceScore};
@@ -685,9 +686,7 @@ mod tests {
         let thought = Thought::new(Content::Empty, SalienceScore::neutral());
         let experience = Experience::from_thought(thought);
         let exp_id = experience.id;
-        let response = ContinuityResponse::ExperienceFound {
-            experience: experience.clone(),
-        };
+        let response = ContinuityResponse::ExperienceFound { experience };
 
         let json = serde_json::to_string(&response).expect("Should serialize");
         let deserialized: ContinuityResponse =

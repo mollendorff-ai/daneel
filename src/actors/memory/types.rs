@@ -1,12 +1,12 @@
 //! Memory Actor Types
 //!
-//! Message and response types for the MemoryActor.
+//! Message and response types for the `MemoryActor`.
 
 use crate::core::types::{Content, SalienceScore, Window, WindowId};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-/// Messages that can be sent to the MemoryActor
+/// Messages that can be sent to the `MemoryActor`
 #[derive(Debug)]
 pub enum MemoryMessage {
     /// Open a new memory window
@@ -54,7 +54,7 @@ pub enum MemoryMessage {
     },
 }
 
-/// Responses from the MemoryActor
+/// Responses from the `MemoryActor`
 #[derive(Debug, Clone, PartialEq)]
 pub enum MemoryResponse {
     /// Window successfully opened
@@ -99,7 +99,7 @@ pub struct StoreRequest {
 impl StoreRequest {
     /// Create a new store request
     #[must_use]
-    pub fn new(window_id: WindowId, content: Content) -> Self {
+    pub const fn new(window_id: WindowId, content: Content) -> Self {
         Self {
             window_id,
             content,
@@ -109,7 +109,7 @@ impl StoreRequest {
 
     /// Add salience score to the request
     #[must_use]
-    pub fn with_salience(mut self, salience: SalienceScore) -> Self {
+    pub const fn with_salience(mut self, salience: SalienceScore) -> Self {
         self.salience = Some(salience);
         self
     }
@@ -169,7 +169,7 @@ impl Default for RecallQuery {
 }
 
 /// Memory actor errors
-#[derive(Debug, Clone, Error, PartialEq)]
+#[derive(Debug, Clone, Error, PartialEq, Eq)]
 pub enum MemoryError {
     /// Window not found
     #[error("Window not found: {window_id}")]
@@ -250,7 +250,7 @@ mod tests {
     fn memory_error_display() {
         let window_id = WindowId::new();
         let error = MemoryError::WindowNotFound { window_id };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("not found"));
     }
 
@@ -266,14 +266,14 @@ mod tests {
     fn memory_error_window_already_closed_display() {
         let window_id = WindowId::new();
         let error = MemoryError::WindowAlreadyClosed { window_id };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("already closed"));
     }
 
     #[test]
     fn memory_error_bounded_memory_exceeded_display() {
         let error = MemoryError::BoundedMemoryExceeded { max: 10 };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("maximum"));
         assert!(message.contains("10"));
     }
@@ -281,7 +281,7 @@ mod tests {
     #[test]
     fn memory_error_bounded_memory_insufficient_display() {
         let error = MemoryError::BoundedMemoryInsufficient { min: 2 };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("minimum"));
         assert!(message.contains('2'));
     }
@@ -291,7 +291,7 @@ mod tests {
         let error = MemoryError::InvalidSalience {
             reason: "out of range".to_string(),
         };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("Invalid salience"));
         assert!(message.contains("out of range"));
     }
@@ -397,14 +397,14 @@ mod tests {
         let (tx, _rx) = ractor::concurrency::oneshot();
         let reply = ractor::RpcReplyPort::from(tx);
         let msg = MemoryMessage::OpenWindow { label: None, reply };
-        let debug_str = format!("{:?}", msg);
+        let debug_str = format!("{msg:?}");
         assert!(debug_str.contains("OpenWindow"));
     }
 
     #[test]
     fn memory_response_debug() {
         let response = MemoryResponse::WindowCount { count: 5 };
-        let debug_str = format!("{:?}", response);
+        let debug_str = format!("{response:?}");
         assert!(debug_str.contains("WindowCount"));
         assert!(debug_str.contains('5'));
     }

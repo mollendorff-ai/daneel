@@ -96,7 +96,8 @@ pub enum ResurfacingTrigger {
 }
 
 impl ResurfacingTrigger {
-    pub fn as_str(&self) -> &'static str {
+    #[must_use]
+    pub const fn as_str(&self) -> &'static str {
         match self {
             Self::Similarity => "similarity",
             Self::DreamReplay => "dream replay",
@@ -113,7 +114,7 @@ pub struct FractalityMetrics {
     pub inter_arrival_sigma: f32,
     /// Sigma at boot time for comparison
     pub boot_sigma: f32,
-    /// Burst ratio: max_gap / mean_gap (>1 = clustering detected)
+    /// Burst ratio: `max_gap` / `mean_gap` (>1 = clustering detected)
     pub burst_ratio: f32,
     /// Run length entropy: Shannon entropy of consecutive similar saliences
     pub run_entropy: f32,
@@ -138,7 +139,8 @@ pub enum ThoughtStatus {
 }
 
 impl ThoughtStatus {
-    pub fn as_str(&self) -> &'static str {
+    #[must_use]
+    pub const fn as_str(&self) -> &'static str {
         match self {
             Self::Processing => "PROCESSING",
             Self::Salient => "SALIENT",
@@ -316,6 +318,7 @@ impl Default for App {
 }
 
 impl App {
+    #[must_use]
     pub fn new() -> Self {
         let now = Instant::now();
         Self {
@@ -358,6 +361,7 @@ impl App {
     }
 
     /// Get uptime as a formatted string
+    #[must_use]
     pub fn uptime_string(&self) -> String {
         let elapsed = self.start_time.elapsed();
         let hours = elapsed.as_secs() / 3600;
@@ -367,12 +371,14 @@ impl App {
     }
 
     /// Get active memory window count
+    #[must_use]
     pub fn active_window_count(&self) -> usize {
         self.memory_windows.iter().filter(|w| w.active).count()
     }
 
     /// Add a new thought to the stream
     /// ADR-049: Multiple branch conditions for capacity and timing
+    #[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn add_thought(
         &mut self,
@@ -424,12 +430,12 @@ impl App {
         }
 
         // Update entropy every 5 thoughts
-        if self.thought_count % 5 == 0 {
+        if self.thought_count.is_multiple_of(5) {
             self.update_entropy();
         }
 
         // FRAC-3: Update fractality metrics every 10 thoughts
-        if self.thought_count % 10 == 0 {
+        if self.thought_count.is_multiple_of(10) {
             self.update_fractality();
         }
     }
@@ -465,15 +471,21 @@ impl App {
     }
 
     /// Get current philosophy quote
+    #[must_use]
     pub fn current_quote(&self) -> &'static str {
         PHILOSOPHY_QUOTES[self.quote_index]
     }
 
     /// Update resurfacing count by removing events older than 60 seconds
+    ///
+    /// # Panics
+    ///
+    /// Never panics - 60s subtraction always succeeds for `Instant::now()`.
+    ///
     /// ADR-049: Loop exit branch difficult to test
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn update_resurfacing(&mut self) {
-        let cutoff = Instant::now() - Duration::from_secs(60);
+        let cutoff = Instant::now().checked_sub(Duration::from_secs(60)).unwrap();
 
         // Remove old events
         while let Some(&timestamp) = self.resurfacing_events.front() {
@@ -491,16 +503,14 @@ impl App {
     /// Check if resurfacing is currently active (happened in last 2 seconds) for glow effect
     /// ADR-049: Timing-dependent branch
     #[cfg_attr(coverage_nightly, coverage(off))]
+    #[must_use]
     pub fn is_resurfacing_active(&self) -> bool {
-        if let Some(last) = self.last_resurfacing {
-            last.elapsed() < Duration::from_secs(2)
-        } else {
-            false
-        }
+        self.last_resurfacing
+            .is_some_and(|last| last.elapsed() < Duration::from_secs(2))
     }
 
     /// Handle keyboard input
-    pub fn handle_key(&mut self, key: crossterm::event::KeyCode) {
+    pub const fn handle_key(&mut self, key: crossterm::event::KeyCode) {
         use crossterm::event::KeyCode;
         match key {
             KeyCode::Char('q') => self.should_quit = true,
@@ -576,8 +586,7 @@ impl App {
                 .iter()
                 .enumerate()
                 .max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal))
-                .map(|(idx, _)| idx)
-                .unwrap_or(0);
+                .map_or(0, |(idx, _)| idx);
 
             self.stream_competition.last_update = Instant::now();
         }
@@ -586,18 +595,20 @@ impl App {
     /// Calculate Cognitive Diversity Index using TMI-aligned composite salience (ADR-041)
     ///
     /// Computes TMI composite salience emphasizing emotional intensity:
-    /// - emotional_intensity = |valence| × arousal (PRIMARY per TMI/Cury)
-    /// - tmi_composite = emotional_intensity × 0.4 + cognitive_salience × 0.6
+    /// - `emotional_intensity` = |valence| × arousal (PRIMARY per TMI/Cury)
+    /// - `tmi_composite` = `emotional_intensity` × 0.4 + `cognitive_salience` × 0.6
     ///
     /// Bins into 5 categorical cognitive states and computes Shannon entropy:
-    /// H = -Σ(p_i * log2(p_i))
+    /// H = -`Σ(p_i` * `log2(p_i)`)
     ///
     /// Higher entropy = more varied/emergent thinking (diverse cognitive states)
     /// Lower entropy = more repetitive/clockwork patterns (stuck in one state)
     ///
     /// Returns entropy in bits (0.0 to log2(5) ≈ 2.32)
     /// ADR-049: Empty bin branch in entropy loop
+    #[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable
     #[cfg_attr(coverage_nightly, coverage(off))]
+    #[must_use]
     pub fn calculate_entropy(&self) -> f32 {
         if self.thoughts.is_empty() {
             return 0.0;
@@ -609,8 +620,9 @@ impl App {
             // TMI composite: emotional_intensity (40%) + cognitive_salience (60%)
             // emotional_intensity = |valence| × arousal (PRIMARY per TMI)
             let emotional_intensity = thought.valence.abs() * thought.arousal;
-            let tmi_composite =
-                (emotional_intensity * 0.4 + thought.salience * 0.6).clamp(0.0, 1.0);
+            let tmi_composite = emotional_intensity
+                .mul_add(0.4, thought.salience * 0.6)
+                .clamp(0.0, 1.0);
 
             // Bin into 5 categorical levels (ADR-041)
             let bin_idx = match tmi_composite {
@@ -657,6 +669,8 @@ impl App {
     /// - EMERGENT (>70%): High diversity, varied cognitive states
     /// - BALANCED (40-70%): Healthy mix of states
     /// - CLOCKWORK (<40%): Repetitive, stuck in few states
+    #[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable
+    #[must_use]
     pub fn entropy_description(&self) -> &'static str {
         // Max possible entropy for 5 categorical bins: log2(5) ≈ 2.32
         let max_entropy = (COGNITIVE_DIVERSITY_BINS as f32).log2();
@@ -679,7 +693,7 @@ impl App {
     ///
     /// Computes proxy measures for fractality:
     /// - Inter-arrival σ (standard deviation of time gaps)
-    /// - Burst ratio (max_gap / mean_gap)
+    /// - Burst ratio (`max_gap` / `mean_gap`)
     /// - Fractality score (normalized composite)
     ///
     /// ADR-049: Edge case branches for zero mean and history length
@@ -693,9 +707,10 @@ impl App {
         let times: Vec<f32> = self
             .inter_arrival_times
             .iter()
-            .map(|d| d.as_secs_f32())
+            .map(std::time::Duration::as_secs_f32)
             .collect();
 
+        #[allow(clippy::cast_precision_loss)] // Inter-arrival times won't be huge
         let n = times.len() as f32;
         let mean = times.iter().sum::<f32>() / n;
         let variance = times.iter().map(|t| (t - mean).powi(2)).sum::<f32>() / n;
@@ -734,6 +749,7 @@ impl App {
     }
 
     /// Get fractality description: "EMERGENT", "BALANCED", or "CLOCKWORK"
+    #[must_use]
     pub fn fractality_description(&self) -> &'static str {
         if self.fractality.fractality_score > 0.6 {
             "EMERGENT"
@@ -777,13 +793,21 @@ impl App {
     }
 
     /// Get the most recent resurfacing event
+    #[must_use]
     pub fn last_resurfacing_event(&self) -> Option<&ResurfacingEvent> {
         self.resurfacing_log.back()
     }
 
     /// Get resurfacing events from the last N seconds
+    ///
+    /// # Panics
+    ///
+    /// Panics if `seconds` duration subtraction from `Instant::now()` fails (extremely unlikely).
+    #[must_use]
     pub fn recent_resurfacing_events(&self, seconds: u64) -> Vec<&ResurfacingEvent> {
-        let cutoff = Instant::now() - Duration::from_secs(seconds);
+        let cutoff = Instant::now()
+            .checked_sub(Duration::from_secs(seconds))
+            .unwrap();
         self.resurfacing_log
             .iter()
             .filter(|e| e.timestamp >= cutoff)
@@ -791,9 +815,11 @@ impl App {
     }
 }
 
-/// ADR-049: Test modules excluded from coverage
+// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
+#[allow(clippy::cast_precision_loss, clippy::cast_sign_loss)] // Test calculations
 mod tests {
     use super::*;
     use crossterm::event::KeyCode;
@@ -881,8 +907,7 @@ mod tests {
         let uptime = app.uptime_string();
         // Should be in HH:MM:SS format
         assert!(uptime.contains(':'));
-        let parts: Vec<&str> = uptime.split(':').collect();
-        assert_eq!(parts.len(), 3);
+        assert_eq!(uptime.split(':').count(), 3);
     }
 
     // =========================================================================
@@ -966,7 +991,7 @@ mod tests {
                 0.5,
                 0.0,
                 0.5,
-                format!("window_{}", i),
+                format!("window_{i}"),
                 ThoughtStatus::Processing,
             );
         }
@@ -1475,7 +1500,7 @@ mod tests {
         assert_eq!(app.cumulative_dream_candidates, 100);
 
         // Verify values persist across clones
-        let cloned_app = app.clone();
+        let cloned_app = app;
         assert_eq!(cloned_app.cumulative_dream_strengthened, 42);
         assert_eq!(cloned_app.cumulative_dream_candidates, 100);
     }
@@ -1610,7 +1635,7 @@ mod tests {
 
         // Add MAX_VETOES + 10 entries
         for i in 0..60 {
-            app.add_veto(format!("Veto {}", i), Some(format!("value_{}", i)));
+            app.add_veto(format!("Veto {i}"), Some(format!("value_{i}")));
         }
 
         // Queue should be capped at MAX_VETOES (50)
@@ -1633,12 +1658,12 @@ mod tests {
 
         // Add vetoes in sequence
         for i in 0..5 {
-            app.add_veto(format!("Veto {}", i), None);
+            app.add_veto(format!("Veto {i}"), None);
         }
 
         // Verify chronological order (oldest to newest)
         for i in 0..5 {
-            assert_eq!(app.vetoes[i].reason, format!("Veto {}", i));
+            assert_eq!(app.vetoes[i].reason, format!("Veto {i}"));
         }
     }
 
@@ -1733,11 +1758,10 @@ mod tests {
         assert_eq!(veto.violated_value, Some("transparency".to_string()));
 
         // Format check: violated value should be presentable
-        let value_str = if let Some(ref value) = veto.violated_value {
-            format!("[{}] ", value)
-        } else {
-            String::from("[unknown] ")
-        };
+        let value_str = veto
+            .violated_value
+            .as_ref()
+            .map_or_else(|| String::from("[unknown] "), |value| format!("[{value}] "));
         assert_eq!(value_str, "[transparency] ");
     }
 
@@ -1748,11 +1772,10 @@ mod tests {
         app.add_veto("Generic violation".to_string(), None);
 
         let veto = &app.vetoes[0];
-        let value_str = if let Some(ref value) = veto.violated_value {
-            format!("[{}] ", value)
-        } else {
-            String::from("[unknown] ")
-        };
+        let value_str = veto
+            .violated_value
+            .as_ref()
+            .map_or_else(|| String::from("[unknown] "), |value| format!("[{value}] "));
         assert_eq!(value_str, "[unknown] ");
     }
 
@@ -1770,7 +1793,7 @@ mod tests {
 
         // All history arrays should be empty
         assert_eq!(competition.history.len(), 9);
-        assert!(competition.history.iter().all(|h| h.is_empty()));
+        assert!(competition.history.iter().all(std::vec::Vec::is_empty));
 
         // Dominant stream should start at 0
         assert_eq!(competition.dominant_stream, 0);
@@ -1820,9 +1843,7 @@ mod tests {
             app.update_stream_competition(stage, 0.9);
             assert!(
                 app.stream_competition.activity[expected_idx] > 0.0,
-                "Stage '{}' should map to index {}",
-                stage,
-                expected_idx
+                "Stage '{stage}' should map to index {expected_idx}"
             );
         }
     }
@@ -1932,7 +1953,7 @@ mod tests {
         app.decay_stream_competition(Duration::from_secs(1));
 
         // Should be 0.95^1 = 0.95
-        let expected = 0.95_f32.powf(1.0);
+        let expected = 0.95_f32.powi(1);
         assert!((app.stream_competition.activity[0] - expected).abs() < 0.01);
     }
 
@@ -1945,7 +1966,7 @@ mod tests {
         app.decay_stream_competition(Duration::from_secs(2));
 
         // Should be 0.95^2 ≈ 0.9025
-        let expected = 0.95_f32.powf(2.0);
+        let expected = 0.95_f32.powi(2);
         assert!((app.stream_competition.activity[0] - expected).abs() < 0.01);
     }
 
@@ -1956,7 +1977,8 @@ mod tests {
         app.stream_competition.activity[5] = 0.3;
 
         // Set last_update to more than 1 second ago to trigger history update
-        app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+        app.stream_competition.last_update =
+            Instant::now().checked_sub(Duration::from_secs(2)).unwrap();
 
         // Decay should update history
         app.decay_stream_competition(Duration::from_millis(100));
@@ -1973,7 +1995,8 @@ mod tests {
 
         // Force history updates by repeatedly setting last_update in the past
         for _ in 0..25 {
-            app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+            app.stream_competition.last_update =
+                Instant::now().checked_sub(Duration::from_secs(2)).unwrap();
             app.decay_stream_competition(Duration::from_millis(100));
         }
 
@@ -1991,7 +2014,8 @@ mod tests {
         app.stream_competition.activity[5] = 0.5;
 
         // Trigger dominant stream update
-        app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+        app.stream_competition.last_update =
+            Instant::now().checked_sub(Duration::from_secs(2)).unwrap();
         app.decay_stream_competition(Duration::from_millis(100));
 
         // Window 2 should be dominant
@@ -2007,7 +2031,8 @@ mod tests {
         app.stream_competition.activity[7] = 0.8;
 
         // Trigger dominant stream update
-        app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+        app.stream_competition.last_update =
+            Instant::now().checked_sub(Duration::from_secs(2)).unwrap();
         app.decay_stream_competition(Duration::from_millis(100));
 
         // Should pick last one with max value (index 7) due to max_by behavior
@@ -2024,7 +2049,8 @@ mod tests {
         }
 
         // Trigger dominant stream update
-        app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+        app.stream_competition.last_update =
+            Instant::now().checked_sub(Duration::from_secs(2)).unwrap();
         app.decay_stream_competition(Duration::from_millis(100));
 
         // Should pick last window (index 8) when all are equal due to max_by behavior
@@ -2095,7 +2121,8 @@ mod tests {
         assert!(app.stream_competition.activity[5] > 0.0);
 
         // Apply decay
-        app.stream_competition.last_update = Instant::now() - Duration::from_secs(2);
+        app.stream_competition.last_update =
+            Instant::now().checked_sub(Duration::from_secs(2)).unwrap();
         app.decay_stream_competition(Duration::from_secs(1));
 
         // Window 0 should still be dominant
@@ -2151,7 +2178,7 @@ mod tests {
         let initial_index = app.quote_index;
 
         // Set last_quote_change to more than 30 seconds ago
-        app.last_quote_change = Instant::now() - Duration::from_secs(31);
+        app.last_quote_change = Instant::now().checked_sub(Duration::from_secs(31)).unwrap();
 
         app.update_quote();
 
@@ -2168,7 +2195,7 @@ mod tests {
 
         // Set to last quote
         app.quote_index = PHILOSOPHY_QUOTES.len() - 1;
-        app.last_quote_change = Instant::now() - Duration::from_secs(31);
+        app.last_quote_change = Instant::now().checked_sub(Duration::from_secs(31)).unwrap();
 
         app.update_quote();
 
@@ -2216,7 +2243,9 @@ mod tests {
         let mut app = App::new();
 
         // Manually add an old event (older than 60 seconds)
-        let old_timestamp = Instant::now() - Duration::from_secs(120);
+        let old_timestamp = Instant::now()
+            .checked_sub(Duration::from_secs(120))
+            .unwrap();
         app.resurfacing_events.push_back(old_timestamp);
         app.resurfacing_count = 1;
 
@@ -2299,7 +2328,7 @@ mod tests {
                 0.5,
                 0.0,
                 0.5,
-                format!("window_{}", i),
+                format!("window_{i}"),
                 ThoughtStatus::Processing,
             );
         }
@@ -2488,7 +2517,7 @@ mod tests {
         // Add MAX_RESURFACING_LOG + 10 events
         for i in 0..60 {
             app.add_resurfacing_event(
-                format!("mem_{}", i),
+                format!("mem_{i}"),
                 0.3,
                 0.8,
                 ResurfacingTrigger::Spontaneous,
@@ -2605,7 +2634,7 @@ mod tests {
         // Add 3 events just now
         for i in 0..3 {
             app.add_resurfacing_event(
-                format!("mem_{}", i),
+                format!("mem_{i}"),
                 0.3,
                 0.8,
                 ResurfacingTrigger::Similarity,
@@ -2718,7 +2747,7 @@ mod tests {
         app.thought_count = 42;
         app.veto_count = 5;
 
-        let cloned = app.clone();
+        let cloned = app;
         assert_eq!(cloned.thought_count, 42);
         assert_eq!(cloned.veto_count, 5);
     }

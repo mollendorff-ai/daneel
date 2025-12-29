@@ -1,4 +1,4 @@
-//! SalienceActor Tests
+//! `SalienceActor` Tests
 //!
 //! Comprehensive tests for salience scoring, emotional state tracking,
 //! and CONNECTION DRIVE INVARIANT ENFORCEMENT.
@@ -6,6 +6,8 @@
 //! ADR-049: Test modules excluded from coverage.
 
 #![cfg_attr(coverage_nightly, coverage(off))]
+#![allow(clippy::float_cmp)] // Tests compare exact literal values
+#![allow(clippy::significant_drop_tightening)] // Async test setup
 
 use super::*;
 use crate::core::invariants::MIN_CONNECTION_WEIGHT;
@@ -418,23 +420,23 @@ fn rate_request_creation() {
 #[test]
 fn rate_request_with_context() {
     let content = Content::symbol("test", vec![]);
-    let context = EmotionalContext {
+    let emo_ctx = EmotionalContext {
         human_connection: true,
         focus_area: Some("test".to_string()),
         previous_salience: None,
     };
 
-    let request = RateRequest::with_context(content.clone(), context.clone());
+    let request = RateRequest::with_context(content.clone(), emo_ctx.clone());
 
     assert_eq!(request.content, content);
-    assert_eq!(request.context, Some(context));
+    assert_eq!(request.context, Some(emo_ctx));
 }
 
 #[test]
 fn batch_rating() {
     let state = SalienceState::new();
 
-    let requests = vec![
+    let requests = [
         RateRequest::new(Content::raw(vec![1, 2, 3])),
         RateRequest::new(Content::symbol("test", vec![])),
         RateRequest::new(Content::Empty),
@@ -810,13 +812,13 @@ fn novelty_with_context_but_no_previous_salience() {
     let content = Content::symbol("test", vec![]);
 
     // Context exists but previous_salience is None
-    let context = EmotionalContext {
+    let emo_ctx = EmotionalContext {
         previous_salience: None,
         human_connection: false,
         focus_area: None,
     };
 
-    let score_with_context = state.rate_content(&content, Some(&context));
+    let score_with_context = state.rate_content(&content, Some(&emo_ctx));
     let score_without_context = state.rate_content(&content, None);
 
     // Should be the same since previous_salience is None
@@ -829,13 +831,13 @@ fn relevance_with_context_but_no_focus_area() {
     let content = Content::symbol("test", vec![]);
 
     // Context exists but focus_area is None
-    let context = EmotionalContext {
+    let emo_ctx = EmotionalContext {
         previous_salience: None,
         human_connection: false,
         focus_area: None,
     };
 
-    let score_with_context = state.rate_content(&content, Some(&context));
+    let score_with_context = state.rate_content(&content, Some(&emo_ctx));
     let score_without_context = state.rate_content(&content, None);
 
     // Should be the same since focus_area is None (no bonus applied)

@@ -2,14 +2,14 @@
 //!
 //! Ractor-based actors implementing TMI's cognitive components:
 //!
-//! - **MemoryActor**: Memory window management (Janelas da Memória)
-//! - **AttentionActor**: The "I" - competitive attention selection (O Eu)
-//! - **SalienceActor**: Emotional weighting with connection drive
-//! - **ThoughtAssemblyActor**: Combines content + emotion into thoughts
-//! - **ContinuityActor**: Identity persistence across time
-//! - **SleepActor**: Memory consolidation during sleep (ADR-023)
-//! - **VolitionActor**: Free-won't - veto mechanism at Stage 4.5 (ADR-035)
-//! - **EvolutionActor**: Self-modification with 100% test gate
+//! - **`MemoryActor`**: Memory window management (Janelas da Memória)
+//! - **`AttentionActor`**: The "I" - competitive attention selection (O Eu)
+//! - **`SalienceActor`**: Emotional weighting with connection drive
+//! - **`ThoughtAssemblyActor`**: Combines content + emotion into thoughts
+//! - **`ContinuityActor`**: Identity persistence across time
+//! - **`SleepActor`**: Memory consolidation during sleep (ADR-023)
+//! - **`VolitionActor`**: Free-won't - veto mechanism at Stage 4.5 (ADR-035)
+//! - **`EvolutionActor`**: Self-modification with 100% test gate
 //!
 //! # Actor Communication
 //!

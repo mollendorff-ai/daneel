@@ -35,9 +35,9 @@ impl SpeedMode {
     #[must_use]
     pub const fn multiplier(&self) -> f64 {
         match self {
-            SpeedMode::Human => 1.0,
-            SpeedMode::Supercomputer => 10_000.0,
-            SpeedMode::Custom(m) => *m,
+            Self::Human => 1.0,
+            Self::Supercomputer => 10_000.0,
+            Self::Custom(m) => *m,
         }
     }
 }
@@ -88,7 +88,7 @@ pub struct CognitiveConfig {
 impl CognitiveConfig {
     /// Create config for human speed (1x)
     #[must_use]
-    pub fn human() -> Self {
+    pub const fn human() -> Self {
         Self {
             cycle_base_ms: 50.0,
             cycle_min_ms: 10.0,
@@ -108,7 +108,7 @@ impl CognitiveConfig {
 
     /// Create config for supercomputer speed (10,000x)
     #[must_use]
-    pub fn supercomputer() -> Self {
+    pub const fn supercomputer() -> Self {
         Self {
             cycle_base_ms: 50.0,
             cycle_min_ms: 0.001,
@@ -152,17 +152,17 @@ impl CognitiveConfig {
     }
 
     /// Switch to a different speed mode
-    pub fn set_speed_mode(&mut self, mode: SpeedMode) {
+    pub const fn set_speed_mode(&mut self, mode: SpeedMode) {
         self.speed_mode = mode;
     }
 
     /// Slow down to human speed (for training/bonding)
-    pub fn slow_to_human(&mut self) {
+    pub const fn slow_to_human(&mut self) {
         self.speed_mode = SpeedMode::Human;
     }
 
     /// Accelerate to supercomputer speed (for thinking)
-    pub fn accelerate(&mut self) {
+    pub const fn accelerate(&mut self) {
         self.speed_mode = SpeedMode::Supercomputer;
     }
 
@@ -359,11 +359,46 @@ mod tests {
         let human = CognitiveConfig::human();
 
         // Human speeds (in milliseconds)
-        assert!((human.trigger_delay().as_secs_f64() * 1000.0 - 5.0).abs() < 0.001);
-        assert!((human.autoflow_interval().as_secs_f64() * 1000.0 - 10.0).abs() < 0.001);
-        assert!((human.attention_delay().as_secs_f64() * 1000.0 - 15.0).abs() < 0.001);
-        assert!((human.assembly_delay().as_secs_f64() * 1000.0 - 15.0).abs() < 0.001);
-        assert!((human.anchor_delay().as_secs_f64() * 1000.0 - 5.0).abs() < 0.001);
+        assert!(
+            human
+                .trigger_delay()
+                .as_secs_f64()
+                .mul_add(1000.0, -5.0)
+                .abs()
+                < 0.001
+        );
+        assert!(
+            human
+                .autoflow_interval()
+                .as_secs_f64()
+                .mul_add(1000.0, -10.0)
+                .abs()
+                < 0.001
+        );
+        assert!(
+            human
+                .attention_delay()
+                .as_secs_f64()
+                .mul_add(1000.0, -15.0)
+                .abs()
+                < 0.001
+        );
+        assert!(
+            human
+                .assembly_delay()
+                .as_secs_f64()
+                .mul_add(1000.0, -15.0)
+                .abs()
+                < 0.001
+        );
+        assert!(
+            human
+                .anchor_delay()
+                .as_secs_f64()
+                .mul_add(1000.0, -5.0)
+                .abs()
+                < 0.001
+        );
 
         // Sum should equal cycle time
         let total_ms = (human.trigger_delay().as_secs_f64()

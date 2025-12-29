@@ -18,7 +18,7 @@ fn format_with_commas(n: u64) -> String {
     let s = n.to_string();
     let mut result = String::with_capacity(s.len() + s.len() / 3);
     for (i, c) in s.chars().enumerate() {
-        if i > 0 && (s.len() - i) % 3 == 0 {
+        if i > 0 && (s.len() - i).is_multiple_of(3) {
             result.push(',');
         }
         result.push(c);
@@ -37,6 +37,7 @@ fn truncate_id(id: &str, max_len: usize) -> String {
     format!("{start}..{end}")
 }
 
+#[allow(clippy::too_many_lines)] // TUI widget: layout complexity is inherent
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let block = Block::default()
@@ -109,6 +110,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
             Span::styled("  Efficiency: ", Style::default().fg(colors::DIM)),
             {
                 // Calculate dream efficiency ratio
+                #[allow(clippy::cast_precision_loss)] // Dream counts won't exceed f32 precision
                 let efficiency = if app.cumulative_dream_candidates > 0 {
                     (app.cumulative_dream_strengthened as f32
                         / app.cumulative_dream_candidates as f32)
@@ -117,7 +119,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
                     0.0
                 };
                 Span::styled(
-                    format!("{:.1}%", efficiency),
+                    format!("{efficiency:.1}%"),
                     Style::default().fg(colors::PRIMARY).bold(),
                 )
             },
@@ -148,9 +150,9 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
             if let Some(event) = app.last_resurfacing_event() {
                 let delta = event.boosted_salience - event.original_salience;
                 let delta_str = if delta >= 0.0 {
-                    format!("+{:.2}", delta)
+                    format!("+{delta:.2}")
                 } else {
-                    format!("{:.2}", delta)
+                    format!("{delta:.2}")
                 };
                 spans.push(Span::styled("  Last: ", Style::default().fg(colors::DIM)));
                 spans.push(Span::styled(
@@ -158,7 +160,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
                     Style::default().fg(colors::SECONDARY),
                 ));
                 spans.push(Span::styled(
-                    format!(" ({})", delta_str),
+                    format!(" ({delta_str})"),
                     Style::default().fg(if delta > 0.0 {
                         colors::SUCCESS
                     } else {
@@ -179,6 +181,8 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
+#[allow(clippy::cast_precision_loss)] // Test calculations
 mod tests {
     use super::*;
 
@@ -219,7 +223,7 @@ mod tests {
         let efficiency = (app.cumulative_dream_strengthened as f32
             / app.cumulative_dream_candidates as f32)
             * 100.0;
-        let formatted = format!("{:.1}%", efficiency);
+        let formatted = format!("{efficiency:.1}%");
 
         // Should format to 1 decimal place
         assert!(formatted.contains('.'));

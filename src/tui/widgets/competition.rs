@@ -19,7 +19,7 @@ use ratatui::{
 use crate::tui::app::App;
 use crate::tui::colors;
 
-/// Stage names matching ThoughtUpdate::from_cycle_result
+/// Stage names matching `ThoughtUpdate::from_cycle_result`
 const STAGE_NAMES: [&str; 9] = [
     "TRIGGER ",
     "AUTOFLOW",
@@ -138,7 +138,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     lines.push(Line::from(vec![
         Span::styled("Active Streams: ", Style::default().fg(colors::DIM)),
         Span::styled(
-            format!("{}/9", active_streams),
+            format!("{active_streams}/9"),
             Style::default().fg(colors::PRIMARY).bold(),
         ),
         Span::styled("  │  Competition: ", Style::default().fg(colors::DIM)),
@@ -181,7 +181,7 @@ fn create_sparkline(history: &[f32], width: usize) -> String {
 }
 
 /// Calculate competition level description
-fn calculate_competition_level(active_streams: usize) -> &'static str {
+const fn calculate_competition_level(active_streams: usize) -> &'static str {
     match active_streams {
         0..=1 => "Minimal",
         2..=3 => "Low",

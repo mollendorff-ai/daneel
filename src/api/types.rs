@@ -10,7 +10,7 @@ pub struct InjectRequest {
     pub vector: Vec<f32>,
     /// Salience score 0.0-1.0
     pub salience: f32,
-    /// Label for audit (e.g., "grok:life_honours_life")
+    /// Label for audit (e.g., "`grok:life_honours_life`")
     pub label: String,
 }
 
@@ -27,7 +27,7 @@ pub struct InjectResponse {
     pub status: String,
 }
 
-/// GET /recent_injections response item
+/// GET /`recent_injections` response item
 #[derive(Debug, Clone, Serialize)]
 pub struct InjectionRecord {
     pub id: String,
@@ -60,7 +60,7 @@ pub struct AuthenticatedKey {
 // Extended Metrics for Observatory (Web Dashboard)
 // ============================================================================
 
-/// GET /extended_metrics response - TUI-equivalent data for web observatory
+/// GET /`extended_metrics` response - TUI-equivalent data for web observatory
 #[derive(Debug, Clone, Serialize)]
 pub struct ExtendedMetricsResponse {
     pub timestamp: DateTime<Utc>,

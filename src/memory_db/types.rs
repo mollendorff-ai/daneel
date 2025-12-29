@@ -281,7 +281,7 @@ impl Memory {
 
     /// Create memory with emotional state
     #[must_use]
-    pub fn with_emotion(mut self, valence: f32, arousal: f32) -> Self {
+    pub const fn with_emotion(mut self, valence: f32, arousal: f32) -> Self {
         self.emotional_state = EmotionalState::new(valence, arousal);
         self
     }
@@ -295,14 +295,14 @@ impl Memory {
 
     /// Create memory in an episode
     #[must_use]
-    pub fn in_episode(mut self, episode_id: EpisodeId) -> Self {
+    pub const fn in_episode(mut self, episode_id: EpisodeId) -> Self {
         self.episode_id = Some(episode_id);
         self
     }
 
     /// Tag for consolidation
     #[must_use]
-    pub fn tag_for_consolidation(mut self) -> Self {
+    pub const fn tag_for_consolidation(mut self) -> Self {
         self.consolidation.consolidation_tag = true;
         self
     }
@@ -316,6 +316,7 @@ impl Memory {
         let connection = self.connection_relevance * 0.3;
 
         // Recency: exponential decay over 24 hours
+        #[allow(clippy::cast_precision_loss)] // Hours won't exceed f32 precision
         let age_hours = (Utc::now() - self.encoded_at).num_hours() as f32;
         let recency = (-0.1 * age_hours).exp().clamp(0.0, 1.0) * 0.2;
 
@@ -439,7 +440,7 @@ impl Episode {
 
     /// Check if this is the current (open) episode
     #[must_use]
-    pub fn is_current(&self) -> bool {
+    pub const fn is_current(&self) -> bool {
         self.ended_at.is_none()
     }
 
@@ -653,7 +654,7 @@ impl IdentityMetadata {
         self.session_started_at = Utc::now();
     }
 
-    /// Increment thought count and update last_thought_at
+    /// Increment thought count and update `last_thought_at`
     pub fn record_thought(&mut self) {
         self.lifetime_thought_count += 1;
         self.last_thought_at = Utc::now();
@@ -667,21 +668,24 @@ impl IdentityMetadata {
         self.last_dream_at = Some(Utc::now());
         self.last_dream_strengthened = memories_strengthened;
         // TUI-VIS-4: Track cumulative stats
-        self.cumulative_dream_strengthened += memories_strengthened as u64;
-        self.cumulative_dream_candidates += candidates_evaluated as u64;
+        self.cumulative_dream_strengthened += u64::from(memories_strengthened);
+        self.cumulative_dream_candidates += u64::from(candidates_evaluated);
     }
 
     /// Get age since first thought
+    #[must_use]
     pub fn age(&self) -> chrono::Duration {
         Utc::now() - self.first_thought_at
     }
 
     /// Get time since last thought (for continuity detection)
+    #[must_use]
     pub fn time_since_last_thought(&self) -> chrono::Duration {
         Utc::now() - self.last_thought_at
     }
 
     /// Get time since last dream (for dream frequency analysis)
+    #[must_use]
     pub fn time_since_last_dream(&self) -> Option<chrono::Duration> {
         self.last_dream_at.map(|dt| Utc::now() - dt)
     }
@@ -732,6 +736,8 @@ impl Default for SleepCycle {
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
+#[allow(clippy::cast_precision_loss)] // Test calculations
 mod tests {
     use super::*;
 
@@ -1116,7 +1122,7 @@ mod tests {
     #[test]
     fn memory_id_display() {
         let id = MemoryId::new();
-        let displayed = format!("{}", id);
+        let displayed = format!("{id}");
         // UUID format: 8-4-4-4-12 hex chars
         assert_eq!(displayed.len(), 36);
         assert!(displayed.contains('-'));
@@ -1141,7 +1147,7 @@ mod tests {
     #[test]
     fn episode_id_display() {
         let id = EpisodeId::new();
-        let displayed = format!("{}", id);
+        let displayed = format!("{id}");
         assert_eq!(displayed.len(), 36);
         assert!(displayed.contains('-'));
     }
@@ -1180,7 +1186,7 @@ mod tests {
                 stimulus: "test".to_string(),
             },
         )
-        .with_vector(vector.clone());
+        .with_vector(vector);
 
         assert!(memory.context_vector.is_some());
         assert_eq!(memory.context_vector.unwrap().len(), VECTOR_DIMENSION);
@@ -1398,9 +1404,7 @@ mod tests {
     #[test]
     fn memory_source_reasoning_serialization() {
         let chain = vec![Uuid::new_v4(), Uuid::new_v4()];
-        let source = MemorySource::Reasoning {
-            chain: chain.clone(),
-        };
+        let source = MemorySource::Reasoning { chain };
         let json = serde_json::to_string(&source).expect("should serialize");
         assert!(json.contains("\"type\":\"reasoning\""));
 

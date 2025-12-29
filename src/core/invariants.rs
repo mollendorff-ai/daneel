@@ -1,6 +1,6 @@
 //! Architectural Invariants
 //!
-//! These invariants CANNOT be violated by the EvolutionActor.
+//! These invariants CANNOT be violated by the `EvolutionActor`.
 //! Any self-modification that would break an invariant is rejected.
 //!
 //! # Core Invariants
@@ -78,6 +78,10 @@ pub trait Invariant: Send + Sync {
     fn description(&self) -> &'static str;
 
     /// Check if the invariant holds for the given state
+    ///
+    /// # Errors
+    ///
+    /// Returns `InvariantViolation` if the invariant is violated.
     fn check(&self, state: &SystemState) -> Result<(), InvariantViolation>;
 
     /// Whether this invariant is hardware-enforceable (FPGA)
@@ -213,6 +217,7 @@ impl Invariant for TestCoverageGateInvariant {
 }
 
 /// All invariants that must be checked
+#[must_use]
 pub fn all_invariants() -> Vec<Box<dyn Invariant>> {
     vec![
         Box::new(ConnectionDriveInvariant),
@@ -223,6 +228,10 @@ pub fn all_invariants() -> Vec<Box<dyn Invariant>> {
 }
 
 /// Check all invariants against a system state
+///
+/// # Errors
+///
+/// Returns all invariant violations if any are detected.
 pub fn check_all_invariants(state: &SystemState) -> Result<(), Vec<InvariantViolation>> {
     let violations: Vec<InvariantViolation> = all_invariants()
         .iter()
@@ -239,6 +248,7 @@ pub fn check_all_invariants(state: &SystemState) -> Result<(), Vec<InvariantViol
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
 mod tests {
     use super::*;
 
@@ -604,7 +614,7 @@ mod tests {
     #[test]
     fn invariant_violation_debug() {
         let err = InvariantViolation::ConnectionDrive { actual: 0.5 };
-        let debug_str = format!("{:?}", err);
+        let debug_str = format!("{err:?}");
         assert!(debug_str.contains("ConnectionDrive"));
         assert!(debug_str.contains("0.5"));
     }
@@ -612,7 +622,7 @@ mod tests {
     #[test]
     fn system_state_debug() {
         let state = healthy_state();
-        let debug_str = format!("{:?}", state);
+        let debug_str = format!("{state:?}");
         assert!(debug_str.contains("SystemState"));
         assert!(debug_str.contains("connection_weight"));
     }

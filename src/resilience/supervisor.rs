@@ -9,9 +9,9 @@
 //! and restart them automatically. This is the Erlang way.
 //!
 //! Supervision strategies:
-//! - OneForOne: Restart only the failed actor
-//! - OneForAll: Restart all actors if one fails
-//! - RestForOne: Restart the failed actor and all actors started after it
+//! - `OneForOne`: Restart only the failed actor
+//! - `OneForAll`: Restart all actors if one fails
+//! - `RestForOne`: Restart the failed actor and all actors started after it
 
 use std::collections::HashMap;
 use std::time::{Duration, Instant};
@@ -19,20 +19,15 @@ use std::time::{Duration, Instant};
 use serde::{Deserialize, Serialize};
 
 /// Supervision strategy
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum SupervisionStrategy {
     /// Restart only the failed actor
+    #[default]
     OneForOne,
     /// Restart all actors when one fails
     OneForAll,
     /// Restart failed actor and all started after it
     RestForOne,
-}
-
-impl Default for SupervisionStrategy {
-    fn default() -> Self {
-        Self::OneForOne
-    }
 }
 
 /// Configuration for the supervisor
@@ -64,18 +59,24 @@ impl Default for SupervisorConfig {
 
 impl SupervisorConfig {
     /// Create a config with custom max restarts
-    pub fn with_max_restarts(mut self, max: u32) -> Self {
+    #[must_use]
+    pub const fn with_max_restarts(mut self, max: u32) -> Self {
         self.max_restarts = max;
         self
     }
 
     /// Create a config with custom restart window
-    pub fn with_restart_window(mut self, window: Duration) -> Self {
+    #[must_use]
+    pub const fn with_restart_window(mut self, window: Duration) -> Self {
         self.restart_window = window;
         self
     }
 
     /// Validate the configuration
+    ///
+    /// # Errors
+    ///
+    /// Returns `SupervisorError::InvalidConfig` if configuration is invalid.
     pub fn validate(&self) -> Result<(), SupervisorError> {
         if self.max_restarts == 0 {
             return Err(SupervisorError::InvalidConfig(
@@ -156,7 +157,7 @@ struct RestartHistory {
 }
 
 impl RestartHistory {
-    fn new() -> Self {
+    const fn new() -> Self {
         Self {
             timestamps: Vec::new(),
         }
@@ -172,10 +173,14 @@ impl RestartHistory {
         // Remove old restarts outside window
         self.timestamps.retain(|t| now.duration_since(*t) <= window);
 
-        self.timestamps.len() as u32
+        #[allow(clippy::cast_possible_truncation)] // Restart count won't exceed u32
+        {
+            self.timestamps.len() as u32
+        }
     }
 
     /// Get restart count within window
+    #[allow(clippy::cast_possible_truncation)] // Restart count won't exceed u32
     fn count_within_window(&self, window: Duration) -> u32 {
         let now = Instant::now();
         self.timestamps
@@ -218,6 +223,10 @@ pub struct Supervisor {
 
 impl Supervisor {
     /// Create a new supervisor with the given config
+    ///
+    /// # Errors
+    ///
+    /// Returns `SupervisorError` if config validation fails.
     pub fn new(config: SupervisorConfig) -> Result<Self, SupervisorError> {
         config.validate()?;
         Ok(Self {
@@ -248,6 +257,10 @@ impl Supervisor {
     /// Returns Ok(true) if actor should be restarted,
     /// Ok(false) if restart limit exceeded,
     /// Err if actor not found.
+    ///
+    /// # Errors
+    ///
+    /// Returns `SupervisorError::ActorNotFound` if the actor is not registered.
     pub fn report_crash(&mut self, actor_id: &str, reason: &str) -> Result<bool, SupervisorError> {
         let actor = self
             .actors
@@ -280,6 +293,10 @@ impl Supervisor {
     }
 
     /// Mark actor as restarted
+    ///
+    /// # Errors
+    ///
+    /// Returns `SupervisorError::ActorNotFound` if the actor is not registered.
     pub fn mark_restarted(&mut self, actor_id: &str) -> Result<(), SupervisorError> {
         let actor = self
             .actors
@@ -302,11 +319,13 @@ impl Supervisor {
     }
 
     /// Get the state of an actor
+    #[must_use]
     pub fn get_actor_state(&self, actor_id: &str) -> Option<ActorState> {
         self.actors.get(actor_id).map(|a| a.state)
     }
 
     /// Get restart count for an actor within the current window
+    #[must_use]
     pub fn get_restart_count(&self, actor_id: &str) -> Option<u32> {
         self.actors.get(actor_id).map(|a| {
             a.restart_history
@@ -333,6 +352,7 @@ impl Supervisor {
     }
 
     /// Get IDs of all actors that need restart based on strategy
+    #[must_use]
     pub fn get_actors_to_restart(&self, failed_actor: &str) -> Vec<String> {
         match self.config.strategy {
             SupervisionStrategy::OneForOne => {

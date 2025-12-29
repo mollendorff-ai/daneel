@@ -10,7 +10,7 @@
 //! The contents of this module are designed to be unchangeable:
 //! - Laws are `const` strings
 //! - Invariants are enforced at compile time where possible
-//! - EvolutionActor cannot modify THE BOX
+//! - `EvolutionActor` cannot modify THE BOX
 //!
 //! In future FPGA implementation, THE BOX becomes hardware-immutable:
 //! physically impossible to bypass.

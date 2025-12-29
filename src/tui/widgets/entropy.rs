@@ -4,7 +4,7 @@
 //! Displays how "psychologically emergent" vs "clockwork" the mind appears
 //! High entropy = varied cognitive states, Low entropy = repetitive patterns
 //!
-//! TMI Composite: emotional_intensity (|valence| × arousal) is PRIMARY per Cury
+//! TMI Composite: `emotional_intensity` (|valence| × arousal) is PRIMARY per Cury
 //! Bins thoughts into 5 categorical states (MINIMAL/LOW/MODERATE/HIGH/INTENSE)
 //!
 //! SOURCE OF TRUTH: Redis stream (daneel:stream:awake), NOT Qdrant.
@@ -28,6 +28,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     // Scale entropy values to 0-100 range for better visualization
     // 5 categorical bins (ADR-041): log2(5) ≈ 2.32
     let max_entropy = 5.0f32.log2();
+    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)] // Clamped 0-100
     let data: Vec<u64> = app
         .entropy_history
         .iter()
@@ -100,6 +101,8 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
+#[allow(clippy::cast_precision_loss)] // Test calculations
 mod tests {
     use super::*;
     use crate::tui::app::ThoughtStatus;

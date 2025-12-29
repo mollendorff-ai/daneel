@@ -2,7 +2,7 @@
 //!
 //! Security model from Grok's design:
 //! - 256-bit HMAC keys (base64 encoded)
-//! - Keys: GROK_KEY, CLAUDE_KEY
+//! - Keys: `GROK_KEY`, `CLAUDE_KEY`
 //! - Daily rotation (future)
 
 use axum::{
@@ -30,6 +30,7 @@ pub struct ApiKeys {
 impl ApiKeys {
     /// Load keys from environment variables
     #[cfg_attr(coverage_nightly, coverage(off))]
+    #[must_use]
     pub fn from_env() -> Self {
         Self {
             grok_key: env::var("GROK_INJECT_KEY")
@@ -44,6 +45,7 @@ impl ApiKeys {
     /// Validate a bearer token and return the key ID if valid
     /// ADR-049: HMAC error paths cannot occur (accepts any key size)
     #[cfg_attr(coverage_nightly, coverage(off))]
+    #[must_use]
     pub fn validate(&self, token: &str) -> Option<AuthenticatedKey> {
         // Token format: <key_id>:<signature>
         // Signature = HMAC-SHA256(key_id, secret)
@@ -53,9 +55,8 @@ impl ApiKeys {
         }
 
         let key_id = parts[0];
-        let provided_sig = match BASE64.decode(parts[1]) {
-            Ok(s) => s,
-            Err(_) => return None,
+        let Ok(provided_sig) = BASE64.decode(parts[1]) else {
+            return None;
         };
 
         let (secret, holder) = match key_id {
@@ -91,6 +92,10 @@ pub fn extract_bearer_token(req: &Request) -> Option<&str> {
 }
 
 /// Auth middleware for protected endpoints
+///
+/// # Errors
+///
+/// Returns `StatusCode::UNAUTHORIZED` if token is missing or invalid.
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub async fn require_auth(req: Request, next: Next) -> Result<Response, StatusCode> {
     let keys = ApiKeys::from_env();
@@ -107,6 +112,11 @@ pub async fn require_auth(req: Request, next: Next) -> Result<Response, StatusCo
 }
 
 /// Generate a signed token for a key (utility for key generation)
+///
+/// # Panics
+///
+/// Never panics - HMAC accepts any key size.
+#[must_use]
 pub fn generate_token(key_id: &str, secret: &[u8]) -> String {
     let mut mac = HmacSha256::new_from_slice(secret).expect("HMAC accepts any key size");
     mac.update(key_id.as_bytes());

@@ -144,6 +144,10 @@ impl MemoryStore {
     // =========================================================================
 
     /// Connect to Redis
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError::ConnectionFailed` if the connection fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn connect(url: &str) -> Result<Self, PersistenceError> {
         info!("MemoryStore connecting to Redis at {}", url);
@@ -165,6 +169,7 @@ impl MemoryStore {
     // =========================================================================
 
     /// Save a value as JSON to a key
+    #[allow(clippy::future_not_send)] // Internal method used with Tokio runtime
     #[cfg_attr(coverage_nightly, coverage(off))]
     async fn save_json<T: Serialize>(
         &mut self,
@@ -188,7 +193,7 @@ impl MemoryStore {
             Some(s) => {
                 let value = serde_json::from_str(&s).map_err(|e| {
                     PersistenceError::DeserializationFailed {
-                        reason: format!("Key {}: {}", key, e),
+                        reason: format!("Key {key}: {e}"),
                     }
                 })?;
                 Ok(Some(value))
@@ -202,12 +207,20 @@ impl MemoryStore {
     // =========================================================================
 
     /// Save DANEEL's identity
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn save_identity(&mut self, identity: &Identity) -> Result<(), PersistenceError> {
         self.save_json(keys::IDENTITY, identity).await
     }
 
     /// Load DANEEL's identity (returns None if never saved)
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_identity(&mut self) -> Result<Option<Identity>, PersistenceError> {
         self.load_json(keys::IDENTITY).await
@@ -218,6 +231,10 @@ impl MemoryStore {
     // =========================================================================
 
     /// Save an experience
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn save_experience(
         &mut self,
@@ -237,6 +254,10 @@ impl MemoryStore {
     }
 
     /// Load an experience by ID
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_experience(
         &mut self,
@@ -247,6 +268,10 @@ impl MemoryStore {
     }
 
     /// Load all experiences
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_all_experiences(
         &mut self,
@@ -270,6 +295,10 @@ impl MemoryStore {
     // =========================================================================
 
     /// Save a milestone
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn save_milestone(&mut self, milestone: &Milestone) -> Result<(), PersistenceError> {
         let key = format!("{}:{}", keys::MILESTONES, milestone.id);
@@ -286,6 +315,10 @@ impl MemoryStore {
     }
 
     /// Load a milestone by ID
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_milestone(
         &mut self,
@@ -296,6 +329,10 @@ impl MemoryStore {
     }
 
     /// Load all milestones
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_all_milestones(&mut self) -> Result<Vec<Milestone>, PersistenceError> {
         let ids: Vec<String> = self.conn.smembers(keys::MILESTONE_INDEX).await?;
@@ -320,6 +357,10 @@ impl MemoryStore {
     // =========================================================================
 
     /// Save a full checkpoint
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn save_checkpoint(
         &mut self,
@@ -342,6 +383,10 @@ impl MemoryStore {
     }
 
     /// Load the latest checkpoint
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_latest_checkpoint(
         &mut self,
@@ -350,6 +395,10 @@ impl MemoryStore {
     }
 
     /// Load a specific checkpoint
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_checkpoint(
         &mut self,
@@ -364,6 +413,10 @@ impl MemoryStore {
     // =========================================================================
 
     /// Save complete state (identity + all experiences + all milestones)
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn save_full_state(
         &mut self,
@@ -400,6 +453,14 @@ impl MemoryStore {
     }
 
     /// Load complete state from latest checkpoint
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
+    ///
+    /// # Panics
+    ///
+    /// Never panics - unwrap is guarded by `is_none()` check.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_full_state(&mut self) -> Result<Option<CheckpointState>, PersistenceError> {
         // First try to load latest checkpoint
@@ -439,6 +500,10 @@ impl MemoryStore {
     // =========================================================================
 
     /// Check if any state exists (has Timmy been born before?)
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn has_existing_state(&mut self) -> Result<bool, PersistenceError> {
         let exists: bool = self.conn.exists(keys::IDENTITY).await?;
@@ -446,6 +511,10 @@ impl MemoryStore {
     }
 
     /// Clear all DANEEL state (use with caution!)
+    ///
+    /// # Errors
+    ///
+    /// Returns `PersistenceError` if Redis operation fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn clear_all(&mut self) -> Result<(), PersistenceError> {
         warn!("Clearing all DANEEL state from Redis");
@@ -528,7 +597,7 @@ mod tests {
         let state = CheckpointState {
             identity: Identity::new(),
             experiences: HashMap::new(),
-            milestones: vec![milestone.clone()],
+            milestones: vec![milestone],
             checkpoint_id: CheckpointId::new(),
             saved_at: chrono::Utc::now(),
         };
@@ -586,7 +655,7 @@ mod tests {
             saved_at: chrono::Utc::now(),
         };
 
-        let debug = format!("{:?}", state);
+        let debug = format!("{state:?}");
         assert!(debug.contains("CheckpointState"));
         assert!(debug.contains("identity"));
     }
@@ -658,31 +727,31 @@ mod tests {
         let err = PersistenceError::ConnectionFailed {
             reason: "test".to_string(),
         };
-        let debug = format!("{:?}", err);
+        let debug = format!("{err:?}");
         assert!(debug.contains("ConnectionFailed"));
 
         let err2 = PersistenceError::SerializationFailed {
             reason: "test".to_string(),
         };
-        let debug2 = format!("{:?}", err2);
+        let debug2 = format!("{err2:?}");
         assert!(debug2.contains("SerializationFailed"));
 
         let err3 = PersistenceError::DeserializationFailed {
             reason: "test".to_string(),
         };
-        let debug3 = format!("{:?}", err3);
+        let debug3 = format!("{err3:?}");
         assert!(debug3.contains("DeserializationFailed"));
 
         let err4 = PersistenceError::OperationFailed {
             reason: "test".to_string(),
         };
-        let debug4 = format!("{:?}", err4);
+        let debug4 = format!("{err4:?}");
         assert!(debug4.contains("OperationFailed"));
 
         let err5 = PersistenceError::NotFound {
             key: "test".to_string(),
         };
-        let debug5 = format!("{:?}", err5);
+        let debug5 = format!("{err5:?}");
         assert!(debug5.contains("NotFound"));
     }
 
@@ -755,7 +824,7 @@ mod tests {
     fn experience_significance_clamped() {
         let content = crate::core::types::Content::raw("Over significance");
         let salience = crate::core::types::SalienceScore::default();
-        let thought = Thought::new(content.clone(), salience);
+        let thought = Thought::new(content, salience);
         let exp = Experience::new(thought.clone(), 1.5, vec![]);
         assert!(exp.significance <= 1.0);
 
@@ -801,7 +870,7 @@ mod tests {
     #[test]
     fn checkpoint_id_display() {
         let id = CheckpointId::new();
-        let display = format!("{}", id);
+        let display = format!("{id}");
         assert!(!display.is_empty());
     }
 
@@ -819,7 +888,7 @@ mod tests {
     #[test]
     fn experience_id_display() {
         let id = ExperienceId::new();
-        let display = format!("{}", id);
+        let display = format!("{id}");
         assert!(!display.is_empty());
     }
 
@@ -837,7 +906,7 @@ mod tests {
     #[test]
     fn milestone_id_display() {
         let id = MilestoneId::new();
-        let display = format!("{}", id);
+        let display = format!("{id}");
         assert!(!display.is_empty());
     }
 }

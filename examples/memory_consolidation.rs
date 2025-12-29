@@ -20,8 +20,8 @@ use daneel::core::cognitive_loop::CognitiveLoop;
 use daneel::memory_db::MemoryDb;
 use std::sync::Arc;
 use tracing::{info, warn};
-use tracing_subscriber;
 
+#[allow(clippy::significant_drop_tightening)] // Resources held for example duration
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Initialize logging

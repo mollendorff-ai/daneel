@@ -54,6 +54,10 @@ const PHILOSOPHY_QUOTES: [&str; 8] = [
 static START_TIME: std::sync::OnceLock<Instant> = std::sync::OnceLock::new();
 
 /// GET /health - Basic health check
+///
+/// # Errors
+///
+/// Returns `StatusCode::SERVICE_UNAVAILABLE` if Redis is unavailable.
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub async fn health(State(state): State<AppState>) -> Result<Json<HealthResponse>, StatusCode> {
     // Get basic stats from Redis
@@ -76,6 +80,11 @@ pub async fn health(State(state): State<AppState>) -> Result<Json<HealthResponse
 }
 
 /// POST /inject - Inject external stimulus
+///
+/// # Errors
+///
+/// Returns error status codes for validation failures, rate limits, or Redis errors.
+#[allow(clippy::too_many_lines)] // API handler: validation complexity is inherent
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub async fn inject(
     State(state): State<AppState>,
@@ -123,10 +132,7 @@ pub async fn inject(
         }) => {
             return Err((
                 StatusCode::TOO_MANY_REQUESTS,
-                format!(
-                    "Rate limit exceeded. Retry after {} seconds",
-                    retry_after_seconds
-                ),
+                format!("Rate limit exceeded. Retry after {retry_after_seconds} seconds"),
             ));
         }
         Err(e) => {
@@ -219,7 +225,11 @@ pub async fn inject(
     }))
 }
 
-/// GET /recent_injections - Last 100 injections
+/// GET /`recent_injections` - Last 100 injections
+///
+/// # Errors
+///
+/// Returns `StatusCode::SERVICE_UNAVAILABLE` if Redis is unavailable.
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub async fn recent_injections(
     State(state): State<AppState>,
@@ -254,7 +264,12 @@ pub async fn recent_injections(
 // Extended Metrics Handler (Observatory)
 // ============================================================================
 
-/// GET /extended_metrics - TUI-equivalent metrics for web observatory
+/// GET /`extended_metrics` - TUI-equivalent metrics for web observatory
+///
+/// # Errors
+///
+/// Returns `StatusCode::SERVICE_UNAVAILABLE` if Redis is unavailable.
+#[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub async fn extended_metrics(
     State(state): State<AppState>,
@@ -347,10 +362,11 @@ pub async fn extended_metrics(
 /// - ATTENTION: high importance (importance > 0.7)
 /// - ASSEMBLY: moderate all-around (balanced scores)
 /// - ANCHOR: high relevance (relevance > 0.6)
-/// - MEMORY: connection-relevant thoughts (connection_relevance > 0.5)
+/// - MEMORY: connection-relevant thoughts (`connection_relevance` > 0.5)
 /// - REASON: low arousal, high importance (thinking)
 /// - EMOTION: high arousal or valence extremes
 /// - SENSORY: high novelty + arousal (external stimuli)
+#[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable
 #[cfg_attr(coverage_nightly, coverage(off))]
 async fn compute_stream_competition(
     conn: &mut redis::aio::MultiplexedConnection,
@@ -413,8 +429,7 @@ async fn compute_stream_competition(
         .iter()
         .enumerate()
         .max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal))
-        .map(|(i, _)| i)
-        .unwrap_or(0);
+        .map_or(0, |(i, _)| i);
 
     let active_count = activity.iter().filter(|&&a| a > 0.05).count();
 
@@ -456,6 +471,7 @@ struct SalienceComponents {
 }
 
 /// Extract full salience object from Redis stream entry
+#[allow(clippy::cast_possible_truncation)] // JSON f64 to f32: acceptable for salience
 #[cfg_attr(coverage_nightly, coverage(off))]
 fn extract_full_salience(entry: &redis::Value) -> Option<SalienceComponents> {
     if let redis::Value::Array(arr) = entry {
@@ -471,32 +487,32 @@ fn extract_full_salience(entry: &redis::Value) -> Option<SalienceComponents> {
                                 return Some(SalienceComponents {
                                     importance: json
                                         .get("importance")
-                                        .and_then(|v| v.as_f64())
+                                        .and_then(serde_json::Value::as_f64)
                                         .unwrap_or(0.5)
                                         as f32,
                                     novelty: json
                                         .get("novelty")
-                                        .and_then(|v| v.as_f64())
+                                        .and_then(serde_json::Value::as_f64)
                                         .unwrap_or(0.5)
                                         as f32,
                                     relevance: json
                                         .get("relevance")
-                                        .and_then(|v| v.as_f64())
+                                        .and_then(serde_json::Value::as_f64)
                                         .unwrap_or(0.5)
                                         as f32,
                                     valence: json
                                         .get("valence")
-                                        .and_then(|v| v.as_f64())
+                                        .and_then(serde_json::Value::as_f64)
                                         .unwrap_or(0.0)
                                         as f32,
                                     arousal: json
                                         .get("arousal")
-                                        .and_then(|v| v.as_f64())
+                                        .and_then(serde_json::Value::as_f64)
                                         .unwrap_or(0.5)
                                         as f32,
                                     connection_relevance: json
                                         .get("connection_relevance")
-                                        .and_then(|v| v.as_f64())
+                                        .and_then(serde_json::Value::as_f64)
                                         .unwrap_or(0.3)
                                         as f32,
                                 });
@@ -516,6 +532,7 @@ fn extract_full_salience(entry: &redis::Value) -> Option<SalienceComponents> {
 /// - Emotional intensity (|valence| × arousal) is PRIMARY per Cury's RAM/killer windows
 /// - Weighted 40% emotional + 30% importance + 20% relevance + 20% novelty + 10% connection
 /// - Uses 5 categorical bins matching cognitive state research
+#[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable
 #[cfg_attr(coverage_nightly, coverage(off))]
 async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> EntropyMetrics {
     let entries: Vec<redis::Value> = conn
@@ -530,11 +547,12 @@ async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> Entrop
             // TMI composite: emotional_intensity (40%) + cognitive (60%)
             // emotional_intensity = |valence| × arousal (PRIMARY per TMI)
             let emotional_intensity = salience.valence.abs() * salience.arousal;
-            let cognitive = salience.importance * 0.3 + salience.relevance * 0.2;
+            let cognitive = salience.importance.mul_add(0.3, salience.relevance * 0.2);
             let novelty = salience.novelty * 0.2;
             let connection = salience.connection_relevance * 0.1;
             let tmi_composite =
-                (emotional_intensity * 0.4 + cognitive + novelty + connection).clamp(0.0, 1.0);
+                (emotional_intensity.mul_add(0.4, cognitive) + novelty + connection)
+                    .clamp(0.0, 1.0);
             composites.push(tmi_composite);
         }
     }
@@ -598,6 +616,7 @@ async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> Entrop
 
 /// Compute fractality metrics from inter-arrival times
 /// Score ranges from 0 (clockwork/regular) to 1 (fractal/bursty)
+#[allow(clippy::cast_precision_loss, clippy::cast_possible_truncation)] // Metrics: precision loss acceptable
 #[cfg_attr(coverage_nightly, coverage(off))]
 async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> FractalityMetrics {
     let entries: Vec<redis::Value> = conn
@@ -700,6 +719,7 @@ fn normalize_vector(v: &[f32]) -> Vec<f32> {
 }
 
 /// Calculate Shannon entropy of recent stream activity
+#[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable
 #[cfg_attr(coverage_nightly, coverage(off))]
 async fn calculate_stream_entropy(
     conn: &mut redis::aio::MultiplexedConnection,
@@ -722,7 +742,7 @@ async fn calculate_stream_entropy(
     Ok(entropy)
 }
 
-/// Parse Redis stream entry into InjectionRecord
+/// Parse Redis stream entry into `InjectionRecord`
 #[cfg_attr(coverage_nightly, coverage(off))]
 fn parse_injection_record(entry: redis::Value) -> Result<InjectionRecord, ()> {
     // Redis returns: [id, [field1, val1, field2, val2, ...]]

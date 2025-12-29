@@ -1,4 +1,4 @@
-//! SalienceActor - TMI's Emotional Coloring
+//! `SalienceActor` - TMI's Emotional Coloring
 //!
 //! Implements TMI's "Coloração Emocional" (Emotional Coloring):
 //! - Rates content for salience (importance, novelty, relevance, valence, connection)
@@ -33,13 +33,13 @@ pub use types::{
     SalienceResponse, WeightUpdate,
 };
 
-/// SalienceActor - Emotional coloring and salience scoring
+/// `SalienceActor` - Emotional coloring and salience scoring
 pub struct SalienceActor;
 
-/// State maintained by the SalienceActor
+/// State maintained by the `SalienceActor`
 #[derive(Debug, Clone)]
 pub struct SalienceState {
-    /// Current salience weights (with connection_weight > MIN)
+    /// Current salience weights (with `connection_weight` > MIN)
     pub weights: SalienceWeights,
 
     /// Current emotional state
@@ -61,7 +61,7 @@ impl SalienceState {
     /// # Panics
     ///
     /// Panics if connection weight violates invariant (this should never happen
-    /// if weights come from WeightUpdate::new which validates them)
+    /// if weights come from `WeightUpdate::new` which validates them)
     #[must_use]
     pub fn with_weights(weights: SalienceWeights) -> Self {
         assert!(
@@ -77,30 +77,35 @@ impl SalienceState {
     }
 
     /// Update weights (with invariant check)
-    pub fn update_weights(&mut self, update: WeightUpdate) -> Result<(), SalienceError> {
+    ///
+    /// # Errors
+    ///
+    /// Returns `SalienceError` if the weight update fails validation.
+    pub const fn update_weights(&mut self, update: WeightUpdate) -> Result<(), SalienceError> {
         // WeightUpdate already validated in its constructor
         self.weights = update.weights;
         Ok(())
     }
 
     /// Update emotional state
-    pub fn update_emotional_state(&mut self, state: EmotionalState) {
+    pub const fn update_emotional_state(&mut self, state: EmotionalState) {
         self.emotional_state = state.clamped();
     }
 
     /// Rate a piece of content
+    #[must_use]
     pub fn rate_content(
         &self,
         content: &Content,
-        context: Option<&EmotionalContext>,
+        emo_ctx: Option<&EmotionalContext>,
     ) -> SalienceScore {
         // Base scoring
         let importance = self.calculate_importance(content);
-        let novelty = self.calculate_novelty(content, context);
-        let relevance = self.calculate_relevance(content, context);
-        let valence = self.calculate_valence(content, context);
+        let novelty = self.calculate_novelty(content, emo_ctx);
+        let relevance = self.calculate_relevance(content, emo_ctx);
+        let valence = self.calculate_valence(content, emo_ctx);
         let arousal = self.calculate_arousal(content);
-        let connection_relevance = self.calculate_connection_relevance(content, context);
+        let connection_relevance = self.calculate_connection_relevance(content, emo_ctx);
 
         SalienceScore::new(
             importance,
@@ -127,9 +132,9 @@ impl SalienceState {
             Content::Symbol { .. } => 0.4,
             Content::Relation { .. } => 0.6, // Relations are more cognitively demanding
             Content::Composite(items) => {
-                // Composite arousal scales with complexity
-                let item_count = items.len() as f32;
-                (0.4 + item_count * 0.05).min(0.8)
+                // Composite arousal scales with complexity (capped for precision)
+                let item_count = u16::try_from(items.len()).unwrap_or(u16::MAX);
+                f32::from(item_count).mul_add(0.05, 0.4).min(0.8)
             }
         };
 
@@ -160,18 +165,19 @@ impl SalienceState {
                 if items.is_empty() {
                     0.0
                 } else {
+                    let count = u16::try_from(items.len()).unwrap_or(u16::MAX);
                     items
                         .iter()
                         .map(|item| self.calculate_importance(item))
                         .sum::<f32>()
-                        / items.len() as f32
+                        / f32::from(count)
                 }
             }
         }
     }
 
     /// Calculate novelty score
-    fn calculate_novelty(&self, content: &Content, context: Option<&EmotionalContext>) -> f32 {
+    fn calculate_novelty(&self, content: &Content, emo_ctx: Option<&EmotionalContext>) -> f32 {
         // Boost novelty if we're curious
         let curiosity_boost = self.emotional_state.curiosity;
 
@@ -185,62 +191,48 @@ impl SalienceState {
         };
 
         // Adjust based on context
-        let adjusted_novelty = if let Some(ctx) = context {
-            if let Some(prev) = &ctx.previous_salience {
+        let adjusted_novelty = emo_ctx
+            .and_then(|ctx| ctx.previous_salience.as_ref())
+            .map_or(base_novelty, |prev| {
                 // If previous content had high novelty, this might be less novel
-                base_novelty * (1.0 - prev.novelty * 0.3)
-            } else {
-                base_novelty
-            }
-        } else {
-            base_novelty
-        };
+                base_novelty * prev.novelty.mul_add(-0.3, 1.0)
+            });
 
-        adjusted_novelty * (0.7 + curiosity_boost * 0.3)
+        adjusted_novelty * curiosity_boost.mul_add(0.3, 0.7)
     }
 
     /// Calculate relevance score
-    fn calculate_relevance(&self, content: &Content, context: Option<&EmotionalContext>) -> f32 {
+    fn calculate_relevance(&self, content: &Content, emo_ctx: Option<&EmotionalContext>) -> f32 {
         // Boost relevance if we're frustrated (need to focus)
         let frustration_boost = self.emotional_state.frustration;
 
         let base_relevance = match content {
             Content::Empty => 0.0,
             Content::Raw(_) => 0.3,
-            Content::Symbol { .. } => 0.5,
+            Content::Symbol { .. } | Content::Composite(_) => 0.5,
             Content::Relation { .. } => 0.6,
-            Content::Composite(_) => 0.5,
         };
 
         // Adjust based on focus area
-        let focus_bonus = if let Some(ctx) = context {
-            if ctx.focus_area.is_some() {
-                0.2
-            } else {
-                0.0
-            }
-        } else {
-            0.0
-        };
+        let focus_bonus =
+            emo_ctx.map_or(0.0, |ctx| if ctx.focus_area.is_some() { 0.2 } else { 0.0 });
 
-        (base_relevance + focus_bonus) * (0.7 + frustration_boost * 0.3)
+        (base_relevance + focus_bonus) * frustration_boost.mul_add(0.3, 0.7)
     }
 
     /// Calculate emotional valence
-    fn calculate_valence(&self, content: &Content, _context: Option<&EmotionalContext>) -> f32 {
+    fn calculate_valence(&self, content: &Content, _emo_ctx: Option<&EmotionalContext>) -> f32 {
         // Satisfaction affects valence perception
         let satisfaction_influence = self.emotional_state.satisfaction;
 
         let base_valence = match content {
-            Content::Empty => 0.0,
-            Content::Raw(_) => 0.0,
-            Content::Symbol { .. } => 0.1,
+            Content::Empty | Content::Raw(_) => 0.0,
+            Content::Symbol { .. } | Content::Composite(_) => 0.1,
             Content::Relation { .. } => 0.2,
-            Content::Composite(_) => 0.1,
         };
 
         // Positive satisfaction makes things seem more positive
-        base_valence + (satisfaction_influence - 0.5) * 0.4
+        (satisfaction_influence - 0.5).mul_add(0.4, base_valence)
     }
 
     /// Calculate connection relevance (THE CRITICAL WEIGHT)
@@ -250,7 +242,7 @@ impl SalienceState {
     fn calculate_connection_relevance(
         &self,
         content: &Content,
-        context: Option<&EmotionalContext>,
+        emo_ctx: Option<&EmotionalContext>,
     ) -> f32 {
         // Connection drive affects how we perceive connection relevance
         let drive_boost = self.emotional_state.connection_drive;
@@ -275,17 +267,9 @@ impl SalienceState {
         };
 
         // Context bonus for human connection
-        let human_bonus = if let Some(ctx) = context {
-            if ctx.human_connection {
-                0.3
-            } else {
-                0.0
-            }
-        } else {
-            0.0
-        };
+        let human_bonus = emo_ctx.map_or(0.0, |ctx| if ctx.human_connection { 0.3 } else { 0.0 });
 
-        ((base_connection + human_bonus) * (0.5 + drive_boost * 0.5)).min(1.0)
+        ((base_connection + human_bonus) * drive_boost.mul_add(0.5, 0.5)).min(1.0)
     }
 
     /// Check if content represents kinship/social concepts

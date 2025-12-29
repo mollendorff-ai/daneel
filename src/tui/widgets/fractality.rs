@@ -13,7 +13,7 @@
 //!
 //! Simplified metrics until Forge gets FFT/Hurst/DFA:
 //! - Inter-arrival σ: stddev of time gaps (low=clockwork, high=bursty)
-//! - Burst ratio: max_gap / mean_gap (detects clustering)
+//! - Burst ratio: `max_gap` / `mean_gap` (detects clustering)
 //! - Fractality score: normalized composite (0=clockwork, 1=fractal)
 
 use ratatui::{
@@ -60,7 +60,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     lines.push(Line::from(vec![
         Span::styled("Pattern: ", Style::default().fg(colors::DIM)),
         Span::styled(
-            format!("{:9}", description),
+            format!("{description:9}"),
             Style::default().fg(desc_color).bold(),
         ),
         Span::raw(" ["),
@@ -79,9 +79,9 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let sigma = app.fractality.inter_arrival_sigma;
     let boot_sigma = app.fractality.boot_sigma;
     let sigma_trend = if boot_sigma > 0.0 && sigma > boot_sigma {
-        format!("↑ from {:.2}s boot", boot_sigma)
+        format!("↑ from {boot_sigma:.2}s boot")
     } else if boot_sigma > 0.0 {
-        format!("↓ from {:.2}s boot", boot_sigma)
+        format!("↓ from {boot_sigma:.2}s boot")
     } else {
         "measuring...".to_string()
     };
@@ -89,12 +89,12 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     lines.push(Line::from(vec![
         Span::styled("Inter-arrival σ: ", Style::default().fg(colors::DIM)),
         Span::styled(
-            format!("{:.3}s", sigma),
+            format!("{sigma:.3}s"),
             Style::default().fg(colors::FOREGROUND).bold(),
         ),
         Span::raw("  "),
         Span::styled(
-            format!("({})", sigma_trend),
+            format!("({sigma_trend})"),
             Style::default().fg(colors::SECONDARY),
         ),
     ]));
@@ -119,12 +119,12 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     lines.push(Line::from(vec![
         Span::styled("Burst ratio:     ", Style::default().fg(colors::DIM)),
         Span::styled(
-            format!("{:.1}x", burst),
+            format!("{burst:.1}x"),
             Style::default().fg(burst_color).bold(),
         ),
         Span::raw("   "),
         Span::styled(
-            format!("({})", burst_desc),
+            format!("({burst_desc})"),
             Style::default().fg(colors::SECONDARY),
         ),
     ]));
@@ -164,6 +164,7 @@ fn create_sparkline(history: &std::collections::VecDeque<f32>, width: usize) -> 
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::cast_precision_loss)] // Test calculations
 mod tests {
     use super::*;
 

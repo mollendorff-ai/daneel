@@ -1,4 +1,4 @@
-//! AttentionActor Types
+//! `AttentionActor` Types
 //!
 //! Types for TMI's "O Eu" (The 'I') - the attention mechanism that selects
 //! between competing memory windows.
@@ -21,7 +21,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use thiserror::Error;
 
-/// Messages that can be sent to the AttentionActor
+/// Messages that can be sent to the `AttentionActor`
 #[derive(Debug)]
 pub enum AttentionMessage {
     /// Trigger one attention cycle
@@ -73,7 +73,7 @@ pub enum AttentionMessage {
     },
 }
 
-/// Responses from the AttentionActor
+/// Responses from the `AttentionActor`
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum AttentionResponse {
     /// Attention cycle completed
@@ -144,19 +144,19 @@ impl AttentionResponse {
 
     /// Create an attention map response
     #[must_use]
-    pub fn attention_map(scores: HashMap<WindowId, f32>) -> Self {
+    pub const fn attention_map(scores: HashMap<WindowId, f32>) -> Self {
         Self::AttentionMap { scores }
     }
 
     /// Create an error response
     #[must_use]
-    pub fn error(error: AttentionError) -> Self {
+    pub const fn error(error: AttentionError) -> Self {
         Self::Error { error }
     }
 }
 
 /// Errors that can occur in attention operations
-#[derive(Debug, Clone, Error, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Error, PartialEq, Eq, Serialize, Deserialize)]
 pub enum AttentionError {
     /// Requested window does not exist
     #[error("Window not found: {window_id}")]
@@ -181,7 +181,7 @@ pub enum AttentionError {
 ///
 /// Tracks which window currently has attention, how long it has been focused,
 /// and when the last shift occurred.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct FocusState {
     /// Currently focused window (None if no focus)
     pub current_focus: Option<WindowId>,
@@ -321,7 +321,7 @@ impl AttentionMap {
 
     /// Get all window scores
     #[must_use]
-    pub fn all_scores(&self) -> &HashMap<WindowId, f32> {
+    pub const fn all_scores(&self) -> &HashMap<WindowId, f32> {
         &self.scores
     }
 
@@ -352,6 +352,7 @@ impl Default for AttentionMap {
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
 mod tests {
     use super::*;
 
@@ -511,15 +512,15 @@ mod tests {
         let window_id = WindowId::new();
 
         let error = AttentionError::WindowNotFound { window_id };
-        assert!(format!("{}", error).contains("Window not found"));
+        assert!(format!("{error}").contains("Window not found"));
 
         let error = AttentionError::NoWindowsAvailable;
-        assert!(format!("{}", error).contains("No windows available"));
+        assert!(format!("{error}").contains("No windows available"));
 
         let error = AttentionError::CycleFailed {
             reason: "test".to_string(),
         };
-        assert!(format!("{}", error).contains("test"));
+        assert!(format!("{error}").contains("test"));
     }
 
     #[test]
@@ -630,9 +631,9 @@ mod tests {
         assert_eq!(response9, response10);
 
         let error = AttentionError::NoWindowsAvailable;
-        let response11 = AttentionResponse::error(error);
-        let response12 = response11.clone();
-        assert_eq!(response11, response12);
+        let resp_err = AttentionResponse::error(error);
+        let resp_err_clone = resp_err.clone();
+        assert_eq!(resp_err, resp_err_clone);
     }
 
     #[test]
@@ -774,29 +775,29 @@ mod tests {
         let window_id = WindowId::new();
 
         let response = AttentionResponse::cycle_complete(Some(window_id), 0.8);
-        let debug_str = format!("{:?}", response);
+        let debug_str = format!("{response:?}");
         assert!(debug_str.contains("CycleComplete"));
 
         let response = AttentionResponse::focus_set(window_id);
-        let debug_str = format!("{:?}", response);
+        let debug_str = format!("{response:?}");
         assert!(debug_str.contains("FocusSet"));
 
         let response = AttentionResponse::focus_shifted(None, window_id);
-        let debug_str = format!("{:?}", response);
+        let debug_str = format!("{response:?}");
         assert!(debug_str.contains("FocusShifted"));
 
         let response = AttentionResponse::current_focus(Some(window_id));
-        let debug_str = format!("{:?}", response);
+        let debug_str = format!("{response:?}");
         assert!(debug_str.contains("CurrentFocus"));
 
         let mut scores = HashMap::new();
         scores.insert(window_id, 0.8);
         let response = AttentionResponse::attention_map(scores);
-        let debug_str = format!("{:?}", response);
+        let debug_str = format!("{response:?}");
         assert!(debug_str.contains("AttentionMap"));
 
         let response = AttentionResponse::error(AttentionError::NoWindowsAvailable);
-        let debug_str = format!("{:?}", response);
+        let debug_str = format!("{response:?}");
         assert!(debug_str.contains("Error"));
     }
 
@@ -805,31 +806,31 @@ mod tests {
         let window_id = WindowId::new();
 
         let error = AttentionError::WindowNotFound { window_id };
-        let debug_str = format!("{:?}", error);
+        let debug_str = format!("{error:?}");
         assert!(debug_str.contains("WindowNotFound"));
 
         let error = AttentionError::NoWindowsAvailable;
-        let debug_str = format!("{:?}", error);
+        let debug_str = format!("{error:?}");
         assert!(debug_str.contains("NoWindowsAvailable"));
 
         let error = AttentionError::CycleFailed {
             reason: "test".to_string(),
         };
-        let debug_str = format!("{:?}", error);
+        let debug_str = format!("{error:?}");
         assert!(debug_str.contains("CycleFailed"));
     }
 
     #[test]
     fn focus_state_debug() {
         let state = FocusState::new();
-        let debug_str = format!("{:?}", state);
+        let debug_str = format!("{state:?}");
         assert!(debug_str.contains("FocusState"));
     }
 
     #[test]
     fn attention_map_debug() {
         let map = AttentionMap::new();
-        let debug_str = format!("{:?}", map);
+        let debug_str = format!("{map:?}");
         assert!(debug_str.contains("AttentionMap"));
     }
 

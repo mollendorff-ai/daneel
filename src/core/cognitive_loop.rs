@@ -101,7 +101,7 @@ impl StageDurations {
         self.trigger + self.autoflow + self.attention + self.assembly + self.anchor
     }
 
-    /// Create a new StageDurations with all stages set to zero
+    /// Create a new `StageDurations` with all stages set to zero
     #[must_use]
     pub const fn zero() -> Self {
         Self {
@@ -113,7 +113,7 @@ impl StageDurations {
         }
     }
 
-    /// Add another StageDurations to this one (for accumulation)
+    /// Add another `StageDurations` to this one (for accumulation)
     #[must_use]
     pub fn add(&self, other: &Self) -> Self {
         Self {
@@ -175,7 +175,7 @@ pub struct CycleResult {
     /// Time spent in each stage (for debugging/monitoring)
     pub stage_durations: StageDurations,
 
-    /// Veto event if one occurred: (reason, violated_value)
+    /// Veto event if one occurred: (reason, `violated_value`)
     /// TUI-VIS-6: Volition Veto Log tracking
     pub veto: Option<(String, Option<String>)>,
 }
@@ -266,6 +266,7 @@ impl CycleMetrics {
     }
 
     /// Success rate (thoughts produced / total cycles)
+    #[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable
     #[must_use]
     pub fn success_rate(&self) -> f32 {
         if self.total_cycles > 0 {
@@ -321,7 +322,7 @@ pub struct CognitiveLoop {
     volition_state: VolitionState,
 
     /// Stimulus injector for 1/f pink noise generation (ADR-043)
-    /// Replaces white noise (rand::rng) with fractal noise for criticality
+    /// Replaces white noise (`rand::rng`) with fractal noise for criticality
     stimulus_injector: StimulusInjector,
 
     /// Embedding engine for semantic vectors (Phase 2 Forward-Only)
@@ -379,14 +380,15 @@ impl CognitiveLoop {
     ///
     /// # Arguments
     ///
-    /// * `memory_db` - MemoryDb client wrapped in Arc for sharing
+    /// * `memory_db` - `MemoryDb` client wrapped in Arc for sharing
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn set_memory_db(&mut self, memory_db: Arc<MemoryDb>) {
         self.memory_db = Some(memory_db);
     }
 
     /// Get a reference to the memory database (for querying counts)
-    pub fn memory_db(&self) -> Option<&Arc<MemoryDb>> {
+    #[must_use]
+    pub const fn memory_db(&self) -> Option<&Arc<MemoryDb>> {
         self.memory_db.as_ref()
     }
 
@@ -398,7 +400,7 @@ impl CognitiveLoop {
     /// # Arguments
     ///
     /// * `threshold` - Salience threshold (0.0 - 1.0)
-    pub fn set_consolidation_threshold(&mut self, threshold: f32) {
+    pub const fn set_consolidation_threshold(&mut self, threshold: f32) {
         self.consolidation_threshold = threshold.clamp(0.0, 1.0);
     }
 
@@ -406,7 +408,7 @@ impl CognitiveLoop {
     ///
     /// # Arguments
     ///
-    /// * `redis_url` - Redis connection URL (e.g., "redis://127.0.0.1:6379")
+    /// * `redis_url` - Redis connection URL (e.g., "<redis://127.0.0.1:6379>")
     ///
     /// # Errors
     ///
@@ -464,7 +466,7 @@ impl CognitiveLoop {
     pub fn is_connected_to_redis(&self) -> bool {
         self.streams
             .as_ref()
-            .map_or(false, StreamsClient::is_connected)
+            .is_some_and(StreamsClient::is_connected)
     }
 
     /// Get the current state
@@ -486,7 +488,7 @@ impl CognitiveLoop {
     }
 
     /// Get a mutable reference to the configuration
-    pub fn config_mut(&mut self) -> &mut CognitiveConfig {
+    pub const fn config_mut(&mut self) -> &mut CognitiveConfig {
         &mut self.config
     }
 
@@ -511,7 +513,7 @@ impl CognitiveLoop {
     /// Stop the cognitive loop completely
     ///
     /// Resets state. Requires `start()` to resume.
-    pub fn stop(&mut self) {
+    pub const fn stop(&mut self) {
         self.state = LoopState::Stopped;
     }
 
@@ -612,7 +614,7 @@ impl CognitiveLoop {
     ///
     /// # Returns
     ///
-    /// Vector of (Content, SalienceScore) pairs for stimuli that were successfully read
+    /// Vector of (Content, `SalienceScore`) pairs for stimuli that were successfully read
     #[cfg_attr(coverage_nightly, coverage(off))]
     async fn read_external_stimuli(&self) -> Vec<(Content, SalienceScore)> {
         // Check if we have a Redis client
@@ -718,7 +720,7 @@ impl CognitiveLoop {
         stimuli
     }
 
-    /// Parse injection stream field-value array into (Content, SalienceScore)
+    /// Parse injection stream field-value array into (Content, `SalienceScore`)
     ///
     /// Fields array format: [field1, value1, field2, value2, ...]
     fn parse_injection_fields(fields: &[redis::Value]) -> Result<(Content, SalienceScore), String> {
@@ -782,11 +784,16 @@ impl CognitiveLoop {
     /// - Whether cycle was on time
     /// - Stage durations for each stage
     ///
+    /// # Panics
+    ///
+    /// Never panics - internal thought vec is always non-empty (random thought added).
+    ///
     /// # Note
     ///
     /// This is a STUB implementation. Stream integration comes in Wave 3.
     /// For now, it focuses on timing and structure with stage delays.
     /// ADR-049: Some branches require I/O or are structurally unreachable
+    #[allow(clippy::too_many_lines)] // Cognitive cycle: complexity is inherent
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn run_cycle(&mut self) -> CycleResult {
         let cycle_start = Instant::now();
@@ -996,7 +1003,7 @@ impl CognitiveLoop {
         }
 
         // Convert Thought to Memory
-        let memory = self.thought_to_memory(thought, salience);
+        let memory = Self::thought_to_memory(thought, salience);
         let memory_id = memory.id;
 
         // Get content string for embedding (same as memory content)
@@ -1155,7 +1162,7 @@ impl CognitiveLoop {
         cycle_number: u64,
     ) {
         // Only forget if below threshold and we have a Redis entry
-        if (composite_salience as f64) >= self.config.forget_threshold {
+        if f64::from(composite_salience) >= self.config.forget_threshold {
             return;
         }
 
@@ -1208,21 +1215,20 @@ impl CognitiveLoop {
     }
 
     /// Convert a Thought to a Memory record
-    fn thought_to_memory(&self, thought: &Thought, _salience: f32) -> Memory {
+    fn thought_to_memory(thought: &Thought, _salience: f32) -> Memory {
         // Serialize thought content to string
         // For now, use debug representation since Content is pre-linguistic
         let content = format!("{:?}", thought.content);
 
         // Determine memory source based on thought source
-        let source = if let Some(ref stream) = thought.source_stream {
-            MemorySource::External {
-                stimulus: stream.clone(),
-            }
-        } else {
+        let source = thought.source_stream.as_ref().map_or(
             MemorySource::Reasoning {
                 chain: vec![], // No chain for now
-            }
-        };
+            },
+            |stream| MemorySource::External {
+                stimulus: stream.clone(),
+            },
+        );
 
         // Create memory with emotional state from thought
         Memory::new(content, source)
@@ -1230,10 +1236,11 @@ impl CognitiveLoop {
             .tag_for_consolidation()
     }
 
-    /// Extract the winning window from an AttentionResponse
+    /// Extract the winning window from an `AttentionResponse`
     ///
-    /// This is a helper for run_cycle that handles the AttentionResponse match.
+    /// This is a helper for `run_cycle` that handles the `AttentionResponse` match.
     /// The fallback branch handles unexpected response types from the attention actor.
+    #[allow(clippy::needless_pass_by_value)] // Ownership transfer intended for pattern matching
     #[cfg_attr(coverage_nightly, coverage(off))] // Actor integration - fallback never hit in practice
     fn extract_attention_winner(
         response: crate::actors::attention::AttentionResponse,
@@ -1253,7 +1260,7 @@ impl CognitiveLoop {
         }
     }
 
-    /// Handle veto decision from VolitionActor
+    /// Handle veto decision from `VolitionActor`
     ///
     /// Returns Some(CycleResult) if the thought was vetoed, None otherwise.
     /// This handles the veto branch of Stage 4.5 in the cognitive cycle.
@@ -1404,7 +1411,7 @@ impl CognitiveLoop {
 
     /// Get current performance metrics
     #[must_use]
-    #[allow(clippy::cast_possible_truncation)] // Cycle count won't exceed u32 in practice
+    #[allow(clippy::cast_possible_truncation, clippy::cast_precision_loss)] // Metrics: precision loss acceptable
     pub fn get_metrics(&self) -> CycleMetrics {
         let average_cycle_time = if self.cycle_count > 0 {
             self.total_duration / self.cycle_count as u32
@@ -1488,6 +1495,10 @@ impl Default for CognitiveLoop {
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
+#[allow(clippy::too_many_lines)] // Integration tests can be long
+#[allow(clippy::significant_drop_tightening)] // Async test setup
+#[allow(clippy::cast_precision_loss)] // Test metrics calculations
 mod cognitive_loop_tests {
     use super::*;
 
@@ -1937,7 +1948,7 @@ mod cognitive_loop_tests {
             5,
             true,
             StageDurations::default(),
-            veto_data.clone(),
+            veto_data,
         );
 
         assert!(result.veto.is_some());
@@ -2129,7 +2140,7 @@ mod cognitive_loop_tests {
         );
 
         // Debug format should include veto field
-        let debug_str = format!("{:?}", result);
+        let debug_str = format!("{result:?}");
         assert!(debug_str.contains("veto"));
         assert!(debug_str.contains("Test veto reason"));
     }
@@ -2205,7 +2216,9 @@ mod cognitive_loop_tests {
 
         let mut loop_instance = CognitiveLoop::with_config(config);
         // Set last_cycle to a time in the past
-        loop_instance.last_cycle = Instant::now() - Duration::from_millis(100);
+        loop_instance.last_cycle = Instant::now()
+            .checked_sub(Duration::from_millis(100))
+            .unwrap();
 
         // Should return zero since we're way behind schedule
         let wait_time = loop_instance.time_until_next_cycle();
@@ -2219,7 +2232,9 @@ mod cognitive_loop_tests {
 
         let mut loop_instance = CognitiveLoop::with_config(config);
         // Set last_cycle to a time in the past
-        loop_instance.last_cycle = Instant::now() - Duration::from_millis(100);
+        loop_instance.last_cycle = Instant::now()
+            .checked_sub(Duration::from_millis(100))
+            .unwrap();
 
         // Should cycle since enough time has passed
         assert!(loop_instance.should_cycle());
@@ -2274,11 +2289,11 @@ mod cognitive_loop_tests {
         let anchor = CognitiveStage::Anchor;
 
         // Test Debug trait
-        assert!(format!("{:?}", trigger).contains("Trigger"));
-        assert!(format!("{:?}", autoflow).contains("Autoflow"));
-        assert!(format!("{:?}", attention).contains("Attention"));
-        assert!(format!("{:?}", assembly).contains("Assembly"));
-        assert!(format!("{:?}", anchor).contains("Anchor"));
+        assert!(format!("{trigger:?}").contains("Trigger"));
+        assert!(format!("{autoflow:?}").contains("Autoflow"));
+        assert!(format!("{attention:?}").contains("Attention"));
+        assert!(format!("{assembly:?}").contains("Assembly"));
+        assert!(format!("{anchor:?}").contains("Anchor"));
 
         // Test Clone
         let trigger_clone = trigger;
@@ -2301,9 +2316,9 @@ mod cognitive_loop_tests {
         let stopped = LoopState::Stopped;
 
         // Test Debug trait
-        assert!(format!("{:?}", running).contains("Running"));
-        assert!(format!("{:?}", paused).contains("Paused"));
-        assert!(format!("{:?}", stopped).contains("Stopped"));
+        assert!(format!("{running:?}").contains("Running"));
+        assert!(format!("{paused:?}").contains("Paused"));
+        assert!(format!("{stopped:?}").contains("Stopped"));
 
         // Test Clone
         let running_clone = running;
@@ -2337,7 +2352,7 @@ mod cognitive_loop_tests {
 
         let (content, salience) = result.unwrap();
         // Verify content parsed correctly
-        assert!(format!("{:?}", content).contains("Symbol"));
+        assert!(format!("{content:?}").contains("Symbol"));
         // Verify salience parsed correctly
         assert_eq!(salience.importance, 0.5);
         assert_eq!(salience.novelty, 0.5);
@@ -2479,14 +2494,12 @@ mod cognitive_loop_tests {
 
     #[test]
     fn thought_to_memory_with_source_stream() {
-        let loop_instance = CognitiveLoop::new();
-
         let content = Content::symbol("test".to_string(), vec![1, 2, 3]);
         let salience = SalienceScore::new(0.5, 0.5, 0.5, 0.0, 0.5, 0.5);
         let mut thought = Thought::new(content, salience);
         thought.source_stream = Some("test_stream".to_string());
 
-        let memory = loop_instance.thought_to_memory(&thought, 0.8);
+        let memory = CognitiveLoop::thought_to_memory(&thought, 0.8);
 
         // Check that source is External
         match memory.source {
@@ -2499,14 +2512,12 @@ mod cognitive_loop_tests {
 
     #[test]
     fn thought_to_memory_without_source_stream() {
-        let loop_instance = CognitiveLoop::new();
-
         let content = Content::symbol("test".to_string(), vec![1, 2, 3]);
         let salience = SalienceScore::new(0.5, 0.5, 0.5, 0.0, 0.5, 0.5);
         let thought = Thought::new(content, salience);
         // source_stream is None by default
 
-        let memory = loop_instance.thought_to_memory(&thought, 0.8);
+        let memory = CognitiveLoop::thought_to_memory(&thought, 0.8);
 
         // Check that source is Reasoning
         match memory.source {
@@ -2519,8 +2530,6 @@ mod cognitive_loop_tests {
 
     #[test]
     fn thought_to_memory_preserves_emotional_state() {
-        let loop_instance = CognitiveLoop::new();
-
         let content = Content::symbol("test".to_string(), vec![1, 2, 3]);
         let salience = SalienceScore::new(
             0.8, // importance
@@ -2532,7 +2541,7 @@ mod cognitive_loop_tests {
         );
         let thought = Thought::new(content, salience);
 
-        let memory = loop_instance.thought_to_memory(&thought, 0.8);
+        let memory = CognitiveLoop::thought_to_memory(&thought, 0.8);
 
         // Emotional state should be preserved (valence -> valence, importance -> arousal)
         // Memory.with_emotion(valence, arousal) - importance becomes arousal
@@ -2673,7 +2682,7 @@ mod cognitive_loop_tests {
     #[test]
     fn config_accessor_returns_config() {
         let config = CognitiveConfig::supercomputer();
-        let loop_instance = CognitiveLoop::with_config(config.clone());
+        let loop_instance = CognitiveLoop::with_config(config);
 
         assert_eq!(
             loop_instance.config().speed_mode,
@@ -3029,7 +3038,7 @@ mod cognitive_loop_tests {
             None,
         );
 
-        let debug_str = format!("{:?}", result);
+        let debug_str = format!("{result:?}");
 
         assert!(debug_str.contains("CycleResult"));
         assert!(debug_str.contains("cycle_number"));
@@ -3047,7 +3056,7 @@ mod cognitive_loop_tests {
             StageDurations::default(),
         );
 
-        let debug_str = format!("{:?}", metrics);
+        let debug_str = format!("{metrics:?}");
 
         assert!(debug_str.contains("CycleMetrics"));
         assert!(debug_str.contains("total_cycles"));
@@ -3058,7 +3067,7 @@ mod cognitive_loop_tests {
     fn stage_durations_debug_format() {
         let durations = StageDurations::default();
 
-        let debug_str = format!("{:?}", durations);
+        let debug_str = format!("{durations:?}");
 
         assert!(debug_str.contains("StageDurations"));
         assert!(debug_str.contains("trigger"));
@@ -3101,8 +3110,6 @@ mod cognitive_loop_tests {
 
     #[test]
     fn thought_to_memory_with_composite_content() {
-        let loop_instance = CognitiveLoop::new();
-
         // Create composite content to test that branch
         let content = Content::Composite(vec![
             Content::symbol("part1".to_string(), vec![1, 2]),
@@ -3111,7 +3118,7 @@ mod cognitive_loop_tests {
         let salience = SalienceScore::new(0.5, 0.5, 0.5, 0.0, 0.5, 0.5);
         let thought = Thought::new(content, salience);
 
-        let memory = loop_instance.thought_to_memory(&thought, 0.8);
+        let memory = CognitiveLoop::thought_to_memory(&thought, 0.8);
 
         // Content should be serialized
         assert!(!memory.content.is_empty());
@@ -3119,8 +3126,6 @@ mod cognitive_loop_tests {
 
     #[test]
     fn thought_to_memory_with_relation_content() {
-        let loop_instance = CognitiveLoop::new();
-
         // Create relation content to test that branch
         let content = Content::Relation {
             subject: Box::new(Content::symbol("subject".to_string(), vec![1])),
@@ -3130,7 +3135,7 @@ mod cognitive_loop_tests {
         let salience = SalienceScore::new(0.5, 0.5, 0.5, 0.0, 0.5, 0.5);
         let thought = Thought::new(content, salience);
 
-        let memory = loop_instance.thought_to_memory(&thought, 0.8);
+        let memory = CognitiveLoop::thought_to_memory(&thought, 0.8);
 
         // Content should be serialized
         assert!(memory.content.contains("relates_to"));
@@ -3138,14 +3143,12 @@ mod cognitive_loop_tests {
 
     #[test]
     fn thought_to_memory_with_raw_content() {
-        let loop_instance = CognitiveLoop::new();
-
         // Create raw content to test that branch
         let content = Content::Raw(vec![0xDE, 0xAD, 0xBE, 0xEF]);
         let salience = SalienceScore::new(0.5, 0.5, 0.5, 0.0, 0.5, 0.5);
         let thought = Thought::new(content, salience);
 
-        let memory = loop_instance.thought_to_memory(&thought, 0.8);
+        let memory = CognitiveLoop::thought_to_memory(&thought, 0.8);
 
         // Content should be serialized
         assert!(!memory.content.is_empty());
@@ -3153,14 +3156,12 @@ mod cognitive_loop_tests {
 
     #[test]
     fn thought_to_memory_with_empty_content() {
-        let loop_instance = CognitiveLoop::new();
-
         // Create empty content to test that branch
         let content = Content::Empty;
         let salience = SalienceScore::new(0.5, 0.5, 0.5, 0.0, 0.5, 0.5);
         let thought = Thought::new(content, salience);
 
-        let memory = loop_instance.thought_to_memory(&thought, 0.8);
+        let memory = CognitiveLoop::thought_to_memory(&thought, 0.8);
 
         // Content should be serialized
         assert!(!memory.content.is_empty());
@@ -3259,9 +3260,7 @@ mod cognitive_loop_tests {
         // (may not be exactly 90% due to pink noise, but should be > 50%)
         assert!(
             low_salience_count > iterations / 2,
-            "Expected majority low-salience thoughts, got {} out of {}",
-            low_salience_count,
-            iterations
+            "Expected majority low-salience thoughts, got {low_salience_count} out of {iterations}"
         );
     }
 
@@ -3360,7 +3359,7 @@ mod cognitive_loop_tests {
 
             if let Content::Symbol { id, .. } = content {
                 // Should be unique
-                assert!(ids.insert(id.clone()), "Duplicate ID found: {}", id);
+                assert!(ids.insert(id.clone()), "Duplicate ID found: {id}");
             }
         }
 
@@ -3560,7 +3559,7 @@ mod cognitive_loop_tests {
                 assert_eq!(id, "thought_42");
                 assert_eq!(data.len(), 8);
             }
-            _ => panic!("Expected Symbol content, got {:?}", content),
+            _ => panic!("Expected Symbol content, got {content:?}"),
         }
     }
 

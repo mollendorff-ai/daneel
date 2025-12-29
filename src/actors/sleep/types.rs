@@ -121,7 +121,7 @@ impl Default for SleepConfig {
 impl SleepConfig {
     /// Fast config for testing (1 second cycles, low thresholds)
     #[must_use]
-    pub fn fast() -> Self {
+    pub const fn fast() -> Self {
         Self {
             idle_threshold_ms: 1000,
             min_awake_duration_ms: 5000,
@@ -181,7 +181,7 @@ pub enum SleepCycleStatus {
 impl SleepCycleReport {
     /// Create an empty report (for when no consolidation needed)
     #[must_use]
-    pub fn empty(cycle_id: uuid::Uuid) -> Self {
+    pub const fn empty(cycle_id: uuid::Uuid) -> Self {
         Self {
             cycle_id,
             duration_ms: 0,
@@ -226,6 +226,7 @@ pub struct SleepSummary {
 
 impl SleepSummary {
     /// Add a cycle report to the summary
+    #[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable
     pub fn add_cycle(&mut self, report: &SleepCycleReport) {
         self.total_duration_ms += report.duration_ms;
         self.cycles_completed += 1;
@@ -236,11 +237,14 @@ impl SleepSummary {
 
         // Running average
         let n = self.cycles_completed as f32;
-        self.avg_priority_per_cycle =
-            (self.avg_priority_per_cycle * (n - 1.0) + report.avg_replay_priority) / n;
+        self.avg_priority_per_cycle = self
+            .avg_priority_per_cycle
+            .mul_add(n - 1.0, report.avg_replay_priority)
+            / n;
     }
 
     /// Finalize the summary
+    #[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable
     pub fn finalize(&mut self) {
         if self.total_memories_replayed > 0 {
             self.consolidation_rate =
@@ -315,6 +319,7 @@ pub enum SleepError {
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
 mod tests {
     use super::*;
 
@@ -426,10 +431,10 @@ mod tests {
         };
 
         // Just verify they can be created and debug printed
-        assert!(format!("{:?}", started).contains("Started"));
-        assert!(format!("{:?}", already).contains("AlreadySleeping"));
-        assert!(format!("{:?}", not_met).contains("ConditionsNotMet"));
-        assert!(format!("{:?}", error).contains("Error"));
+        assert!(format!("{started:?}").contains("Started"));
+        assert!(format!("{already:?}").contains("AlreadySleeping"));
+        assert!(format!("{not_met:?}").contains("ConditionsNotMet"));
+        assert!(format!("{error:?}").contains("Error"));
     }
 
     #[test]
