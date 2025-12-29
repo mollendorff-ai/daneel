@@ -14,6 +14,7 @@ use ratatui::{
 use crate::tui::app::{App, LawStatus};
 use crate::tui::colors;
 
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let block = Block::default()
         .title(" THE BOX ")
@@ -37,6 +38,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     render_connection_drive(frame, chunks[1], app);
 }
 
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn render_laws(frame: &mut Frame, area: Rect, app: &App) {
     let law_names = ["0", "1", "2", "3"];
 
@@ -85,6 +87,7 @@ fn render_laws(frame: &mut Frame, area: Rect, app: &App) {
     frame.render_widget(paragraph, area);
 }
 
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn render_connection_drive(frame: &mut Frame, area: Rect, app: &App) {
     // Pulse effect: vary the display slightly based on pulse_phase
     let pulse_factor = 1.0 + 0.05 * (app.the_box.pulse_phase * std::f32::consts::TAU).sin();

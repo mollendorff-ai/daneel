@@ -155,11 +155,8 @@ impl VolitionState {
             }
         }
 
-        // Check against custom commitments
-        if let Some(decision) = self.check_commitments(thought) {
-            self.stats.record_evaluation(false, Some("commitment"));
-            return decision;
-        }
+        // ADR-049: Custom commitments not yet implemented
+        // When implemented: if let Some(decision) = self.apply_commitment_veto(thought) { return decision; }
 
         // All checks passed
         self.stats.record_evaluation(true, None);
@@ -226,12 +223,8 @@ impl VolitionState {
         None
     }
 
-    /// Check against custom commitments
-    fn check_commitments(&self, _thought: &Thought) -> Option<VetoDecision> {
-        // Future: Check each commitment
-        // For now, no additional commitment checks
-        None
-    }
+    // ADR-049: Commitment checking not yet implemented
+    // When implemented, add check_commitments() function here
 
     /// Detect if thought has harm intent
     fn detects_harm_intent(&self, thought: &Thought) -> bool {

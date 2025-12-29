@@ -1,3 +1,5 @@
+#![cfg_attr(coverage_nightly, feature(coverage_attribute))]
+
 //! DANEEL - Architecture-based AI alignment
 //!
 //! This crate implements the TMI (Theory of Multifocal Intelligence) cognitive

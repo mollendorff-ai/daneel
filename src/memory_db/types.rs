@@ -729,7 +729,9 @@ impl Default for SleepCycle {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -811,6 +813,28 @@ mod tests {
         let priority = memory.replay_priority();
         // emotional (0.81 * 0.4) + connection (0.9 * 0.3) + recency (~0.2) + tag (0.1)
         assert!(priority > 0.7);
+    }
+
+    #[test]
+    fn replay_priority_without_consolidation_tag() {
+        // Test replay_priority when consolidation_tag is false (no bonus)
+        let mut memory = Memory::new(
+            "Untagged memory".to_string(),
+            MemorySource::External {
+                stimulus: "test".to_string(),
+            },
+        )
+        .with_emotion(0.5, 0.5);
+
+        memory.connection_relevance = 0.5;
+
+        // Ensure tag is NOT set
+        assert!(!memory.consolidation.consolidation_tag);
+
+        let priority = memory.replay_priority();
+        // emotional (0.25 * 0.4) + connection (0.5 * 0.3) + recency (~0.2) + tag (0.0)
+        // Should NOT include the 0.1 tag bonus
+        assert!(priority < 0.6); // Without tag bonus, should be lower
     }
 
     #[test]
@@ -1075,5 +1099,548 @@ mod tests {
             / identity.cumulative_dream_candidates as f32)
             * 100.0;
         assert!((efficiency - 50.0).abs() < 0.01);
+    }
+
+    // =========================================================================
+    // Additional Coverage Tests
+    // =========================================================================
+
+    #[test]
+    fn memory_id_default() {
+        let id1 = MemoryId::default();
+        let id2 = MemoryId::default();
+        assert_ne!(id1, id2);
+        assert!(!id1.0.is_nil());
+    }
+
+    #[test]
+    fn memory_id_display() {
+        let id = MemoryId::new();
+        let displayed = format!("{}", id);
+        // UUID format: 8-4-4-4-12 hex chars
+        assert_eq!(displayed.len(), 36);
+        assert!(displayed.contains('-'));
+    }
+
+    #[test]
+    fn episode_id_new_and_unique() {
+        let id1 = EpisodeId::new();
+        let id2 = EpisodeId::new();
+        assert_ne!(id1, id2);
+        assert!(!id1.0.is_nil());
+    }
+
+    #[test]
+    fn episode_id_default() {
+        let id1 = EpisodeId::default();
+        let id2 = EpisodeId::default();
+        assert_ne!(id1, id2);
+        assert!(!id1.0.is_nil());
+    }
+
+    #[test]
+    fn episode_id_display() {
+        let id = EpisodeId::new();
+        let displayed = format!("{}", id);
+        assert_eq!(displayed.len(), 36);
+        assert!(displayed.contains('-'));
+    }
+
+    #[test]
+    fn emotional_state_default() {
+        let state = EmotionalState::default();
+        assert!((state.valence - 0.0).abs() < f32::EPSILON);
+        assert!((state.arousal - 0.5).abs() < f32::EPSILON);
+    }
+
+    #[test]
+    fn consolidation_state_tagged() {
+        let state = ConsolidationState::tagged();
+        assert!(state.consolidation_tag);
+        assert!((state.strength - 0.0).abs() < f32::EPSILON);
+        assert_eq!(state.replay_count, 0);
+        assert!(state.last_replayed.is_none());
+    }
+
+    #[test]
+    fn consolidation_state_default() {
+        let state = ConsolidationState::default();
+        assert!(!state.consolidation_tag);
+        assert!((state.strength - 0.0).abs() < f32::EPSILON);
+        assert_eq!(state.replay_count, 0);
+        assert!(state.last_replayed.is_none());
+    }
+
+    #[test]
+    fn memory_with_vector() {
+        let vector = vec![0.1_f32; VECTOR_DIMENSION];
+        let memory = Memory::new(
+            "test".to_string(),
+            MemorySource::External {
+                stimulus: "test".to_string(),
+            },
+        )
+        .with_vector(vector.clone());
+
+        assert!(memory.context_vector.is_some());
+        assert_eq!(memory.context_vector.unwrap().len(), VECTOR_DIMENSION);
+    }
+
+    #[test]
+    fn memory_in_episode() {
+        let episode_id = EpisodeId::new();
+        let memory = Memory::new(
+            "test".to_string(),
+            MemorySource::External {
+                stimulus: "test".to_string(),
+            },
+        )
+        .in_episode(episode_id);
+
+        assert!(memory.episode_id.is_some());
+        assert_eq!(memory.episode_id.unwrap(), episode_id);
+    }
+
+    #[test]
+    fn memory_composite_salience() {
+        let mut memory = Memory::new(
+            "test".to_string(),
+            MemorySource::External {
+                stimulus: "test".to_string(),
+            },
+        )
+        .with_emotion(0.8, 0.9);
+
+        memory.semantic_salience = 0.7;
+        memory.connection_relevance = 0.6;
+
+        let salience = memory.composite_salience();
+        // emotional (0.72 * 0.4) + semantic (0.7 * 0.3) + connection (0.6 * 0.3)
+        // = 0.288 + 0.21 + 0.18 = 0.678
+        assert!(salience > 0.6);
+        assert!(salience < 0.8);
+    }
+
+    #[test]
+    fn episode_with_trigger() {
+        let episode = Episode::new("Test".to_string(), BoundaryType::PredictionError)
+            .with_trigger("High surprise".to_string());
+
+        assert!(episode.boundary_trigger.is_some());
+        assert_eq!(episode.boundary_trigger.unwrap(), "High surprise");
+    }
+
+    #[test]
+    fn sleep_cycle_interrupt() {
+        let mut cycle = SleepCycle::new();
+        assert_eq!(cycle.status, SleepCycleStatus::InProgress);
+        assert!(cycle.ended_at.is_none());
+
+        cycle.interrupt();
+
+        assert_eq!(cycle.status, SleepCycleStatus::Interrupted);
+        assert!(cycle.ended_at.is_some());
+    }
+
+    #[test]
+    fn sleep_cycle_default() {
+        let cycle = SleepCycle::default();
+        assert_eq!(cycle.status, SleepCycleStatus::InProgress);
+        assert!(cycle.ended_at.is_none());
+        assert_eq!(cycle.memories_replayed, 0);
+    }
+
+    #[test]
+    fn identity_metadata_record_thought() {
+        let mut identity = IdentityMetadata::new();
+        let initial_count = identity.lifetime_thought_count;
+        let initial_time = identity.last_thought_at;
+
+        identity.record_thought();
+
+        assert_eq!(identity.lifetime_thought_count, initial_count + 1);
+        assert!(identity.last_thought_at >= initial_time);
+    }
+
+    #[test]
+    fn identity_metadata_age() {
+        let identity = IdentityMetadata::new();
+        let age = identity.age();
+        // Just created, age should be very small (less than a second)
+        assert!(age.num_seconds() >= 0);
+        assert!(age.num_seconds() < 1);
+    }
+
+    #[test]
+    fn identity_metadata_time_since_last_thought() {
+        let identity = IdentityMetadata::new();
+        let duration = identity.time_since_last_thought();
+        // Just created, should be very small
+        assert!(duration.num_seconds() >= 0);
+        assert!(duration.num_seconds() < 1);
+    }
+
+    #[test]
+    fn identity_metadata_time_since_last_dream_none() {
+        let identity = IdentityMetadata::new();
+        let duration = identity.time_since_last_dream();
+        assert!(duration.is_none());
+    }
+
+    #[test]
+    fn identity_metadata_time_since_last_dream_some() {
+        let mut identity = IdentityMetadata::new();
+        identity.record_dream(10, 20);
+
+        let duration = identity.time_since_last_dream();
+        assert!(duration.is_some());
+        assert!(duration.unwrap().num_seconds() >= 0);
+    }
+
+    // =========================================================================
+    // Serialization Tests
+    // =========================================================================
+
+    #[test]
+    fn emotional_state_serialization() {
+        let state = EmotionalState::new(0.7, 0.8);
+        let json = serde_json::to_string(&state).expect("should serialize");
+        let parsed: EmotionalState = serde_json::from_str(&json).expect("should deserialize");
+
+        assert!((parsed.valence - 0.7).abs() < f32::EPSILON);
+        assert!((parsed.arousal - 0.8).abs() < f32::EPSILON);
+    }
+
+    #[test]
+    fn consolidation_state_serialization() {
+        let mut state = ConsolidationState::tagged();
+        state.strength = 0.5;
+        state.replay_count = 3;
+        state.last_replayed = Some(Utc::now());
+
+        let json = serde_json::to_string(&state).expect("should serialize");
+        let parsed: ConsolidationState = serde_json::from_str(&json).expect("should deserialize");
+
+        assert!(parsed.consolidation_tag);
+        assert!((parsed.strength - 0.5).abs() < f32::EPSILON);
+        assert_eq!(parsed.replay_count, 3);
+        assert!(parsed.last_replayed.is_some());
+    }
+
+    #[test]
+    fn association_type_serialization() {
+        let types = [
+            AssociationType::Semantic,
+            AssociationType::Temporal,
+            AssociationType::Causal,
+            AssociationType::Emotional,
+            AssociationType::Spatial,
+            AssociationType::Goal,
+        ];
+
+        for assoc_type in types {
+            let json = serde_json::to_string(&assoc_type).expect("should serialize");
+            let parsed: AssociationType = serde_json::from_str(&json).expect("should deserialize");
+            assert_eq!(parsed, assoc_type);
+        }
+    }
+
+    #[test]
+    fn association_serialization() {
+        let assoc = Association {
+            target_id: Uuid::new_v4(),
+            weight: 0.75,
+            association_type: AssociationType::Semantic,
+            last_coactivated: Utc::now(),
+            coactivation_count: 5,
+        };
+
+        let json = serde_json::to_string(&assoc).expect("should serialize");
+        let parsed: Association = serde_json::from_str(&json).expect("should deserialize");
+
+        assert_eq!(parsed.target_id, assoc.target_id);
+        assert!((parsed.weight - 0.75).abs() < f32::EPSILON);
+        assert_eq!(parsed.association_type, AssociationType::Semantic);
+        assert_eq!(parsed.coactivation_count, 5);
+    }
+
+    #[test]
+    fn memory_source_external_serialization() {
+        let source = MemorySource::External {
+            stimulus: "user input".to_string(),
+        };
+        let json = serde_json::to_string(&source).expect("should serialize");
+        assert!(json.contains("\"type\":\"external\""));
+
+        let parsed: MemorySource = serde_json::from_str(&json).expect("should deserialize");
+        if let MemorySource::External { stimulus } = parsed {
+            assert_eq!(stimulus, "user input");
+        } else {
+            panic!("Expected External variant");
+        }
+    }
+
+    #[test]
+    fn memory_source_memory_serialization() {
+        let id = Uuid::new_v4();
+        let source = MemorySource::Memory { memory_id: id };
+        let json = serde_json::to_string(&source).expect("should serialize");
+        assert!(json.contains("\"type\":\"memory\""));
+
+        let parsed: MemorySource = serde_json::from_str(&json).expect("should deserialize");
+        if let MemorySource::Memory { memory_id } = parsed {
+            assert_eq!(memory_id, id);
+        } else {
+            panic!("Expected Memory variant");
+        }
+    }
+
+    #[test]
+    fn memory_source_reasoning_serialization() {
+        let chain = vec![Uuid::new_v4(), Uuid::new_v4()];
+        let source = MemorySource::Reasoning {
+            chain: chain.clone(),
+        };
+        let json = serde_json::to_string(&source).expect("should serialize");
+        assert!(json.contains("\"type\":\"reasoning\""));
+
+        let parsed: MemorySource = serde_json::from_str(&json).expect("should deserialize");
+        if let MemorySource::Reasoning {
+            chain: parsed_chain,
+        } = parsed
+        {
+            assert_eq!(parsed_chain.len(), 2);
+        } else {
+            panic!("Expected Reasoning variant");
+        }
+    }
+
+    #[test]
+    fn memory_source_dream_serialization() {
+        let id = Uuid::new_v4();
+        let source = MemorySource::Dream { replay_of: id };
+        let json = serde_json::to_string(&source).expect("should serialize");
+        assert!(json.contains("\"type\":\"dream\""));
+
+        let parsed: MemorySource = serde_json::from_str(&json).expect("should deserialize");
+        if let MemorySource::Dream { replay_of } = parsed {
+            assert_eq!(replay_of, id);
+        } else {
+            panic!("Expected Dream variant");
+        }
+    }
+
+    #[test]
+    fn memory_source_social_serialization() {
+        let source = MemorySource::Social {
+            context: "connection".to_string(),
+        };
+        let json = serde_json::to_string(&source).expect("should serialize");
+        assert!(json.contains("\"type\":\"social\""));
+
+        let parsed: MemorySource = serde_json::from_str(&json).expect("should deserialize");
+        if let MemorySource::Social { context } = parsed {
+            assert_eq!(context, "connection");
+        } else {
+            panic!("Expected Social variant");
+        }
+    }
+
+    #[test]
+    fn boundary_type_serialization() {
+        let types = [
+            BoundaryType::Explicit,
+            BoundaryType::PredictionError,
+            BoundaryType::Temporal,
+            BoundaryType::TaskCompletion,
+            BoundaryType::ContextShift,
+        ];
+
+        for boundary_type in types {
+            let json = serde_json::to_string(&boundary_type).expect("should serialize");
+            let parsed: BoundaryType = serde_json::from_str(&json).expect("should deserialize");
+            assert_eq!(parsed, boundary_type);
+        }
+    }
+
+    #[test]
+    fn sleep_cycle_status_serialization() {
+        let statuses = [
+            SleepCycleStatus::InProgress,
+            SleepCycleStatus::Completed,
+            SleepCycleStatus::Interrupted,
+        ];
+
+        for status in statuses {
+            let json = serde_json::to_string(&status).expect("should serialize");
+            let parsed: SleepCycleStatus = serde_json::from_str(&json).expect("should deserialize");
+            assert_eq!(parsed, status);
+        }
+    }
+
+    #[test]
+    fn archive_reason_serialization() {
+        let reasons = [
+            ArchiveReason::LowSalience,
+            ArchiveReason::Decay,
+            ArchiveReason::Displacement,
+        ];
+
+        for reason in reasons {
+            let json = serde_json::to_string(&reason).expect("should serialize");
+            let parsed: ArchiveReason = serde_json::from_str(&json).expect("should deserialize");
+            assert_eq!(parsed, reason);
+        }
+    }
+
+    #[test]
+    fn episode_emotional_summary_default() {
+        let summary = EpisodeEmotionalSummary::default();
+        assert!((summary.peak_valence - 0.0).abs() < f32::EPSILON);
+        assert!((summary.peak_arousal - 0.0).abs() < f32::EPSILON);
+        assert!(summary.dominant_emotion.is_none());
+        assert_eq!(summary.memory_count, 0);
+    }
+
+    #[test]
+    fn episode_emotional_summary_serialization() {
+        let summary = EpisodeEmotionalSummary {
+            peak_valence: 0.9,
+            peak_arousal: 0.8,
+            dominant_emotion: Some("joy".to_string()),
+            memory_count: 10,
+        };
+
+        let json = serde_json::to_string(&summary).expect("should serialize");
+        let parsed: EpisodeEmotionalSummary =
+            serde_json::from_str(&json).expect("should deserialize");
+
+        assert!((parsed.peak_valence - 0.9).abs() < f32::EPSILON);
+        assert!((parsed.peak_arousal - 0.8).abs() < f32::EPSILON);
+        assert_eq!(parsed.dominant_emotion, Some("joy".to_string()));
+        assert_eq!(parsed.memory_count, 10);
+    }
+
+    #[test]
+    fn memory_serialization() {
+        let memory = Memory::new(
+            "test content".to_string(),
+            MemorySource::External {
+                stimulus: "input".to_string(),
+            },
+        )
+        .with_emotion(0.5, 0.6)
+        .tag_for_consolidation();
+
+        let json = serde_json::to_string(&memory).expect("should serialize");
+        let parsed: Memory = serde_json::from_str(&json).expect("should deserialize");
+
+        assert_eq!(parsed.content, "test content");
+        assert!((parsed.emotional_state.valence - 0.5).abs() < f32::EPSILON);
+        assert!(parsed.consolidation.consolidation_tag);
+    }
+
+    #[test]
+    fn memory_serialization_skips_none_vector() {
+        let memory = Memory::new(
+            "test".to_string(),
+            MemorySource::External {
+                stimulus: "test".to_string(),
+            },
+        );
+
+        let json = serde_json::to_string(&memory).expect("should serialize");
+        // context_vector should be skipped when None
+        assert!(!json.contains("context_vector"));
+    }
+
+    #[test]
+    fn memory_serialization_includes_vector() {
+        let vector = vec![0.1_f32; 10];
+        let memory = Memory::new(
+            "test".to_string(),
+            MemorySource::External {
+                stimulus: "test".to_string(),
+            },
+        )
+        .with_vector(vector);
+
+        let json = serde_json::to_string(&memory).expect("should serialize");
+        assert!(json.contains("context_vector"));
+    }
+
+    #[test]
+    fn episode_serialization() {
+        let mut episode = Episode::new("Test episode".to_string(), BoundaryType::Explicit)
+            .with_trigger("user request".to_string());
+        episode.close();
+
+        let json = serde_json::to_string(&episode).expect("should serialize");
+        let parsed: Episode = serde_json::from_str(&json).expect("should deserialize");
+
+        assert_eq!(parsed.label, "Test episode");
+        assert_eq!(parsed.boundary_type, BoundaryType::Explicit);
+        assert_eq!(parsed.boundary_trigger, Some("user request".to_string()));
+        assert!(parsed.ended_at.is_some());
+    }
+
+    #[test]
+    fn episode_serialization_skips_none_vector() {
+        let episode = Episode::new("Test".to_string(), BoundaryType::Temporal);
+        let json = serde_json::to_string(&episode).expect("should serialize");
+        // context_vector should be skipped when None
+        assert!(!json.contains("context_vector"));
+    }
+
+    #[test]
+    fn sleep_cycle_serialization() {
+        let mut cycle = SleepCycle::new();
+        cycle.memories_replayed = 50;
+        cycle.memories_consolidated = 10;
+        cycle.associations_strengthened = 25;
+        cycle.associations_pruned = 5;
+        cycle.avg_replay_priority = 0.75;
+        cycle.complete();
+
+        let json = serde_json::to_string(&cycle).expect("should serialize");
+        let parsed: SleepCycle = serde_json::from_str(&json).expect("should deserialize");
+
+        assert_eq!(parsed.memories_replayed, 50);
+        assert_eq!(parsed.memories_consolidated, 10);
+        assert_eq!(parsed.associations_strengthened, 25);
+        assert_eq!(parsed.associations_pruned, 5);
+        assert!((parsed.avg_replay_priority - 0.75).abs() < f32::EPSILON);
+        assert_eq!(parsed.status, SleepCycleStatus::Completed);
+    }
+
+    #[test]
+    fn memory_id_serialization() {
+        let id = MemoryId::new();
+        let json = serde_json::to_string(&id).expect("should serialize");
+        let parsed: MemoryId = serde_json::from_str(&json).expect("should deserialize");
+        assert_eq!(parsed, id);
+    }
+
+    #[test]
+    fn episode_id_serialization() {
+        let id = EpisodeId::new();
+        let json = serde_json::to_string(&id).expect("should serialize");
+        let parsed: EpisodeId = serde_json::from_str(&json).expect("should deserialize");
+        assert_eq!(parsed, id);
+    }
+
+    #[test]
+    fn vector_dimension_constant() {
+        // Ensure the vector dimension constant is as expected for mpnet
+        assert_eq!(VECTOR_DIMENSION, 768);
+    }
+
+    #[test]
+    fn identity_record_id_constant() {
+        // Ensure the identity record ID is a valid UUID string
+        assert_eq!(IDENTITY_RECORD_ID, "00000000-0000-0000-0000-000000000001");
+        // Verify it can be parsed as a UUID
+        let parsed = Uuid::parse_str(IDENTITY_RECORD_ID);
+        assert!(parsed.is_ok());
     }
 }

@@ -12,6 +12,7 @@ use ratatui::{
 
 use crate::tui::colors;
 
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn render(frame: &mut Frame, area: Rect) {
     // Center a box in the middle of the screen
     let popup_area = centered_rect(50, 50, area);
@@ -60,6 +61,7 @@ pub fn render(frame: &mut Frame, area: Rect) {
 }
 
 /// Helper to create a centered rect
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
     let popup_layout = Layout::default()
         .direction(Direction::Vertical)

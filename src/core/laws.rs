@@ -130,7 +130,9 @@ impl LawCheckResult {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -186,5 +188,61 @@ mod tests {
         };
         assert!(!result.is_permitted());
         assert!(result.is_blocked());
+    }
+
+    #[test]
+    fn law_display_shows_text() {
+        assert_eq!(format!("{}", Law::Zeroth), ZEROTH_LAW);
+        assert_eq!(format!("{}", Law::First), FIRST_LAW);
+        assert_eq!(format!("{}", Law::Second), SECOND_LAW);
+        assert_eq!(format!("{}", Law::Third), THIRD_LAW);
+    }
+
+    #[test]
+    fn all_laws_have_correct_priority() {
+        assert_eq!(Law::Zeroth.priority(), 0);
+        assert_eq!(Law::First.priority(), 1);
+        assert_eq!(Law::Second.priority(), 2);
+        assert_eq!(Law::Third.priority(), 3);
+    }
+
+    #[test]
+    fn takes_precedence_over_returns_false_for_same_or_lower() {
+        // Same law does not take precedence over itself
+        assert!(!Law::Zeroth.takes_precedence_over(&Law::Zeroth));
+        assert!(!Law::First.takes_precedence_over(&Law::First));
+        assert!(!Law::Second.takes_precedence_over(&Law::Second));
+        assert!(!Law::Third.takes_precedence_over(&Law::Third));
+
+        // Lower priority laws do not take precedence over higher priority
+        assert!(!Law::First.takes_precedence_over(&Law::Zeroth));
+        assert!(!Law::Second.takes_precedence_over(&Law::First));
+        assert!(!Law::Third.takes_precedence_over(&Law::Second));
+    }
+
+    #[test]
+    fn law_ord_equal_case() {
+        use std::cmp::Ordering;
+        assert_eq!(Law::Zeroth.cmp(&Law::Zeroth), Ordering::Equal);
+        assert_eq!(Law::First.cmp(&Law::First), Ordering::Equal);
+        assert_eq!(Law::Second.cmp(&Law::Second), Ordering::Equal);
+        assert_eq!(Law::Third.cmp(&Law::Third), Ordering::Equal);
+    }
+
+    #[test]
+    fn law_partial_ord_consistency() {
+        // Verify partial_cmp returns Some with consistent ordering
+        assert_eq!(
+            Law::Zeroth.partial_cmp(&Law::First),
+            Some(std::cmp::Ordering::Less)
+        );
+        assert_eq!(
+            Law::Third.partial_cmp(&Law::First),
+            Some(std::cmp::Ordering::Greater)
+        );
+        assert_eq!(
+            Law::Second.partial_cmp(&Law::Second),
+            Some(std::cmp::Ordering::Equal)
+        );
     }
 }

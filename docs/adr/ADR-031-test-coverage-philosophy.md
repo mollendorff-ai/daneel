@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Superseded by [ADR-049: 100% Test Coverage Policy](./ADR-049-test-coverage-policy.md)
 
 ## Date
 

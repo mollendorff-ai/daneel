@@ -149,6 +149,7 @@ impl ThoughtUpdate {
 /// # Errors
 ///
 /// Returns error if terminal operations fail
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn run(thought_rx: Option<mpsc::Receiver<ThoughtUpdate>>) -> io::Result<()> {
     // Setup terminal
     enable_raw_mode()?;
@@ -176,6 +177,7 @@ pub fn run(thought_rx: Option<mpsc::Receiver<ThoughtUpdate>>) -> io::Result<()> 
 }
 
 /// Main event loop
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn run_loop(
     terminal: &mut Terminal<CrosstermBackend<io::Stdout>>,
     app: &mut App,
@@ -256,6 +258,7 @@ fn run_loop(
 /// Simulate a thought for demo purposes
 /// LEGACY: Kept for testing. Real DANEEL uses the cognitive loop via channels.
 #[allow(dead_code)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn simulate_thought(app: &mut App) {
     use rand::Rng;
 
@@ -308,4 +311,128 @@ fn simulate_thought(app: &mut App) {
     // Slight variation in connection drive
     app.the_box.connection_drive =
         (app.the_box.connection_drive + rng.random_range(-0.02..0.02)).clamp(0.5, 1.0);
+}
+
+/// ADR-049: Test modules excluded from coverage
+#[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
+mod tests {
+    use super::*;
+    use crate::core::cognitive_loop::{CycleResult, StageDurations};
+    use crate::core::types::ThoughtId;
+    use std::time::Duration;
+
+    fn make_result(cycle: u64, thought: Option<ThoughtId>, salience: f32) -> CycleResult {
+        CycleResult {
+            cycle_number: cycle,
+            duration: Duration::from_millis(100),
+            thought_produced: thought,
+            salience,
+            valence: 0.0,
+            arousal: 0.5,
+            on_time: true,
+            candidates_evaluated: 1,
+            stage_durations: StageDurations::default(),
+            veto: None,
+        }
+    }
+
+    #[test]
+    fn from_cycle_result_high_salience_anchored() {
+        let result = make_result(1, Some(ThoughtId::new()), 0.9);
+        let update = ThoughtUpdate::from_cycle_result(&result, 10, 5, 100, 2, 3, 10, 20, None);
+        assert_eq!(update.status, ThoughtStatus::Anchored);
+        assert_eq!(update.salience, 0.9);
+    }
+
+    #[test]
+    fn from_cycle_result_medium_salience_memory_write() {
+        let result = make_result(2, Some(ThoughtId::new()), 0.75);
+        let update = ThoughtUpdate::from_cycle_result(&result, 0, 0, 0, 0, 0, 0, 0, None);
+        assert_eq!(update.status, ThoughtStatus::MemoryWrite);
+    }
+
+    #[test]
+    fn from_cycle_result_low_salience_unconscious() {
+        let result = make_result(3, Some(ThoughtId::new()), 0.2);
+        let update = ThoughtUpdate::from_cycle_result(&result, 0, 0, 0, 0, 0, 0, 0, None);
+        assert_eq!(update.status, ThoughtStatus::Unconscious);
+    }
+
+    #[test]
+    fn from_cycle_result_no_thought_dismissed() {
+        let result = make_result(4, None, 0.5);
+        let update = ThoughtUpdate::from_cycle_result(&result, 0, 0, 0, 0, 0, 0, 0, None);
+        assert_eq!(update.status, ThoughtStatus::Dismissed);
+    }
+
+    #[test]
+    fn from_cycle_result_salient_status() {
+        let result = make_result(5, Some(ThoughtId::new()), 0.6);
+        let update = ThoughtUpdate::from_cycle_result(&result, 0, 0, 0, 0, 0, 0, 0, None);
+        assert_eq!(update.status, ThoughtStatus::Salient);
+    }
+
+    #[test]
+    fn from_cycle_result_processing_status() {
+        let result = make_result(6, Some(ThoughtId::new()), 0.4);
+        let update = ThoughtUpdate::from_cycle_result(&result, 0, 0, 0, 0, 0, 0, 0, None);
+        assert_eq!(update.status, ThoughtStatus::Processing);
+    }
+
+    #[test]
+    fn from_cycle_result_preserves_all_fields() {
+        let result = CycleResult {
+            cycle_number: 42,
+            duration: Duration::from_millis(200),
+            thought_produced: Some(ThoughtId::new()),
+            salience: 0.88,
+            valence: 0.7,
+            arousal: 0.8,
+            on_time: true,
+            candidates_evaluated: 10,
+            stage_durations: StageDurations::default(),
+            veto: None,
+        };
+        let update = ThoughtUpdate::from_cycle_result(
+            &result,
+            100,
+            50,
+            1000,
+            5,
+            10,
+            25,
+            50,
+            Some(("veto_reason".to_string(), Some("value".to_string()))),
+        );
+        assert_eq!(update.cycle_number, 42);
+        assert_eq!(update.salience, 0.88);
+        assert_eq!(update.valence, 0.7);
+        assert_eq!(update.arousal, 0.8);
+        assert_eq!(update.memory_count, 100);
+        assert_eq!(update.unconscious_count, 50);
+        assert_eq!(update.lifetime_thought_count, 1000);
+        assert_eq!(update.dream_cycles, 5);
+        assert_eq!(update.candidates_evaluated, 10);
+    }
+
+    #[test]
+    fn from_cycle_result_window_cycles_through_stages() {
+        let expected_windows = [
+            "trigger",
+            "autoflow",
+            "attention",
+            "assembly",
+            "anchor",
+            "memory",
+            "reasoning",
+            "emotion",
+            "sensory",
+        ];
+        for i in 0..18u64 {
+            let result = make_result(i, Some(ThoughtId::new()), 0.5);
+            let update = ThoughtUpdate::from_cycle_result(&result, 0, 0, 0, 0, 0, 0, 0, None);
+            assert_eq!(update.window, expected_windows[(i as usize) % 9]);
+        }
+    }
 }

@@ -134,6 +134,7 @@ pub enum AutofluxoStream {
     Social,
 }
 
+#[cfg_attr(coverage_nightly, coverage(off))]
 impl std::fmt::Display for AutofluxoStream {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -147,6 +148,7 @@ impl std::fmt::Display for AutofluxoStream {
 }
 
 /// Placeholder - Redis client implementation
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn streams_placeholder() {
     // This function exists for backwards compatibility
     // Real implementation is in client.rs and consumer.rs

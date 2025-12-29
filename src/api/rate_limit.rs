@@ -37,6 +37,7 @@ pub enum RateLimitResult {
 }
 
 /// Check rate limit for a key
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub async fn check_rate_limit(
     redis: &mut redis::aio::MultiplexedConnection,
     key_id: &str,
@@ -124,7 +125,9 @@ impl RampPhase {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -146,5 +149,143 @@ mod tests {
             RampPhase::from_duration(Duration::from_secs(100 * 3600)),
             RampPhase::Full
         ));
+    }
+
+    #[test]
+    fn test_default_rate_limit_config() {
+        let config = RateLimitConfig::default();
+        assert_eq!(config.per_second, 5);
+        assert_eq!(config.per_minute, 100);
+    }
+
+    #[test]
+    fn test_warmup_phase_config() {
+        let config = RampPhase::Warmup.config();
+        assert_eq!(config.per_second, 1);
+        assert_eq!(config.per_minute, 12); // 1 per 5 minutes = 12 per hour
+    }
+
+    #[test]
+    fn test_baseline_phase_config() {
+        let config = RampPhase::Baseline.config();
+        assert_eq!(config.per_second, 1);
+        assert_eq!(config.per_minute, 60); // 1 per minute = 60 per hour
+    }
+
+    #[test]
+    fn test_ramp_phase_config() {
+        let config = RampPhase::Ramp.config();
+        assert_eq!(config.per_second, 1);
+        assert_eq!(config.per_minute, 100);
+    }
+
+    #[test]
+    fn test_full_phase_config() {
+        let config = RampPhase::Full.config();
+        assert_eq!(config.per_second, 5);
+        assert_eq!(config.per_minute, 100);
+    }
+
+    #[test]
+    fn test_ramp_phase_boundaries() {
+        // Test exact boundary at 24 hours (should be Baseline)
+        assert!(matches!(
+            RampPhase::from_duration(Duration::from_secs(24 * 3600)),
+            RampPhase::Baseline
+        ));
+
+        // Test just before 24 hours (should still be Warmup)
+        assert!(matches!(
+            RampPhase::from_duration(Duration::from_secs(23 * 3600 + 3599)),
+            RampPhase::Warmup
+        ));
+
+        // Test exact boundary at 48 hours (should be Ramp)
+        assert!(matches!(
+            RampPhase::from_duration(Duration::from_secs(48 * 3600)),
+            RampPhase::Ramp
+        ));
+
+        // Test just before 48 hours (should still be Baseline)
+        assert!(matches!(
+            RampPhase::from_duration(Duration::from_secs(47 * 3600 + 3599)),
+            RampPhase::Baseline
+        ));
+
+        // Test exact boundary at 72 hours (should be Full)
+        assert!(matches!(
+            RampPhase::from_duration(Duration::from_secs(72 * 3600)),
+            RampPhase::Full
+        ));
+
+        // Test just before 72 hours (should still be Ramp)
+        assert!(matches!(
+            RampPhase::from_duration(Duration::from_secs(71 * 3600 + 3599)),
+            RampPhase::Ramp
+        ));
+    }
+
+    #[test]
+    fn test_ramp_phase_very_long_duration() {
+        // Test very long durations remain at Full
+        assert!(matches!(
+            RampPhase::from_duration(Duration::from_secs(1000 * 3600)),
+            RampPhase::Full
+        ));
+    }
+
+    #[test]
+    fn test_rate_limit_result_allowed_debug() {
+        let result = RateLimitResult::Allowed {
+            remaining_second: 4,
+            remaining_minute: 99,
+        };
+        let debug_str = format!("{:?}", result);
+        assert!(debug_str.contains("Allowed"));
+        assert!(debug_str.contains('4'));
+        assert!(debug_str.contains("99"));
+    }
+
+    #[test]
+    fn test_rate_limit_result_exceeded_debug() {
+        let result = RateLimitResult::Exceeded {
+            retry_after_seconds: 30,
+        };
+        let debug_str = format!("{:?}", result);
+        assert!(debug_str.contains("Exceeded"));
+        assert!(debug_str.contains("30"));
+    }
+
+    #[test]
+    fn test_rate_limit_result_allowed_fields() {
+        let result = RateLimitResult::Allowed {
+            remaining_second: 3,
+            remaining_minute: 50,
+        };
+        if let RateLimitResult::Allowed {
+            remaining_second,
+            remaining_minute,
+        } = result
+        {
+            assert_eq!(remaining_second, 3);
+            assert_eq!(remaining_minute, 50);
+        } else {
+            panic!("Expected Allowed variant");
+        }
+    }
+
+    #[test]
+    fn test_rate_limit_result_exceeded_fields() {
+        let result = RateLimitResult::Exceeded {
+            retry_after_seconds: 45,
+        };
+        if let RateLimitResult::Exceeded {
+            retry_after_seconds,
+        } = result
+        {
+            assert_eq!(retry_after_seconds, 45);
+        } else {
+            panic!("Expected Exceeded variant");
+        }
     }
 }

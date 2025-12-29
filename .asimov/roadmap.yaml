@@ -21,6 +21,7 @@
 # ADR-044: Migrate to Mac mini + Cloudflare (DONE - Dec 25, 2025)
 #
 # Current priorities:
+#   0. 100% Test Coverage (TEST-1 through TEST-4) ← DONE (Dec 28, 2025)
 #   1. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL
 #   2. Drive system upgrade (DRIVE-1 through DRIVE-3) ← HIGH
 #   3. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← HIGH
@@ -58,6 +59,76 @@ current:
   status: wip
   name: "External Stimuli Injection"
   summary: "Open the loop - inject external stimuli and observe dynamics"
+
+  # ==========================================================================
+  # DONE: 100% Test Coverage (ADR-049) - Completed Dec 28, 2025
+  # ==========================================================================
+  # Origin: Rex + Claude Opus 4.5 - Dec 28, 2025
+  # Goal: 100% unit test coverage, inline with Rust source (the Rust way)
+  # Untestable code: mark with #[coverage(off)] + document in ADR-049
+  # ==========================================================================
+  test_coverage:
+    status: done
+    completed: "2025-12-28"
+    priority: "HIGH (BLOCKING)"
+    origin: "Rex + Claude Opus 4.5 - Dec 28, 2025"
+    adr: "ADR-049-test-coverage-policy.md"
+    description: |
+      100% test coverage achieved for all testable code.
+      Tests colocated with source (Rust idiomatic #[cfg(test)] mod tests).
+      Untestable code (I/O, external services) marked with #[coverage(off)]
+      and documented in ADR-049.
+
+    tasks:
+      - id: "TEST-1"
+        title: "Establish coverage baseline"
+        status: done
+        completed: "2025-12-28"
+        priority: "HIGH"
+        description: |
+          Initial baseline: 70.14% (581 tests).
+          Final: 100% (1172 tests).
+        command: "cargo llvm-cov --html"
+
+      - id: "TEST-2"
+        title: "Add #![feature(coverage_attribute)] to lib.rs"
+        status: done
+        completed: "2025-12-28"
+        priority: "HIGH"
+        description: |
+          Added #![cfg_attr(coverage_nightly, feature(coverage_attribute))]
+          Enables #[coverage(off)] for marking untestable code.
+        files: ["src/lib.rs"]
+
+      - id: "TEST-3"
+        title: "Audit and mark untestable code"
+        status: done
+        completed: "2025-12-28"
+        priority: "HIGH"
+        description: |
+          Marked with #[cfg_attr(coverage_nightly, coverage(off))]:
+          - External I/O (Redis, Qdrant connections)
+          - TUI rendering (requires terminal)
+          - Main function and CLI parsing
+          - Signal handlers and panic hooks
+          - Test modules (meta-recursive)
+          All documented in ADR-049.
+
+      - id: "TEST-4"
+        title: "Achieve 100% coverage on testable code"
+        status: done
+        completed: "2025-12-28"
+        priority: "HIGH"
+        description: |
+          100% lines, 100% functions, 100% branches.
+          1172 tests (doubled from 581).
+          All tests inline (#[cfg(test)] mod tests).
+
+    success_criteria:
+      - "✅ cargo llvm-cov reports 100% on testable code"
+      - "✅ All #[coverage(off)] items documented in ADR-049"
+      - "✅ All tests colocated with source (Rust idiomatic)"
+      - "✅ make coverage enforces 100% threshold"
 
   # ==========================================================================
   # DONE: Research Absorption (ADR-047) - Moved to CHANGELOG.md

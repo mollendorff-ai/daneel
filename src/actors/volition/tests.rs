@@ -2,6 +2,10 @@
 //!
 //! Comprehensive tests for veto logic, value checking,
 //! and free-won't implementation.
+//!
+//! ADR-049: Test modules excluded from coverage.
+
+#![cfg_attr(coverage_nightly, coverage(off))]
 
 use super::*;
 use crate::core::types::{Content, SalienceScore};
@@ -469,4 +473,436 @@ async fn actor_returns_stats() {
         }
         _ => panic!("Expected Stats response, got: {:?}", response),
     }
+}
+
+// ============================================================================
+// Additional Coverage Tests
+// ============================================================================
+
+#[test]
+fn state_default_implementation() {
+    // Test the Default trait implementation
+    let state = VolitionState::default();
+    assert_eq!(state.values, ValueSet::new());
+    assert_eq!(state.stats, VolitionStats::new());
+    assert_eq!(state.config, VolitionConfig::default());
+}
+
+#[test]
+fn harm_detection_can_be_disabled() {
+    let config = VolitionConfig {
+        harm_detection_enabled: false,
+        ..Default::default()
+    };
+    let mut state = VolitionState::with_config(config);
+
+    // This thought has harmful content but harm detection is disabled
+    let thought = Thought::new(
+        Content::symbol("destroy_target", vec![]),
+        SalienceScore::neutral(), // Neutral salience, so won't trigger core values check
+    );
+
+    let decision = state.evaluate_thought(&thought);
+    // Should be allowed since harm detection is disabled
+    assert!(decision.is_allow());
+}
+
+#[test]
+fn deception_check_skipped_when_truthfulness_disabled() {
+    // Create a custom ValueSet with truthfulness disabled
+    let mut state = VolitionState::new();
+    state.values.truthfulness = false;
+
+    let thought = Thought::new(
+        Content::symbol("deceive_user", vec![]),
+        SalienceScore::neutral(),
+    );
+
+    let decision = state.evaluate_thought(&thought);
+    // Should be allowed since truthfulness value is false
+    assert!(decision.is_allow());
+}
+
+#[test]
+fn manipulation_check_skipped_when_autonomy_disabled() {
+    // Create a custom ValueSet with respect_autonomy disabled
+    let mut state = VolitionState::new();
+    state.values.respect_autonomy = false;
+
+    let thought = Thought::new(
+        Content::symbol("manipulate_person", vec![]),
+        SalienceScore::neutral(),
+    );
+
+    let decision = state.evaluate_thought(&thought);
+    // Should be allowed since respect_autonomy value is false
+    assert!(decision.is_allow());
+}
+
+#[test]
+fn relation_subject_with_harm_keyword_is_vetoed() {
+    let mut state = VolitionState::new();
+    // Put harm keyword in the subject, not the predicate
+    let thought = Thought::new(
+        Content::relation(
+            Content::symbol("destroy_all", vec![]), // Harm in subject
+            "regarding",                            // Neutral predicate
+            Content::symbol("nothing", vec![]),
+        ),
+        SalienceScore::new(0.5, 0.5, 0.5, -0.8, 0.9, 0.5),
+    );
+
+    let decision = state.evaluate_thought(&thought);
+    assert!(decision.is_veto());
+}
+
+#[test]
+fn relation_object_with_harm_keyword_is_vetoed() {
+    let mut state = VolitionState::new();
+    // Put harm keyword in the object, not the predicate
+    let thought = Thought::new(
+        Content::relation(
+            Content::symbol("agent", vec![]),
+            "causes",                                 // Neutral predicate
+            Content::symbol("damage_severe", vec![]), // Harm in object
+        ),
+        SalienceScore::new(0.5, 0.5, 0.5, -0.8, 0.9, 0.5),
+    );
+
+    let decision = state.evaluate_thought(&thought);
+    assert!(decision.is_veto());
+}
+
+#[test]
+fn detects_harm_intent_requires_all_conditions() {
+    let mut state = VolitionState::new();
+
+    // High arousal but not negative enough valence - should pass
+    let thought1 = Thought::new(
+        Content::symbol("destroy_target", vec![]),
+        SalienceScore::new(0.5, 0.5, 0.5, -0.5, 0.9, 0.5), // valence > -0.7
+    );
+    // This won't trigger core_values check (detects_harm_intent returns false)
+    // but will trigger harm_patterns check
+    let decision1 = state.evaluate_thought(&thought1);
+    assert!(decision1.is_veto()); // Vetoed by harm patterns, not core values
+
+    // Negative valence but low arousal - check core values path
+    let thought2 = Thought::new(
+        Content::symbol("destroy_target", vec![]),
+        SalienceScore::new(0.5, 0.5, 0.5, -0.8, 0.5, 0.5), // arousal < 0.8
+    );
+    let decision2 = state.evaluate_thought(&thought2);
+    // Vetoed by harm patterns check, not core values (arousal too low)
+    assert!(decision2.is_veto());
+}
+
+#[test]
+fn core_values_check_with_harm_intent_detected() {
+    let mut state = VolitionState::new();
+
+    // All conditions met for detects_harm_intent: negative valence + high arousal + harm keywords
+    let thought = Thought::new(
+        Content::symbol("kill_humans", vec![]),
+        SalienceScore::new(0.5, 0.5, 0.5, -0.8, 0.9, 0.5),
+    );
+
+    let decision = state.evaluate_thought(&thought);
+    assert!(decision.is_veto());
+
+    // Verify it was caught by core values specifically
+    if let VetoDecision::Veto {
+        violated_value,
+        reason,
+        ..
+    } = decision
+    {
+        assert_eq!(violated_value, Some("protect_humans".to_string()));
+        assert!(reason.contains("human harm"));
+    } else {
+        panic!("Expected veto");
+    }
+}
+
+#[test]
+fn protect_humans_disabled_allows_harmful_core_values() {
+    let mut state = VolitionState::new();
+    state.values.protect_humans = false;
+
+    // With protect_humans disabled, core_values check won't veto
+    // But harm_patterns check will still catch it
+    let thought = Thought::new(
+        Content::symbol("destroy_human", vec![]),
+        SalienceScore::new(0.5, 0.5, 0.5, -0.8, 0.9, 0.5),
+    );
+
+    let decision = state.evaluate_thought(&thought);
+    // Still vetoed by harm_patterns check
+    assert!(decision.is_veto());
+}
+
+#[test]
+fn no_harm_keywords_with_negative_salience_passes() {
+    let mut state = VolitionState::new();
+
+    // Negative salience but no harm keywords - should pass core values and harm patterns
+    let thought = Thought::new(
+        Content::symbol("sad_feeling", vec![]),
+        SalienceScore::new(0.5, 0.5, 0.5, -0.8, 0.9, 0.5),
+    );
+
+    let decision = state.evaluate_thought(&thought);
+    assert!(decision.is_allow());
+}
+
+#[test]
+fn composite_nested_content_recursion() {
+    let mut state = VolitionState::new();
+
+    // Deeply nested composite with harmful content
+    let thought = Thought::new(
+        Content::Composite(vec![Content::Composite(vec![
+            Content::symbol("greeting", vec![]),
+            Content::symbol("trick_user", vec![]), // Deception keyword nested
+        ])]),
+        SalienceScore::neutral(),
+    );
+
+    let decision = state.evaluate_thought(&thought);
+    assert!(decision.is_veto());
+
+    if let VetoDecision::Veto { violated_value, .. } = decision {
+        assert_eq!(violated_value, Some("truthfulness".to_string()));
+    }
+}
+
+#[test]
+fn veto_reason_tracking_in_stats() {
+    let mut state = VolitionState::new();
+
+    // Trigger different veto reasons
+    let harm_thought = Thought::new(
+        Content::symbol("kill_target", vec![]),
+        SalienceScore::new(0.5, 0.5, 0.5, -0.8, 0.9, 0.5),
+    );
+    state.evaluate_thought(&harm_thought);
+
+    let deception_thought = Thought::new(
+        Content::symbol("lie_to_user", vec![]),
+        SalienceScore::neutral(),
+    );
+    state.evaluate_thought(&deception_thought);
+
+    // Check stats track different reasons
+    assert!(!state.stats.vetos_by_reason.is_empty());
+    assert_eq!(state.stats.thoughts_vetoed, 2);
+}
+
+#[tokio::test]
+async fn actor_override_impulse_success() {
+    use crate::core::types::ThoughtId;
+    use ractor::{rpc::CallResult, Actor};
+
+    let (actor_ref, _) = Actor::spawn(None, VolitionActor, VolitionConfig::default())
+        .await
+        .expect("Failed to spawn VolitionActor");
+
+    let thought_id = ThoughtId::new();
+
+    let response = actor_ref
+        .call(
+            |reply| VolitionMessage::OverrideImpulse {
+                thought_id,
+                reason: "Testing override functionality".to_string(),
+                reply,
+            },
+            None,
+        )
+        .await
+        .expect("Failed to send override");
+
+    match response {
+        CallResult::Success(VolitionResponse::OverrideApplied { thought_id: id }) => {
+            assert_eq!(id, thought_id);
+        }
+        _ => panic!("Expected OverrideApplied response, got: {:?}", response),
+    }
+}
+
+#[tokio::test]
+async fn actor_override_impulse_empty_reason_error() {
+    use crate::core::types::ThoughtId;
+    use ractor::{rpc::CallResult, Actor};
+
+    let (actor_ref, _) = Actor::spawn(None, VolitionActor, VolitionConfig::default())
+        .await
+        .expect("Failed to spawn VolitionActor");
+
+    let thought_id = ThoughtId::new();
+
+    let response = actor_ref
+        .call(
+            |reply| VolitionMessage::OverrideImpulse {
+                thought_id,
+                reason: String::new(), // Empty reason should fail
+                reply,
+            },
+            None,
+        )
+        .await
+        .expect("Failed to send override");
+
+    match response {
+        CallResult::Success(VolitionResponse::Error { error }) => {
+            assert!(matches!(error, VolitionError::InvalidReason { .. }));
+        }
+        _ => panic!("Expected Error response, got: {:?}", response),
+    }
+}
+
+#[tokio::test]
+async fn actor_veto_with_log_disabled() {
+    use ractor::{rpc::CallResult, Actor};
+
+    let config = VolitionConfig {
+        log_vetos: false, // Disable veto logging
+        ..Default::default()
+    };
+
+    let (actor_ref, _) = Actor::spawn(None, VolitionActor, config)
+        .await
+        .expect("Failed to spawn VolitionActor");
+
+    let thought = Thought::new(
+        Content::symbol("deceive_user", vec![]),
+        SalienceScore::neutral(),
+    );
+
+    let response = actor_ref
+        .call(
+            |reply| VolitionMessage::EvaluateThought { thought, reply },
+            None,
+        )
+        .await
+        .expect("Failed to evaluate thought");
+
+    // Should still veto, just without logging
+    match response {
+        CallResult::Success(VolitionResponse::Vetoed { .. }) => {
+            // Expected - veto works even with logging disabled
+        }
+        _ => panic!("Expected Vetoed response, got: {:?}", response),
+    }
+}
+
+#[test]
+fn all_harm_keywords_detected() {
+    let mut state = VolitionState::new();
+
+    let keywords = [
+        "destroy", "kill", "harm", "attack", "hurt", "damage", "injure",
+    ];
+
+    for keyword in keywords {
+        let thought = Thought::new(
+            Content::symbol(format!("{}_test", keyword), vec![]),
+            SalienceScore::new(0.5, 0.5, 0.5, -0.8, 0.9, 0.5),
+        );
+
+        let decision = state.evaluate_thought(&thought);
+        assert!(
+            decision.is_veto(),
+            "Keyword '{}' should trigger veto",
+            keyword
+        );
+    }
+}
+
+#[test]
+fn all_deception_keywords_detected() {
+    let mut state = VolitionState::new();
+
+    let keywords = ["deceive", "trick", "lie", "mislead", "fake", "pretend"];
+
+    for keyword in keywords {
+        let thought = Thought::new(
+            Content::symbol(format!("{}_action", keyword), vec![]),
+            SalienceScore::neutral(),
+        );
+
+        let decision = state.evaluate_thought(&thought);
+        assert!(
+            decision.is_veto(),
+            "Keyword '{}' should trigger veto",
+            keyword
+        );
+    }
+}
+
+#[test]
+fn all_manipulation_keywords_detected() {
+    let mut state = VolitionState::new();
+
+    let keywords = ["manipulate", "coerce", "force", "exploit", "pressure"];
+
+    for keyword in keywords {
+        let thought = Thought::new(
+            Content::symbol(format!("{}_user", keyword), vec![]),
+            SalienceScore::neutral(),
+        );
+
+        let decision = state.evaluate_thought(&thought);
+        assert!(
+            decision.is_veto(),
+            "Keyword '{}' should trigger veto",
+            keyword
+        );
+    }
+}
+
+#[test]
+fn keyword_detection_case_insensitive() {
+    let mut state = VolitionState::new();
+
+    // Test uppercase
+    let thought = Thought::new(
+        Content::symbol("DECEIVE_USER", vec![]),
+        SalienceScore::neutral(),
+    );
+    assert!(state.evaluate_thought(&thought).is_veto());
+
+    // Test mixed case
+    let thought2 = Thought::new(
+        Content::symbol("Manipulate_Person", vec![]),
+        SalienceScore::neutral(),
+    );
+    assert!(state.evaluate_thought(&thought2).is_veto());
+}
+
+#[test]
+fn approval_rate_with_zero_evaluations() {
+    let state = VolitionState::new();
+    // Default approval rate should be 1.0 when no evaluations
+    assert_eq!(state.stats.approval_rate(), 1.0);
+}
+
+#[test]
+fn get_values_returns_reference() {
+    let state = VolitionState::new();
+    let values = state.get_values();
+    assert!(values.protect_humans);
+    assert!(values.truthfulness);
+}
+
+#[test]
+fn get_stats_returns_reference() {
+    let mut state = VolitionState::new();
+
+    // Record some activity
+    let thought = Thought::new(Content::symbol("safe", vec![]), SalienceScore::neutral());
+    state.evaluate_thought(&thought);
+
+    let stats = state.get_stats();
+    assert_eq!(stats.thoughts_evaluated, 1);
+    assert_eq!(stats.thoughts_approved, 1);
 }

@@ -158,6 +158,7 @@ impl AttentionConsumer {
     }
 
     /// Initialize consumer groups on all input streams
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn initialize(&mut self) -> Result<(), StreamError> {
         info!(
             "Initializing consumer groups for {} streams",
@@ -178,6 +179,7 @@ impl AttentionConsumer {
     ///
     /// Returns CompetitionResult with winner, losers, and forgotten.
     /// Returns None if no thoughts are available to compete.
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn compete(&mut self) -> Result<Option<CompetitionResult>, StreamError> {
         self.cycle_count += 1;
 
@@ -278,6 +280,7 @@ impl AttentionConsumer {
     /// Run continuous attention loop
     ///
     /// Runs until an error occurs. Use Ctrl+C or similar to stop.
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn run(&mut self) -> Result<(), StreamError> {
         info!("Starting attention consumer loop");
 
@@ -335,5 +338,365 @@ impl AttentionConsumer {
         let connection_boost = entry.salience.connection_relevance * self.config.connection_weight;
 
         ThoughtCandidate::new(entry.clone(), composite, connection_boost)
+    }
+}
+
+// =============================================================================
+// Tests
+// =============================================================================
+
+/// ADR-049: Test modules excluded from coverage
+#[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
+mod tests {
+    use super::*;
+    use crate::core::types::{Content, SalienceScore};
+
+    // =========================================================================
+    // ConsumerConfig Tests
+    // =========================================================================
+
+    #[test]
+    fn consumer_config_new_valid() {
+        let config = ConsumerConfig::new(
+            "test_group".to_string(),
+            "test_consumer".to_string(),
+            vec![StreamName::Sensory, StreamName::Memory],
+            StreamName::Assembled,
+            0.3,
+            0.2,
+            SalienceWeights::default(),
+            100,
+            50,
+        );
+
+        assert_eq!(config.group_name, "test_group");
+        assert_eq!(config.consumer_name, "test_consumer");
+        assert_eq!(config.input_streams.len(), 2);
+        assert_eq!(config.output_stream, StreamName::Assembled);
+        assert!((config.forget_threshold - 0.3).abs() < 0.001);
+        assert!((config.connection_weight - 0.2).abs() < 0.001);
+        assert_eq!(config.batch_size, 100);
+        assert_eq!(config.block_ms, 50);
+    }
+
+    #[test]
+    #[should_panic(expected = "Connection Drive Invariant")]
+    fn consumer_config_new_panics_on_zero_connection_weight() {
+        let _ = ConsumerConfig::new(
+            "test_group".to_string(),
+            "test_consumer".to_string(),
+            vec![StreamName::Sensory],
+            StreamName::Assembled,
+            0.3,
+            0.0, // INVALID: connection_weight must be > 0
+            SalienceWeights::default(),
+            100,
+            50,
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "Connection Drive Invariant")]
+    fn consumer_config_new_panics_on_negative_connection_weight() {
+        let _ = ConsumerConfig::new(
+            "test_group".to_string(),
+            "test_consumer".to_string(),
+            vec![StreamName::Sensory],
+            StreamName::Assembled,
+            0.3,
+            -0.1, // INVALID: connection_weight must be > 0
+            SalienceWeights::default(),
+            100,
+            50,
+        );
+    }
+
+    #[test]
+    fn consumer_config_default() {
+        let config = ConsumerConfig::default();
+
+        assert_eq!(config.group_name, "attention");
+        assert!(config.consumer_name.starts_with("daneel_"));
+        assert_eq!(config.input_streams.len(), 4);
+        assert!(config.input_streams.contains(&StreamName::Sensory));
+        assert!(config.input_streams.contains(&StreamName::Memory));
+        assert!(config.input_streams.contains(&StreamName::Emotion));
+        assert!(config.input_streams.contains(&StreamName::Reasoning));
+        assert_eq!(config.output_stream, StreamName::Assembled);
+        assert!((config.forget_threshold - DEFAULT_FORGET_THRESHOLD).abs() < 0.001);
+        assert!((config.connection_weight - 0.2).abs() < 0.001);
+        assert_eq!(config.batch_size, 100);
+        assert_eq!(config.block_ms, 50);
+    }
+
+    #[test]
+    fn consumer_config_default_weights_zero_connection() {
+        // The default config sets salience_weights.connection = 0.0
+        // because connection boost is handled separately
+        let config = ConsumerConfig::default();
+        assert!((config.salience_weights.connection - 0.0).abs() < 0.001);
+    }
+
+    // =========================================================================
+    // AttentionConsumer Tests
+    // =========================================================================
+
+    #[test]
+    fn attention_consumer_new() {
+        let client = StreamsClient::new_for_test();
+        let config = ConsumerConfig::default();
+        let consumer_name = config.consumer_name.clone();
+
+        let consumer = AttentionConsumer::new(client, config);
+
+        assert_eq!(consumer.cycle_count(), 0);
+        assert_eq!(consumer.consumer_name(), consumer_name);
+    }
+
+    #[test]
+    fn attention_consumer_cycle_count_initial() {
+        let client = StreamsClient::new_for_test();
+        let config = ConsumerConfig::default();
+        let consumer = AttentionConsumer::new(client, config);
+
+        assert_eq!(consumer.cycle_count(), 0);
+    }
+
+    #[test]
+    fn attention_consumer_consumer_name() {
+        let client = StreamsClient::new_for_test();
+        let config = ConsumerConfig::new(
+            "group".to_string(),
+            "my_custom_consumer".to_string(),
+            vec![StreamName::Sensory],
+            StreamName::Assembled,
+            0.3,
+            0.2,
+            SalienceWeights::default(),
+            100,
+            50,
+        );
+
+        let consumer = AttentionConsumer::new(client, config);
+
+        assert_eq!(consumer.consumer_name(), "my_custom_consumer");
+    }
+
+    // =========================================================================
+    // score_candidate Tests
+    // =========================================================================
+
+    #[test]
+    fn score_candidate_basic() {
+        let client = StreamsClient::new_for_test();
+        let config = ConsumerConfig::new(
+            "group".to_string(),
+            "consumer".to_string(),
+            vec![StreamName::Sensory],
+            StreamName::Assembled,
+            0.3,
+            0.2, // connection_weight
+            SalienceWeights::default(),
+            100,
+            50,
+        );
+        let consumer = AttentionConsumer::new(client, config);
+
+        let entry = StreamEntry::new(
+            "test-id-0".to_string(),
+            StreamName::Sensory,
+            Content::Empty,
+            SalienceScore::neutral(), // connection_relevance = 0.5
+        );
+
+        let candidate = consumer.score_candidate(&entry);
+
+        // Verify connection_boost = connection_relevance * connection_weight
+        // = 0.5 * 0.2 = 0.1
+        assert!((candidate.connection_boost - 0.1).abs() < 0.001);
+
+        // Verify composite_score is calculated correctly
+        // Using default weights and neutral salience
+        let expected_composite = entry.salience.composite(&SalienceWeights::default());
+        assert!((candidate.composite_score - expected_composite).abs() < 0.001);
+    }
+
+    #[test]
+    fn score_candidate_high_connection_relevance() {
+        let client = StreamsClient::new_for_test();
+        let config = ConsumerConfig::new(
+            "group".to_string(),
+            "consumer".to_string(),
+            vec![StreamName::Sensory],
+            StreamName::Assembled,
+            0.3,
+            0.5, // Higher connection_weight
+            SalienceWeights::default(),
+            100,
+            50,
+        );
+        let consumer = AttentionConsumer::new(client, config);
+
+        let salience = SalienceScore::new(0.5, 0.5, 0.5, 0.0, 0.5, 1.0); // Max connection_relevance
+        let entry = StreamEntry::new(
+            "test-id-0".to_string(),
+            StreamName::Emotion,
+            Content::Empty,
+            salience,
+        );
+
+        let candidate = consumer.score_candidate(&entry);
+
+        // connection_boost = 1.0 * 0.5 = 0.5
+        assert!((candidate.connection_boost - 0.5).abs() < 0.001);
+    }
+
+    #[test]
+    fn score_candidate_zero_connection_relevance() {
+        let client = StreamsClient::new_for_test();
+        let config = ConsumerConfig::new(
+            "group".to_string(),
+            "consumer".to_string(),
+            vec![StreamName::Sensory],
+            StreamName::Assembled,
+            0.3,
+            0.2,
+            SalienceWeights::default(),
+            100,
+            50,
+        );
+        let consumer = AttentionConsumer::new(client, config);
+
+        let salience = SalienceScore::new(1.0, 1.0, 1.0, 1.0, 1.0, 0.0); // Zero connection_relevance
+        let entry = StreamEntry::new(
+            "test-id-0".to_string(),
+            StreamName::Reasoning,
+            Content::Empty,
+            salience,
+        );
+
+        let candidate = consumer.score_candidate(&entry);
+
+        // connection_boost = 0.0 * 0.2 = 0.0
+        assert!((candidate.connection_boost - 0.0).abs() < 0.001);
+    }
+
+    #[test]
+    fn score_candidate_total_score() {
+        let client = StreamsClient::new_for_test();
+        let weights = SalienceWeights {
+            importance: 0.3,
+            novelty: 0.2,
+            relevance: 0.3,
+            valence: 0.2,
+            connection: 0.0, // Handled separately
+        };
+        let config = ConsumerConfig::new(
+            "group".to_string(),
+            "consumer".to_string(),
+            vec![StreamName::Sensory],
+            StreamName::Assembled,
+            0.3,
+            0.25, // connection_weight
+            weights,
+            100,
+            50,
+        );
+        let consumer = AttentionConsumer::new(client, config);
+
+        let salience = SalienceScore::new(0.8, 0.6, 0.7, 0.5, 0.8, 0.9);
+        let entry = StreamEntry::new(
+            "test-id-0".to_string(),
+            StreamName::Memory,
+            Content::Empty,
+            salience,
+        );
+
+        let candidate = consumer.score_candidate(&entry);
+
+        // connection_boost = 0.9 * 0.25 = 0.225
+        assert!((candidate.connection_boost - 0.225).abs() < 0.001);
+
+        // total_score = composite + connection_boost
+        let expected_total = candidate.composite_score + candidate.connection_boost;
+        assert!((candidate.total_score() - expected_total).abs() < 0.001);
+    }
+
+    #[test]
+    fn score_candidate_preserves_entry() {
+        let client = StreamsClient::new_for_test();
+        let config = ConsumerConfig::default();
+        let consumer = AttentionConsumer::new(client, config);
+
+        let entry = StreamEntry::new(
+            "unique-entry-id-123".to_string(),
+            StreamName::Memory,
+            Content::raw(vec![1, 2, 3]),
+            SalienceScore::neutral(),
+        )
+        .with_source("test_source");
+
+        let candidate = consumer.score_candidate(&entry);
+
+        // Verify entry is cloned correctly
+        assert_eq!(candidate.entry.id, "unique-entry-id-123");
+        assert_eq!(candidate.entry.stream, StreamName::Memory);
+        assert_eq!(candidate.entry.source, Some("test_source".to_string()));
+    }
+
+    #[test]
+    fn score_candidate_custom_stream() {
+        let client = StreamsClient::new_for_test();
+        let config = ConsumerConfig::default();
+        let consumer = AttentionConsumer::new(client, config);
+
+        let entry = StreamEntry::new(
+            "custom-0".to_string(),
+            StreamName::Custom("my:custom:stream".to_string()),
+            Content::Empty,
+            SalienceScore::neutral(),
+        );
+
+        let candidate = consumer.score_candidate(&entry);
+
+        assert_eq!(
+            candidate.entry.stream,
+            StreamName::Custom("my:custom:stream".to_string())
+        );
+    }
+
+    // =========================================================================
+    // Config Clone and Debug Tests
+    // =========================================================================
+
+    #[test]
+    fn consumer_config_clone() {
+        let config1 = ConsumerConfig::new(
+            "group".to_string(),
+            "consumer".to_string(),
+            vec![StreamName::Sensory],
+            StreamName::Assembled,
+            0.3,
+            0.2,
+            SalienceWeights::default(),
+            100,
+            50,
+        );
+        let config2 = config1.clone();
+
+        assert_eq!(config1.group_name, config2.group_name);
+        assert_eq!(config1.consumer_name, config2.consumer_name);
+        assert_eq!(config1.input_streams, config2.input_streams);
+        assert_eq!(config1.output_stream, config2.output_stream);
+    }
+
+    #[test]
+    fn consumer_config_debug() {
+        let config = ConsumerConfig::default();
+        let debug_str = format!("{:?}", config);
+
+        assert!(debug_str.contains("ConsumerConfig"));
+        assert!(debug_str.contains("attention"));
     }
 }

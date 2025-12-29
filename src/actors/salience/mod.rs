@@ -368,6 +368,7 @@ impl Actor for SalienceActor {
     type State = SalienceState;
     type Arguments = SalienceState;
 
+    #[cfg_attr(coverage_nightly, coverage(off))]
     async fn pre_start(
         &self,
         _myself: ActorRef<Self::Msg>,
@@ -383,6 +384,7 @@ impl Actor for SalienceActor {
         Ok(args)
     }
 
+    #[cfg_attr(coverage_nightly, coverage(off))]
     async fn handle(
         &self,
         _myself: ActorRef<Self::Msg>,

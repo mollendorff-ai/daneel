@@ -30,6 +30,7 @@ use crate::tui::colors;
 /// Unicode block elements for sparklines
 const SPARK_CHARS: [char; 8] = [' ', '▁', '▂', '▃', '▄', '▅', '▆', '█'];
 
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let block = Block::default()
         .title(" FRACTALITY (stream) ")
@@ -160,7 +161,9 @@ fn create_sparkline(history: &std::collections::VecDeque<f32>, width: usize) -> 
         .collect()
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 

@@ -24,6 +24,7 @@ pub struct AppState {
 }
 
 /// Build the API router
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn router(state: AppState) -> Router {
     // Protected routes (require auth)
     let protected = Router::new()

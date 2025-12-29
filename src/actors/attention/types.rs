@@ -349,7 +349,9 @@ impl Default for AttentionMap {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -540,5 +542,354 @@ mod tests {
         // last_shift should have updated
         assert!(second_shift > first_shift);
         assert_eq!(state.focused_window(), Some(window2));
+    }
+
+    #[test]
+    fn focus_state_default() {
+        let state = FocusState::default();
+        assert!(!state.is_focused());
+        assert_eq!(state.focused_window(), None);
+        assert_eq!(state.focus_duration, Duration::zero());
+    }
+
+    #[test]
+    fn focus_state_first_focus_does_not_update_last_shift() {
+        // When focusing on a window when there's no prior focus,
+        // last_shift should not be updated (tests the else branch)
+        let state = FocusState::new();
+        let initial_shift = state.last_shift;
+
+        let mut state2 = FocusState::new();
+        // Focus without any prior focus
+        state2.focus_on(WindowId::new());
+
+        // The last_shift was set in new(), not updated by focus_on
+        // since current_focus was None
+        assert!(state2.last_shift >= initial_shift);
+    }
+
+    #[test]
+    fn attention_map_default() {
+        let map = AttentionMap::default();
+        assert!(map.is_empty());
+        assert_eq!(map.len(), 0);
+    }
+
+    #[test]
+    fn attention_map_all_scores() {
+        let mut map = AttentionMap::new();
+        let window1 = WindowId::new();
+        let window2 = WindowId::new();
+
+        map.update(window1, 0.5);
+        map.update(window2, 0.9);
+
+        let scores = map.all_scores();
+        assert_eq!(scores.len(), 2);
+        assert_eq!(scores.get(&window1), Some(&0.5));
+        assert_eq!(scores.get(&window2), Some(&0.9));
+    }
+
+    #[test]
+    fn attention_response_error_constructor() {
+        let error = AttentionError::NoWindowsAvailable;
+        let response = AttentionResponse::error(error.clone());
+
+        match response {
+            AttentionResponse::Error { error: e } => {
+                assert_eq!(e, error);
+            }
+            _ => panic!("Expected Error variant"),
+        }
+    }
+
+    #[test]
+    fn attention_response_clone_and_eq() {
+        let window_id = WindowId::new();
+
+        let response1 = AttentionResponse::cycle_complete(Some(window_id), 0.8);
+        let response2 = response1.clone();
+        assert_eq!(response1, response2);
+
+        let response3 = AttentionResponse::focus_set(window_id);
+        let response4 = response3.clone();
+        assert_eq!(response3, response4);
+
+        let response5 = AttentionResponse::focus_shifted(None, window_id);
+        let response6 = response5.clone();
+        assert_eq!(response5, response6);
+
+        let response7 = AttentionResponse::current_focus(Some(window_id));
+        let response8 = response7.clone();
+        assert_eq!(response7, response8);
+
+        let mut scores = HashMap::new();
+        scores.insert(window_id, 0.8);
+        let response9 = AttentionResponse::attention_map(scores);
+        let response10 = response9.clone();
+        assert_eq!(response9, response10);
+
+        let error = AttentionError::NoWindowsAvailable;
+        let response11 = AttentionResponse::error(error);
+        let response12 = response11.clone();
+        assert_eq!(response11, response12);
+    }
+
+    #[test]
+    fn attention_error_clone_and_eq() {
+        let window_id = WindowId::new();
+
+        let error1 = AttentionError::WindowNotFound { window_id };
+        let error2 = error1.clone();
+        assert_eq!(error1, error2);
+
+        let error3 = AttentionError::NoWindowsAvailable;
+        let error4 = error3.clone();
+        assert_eq!(error3, error4);
+
+        let error5 = AttentionError::CycleFailed {
+            reason: "test".to_string(),
+        };
+        let error6 = error5.clone();
+        assert_eq!(error5, error6);
+    }
+
+    #[test]
+    fn focus_state_clone_and_eq() {
+        let mut state1 = FocusState::new();
+        let window_id = WindowId::new();
+        state1.focus_on(window_id);
+
+        let state2 = state1.clone();
+        assert_eq!(state1, state2);
+    }
+
+    #[test]
+    fn attention_map_clone_and_eq() {
+        let mut map1 = AttentionMap::new();
+        map1.update(WindowId::new(), 0.5);
+
+        let map2 = map1.clone();
+        assert_eq!(map1, map2);
+    }
+
+    #[test]
+    fn attention_response_serde() {
+        let window_id = WindowId::new();
+
+        // Test CycleComplete
+        let response = AttentionResponse::cycle_complete(Some(window_id), 0.8);
+        let json = serde_json::to_string(&response).unwrap();
+        let deserialized: AttentionResponse = serde_json::from_str(&json).unwrap();
+        assert_eq!(response, deserialized);
+
+        // Test FocusSet
+        let response = AttentionResponse::focus_set(window_id);
+        let json = serde_json::to_string(&response).unwrap();
+        let deserialized: AttentionResponse = serde_json::from_str(&json).unwrap();
+        assert_eq!(response, deserialized);
+
+        // Test FocusShifted
+        let response = AttentionResponse::focus_shifted(Some(window_id), window_id);
+        let json = serde_json::to_string(&response).unwrap();
+        let deserialized: AttentionResponse = serde_json::from_str(&json).unwrap();
+        assert_eq!(response, deserialized);
+
+        // Test CurrentFocus
+        let response = AttentionResponse::current_focus(None);
+        let json = serde_json::to_string(&response).unwrap();
+        let deserialized: AttentionResponse = serde_json::from_str(&json).unwrap();
+        assert_eq!(response, deserialized);
+
+        // Test AttentionMap
+        let mut scores = HashMap::new();
+        scores.insert(window_id, 0.8);
+        let response = AttentionResponse::attention_map(scores);
+        let json = serde_json::to_string(&response).unwrap();
+        let deserialized: AttentionResponse = serde_json::from_str(&json).unwrap();
+        assert_eq!(response, deserialized);
+
+        // Test Error
+        let response = AttentionResponse::error(AttentionError::NoWindowsAvailable);
+        let json = serde_json::to_string(&response).unwrap();
+        let deserialized: AttentionResponse = serde_json::from_str(&json).unwrap();
+        assert_eq!(response, deserialized);
+    }
+
+    #[test]
+    fn attention_error_serde() {
+        let window_id = WindowId::new();
+
+        let error = AttentionError::WindowNotFound { window_id };
+        let json = serde_json::to_string(&error).unwrap();
+        let deserialized: AttentionError = serde_json::from_str(&json).unwrap();
+        assert_eq!(error, deserialized);
+
+        let error = AttentionError::NoWindowsAvailable;
+        let json = serde_json::to_string(&error).unwrap();
+        let deserialized: AttentionError = serde_json::from_str(&json).unwrap();
+        assert_eq!(error, deserialized);
+
+        let error = AttentionError::CycleFailed {
+            reason: "test reason".to_string(),
+        };
+        let json = serde_json::to_string(&error).unwrap();
+        let deserialized: AttentionError = serde_json::from_str(&json).unwrap();
+        assert_eq!(error, deserialized);
+    }
+
+    #[test]
+    fn focus_state_serde() {
+        let mut state = FocusState::new();
+        state.focus_on(WindowId::new());
+        state.update_duration(Duration::milliseconds(100));
+
+        let json = serde_json::to_string(&state).unwrap();
+        let deserialized: FocusState = serde_json::from_str(&json).unwrap();
+        assert_eq!(state, deserialized);
+    }
+
+    #[test]
+    fn attention_map_serde() {
+        let mut map = AttentionMap::new();
+        map.update(WindowId::new(), 0.5);
+        map.update(WindowId::new(), 0.9);
+
+        let json = serde_json::to_string(&map).unwrap();
+        let deserialized: AttentionMap = serde_json::from_str(&json).unwrap();
+        assert_eq!(map, deserialized);
+    }
+
+    #[test]
+    fn attention_message_debug() {
+        // Test Debug impl for AttentionMessage variants
+        // We can't easily construct the RpcReplyPort, but we can verify
+        // the Debug formatting via the type's existence
+        let debug_str = format!("{:?}", std::any::type_name::<AttentionMessage>());
+        assert!(debug_str.contains("AttentionMessage"));
+    }
+
+    #[test]
+    fn attention_response_debug() {
+        let window_id = WindowId::new();
+
+        let response = AttentionResponse::cycle_complete(Some(window_id), 0.8);
+        let debug_str = format!("{:?}", response);
+        assert!(debug_str.contains("CycleComplete"));
+
+        let response = AttentionResponse::focus_set(window_id);
+        let debug_str = format!("{:?}", response);
+        assert!(debug_str.contains("FocusSet"));
+
+        let response = AttentionResponse::focus_shifted(None, window_id);
+        let debug_str = format!("{:?}", response);
+        assert!(debug_str.contains("FocusShifted"));
+
+        let response = AttentionResponse::current_focus(Some(window_id));
+        let debug_str = format!("{:?}", response);
+        assert!(debug_str.contains("CurrentFocus"));
+
+        let mut scores = HashMap::new();
+        scores.insert(window_id, 0.8);
+        let response = AttentionResponse::attention_map(scores);
+        let debug_str = format!("{:?}", response);
+        assert!(debug_str.contains("AttentionMap"));
+
+        let response = AttentionResponse::error(AttentionError::NoWindowsAvailable);
+        let debug_str = format!("{:?}", response);
+        assert!(debug_str.contains("Error"));
+    }
+
+    #[test]
+    fn attention_error_debug() {
+        let window_id = WindowId::new();
+
+        let error = AttentionError::WindowNotFound { window_id };
+        let debug_str = format!("{:?}", error);
+        assert!(debug_str.contains("WindowNotFound"));
+
+        let error = AttentionError::NoWindowsAvailable;
+        let debug_str = format!("{:?}", error);
+        assert!(debug_str.contains("NoWindowsAvailable"));
+
+        let error = AttentionError::CycleFailed {
+            reason: "test".to_string(),
+        };
+        let debug_str = format!("{:?}", error);
+        assert!(debug_str.contains("CycleFailed"));
+    }
+
+    #[test]
+    fn focus_state_debug() {
+        let state = FocusState::new();
+        let debug_str = format!("{:?}", state);
+        assert!(debug_str.contains("FocusState"));
+    }
+
+    #[test]
+    fn attention_map_debug() {
+        let map = AttentionMap::new();
+        let debug_str = format!("{:?}", map);
+        assert!(debug_str.contains("AttentionMap"));
+    }
+
+    #[test]
+    fn attention_map_get_nonexistent() {
+        let map = AttentionMap::new();
+        let window_id = WindowId::new();
+        assert_eq!(map.get(&window_id), None);
+    }
+
+    #[test]
+    fn attention_map_remove_nonexistent() {
+        let mut map = AttentionMap::new();
+        let window_id = WindowId::new();
+        // Should not panic when removing nonexistent window
+        map.remove(&window_id);
+        assert!(map.is_empty());
+    }
+
+    #[test]
+    fn attention_map_above_threshold_empty() {
+        let map = AttentionMap::new();
+        let above = map.above_threshold(0.5);
+        assert!(above.is_empty());
+    }
+
+    #[test]
+    fn attention_map_above_threshold_none_above() {
+        let mut map = AttentionMap::new();
+        map.update(WindowId::new(), 0.1);
+        map.update(WindowId::new(), 0.2);
+        map.update(WindowId::new(), 0.3);
+
+        let above = map.above_threshold(0.5);
+        assert!(above.is_empty());
+    }
+
+    #[test]
+    fn attention_map_above_threshold_boundary() {
+        let mut map = AttentionMap::new();
+        let window_id = WindowId::new();
+        map.update(window_id, 0.5);
+
+        // Exactly at threshold should be included (>= threshold)
+        let above = map.above_threshold(0.5);
+        assert_eq!(above.len(), 1);
+        assert_eq!(above[0].0, window_id);
+        assert_eq!(above[0].1, 0.5);
+    }
+
+    #[test]
+    fn attention_map_update_overwrites() {
+        let mut map = AttentionMap::new();
+        let window_id = WindowId::new();
+
+        map.update(window_id, 0.5);
+        assert_eq!(map.get(&window_id), Some(0.5));
+
+        map.update(window_id, 0.9);
+        assert_eq!(map.get(&window_id), Some(0.9));
+        assert_eq!(map.len(), 1);
     }
 }

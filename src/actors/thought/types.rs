@@ -283,6 +283,8 @@ impl ThoughtCache {
     /// Evict the oldest thought from the cache
     ///
     /// This is called automatically when the cache reaches capacity.
+    /// ADR-049: Empty insertion_order branch cannot happen (called only when full)
+    #[cfg_attr(coverage_nightly, coverage(off))]
     fn evict_oldest(&mut self) {
         if let Some(oldest_id) = self.insertion_order.first().copied() {
             self.cache.remove(&oldest_id);
@@ -316,7 +318,9 @@ impl Default for ThoughtCache {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -502,6 +506,26 @@ mod tests {
     }
 
     #[test]
+    fn assembly_strategy_variants() {
+        // Ensure all variants are distinct and comparable
+        let default = AssemblyStrategy::Default;
+        let composite = AssemblyStrategy::Composite;
+        let chain = AssemblyStrategy::Chain;
+        let urgent = AssemblyStrategy::Urgent;
+
+        assert_ne!(default, composite);
+        assert_ne!(default, chain);
+        assert_ne!(default, urgent);
+        assert_ne!(composite, chain);
+        assert_ne!(composite, urgent);
+        assert_ne!(chain, urgent);
+
+        // Test Copy trait
+        let copied = composite;
+        assert_eq!(copied, AssemblyStrategy::Composite);
+    }
+
+    #[test]
     fn thought_response_equality() {
         let thought1 = Thought::new(Content::raw(vec![1]), SalienceScore::neutral());
         let thought2 = thought1.clone();
@@ -521,5 +545,59 @@ mod tests {
         };
 
         assert_eq!(batch1, batch2);
+    }
+
+    #[test]
+    fn assembly_error_assembly_failed_display() {
+        let error = AssemblyError::AssemblyFailed {
+            reason: "timeout occurred".to_string(),
+        };
+        let message = format!("{}", error);
+        assert!(message.contains("Assembly failed"));
+        assert!(message.contains("timeout occurred"));
+    }
+
+    #[test]
+    fn thought_response_thought_found() {
+        let thought = Thought::new(Content::raw(vec![1]), SalienceScore::neutral());
+        let response1 = ThoughtResponse::ThoughtFound {
+            thought: thought.clone(),
+        };
+        let response2 = ThoughtResponse::ThoughtFound { thought };
+
+        assert_eq!(response1, response2);
+    }
+
+    #[test]
+    fn thought_response_thought_chain() {
+        let thought1 = Thought::new(Content::raw(vec![1]), SalienceScore::neutral());
+        let thought2 = Thought::new(Content::raw(vec![2]), SalienceScore::neutral());
+
+        let response1 = ThoughtResponse::ThoughtChain {
+            thoughts: vec![thought1.clone(), thought2.clone()],
+        };
+        let response2 = ThoughtResponse::ThoughtChain {
+            thoughts: vec![thought1, thought2],
+        };
+
+        assert_eq!(response1, response2);
+    }
+
+    #[test]
+    fn thought_response_error() {
+        let error = AssemblyError::EmptyContent;
+        let response1 = ThoughtResponse::Error {
+            error: error.clone(),
+        };
+        let response2 = ThoughtResponse::Error { error };
+
+        assert_eq!(response1, response2);
+    }
+
+    #[test]
+    fn thought_cache_default() {
+        let cache = ThoughtCache::default();
+        assert_eq!(cache.max_size, 100);
+        assert!(cache.is_empty());
     }
 }

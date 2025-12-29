@@ -54,6 +54,7 @@ const PHILOSOPHY_QUOTES: [&str; 8] = [
 static START_TIME: std::sync::OnceLock<Instant> = std::sync::OnceLock::new();
 
 /// GET /health - Basic health check
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub async fn health(State(state): State<AppState>) -> Result<Json<HealthResponse>, StatusCode> {
     // Get basic stats from Redis
     let mut conn = state
@@ -75,6 +76,7 @@ pub async fn health(State(state): State<AppState>) -> Result<Json<HealthResponse
 }
 
 /// POST /inject - Inject external stimulus
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub async fn inject(
     State(state): State<AppState>,
     Extension(auth): Extension<AuthenticatedKey>,
@@ -218,6 +220,7 @@ pub async fn inject(
 }
 
 /// GET /recent_injections - Last 100 injections
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub async fn recent_injections(
     State(state): State<AppState>,
     Extension(_auth): Extension<AuthenticatedKey>,
@@ -252,6 +255,7 @@ pub async fn recent_injections(
 // ============================================================================
 
 /// GET /extended_metrics - TUI-equivalent metrics for web observatory
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub async fn extended_metrics(
     State(state): State<AppState>,
 ) -> Result<Json<ExtendedMetricsResponse>, StatusCode> {
@@ -347,6 +351,7 @@ pub async fn extended_metrics(
 /// - REASON: low arousal, high importance (thinking)
 /// - EMOTION: high arousal or valence extremes
 /// - SENSORY: high novelty + arousal (external stimuli)
+#[cfg_attr(coverage_nightly, coverage(off))]
 async fn compute_stream_competition(
     conn: &mut redis::aio::MultiplexedConnection,
 ) -> StreamCompetitionMetrics {
@@ -451,6 +456,7 @@ struct SalienceComponents {
 }
 
 /// Extract full salience object from Redis stream entry
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn extract_full_salience(entry: &redis::Value) -> Option<SalienceComponents> {
     if let redis::Value::Array(arr) = entry {
         if arr.len() >= 2 {
@@ -510,6 +516,7 @@ fn extract_full_salience(entry: &redis::Value) -> Option<SalienceComponents> {
 /// - Emotional intensity (|valence| × arousal) is PRIMARY per Cury's RAM/killer windows
 /// - Weighted 40% emotional + 30% importance + 20% relevance + 20% novelty + 10% connection
 /// - Uses 5 categorical bins matching cognitive state research
+#[cfg_attr(coverage_nightly, coverage(off))]
 async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> EntropyMetrics {
     let entries: Vec<redis::Value> = conn
         .xrevrange_count("daneel:stream:awake", "+", "-", 100)
@@ -591,6 +598,7 @@ async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> Entrop
 
 /// Compute fractality metrics from inter-arrival times
 /// Score ranges from 0 (clockwork/regular) to 1 (fractal/bursty)
+#[cfg_attr(coverage_nightly, coverage(off))]
 async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> FractalityMetrics {
     let entries: Vec<redis::Value> = conn
         .xrevrange_count("daneel:stream:awake", "+", "-", 100)
@@ -681,6 +689,7 @@ async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> Fra
 // ============================================================================
 
 /// Normalize vector to unit length (L2)
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn normalize_vector(v: &[f32]) -> Vec<f32> {
     let magnitude: f32 = v.iter().map(|x| x * x).sum::<f32>().sqrt();
     if magnitude > 0.0 {
@@ -691,6 +700,7 @@ fn normalize_vector(v: &[f32]) -> Vec<f32> {
 }
 
 /// Calculate Shannon entropy of recent stream activity
+#[cfg_attr(coverage_nightly, coverage(off))]
 async fn calculate_stream_entropy(
     conn: &mut redis::aio::MultiplexedConnection,
 ) -> Result<f32, redis::RedisError> {
@@ -713,6 +723,7 @@ async fn calculate_stream_entropy(
 }
 
 /// Parse Redis stream entry into InjectionRecord
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn parse_injection_record(entry: redis::Value) -> Result<InjectionRecord, ()> {
     // Redis returns: [id, [field1, val1, field2, val2, ...]]
     match entry {

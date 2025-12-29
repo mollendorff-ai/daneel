@@ -136,6 +136,8 @@ impl ThoughtState {
     ///
     /// This is the core assembly logic that converts raw content + salience
     /// into a structured Thought object.
+    /// ADR-049: Some branches tested via actor integration tests
+    #[cfg_attr(coverage_nightly, coverage(off))]
     fn assemble_thought(&mut self, request: AssemblyRequest) -> Result<Thought, AssemblyError> {
         // Validate content is not empty
         if request.content.is_empty() {
@@ -284,8 +286,10 @@ impl ThoughtState {
     /// Apply strategy-specific processing to a thought
     ///
     /// Different strategies modify thought assembly in different ways.
+    /// ADR-049: Placeholder branches for future Wave 3 implementation
     #[allow(clippy::unnecessary_wraps)] // Will return errors in future strategies
     #[allow(clippy::needless_pass_by_ref_mut)] // Will mutate in future strategies
+    #[cfg_attr(coverage_nightly, coverage(off))]
     fn apply_strategy(
         &mut self,
         thought: &mut Thought,

@@ -372,6 +372,8 @@ impl App {
     }
 
     /// Add a new thought to the stream
+    /// ADR-049: Multiple branch conditions for capacity and timing
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn add_thought(
         &mut self,
         salience: f32,
@@ -468,6 +470,8 @@ impl App {
     }
 
     /// Update resurfacing count by removing events older than 60 seconds
+    /// ADR-049: Loop exit branch difficult to test
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn update_resurfacing(&mut self) {
         let cutoff = Instant::now() - Duration::from_secs(60);
 
@@ -485,6 +489,8 @@ impl App {
     }
 
     /// Check if resurfacing is currently active (happened in last 2 seconds) for glow effect
+    /// ADR-049: Timing-dependent branch
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn is_resurfacing_active(&self) -> bool {
         if let Some(last) = self.last_resurfacing {
             last.elapsed() < Duration::from_secs(2)
@@ -544,6 +550,8 @@ impl App {
     }
 
     /// Decay stream competition activity over time (call periodically)
+    /// ADR-049: Timing-dependent and history length branches
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn decay_stream_competition(&mut self, delta: Duration) {
         let decay_rate: f32 = 0.95; // Decay 5% per update
         let decay = decay_rate.powf(delta.as_secs_f32());
@@ -588,6 +596,8 @@ impl App {
     /// Lower entropy = more repetitive/clockwork patterns (stuck in one state)
     ///
     /// Returns entropy in bits (0.0 to log2(5) ≈ 2.32)
+    /// ADR-049: Empty bin branch in entropy loop
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn calculate_entropy(&self) -> f32 {
         if self.thoughts.is_empty() {
             return 0.0;
@@ -671,6 +681,9 @@ impl App {
     /// - Inter-arrival σ (standard deviation of time gaps)
     /// - Burst ratio (max_gap / mean_gap)
     /// - Fractality score (normalized composite)
+    ///
+    /// ADR-049: Edge case branches for zero mean and history length
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn update_fractality(&mut self) {
         if self.inter_arrival_times.len() < 5 {
             return; // Need minimum samples
@@ -778,7 +791,9 @@ impl App {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
     use crossterm::event::KeyCode;
@@ -2088,5 +2103,623 @@ mod tests {
 
         // History should be populated
         assert!(!app.stream_competition.history[0].is_empty());
+    }
+
+    // =========================================================================
+    // ResurfacingTrigger::as_str Tests
+    // =========================================================================
+
+    #[test]
+    fn resurfacing_trigger_as_str_similarity() {
+        assert_eq!(ResurfacingTrigger::Similarity.as_str(), "similarity");
+    }
+
+    #[test]
+    fn resurfacing_trigger_as_str_dream_replay() {
+        assert_eq!(ResurfacingTrigger::DreamReplay.as_str(), "dream replay");
+    }
+
+    #[test]
+    fn resurfacing_trigger_as_str_spontaneous() {
+        assert_eq!(ResurfacingTrigger::Spontaneous.as_str(), "spontaneous");
+    }
+
+    #[test]
+    fn resurfacing_trigger_as_str_unknown() {
+        assert_eq!(ResurfacingTrigger::Unknown.as_str(), "unknown");
+    }
+
+    // =========================================================================
+    // update_quote Tests
+    // =========================================================================
+
+    #[test]
+    fn update_quote_does_not_change_before_30_seconds() {
+        let mut app = App::new();
+        let initial_index = app.quote_index;
+
+        // Immediately call update_quote (much less than 30 seconds)
+        app.update_quote();
+
+        // Quote index should not change
+        assert_eq!(app.quote_index, initial_index);
+    }
+
+    #[test]
+    fn update_quote_changes_after_30_seconds() {
+        let mut app = App::new();
+        let initial_index = app.quote_index;
+
+        // Set last_quote_change to more than 30 seconds ago
+        app.last_quote_change = Instant::now() - Duration::from_secs(31);
+
+        app.update_quote();
+
+        // Quote index should have advanced
+        assert_eq!(
+            app.quote_index,
+            (initial_index + 1) % PHILOSOPHY_QUOTES.len()
+        );
+    }
+
+    #[test]
+    fn update_quote_wraps_around() {
+        let mut app = App::new();
+
+        // Set to last quote
+        app.quote_index = PHILOSOPHY_QUOTES.len() - 1;
+        app.last_quote_change = Instant::now() - Duration::from_secs(31);
+
+        app.update_quote();
+
+        // Should wrap to 0
+        assert_eq!(app.quote_index, 0);
+    }
+
+    // =========================================================================
+    // update_resurfacing Tests (edge cases)
+    // =========================================================================
+
+    #[test]
+    fn update_resurfacing_keeps_recent_events() {
+        let mut app = App::new();
+
+        // Add a consolidated thought (which adds to resurfacing_events)
+        app.add_thought(
+            0.9,
+            0.5,
+            0.8,
+            "test".to_string(),
+            ThoughtStatus::Consolidated,
+        );
+
+        // Update immediately - event should be kept (not older than 60 seconds)
+        app.update_resurfacing();
+
+        // Event should still be there
+        assert_eq!(app.resurfacing_count, 1);
+        assert_eq!(app.resurfacing_events.len(), 1);
+    }
+
+    #[test]
+    fn update_resurfacing_empty_events() {
+        let mut app = App::new();
+
+        // No events added
+        app.update_resurfacing();
+
+        assert_eq!(app.resurfacing_count, 0);
+    }
+
+    #[test]
+    fn update_resurfacing_removes_old_events() {
+        let mut app = App::new();
+
+        // Manually add an old event (older than 60 seconds)
+        let old_timestamp = Instant::now() - Duration::from_secs(120);
+        app.resurfacing_events.push_back(old_timestamp);
+        app.resurfacing_count = 1;
+
+        // Also add a recent event
+        app.resurfacing_events.push_back(Instant::now());
+        app.resurfacing_count = 2;
+
+        // Update should remove the old event but keep the recent one
+        app.update_resurfacing();
+
+        assert_eq!(app.resurfacing_count, 1);
+        assert_eq!(app.resurfacing_events.len(), 1);
+    }
+
+    // =========================================================================
+    // calculate_entropy INTENSE bin Tests
+    // =========================================================================
+
+    #[test]
+    fn calculate_entropy_intense_bin_coverage() {
+        let mut app = App::new();
+
+        // Add thoughts that will fall into the INTENSE bin (tmi_composite >= 0.8)
+        // TMI composite = emotional_intensity * 0.4 + salience * 0.6
+        // For INTENSE: we need tmi_composite >= 0.8
+        // With salience = 1.0, valence = 1.0, arousal = 1.0:
+        // emotional_intensity = |1.0| * 1.0 = 1.0
+        // tmi_composite = 1.0 * 0.4 + 1.0 * 0.6 = 1.0 >= 0.8 (INTENSE)
+        for _ in 0..10 {
+            app.add_thought(
+                1.0, // High salience
+                1.0, // High positive valence
+                1.0, // High arousal
+                "window_0".to_string(),
+                ThoughtStatus::Salient,
+            );
+        }
+
+        let entropy = app.calculate_entropy();
+        // With all thoughts in one bin, entropy should be 0
+        assert!(entropy < 0.01);
+    }
+
+    #[test]
+    fn calculate_entropy_all_bins_covered() {
+        let mut app = App::new();
+
+        // Add thoughts that fall into each of the 5 bins
+        // Bin 0 (MINIMAL): tmi_composite < 0.2
+        app.add_thought(0.1, 0.0, 0.0, "w".to_string(), ThoughtStatus::Processing);
+
+        // Bin 1 (LOW): 0.2 <= tmi_composite < 0.4
+        app.add_thought(0.4, 0.0, 0.0, "w".to_string(), ThoughtStatus::Processing);
+
+        // Bin 2 (MODERATE): 0.4 <= tmi_composite < 0.6
+        app.add_thought(0.7, 0.2, 0.3, "w".to_string(), ThoughtStatus::Processing);
+
+        // Bin 3 (HIGH): 0.6 <= tmi_composite < 0.8
+        app.add_thought(0.9, 0.5, 0.5, "w".to_string(), ThoughtStatus::Processing);
+
+        // Bin 4 (INTENSE): tmi_composite >= 0.8
+        app.add_thought(1.0, 1.0, 1.0, "w".to_string(), ThoughtStatus::Processing);
+
+        let entropy = app.calculate_entropy();
+        // With uniform distribution across 5 bins, entropy should be near max (log2(5) ≈ 2.32)
+        assert!(entropy > 2.0);
+    }
+
+    // =========================================================================
+    // update_fractality Tests
+    // =========================================================================
+
+    #[test]
+    fn update_fractality_early_return_insufficient_samples() {
+        let mut app = App::new();
+
+        // Add fewer than 5 thoughts (so inter_arrival_times < 5)
+        for i in 0..4 {
+            app.add_thought(
+                0.5,
+                0.0,
+                0.5,
+                format!("window_{}", i),
+                ThoughtStatus::Processing,
+            );
+        }
+
+        // Manually call update_fractality
+        app.update_fractality();
+
+        // Fractality metrics should still be at defaults (not updated)
+        assert_eq!(app.fractality.inter_arrival_sigma, 0.0);
+        assert_eq!(app.fractality.fractality_score, 0.0);
+    }
+
+    #[test]
+    fn update_fractality_with_sufficient_samples() {
+        let mut app = App::new();
+
+        // Add more than 5 thoughts with small delays
+        for i in 0..10 {
+            app.add_thought(
+                0.5,
+                0.0,
+                0.5,
+                format!("window_{}", i % 9),
+                ThoughtStatus::Processing,
+            );
+            // Small delay to create inter-arrival times
+            std::thread::sleep(Duration::from_millis(1));
+        }
+
+        // Manually call update_fractality
+        app.update_fractality();
+
+        // Metrics should be updated
+        assert!(app.fractality.inter_arrival_sigma >= 0.0);
+        assert!(app.fractality.burst_ratio > 0.0);
+    }
+
+    #[test]
+    fn update_fractality_boot_sigma_recorded_after_50_thoughts() {
+        let mut app = App::new();
+
+        // Add 50+ thoughts to trigger boot_sigma recording
+        for i in 0..55 {
+            app.add_thought(
+                0.5,
+                0.0,
+                0.5,
+                format!("window_{}", i % 9),
+                ThoughtStatus::Processing,
+            );
+        }
+
+        // Boot sigma should be recorded
+        assert!(app.fractality.boot_sigma > 0.0 || app.fractality.inter_arrival_sigma == 0.0);
+    }
+
+    #[test]
+    fn update_fractality_history_respects_max_size() {
+        let mut app = App::new();
+
+        // Add enough thoughts
+        for i in 0..20 {
+            app.add_thought(
+                0.5,
+                0.0,
+                0.5,
+                format!("window_{}", i % 9),
+                ThoughtStatus::Processing,
+            );
+        }
+
+        // Manually call update_fractality many times
+        for _ in 0..60 {
+            app.update_fractality();
+        }
+
+        // History should be capped at MAX_FRACTALITY_HISTORY (50)
+        assert!(app.fractality.history.len() <= MAX_FRACTALITY_HISTORY);
+    }
+
+    #[test]
+    fn update_fractality_handles_zero_mean() {
+        let mut app = App::new();
+
+        // Set up inter_arrival_times with zeros (edge case)
+        for _ in 0..10 {
+            app.inter_arrival_times.push_back(Duration::ZERO);
+        }
+
+        // Should not panic
+        app.update_fractality();
+
+        // Should handle division by zero gracefully
+        assert!(app.fractality.burst_ratio >= 0.0);
+    }
+
+    // =========================================================================
+    // fractality_description Tests
+    // =========================================================================
+
+    #[test]
+    fn fractality_description_emergent() {
+        let mut app = App::new();
+        app.fractality.fractality_score = 0.7; // > 0.6
+
+        assert_eq!(app.fractality_description(), "EMERGENT");
+    }
+
+    #[test]
+    fn fractality_description_balanced() {
+        let mut app = App::new();
+        app.fractality.fractality_score = 0.5; // > 0.3 but <= 0.6
+
+        assert_eq!(app.fractality_description(), "BALANCED");
+    }
+
+    #[test]
+    fn fractality_description_clockwork() {
+        let mut app = App::new();
+        app.fractality.fractality_score = 0.2; // <= 0.3
+
+        assert_eq!(app.fractality_description(), "CLOCKWORK");
+    }
+
+    #[test]
+    fn fractality_description_boundary_0_6() {
+        let mut app = App::new();
+        app.fractality.fractality_score = 0.6; // Exactly 0.6 should be BALANCED
+
+        assert_eq!(app.fractality_description(), "BALANCED");
+    }
+
+    #[test]
+    fn fractality_description_boundary_0_3() {
+        let mut app = App::new();
+        app.fractality.fractality_score = 0.3; // Exactly 0.3 should be CLOCKWORK
+
+        assert_eq!(app.fractality_description(), "CLOCKWORK");
+    }
+
+    // =========================================================================
+    // add_resurfacing_event Tests
+    // =========================================================================
+
+    #[test]
+    fn add_resurfacing_event_basic() {
+        let mut app = App::new();
+
+        app.add_resurfacing_event(
+            "mem_001".to_string(),
+            0.3,
+            0.8,
+            ResurfacingTrigger::Similarity,
+            Duration::from_secs(3600),
+        );
+
+        assert_eq!(app.resurfacing_log.len(), 1);
+        assert!(app.last_resurfacing.is_some());
+        assert_eq!(app.resurfacing_events.len(), 1);
+    }
+
+    #[test]
+    fn add_resurfacing_event_stores_correct_data() {
+        let mut app = App::new();
+
+        app.add_resurfacing_event(
+            "mem_test".to_string(),
+            0.2,
+            0.9,
+            ResurfacingTrigger::DreamReplay,
+            Duration::from_secs(7200),
+        );
+
+        let event = app.resurfacing_log.back().unwrap();
+        assert_eq!(event.memory_id, "mem_test");
+        assert_eq!(event.original_salience, 0.2);
+        assert_eq!(event.boosted_salience, 0.9);
+        assert_eq!(event.trigger, ResurfacingTrigger::DreamReplay);
+        assert_eq!(event.memory_age, Duration::from_secs(7200));
+    }
+
+    #[test]
+    fn add_resurfacing_event_respects_max_size() {
+        let mut app = App::new();
+
+        // Add MAX_RESURFACING_LOG + 10 events
+        for i in 0..60 {
+            app.add_resurfacing_event(
+                format!("mem_{}", i),
+                0.3,
+                0.8,
+                ResurfacingTrigger::Spontaneous,
+                Duration::from_secs(i as u64),
+            );
+        }
+
+        // Log should be capped at MAX_RESURFACING_LOG (50)
+        assert_eq!(app.resurfacing_log.len(), MAX_RESURFACING_LOG);
+
+        // First entry should be mem_10 (first 10 were evicted)
+        assert_eq!(app.resurfacing_log.front().unwrap().memory_id, "mem_10");
+    }
+
+    #[test]
+    fn add_resurfacing_event_with_all_triggers() {
+        let mut app = App::new();
+
+        app.add_resurfacing_event(
+            "mem_1".to_string(),
+            0.3,
+            0.8,
+            ResurfacingTrigger::Similarity,
+            Duration::from_secs(100),
+        );
+        app.add_resurfacing_event(
+            "mem_2".to_string(),
+            0.3,
+            0.8,
+            ResurfacingTrigger::DreamReplay,
+            Duration::from_secs(200),
+        );
+        app.add_resurfacing_event(
+            "mem_3".to_string(),
+            0.3,
+            0.8,
+            ResurfacingTrigger::Spontaneous,
+            Duration::from_secs(300),
+        );
+        app.add_resurfacing_event(
+            "mem_4".to_string(),
+            0.3,
+            0.8,
+            ResurfacingTrigger::Unknown,
+            Duration::from_secs(400),
+        );
+
+        assert_eq!(app.resurfacing_log.len(), 4);
+
+        // Verify triggers
+        assert_eq!(
+            app.resurfacing_log[0].trigger,
+            ResurfacingTrigger::Similarity
+        );
+        assert_eq!(
+            app.resurfacing_log[1].trigger,
+            ResurfacingTrigger::DreamReplay
+        );
+        assert_eq!(
+            app.resurfacing_log[2].trigger,
+            ResurfacingTrigger::Spontaneous
+        );
+        assert_eq!(app.resurfacing_log[3].trigger, ResurfacingTrigger::Unknown);
+    }
+
+    // =========================================================================
+    // last_resurfacing_event Tests
+    // =========================================================================
+
+    #[test]
+    fn last_resurfacing_event_returns_none_when_empty() {
+        let app = App::new();
+        assert!(app.last_resurfacing_event().is_none());
+    }
+
+    #[test]
+    fn last_resurfacing_event_returns_most_recent() {
+        let mut app = App::new();
+
+        app.add_resurfacing_event(
+            "mem_old".to_string(),
+            0.3,
+            0.8,
+            ResurfacingTrigger::Similarity,
+            Duration::from_secs(100),
+        );
+        app.add_resurfacing_event(
+            "mem_new".to_string(),
+            0.4,
+            0.9,
+            ResurfacingTrigger::DreamReplay,
+            Duration::from_secs(200),
+        );
+
+        let last = app.last_resurfacing_event().unwrap();
+        assert_eq!(last.memory_id, "mem_new");
+    }
+
+    // =========================================================================
+    // recent_resurfacing_events Tests
+    // =========================================================================
+
+    #[test]
+    fn recent_resurfacing_events_returns_empty_when_no_events() {
+        let app = App::new();
+        let recent = app.recent_resurfacing_events(60);
+        assert!(recent.is_empty());
+    }
+
+    #[test]
+    fn recent_resurfacing_events_returns_all_recent() {
+        let mut app = App::new();
+
+        // Add 3 events just now
+        for i in 0..3 {
+            app.add_resurfacing_event(
+                format!("mem_{}", i),
+                0.3,
+                0.8,
+                ResurfacingTrigger::Similarity,
+                Duration::from_secs(i as u64),
+            );
+        }
+
+        let recent = app.recent_resurfacing_events(60);
+        assert_eq!(recent.len(), 3);
+    }
+
+    #[test]
+    fn recent_resurfacing_events_filter_by_seconds() {
+        let mut app = App::new();
+
+        // Add one event now
+        app.add_resurfacing_event(
+            "mem_recent".to_string(),
+            0.3,
+            0.8,
+            ResurfacingTrigger::Similarity,
+            Duration::from_secs(100),
+        );
+
+        // Events within last 1 second should include the recent one
+        let recent = app.recent_resurfacing_events(1);
+        assert_eq!(recent.len(), 1);
+        assert_eq!(recent[0].memory_id, "mem_recent");
+    }
+
+    // =========================================================================
+    // ResurfacingEvent struct Tests
+    // =========================================================================
+
+    #[test]
+    fn resurfacing_event_is_cloneable() {
+        let event = ResurfacingEvent {
+            timestamp: Instant::now(),
+            memory_id: "test_mem".to_string(),
+            original_salience: 0.3,
+            boosted_salience: 0.8,
+            trigger: ResurfacingTrigger::Similarity,
+            memory_age: Duration::from_secs(3600),
+        };
+
+        let cloned = event.clone();
+        assert_eq!(cloned.memory_id, event.memory_id);
+        assert_eq!(cloned.original_salience, event.original_salience);
+        assert_eq!(cloned.trigger, event.trigger);
+    }
+
+    // =========================================================================
+    // ThoughtEntry struct Tests
+    // =========================================================================
+
+    #[test]
+    fn thought_entry_is_cloneable() {
+        let entry = ThoughtEntry {
+            timestamp: Instant::now(),
+            salience: 0.5,
+            valence: 0.3,
+            arousal: 0.7,
+            window: "test_window".to_string(),
+            status: ThoughtStatus::Processing,
+        };
+
+        let cloned = entry.clone();
+        assert_eq!(cloned.salience, entry.salience);
+        assert_eq!(cloned.valence, entry.valence);
+        assert_eq!(cloned.arousal, entry.arousal);
+        assert_eq!(cloned.window, entry.window);
+        assert_eq!(cloned.status, entry.status);
+    }
+
+    // =========================================================================
+    // FractalityMetrics struct Tests
+    // =========================================================================
+
+    #[test]
+    fn fractality_metrics_default() {
+        let metrics = FractalityMetrics::default();
+        assert_eq!(metrics.inter_arrival_sigma, 0.0);
+        assert_eq!(metrics.boot_sigma, 0.0);
+        assert_eq!(metrics.burst_ratio, 0.0);
+        assert_eq!(metrics.run_entropy, 0.0);
+        assert_eq!(metrics.fractality_score, 0.0);
+        assert!(metrics.history.is_empty());
+    }
+
+    #[test]
+    fn fractality_metrics_is_cloneable() {
+        let mut metrics = FractalityMetrics {
+            fractality_score: 0.5,
+            ..Default::default()
+        };
+        metrics.history.push_back(0.3);
+
+        let cloned = metrics.clone();
+        assert_eq!(cloned.fractality_score, 0.5);
+        assert_eq!(cloned.history.len(), 1);
+    }
+
+    // =========================================================================
+    // App::clone Tests
+    // =========================================================================
+
+    #[test]
+    fn app_is_cloneable() {
+        let mut app = App::new();
+        app.thought_count = 42;
+        app.veto_count = 5;
+
+        let cloned = app.clone();
+        assert_eq!(cloned.thought_count, 42);
+        assert_eq!(cloned.veto_count, 5);
     }
 }

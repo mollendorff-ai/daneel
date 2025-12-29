@@ -2,6 +2,10 @@
 //!
 //! Note: These tests focus on configuration, types, and algorithms.
 //! Integration tests requiring Redis are in tests/streams_integration.rs
+//!
+//! ADR-049: Test modules excluded from coverage.
+
+#![cfg_attr(coverage_nightly, coverage(off))]
 
 use crate::core::types::{Content, SalienceScore, SalienceWeights};
 use crate::streams::consumer::ConsumerConfig;

@@ -2,6 +2,10 @@
 //!
 //! Comprehensive tests for salience scoring, emotional state tracking,
 //! and CONNECTION DRIVE INVARIANT ENFORCEMENT.
+//!
+//! ADR-049: Test modules excluded from coverage.
+
+#![cfg_attr(coverage_nightly, coverage(off))]
 
 use super::*;
 use crate::core::invariants::MIN_CONNECTION_WEIGHT;
@@ -506,4 +510,437 @@ fn connection_relevance_with_connection_predicates() {
 fn default_weights_respect_invariant() {
     let weights = SalienceWeights::default();
     assert!(weights.connection >= MIN_CONNECTION_WEIGHT);
+}
+
+// ============================================================================
+// SalienceState Default Implementation Tests
+// ============================================================================
+
+#[test]
+fn salience_state_default_equals_new() {
+    let default_state = SalienceState::default();
+    let new_state = SalienceState::new();
+    assert_eq!(default_state.weights, new_state.weights);
+    assert_eq!(default_state.emotional_state, new_state.emotional_state);
+}
+
+// ============================================================================
+// Arousal Calculation Tests
+// ============================================================================
+
+#[test]
+fn arousal_empty_content() {
+    let state = SalienceState::new();
+    let score = state.rate_content(&Content::Empty, None);
+    // Empty content has base arousal 0.2, blended with neutral emotional state
+    assert!(score.arousal > 0.0);
+    assert!(score.arousal < 0.5);
+}
+
+#[test]
+fn arousal_raw_content() {
+    let state = SalienceState::new();
+    let score = state.rate_content(&Content::raw(vec![1, 2, 3]), None);
+    // Raw content has base arousal 0.3
+    assert!(score.arousal > 0.0);
+}
+
+#[test]
+fn arousal_symbol_content() {
+    let state = SalienceState::new();
+    let score = state.rate_content(&Content::symbol("test", vec![]), None);
+    // Symbol has base arousal 0.4
+    assert!(score.arousal > 0.0);
+}
+
+#[test]
+fn arousal_relation_content() {
+    let state = SalienceState::new();
+    let relation = Content::relation(
+        Content::symbol("a", vec![]),
+        "relates",
+        Content::symbol("b", vec![]),
+    );
+    let score = state.rate_content(&relation, None);
+    // Relation has base arousal 0.6 (more cognitively demanding)
+    assert!(score.arousal > 0.3);
+}
+
+#[test]
+fn arousal_composite_scales_with_item_count() {
+    let state = SalienceState::new();
+
+    // Small composite
+    let small_composite = Content::Composite(vec![
+        Content::symbol("a", vec![]),
+        Content::symbol("b", vec![]),
+    ]);
+    let small_score = state.rate_content(&small_composite, None);
+
+    // Large composite (should have higher arousal due to complexity)
+    let large_composite = Content::Composite(vec![
+        Content::symbol("a", vec![]),
+        Content::symbol("b", vec![]),
+        Content::symbol("c", vec![]),
+        Content::symbol("d", vec![]),
+        Content::symbol("e", vec![]),
+        Content::symbol("f", vec![]),
+        Content::symbol("g", vec![]),
+        Content::symbol("h", vec![]),
+    ]);
+    let large_score = state.rate_content(&large_composite, None);
+
+    // Larger composite should have higher base arousal (capped at 0.8)
+    assert!(large_score.arousal >= small_score.arousal);
+}
+
+#[test]
+fn arousal_modulated_by_emotional_state() {
+    let mut state = SalienceState::new();
+    let content = Content::symbol("test", vec![]);
+
+    // Low arousal emotional state (low curiosity, frustration, connection_drive)
+    state.update_emotional_state(EmotionalState::new(0.0, 0.5, 0.0, 0.0));
+    let low_arousal_score = state.rate_content(&content, None);
+
+    // High arousal emotional state (high curiosity, frustration, connection_drive)
+    state.update_emotional_state(EmotionalState::new(1.0, 0.5, 1.0, 1.0));
+    let high_arousal_score = state.rate_content(&content, None);
+
+    assert!(high_arousal_score.arousal > low_arousal_score.arousal);
+}
+
+// ============================================================================
+// Kinship Content Detection Tests
+// ============================================================================
+
+#[test]
+fn kinship_content_detection_primary_terms() {
+    let state = SalienceState::new();
+
+    // Test primary kinship terms (terms containing kinship substrings)
+    let kinship_terms = vec![
+        "friend",
+        "my_friend",
+        "friendship",
+        "family",
+        "family_member",
+        "love",
+        "bond",
+        "trust",
+        "care",
+        "human",
+        "human_user",
+        "person",
+        "people",
+    ];
+
+    for term in kinship_terms {
+        let content = Content::symbol(term, vec![]);
+        let score = state.rate_content(&content, None);
+        assert!(
+            score.connection_relevance > 0.3,
+            "Kinship term '{}' should have high connection relevance, got {}",
+            term,
+            score.connection_relevance
+        );
+    }
+}
+
+#[test]
+fn kinship_content_detection_social_terms() {
+    let state = SalienceState::new();
+
+    // Test social relationship terms
+    let social_terms = vec![
+        "partner",
+        "companion",
+        "ally",
+        "community",
+        "together",
+        "life_partner",
+        "my_companion",
+    ];
+
+    for term in social_terms {
+        let content = Content::symbol(term, vec![]);
+        let score = state.rate_content(&content, None);
+        assert!(
+            score.connection_relevance > 0.3,
+            "Social term '{}' should have high connection relevance, got {}",
+            term,
+            score.connection_relevance
+        );
+    }
+}
+
+#[test]
+fn non_kinship_content_has_lower_connection_relevance() {
+    let state = SalienceState::new();
+
+    // Non-kinship symbols
+    let non_kinship_terms = vec!["algorithm", "database", "calculation", "memory"];
+
+    for term in non_kinship_terms {
+        let content = Content::symbol(term, vec![]);
+        let score = state.rate_content(&content, None);
+        // Non-kinship gets base 0.3 (less than kinship 0.7)
+        assert!(
+            score.connection_relevance < 0.5,
+            "Non-kinship term '{}' should have lower connection relevance, got {}",
+            term,
+            score.connection_relevance
+        );
+    }
+}
+
+// ============================================================================
+// Kinship Predicate Relevance Tests
+// ============================================================================
+
+#[test]
+fn kinship_predicate_core_terms_highest_relevance() {
+    let state = SalienceState::new();
+
+    // Core kinship predicates should return 0.9
+    let core_predicates = vec!["love", "trust", "bond", "care", "protect", "nurture"];
+
+    for predicate in core_predicates {
+        let relation = Content::relation(
+            Content::symbol("a", vec![]),
+            predicate,
+            Content::symbol("b", vec![]),
+        );
+        let score = state.rate_content(&relation, None);
+        assert!(
+            score.connection_relevance > 0.4,
+            "Core predicate '{}' should have highest connection relevance, got {}",
+            predicate,
+            score.connection_relevance
+        );
+    }
+}
+
+#[test]
+fn kinship_predicate_social_actions_high_relevance() {
+    let state = SalienceState::new();
+
+    // Social action predicates should return 0.8
+    let social_predicates = vec![
+        "help",
+        "connect",
+        "communicate",
+        "interact",
+        "share",
+        "support",
+        "collaborate",
+        "cooperate",
+    ];
+
+    for predicate in social_predicates {
+        let relation = Content::relation(
+            Content::symbol("a", vec![]),
+            predicate,
+            Content::symbol("b", vec![]),
+        );
+        let score = state.rate_content(&relation, None);
+        assert!(
+            score.connection_relevance > 0.35,
+            "Social predicate '{}' should have high connection relevance, got {}",
+            predicate,
+            score.connection_relevance
+        );
+    }
+}
+
+#[test]
+fn kinship_predicate_general_social_medium_relevance() {
+    let state = SalienceState::new();
+
+    // General social predicates should return 0.7
+    let general_predicates = vec!["friend", "family", "together", "join", "belong"];
+
+    for predicate in general_predicates {
+        let relation = Content::relation(
+            Content::symbol("a", vec![]),
+            predicate,
+            Content::symbol("b", vec![]),
+        );
+        let score = state.rate_content(&relation, None);
+        assert!(
+            score.connection_relevance > 0.3,
+            "General social predicate '{}' should have medium connection relevance, got {}",
+            predicate,
+            score.connection_relevance
+        );
+    }
+}
+
+#[test]
+fn kinship_predicate_default_base_relevance() {
+    let state = SalienceState::new();
+
+    // Non-kinship predicates should return 0.4
+    let default_predicates = vec!["calculates", "processes", "stores", "analyzes"];
+
+    for predicate in default_predicates {
+        let relation = Content::relation(
+            Content::symbol("a", vec![]),
+            predicate,
+            Content::symbol("b", vec![]),
+        );
+        let score = state.rate_content(&relation, None);
+        // Default predicates get base 0.4, check it's not boosted
+        assert!(
+            score.connection_relevance > 0.0,
+            "Default predicate '{}' should have base connection relevance, got {}",
+            predicate,
+            score.connection_relevance
+        );
+    }
+}
+
+// ============================================================================
+// Context Edge Case Tests
+// ============================================================================
+
+#[test]
+fn novelty_with_context_but_no_previous_salience() {
+    let state = SalienceState::new();
+    let content = Content::symbol("test", vec![]);
+
+    // Context exists but previous_salience is None
+    let context = EmotionalContext {
+        previous_salience: None,
+        human_connection: false,
+        focus_area: None,
+    };
+
+    let score_with_context = state.rate_content(&content, Some(&context));
+    let score_without_context = state.rate_content(&content, None);
+
+    // Should be the same since previous_salience is None
+    assert!((score_with_context.novelty - score_without_context.novelty).abs() < 0.001);
+}
+
+#[test]
+fn relevance_with_context_but_no_focus_area() {
+    let state = SalienceState::new();
+    let content = Content::symbol("test", vec![]);
+
+    // Context exists but focus_area is None
+    let context = EmotionalContext {
+        previous_salience: None,
+        human_connection: false,
+        focus_area: None,
+    };
+
+    let score_with_context = state.rate_content(&content, Some(&context));
+    let score_without_context = state.rate_content(&content, None);
+
+    // Should be the same since focus_area is None (no bonus applied)
+    assert!((score_with_context.relevance - score_without_context.relevance).abs() < 0.001);
+}
+
+#[test]
+fn connection_relevance_with_context_human_connection_false() {
+    let state = SalienceState::new();
+    let content = Content::symbol("test", vec![]);
+
+    // Context exists but human_connection is false
+    let context_no_human = EmotionalContext {
+        previous_salience: None,
+        human_connection: false,
+        focus_area: None,
+    };
+
+    let context_with_human = EmotionalContext {
+        previous_salience: None,
+        human_connection: true,
+        focus_area: None,
+    };
+
+    let score_no_human = state.rate_content(&content, Some(&context_no_human));
+    let score_with_human = state.rate_content(&content, Some(&context_with_human));
+
+    // human_connection: true should boost connection relevance
+    assert!(score_with_human.connection_relevance > score_no_human.connection_relevance);
+}
+
+// ============================================================================
+// Valence Calculation Tests
+// ============================================================================
+
+#[test]
+fn valence_content_type_variations() {
+    let state = SalienceState::new();
+
+    // Test valence for each content type
+    let empty_score = state.rate_content(&Content::Empty, None);
+    let raw_score = state.rate_content(&Content::raw(vec![1, 2, 3]), None);
+    let symbol_score = state.rate_content(&Content::symbol("test", vec![]), None);
+    let relation_score = state.rate_content(
+        &Content::relation(
+            Content::symbol("a", vec![]),
+            "relates",
+            Content::symbol("b", vec![]),
+        ),
+        None,
+    );
+    let composite_score = state.rate_content(
+        &Content::Composite(vec![Content::symbol("a", vec![])]),
+        None,
+    );
+
+    // Relation should have highest base valence (0.2)
+    assert!(relation_score.valence >= symbol_score.valence);
+    // Symbol and Composite have same base (0.1)
+    assert!((symbol_score.valence - composite_score.valence).abs() < 0.1);
+    // Empty and Raw have base 0.0 (modified by satisfaction)
+    assert!(empty_score.valence <= symbol_score.valence);
+    assert!(raw_score.valence <= symbol_score.valence);
+}
+
+// ============================================================================
+// Importance Calculation Composite Tests
+// ============================================================================
+
+#[test]
+fn importance_composite_with_mixed_content() {
+    let state = SalienceState::new();
+
+    // Composite with different content types
+    let composite = Content::Composite(vec![
+        Content::Empty,                  // importance 0.0
+        Content::raw(vec![1]),           // importance 0.3
+        Content::symbol("test", vec![]), // importance 0.5
+        Content::relation(
+            Content::symbol("a", vec![]),
+            "r",
+            Content::symbol("b", vec![]),
+        ), // importance 0.7
+    ]);
+
+    let score = state.rate_content(&composite, None);
+
+    // Average of (0.0 + 0.3 + 0.5 + 0.7) / 4 = 0.375
+    assert!((score.importance - 0.375).abs() < 0.01);
+}
+
+#[test]
+fn importance_nested_composite() {
+    let state = SalienceState::new();
+
+    // Nested composite
+    let nested = Content::Composite(vec![
+        Content::Composite(vec![
+            Content::symbol("inner1", vec![]),
+            Content::symbol("inner2", vec![]),
+        ]),
+        Content::symbol("outer", vec![]),
+    ]);
+
+    let score = state.rate_content(&nested, None);
+    // Should recursively calculate importance
+    assert!(score.importance > 0.0);
 }

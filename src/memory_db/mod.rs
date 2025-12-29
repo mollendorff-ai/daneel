@@ -101,6 +101,7 @@ impl MemoryDb {
     ///
     /// Note: Currently synchronous but async for API consistency with other db operations.
     #[allow(clippy::unused_async)]
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn connect(url: &str) -> Result<Self> {
         let client = Qdrant::from_url(url).build()?;
         Ok(Self { client })
@@ -118,6 +119,7 @@ impl MemoryDb {
     /// # Errors
     ///
     /// Returns error if connection or collection creation fails.
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn connect_and_init(url: &str) -> Result<Self> {
         let db = Self::connect(url).await?;
         db.init_collections().await?;
@@ -134,6 +136,7 @@ impl MemoryDb {
     /// # Errors
     ///
     /// Returns error if collection creation fails.
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn init_collections(&self) -> Result<()> {
         // Check and create memories collection
         if !self.collection_exists(collections::MEMORIES).await? {
@@ -184,6 +187,7 @@ impl MemoryDb {
     }
 
     /// Check if a collection exists
+    #[cfg_attr(coverage_nightly, coverage(off))]
     async fn collection_exists(&self, name: &str) -> Result<bool> {
         match self.client.collection_exists(name).await {
             Ok(exists) => Ok(exists),
@@ -201,6 +205,7 @@ impl MemoryDb {
     /// # Errors
     ///
     /// Returns error if vector dimension is wrong or storage fails.
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn store_memory(&self, memory: &Memory, vector: &[f32]) -> Result<()> {
         if vector.len() != VECTOR_DIMENSION {
             return Err(MemoryDbError::InvalidVectorDimension {
@@ -231,6 +236,7 @@ impl MemoryDb {
     /// # Returns
     ///
     /// Vector of (memory, similarity_score) pairs, sorted by similarity descending.
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn find_by_context(
         &self,
         context_vector: &[f32],
@@ -276,6 +282,7 @@ impl MemoryDb {
     /// # Arguments
     ///
     /// * `limit` - Maximum number of results
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn get_replay_candidates(&self, limit: u32) -> Result<Vec<Memory>> {
         let filter = Filter::must([Condition::matches("consolidation.consolidation_tag", true)]);
 
@@ -313,6 +320,7 @@ impl MemoryDb {
     /// Update memory consolidation state
     ///
     /// Called during sleep to strengthen memories.
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn update_consolidation(
         &self,
         memory_id: &MemoryId,
@@ -364,6 +372,7 @@ impl MemoryDb {
     }
 
     /// Store an episode
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn store_episode(&self, episode: &Episode, vector: &[f32]) -> Result<()> {
         if vector.len() != VECTOR_DIMENSION {
             return Err(MemoryDbError::InvalidVectorDimension {
@@ -384,6 +393,7 @@ impl MemoryDb {
     }
 
     /// Get current (open) episode
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn get_current_episode(&self) -> Result<Option<Episode>> {
         let filter = Filter::must([Condition::is_null("ended_at")]);
 
@@ -406,6 +416,7 @@ impl MemoryDb {
     }
 
     /// Close current episode and create new one (Door Syndrome boundary)
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn create_episode_boundary(
         &self,
         label: String,
@@ -428,18 +439,21 @@ impl MemoryDb {
     }
 
     /// Get total memory count
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn memory_count(&self) -> Result<u64> {
         let info = self.client.collection_info(collections::MEMORIES).await?;
         Ok(info.result.and_then(|r| r.points_count).unwrap_or(0))
     }
 
     /// Get total episode count
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn episode_count(&self) -> Result<u64> {
         let info = self.client.collection_info(collections::EPISODES).await?;
         Ok(info.result.and_then(|r| r.points_count).unwrap_or(0))
     }
 
     /// Get total unconscious memory count (ADR-033)
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn unconscious_count(&self) -> Result<u64> {
         let info = self
             .client
@@ -460,6 +474,7 @@ impl MemoryDb {
     /// * `salience` - Composite salience when archived
     /// * `reason` - Why this thought is being archived
     /// * `redis_id` - Original Redis stream entry ID
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn archive_to_unconscious(
         &self,
         content: &str,
@@ -497,6 +512,7 @@ impl MemoryDb {
     ///
     /// Returns existing identity if found, or creates new identity for first boot.
     /// On restart, increments restart_count and updates session_started_at.
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_identity(&self) -> Result<IdentityMetadata> {
         use qdrant_client::qdrant::GetPointsBuilder;
 
@@ -539,6 +555,7 @@ impl MemoryDb {
     /// Save Timmy's identity metadata to Qdrant (ADR-034)
     ///
     /// Called periodically and on shutdown to persist identity state.
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn save_identity(&self, identity: &IdentityMetadata) -> Result<()> {
         // Create payload from struct
         let payload: HashMap<String, serde_json::Value> =
@@ -556,6 +573,7 @@ impl MemoryDb {
     }
 
     /// Health check
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn health_check(&self) -> Result<bool> {
         match self.client.health_check().await {
             Ok(_) => Ok(true),
@@ -565,6 +583,7 @@ impl MemoryDb {
 }
 
 impl std::fmt::Debug for MemoryDb {
+    #[cfg_attr(coverage_nightly, coverage(off))]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("MemoryDb").finish()
     }

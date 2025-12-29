@@ -22,6 +22,7 @@ use ratatui::{
 use crate::tui::app::App;
 use crate::tui::colors;
 
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     // Prepare sparkline data - convert entropy history to u64 for sparkline
     // Scale entropy values to 0-100 range for better visualization
@@ -96,7 +97,9 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
     use crate::tui::app::ThoughtStatus;

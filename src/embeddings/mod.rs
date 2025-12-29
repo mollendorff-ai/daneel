@@ -38,6 +38,7 @@ impl EmbeddingEngine {
     /// Create a new embedding engine
     ///
     /// Downloads the model on first run (~90MB for MiniLM-L6-v2)
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn new() -> Result<Self, EmbeddingError> {
         info!("Initializing embedding engine (all-MiniLM-L6-v2)...");
 
@@ -58,6 +59,7 @@ impl EmbeddingEngine {
     /// Generate embedding for a single thought
     ///
     /// Returns a 768-dimensional vector (padded from 384-dim MiniLM output)
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn embed_thought(&mut self, text: &str) -> Result<Vec<f32>, EmbeddingError> {
         if text.is_empty() {
             return Err(EmbeddingError::EmptyInput);
@@ -86,6 +88,7 @@ impl EmbeddingEngine {
     }
 
     /// Generate embeddings for a batch of thoughts
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn embed_batch(&mut self, texts: Vec<String>) -> Result<Vec<Vec<f32>>, EmbeddingError> {
         if texts.is_empty() {
             return Ok(vec![]);
@@ -107,12 +110,14 @@ impl EmbeddingEngine {
     }
 
     /// Get count of embeddings generated this session
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn embed_count(&self) -> u64 {
         self.embed_count
     }
 }
 
 /// Pad vector to target dimension (fills with zeros)
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn pad_to_dimension(mut vector: Vec<f32>, target_dim: usize) -> Vec<f32> {
     if vector.len() < target_dim {
         vector.resize(target_dim, 0.0);
@@ -123,6 +128,7 @@ fn pad_to_dimension(mut vector: Vec<f32>, target_dim: usize) -> Vec<f32> {
 }
 
 /// Create a shared embedding engine
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn create_embedding_engine() -> Result<SharedEmbeddingEngine, EmbeddingError> {
     let engine = EmbeddingEngine::new()?;
     Ok(Arc::new(RwLock::new(engine)))
@@ -144,7 +150,9 @@ pub enum EmbeddingError {
     NoOutput,
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 

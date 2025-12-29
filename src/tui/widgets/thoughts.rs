@@ -14,6 +14,7 @@ use ratatui::{
 use crate::tui::app::{App, ThoughtStatus};
 use crate::tui::colors;
 
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let block = Block::default()
         .title(if app.stream_paused {

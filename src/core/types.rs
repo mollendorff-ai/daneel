@@ -426,7 +426,9 @@ impl Default for Window {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -577,5 +579,183 @@ mod tests {
             0
         );
         // Need specific values to hit each bin - these depend on the formula
+    }
+
+    // =========================================================================
+    // Additional coverage tests for trait implementations and constructors
+    // =========================================================================
+
+    #[test]
+    fn thought_id_default() {
+        let id1 = ThoughtId::default();
+        let id2 = ThoughtId::default();
+        // Default creates unique IDs
+        assert_ne!(id1, id2);
+    }
+
+    #[test]
+    fn thought_id_display() {
+        let id = ThoughtId::new();
+        let display = format!("{}", id);
+        // Display should format the inner UUID
+        assert!(!display.is_empty());
+        assert_eq!(display.len(), 36); // UUID format: 8-4-4-4-12
+    }
+
+    #[test]
+    fn window_id_new_unique() {
+        let id1 = WindowId::new();
+        let id2 = WindowId::new();
+        assert_ne!(id1, id2);
+    }
+
+    #[test]
+    fn window_id_default() {
+        let id1 = WindowId::default();
+        let id2 = WindowId::default();
+        // Default creates unique IDs
+        assert_ne!(id1, id2);
+    }
+
+    #[test]
+    fn window_id_display() {
+        let id = WindowId::new();
+        let display = format!("{}", id);
+        // Display should format the inner UUID
+        assert!(!display.is_empty());
+        assert_eq!(display.len(), 36); // UUID format: 8-4-4-4-12
+    }
+
+    #[test]
+    fn content_is_empty() {
+        assert!(Content::Empty.is_empty());
+        assert!(!Content::raw(vec![1]).is_empty());
+        assert!(!Content::symbol("test", vec![]).is_empty());
+    }
+
+    #[test]
+    fn content_default_is_empty() {
+        let content = Content::default();
+        assert!(content.is_empty());
+        assert!(matches!(content, Content::Empty));
+    }
+
+    #[test]
+    fn content_composite_creation() {
+        let content = Content::Composite(vec![
+            Content::raw(vec![1, 2]),
+            Content::symbol("test", vec![3]),
+            Content::Empty,
+        ]);
+        assert!(matches!(content, Content::Composite(_)));
+        assert!(!content.is_empty());
+    }
+
+    #[test]
+    fn salience_score_new_without_arousal() {
+        let score = SalienceScore::new_without_arousal(0.8, 0.6, 0.7, 0.5, 0.9);
+        assert_eq!(score.importance, 0.8);
+        assert_eq!(score.novelty, 0.6);
+        assert_eq!(score.relevance, 0.7);
+        assert_eq!(score.valence, 0.5);
+        assert_eq!(score.arousal, 0.5); // Default arousal
+        assert_eq!(score.connection_relevance, 0.9);
+    }
+
+    #[test]
+    fn salience_score_default() {
+        let score = SalienceScore::default();
+        let neutral = SalienceScore::neutral();
+        // Default should equal neutral
+        assert_eq!(score.importance, neutral.importance);
+        assert_eq!(score.novelty, neutral.novelty);
+        assert_eq!(score.relevance, neutral.relevance);
+        assert_eq!(score.valence, neutral.valence);
+        assert_eq!(score.arousal, neutral.arousal);
+        assert_eq!(score.connection_relevance, neutral.connection_relevance);
+    }
+
+    #[test]
+    fn salience_score_emotional_intensity() {
+        // Zero valence = zero intensity regardless of arousal
+        let score = SalienceScore::new(0.5, 0.5, 0.5, 0.0, 1.0, 0.5);
+        assert_eq!(score.emotional_intensity(), 0.0);
+
+        // High valence + high arousal = high intensity
+        let score = SalienceScore::new(0.5, 0.5, 0.5, 1.0, 1.0, 0.5);
+        assert_eq!(score.emotional_intensity(), 1.0);
+
+        // Negative valence uses absolute value
+        let score = SalienceScore::new(0.5, 0.5, 0.5, -0.8, 0.5, 0.5);
+        assert!((score.emotional_intensity() - 0.4).abs() < 0.001);
+    }
+
+    #[test]
+    fn thought_with_source() {
+        let thought =
+            Thought::new(Content::Empty, SalienceScore::neutral()).with_source("perception");
+        assert_eq!(thought.source_stream, Some("perception".to_string()));
+    }
+
+    #[test]
+    fn thought_with_parent_and_source() {
+        let parent = Thought::new(Content::Empty, SalienceScore::neutral());
+        let child = Thought::new(Content::raw(vec![1, 2, 3]), SalienceScore::neutral())
+            .with_parent(parent.id)
+            .with_source("reasoning");
+        assert_eq!(child.parent_id, Some(parent.id));
+        assert_eq!(child.source_stream, Some("reasoning".to_string()));
+    }
+
+    #[test]
+    fn window_default() {
+        let window = Window::default();
+        assert!(window.is_open);
+        assert!(window.label.is_none());
+        assert!(window.contents.is_empty());
+    }
+
+    #[test]
+    fn tmi_bin_high_boundary() {
+        // Create a score that lands in HIGH bin (0.6 <= composite < 0.8)
+        // Need: emotional * 0.4 + cognitive + novelty + connection = ~0.7
+        // Set importance=1.0, relevance=1.0, novelty=1.0, connection=1.0, but low emotional
+        // cognitive = 1.0*0.3 + 1.0*0.2 = 0.5
+        // novelty = 1.0*0.2 = 0.2
+        // connection = 1.0*0.1 = 0.1
+        // emotional = 0 (valence=0)
+        // total = 0 + 0.5 + 0.2 + 0.1 = 0.8 -> bin 4
+        // Let's try with lower values to get bin 3
+        let score = SalienceScore::new(0.8, 0.8, 0.8, 0.0, 0.0, 0.8);
+        // cognitive = 0.8*0.3 + 0.8*0.2 = 0.4
+        // novelty = 0.8*0.2 = 0.16
+        // connection = 0.8*0.1 = 0.08
+        // total = 0 + 0.4 + 0.16 + 0.08 = 0.64 -> bin 3 (HIGH)
+        assert_eq!(score.tmi_bin(), 3);
+    }
+
+    #[test]
+    fn tmi_bin_low_boundary() {
+        // Create a score that lands in LOW bin (0.2 <= composite < 0.4)
+        let score = SalienceScore::new(0.3, 0.3, 0.3, 0.0, 0.0, 0.3);
+        // cognitive = 0.3*0.3 + 0.3*0.2 = 0.15
+        // novelty = 0.3*0.2 = 0.06
+        // connection = 0.3*0.1 = 0.03
+        // total = 0 + 0.15 + 0.06 + 0.03 = 0.24 -> bin 1 (LOW)
+        assert_eq!(score.tmi_bin(), 1);
+    }
+
+    #[test]
+    fn salience_score_serde_default_arousal() {
+        // Test that serde correctly uses default_arousal() when arousal is missing
+        let json = r#"{
+            "importance": 0.5,
+            "novelty": 0.5,
+            "relevance": 0.5,
+            "valence": 0.0,
+            "connection_relevance": 0.5
+        }"#;
+        let score: SalienceScore = serde_json::from_str(json).unwrap();
+        assert_eq!(score.arousal, 0.5); // default_arousal() returns 0.5
     }
 }

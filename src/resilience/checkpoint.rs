@@ -120,6 +120,7 @@ impl CheckpointManager {
     /// # Errors
     ///
     /// Returns error if Redis operation fails
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn save_checkpoint(
         &self,
         checkpoint: &Checkpoint,
@@ -147,6 +148,7 @@ impl CheckpointManager {
     /// Load checkpoint from Redis (async)
     ///
     /// Returns None if no checkpoint exists.
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_checkpoint(
         &self,
         redis_client: &redis::Client,
@@ -174,7 +176,9 @@ impl CheckpointManager {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -238,5 +242,190 @@ mod tests {
         let state = DriveState::default();
         assert!((state.connection_drive - 0.0).abs() < f32::EPSILON);
         assert!(state.auxiliary_drives.is_empty());
+    }
+
+    #[test]
+    fn test_checkpoint_new_sets_all_fields() {
+        let checkpoint = Checkpoint::new(1000, vec![0.1, 0.2, 0.3], 0.95, 42);
+
+        assert_eq!(checkpoint.thought_count, 1000);
+        assert_eq!(checkpoint.salience_weights, vec![0.1, 0.2, 0.3]);
+        assert!((checkpoint.drive_state.connection_drive - 0.95).abs() < f32::EPSILON);
+        assert!(checkpoint.drive_state.auxiliary_drives.is_empty());
+        assert_eq!(checkpoint.sequence, 42);
+        // Timestamp should be recent (within last minute)
+        let now = chrono::Utc::now();
+        let diff = now - checkpoint.timestamp;
+        assert!(diff.num_seconds() < 60);
+    }
+
+    #[test]
+    fn test_checkpoint_with_empty_salience_weights() {
+        let checkpoint = Checkpoint::new(0, vec![], 0.5, 0);
+
+        assert_eq!(checkpoint.thought_count, 0);
+        assert!(checkpoint.salience_weights.is_empty());
+        assert_eq!(checkpoint.sequence, 0);
+    }
+
+    #[test]
+    fn test_checkpoint_with_large_values() {
+        let checkpoint = Checkpoint::new(u64::MAX, vec![1.0; 1000], 1.0, u64::MAX);
+
+        assert_eq!(checkpoint.thought_count, u64::MAX);
+        assert_eq!(checkpoint.salience_weights.len(), 1000);
+        assert_eq!(checkpoint.sequence, u64::MAX);
+    }
+
+    #[test]
+    fn test_checkpoint_config_custom_values() {
+        let config = CheckpointConfig {
+            interval: 50,
+            redis_key: "custom:key".to_string(),
+            max_checkpoints: 5,
+        };
+
+        assert_eq!(config.interval, 50);
+        assert_eq!(config.redis_key, "custom:key");
+        assert_eq!(config.max_checkpoints, 5);
+    }
+
+    #[test]
+    fn test_checkpoint_manager_new_starts_at_zero() {
+        let config = CheckpointConfig::default();
+        let manager = CheckpointManager::new(config.clone());
+
+        // First checkpoint should have sequence 1
+        let mut manager = manager;
+        let cp = manager.create_checkpoint(100, vec![], 0.8);
+        assert_eq!(cp.sequence, 1);
+    }
+
+    #[test]
+    fn test_should_checkpoint_with_interval_one() {
+        let config = CheckpointConfig {
+            interval: 1,
+            ..Default::default()
+        };
+        let manager = CheckpointManager::new(config);
+
+        // With interval 1, every thought (except 0) should checkpoint
+        assert!(!manager.should_checkpoint(0));
+        assert!(manager.should_checkpoint(1));
+        assert!(manager.should_checkpoint(2));
+        assert!(manager.should_checkpoint(100));
+    }
+
+    #[test]
+    fn test_should_checkpoint_with_large_interval() {
+        let config = CheckpointConfig {
+            interval: 1000,
+            ..Default::default()
+        };
+        let manager = CheckpointManager::new(config);
+
+        assert!(!manager.should_checkpoint(0));
+        assert!(!manager.should_checkpoint(999));
+        assert!(manager.should_checkpoint(1000));
+        assert!(!manager.should_checkpoint(1001));
+        assert!(manager.should_checkpoint(2000));
+    }
+
+    #[test]
+    fn test_drive_state_with_auxiliary_drives() {
+        let state = DriveState {
+            connection_drive: 0.75,
+            auxiliary_drives: vec![0.5, 0.6, 0.7],
+        };
+
+        assert!((state.connection_drive - 0.75).abs() < f32::EPSILON);
+        assert_eq!(state.auxiliary_drives.len(), 3);
+        assert!((state.auxiliary_drives[0] - 0.5).abs() < f32::EPSILON);
+        assert!((state.auxiliary_drives[1] - 0.6).abs() < f32::EPSILON);
+        assert!((state.auxiliary_drives[2] - 0.7).abs() < f32::EPSILON);
+    }
+
+    #[test]
+    fn test_drive_state_serialization() {
+        let state = DriveState {
+            connection_drive: 0.85,
+            auxiliary_drives: vec![0.1, 0.2],
+        };
+
+        let json = serde_json::to_string(&state).unwrap();
+        assert!(json.contains("connection_drive"));
+        assert!(json.contains("0.85"));
+        assert!(json.contains("auxiliary_drives"));
+
+        let parsed: DriveState = serde_json::from_str(&json).unwrap();
+        assert!((parsed.connection_drive - 0.85).abs() < f32::EPSILON);
+        assert_eq!(parsed.auxiliary_drives.len(), 2);
+    }
+
+    #[test]
+    fn test_checkpoint_config_serialization() {
+        let config = CheckpointConfig {
+            interval: 200,
+            redis_key: "test:checkpoint".to_string(),
+            max_checkpoints: 20,
+        };
+
+        let json = serde_json::to_string(&config).unwrap();
+        assert!(json.contains("interval"));
+        assert!(json.contains("200"));
+        assert!(json.contains("test:checkpoint"));
+        assert!(json.contains("max_checkpoints"));
+
+        let parsed: CheckpointConfig = serde_json::from_str(&json).unwrap();
+        assert_eq!(parsed.interval, 200);
+        assert_eq!(parsed.redis_key, "test:checkpoint");
+        assert_eq!(parsed.max_checkpoints, 20);
+    }
+
+    #[test]
+    fn test_checkpoint_deserialization_from_json() {
+        let json = r#"{
+            "timestamp": "2024-01-15T12:00:00Z",
+            "thought_count": 500,
+            "salience_weights": [0.5, 0.6, 0.7],
+            "drive_state": {
+                "connection_drive": 0.9,
+                "auxiliary_drives": [0.1]
+            },
+            "sequence": 10
+        }"#;
+
+        let checkpoint: Checkpoint = serde_json::from_str(json).unwrap();
+        assert_eq!(checkpoint.thought_count, 500);
+        assert_eq!(checkpoint.salience_weights, vec![0.5, 0.6, 0.7]);
+        assert!((checkpoint.drive_state.connection_drive - 0.9).abs() < f32::EPSILON);
+        assert_eq!(checkpoint.drive_state.auxiliary_drives, vec![0.1]);
+        assert_eq!(checkpoint.sequence, 10);
+    }
+
+    #[test]
+    fn test_create_checkpoint_preserves_values() {
+        let config = CheckpointConfig::default();
+        let mut manager = CheckpointManager::new(config);
+
+        let weights = vec![0.1, 0.2, 0.3, 0.4, 0.5];
+        let cp = manager.create_checkpoint(12345, weights.clone(), 0.77);
+
+        assert_eq!(cp.thought_count, 12345);
+        assert_eq!(cp.salience_weights, weights);
+        assert!((cp.drive_state.connection_drive - 0.77).abs() < f32::EPSILON);
+    }
+
+    #[test]
+    fn test_multiple_checkpoint_creations() {
+        let config = CheckpointConfig::default();
+        let mut manager = CheckpointManager::new(config);
+
+        // Create 10 checkpoints and verify sequence numbers
+        for i in 1..=10 {
+            let cp = manager.create_checkpoint(i * 100, vec![0.5], 0.8);
+            assert_eq!(cp.sequence, i);
+            assert_eq!(cp.thought_count, i * 100);
+        }
     }
 }

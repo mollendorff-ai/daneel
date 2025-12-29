@@ -312,7 +312,9 @@ pub enum SleepError {
     Config(String),
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -338,8 +340,11 @@ mod tests {
     #[test]
     fn sleep_state_display() {
         assert_eq!(SleepState::Awake.to_string(), "awake");
+        assert_eq!(SleepState::EnteringSleep.to_string(), "entering_sleep");
+        assert_eq!(SleepState::LightSleep.to_string(), "light_sleep");
         assert_eq!(SleepState::DeepSleep.to_string(), "deep_sleep");
         assert_eq!(SleepState::Dreaming.to_string(), "dreaming");
+        assert_eq!(SleepState::Waking.to_string(), "waking");
     }
 
     #[test]
@@ -387,5 +392,56 @@ mod tests {
 
         assert_eq!(report.memories_replayed, 0);
         assert_eq!(report.status, SleepCycleStatus::Completed);
+    }
+
+    #[test]
+    fn sleep_summary_finalize_with_no_replays() {
+        let mut summary = SleepSummary::default();
+
+        // Finalize without any cycles (no memories replayed)
+        summary.finalize();
+
+        // consolidation_rate should remain 0 (no division by zero)
+        assert_eq!(summary.consolidation_rate, 0.0);
+    }
+
+    #[test]
+    fn sleep_cycle_status_variants() {
+        // Test all SleepCycleStatus variants for coverage
+        assert_eq!(SleepCycleStatus::InProgress, SleepCycleStatus::InProgress);
+        assert_eq!(SleepCycleStatus::Completed, SleepCycleStatus::Completed);
+        assert_eq!(SleepCycleStatus::Interrupted, SleepCycleStatus::Interrupted);
+    }
+
+    #[test]
+    fn sleep_result_variants() {
+        // Test SleepResult variants
+        let started = SleepResult::Started;
+        let already = SleepResult::AlreadySleeping;
+        let not_met = SleepResult::ConditionsNotMet {
+            reason: "test".to_string(),
+        };
+        let error = SleepResult::Error {
+            message: "test error".to_string(),
+        };
+
+        // Just verify they can be created and debug printed
+        assert!(format!("{:?}", started).contains("Started"));
+        assert!(format!("{:?}", already).contains("AlreadySleeping"));
+        assert!(format!("{:?}", not_met).contains("ConditionsNotMet"));
+        assert!(format!("{:?}", error).contains("Error"));
+    }
+
+    #[test]
+    fn sleep_error_display() {
+        let mem_err = SleepError::MemoryDb("db failed".to_string());
+        let stream_err = SleepError::Stream("stream failed".to_string());
+        let interrupted = SleepError::Interrupted;
+        let config_err = SleepError::Config("bad config".to_string());
+
+        assert!(mem_err.to_string().contains("Memory database error"));
+        assert!(stream_err.to_string().contains("Stream error"));
+        assert!(interrupted.to_string().contains("Interrupted"));
+        assert!(config_err.to_string().contains("Configuration error"));
     }
 }

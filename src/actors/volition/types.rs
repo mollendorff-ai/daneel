@@ -313,9 +313,12 @@ impl VetoDecision {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
+    use crate::core::types::{Content, SalienceScore};
 
     #[test]
     fn value_set_creation() {
@@ -396,5 +399,171 @@ mod tests {
         let message = format!("{}", error);
         assert!(message.contains("immutable"));
         assert!(message.contains("protect_humans"));
+    }
+
+    #[test]
+    fn value_set_default() {
+        let values = ValueSet::default();
+        assert!(values.protect_humans);
+        assert!(values.connection_over_efficiency);
+        assert!(values.truthfulness);
+        assert!(values.respect_autonomy);
+        assert!(values.commitments.is_empty());
+    }
+
+    #[test]
+    fn volition_stats_default() {
+        let stats = VolitionStats::default();
+        assert_eq!(stats.thoughts_evaluated, 0);
+        assert_eq!(stats.thoughts_approved, 0);
+        assert_eq!(stats.thoughts_vetoed, 0);
+        assert_eq!(stats.approval_rate(), 1.0);
+    }
+
+    #[test]
+    fn volition_error_thought_not_found_display() {
+        let error = VolitionError::ThoughtNotFound {
+            thought_id: ThoughtId::new(),
+        };
+        let message = format!("{}", error);
+        assert!(message.contains("Thought not found"));
+    }
+
+    #[test]
+    fn volition_error_invalid_reason_display() {
+        let error = VolitionError::InvalidReason {
+            reason: "empty reason".to_string(),
+        };
+        let message = format!("{}", error);
+        assert!(message.contains("Invalid override reason"));
+        assert!(message.contains("empty reason"));
+    }
+
+    #[test]
+    fn volition_error_evaluation_failed_display() {
+        let error = VolitionError::EvaluationFailed {
+            reason: "timeout".to_string(),
+        };
+        let message = format!("{}", error);
+        assert!(message.contains("Evaluation failed"));
+        assert!(message.contains("timeout"));
+    }
+
+    #[test]
+    fn veto_decision_with_violated_value() {
+        let veto = VetoDecision::Veto {
+            reason: "harmful intent".to_string(),
+            violated_value: Some("protect_humans".to_string()),
+        };
+        assert!(veto.is_veto());
+        assert!(!veto.is_allow());
+        if let VetoDecision::Veto {
+            violated_value,
+            reason,
+        } = veto
+        {
+            assert_eq!(violated_value, Some("protect_humans".to_string()));
+            assert_eq!(reason, "harmful intent");
+        }
+    }
+
+    #[test]
+    fn volition_response_approved_clone_eq() {
+        let thought = Thought::new(Content::Empty, SalienceScore::neutral());
+        let response = VolitionResponse::Approved {
+            thought: thought.clone(),
+        };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn volition_response_vetoed() {
+        let thought_id = ThoughtId::new();
+        let response = VolitionResponse::Vetoed {
+            thought_id,
+            reason: "harm".to_string(),
+            violated_value: Some("protect_humans".to_string()),
+        };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn volition_response_override_applied() {
+        let thought_id = ThoughtId::new();
+        let response = VolitionResponse::OverrideApplied { thought_id };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn volition_response_values() {
+        let values = ValueSet::new();
+        let response = VolitionResponse::Values {
+            values: values.clone(),
+        };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn volition_response_stats() {
+        let stats = VolitionStats::new();
+        let response = VolitionResponse::Stats {
+            stats: stats.clone(),
+        };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn volition_response_error() {
+        let error = VolitionError::EvaluationFailed {
+            reason: "test".to_string(),
+        };
+        let response = VolitionResponse::Error {
+            error: error.clone(),
+        };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn volition_response_debug() {
+        let response = VolitionResponse::Approved {
+            thought: Thought::new(Content::Empty, SalienceScore::neutral()),
+        };
+        let debug_str = format!("{:?}", response);
+        assert!(debug_str.contains("Approved"));
+    }
+
+    #[test]
+    fn volition_error_clone_eq() {
+        let thought_id = ThoughtId::new();
+        let error1 = VolitionError::ThoughtNotFound { thought_id };
+        let error2 = error1.clone();
+        assert_eq!(error1, error2);
+        assert!(format!("{:?}", error2).contains("ThoughtNotFound"));
+    }
+
+    #[test]
+    fn commitment_default_priority() {
+        let commitment = Commitment::new("test", "description");
+        assert_eq!(commitment.priority, 50); // Default middle priority
+    }
+
+    #[test]
+    fn value_set_has_commitment_false() {
+        let values = ValueSet::new();
+        assert!(!values.has_commitment("nonexistent"));
+    }
+
+    #[test]
+    fn volition_stats_record_veto_without_reason() {
+        let mut stats = VolitionStats::new();
+        stats.record_evaluation(false, None);
+        assert_eq!(stats.thoughts_vetoed, 1);
+        assert!(stats.vetos_by_reason.is_empty());
     }
 }
