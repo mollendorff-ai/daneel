@@ -3,12 +3,13 @@
 //! ADR-049: Test modules excluded from coverage.
 
 #![cfg_attr(coverage_nightly, coverage(off))]
+#![allow(clippy::significant_drop_tightening)] // Async test setup
 
 use super::*;
 use ractor::rpc::CallResult;
 use ractor::Actor;
 
-/// Extract value from CallResult or panic
+/// Extract value from `CallResult` or panic
 fn unwrap_call<T: std::fmt::Debug>(result: CallResult<T>) -> T {
     match result {
         CallResult::Success(v) => v,
@@ -98,7 +99,7 @@ async fn sleep_actor_enter_sleep_conditions_not_met() {
 
     match result {
         SleepResult::ConditionsNotMet { .. } => {}
-        _ => panic!("Expected ConditionsNotMet, got {:?}", result),
+        _ => panic!("Expected ConditionsNotMet, got {result:?}"),
     }
 
     actor_ref.stop(None);
@@ -229,7 +230,7 @@ fn sleep_state_interruptibility() {
 #[test]
 fn sleep_phase_advancement() {
     let config = SleepConfig::default();
-    let mut state = SleepState::new(config.clone());
+    let mut state = SleepState::new(config);
 
     // Light sleep at 10%
     state.advance_sleep_phase(0.1);
@@ -354,7 +355,7 @@ fn enter_sleep_already_sleeping() {
     let result = state.enter_sleep();
     match result {
         SleepResult::AlreadySleeping => {}
-        _ => panic!("Expected AlreadySleeping, got {:?}", result),
+        _ => panic!("Expected AlreadySleeping, got {result:?}"),
     }
 }
 
@@ -374,7 +375,7 @@ fn enter_sleep_success() {
     let result = state.enter_sleep();
     match result {
         SleepResult::Started => {}
-        _ => panic!("Expected Started, got {:?}", result),
+        _ => panic!("Expected Started, got {result:?}"),
     }
 
     assert_eq!(state.state, types::SleepState::EnteringSleep);
@@ -506,7 +507,7 @@ fn advance_sleep_phase_boundary_conditions() {
         light_sleep_duration_pct: 0.2,
         ..SleepConfig::default()
     };
-    let mut state = SleepState::new(config.clone());
+    let mut state = SleepState::new(config);
 
     // Exactly at light sleep threshold
     state.advance_sleep_phase(0.0);
@@ -541,7 +542,7 @@ fn sleep_actor_with_custom_config() {
         ..SleepConfig::default()
     };
 
-    let actor = SleepActor::with_config(config.clone());
+    let actor = SleepActor::with_config(config);
     assert_eq!(actor.config.idle_threshold_ms, 5000);
     assert_eq!(actor.config.replay_batch_size, 100);
 }
@@ -572,7 +573,7 @@ async fn sleep_actor_enter_sleep_when_already_sleeping() {
 
     match result1 {
         SleepResult::Started => {}
-        _ => panic!("Expected Started, got {:?}", result1),
+        _ => panic!("Expected Started, got {result1:?}"),
     }
 
     // Verify state is EnteringSleep
@@ -594,7 +595,7 @@ async fn sleep_actor_enter_sleep_when_already_sleeping() {
 
     match result2 {
         SleepResult::AlreadySleeping => {}
-        _ => panic!("Expected AlreadySleeping, got {:?}", result2),
+        _ => panic!("Expected AlreadySleeping, got {result2:?}"),
     }
 
     actor_ref.stop(None);
@@ -690,7 +691,7 @@ async fn sleep_actor_wake_after_sleep_cycle() {
 
     match result {
         SleepResult::Started => {}
-        _ => panic!("Expected Started, got {:?}", result),
+        _ => panic!("Expected Started, got {result:?}"),
     }
 
     // Wake up - should return summary (which was created when entering sleep)

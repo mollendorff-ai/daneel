@@ -1,11 +1,13 @@
 //! Tests for Redis Streams integration
 //!
 //! Note: These tests focus on configuration, types, and algorithms.
-//! Integration tests requiring Redis are in tests/streams_integration.rs
+//! Integration tests requiring Redis are in `tests/streams_integration.rs`
 //!
 //! ADR-049: Test modules excluded from coverage.
 
 #![cfg_attr(coverage_nightly, coverage(off))]
+#![allow(clippy::float_cmp)] // Tests compare exact literal values
+#![allow(clippy::significant_drop_tightening)] // Async test setup
 
 use crate::core::types::{Content, SalienceScore, SalienceWeights};
 use crate::streams::consumer::ConsumerConfig;
@@ -185,8 +187,7 @@ fn test_thought_candidate_scoring_with_high_connection() {
     // connection_boost should be 0.9 * 0.2 = 0.18
     assert!(
         (connection_boost - 0.18).abs() < 0.001,
-        "Expected ~0.18, got {}",
-        connection_boost
+        "Expected ~0.18, got {connection_boost}"
     );
 
     let candidate = ThoughtCandidate::new(entry, 0.5, connection_boost);
@@ -399,7 +400,7 @@ fn test_invalid_url_format() {
 #[test]
 fn test_stream_error_types() {
     // Verify all error types can be constructed
-    let errors = vec![
+    let errors = [
         StreamError::ConnectionFailed {
             reason: "test".to_string(),
         },
@@ -519,7 +520,7 @@ fn test_block_timeout_configuration() {
 // Helper Functions
 // =============================================================================
 
-/// Create a test ThoughtCandidate with given ID and scores
+/// Create a test `ThoughtCandidate` with given ID and scores
 fn create_test_candidate(id: &str, composite: f32, connection_boost: f32) -> ThoughtCandidate {
     let entry = StreamEntry::new(
         id.to_string(),

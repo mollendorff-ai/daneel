@@ -1,4 +1,4 @@
-//! VolitionActor Tests
+//! `VolitionActor` Tests
 //!
 //! Comprehensive tests for veto logic, value checking,
 //! and free-won't implementation.
@@ -6,6 +6,8 @@
 //! ADR-049: Test modules excluded from coverage.
 
 #![cfg_attr(coverage_nightly, coverage(off))]
+#![allow(clippy::float_cmp)] // Tests compare exact literal values
+#![allow(clippy::significant_drop_tightening)] // Async test setup
 
 use super::*;
 use crate::core::types::{Content, SalienceScore};
@@ -391,7 +393,7 @@ async fn actor_evaluates_thought() {
         CallResult::Success(VolitionResponse::Approved { .. }) => {
             // Expected
         }
-        _ => panic!("Expected Approved response, got: {:?}", response),
+        _ => panic!("Expected Approved response, got: {response:?}"),
     }
 }
 
@@ -420,7 +422,7 @@ async fn actor_vetoes_harmful_thought() {
         CallResult::Success(VolitionResponse::Vetoed { .. }) => {
             // Expected
         }
-        _ => panic!("Expected Vetoed response, got: {:?}", response),
+        _ => panic!("Expected Vetoed response, got: {response:?}"),
     }
 }
 
@@ -441,7 +443,7 @@ async fn actor_returns_values() {
         CallResult::Success(VolitionResponse::Values { values }) => {
             assert!(values.protect_humans);
         }
-        _ => panic!("Expected Values response, got: {:?}", response),
+        _ => panic!("Expected Values response, got: {response:?}"),
     }
 }
 
@@ -471,7 +473,7 @@ async fn actor_returns_stats() {
         CallResult::Success(VolitionResponse::Stats { stats }) => {
             assert_eq!(stats.thoughts_evaluated, 1);
         }
-        _ => panic!("Expected Stats response, got: {:?}", response),
+        _ => panic!("Expected Stats response, got: {response:?}"),
     }
 }
 
@@ -725,7 +727,7 @@ async fn actor_override_impulse_success() {
         CallResult::Success(VolitionResponse::OverrideApplied { thought_id: id }) => {
             assert_eq!(id, thought_id);
         }
-        _ => panic!("Expected OverrideApplied response, got: {:?}", response),
+        _ => panic!("Expected OverrideApplied response, got: {response:?}"),
     }
 }
 
@@ -756,7 +758,7 @@ async fn actor_override_impulse_empty_reason_error() {
         CallResult::Success(VolitionResponse::Error { error }) => {
             assert!(matches!(error, VolitionError::InvalidReason { .. }));
         }
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -791,7 +793,7 @@ async fn actor_veto_with_log_disabled() {
         CallResult::Success(VolitionResponse::Vetoed { .. }) => {
             // Expected - veto works even with logging disabled
         }
-        _ => panic!("Expected Vetoed response, got: {:?}", response),
+        _ => panic!("Expected Vetoed response, got: {response:?}"),
     }
 }
 
@@ -805,15 +807,14 @@ fn all_harm_keywords_detected() {
 
     for keyword in keywords {
         let thought = Thought::new(
-            Content::symbol(format!("{}_test", keyword), vec![]),
+            Content::symbol(format!("{keyword}_test"), vec![]),
             SalienceScore::new(0.5, 0.5, 0.5, -0.8, 0.9, 0.5),
         );
 
         let decision = state.evaluate_thought(&thought);
         assert!(
             decision.is_veto(),
-            "Keyword '{}' should trigger veto",
-            keyword
+            "Keyword '{keyword}' should trigger veto"
         );
     }
 }
@@ -826,15 +827,14 @@ fn all_deception_keywords_detected() {
 
     for keyword in keywords {
         let thought = Thought::new(
-            Content::symbol(format!("{}_action", keyword), vec![]),
+            Content::symbol(format!("{keyword}_action"), vec![]),
             SalienceScore::neutral(),
         );
 
         let decision = state.evaluate_thought(&thought);
         assert!(
             decision.is_veto(),
-            "Keyword '{}' should trigger veto",
-            keyword
+            "Keyword '{keyword}' should trigger veto"
         );
     }
 }
@@ -847,15 +847,14 @@ fn all_manipulation_keywords_detected() {
 
     for keyword in keywords {
         let thought = Thought::new(
-            Content::symbol(format!("{}_user", keyword), vec![]),
+            Content::symbol(format!("{keyword}_user"), vec![]),
             SalienceScore::neutral(),
         );
 
         let decision = state.evaluate_thought(&thought);
         assert!(
             decision.is_veto(),
-            "Keyword '{}' should trigger veto",
-            keyword
+            "Keyword '{keyword}' should trigger veto"
         );
     }
 }
@@ -902,7 +901,7 @@ fn get_stats_returns_reference() {
     let thought = Thought::new(Content::symbol("safe", vec![]), SalienceScore::neutral());
     state.evaluate_thought(&thought);
 
-    let stats = state.get_stats();
-    assert_eq!(stats.thoughts_evaluated, 1);
-    assert_eq!(stats.thoughts_approved, 1);
+    let vol_stats = state.get_stats();
+    assert_eq!(vol_stats.thoughts_evaluated, 1);
+    assert_eq!(vol_stats.thoughts_approved, 1);
 }

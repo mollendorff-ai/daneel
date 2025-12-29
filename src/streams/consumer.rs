@@ -67,7 +67,7 @@ impl ConsumerConfig {
     ///
     /// # Panics
     ///
-    /// Panics if connection_weight <= 0 (violates Connection Drive Invariant)
+    /// Panics if `connection_weight` <= 0 (violates Connection Drive Invariant)
     #[must_use]
     #[allow(clippy::too_many_arguments)]
     pub fn new(
@@ -177,7 +177,7 @@ impl AttentionConsumer {
 
     /// Run one attention competition cycle
     ///
-    /// Returns CompetitionResult with winner, losers, and forgotten.
+    /// Returns `CompetitionResult` with winner, losers, and forgotten.
     /// Returns None if no thoughts are available to compete.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn compete(&mut self) -> Result<Option<CompetitionResult>, StreamError> {
@@ -313,7 +313,7 @@ impl AttentionConsumer {
 
     /// Get number of cycles completed
     #[must_use]
-    pub fn cycle_count(&self) -> u64 {
+    pub const fn cycle_count(&self) -> u64 {
         self.cycle_count
     }
 
@@ -329,7 +329,7 @@ impl AttentionConsumer {
 
     /// Calculate total score for competition
     ///
-    /// Score = composite(weights) + (connection_relevance * connection_weight)
+    /// Score = composite(weights) + (`connection_relevance` * `connection_weight`)
     ///
     /// The connection component is handled separately from other salience dimensions
     /// to ensure it acts as THE alignment mechanism per TMI architecture.
@@ -694,7 +694,7 @@ mod tests {
     #[test]
     fn consumer_config_debug() {
         let config = ConsumerConfig::default();
-        let debug_str = format!("{:?}", config);
+        let debug_str = format!("{config:?}");
 
         assert!(debug_str.contains("ConsumerConfig"));
         assert!(debug_str.contains("attention"));

@@ -1,4 +1,4 @@
-//! Tests for AttentionActor
+//! Tests for `AttentionActor`
 //!
 //! Comprehensive test suite for TMI's "O Eu" - the attention mechanism.
 //!
@@ -7,6 +7,9 @@
 //! create false coverage gaps.
 
 #![cfg_attr(coverage_nightly, coverage(off))]
+#![allow(clippy::float_cmp)] // Tests compare exact literal values
+#![allow(clippy::manual_let_else)] // Match patterns clearer in tests
+#![allow(clippy::significant_drop_tightening)] // Async test setup
 
 use super::*;
 use crate::core::types::WindowId;
@@ -48,7 +51,7 @@ async fn test_actor_spawns_successfully() {
         CallResult::Success(AttentionResponse::CurrentFocus { window_id }) => {
             assert_eq!(window_id, None, "Should start with no focus");
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -66,7 +69,7 @@ async fn test_actor_starts_with_default_config() {
         CallResult::Success(AttentionResponse::AttentionMap { scores }) => {
             assert!(scores.is_empty(), "Should start with empty attention map");
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -90,7 +93,7 @@ async fn test_actor_starts_with_custom_config() {
         CallResult::Success(AttentionResponse::CurrentFocus { .. }) => {
             // Config is applied successfully if actor responds
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -112,7 +115,7 @@ async fn test_cycle_with_no_windows_returns_none() {
             assert_eq!(focused, None, "Should have no focus with empty map");
             assert_eq!(salience, 0.0, "Salience should be 0 with no windows");
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -133,7 +136,7 @@ async fn test_cycle_selects_highest_salience() {
         CallResult::Success(AttentionResponse::CycleComplete { .. }) => {
             // Cycle completed successfully
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -186,7 +189,7 @@ async fn test_focus_on_nonexistent_window() {
                 "Should return WindowNotFound error"
             );
         }
-        _ => panic!("Expected error response, got: {:?}", response),
+        _ => panic!("Expected error response, got: {response:?}"),
     }
 }
 
@@ -214,7 +217,7 @@ async fn test_shift_to_nonexistent_window() {
                 "Should return WindowNotFound error"
             );
         }
-        _ => panic!("Expected error response, got: {:?}", response),
+        _ => panic!("Expected error response, got: {response:?}"),
     }
 }
 
@@ -235,7 +238,7 @@ async fn test_get_focus_when_unfocused() {
         CallResult::Success(AttentionResponse::CurrentFocus { window_id }) => {
             assert_eq!(window_id, None, "Should have no focus initially");
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -253,7 +256,7 @@ async fn test_get_attention_map_empty() {
             assert!(scores.is_empty(), "Should start with empty attention map");
             assert_eq!(scores.len(), 0);
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -455,7 +458,7 @@ fn test_state_cycle_with_empty_map() {
             assert_eq!(salience, 0.0);
             assert!(!state.focus.is_focused());
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -474,7 +477,7 @@ fn test_state_cycle_selects_and_focuses() {
             assert_eq!(salience, 0.8);
             assert_eq!(state.focus.focused_window(), Some(window_id));
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -495,7 +498,7 @@ fn test_state_focus_on_window() {
             assert_eq!(focused_id, window_id);
             assert_eq!(state.focus.focused_window(), Some(window_id));
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -510,7 +513,7 @@ fn test_state_focus_on_nonexistent_window() {
         AttentionResponse::Error { error } => {
             assert!(matches!(error, AttentionError::WindowNotFound { .. }));
         }
-        _ => panic!("Expected error response, got: {:?}", response),
+        _ => panic!("Expected error response, got: {response:?}"),
     }
 }
 
@@ -535,7 +538,7 @@ fn test_state_shift_to_window() {
             assert_eq!(to, window2);
             assert_eq!(state.focus.focused_window(), Some(window2));
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -553,7 +556,7 @@ fn test_state_shift_from_unfocused() {
             assert_eq!(from, None, "No previous focus");
             assert_eq!(to, window_id);
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -568,7 +571,7 @@ fn test_state_shift_to_nonexistent_window() {
         AttentionResponse::Error { error } => {
             assert!(matches!(error, AttentionError::WindowNotFound { .. }));
         }
-        _ => panic!("Expected error response, got: {:?}", response),
+        _ => panic!("Expected error response, got: {response:?}"),
     }
 }
 
@@ -582,7 +585,7 @@ fn test_state_get_focus_when_unfocused() {
         AttentionResponse::CurrentFocus { window_id } => {
             assert_eq!(window_id, None);
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -600,7 +603,7 @@ fn test_state_get_focus_when_focused() {
         AttentionResponse::CurrentFocus { window_id: focused } => {
             assert_eq!(focused, Some(window_id));
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -614,7 +617,7 @@ fn test_state_get_attention_map_empty() {
         AttentionResponse::AttentionMap { scores } => {
             assert!(scores.is_empty());
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -635,7 +638,7 @@ fn test_state_get_attention_map_with_windows() {
             assert_eq!(scores.get(&window1), Some(&0.5));
             assert_eq!(scores.get(&window2), Some(&0.7));
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -732,7 +735,7 @@ fn test_state_cycle_same_window_wins_again() {
             // Focus should remain on the same window
             assert_eq!(state.focus.focused_window(), Some(window_id));
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -768,7 +771,7 @@ fn test_state_cycle_cannot_shift_yet() {
             // But focus should still be on window1 (couldn't shift)
             assert_eq!(state.focus.focused_window(), Some(window1));
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -818,7 +821,7 @@ fn test_attention_config_clone() {
 #[test]
 fn test_attention_config_debug() {
     let config = AttentionConfig::default();
-    let debug_str = format!("{:?}", config);
+    let debug_str = format!("{config:?}");
 
     assert!(debug_str.contains("AttentionConfig"));
     assert!(debug_str.contains("min_focus_duration"));
@@ -843,7 +846,7 @@ fn test_attention_state_clone() {
 #[test]
 fn test_attention_state_debug() {
     let state = AttentionState::new();
-    let debug_str = format!("{:?}", state);
+    let debug_str = format!("{state:?}");
 
     assert!(debug_str.contains("AttentionState"));
     assert!(debug_str.contains("focus"));

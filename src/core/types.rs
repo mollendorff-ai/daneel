@@ -105,13 +105,13 @@ impl Content {
     /// Create raw content from bytes
     #[must_use]
     pub fn raw(data: impl Into<Vec<u8>>) -> Self {
-        Content::Raw(data.into())
+        Self::Raw(data.into())
     }
 
     /// Create a symbol
     #[must_use]
     pub fn symbol(id: impl Into<String>, data: impl Into<Vec<u8>>) -> Self {
-        Content::Symbol {
+        Self::Symbol {
             id: id.into(),
             data: data.into(),
         }
@@ -119,8 +119,8 @@ impl Content {
 
     /// Create a relation
     #[must_use]
-    pub fn relation(subject: Content, predicate: impl Into<String>, object: Content) -> Self {
-        Content::Relation {
+    pub fn relation(subject: Self, predicate: impl Into<String>, object: Self) -> Self {
+        Self::Relation {
             subject: Box::new(subject),
             predicate: predicate.into(),
             object: Box::new(object),
@@ -130,7 +130,7 @@ impl Content {
     /// Check if content is empty
     #[must_use]
     pub const fn is_empty(&self) -> bool {
-        matches!(self, Content::Empty)
+        matches!(self, Self::Empty)
     }
 }
 
@@ -169,7 +169,7 @@ pub struct SalienceScore {
     pub connection_relevance: f32,
 }
 
-fn default_arousal() -> f32 {
+const fn default_arousal() -> f32 {
     0.5
 }
 
@@ -219,15 +219,21 @@ impl SalienceScore {
     pub fn composite(&self, weights: &SalienceWeights) -> f32 {
         // Arousal amplifies valence: emotional_impact = |valence| * arousal
         let emotional_impact = self.valence.abs() * self.arousal;
-        self.importance * weights.importance
-            + self.novelty * weights.novelty
-            + self.relevance * weights.relevance
-            + emotional_impact * weights.valence
-            + self.connection_relevance * weights.connection
+        self.connection_relevance.mul_add(
+            weights.connection,
+            emotional_impact.mul_add(
+                weights.valence,
+                self.relevance.mul_add(
+                    weights.relevance,
+                    self.importance
+                        .mul_add(weights.importance, self.novelty * weights.novelty),
+                ),
+            ),
+        )
     }
 
     /// Calculate emotional intensity (Russell's circumplex: distance from neutral)
-    /// Similar to EmotionalState::intensity() in memory_db/types.rs
+    /// Similar to `EmotionalState::intensity()` in `memory_db/types.rs`
     #[must_use]
     pub fn emotional_intensity(&self) -> f32 {
         self.valence.abs() * self.arousal
@@ -243,11 +249,11 @@ impl SalienceScore {
     #[must_use]
     pub fn tmi_composite(&self) -> f32 {
         let emotional_intensity = self.emotional_intensity(); // |valence| × arousal - PRIMARY per TMI
-        let cognitive = self.importance * 0.3 + self.relevance * 0.2;
+        let cognitive = self.importance.mul_add(0.3, self.relevance * 0.2);
         let novelty = self.novelty * 0.2;
         let connection = self.connection_relevance * 0.1;
 
-        (emotional_intensity * 0.4 + cognitive + novelty + connection).clamp(0.0, 1.0)
+        (emotional_intensity.mul_add(0.4, cognitive) + novelty + connection).clamp(0.0, 1.0)
     }
 
     /// Bin TMI composite salience into 5 categorical levels (ADR-041)
@@ -299,7 +305,7 @@ pub struct SalienceWeights {
     pub novelty: f32,
     pub relevance: f32,
     pub valence: f32,
-    /// Connection weight - INVARIANT: must be > MIN_CONNECTION_WEIGHT
+    /// Connection weight - INVARIANT: must be > `MIN_CONNECTION_WEIGHT`
     pub connection: f32,
 }
 
@@ -353,7 +359,7 @@ impl Thought {
 
     /// Create a thought with a parent
     #[must_use]
-    pub fn with_parent(mut self, parent_id: ThoughtId) -> Self {
+    pub const fn with_parent(mut self, parent_id: ThoughtId) -> Self {
         self.parent_id = Some(parent_id);
         self
     }
@@ -415,7 +421,7 @@ impl Window {
     }
 
     /// Close this window
-    pub fn close(&mut self) {
+    pub const fn close(&mut self) {
         self.is_open = false;
     }
 }
@@ -429,6 +435,9 @@ impl Default for Window {
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
+#[allow(clippy::significant_drop_tightening)] // Async test setup
+#[allow(clippy::cast_precision_loss)] // Test calculations
 mod tests {
     use super::*;
 
@@ -596,7 +605,7 @@ mod tests {
     #[test]
     fn thought_id_display() {
         let id = ThoughtId::new();
-        let display = format!("{}", id);
+        let display = format!("{id}");
         // Display should format the inner UUID
         assert!(!display.is_empty());
         assert_eq!(display.len(), 36); // UUID format: 8-4-4-4-12
@@ -620,7 +629,7 @@ mod tests {
     #[test]
     fn window_id_display() {
         let id = WindowId::new();
-        let display = format!("{}", id);
+        let display = format!("{id}");
         // Display should format the inner UUID
         assert!(!display.is_empty());
         assert_eq!(display.len(), 36); // UUID format: 8-4-4-4-12

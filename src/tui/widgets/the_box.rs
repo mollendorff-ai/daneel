@@ -90,7 +90,8 @@ fn render_laws(frame: &mut Frame, area: Rect, app: &App) {
 #[cfg_attr(coverage_nightly, coverage(off))]
 fn render_connection_drive(frame: &mut Frame, area: Rect, app: &App) {
     // Pulse effect: vary the display slightly based on pulse_phase
-    let pulse_factor = 1.0 + 0.05 * (app.the_box.pulse_phase * std::f32::consts::TAU).sin();
+    let pulse_factor =
+        0.05f32.mul_add((app.the_box.pulse_phase * std::f32::consts::TAU).sin(), 1.0);
     let display_value = (app.the_box.connection_drive * pulse_factor).clamp(0.0, 1.0);
 
     let label = Line::from(vec![

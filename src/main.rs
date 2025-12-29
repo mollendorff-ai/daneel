@@ -60,6 +60,10 @@ fn main() {
 ///
 /// The mind should be observable by default.
 /// Transparency is oversight.
+#[allow(clippy::too_many_lines)] // TUI main loop: complexity is inherent
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)] // Metrics: acceptable
+#[allow(clippy::future_not_send)] // Tokio runtime spawn is Send-safe
+#[allow(clippy::significant_drop_tightening)] // Resources held for loop duration
 #[cfg_attr(coverage_nightly, coverage(off))]
 fn run_tui(args: &Args) {
     // Install panic hooks FIRST - before any terminal manipulation
@@ -88,7 +92,7 @@ fn run_tui(args: &Args) {
                 loop_instance
             }
             Err(e) => {
-                eprintln!("Warning: Redis unavailable ({}), running standalone", e);
+                eprintln!("Warning: Redis unavailable ({e}), running standalone");
                 CognitiveLoop::new()
             }
         };
@@ -101,7 +105,7 @@ fn run_tui(args: &Args) {
                     Some(std::sync::Arc::new(db))
                 }
                 Err(e) => {
-                    eprintln!("Warning: Qdrant unavailable ({}), memory disabled", e);
+                    eprintln!("Warning: Qdrant unavailable ({e}), memory disabled");
                     None
                 }
             };
@@ -131,7 +135,7 @@ fn run_tui(args: &Args) {
                     Some(id)
                 }
                 Err(e) => {
-                    eprintln!("Warning: Failed to load identity ({})", e);
+                    eprintln!("Warning: Failed to load identity ({e})");
                     None
                 }
             }
@@ -169,10 +173,7 @@ fn run_tui(args: &Args) {
                 cognitive_loop.set_embedding_engine(engine);
             }
             Err(e) => {
-                eprintln!(
-                    "Warning: Embedding engine unavailable ({}), using zero vectors",
-                    e
-                );
+                eprintln!("Warning: Embedding engine unavailable ({e}), using zero vectors");
             }
         }
 
@@ -200,7 +201,7 @@ fn run_tui(args: &Args) {
                 if should_flush {
                     if let Some(ref db) = memory_db {
                         if let Err(e) = db.save_identity(id).await {
-                            eprintln!("Warning: Failed to save identity: {}", e);
+                            eprintln!("Warning: Failed to save identity: {e}");
                         }
                     }
                     thoughts_since_flush = 0;
@@ -247,7 +248,7 @@ fn run_tui(args: &Args) {
                             }
                         }
                         Err(e) => {
-                            eprintln!("Warning: Failed to get replay candidates: {}", e);
+                            eprintln!("Warning: Failed to get replay candidates: {e}");
                         }
                     }
                 }
@@ -301,7 +302,7 @@ fn run_tui(args: &Args) {
             let redis_client = match redis::Client::open(redis_url) {
                 Ok(client) => client,
                 Err(e) => {
-                    eprintln!("Warning: Failed to create Redis client for API: {}", e);
+                    eprintln!("Warning: Failed to create Redis client for API: {e}");
                     return;
                 }
             };
@@ -311,7 +312,7 @@ fn run_tui(args: &Args) {
                 match daneel::streams::client::StreamsClient::connect(redis_url).await {
                     Ok(client) => client,
                     Err(e) => {
-                        eprintln!("Warning: Failed to create StreamsClient for API: {}", e);
+                        eprintln!("Warning: Failed to create StreamsClient for API: {e}");
                         return;
                     }
                 };
@@ -328,11 +329,11 @@ fn run_tui(args: &Args) {
                 Ok(listener) => {
                     info!("Injection API listening on {}", addr);
                     if let Err(e) = axum::serve(listener, app).await {
-                        eprintln!("API server error: {}", e);
+                        eprintln!("API server error: {e}");
                     }
                 }
                 Err(e) => {
-                    eprintln!("Failed to bind API server to {}: {}", addr, e);
+                    eprintln!("Failed to bind API server to {addr}: {e}");
                 }
             }
         });
@@ -396,7 +397,7 @@ fn run_headless(args: &Args) {
                 let redis_client = match redis::Client::open(redis_url) {
                     Ok(client) => client,
                     Err(e) => {
-                        eprintln!("Warning: Failed to create Redis client for API: {}", e);
+                        eprintln!("Warning: Failed to create Redis client for API: {e}");
                         return;
                     }
                 };
@@ -406,7 +407,7 @@ fn run_headless(args: &Args) {
                     match daneel::streams::client::StreamsClient::connect(redis_url).await {
                         Ok(client) => client,
                         Err(e) => {
-                            eprintln!("Warning: Failed to create StreamsClient for API: {}", e);
+                            eprintln!("Warning: Failed to create StreamsClient for API: {e}");
                             return;
                         }
                     };
@@ -423,11 +424,11 @@ fn run_headless(args: &Args) {
                     Ok(listener) => {
                         info!("Injection API listening on {}", addr);
                         if let Err(e) = axum::serve(listener, app).await {
-                            eprintln!("API server error: {}", e);
+                            eprintln!("API server error: {e}");
                         }
                     }
                     Err(e) => {
-                        eprintln!("Failed to bind API server to {}: {}", addr, e);
+                        eprintln!("Failed to bind API server to {addr}: {e}");
                     }
                 }
             });
@@ -441,6 +442,10 @@ fn run_headless(args: &Args) {
 ///
 /// This is the same logic as the TUI cognitive loop, but without
 /// sending updates to the display. Used for headless/server mode.
+#[allow(clippy::too_many_lines)] // Main loop: complexity is inherent
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)] // Metrics: acceptable
+#[allow(clippy::future_not_send)] // Async runtime handles this
+#[allow(clippy::significant_drop_tightening)] // Resources held for loop duration
 #[cfg_attr(coverage_nightly, coverage(off))]
 async fn run_cognitive_loop_headless() {
     // ADR-034: Lifetime Identity Persistence - flush intervals
@@ -462,7 +467,7 @@ async fn run_cognitive_loop_headless() {
             loop_instance
         }
         Err(e) => {
-            eprintln!("Warning: Redis unavailable ({}), running standalone", e);
+            eprintln!("Warning: Redis unavailable ({e}), running standalone");
             CognitiveLoop::new()
         }
     };
@@ -475,7 +480,7 @@ async fn run_cognitive_loop_headless() {
                 Some(std::sync::Arc::new(db))
             }
             Err(e) => {
-                eprintln!("Warning: Qdrant unavailable ({}), memory disabled", e);
+                eprintln!("Warning: Qdrant unavailable ({e}), memory disabled");
                 None
             }
         };
@@ -491,7 +496,7 @@ async fn run_cognitive_loop_headless() {
                 Some(id)
             }
             Err(e) => {
-                eprintln!("Warning: Failed to load identity ({})", e);
+                eprintln!("Warning: Failed to load identity ({e})");
                 None
             }
         }
@@ -518,10 +523,7 @@ async fn run_cognitive_loop_headless() {
             cognitive_loop.set_embedding_engine(engine);
         }
         Err(e) => {
-            eprintln!(
-                "Warning: Embedding engine unavailable ({}), using zero vectors",
-                e
-            );
+            eprintln!("Warning: Embedding engine unavailable ({e}), using zero vectors");
         }
     }
 
@@ -553,7 +555,7 @@ async fn run_cognitive_loop_headless() {
             if should_flush {
                 if let Some(ref db) = memory_db {
                     if let Err(e) = db.save_identity(id).await {
-                        eprintln!("Warning: Failed to save identity: {}", e);
+                        eprintln!("Warning: Failed to save identity: {e}");
                     }
                 }
                 thoughts_since_flush = 0;
@@ -586,7 +588,7 @@ async fn run_cognitive_loop_headless() {
                         }
                     }
                     Err(e) => {
-                        eprintln!("Warning: Failed to get replay candidates: {}", e);
+                        eprintln!("Warning: Failed to get replay candidates: {e}");
                     }
                 }
             }
@@ -594,7 +596,7 @@ async fn run_cognitive_loop_headless() {
         }
 
         // Periodic status log
-        if cycles % STATUS_LOG_INTERVAL == 0 {
+        if cycles.is_multiple_of(STATUS_LOG_INTERVAL) {
             let lifetime = identity.as_ref().map_or(0, |id| id.lifetime_thought_count);
             info!(
                 "Status: {} cycles this session, {} lifetime thoughts, {} dreams",

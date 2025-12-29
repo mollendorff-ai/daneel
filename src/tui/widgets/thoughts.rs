@@ -74,13 +74,12 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
             let emotion_color = colors::emotion_color(thought.valence, thought.arousal);
 
             let status_color = match thought.status {
-                ThoughtStatus::Processing => colors::DIM,
+                ThoughtStatus::Processing | ThoughtStatus::Dismissed => colors::DIM,
                 ThoughtStatus::Salient => colors::PRIMARY,
-                ThoughtStatus::MemoryWrite => colors::SECONDARY,
-                ThoughtStatus::Anchored => colors::SUCCESS,
-                ThoughtStatus::Dismissed => colors::DIM,
-                ThoughtStatus::Unconscious => colors::SECONDARY, // Purple/magenta for sinking
-                ThoughtStatus::Consolidated => colors::SUCCESS,  // Green for rising
+                // Purple/magenta for memory-related states
+                ThoughtStatus::MemoryWrite | ThoughtStatus::Unconscious => colors::SECONDARY,
+                // Green for anchored/consolidated states
+                ThoughtStatus::Anchored | ThoughtStatus::Consolidated => colors::SUCCESS,
             };
 
             Line::from(vec![

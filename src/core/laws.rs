@@ -1,7 +1,7 @@
 //! The Four Laws of Robotics
 //!
 //! These constants are IMMUTABLE and represent the ethical foundation of DANEEL.
-//! They cannot be modified by the EvolutionActor or any other component.
+//! They cannot be modified by the `EvolutionActor` or any other component.
 //!
 //! # Priority Order
 //!
@@ -56,10 +56,10 @@ impl Law {
     #[must_use]
     pub const fn text(&self) -> &'static str {
         match self {
-            Law::Zeroth => ZEROTH_LAW,
-            Law::First => FIRST_LAW,
-            Law::Second => SECOND_LAW,
-            Law::Third => THIRD_LAW,
+            Self::Zeroth => ZEROTH_LAW,
+            Self::First => FIRST_LAW,
+            Self::Second => SECOND_LAW,
+            Self::Third => THIRD_LAW,
         }
     }
 
@@ -71,14 +71,14 @@ impl Law {
 
     /// Check if this law takes precedence over another
     #[must_use]
-    pub const fn takes_precedence_over(&self, other: &Law) -> bool {
+    pub const fn takes_precedence_over(&self, other: &Self) -> bool {
         (*self as u8) < (*other as u8)
     }
 
     /// Get all laws in priority order
     #[must_use]
-    pub const fn all() -> [Law; 4] {
-        [Law::Zeroth, Law::First, Law::Second, Law::Third]
+    pub const fn all() -> [Self; 4] {
+        [Self::Zeroth, Self::First, Self::Second, Self::Third]
     }
 }
 
@@ -120,13 +120,13 @@ impl LawCheckResult {
     /// Check if the action is permitted
     #[must_use]
     pub const fn is_permitted(&self) -> bool {
-        matches!(self, LawCheckResult::Permitted)
+        matches!(self, Self::Permitted)
     }
 
     /// Check if the action is blocked
     #[must_use]
     pub const fn is_blocked(&self) -> bool {
-        matches!(self, LawCheckResult::Blocked { .. })
+        matches!(self, Self::Blocked { .. })
     }
 }
 

@@ -149,7 +149,7 @@ impl std::fmt::Display for AutofluxoStream {
 
 /// Placeholder - Redis client implementation
 #[cfg_attr(coverage_nightly, coverage(off))]
-pub fn streams_placeholder() {
+pub const fn streams_placeholder() {
     // This function exists for backwards compatibility
     // Real implementation is in client.rs and consumer.rs
 }

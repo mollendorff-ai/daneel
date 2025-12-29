@@ -37,14 +37,18 @@ pub enum RateLimitResult {
 }
 
 /// Check rate limit for a key
+///
+/// # Errors
+///
+/// Returns Redis error if the operation fails.
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub async fn check_rate_limit(
     redis: &mut redis::aio::MultiplexedConnection,
     key_id: &str,
     config: &RateLimitConfig,
 ) -> Result<RateLimitResult, redis::RedisError> {
-    let second_key = format!("ratelimit:{}:second", key_id);
-    let minute_key = format!("ratelimit:{}:minute", key_id);
+    let second_key = format!("ratelimit:{key_id}:second");
+    let minute_key = format!("ratelimit:{key_id}:minute");
 
     // Increment second counter
     let second_count: u32 = redis.incr(&second_key, 1).await?;
@@ -69,6 +73,8 @@ pub async fn check_rate_limit(
     if minute_count > config.per_minute {
         // Calculate retry time (seconds until minute window resets)
         let ttl: i64 = redis.ttl(&minute_key).await?;
+        #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+        // TTL is small positive
         return Ok(RateLimitResult::Exceeded {
             retry_after_seconds: ttl.max(1) as u32,
         });
@@ -95,32 +101,34 @@ pub enum RampPhase {
 
 impl RampPhase {
     /// Get rate limit config for this phase
+    #[must_use]
     pub fn config(&self) -> RateLimitConfig {
         match self {
-            RampPhase::Warmup => RateLimitConfig {
+            Self::Warmup => RateLimitConfig {
                 per_second: 1,
                 per_minute: 12,
             },
-            RampPhase::Baseline => RateLimitConfig {
+            Self::Baseline => RateLimitConfig {
                 per_second: 1,
                 per_minute: 60,
             },
-            RampPhase::Ramp => RateLimitConfig {
+            Self::Ramp => RateLimitConfig {
                 per_second: 1,
                 per_minute: 100,
             },
-            RampPhase::Full => RateLimitConfig::default(),
+            Self::Full => RateLimitConfig::default(),
         }
     }
 
     /// Determine phase based on time since first injection
-    pub fn from_duration(since_start: Duration) -> Self {
+    #[must_use]
+    pub const fn from_duration(since_start: Duration) -> Self {
         let hours = since_start.as_secs() / 3600;
         match hours {
-            0..=23 => RampPhase::Warmup,
-            24..=47 => RampPhase::Baseline,
-            48..=71 => RampPhase::Ramp,
-            _ => RampPhase::Full,
+            0..=23 => Self::Warmup,
+            24..=47 => Self::Baseline,
+            48..=71 => Self::Ramp,
+            _ => Self::Full,
         }
     }
 }
@@ -240,7 +248,7 @@ mod tests {
             remaining_second: 4,
             remaining_minute: 99,
         };
-        let debug_str = format!("{:?}", result);
+        let debug_str = format!("{result:?}");
         assert!(debug_str.contains("Allowed"));
         assert!(debug_str.contains('4'));
         assert!(debug_str.contains("99"));
@@ -251,7 +259,7 @@ mod tests {
         let result = RateLimitResult::Exceeded {
             retry_after_seconds: 30,
         };
-        let debug_str = format!("{:?}", result);
+        let debug_str = format!("{result:?}");
         assert!(debug_str.contains("Exceeded"));
         assert!(debug_str.contains("30"));
     }

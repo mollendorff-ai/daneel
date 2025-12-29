@@ -37,21 +37,22 @@ static TERMINAL_CLEANED: AtomicBool = AtomicBool::new(false);
 ///
 /// # What it does
 ///
-/// 1. Installs color_eyre for pretty panic reports
+/// 1. Installs `color_eyre` for pretty panic reports
 /// 2. Sets up a custom panic hook that:
 ///    - Restores terminal state (raw mode, cursor, alternate screen)
 ///    - Logs crash details
 ///    - Then calls the original panic handler
+///
+/// # Errors
+///
+/// Returns error if `color_eyre` installation fails.
 ///
 /// # Example
 ///
 /// ```no_run
 /// use daneel::resilience::install_panic_hooks;
 ///
-/// fn main() {
-///     install_panic_hooks().expect("Failed to install panic hooks");
-///     // ... rest of app
-/// }
+/// install_panic_hooks().expect("Failed to install panic hooks");
 /// ```
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub fn install_panic_hooks() -> color_eyre::Result<()> {
@@ -96,6 +97,10 @@ pub fn install_panic_hooks() -> color_eyre::Result<()> {
 /// 2. Leaves alternate screen
 /// 3. Shows cursor
 /// 4. Flushes stdout
+///
+/// # Errors
+///
+/// Returns IO error if terminal restoration fails.
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub fn restore_terminal() -> std::io::Result<()> {
     // Check if already cleaned (prevent double-cleanup)
@@ -104,6 +109,7 @@ pub fn restore_terminal() -> std::io::Result<()> {
     }
 
     // Best effort - try each step even if others fail
+    #[allow(clippy::useless_let_if_seq)] // Intentionally trying all cleanup steps
     let mut result = Ok(());
 
     // Disable raw mode

@@ -1,4 +1,4 @@
-//! ThoughtAssemblyActor - Construção do Pensamento (Thought Construction)
+//! `ThoughtAssemblyActor` - Construção do Pensamento (Thought Construction)
 //!
 //! Implements TMI's thought assembly stage where pre-linguistic content
 //! becomes structured cognitive units.
@@ -11,13 +11,13 @@
 //! - Thoughts link into chains (parent-child relationships)
 //! - Each thought captures its source stream (which content won)
 //!
-//! The ThoughtAssemblyActor is the final stage before consciousness. It takes
+//! The `ThoughtAssemblyActor` is the final stage before consciousness. It takes
 //! raw content (from competition) and emotional coloring (salience) and
 //! assembles them into coherent Thought objects.
 //!
 //! # Key Responsibilities
 //!
-//! - **Assembly**: Convert AssemblyRequest -> Thought
+//! - **Assembly**: Convert `AssemblyRequest` -> Thought
 //! - **Caching**: Store recently assembled thoughts for quick retrieval
 //! - **Chaining**: Link thoughts to their parents (causal history)
 //! - **Strategy**: Support different assembly strategies (Default, Composite, Chain, Urgent)
@@ -61,7 +61,7 @@ pub use types::{
     AssemblyError, AssemblyRequest, AssemblyStrategy, ThoughtCache, ThoughtMessage, ThoughtResponse,
 };
 
-/// Configuration for the ThoughtAssemblyActor
+/// Configuration for the `ThoughtAssemblyActor`
 ///
 /// Controls caching, validation, and chain traversal behavior.
 #[derive(Debug, Clone)]
@@ -100,7 +100,7 @@ impl Default for AssemblyConfig {
     }
 }
 
-/// Internal state for the ThoughtAssemblyActor
+/// Internal state for the `ThoughtAssemblyActor`
 ///
 /// Maintains cache and statistics for thought assembly.
 #[derive(Debug)]
@@ -163,7 +163,7 @@ impl ThoughtState {
         }
 
         // Apply strategy-specific processing
-        self.apply_strategy(&mut thought, &request.strategy)?;
+        self.apply_strategy(&mut thought, request.strategy)?;
 
         // Cache the assembled thought
         self.cache.insert(thought.clone());
@@ -203,7 +203,7 @@ impl ThoughtState {
 
     /// Get a thought chain (thought + its ancestry)
     ///
-    /// Walks up the parent chain from the given thought, up to max_depth.
+    /// Walks up the parent chain from the given thought, up to `max_depth`.
     fn get_thought_chain(
         &self,
         thought_id: ThoughtId,
@@ -293,7 +293,7 @@ impl ThoughtState {
     fn apply_strategy(
         &mut self,
         thought: &mut Thought,
-        strategy: &AssemblyStrategy,
+        strategy: AssemblyStrategy,
     ) -> Result<(), AssemblyError> {
         match strategy {
             AssemblyStrategy::Default => {

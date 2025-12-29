@@ -4,6 +4,8 @@
 //! Full integration tests require running Qdrant.
 
 #![cfg_attr(coverage_nightly, coverage(off))]
+#![allow(clippy::float_cmp)] // Tests compare exact literal values
+#![allow(clippy::significant_drop_tightening)] // Async test setup
 
 use super::*;
 
@@ -138,7 +140,7 @@ fn memory_vector_dimension_check() {
     assert!(memory.context_vector.is_none());
 
     // Memory with vector
-    let memory_with_vec = memory.with_vector(correct_vector.clone());
+    let memory_with_vec = memory.with_vector(correct_vector);
     assert!(memory_with_vec.context_vector.is_some());
     assert_eq!(memory_with_vec.context_vector.unwrap().len(), 768);
 }

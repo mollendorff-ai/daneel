@@ -1,8 +1,11 @@
-//! Tests for ThoughtAssemblyActor
+//! Tests for `ThoughtAssemblyActor`
 //!
 //! ADR-049: Test modules excluded from coverage.
 
 #![cfg_attr(coverage_nightly, coverage(off))]
+#![allow(clippy::manual_let_else)] // Match patterns clearer in tests
+#![allow(clippy::float_cmp)] // Tests compare exact literal values
+#![allow(clippy::significant_drop_tightening)] // Async test setup
 
 use super::*;
 use crate::core::types::{Content, SalienceScore, ThoughtId};
@@ -99,7 +102,7 @@ async fn test_assemble_raw_content() {
             assert_eq!(thought.salience, salience);
             assert!(thought.parent_id.is_none());
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -120,7 +123,7 @@ async fn test_assemble_symbol_content() {
         CallResult::Success(ThoughtResponse::Assembled { thought }) => {
             assert_eq!(thought.content, content);
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -143,7 +146,7 @@ async fn test_assemble_relation_content() {
         CallResult::Success(ThoughtResponse::Assembled { thought }) => {
             assert_eq!(thought.content, content);
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -164,10 +167,7 @@ async fn test_assemble_empty_content_fails() {
         CallResult::Success(ThoughtResponse::Error { error }) => {
             assert!(matches!(error, AssemblyError::EmptyContent));
         }
-        _ => panic!(
-            "Expected Error response with EmptyContent, got: {:?}",
-            response
-        ),
+        _ => panic!("Expected Error response with EmptyContent, got: {response:?}"),
     }
 }
 
@@ -192,7 +192,7 @@ async fn test_assemble_with_valid_salience() {
         CallResult::Success(ThoughtResponse::Assembled { thought }) => {
             assert_eq!(thought.salience, salience);
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -214,9 +214,9 @@ async fn test_assemble_with_invalid_importance() {
             AssemblyError::InvalidSalience { reason } => {
                 assert!(reason.contains("importance"));
             }
-            _ => panic!("Expected InvalidSalience error, got: {:?}", error),
+            _ => panic!("Expected InvalidSalience error, got: {error:?}"),
         },
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -238,9 +238,9 @@ async fn test_assemble_with_invalid_valence() {
             AssemblyError::InvalidSalience { reason } => {
                 assert!(reason.contains("valence"));
             }
-            _ => panic!("Expected InvalidSalience error, got: {:?}", error),
+            _ => panic!("Expected InvalidSalience error, got: {error:?}"),
         },
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -318,7 +318,7 @@ async fn test_assemble_with_parent() {
         CallResult::Success(ThoughtResponse::Assembled { thought }) => {
             assert_eq!(thought.parent_id, Some(parent_thought.id));
         }
-        _ => panic!("Expected Assembled response, got: {:?}", child_response),
+        _ => panic!("Expected Assembled response, got: {child_response:?}"),
     }
 }
 
@@ -405,7 +405,7 @@ async fn test_assemble_batch_empty() {
         CallResult::Success(ThoughtResponse::BatchAssembled { thoughts }) => {
             assert_eq!(thoughts.len(), 0);
         }
-        _ => panic!("Expected BatchAssembled response, got: {:?}", response),
+        _ => panic!("Expected BatchAssembled response, got: {response:?}"),
     }
 }
 
@@ -437,7 +437,7 @@ async fn test_assemble_batch_multiple() {
             assert_eq!(thoughts[1].content, Content::raw(vec![2]));
             assert_eq!(thoughts[2].content, Content::raw(vec![3]));
         }
-        _ => panic!("Expected BatchAssembled response, got: {:?}", response),
+        _ => panic!("Expected BatchAssembled response, got: {response:?}"),
     }
 }
 
@@ -463,7 +463,7 @@ async fn test_assemble_batch_stops_on_error() {
         CallResult::Success(ThoughtResponse::Error { error }) => {
             assert!(matches!(error, AssemblyError::EmptyContent));
         }
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -506,7 +506,7 @@ async fn test_get_thought_from_cache() {
             assert_eq!(thought.id, thought_id);
             assert_eq!(thought.content, content);
         }
-        _ => panic!("Expected ThoughtFound response, got: {:?}", response),
+        _ => panic!("Expected ThoughtFound response, got: {response:?}"),
     }
 }
 
@@ -531,7 +531,7 @@ async fn test_get_thought_not_found() {
         CallResult::Success(ThoughtResponse::Error { error }) => {
             assert!(matches!(error, AssemblyError::ThoughtNotFound { .. }));
         }
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -682,7 +682,7 @@ async fn test_get_thought_chain_single() {
             assert_eq!(thoughts.len(), 1);
             assert_eq!(thoughts[0].id, thought_id);
         }
-        _ => panic!("Expected ThoughtChain response, got: {:?}", response),
+        _ => panic!("Expected ThoughtChain response, got: {response:?}"),
     }
 }
 
@@ -758,7 +758,7 @@ async fn test_get_thought_chain_multiple() {
             assert_eq!(thoughts[1].id, thought2_id);
             assert_eq!(thoughts[2].id, thought1_id);
         }
-        _ => panic!("Expected ThoughtChain response, got: {:?}", response),
+        _ => panic!("Expected ThoughtChain response, got: {response:?}"),
     }
 }
 
@@ -805,9 +805,9 @@ async fn test_get_thought_chain_depth_limit() {
             AssemblyError::ChainTooDeep { max_depth } => {
                 assert_eq!(max_depth, 5);
             }
-            _ => panic!("Expected ChainTooDeep error, got: {:?}", error),
+            _ => panic!("Expected ChainTooDeep error, got: {error:?}"),
         },
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -884,7 +884,7 @@ async fn test_get_thought_chain_stops_at_root() {
             assert_eq!(thoughts[1].id, thought2_id);
             assert_eq!(thoughts[2].id, thought1_id);
         }
-        _ => panic!("Expected ThoughtChain response, got: {:?}", response),
+        _ => panic!("Expected ThoughtChain response, got: {response:?}"),
     }
 }
 
@@ -909,7 +909,7 @@ async fn test_strategy_default() {
         CallResult::Success(ThoughtResponse::Assembled { thought }) => {
             assert_eq!(thought.content, content);
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -949,7 +949,7 @@ async fn test_strategy_chain_with_parent() {
             assert_eq!(thought.content, content);
             assert_eq!(thought.parent_id, Some(parent_id));
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -1020,9 +1020,9 @@ async fn test_assemble_with_negative_importance() {
             AssemblyError::InvalidSalience { reason } => {
                 assert!(reason.contains("importance"));
             }
-            _ => panic!("Expected InvalidSalience error, got: {:?}", error),
+            _ => panic!("Expected InvalidSalience error, got: {error:?}"),
         },
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -1044,9 +1044,9 @@ async fn test_assemble_with_invalid_novelty_high() {
             AssemblyError::InvalidSalience { reason } => {
                 assert!(reason.contains("novelty"));
             }
-            _ => panic!("Expected InvalidSalience error, got: {:?}", error),
+            _ => panic!("Expected InvalidSalience error, got: {error:?}"),
         },
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -1068,9 +1068,9 @@ async fn test_assemble_with_invalid_novelty_low() {
             AssemblyError::InvalidSalience { reason } => {
                 assert!(reason.contains("novelty"));
             }
-            _ => panic!("Expected InvalidSalience error, got: {:?}", error),
+            _ => panic!("Expected InvalidSalience error, got: {error:?}"),
         },
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -1092,9 +1092,9 @@ async fn test_assemble_with_invalid_relevance_high() {
             AssemblyError::InvalidSalience { reason } => {
                 assert!(reason.contains("relevance"));
             }
-            _ => panic!("Expected InvalidSalience error, got: {:?}", error),
+            _ => panic!("Expected InvalidSalience error, got: {error:?}"),
         },
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -1116,9 +1116,9 @@ async fn test_assemble_with_invalid_relevance_low() {
             AssemblyError::InvalidSalience { reason } => {
                 assert!(reason.contains("relevance"));
             }
-            _ => panic!("Expected InvalidSalience error, got: {:?}", error),
+            _ => panic!("Expected InvalidSalience error, got: {error:?}"),
         },
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -1140,9 +1140,9 @@ async fn test_assemble_with_invalid_valence_high() {
             AssemblyError::InvalidSalience { reason } => {
                 assert!(reason.contains("valence"));
             }
-            _ => panic!("Expected InvalidSalience error, got: {:?}", error),
+            _ => panic!("Expected InvalidSalience error, got: {error:?}"),
         },
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -1164,9 +1164,9 @@ async fn test_assemble_with_invalid_connection_relevance_high() {
             AssemblyError::InvalidSalience { reason } => {
                 assert!(reason.contains("connection_relevance"));
             }
-            _ => panic!("Expected InvalidSalience error, got: {:?}", error),
+            _ => panic!("Expected InvalidSalience error, got: {error:?}"),
         },
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -1188,9 +1188,9 @@ async fn test_assemble_with_invalid_connection_relevance_low() {
             AssemblyError::InvalidSalience { reason } => {
                 assert!(reason.contains("connection_relevance"));
             }
-            _ => panic!("Expected InvalidSalience error, got: {:?}", error),
+            _ => panic!("Expected InvalidSalience error, got: {error:?}"),
         },
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -1216,7 +1216,7 @@ async fn test_assemble_with_source_stream() {
             assert_eq!(thought.content, content);
             assert_eq!(thought.source_stream, Some("external".to_string()));
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -1237,7 +1237,7 @@ async fn test_assemble_with_source_stream_memory() {
         CallResult::Success(ThoughtResponse::Assembled { thought }) => {
             assert_eq!(thought.source_stream, Some("memory".to_string()));
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -1262,7 +1262,7 @@ async fn test_strategy_composite() {
         CallResult::Success(ThoughtResponse::Assembled { thought }) => {
             assert_eq!(thought.content, content);
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -1283,7 +1283,7 @@ async fn test_strategy_urgent() {
         CallResult::Success(ThoughtResponse::Assembled { thought }) => {
             assert_eq!(thought.content, content);
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -1306,7 +1306,7 @@ async fn test_strategy_chain_without_parent() {
             assert_eq!(thought.content, content);
             assert!(thought.parent_id.is_none());
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -1333,7 +1333,7 @@ async fn test_strategy_chain_with_parent_not_in_cache() {
             assert_eq!(thought.content, content);
             assert_eq!(thought.parent_id, Some(fake_parent_id));
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }
 
@@ -1377,10 +1377,7 @@ async fn test_get_thought_chain_broken_chain() {
         CallResult::Success(ThoughtResponse::Error { error }) => {
             assert!(matches!(error, AssemblyError::ThoughtNotFound { .. }));
         }
-        _ => panic!(
-            "Expected Error response with ThoughtNotFound, got: {:?}",
-            response
-        ),
+        _ => panic!("Expected Error response with ThoughtNotFound, got: {response:?}"),
     }
 }
 
@@ -1421,7 +1418,7 @@ async fn test_get_thought_chain_zero_depth() {
         CallResult::Success(ThoughtResponse::ThoughtChain { thoughts }) => {
             assert_eq!(thoughts.len(), 0);
         }
-        _ => panic!("Expected ThoughtChain response, got: {:?}", response),
+        _ => panic!("Expected ThoughtChain response, got: {response:?}"),
     }
 }
 
@@ -1497,7 +1494,7 @@ async fn test_get_thought_chain_depth_limited_by_param() {
             assert_eq!(thoughts[1].id, thought2_id);
             // thought1 not included due to depth limit
         }
-        _ => panic!("Expected ThoughtChain response, got: {:?}", response),
+        _ => panic!("Expected ThoughtChain response, got: {response:?}"),
     }
 }
 
@@ -1523,7 +1520,7 @@ async fn test_get_thought_chain_not_found() {
         CallResult::Success(ThoughtResponse::Error { error }) => {
             assert!(matches!(error, AssemblyError::ThoughtNotFound { .. }));
         }
-        _ => panic!("Expected Error response, got: {:?}", response),
+        _ => panic!("Expected Error response, got: {response:?}"),
     }
 }
 
@@ -1601,7 +1598,7 @@ fn test_state_get_thought_directly() {
     let mut state = ThoughtState::new();
 
     let content = Content::raw(vec![1, 2, 3]);
-    let request = AssemblyRequest::new(content.clone(), SalienceScore::neutral());
+    let request = AssemblyRequest::new(content, SalienceScore::neutral());
 
     let thought = state.assemble_thought(request).unwrap();
     let thought_id = thought.id;
@@ -1692,6 +1689,6 @@ async fn test_assemble_with_all_options() {
             assert_eq!(thought.parent_id, Some(parent_id));
             assert_eq!(thought.source_stream, Some("internal".to_string()));
         }
-        _ => panic!("Expected Assembled response, got: {:?}", response),
+        _ => panic!("Expected Assembled response, got: {response:?}"),
     }
 }

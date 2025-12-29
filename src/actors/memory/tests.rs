@@ -1,8 +1,10 @@
-//! Tests for MemoryActor
+//! Tests for `MemoryActor`
 //!
 //! ADR-049: Test modules excluded from coverage.
 
 #![cfg_attr(coverage_nightly, coverage(off))]
+#![allow(clippy::manual_let_else)] // Match patterns clearer in tests
+#![allow(clippy::significant_drop_tightening)] // Async test setup
 
 use super::*;
 use crate::core::invariants::{MAX_MEMORY_WINDOWS, MIN_MEMORY_WINDOWS};
@@ -33,7 +35,7 @@ async fn test_actor_spawns_with_minimum_windows() {
         CallResult::Success(MemoryResponse::WindowCount { count }) => {
             assert_eq!(count, MIN_MEMORY_WINDOWS);
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -56,7 +58,7 @@ async fn test_open_window_success() {
         CallResult::Success(MemoryResponse::WindowOpened { window_id }) => {
             assert!(!window_id.to_string().is_empty());
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -95,7 +97,7 @@ async fn test_open_window_respects_max_limit() {
         CallResult::Success(MemoryResponse::Error { error }) => {
             assert!(matches!(error, MemoryError::BoundedMemoryExceeded { .. }));
         }
-        _ => panic!("Expected error response, got: {:?}", response),
+        _ => panic!("Expected error response, got: {response:?}"),
     }
 }
 
@@ -131,7 +133,7 @@ async fn test_close_window_success() {
         }) => {
             assert_eq!(window_id, closed_id);
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -156,7 +158,7 @@ async fn test_close_nonexistent_window() {
         CallResult::Success(MemoryResponse::Error { error }) => {
             assert!(matches!(error, MemoryError::WindowNotFound { .. }));
         }
-        _ => panic!("Expected error response, got: {:?}", response),
+        _ => panic!("Expected error response, got: {response:?}"),
     }
 }
 
@@ -192,7 +194,7 @@ async fn test_cannot_close_below_minimum() {
                 MemoryError::BoundedMemoryInsufficient { .. }
             ));
         }
-        _ => panic!("Expected error response, got: {:?}", response),
+        _ => panic!("Expected error response, got: {response:?}"),
     }
 }
 
@@ -224,7 +226,7 @@ async fn test_store_content_success() {
         }) => {
             assert_eq!(window_id, stored_id);
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -245,7 +247,7 @@ async fn test_store_in_nonexistent_window() {
         CallResult::Success(MemoryResponse::Error { error }) => {
             assert!(matches!(error, MemoryError::WindowNotFound { .. }));
         }
-        _ => panic!("Expected error response, got: {:?}", response),
+        _ => panic!("Expected error response, got: {response:?}"),
     }
 }
 
@@ -288,7 +290,7 @@ async fn test_store_in_closed_window() {
         CallResult::Success(MemoryResponse::Error { error }) => {
             assert!(matches!(error, MemoryError::WindowAlreadyClosed { .. }));
         }
-        _ => panic!("Expected error response, got: {:?}", response),
+        _ => panic!("Expected error response, got: {response:?}"),
     }
 }
 
@@ -345,7 +347,7 @@ async fn test_recall_all_content() {
             assert!(contents.contains(&content1));
             assert!(contents.contains(&content2));
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -404,7 +406,7 @@ async fn test_recall_from_specific_window() {
             assert!(contents.contains(&content1));
             assert!(!contents.contains(&content2));
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -448,7 +450,7 @@ async fn test_recall_with_limit() {
         CallResult::Success(MemoryResponse::ContentRecalled { contents }) => {
             assert_eq!(contents.len(), 3);
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -466,7 +468,7 @@ async fn test_list_windows() {
             assert_eq!(windows.len(), MIN_MEMORY_WINDOWS);
             assert!(windows.iter().all(|w| w.is_open));
         }
-        _ => panic!("Unexpected response: {:?}", response),
+        _ => panic!("Unexpected response: {response:?}"),
     }
 }
 
@@ -642,10 +644,10 @@ fn test_memory_state_recall_with_min_salience() {
 
     // Recall with high min_salience - should only get content1
     let query = RecallQuery::all().with_min_salience(0.5);
-    let contents = state.recall(query);
+    let recalled = state.recall(&query);
 
-    assert!(contents.contains(&content1));
-    assert!(!contents.contains(&content2));
+    assert!(recalled.contains(&content1));
+    assert!(!recalled.contains(&content2));
 }
 
 #[test]

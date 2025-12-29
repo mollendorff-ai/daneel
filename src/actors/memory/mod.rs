@@ -8,7 +8,7 @@
 //! - Working memory is bounded (Miller's Law: 7±2 items)
 //! - Windows open/close dynamically based on attention
 //! - Each window holds content with salience scores
-//! - Windows compete for attention (managed by AttentionActor)
+//! - Windows compete for attention (managed by `AttentionActor`)
 //!
 //! # Invariants Enforced
 //!
@@ -56,7 +56,7 @@ pub use types::{MemoryError, MemoryMessage, MemoryResponse, RecallQuery, StoreRe
 /// Maintains a bounded collection of memory windows.
 #[derive(Debug)]
 pub struct MemoryState {
-    /// Active memory windows (WindowId -> Window)
+    /// Active memory windows (`WindowId` -> Window)
     windows: HashMap<WindowId, Window>,
     /// Default salience weights for scoring
     salience_weights: SalienceWeights,
@@ -158,14 +158,11 @@ impl MemoryState {
     }
 
     /// Recall content from memory
-    fn recall(&self, query: RecallQuery) -> Vec<crate::core::types::Content> {
-        let windows_to_search: Vec<&Window> = if let Some(window_id) = query.window_id {
-            // Search specific window
-            self.windows.get(&window_id).into_iter().collect()
-        } else {
-            // Search all open windows
-            self.windows.values().filter(|w| w.is_open).collect()
-        };
+    fn recall(&self, query: &RecallQuery) -> Vec<crate::core::types::Content> {
+        let windows_to_search: Vec<&Window> = query.window_id.map_or_else(
+            || self.windows.values().filter(|w| w.is_open).collect(),
+            |window_id| self.windows.get(&window_id).into_iter().collect(),
+        );
 
         let mut contents = Vec::new();
 
@@ -254,7 +251,7 @@ impl Actor for MemoryActor {
             }
 
             MemoryMessage::Recall { query, reply } => {
-                let contents = state.recall(query);
+                let contents = state.recall(&query);
                 let response = MemoryResponse::ContentRecalled { contents };
                 let _ = reply.send(response);
             }

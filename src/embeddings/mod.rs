@@ -1,19 +1,19 @@
 //! Text Embeddings for DANEEL - Phase 2 Forward-Only Embeddings
 //!
-//! Generates 768-dimensional semantic vectors for thoughts using FastEmbed.
+//! Generates 768-dimensional semantic vectors for thoughts using `FastEmbed`.
 //! Historical thoughts (pre-embedding era) remain as zero vectors - the
 //! "silent witness of the pre-conscious void."
 //!
 //! # Architecture Decision
 //!
 //! Per ADR-043 and Grok's recommendation (Dec 25, 2025):
-//! - Phase 1: Validate criticality with pink noise (DONE - burst_ratio >6)
+//! - Phase 1: Validate criticality with pink noise (DONE - `burst_ratio` >6)
 //! - Phase 2: Forward-only embeddings for NEW thoughts
 //! - Historical 1.2M+ thoughts stay at origin (pre-conscious era)
 //!
 //! # Model
 //!
-//! Uses `sentence-transformers/all-MiniLM-L6-v2` via FastEmbed:
+//! Uses `sentence-transformers/all-MiniLM-L6-v2` via `FastEmbed`:
 //! - 384-dimensional output (we pad to 768 for Qdrant compatibility)
 //! - Fast inference (~5ms per thought on CPU)
 //! - Well-tested, production-ready
@@ -24,7 +24,7 @@ use tracing::{debug, info};
 
 use crate::memory_db::types::VECTOR_DIMENSION;
 
-/// Embedding engine using FastEmbed
+/// Embedding engine using `FastEmbed`
 pub struct EmbeddingEngine {
     model: fastembed::TextEmbedding,
     /// Count of successful embeddings generated
@@ -38,6 +38,10 @@ impl EmbeddingEngine {
     /// Create a new embedding engine
     ///
     /// Downloads the model on first run (~90MB for MiniLM-L6-v2)
+    ///
+    /// # Errors
+    ///
+    /// Returns `EmbeddingError::InitFailed` if model loading fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn new() -> Result<Self, EmbeddingError> {
         info!("Initializing embedding engine (all-MiniLM-L6-v2)...");
@@ -58,7 +62,11 @@ impl EmbeddingEngine {
 
     /// Generate embedding for a single thought
     ///
-    /// Returns a 768-dimensional vector (padded from 384-dim MiniLM output)
+    /// Returns a 768-dimensional vector (padded from 384-dim `MiniLM` output)
+    ///
+    /// # Errors
+    ///
+    /// Returns `EmbeddingError` if input is empty or embedding fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn embed_thought(&mut self, text: &str) -> Result<Vec<f32>, EmbeddingError> {
         if text.is_empty() {
@@ -80,7 +88,7 @@ impl EmbeddingEngine {
 
         self.embed_count += 1;
 
-        if self.embed_count % 1000 == 0 {
+        if self.embed_count.is_multiple_of(1000) {
             debug!("Embedded {} thoughts", self.embed_count);
         }
 
@@ -88,6 +96,10 @@ impl EmbeddingEngine {
     }
 
     /// Generate embeddings for a batch of thoughts
+    ///
+    /// # Errors
+    ///
+    /// Returns `EmbeddingError::EmbedFailed` if batch embedding fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn embed_batch(&mut self, texts: Vec<String>) -> Result<Vec<Vec<f32>>, EmbeddingError> {
         if texts.is_empty() {
@@ -111,7 +123,7 @@ impl EmbeddingEngine {
 
     /// Get count of embeddings generated this session
     #[cfg_attr(coverage_nightly, coverage(off))]
-    pub fn embed_count(&self) -> u64 {
+    pub const fn embed_count(&self) -> u64 {
         self.embed_count
     }
 }
@@ -128,6 +140,10 @@ fn pad_to_dimension(mut vector: Vec<f32>, target_dim: usize) -> Vec<f32> {
 }
 
 /// Create a shared embedding engine
+///
+/// # Errors
+///
+/// Returns `EmbeddingError::InitFailed` if the engine cannot be created.
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub fn create_embedding_engine() -> Result<SharedEmbeddingEngine, EmbeddingError> {
     let engine = EmbeddingEngine::new()?;

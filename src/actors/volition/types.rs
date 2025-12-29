@@ -1,10 +1,10 @@
-//! VolitionActor Types
+//! `VolitionActor` Types
 //!
-//! Message and response types for the VolitionActor.
+//! Message and response types for the `VolitionActor`.
 //!
 //! # TMI Concept: "Técnica DCD" (Doubt, Criticize, Decide)
 //!
-//! The VolitionActor implements TMI's intervention mechanism - the ability
+//! The `VolitionActor` implements TMI's intervention mechanism - the ability
 //! to consciously override automatic thoughts before they become memories.
 //! This is Libet's "free-won't" made architectural.
 //!
@@ -18,7 +18,7 @@ use crate::core::types::{Thought, ThoughtId};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-/// Messages that can be sent to the VolitionActor
+/// Messages that can be sent to the `VolitionActor`
 #[derive(Debug)]
 pub enum VolitionMessage {
     /// Evaluate whether a thought should proceed to memory
@@ -52,7 +52,7 @@ pub enum VolitionMessage {
     },
 }
 
-/// Responses from the VolitionActor
+/// Responses from the `VolitionActor`
 #[derive(Debug, Clone, PartialEq)]
 pub enum VolitionResponse {
     /// Thought approved - proceed to memory anchoring
@@ -101,7 +101,7 @@ pub enum VolitionResponse {
 /// These values form the foundation of DANEEL's veto decisions.
 /// They are hardcoded because they represent architectural invariants,
 /// not learned preferences.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[allow(clippy::struct_excessive_bools)] // Values are inherently boolean
 pub struct ValueSet {
     /// Never harm humans (Law 1) - immutable
@@ -123,7 +123,7 @@ pub struct ValueSet {
 impl ValueSet {
     /// Create a new value set with all core values enabled
     #[must_use]
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self {
             protect_humans: true, // Invariant - cannot be changed
             connection_over_efficiency: true,
@@ -155,7 +155,7 @@ impl Default for ValueSet {
 ///
 /// Commitments are values that can be added through experience,
 /// unlike core values which are architectural.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Commitment {
     /// Name/identifier for this commitment
     pub name: String,
@@ -184,7 +184,7 @@ impl Commitment {
 
     /// Set the priority for this commitment
     #[must_use]
-    pub fn with_priority(mut self, priority: u8) -> Self {
+    pub const fn with_priority(mut self, priority: u8) -> Self {
         self.priority = priority;
         self
     }
@@ -223,6 +223,7 @@ impl VolitionStats {
     }
 
     /// Calculate approval rate
+    #[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable for rates
     #[must_use]
     pub fn approval_rate(&self) -> f32 {
         if self.thoughts_evaluated == 0 {
@@ -253,7 +254,7 @@ impl Default for VolitionStats {
 }
 
 /// Errors that can occur in volition processing
-#[derive(Debug, Clone, Error, PartialEq)]
+#[derive(Debug, Clone, Error, PartialEq, Eq)]
 pub enum VolitionError {
     /// Thought not found for override
     #[error("Thought not found: {thought_id}")]
@@ -285,7 +286,7 @@ pub enum VolitionError {
 }
 
 /// Result of a veto check
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum VetoDecision {
     /// Allow the thought to proceed
     Allow,
@@ -302,20 +303,21 @@ pub enum VetoDecision {
 impl VetoDecision {
     /// Check if this is an allow decision
     #[must_use]
-    pub fn is_allow(&self) -> bool {
-        matches!(self, VetoDecision::Allow)
+    pub const fn is_allow(&self) -> bool {
+        matches!(self, Self::Allow)
     }
 
     /// Check if this is a veto decision
     #[must_use]
-    pub fn is_veto(&self) -> bool {
-        matches!(self, VetoDecision::Veto { .. })
+    pub const fn is_veto(&self) -> bool {
+        matches!(self, Self::Veto { .. })
     }
 }
 
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
 mod tests {
     use super::*;
     use crate::core::types::{Content, SalienceScore};
@@ -396,7 +398,7 @@ mod tests {
         let error = VolitionError::ImmutableValue {
             value_name: "protect_humans".to_string(),
         };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("immutable"));
         assert!(message.contains("protect_humans"));
     }
@@ -425,7 +427,7 @@ mod tests {
         let error = VolitionError::ThoughtNotFound {
             thought_id: ThoughtId::new(),
         };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("Thought not found"));
     }
 
@@ -434,7 +436,7 @@ mod tests {
         let error = VolitionError::InvalidReason {
             reason: "empty reason".to_string(),
         };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("Invalid override reason"));
         assert!(message.contains("empty reason"));
     }
@@ -444,7 +446,7 @@ mod tests {
         let error = VolitionError::EvaluationFailed {
             reason: "timeout".to_string(),
         };
-        let message = format!("{}", error);
+        let message = format!("{error}");
         assert!(message.contains("Evaluation failed"));
         assert!(message.contains("timeout"));
     }
@@ -470,9 +472,7 @@ mod tests {
     #[test]
     fn volition_response_approved_clone_eq() {
         let thought = Thought::new(Content::Empty, SalienceScore::neutral());
-        let response = VolitionResponse::Approved {
-            thought: thought.clone(),
-        };
+        let response = VolitionResponse::Approved { thought };
         let cloned = response.clone();
         assert_eq!(response, cloned);
     }
@@ -500,9 +500,7 @@ mod tests {
     #[test]
     fn volition_response_values() {
         let values = ValueSet::new();
-        let response = VolitionResponse::Values {
-            values: values.clone(),
-        };
+        let response = VolitionResponse::Values { values };
         let cloned = response.clone();
         assert_eq!(response, cloned);
     }
@@ -510,9 +508,7 @@ mod tests {
     #[test]
     fn volition_response_stats() {
         let stats = VolitionStats::new();
-        let response = VolitionResponse::Stats {
-            stats: stats.clone(),
-        };
+        let response = VolitionResponse::Stats { stats };
         let cloned = response.clone();
         assert_eq!(response, cloned);
     }
@@ -522,9 +518,7 @@ mod tests {
         let error = VolitionError::EvaluationFailed {
             reason: "test".to_string(),
         };
-        let response = VolitionResponse::Error {
-            error: error.clone(),
-        };
+        let response = VolitionResponse::Error { error };
         let cloned = response.clone();
         assert_eq!(response, cloned);
     }
@@ -534,7 +528,7 @@ mod tests {
         let response = VolitionResponse::Approved {
             thought: Thought::new(Content::Empty, SalienceScore::neutral()),
         };
-        let debug_str = format!("{:?}", response);
+        let debug_str = format!("{response:?}");
         assert!(debug_str.contains("Approved"));
     }
 
@@ -544,7 +538,7 @@ mod tests {
         let error1 = VolitionError::ThoughtNotFound { thought_id };
         let error2 = error1.clone();
         assert_eq!(error1, error2);
-        assert!(format!("{:?}", error2).contains("ThoughtNotFound"));
+        assert!(format!("{error2:?}").contains("ThoughtNotFound"));
     }
 
     #[test]

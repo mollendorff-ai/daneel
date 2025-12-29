@@ -88,6 +88,7 @@ pub fn render(frame: &mut Frame, app: &App) {
 /// Calculate layout for streaming at 1920x1080
 #[allow(dead_code)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[must_use]
 pub fn streaming_layout(area: Rect) -> Vec<Rect> {
     // Optimized for readability on mobile/stream viewers
     Layout::default()

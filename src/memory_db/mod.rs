@@ -93,7 +93,7 @@ impl MemoryDb {
     ///
     /// # Arguments
     ///
-    /// * `url` - Qdrant gRPC URL (e.g., "http://localhost:6334")
+    /// * `url` - Qdrant gRPC URL (e.g., "<http://localhost:6334>")
     ///
     /// # Errors
     ///
@@ -114,7 +114,7 @@ impl MemoryDb {
     ///
     /// # Arguments
     ///
-    /// * `url` - Qdrant gRPC URL (e.g., "http://localhost:6334")
+    /// * `url` - Qdrant gRPC URL (e.g., "<http://localhost:6334>")
     ///
     /// # Errors
     ///
@@ -235,7 +235,11 @@ impl MemoryDb {
     ///
     /// # Returns
     ///
-    /// Vector of (memory, similarity_score) pairs, sorted by similarity descending.
+    /// Vector of (memory, `similarity_score`) pairs, sorted by similarity descending.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if vector dimension is wrong or search fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn find_by_context(
         &self,
@@ -282,6 +286,10 @@ impl MemoryDb {
     /// # Arguments
     ///
     /// * `limit` - Maximum number of results
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant query fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn get_replay_candidates(&self, limit: u32) -> Result<Vec<Memory>> {
         let filter = Filter::must([Condition::matches("consolidation.consolidation_tag", true)]);
@@ -320,6 +328,10 @@ impl MemoryDb {
     /// Update memory consolidation state
     ///
     /// Called during sleep to strengthen memories.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if memory not found or update fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn update_consolidation(
         &self,
@@ -372,6 +384,10 @@ impl MemoryDb {
     }
 
     /// Store an episode
+    ///
+    /// # Errors
+    ///
+    /// Returns error if vector dimension is wrong or storage fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn store_episode(&self, episode: &Episode, vector: &[f32]) -> Result<()> {
         if vector.len() != VECTOR_DIMENSION {
@@ -393,6 +409,10 @@ impl MemoryDb {
     }
 
     /// Get current (open) episode
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant query fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn get_current_episode(&self) -> Result<Option<Episode>> {
         let filter = Filter::must([Condition::is_null("ended_at")]);
@@ -416,6 +436,10 @@ impl MemoryDb {
     }
 
     /// Close current episode and create new one (Door Syndrome boundary)
+    ///
+    /// # Errors
+    ///
+    /// Returns error if episode operations fail.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn create_episode_boundary(
         &self,
@@ -439,6 +463,10 @@ impl MemoryDb {
     }
 
     /// Get total memory count
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant query fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn memory_count(&self) -> Result<u64> {
         let info = self.client.collection_info(collections::MEMORIES).await?;
@@ -446,6 +474,10 @@ impl MemoryDb {
     }
 
     /// Get total episode count
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant query fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn episode_count(&self) -> Result<u64> {
         let info = self.client.collection_info(collections::EPISODES).await?;
@@ -453,6 +485,10 @@ impl MemoryDb {
     }
 
     /// Get total unconscious memory count (ADR-033)
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant query fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn unconscious_count(&self) -> Result<u64> {
         let info = self
@@ -474,6 +510,10 @@ impl MemoryDb {
     /// * `salience` - Composite salience when archived
     /// * `reason` - Why this thought is being archived
     /// * `redis_id` - Original Redis stream entry ID
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant upsert fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn archive_to_unconscious(
         &self,
@@ -511,7 +551,11 @@ impl MemoryDb {
     /// Load Timmy's identity metadata from Qdrant (ADR-034)
     ///
     /// Returns existing identity if found, or creates new identity for first boot.
-    /// On restart, increments restart_count and updates session_started_at.
+    /// On restart, increments `restart_count` and updates `session_started_at`.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if serialization fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_identity(&self) -> Result<IdentityMetadata> {
         use qdrant_client::qdrant::GetPointsBuilder;
@@ -555,6 +599,10 @@ impl MemoryDb {
     /// Save Timmy's identity metadata to Qdrant (ADR-034)
     ///
     /// Called periodically and on shutdown to persist identity state.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant upsert fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn save_identity(&self, identity: &IdentityMetadata) -> Result<()> {
         // Create payload from struct
@@ -573,6 +621,10 @@ impl MemoryDb {
     }
 
     /// Health check
+    ///
+    /// # Errors
+    ///
+    /// Returns error if the check itself fails unexpectedly.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn health_check(&self) -> Result<bool> {
         match self.client.health_check().await {

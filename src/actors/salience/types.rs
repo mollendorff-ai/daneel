@@ -1,4 +1,4 @@
-//! SalienceActor Types
+//! `SalienceActor` Types
 //!
 //! Actor-specific message types for salience scoring and emotional state tracking.
 
@@ -7,7 +7,7 @@ use crate::core::types::{Content, SalienceScore, SalienceWeights};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-/// Messages that can be sent to the SalienceActor
+/// Messages that can be sent to the `SalienceActor`
 #[derive(Debug, Clone)]
 pub enum SalienceMessage {
     /// Rate a single piece of content
@@ -26,7 +26,7 @@ pub enum SalienceMessage {
     GetEmotionalState,
 }
 
-/// Responses from the SalienceActor
+/// Responses from the `SalienceActor`
 #[derive(Debug, Clone, PartialEq)]
 pub enum SalienceResponse {
     /// Single salience score
@@ -61,7 +61,7 @@ pub struct RateRequest {
 impl RateRequest {
     /// Create a new rate request
     #[must_use]
-    pub fn new(content: Content) -> Self {
+    pub const fn new(content: Content) -> Self {
         Self {
             content,
             context: None,
@@ -70,10 +70,10 @@ impl RateRequest {
 
     /// Create a rate request with context
     #[must_use]
-    pub fn with_context(content: Content, context: EmotionalContext) -> Self {
+    pub const fn with_context(content: Content, emo_ctx: EmotionalContext) -> Self {
         Self {
             content,
-            context: Some(context),
+            context: Some(emo_ctx),
         }
     }
 }
@@ -191,7 +191,7 @@ impl EmotionalState {
 
     /// Clamp all values to valid range [0.0, 1.0]
     #[must_use]
-    pub fn clamped(mut self) -> Self {
+    pub const fn clamped(mut self) -> Self {
         self.curiosity = self.curiosity.clamp(0.0, 1.0);
         self.satisfaction = self.satisfaction.clamp(0.0, 1.0);
         self.frustration = self.frustration.clamp(0.0, 1.0);
@@ -240,6 +240,7 @@ pub enum SalienceError {
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
 mod tests {
     use super::*;
 
@@ -397,26 +398,26 @@ mod tests {
     #[test]
     fn salience_message_debug_and_clone() {
         let msg = SalienceMessage::Rate(RateRequest::new(Content::Empty));
-        let cloned = msg.clone();
-        let debug_str = format!("{:?}", cloned);
+        let cloned = msg;
+        let debug_str = format!("{cloned:?}");
         assert!(debug_str.contains("Rate"));
 
         let msg_batch = SalienceMessage::RateBatch(vec![RateRequest::new(Content::Empty)]);
-        let debug_batch = format!("{:?}", msg_batch.clone());
+        let debug_batch = format!("{msg_batch:?}");
         assert!(debug_batch.contains("RateBatch"));
 
         let msg_update = SalienceMessage::UpdateWeights(
             WeightUpdate::from_values(0.2, 0.2, 0.2, 0.2, 0.2).unwrap(),
         );
-        let debug_update = format!("{:?}", msg_update.clone());
+        let debug_update = format!("{msg_update:?}");
         assert!(debug_update.contains("UpdateWeights"));
 
         let msg_get_weights = SalienceMessage::GetWeights;
-        let debug_get_weights = format!("{:?}", msg_get_weights.clone());
+        let debug_get_weights = format!("{msg_get_weights:?}");
         assert!(debug_get_weights.contains("GetWeights"));
 
         let msg_get_emotional = SalienceMessage::GetEmotionalState;
-        let debug_get_emotional = format!("{:?}", msg_get_emotional.clone());
+        let debug_get_emotional = format!("{msg_get_emotional:?}");
         assert!(debug_get_emotional.contains("GetEmotionalState"));
     }
 
@@ -433,28 +434,28 @@ mod tests {
         let resp_score = SalienceResponse::Score(SalienceScore::new(0.5, 0.5, 0.5, 0.5, 0.5, 0.5));
         let cloned_score = resp_score.clone();
         assert_eq!(resp_score, cloned_score);
-        assert!(format!("{:?}", resp_score).contains("Score"));
+        assert!(format!("{resp_score:?}").contains("Score"));
 
         let resp_batch =
             SalienceResponse::ScoreBatch(vec![SalienceScore::new(0.5, 0.5, 0.5, 0.5, 0.5, 0.5)]);
         let cloned_batch = resp_batch.clone();
         assert_eq!(resp_batch, cloned_batch);
-        assert!(format!("{:?}", resp_batch).contains("ScoreBatch"));
+        assert!(format!("{resp_batch:?}").contains("ScoreBatch"));
 
         let resp_updated = SalienceResponse::WeightsUpdated(weights);
         let cloned_updated = resp_updated.clone();
         assert_eq!(resp_updated, cloned_updated);
-        assert!(format!("{:?}", resp_updated).contains("WeightsUpdated"));
+        assert!(format!("{resp_updated:?}").contains("WeightsUpdated"));
 
         let resp_weights = SalienceResponse::Weights(weights);
         let cloned_weights = resp_weights.clone();
         assert_eq!(resp_weights, cloned_weights);
-        assert!(format!("{:?}", resp_weights).contains("Weights("));
+        assert!(format!("{resp_weights:?}").contains("Weights("));
 
         let resp_emotional = SalienceResponse::EmotionalState(EmotionalState::neutral());
         let cloned_emotional = resp_emotional.clone();
         assert_eq!(resp_emotional, cloned_emotional);
-        assert!(format!("{:?}", resp_emotional).contains("EmotionalState"));
+        assert!(format!("{resp_emotional:?}").contains("EmotionalState"));
 
         let resp_error = SalienceResponse::Error(SalienceError::InvalidWeight {
             field: "test".to_string(),
@@ -462,14 +463,14 @@ mod tests {
         });
         let cloned_error = resp_error.clone();
         assert_eq!(resp_error, cloned_error);
-        assert!(format!("{:?}", resp_error).contains("Error"));
+        assert!(format!("{resp_error:?}").contains("Error"));
     }
 
     #[test]
     fn rate_request_debug_and_clone() {
         let request = RateRequest::new(Content::Empty);
-        let cloned = request.clone();
-        let debug_str = format!("{:?}", cloned);
+        let cloned = request;
+        let debug_str = format!("{cloned:?}");
         assert!(debug_str.contains("RateRequest"));
     }
 

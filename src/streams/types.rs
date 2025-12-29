@@ -101,12 +101,12 @@ impl StreamName {
     #[must_use]
     pub fn as_redis_key(&self) -> &str {
         match self {
-            StreamName::Sensory => "thought:sensory",
-            StreamName::Memory => "thought:memory",
-            StreamName::Emotion => "thought:emotion",
-            StreamName::Reasoning => "thought:reasoning",
-            StreamName::Assembled => "thought:assembled",
-            StreamName::Custom(name) => name,
+            Self::Sensory => "thought:sensory",
+            Self::Memory => "thought:memory",
+            Self::Emotion => "thought:emotion",
+            Self::Reasoning => "thought:reasoning",
+            Self::Assembled => "thought:assembled",
+            Self::Custom(name) => name,
         }
     }
 }
@@ -149,11 +149,11 @@ impl MemoryStream {
     /// assert_eq!(key, "memory:episodic");
     /// ```
     #[must_use]
-    pub fn as_redis_key(&self) -> &str {
+    pub const fn as_redis_key(&self) -> &str {
         match self {
-            MemoryStream::Episodic => "memory:episodic",
-            MemoryStream::Semantic => "memory:semantic",
-            MemoryStream::Procedural => "memory:procedural",
+            Self::Episodic => "memory:episodic",
+            Self::Semantic => "memory:semantic",
+            Self::Procedural => "memory:procedural",
         }
     }
 }
@@ -190,7 +190,7 @@ pub struct StreamEntry {
     /// When this entry was created
     pub timestamp: DateTime<Utc>,
 
-    /// Optional source identifier (e.g., "camera_01", "memory_retrieval")
+    /// Optional source identifier (e.g., "`camera_01`", "`memory_retrieval`")
     pub source: Option<String>,
 }
 
@@ -217,7 +217,7 @@ impl StreamEntry {
 
     /// Create a stream entry with a specific timestamp
     #[must_use]
-    pub fn with_timestamp(mut self, timestamp: DateTime<Utc>) -> Self {
+    pub const fn with_timestamp(mut self, timestamp: DateTime<Utc>) -> Self {
         self.timestamp = timestamp;
         self
     }
@@ -231,7 +231,7 @@ impl StreamEntry {
 ///
 /// Controls memory limits (MAXLEN), time-to-live (TTL), and consumer groups.
 /// Different configs for working memory (ephemeral) vs long-term memory (persistent).
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct StreamConfig {
     /// Maximum length for the stream (None = unlimited)
     ///
@@ -284,7 +284,7 @@ impl StreamConfig {
     /// Long-term memory:
     /// - MAXLEN = None (unlimited)
     /// - TTL = None (never expires)
-    /// - Consumer group = "memory_anchor"
+    /// - Consumer group = "`memory_anchor`"
     #[must_use]
     pub fn long_term_memory() -> Self {
         Self {
@@ -328,7 +328,7 @@ pub struct ThoughtCandidate {
 impl ThoughtCandidate {
     /// Create a new thought candidate
     #[must_use]
-    pub fn new(entry: StreamEntry, composite_score: f32, connection_boost: f32) -> Self {
+    pub const fn new(entry: StreamEntry, composite_score: f32, connection_boost: f32) -> Self {
         Self {
             entry,
             composite_score,
@@ -338,9 +338,9 @@ impl ThoughtCandidate {
 
     /// Calculate total score for attention competition
     ///
-    /// Total score = composite_score + connection_boost
+    /// Total score = `composite_score` + `connection_boost`
     ///
-    /// The connection_boost is THE critical weight for value alignment.
+    /// The `connection_boost` is THE critical weight for value alignment.
     /// It ensures thoughts relevant to human connection are prioritized.
     #[must_use]
     pub fn total_score(&self) -> f32 {
@@ -372,7 +372,7 @@ pub struct CompetitionResult {
 impl CompetitionResult {
     /// Create a new competition result
     #[must_use]
-    pub fn new(
+    pub const fn new(
         winner: ThoughtCandidate,
         losers: Vec<ThoughtCandidate>,
         forgotten: Vec<String>,
@@ -386,13 +386,13 @@ impl CompetitionResult {
 
     /// Total number of thoughts that competed
     #[must_use]
-    pub fn total_candidates(&self) -> usize {
+    pub const fn total_candidates(&self) -> usize {
         1 + self.losers.len() + self.forgotten.len()
     }
 
     /// Number of thoughts that survived (not forgotten)
     #[must_use]
-    pub fn surviving_count(&self) -> usize {
+    pub const fn surviving_count(&self) -> usize {
         1 + self.losers.len()
     }
 }
@@ -402,7 +402,7 @@ impl CompetitionResult {
 // =============================================================================
 
 /// Errors that can occur during stream operations
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum StreamError {
     /// Failed to connect to Redis
     ConnectionFailed {
@@ -438,20 +438,20 @@ pub enum StreamError {
 impl fmt::Display for StreamError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            StreamError::ConnectionFailed { reason } => {
-                write!(f, "Redis connection failed: {}", reason)
+            Self::ConnectionFailed { reason } => {
+                write!(f, "Redis connection failed: {reason}")
             }
-            StreamError::StreamNotFound { stream } => {
-                write!(f, "Stream not found: {}", stream)
+            Self::StreamNotFound { stream } => {
+                write!(f, "Stream not found: {stream}")
             }
-            StreamError::EntryNotFound { id } => {
-                write!(f, "Entry not found: {}", id)
+            Self::EntryNotFound { id } => {
+                write!(f, "Entry not found: {id}")
             }
-            StreamError::SerializationFailed { reason } => {
-                write!(f, "Serialization failed: {}", reason)
+            Self::SerializationFailed { reason } => {
+                write!(f, "Serialization failed: {reason}")
             }
-            StreamError::ConsumerGroupError { reason } => {
-                write!(f, "Consumer group error: {}", reason)
+            Self::ConsumerGroupError { reason } => {
+                write!(f, "Consumer group error: {reason}")
             }
         }
     }
@@ -466,6 +466,7 @@ impl std::error::Error for StreamError {}
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
 mod tests {
     use super::*;
     use crate::core::types::SalienceScore;
@@ -606,28 +607,28 @@ mod tests {
         let error = StreamError::ConnectionFailed {
             reason: "timeout".to_string(),
         };
-        assert_eq!(format!("{}", error), "Redis connection failed: timeout");
+        assert_eq!(format!("{error}"), "Redis connection failed: timeout");
 
         let error = StreamError::StreamNotFound {
             stream: StreamName::Sensory,
         };
-        assert_eq!(format!("{}", error), "Stream not found: thought:sensory");
+        assert_eq!(format!("{error}"), "Stream not found: thought:sensory");
 
         let error = StreamError::EntryNotFound {
             id: "123-0".to_string(),
         };
-        assert_eq!(format!("{}", error), "Entry not found: 123-0");
+        assert_eq!(format!("{error}"), "Entry not found: 123-0");
 
         let error = StreamError::SerializationFailed {
             reason: "invalid JSON".to_string(),
         };
-        assert_eq!(format!("{}", error), "Serialization failed: invalid JSON");
+        assert_eq!(format!("{error}"), "Serialization failed: invalid JSON");
 
         let error = StreamError::ConsumerGroupError {
             reason: "group already exists".to_string(),
         };
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "Consumer group error: group already exists"
         );
     }

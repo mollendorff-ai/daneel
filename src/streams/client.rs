@@ -57,7 +57,7 @@ impl StreamsClient {
 
     /// Check if client is connected
     #[must_use]
-    pub fn is_connected(&self) -> bool {
+    pub const fn is_connected(&self) -> bool {
         self.conn.is_some()
     }
 
@@ -343,9 +343,8 @@ impl StreamsClient {
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn stream_exists(&mut self, stream: &StreamName) -> bool {
         let key = stream.as_redis_key();
-        let conn = match self.conn_mut() {
-            Ok(c) => c,
-            Err(_) => return false,
+        let Ok(conn) = self.conn_mut() else {
+            return false;
         };
 
         let exists: Result<bool, RedisError> = conn.exists(key).await;
@@ -356,7 +355,8 @@ impl StreamsClient {
     // Internal Helpers
     // =========================================================================
 
-    /// Map Redis error to StreamError
+    /// Map Redis error to `StreamError`
+    #[allow(clippy::needless_pass_by_value)] // Error is consumed (converted to string)
     fn map_redis_error(err: RedisError) -> StreamError {
         StreamError::ConnectionFailed {
             reason: format!("{err}"),
@@ -434,6 +434,8 @@ impl StreamsClient {
     /// Create a dummy client for testing (not connected to Redis)
     ///
     /// This allows testing pure computation functions that don't require I/O.
+    #[must_use]
+    #[allow(clippy::missing_panics_doc)] // Test helper - panics on invalid URL
     pub fn new_for_test() -> Self {
         let client =
             Client::open("redis://localhost:6379").expect("Failed to create test client URL");

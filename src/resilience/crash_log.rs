@@ -23,7 +23,7 @@ pub struct CrashReport {
     /// Panic message
     pub message: String,
 
-    /// Location where panic occurred (file:line:column)
+    /// Location where panic occurred (<file:line:column>)
     pub location: Option<String>,
 
     /// Backtrace (if available)
@@ -57,7 +57,9 @@ pub struct CognitiveStateSnapshot {
 
 impl CrashReport {
     /// Create a new crash report from panic info
+    #[allow(clippy::option_if_let_else)] // Chain of downcasts is clearer than nested map_or_else
     #[cfg_attr(coverage_nightly, coverage(off))]
+    #[must_use]
     pub fn from_panic_info(panic_info: &PanicHookInfo<'_>) -> Self {
         let message = if let Some(s) = panic_info.payload().downcast_ref::<&str>() {
             (*s).to_string()
@@ -89,17 +91,23 @@ impl CrashReport {
     }
 
     /// Add cognitive state snapshot to the report
+    #[must_use]
     pub fn with_cognitive_state(mut self, state: CognitiveStateSnapshot) -> Self {
         self.cognitive_state = Some(state);
         self
     }
 
     /// Get the filename for this crash report
+    #[must_use]
     pub fn filename(&self) -> String {
         format!("panic_{}.json", self.timestamp.format("%Y%m%d_%H%M%S"))
     }
 
     /// Save crash report to file
+    ///
+    /// # Errors
+    ///
+    /// Returns IO error if file creation or writing fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn save(&self) -> std::io::Result<PathBuf> {
         // Ensure logs directory exists
@@ -108,8 +116,7 @@ impl CrashReport {
         let path = PathBuf::from(CRASH_LOG_DIR).join(self.filename());
         let mut file = File::create(&path)?;
 
-        let json = serde_json::to_string_pretty(self)
-            .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?;
+        let json = serde_json::to_string_pretty(self).map_err(std::io::Error::other)?;
 
         file.write_all(json.as_bytes())?;
 
@@ -120,6 +127,10 @@ impl CrashReport {
 /// Log a panic to a crash file.
 ///
 /// Called from the panic hook to record crash details.
+///
+/// # Errors
+///
+/// Returns IO error if file creation or writing fails.
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub fn log_panic(panic_info: &PanicHookInfo<'_>) -> std::io::Result<PathBuf> {
     let report = CrashReport::from_panic_info(panic_info);
@@ -130,6 +141,7 @@ pub fn log_panic(panic_info: &PanicHookInfo<'_>) -> std::io::Result<PathBuf> {
 ///
 /// Returns the most recent crash report if one exists.
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[must_use]
 pub fn detect_previous_crash() -> Option<CrashReport> {
     let log_dir = PathBuf::from(CRASH_LOG_DIR);
 
@@ -140,12 +152,12 @@ pub fn detect_previous_crash() -> Option<CrashReport> {
     // Find most recent panic log
     let mut crash_files: Vec<_> = fs::read_dir(&log_dir)
         .ok()?
-        .filter_map(|entry| entry.ok())
+        .filter_map(std::result::Result::ok)
         .filter(|entry| entry.file_name().to_string_lossy().starts_with("panic_"))
         .collect();
 
     // Sort by name (which includes timestamp) descending
-    crash_files.sort_by(|a, b| b.file_name().cmp(&a.file_name()));
+    crash_files.sort_by_key(|f| std::cmp::Reverse(f.file_name()));
 
     // Read most recent
     let most_recent = crash_files.first()?;
@@ -155,6 +167,7 @@ pub fn detect_previous_crash() -> Option<CrashReport> {
 
 /// Get all crash reports.
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[must_use]
 pub fn get_all_crash_reports() -> Vec<CrashReport> {
     let log_dir = PathBuf::from(CRASH_LOG_DIR);
 
@@ -165,7 +178,7 @@ pub fn get_all_crash_reports() -> Vec<CrashReport> {
     fs::read_dir(&log_dir)
         .into_iter()
         .flatten()
-        .filter_map(|entry| entry.ok())
+        .filter_map(std::result::Result::ok)
         .filter(|entry| entry.file_name().to_string_lossy().starts_with("panic_"))
         .filter_map(|entry| {
             let contents = fs::read_to_string(entry.path()).ok()?;
@@ -175,6 +188,10 @@ pub fn get_all_crash_reports() -> Vec<CrashReport> {
 }
 
 /// Clear old crash logs (keep last N)
+///
+/// # Errors
+///
+/// Returns IO error if directory reading or file deletion fails.
 #[cfg_attr(coverage_nightly, coverage(off))]
 pub fn cleanup_old_logs(keep_count: usize) -> std::io::Result<usize> {
     let log_dir = PathBuf::from(CRASH_LOG_DIR);
@@ -184,12 +201,12 @@ pub fn cleanup_old_logs(keep_count: usize) -> std::io::Result<usize> {
     }
 
     let mut crash_files: Vec<_> = fs::read_dir(&log_dir)?
-        .filter_map(|entry| entry.ok())
+        .filter_map(std::result::Result::ok)
         .filter(|entry| entry.file_name().to_string_lossy().starts_with("panic_"))
         .collect();
 
     // Sort by name descending (newest first)
-    crash_files.sort_by(|a, b| b.file_name().cmp(&a.file_name()));
+    crash_files.sort_by_key(|f| std::cmp::Reverse(f.file_name()));
 
     let mut deleted = 0;
     for entry in crash_files.into_iter().skip(keep_count) {
@@ -354,7 +371,7 @@ mod tests {
     #[test]
     fn test_crash_report_debug() {
         let report = create_test_report();
-        let debug_str = format!("{:?}", report);
+        let debug_str = format!("{report:?}");
         assert!(debug_str.contains("CrashReport"));
         assert!(debug_str.contains("test panic"));
     }
@@ -362,7 +379,7 @@ mod tests {
     #[test]
     fn test_cognitive_state_snapshot_debug() {
         let state = create_test_cognitive_state();
-        let debug_str = format!("{:?}", state);
+        let debug_str = format!("{state:?}");
         assert!(debug_str.contains("CognitiveStateSnapshot"));
         assert!(debug_str.contains("100"));
     }

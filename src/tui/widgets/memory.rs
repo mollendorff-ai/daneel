@@ -58,7 +58,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
         Line::from(vec![
             Span::styled("Active: ", Style::default().fg(colors::DIM)),
             Span::styled(
-                format!("{}/9", active_count),
+                format!("{active_count}/9"),
                 Style::default().fg(status_color).bold(),
             ),
             Span::styled("  │  ", Style::default().fg(colors::DIM)),
@@ -74,7 +74,7 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
             ),
             Span::styled("  Total: ", Style::default().fg(colors::DIM)),
             Span::styled(
-                format!("{}", total_memories),
+                format!("{total_memories}"),
                 Style::default().fg(colors::FOREGROUND),
             ),
         ]),

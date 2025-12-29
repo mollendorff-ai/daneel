@@ -12,7 +12,7 @@
 //!
 //! # Architecture
 //!
-//! The SleepActor coordinates:
+//! The `SleepActor` coordinates:
 //! 1. **Sleep Scheduler**: Entry/exit conditions
 //! 2. **Replay Selector**: Priority-based memory selection
 //! 3. **Consolidation**: Strengthening via Qdrant
@@ -111,7 +111,7 @@ impl SleepState {
     }
 
     /// Check if current state is interruptible
-    fn is_interruptible(&self) -> bool {
+    const fn is_interruptible(&self) -> bool {
         matches!(
             self.state,
             types::SleepState::Awake
@@ -155,18 +155,18 @@ impl SleepState {
     }
 
     /// Increment consolidation queue estimate
-    fn increment_queue(&mut self) {
+    const fn increment_queue(&mut self) {
         self.consolidation_queue_estimate += 1;
     }
 
     /// Clear consolidation queue after sleep
-    fn clear_queue(&mut self) {
+    const fn clear_queue(&mut self) {
         self.consolidation_queue_estimate = 0;
     }
 
     /// Transition to next sleep phase
     ///
-    /// Used during sleep cycle execution (will be called by SleepActor's sleep loop).
+    /// Used during sleep cycle execution (will be called by `SleepActor`'s sleep loop).
     #[allow(dead_code)]
     fn advance_sleep_phase(&mut self, cycle_elapsed_pct: f32) {
         self.state = match cycle_elapsed_pct {
@@ -178,7 +178,7 @@ impl SleepState {
 
     /// Add cycle report to summary
     ///
-    /// Used during sleep cycle completion (will be called by SleepActor's sleep loop).
+    /// Used during sleep cycle completion (will be called by `SleepActor`'s sleep loop).
     #[allow(dead_code)]
     fn add_cycle_report(&mut self, report: &SleepCycleReport) {
         if let Some(ref mut summary) = self.current_summary {
@@ -198,7 +198,7 @@ pub struct SleepActor {
 impl SleepActor {
     /// Create with custom config
     #[must_use]
-    pub fn with_config(config: SleepConfig) -> Self {
+    pub const fn with_config(config: SleepConfig) -> Self {
         Self { config }
     }
 }

@@ -1,4 +1,4 @@
-//! ContinuityActor - Âncora da Memória (Memory Anchor)
+//! `ContinuityActor` - Âncora da Memória (Memory Anchor)
 //!
 //! Implements TMI's identity persistence and memory anchor system using Ractor actor model.
 //!
@@ -21,7 +21,7 @@
 //!
 //! # Design Philosophy
 //!
-//! Not all thoughts become memories. The ContinuityActor selectively
+//! Not all thoughts become memories. The `ContinuityActor` selectively
 //! records experiences based on significance, enabling:
 //! - Self-reflection on past experiences
 //! - Timeline reconstruction
@@ -118,13 +118,13 @@ pub struct ContinuityState {
     /// DANEEL's persistent identity
     identity: Identity,
 
-    /// Recorded experiences (ExperienceId -> Experience)
+    /// Recorded experiences (`ExperienceId` -> Experience)
     experiences: HashMap<ExperienceId, Experience>,
 
     /// Growth milestones (chronological order)
     milestones: Vec<Milestone>,
 
-    /// Saved checkpoints (CheckpointId -> Checkpoint)
+    /// Saved checkpoints (`CheckpointId` -> Checkpoint)
     checkpoints: HashMap<CheckpointId, Checkpoint>,
 }
 
@@ -319,6 +319,7 @@ impl Actor for ContinuityActor {
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::cast_precision_loss)] // Test calculations
 mod state_tests {
     use super::*;
     use crate::core::types::{Content, SalienceScore, Thought};
@@ -345,7 +346,7 @@ mod state_tests {
         custom_identity.experience_count = 42;
         custom_identity.milestone_count = 7;
 
-        let state = ContinuityState::with_identity(custom_identity.clone());
+        let state = ContinuityState::with_identity(custom_identity);
         assert_eq!(state.identity.experience_count, 42);
         assert_eq!(state.identity.milestone_count, 7);
         assert!(state.experiences.is_empty());
@@ -566,7 +567,7 @@ mod state_tests {
         for i in 0..3 {
             let thought = Thought::new(Content::Empty, SalienceScore::neutral());
             let mut exp = Experience::from_thought(thought);
-            exp.significance = 0.5 + (i as f32) * 0.1;
+            exp.significance = (i as f32).mul_add(0.1, 0.5);
             state.record_experience(exp);
         }
 

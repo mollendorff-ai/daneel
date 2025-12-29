@@ -39,6 +39,7 @@ impl PinkNoiseGenerator {
     ///
     /// More octaves = better 1/f approximation but more computation.
     /// 8 octaves is typically sufficient.
+    #[must_use]
     pub fn new(octaves: usize) -> Self {
         Self {
             octaves,
@@ -65,7 +66,10 @@ impl PinkNoiseGenerator {
 
         // Sum all octaves and normalize
         let sum: f32 = self.state.iter().sum();
-        sum / self.octaves as f32
+        #[allow(clippy::cast_precision_loss)] // Octaves is small (< 10)
+        {
+            sum / self.octaves as f32
+        }
     }
 
     /// Generate next sample scaled to a specific variance.
@@ -108,6 +112,7 @@ impl Default for PowerLawBurstTimer {
 
 impl PowerLawBurstTimer {
     /// Create a new power-law burst timer.
+    #[must_use]
     pub fn new(alpha: f32, min_interval: Duration, max_interval: Duration) -> Self {
         Self {
             alpha,
@@ -139,6 +144,7 @@ impl PowerLawBurstTimer {
     }
 
     /// Get time until next burst.
+    #[must_use]
     pub fn time_until_burst(&self) -> Duration {
         self.next_burst.saturating_duration_since(Instant::now())
     }
@@ -170,6 +176,7 @@ impl Default for StimulusInjector {
 
 impl StimulusInjector {
     /// Create a new stimulus injector with custom variance.
+    #[must_use]
     pub fn with_variance(variance: f32) -> Self {
         Self {
             variance,
@@ -209,12 +216,13 @@ impl StimulusInjector {
     }
 
     /// Get current variance setting.
-    pub fn variance(&self) -> f32 {
+    #[must_use]
+    pub const fn variance(&self) -> f32 {
         self.variance
     }
 
     /// Set variance (for tuning during experiments).
-    pub fn set_variance(&mut self, variance: f32) {
+    pub const fn set_variance(&mut self, variance: f32) {
         self.variance = variance;
     }
 }
@@ -222,6 +230,8 @@ impl StimulusInjector {
 /// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
 #[cfg_attr(coverage_nightly, coverage(off))]
+#[allow(clippy::float_cmp)] // Tests compare exact literal values
+#[allow(clippy::cast_precision_loss)] // Test calculations
 mod tests {
     use super::*;
 
@@ -234,8 +244,7 @@ mod tests {
             let sample = pink.next(&mut rng);
             assert!(
                 (-1.0..=1.0).contains(&sample),
-                "Sample {} out of range",
-                sample
+                "Sample {sample} out of range"
             );
         }
     }
@@ -263,8 +272,7 @@ mod tests {
         // Pink noise should have positive autocorrelation
         assert!(
             autocorr > 0.0,
-            "Pink noise should have positive autocorrelation, got {}",
-            autocorr
+            "Pink noise should have positive autocorrelation, got {autocorr}"
         );
     }
 
@@ -286,8 +294,7 @@ mod tests {
         // Should be roughly proportional to requested variance (pink noise has bounded range)
         assert!(
             actual_variance < variance * 2.0,
-            "Variance {} too high",
-            actual_variance
+            "Variance {actual_variance} too high"
         );
     }
 
@@ -464,8 +471,7 @@ mod tests {
             let interval = timer.sample_interval(&mut rng);
             assert!(
                 interval <= Duration::from_millis(500),
-                "Interval {:?} exceeds max",
-                interval
+                "Interval {interval:?} exceeds max"
             );
         }
     }
@@ -480,8 +486,7 @@ mod tests {
             let interval = timer.sample_interval(&mut rng);
             assert!(
                 interval >= Duration::from_millis(100),
-                "Interval {:?} below min",
-                interval
+                "Interval {interval:?} below min"
             );
         }
     }

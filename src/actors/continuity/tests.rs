@@ -1,10 +1,14 @@
-//! Tests for ContinuityActor
+//! Tests for `ContinuityActor`
 //!
 //! Comprehensive test suite for DANEEL's identity persistence and memory anchor system.
 //!
 //! ADR-049: Test modules excluded from coverage.
 
 #![cfg_attr(coverage_nightly, coverage(off))]
+#![allow(clippy::float_cmp)] // Tests compare exact literal values
+#![allow(clippy::cast_precision_loss)] // Test loop indices
+#![allow(clippy::too_many_lines)] // Integration tests can be long
+#![allow(clippy::significant_drop_tightening)] // Async test setup
 
 use super::*;
 use crate::core::types::{Content, SalienceScore, Thought};
@@ -17,7 +21,7 @@ use uuid::Uuid;
 // Test Helpers
 // ============================================================================
 
-/// Spawn a ContinuityActor for testing
+/// Spawn a `ContinuityActor` for testing
 async fn spawn_continuity_actor() -> ActorRef<ContinuityMessage> {
     let (actor_ref, _) = Actor::spawn(None, ContinuityActor, ())
         .await
@@ -52,7 +56,7 @@ fn create_milestone_with_experiences(
     Milestone::new(name, description, experiences)
 }
 
-/// Unwrap a CallResult to get the ContinuityResponse
+/// Unwrap a `CallResult` to get the `ContinuityResponse`
 fn unwrap_response(result: CallResult<ContinuityResponse>) -> ContinuityResponse {
     match result {
         CallResult::Success(response) => response,
@@ -92,7 +96,7 @@ async fn test_identity_tracks_experience_count() {
 
     // Record multiple experiences
     for i in 0..3 {
-        let experience = create_test_experience(0.5 + (i as f32) * 0.1);
+        let experience = create_test_experience((i as f32).mul_add(0.1, 0.5));
         let result = actor_ref
             .call(
                 |reply| ContinuityMessage::RecordExperience { experience, reply },
@@ -130,7 +134,7 @@ async fn test_identity_tracks_milestone_count() {
 
     // Add milestones
     for i in 0..2 {
-        let milestone = create_test_milestone(&format!("Milestone {}", i), "Test milestone");
+        let milestone = create_test_milestone(&format!("Milestone {i}"), "Test milestone");
         let result = actor_ref
             .call(
                 |reply| ContinuityMessage::AddMilestone { milestone, reply },
@@ -235,7 +239,7 @@ async fn test_record_multiple_experiences() {
 
     // Record multiple experiences
     for i in 0..5 {
-        let experience = create_test_experience(0.5 + (i as f32) * 0.05);
+        let experience = create_test_experience((i as f32).mul_add(0.05, 0.5));
         let experience_id = experience.id;
 
         let result = actor_ref
@@ -449,7 +453,7 @@ async fn test_timeline_includes_all_in_range() {
     // Record multiple experiences within range
     let mut exp_ids = Vec::new();
     for i in 0..4 {
-        let mut experience = create_test_experience(0.5 + (i as f32) * 0.1);
+        let mut experience = create_test_experience((i as f32).mul_add(0.1, 0.5));
         experience.recorded_at = now - Duration::minutes(30 - i * 10);
         exp_ids.push(experience.id);
 
@@ -541,7 +545,7 @@ async fn test_get_milestones_multiple() {
     // Add multiple milestones
     for i in 0..3 {
         let milestone =
-            create_test_milestone(&format!("Milestone {}", i), &format!("Description {}", i));
+            create_test_milestone(&format!("Milestone {i}"), &format!("Description {i}"));
         milestone_ids.push(milestone.id);
 
         actor_ref
@@ -564,8 +568,8 @@ async fn test_get_milestones_multiple() {
         ContinuityResponse::Milestones { milestones } => {
             assert_eq!(milestones.len(), 3);
             for (i, milestone) in milestones.iter().enumerate() {
-                assert_eq!(milestone.name, format!("Milestone {}", i));
-                assert_eq!(milestone.description, format!("Description {}", i));
+                assert_eq!(milestone.name, format!("Milestone {i}"));
+                assert_eq!(milestone.description, format!("Description {i}"));
                 assert_eq!(milestone.id, milestone_ids[i]);
             }
         }
@@ -580,7 +584,7 @@ async fn test_milestone_with_related_experiences() {
     // Record some experiences
     let mut exp_ids = Vec::new();
     for i in 0..2 {
-        let experience = create_test_experience(0.8 + (i as f32) * 0.05);
+        let experience = create_test_experience((i as f32).mul_add(0.05, 0.8));
         exp_ids.push(experience.id);
 
         actor_ref
@@ -662,9 +666,8 @@ async fn test_restore_checkpoint_success() {
         .expect("Failed to create checkpoint");
 
     let checkpoint_response = unwrap_response(checkpoint_result);
-    let checkpoint_id = match checkpoint_response {
-        ContinuityResponse::CheckpointSaved { checkpoint_id } => checkpoint_id,
-        _ => panic!("Expected CheckpointSaved response"),
+    let ContinuityResponse::CheckpointSaved { checkpoint_id } = checkpoint_response else {
+        panic!("Expected CheckpointSaved response")
     };
 
     // Add some experiences
@@ -736,7 +739,7 @@ async fn test_checkpoint_preserves_state() {
 
     // Record experiences
     for i in 0..2 {
-        let experience = create_test_experience(0.8 + (i as f32) * 0.05);
+        let experience = create_test_experience((i as f32).mul_add(0.05, 0.8));
 
         actor_ref
             .call(
@@ -764,9 +767,8 @@ async fn test_checkpoint_preserves_state() {
         .expect("Failed to create checkpoint");
 
     let checkpoint_response = unwrap_response(checkpoint_result);
-    let checkpoint_id = match checkpoint_response {
-        ContinuityResponse::CheckpointSaved { checkpoint_id } => checkpoint_id,
-        _ => panic!("Expected CheckpointSaved response"),
+    let ContinuityResponse::CheckpointSaved { checkpoint_id } = checkpoint_response else {
+        panic!("Expected CheckpointSaved response")
     };
 
     // Check identity at checkpoint
@@ -861,9 +863,8 @@ async fn test_restore_rolls_back_state() {
         .expect("Failed to create checkpoint");
 
     let checkpoint_response = unwrap_response(checkpoint_result);
-    let checkpoint_id = match checkpoint_response {
-        ContinuityResponse::CheckpointSaved { checkpoint_id } => checkpoint_id,
-        _ => panic!("Expected CheckpointSaved response"),
+    let ContinuityResponse::CheckpointSaved { checkpoint_id } = checkpoint_response else {
+        panic!("Expected CheckpointSaved response")
     };
 
     // Add more experiences after checkpoint

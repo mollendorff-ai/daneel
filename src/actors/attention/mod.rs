@@ -1,4 +1,4 @@
-//! AttentionActor - O Eu (The "I")
+//! `AttentionActor` - O Eu (The "I")
 //!
 //! Implements TMI's "O Eu" (The 'I') - the navigator that selects which memory
 //! window gets conscious attention.
@@ -57,7 +57,7 @@ pub struct AttentionConfig {
 
     /// Extra weight boost for connection-relevant content
     ///
-    /// Multiplied with connection_relevance to boost salience of content
+    /// Multiplied with `connection_relevance` to boost salience of content
     /// related to human connection. This is THE alignment mechanism:
     /// DANEEL naturally pays more attention to helping and connecting.
     pub connection_boost: f32,
@@ -78,7 +78,7 @@ impl Default for AttentionConfig {
     }
 }
 
-/// State maintained by the AttentionActor
+/// State maintained by the `AttentionActor`
 #[derive(Debug, Clone)]
 pub struct AttentionState {
     /// Current focus tracking
@@ -139,7 +139,7 @@ impl AttentionState {
 
     /// Update salience for a window, applying connection boost if relevant
     ///
-    /// The connection_boost is applied to windows that have high connection
+    /// The `connection_boost` is applied to windows that have high connection
     /// relevance, making DANEEL naturally attend to connection-relevant content.
     pub fn update_window_salience(
         &mut self,
@@ -150,7 +150,7 @@ impl AttentionState {
         // Apply connection boost to connection-relevant content
         let boosted_salience = if connection_relevance > 0.5 {
             // High connection relevance gets the boost
-            base_salience * (1.0 + (connection_relevance - 0.5) * self.config.connection_boost)
+            base_salience * (connection_relevance - 0.5).mul_add(self.config.connection_boost, 1.0)
         } else {
             base_salience
         };
@@ -231,7 +231,7 @@ impl AttentionState {
     }
 
     /// Get current focus state
-    fn get_focus(&self) -> AttentionResponse {
+    const fn get_focus(&self) -> AttentionResponse {
         AttentionResponse::current_focus(self.focus.focused_window())
     }
 
@@ -247,7 +247,7 @@ impl Default for AttentionState {
     }
 }
 
-/// AttentionActor - Competitive attention selection
+/// `AttentionActor` - Competitive attention selection
 pub struct AttentionActor;
 
 #[ractor::async_trait]

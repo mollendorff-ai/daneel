@@ -60,6 +60,7 @@ pub struct DriveState {
 
 impl Checkpoint {
     /// Create a new checkpoint
+    #[must_use]
     pub fn new(
         thought_count: u64,
         salience_weights: Vec<f32>,
@@ -87,7 +88,8 @@ pub struct CheckpointManager {
 
 impl CheckpointManager {
     /// Create a new checkpoint manager
-    pub fn new(config: CheckpointConfig) -> Self {
+    #[must_use]
+    pub const fn new(config: CheckpointConfig) -> Self {
         Self {
             config,
             current_sequence: 0,
@@ -95,8 +97,9 @@ impl CheckpointManager {
     }
 
     /// Check if we should checkpoint based on thought count
-    pub fn should_checkpoint(&self, thought_count: u64) -> bool {
-        thought_count > 0 && thought_count % self.config.interval == 0
+    #[must_use]
+    pub const fn should_checkpoint(&self, thought_count: u64) -> bool {
+        thought_count > 0 && thought_count.is_multiple_of(self.config.interval)
     }
 
     /// Create a checkpoint (does not save it)
@@ -148,6 +151,10 @@ impl CheckpointManager {
     /// Load checkpoint from Redis (async)
     ///
     /// Returns None if no checkpoint exists.
+    ///
+    /// # Errors
+    ///
+    /// Returns Redis error if connection or query fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn load_checkpoint(
         &self,
@@ -293,7 +300,7 @@ mod tests {
     #[test]
     fn test_checkpoint_manager_new_starts_at_zero() {
         let config = CheckpointConfig::default();
-        let manager = CheckpointManager::new(config.clone());
+        let manager = CheckpointManager::new(config);
 
         // First checkpoint should have sequence 1
         let mut manager = manager;

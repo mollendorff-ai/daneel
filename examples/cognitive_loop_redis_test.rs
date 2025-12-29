@@ -1,13 +1,13 @@
 //! Test cognitive loop with Redis integration
 //!
-//! Run this with: cargo run --example cognitive_loop_redis_test
+//! Run this with: cargo run --example `cognitive_loop_redis_test`
 //!
 //! Make sure Redis is running on localhost:6379
 
 use daneel::core::cognitive_loop::CognitiveLoop;
 use tracing::info;
-use tracing_subscriber;
 
+#[allow(clippy::significant_drop_tightening)] // Resources held for example duration
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Initialize tracing
@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             loop_instance
         }
         Err(e) => {
-            eprintln!("Failed to connect to Redis: {}", e);
+            eprintln!("Failed to connect to Redis: {e}");
             eprintln!("Falling back to standalone mode (no Redis)");
             CognitiveLoop::new()
         }

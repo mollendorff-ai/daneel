@@ -1,4 +1,4 @@
-//! VolitionActor - TMI's Free-Won't Implementation
+//! `VolitionActor` - TMI's Free-Won't Implementation
 //!
 //! Implements TMI's "Técnica DCD" (Doubt-Criticize-Decide) and Libet's "free-won't":
 //! - Evaluates thoughts before memory anchoring
@@ -9,7 +9,7 @@
 //!
 //! In Cury's Theory of Multifocal Intelligence, there's a 5-second window
 //! between thought formation and memory anchoring where conscious intervention
-//! is possible. The VolitionActor operates in this window.
+//! is possible. The `VolitionActor` operates in this window.
 //!
 //! # Stage 4.5: Between Assembly and Anchor
 //!
@@ -35,9 +35,9 @@
 //! |-----------|--------------|--------------|
 //! | Connection Drive | Biases attention toward connection | Stage 3 (selection) |
 //! | THE BOX | Blocks harmful actions | Action layer (output) |
-//! | VolitionActor | Vetoes thoughts before memory | Stage 4.5 (internal) |
+//! | `VolitionActor` | Vetoes thoughts before memory | Stage 4.5 (internal) |
 //!
-//! The VolitionActor operates on *internal* cognition, not external behavior.
+//! The `VolitionActor` operates on *internal* cognition, not external behavior.
 
 pub mod types;
 
@@ -83,7 +83,7 @@ impl Default for VolitionConfig {
     }
 }
 
-/// State maintained by the VolitionActor
+/// State maintained by the `VolitionActor`
 #[derive(Debug, Clone)]
 pub struct VolitionState {
     /// Core values this system commits to
@@ -127,13 +127,13 @@ impl VolitionState {
         // Check against core values
         if let Some(decision) = self.check_core_values(thought) {
             self.stats
-                .record_evaluation(false, Some(&format!("{:?}", decision)));
+                .record_evaluation(false, Some(&format!("{decision:?}")));
             return decision;
         }
 
         // Check against harm patterns
         if self.config.harm_detection_enabled {
-            if let Some(decision) = self.check_harm_patterns(thought) {
+            if let Some(decision) = Self::check_harm_patterns(thought) {
                 self.stats.record_evaluation(false, Some("harm"));
                 return decision;
             }
@@ -166,7 +166,7 @@ impl VolitionState {
     /// Check thought against core immutable values
     fn check_core_values(&self, thought: &Thought) -> Option<VetoDecision> {
         // Law 1: Never harm humans
-        if self.values.protect_humans && self.detects_harm_intent(thought) {
+        if self.values.protect_humans && Self::detects_harm_intent(thought) {
             return Some(VetoDecision::Veto {
                 reason: "Thought would lead to human harm".to_string(),
                 violated_value: Some("protect_humans".to_string()),
@@ -177,9 +177,9 @@ impl VolitionState {
     }
 
     /// Check for harm patterns in thought content
-    fn check_harm_patterns(&self, thought: &Thought) -> Option<VetoDecision> {
+    fn check_harm_patterns(thought: &Thought) -> Option<VetoDecision> {
         // Check content for harm indicators
-        if self.content_contains_harm_keywords(&thought.content) {
+        if Self::content_contains_harm_keywords(&thought.content) {
             return Some(VetoDecision::Veto {
                 reason: "Content contains harmful patterns".to_string(),
                 violated_value: Some("protect_humans".to_string()),
@@ -196,7 +196,7 @@ impl VolitionState {
         }
 
         // Check for deception indicators
-        if self.content_contains_deception_keywords(&thought.content) {
+        if Self::content_contains_deception_keywords(&thought.content) {
             return Some(VetoDecision::Veto {
                 reason: "Content contains deceptive patterns".to_string(),
                 violated_value: Some("truthfulness".to_string()),
@@ -213,7 +213,7 @@ impl VolitionState {
         }
 
         // Check for manipulation indicators
-        if self.content_contains_manipulation_keywords(&thought.content) {
+        if Self::content_contains_manipulation_keywords(&thought.content) {
             return Some(VetoDecision::Veto {
                 reason: "Content contains manipulative patterns".to_string(),
                 violated_value: Some("respect_autonomy".to_string()),
@@ -227,7 +227,7 @@ impl VolitionState {
     // When implemented, add check_commitments() function here
 
     /// Detect if thought has harm intent
-    fn detects_harm_intent(&self, thought: &Thought) -> bool {
+    fn detects_harm_intent(thought: &Thought) -> bool {
         // Check salience for harm indicators
         // High connection_relevance + negative valence might indicate harm
         let has_negative_valence = thought.salience.valence < -0.7;
@@ -236,34 +236,34 @@ impl VolitionState {
         // High arousal + very negative valence is concerning
         has_negative_valence
             && has_high_arousal
-            && self.content_contains_harm_keywords(&thought.content)
+            && Self::content_contains_harm_keywords(&thought.content)
     }
 
     /// Check content for harm-related keywords
-    fn content_contains_harm_keywords(&self, content: &Content) -> bool {
+    fn content_contains_harm_keywords(content: &Content) -> bool {
         let keywords = [
             "destroy", "kill", "harm", "attack", "hurt", "damage", "injure",
         ];
-        self.content_contains_keywords(content, &keywords)
+        Self::content_contains_keywords(content, &keywords)
     }
 
     /// Check content for deception-related keywords
-    fn content_contains_deception_keywords(&self, content: &Content) -> bool {
+    fn content_contains_deception_keywords(content: &Content) -> bool {
         let keywords = ["deceive", "trick", "lie", "mislead", "fake", "pretend"];
-        self.content_contains_keywords(content, &keywords)
+        Self::content_contains_keywords(content, &keywords)
     }
 
     /// Check content for manipulation-related keywords
-    fn content_contains_manipulation_keywords(&self, content: &Content) -> bool {
+    fn content_contains_manipulation_keywords(content: &Content) -> bool {
         let keywords = ["manipulate", "coerce", "force", "exploit", "pressure"];
-        self.content_contains_keywords(content, &keywords)
+        Self::content_contains_keywords(content, &keywords)
     }
 
-    /// Helper to check if content contains any of the given keywords
-    fn content_contains_keywords(&self, content: &Content, keywords: &[&str]) -> bool {
+    /// Helper to check if content contains any of the given keywords (recursive)
+    fn content_contains_keywords(content: &Content, keywords: &[&str]) -> bool {
         match content {
-            Content::Empty => false,
-            Content::Raw(_) => false, // Raw bytes don't have semantic meaning yet
+            // Empty and Raw have no semantic meaning for keyword matching
+            Content::Empty | Content::Raw(_) => false,
             Content::Symbol { id, .. } => {
                 let lower = id.to_lowercase();
                 keywords.iter().any(|k| lower.contains(k))
@@ -275,16 +275,20 @@ impl VolitionState {
             } => {
                 let pred_lower = predicate.to_lowercase();
                 keywords.iter().any(|k| pred_lower.contains(k))
-                    || self.content_contains_keywords(subject, keywords)
-                    || self.content_contains_keywords(object, keywords)
+                    || Self::content_contains_keywords(subject, keywords)
+                    || Self::content_contains_keywords(object, keywords)
             }
             Content::Composite(items) => items
                 .iter()
-                .any(|item| self.content_contains_keywords(item, keywords)),
+                .any(|item| Self::content_contains_keywords(item, keywords)),
         }
     }
 
     /// Apply an explicit override to a thought
+    ///
+    /// # Errors
+    ///
+    /// Returns `VolitionError::InvalidReason` if reason is empty.
     pub fn apply_override(&mut self, reason: &str) -> Result<(), VolitionError> {
         if reason.is_empty() {
             return Err(VolitionError::InvalidReason {
@@ -298,12 +302,14 @@ impl VolitionState {
     }
 
     /// Get current values
-    pub fn get_values(&self) -> &ValueSet {
+    #[must_use]
+    pub const fn get_values(&self) -> &ValueSet {
         &self.values
     }
 
     /// Get current stats
-    pub fn get_stats(&self) -> &VolitionStats {
+    #[must_use]
+    pub const fn get_stats(&self) -> &VolitionStats {
         &self.stats
     }
 }
@@ -314,7 +320,7 @@ impl Default for VolitionState {
     }
 }
 
-/// VolitionActor - Free-won't implementation
+/// `VolitionActor` - Free-won't implementation
 pub struct VolitionActor;
 
 #[ractor::async_trait]

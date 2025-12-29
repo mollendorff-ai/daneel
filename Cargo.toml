@@ -85,78 +85,8 @@ pedantic = { level = "warn", priority = -1 }
 nursery = { level = "warn", priority = -1 }
 cargo = { level = "warn", priority = -1 }
 
-# === Documentation ===
-missing_errors_doc = "allow"
-missing_panics_doc = "allow"
-doc_markdown = "allow"  # Bold actor names are intentional
-
-# === Naming ===
-module_name_repetitions = "allow"
-similar_names = "allow"  # TMI terms: content/context
-
-# === Code Style ===
-must_use_candidate = "allow"  # Too noisy, add manually when needed
-missing_const_for_fn = "allow"  # Will upgrade when stable
-option_if_let_else = "allow"  # if/else often more readable than map_or_else
-manual_let_else = "allow"  # Explicit match is clearer than let...else
-uninlined_format_args = "allow"  # Older format style is fine
-redundant_else = "allow"  # Explicit else blocks are clearer
-if_not_else = "allow"  # Negative conditions can be clearer
-use_self = "allow"  # Explicit type names can be clearer
-match_same_arms = "allow"  # Explicit arms document intent
-suboptimal_flops = "allow"  # mul_add is micro-optimization
-
-# === Types ===
-derive_partial_eq_without_eq = "allow"  # Eq not always needed
-needless_pass_by_value = "allow"  # Actor messages often move values
-cast_precision_loss = "allow"  # f32 salience scores are intentional
-trivially_copy_pass_by_ref = "allow"  # Micro-optimization not worth API change
-
-# === Collections ===
-useless_vec = "allow"  # Prefer consistency
-needless_collect = "allow"  # Explicit collect often clearer
-
-# === Tests ===
-float_cmp = "allow"  # Exact float comparisons in tests are fine
-
-# === Async ===
-future_not_send = "allow"  # Will address when needed
-unused_async = "allow"  # Async for future compatibility
-
-# === Cognitive Architecture ===
-too_many_lines = "allow"
-cognitive_complexity = "allow"
-
-# === Rust 1.92+ Pedantic (too noisy) ===
-significant_drop_tightening = "allow"  # False positives in async code
-map_unwrap_or = "allow"  # map_or is clearer sometimes
-unnecessary_map_or = "allow"  # map_or can be clearer than is_some_and
-redundant_closure = "allow"  # Explicit closures can be clearer
-redundant_closure_for_method_calls = "allow"  # Method refs vs closures - style
-or_fun_call = "allow"  # .unwrap_or_else not always clearer
-unnecessary_wraps = "allow"  # API consistency matters
-if_then_some_else_none = "allow"  # Explicit if/else clearer
-cast_possible_truncation = "allow"  # We know our target platforms
-cast_sign_loss = "allow"  # Explicit casts are intentional
-cast_lossless = "allow"  # Explicit casts are intentional
-unused_self = "allow"  # API consistency for future methods
-return_self_not_must_use = "allow"  # Builder pattern doesn't need #[must_use]
-manual_is_variant_and = "allow"  # Explicit matches clearer
-impl_trait_in_params = "allow"  # Generic bounds are fine
-iter_without_into_iter = "allow"  # Not always needed
-redundant_clone = "allow"  # Explicit clones document intent
-needless_doctest_main = "allow"  # Main in doctests for completeness
-unnecessary_sort_by = "allow"  # sort_by can be clearer than sort_by_key
-manual_is_multiple_of = "allow"  # Explicit % == 0 is clear
-derivable_impls = "allow"  # Explicit Default impls document intent
-useless_let_if_seq = "allow"  # Explicit let + if clearer for error handling
-io_other_error = "allow"  # std::io::Error::new is clearer than ::other
-single_component_path_imports = "allow"  # Explicit imports are fine
-only_used_in_recursion = "allow"  # Recursive methods intentionally use self
-unchecked_duration_subtraction = "allow"  # Duration subtraction guarded by if
-
-# === Dependencies ===
-multiple_crate_versions = "allow"  # Transitive deps we don't control
+# === Truly Unavoidable ===
+multiple_crate_versions = "allow"  # Transitive deps - we don't control upstream
 
 # === Coverage (ADR-049) ===
 # Allow coverage_nightly cfg for #[coverage(off)] attribute
