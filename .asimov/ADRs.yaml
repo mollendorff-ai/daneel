@@ -9,8 +9,9 @@
 
 meta:
   created: 2025-12-28
+  updated: 2025-12-29
   project: daneel
-  total: 48
+  total: 50
   generator: "Claude Opus 4.5 (8 parallel agents)"
 
 adrs:
@@ -967,23 +968,46 @@ adrs:
       - "ADR-031"
       - "ADR-015"
 
+  - id: "ADR-050"
+    title: "Multi-Architecture Release with MUSL and Green Coding"
+    status: accepted
+    date: "2025-12-29"
+    deciders:
+      - "Louis C. Tavares"
+      - "Claude Opus 4.5"
+    categories:
+      - infrastructure
+      - process
+      - green-coding
+    summary: "Multi-arch builds via GitHub Actions with MUSL for Linux (static binaries), UPX compression, and native builds (no Docker). Green coding: smaller binaries, less bandwidth, less CI compute."
+    supersedes: null
+    superseded_by: null
+    depends_on: []
+    related_to:
+      - "ADR-015"
+    green_coding_impact:
+      binary_size_reduction: "40-60%"
+      bandwidth_savings: "60%"
+      docker_overhead_eliminated: true
+      platforms: 5
+
 # =============================================================================
 # STATISTICS
 # =============================================================================
 #
 # By Status:
-#   accepted:   40
+#   accepted:   41
 #   proposed:    6  (ADR-013, ADR-016, ADR-017, ADR-037, ADR-046, ADR-047)
 #   superseded:  3  (ADR-004 → ADR-006, ADR-031 → ADR-049, ADR-042 → ADR-043)
 #
 # By Category (top 10):
 #   architecture:  24
 #   tmi:           21
+#   infrastructure:15
 #   theoretical:   14
-#   infrastructure:14
 #   safety:        10
+#   process:        9
 #   learning:       8
-#   process:        8
 #   memory:         7
 #   research:       3
 #   identity:       3
