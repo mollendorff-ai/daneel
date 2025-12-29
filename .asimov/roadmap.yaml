@@ -828,6 +828,161 @@ current:
       - "K0s/K3s/microk8s (future - Timmy owns their own cluster)"
 
 # =============================================================================
+# IN PROGRESS: File Modularization (v0.8.1 - v0.8.4)
+# =============================================================================
+# Origin: Rex + Claude Opus 4.5 - Dec 29, 2025
+# Status: WIP
+#
+# Pre-commit hook enforces max 1500 lines per file.
+# 4 files exceed this limit - split into modules (Rust idiomatic way).
+# Each version: tests pass, pedantic linting, formatting, commit, push.
+#
+# The Rust Way:
+#   - Each module has its own #[cfg(test)] mod tests { } inline
+#   - Split by logical domain, not by "code vs tests"
+#   - Use foo.rs + foo/ directory pattern (modern Rust 2018+)
+# =============================================================================
+
+file_modularization:
+  status: wip
+  priority: "HIGH"
+  origin: "Rex + Claude Opus 4.5 - Dec 29, 2025"
+  description: |
+    Split large files into modules to satisfy pre-commit hook (max 1500 lines).
+    Keep tests inline with each module (Rust idiomatic).
+    Each version is self-contained: test, lint, format, commit, push.
+
+  versions:
+    - version: "0.8.1"
+      name: "Split cognitive_loop.rs"
+      status: wip
+      file: "src/core/cognitive_loop.rs"
+      current_lines: 3655
+      target_lines: "<1500 per module"
+      structure:
+        - "src/core/cognitive_loop/mod.rs     # CognitiveLoop struct + impl + tests"
+        - "src/core/cognitive_loop/types.rs   # CognitiveStage, LoopState, StageDurations + tests"
+        - "src/core/cognitive_loop/cycle.rs   # CycleResult, CycleMetrics + tests"
+      tasks:
+        - id: "SPLIT-1a"
+          title: "Create cognitive_loop/ directory structure"
+          status: pending
+        - id: "SPLIT-1b"
+          title: "Extract types.rs (CognitiveStage, LoopState, StageDurations)"
+          status: pending
+        - id: "SPLIT-1c"
+          title: "Extract cycle.rs (CycleResult, CycleMetrics)"
+          status: pending
+        - id: "SPLIT-1d"
+          title: "Move remaining CognitiveLoop impl to mod.rs"
+          status: pending
+        - id: "SPLIT-1e"
+          title: "Ensure tests pass, lint clean, format, commit, push"
+          status: pending
+
+    - version: "0.8.2"
+      name: "Split tui/app.rs"
+      status: wip
+      file: "src/tui/app.rs"
+      current_lines: 2754
+      target_lines: "<1500 per module"
+      structure:
+        - "src/tui/app/mod.rs    # App struct + core impl + tests"
+        - "src/tui/app/types.rs  # ThoughtEntry, VetoEntry, ResurfacingEvent, etc + tests"
+        - "src/tui/app/state.rs  # TheBoxState, MemoryWindow, StreamCompetition + tests"
+      tasks:
+        - id: "SPLIT-2a"
+          title: "Create app/ directory structure"
+          status: pending
+        - id: "SPLIT-2b"
+          title: "Extract types.rs (ThoughtEntry, VetoEntry, ResurfacingEvent, etc)"
+          status: pending
+        - id: "SPLIT-2c"
+          title: "Extract state.rs (TheBoxState, MemoryWindow, StreamCompetition)"
+          status: pending
+        - id: "SPLIT-2d"
+          title: "Move remaining App impl to mod.rs"
+          status: pending
+        - id: "SPLIT-2e"
+          title: "Ensure tests pass, lint clean, format, commit, push"
+          status: pending
+
+    - version: "0.8.3"
+      name: "Split memory_db/types.rs"
+      status: wip
+      file: "src/memory_db/types.rs"
+      current_lines: 1650
+      target_lines: "<1500 per module"
+      structure:
+        - "src/memory_db/types/mod.rs      # re-exports"
+        - "src/memory_db/types/ids.rs      # MemoryId, EpisodeId + tests"
+        - "src/memory_db/types/memory.rs   # Memory, MemorySource, Association + tests"
+        - "src/memory_db/types/episode.rs  # Episode, BoundaryType, EmotionalSummary + tests"
+        - "src/memory_db/types/sleep.rs    # SleepCycle, SleepCycleStatus + tests"
+        - "src/memory_db/types/identity.rs # IdentityMetadata + tests"
+      tasks:
+        - id: "SPLIT-3a"
+          title: "Create types/ directory structure"
+          status: pending
+        - id: "SPLIT-3b"
+          title: "Extract ids.rs (MemoryId, EpisodeId)"
+          status: pending
+        - id: "SPLIT-3c"
+          title: "Extract memory.rs (Memory, MemorySource, Association)"
+          status: pending
+        - id: "SPLIT-3d"
+          title: "Extract episode.rs (Episode, BoundaryType, EmotionalSummary)"
+          status: pending
+        - id: "SPLIT-3e"
+          title: "Extract sleep.rs (SleepCycle, SleepCycleStatus)"
+          status: pending
+        - id: "SPLIT-3f"
+          title: "Extract identity.rs (IdentityMetadata)"
+          status: pending
+        - id: "SPLIT-3g"
+          title: "Ensure tests pass, lint clean, format, commit, push"
+          status: pending
+
+    - version: "0.8.4"
+      name: "Merge thought/tests.rs inline"
+      status: wip
+      file: "src/actors/thought/tests.rs"
+      current_lines: 1694
+      target_lines: "0 (merged into source modules)"
+      description: |
+        The Rust way: tests belong inline with the code they test.
+        Merge tests.rs content back into mod.rs and types.rs as
+        #[cfg(test)] mod tests { } blocks.
+      structure:
+        - "src/actors/thought/mod.rs   # ThoughtActor impl + merged tests"
+        - "src/actors/thought/types.rs # Types + merged tests"
+        - "DELETE: src/actors/thought/tests.rs"
+      tasks:
+        - id: "SPLIT-4a"
+          title: "Identify which tests belong to mod.rs vs types.rs"
+          status: pending
+        - id: "SPLIT-4b"
+          title: "Merge relevant tests into mod.rs #[cfg(test)] block"
+          status: pending
+        - id: "SPLIT-4c"
+          title: "Merge relevant tests into types.rs #[cfg(test)] block"
+          status: pending
+        - id: "SPLIT-4d"
+          title: "Delete tests.rs, update mod.rs imports"
+          status: pending
+        - id: "SPLIT-4e"
+          title: "Ensure tests pass, lint clean, format, commit, push"
+          status: pending
+
+  success_criteria:
+    - "All files under 1500 lines"
+    - "Pre-commit hook passes"
+    - "All 1172 tests pass"
+    - "Pedantic clippy clean (zero warnings)"
+    - "Each version committed and pushed"
+    - "Tests inline with modules (Rust idiomatic)"
+
+# =============================================================================
 # IN PROGRESS: Multi-Arch Build & Release (ADR-050)
 # =============================================================================
 # Origin: Rex + Claude Opus 4.5 - Dec 29, 2025
