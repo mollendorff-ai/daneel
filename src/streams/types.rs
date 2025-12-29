@@ -463,7 +463,9 @@ impl std::error::Error for StreamError {}
 // Tests
 // =============================================================================
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
     use crate::core::types::SalienceScore;
@@ -513,6 +515,22 @@ mod tests {
         .with_source("camera_01");
 
         assert_eq!(entry.source, Some("camera_01".to_string()));
+    }
+
+    #[test]
+    fn stream_entry_with_timestamp() {
+        use chrono::TimeZone;
+
+        let custom_time = Utc.with_ymd_and_hms(2024, 6, 15, 10, 30, 0).unwrap();
+        let entry = StreamEntry::new(
+            "1234567890123-0".to_string(),
+            StreamName::Memory,
+            Content::Empty,
+            SalienceScore::neutral(),
+        )
+        .with_timestamp(custom_time);
+
+        assert_eq!(entry.timestamp, custom_time);
     }
 
     #[test]
@@ -599,6 +617,30 @@ mod tests {
             id: "123-0".to_string(),
         };
         assert_eq!(format!("{}", error), "Entry not found: 123-0");
+
+        let error = StreamError::SerializationFailed {
+            reason: "invalid JSON".to_string(),
+        };
+        assert_eq!(format!("{}", error), "Serialization failed: invalid JSON");
+
+        let error = StreamError::ConsumerGroupError {
+            reason: "group already exists".to_string(),
+        };
+        assert_eq!(
+            format!("{}", error),
+            "Consumer group error: group already exists"
+        );
+    }
+
+    #[test]
+    fn stream_error_is_std_error() {
+        // Test that StreamError implements std::error::Error
+        fn assert_error<E: std::error::Error>(_: &E) {}
+
+        let error = StreamError::ConnectionFailed {
+            reason: "test".to_string(),
+        };
+        assert_error(&error);
     }
 
     #[test]
@@ -617,13 +659,21 @@ mod tests {
     #[test]
     fn stream_name_display() {
         assert_eq!(StreamName::Sensory.to_string(), "thought:sensory");
+        assert_eq!(StreamName::Memory.to_string(), "thought:memory");
+        assert_eq!(StreamName::Emotion.to_string(), "thought:emotion");
+        assert_eq!(StreamName::Reasoning.to_string(), "thought:reasoning");
         assert_eq!(StreamName::Assembled.to_string(), "thought:assembled");
+        assert_eq!(
+            StreamName::Custom("custom:test".to_string()).to_string(),
+            "custom:test"
+        );
     }
 
     #[test]
     fn memory_stream_display() {
         assert_eq!(MemoryStream::Episodic.to_string(), "memory:episodic");
         assert_eq!(MemoryStream::Semantic.to_string(), "memory:semantic");
+        assert_eq!(MemoryStream::Procedural.to_string(), "memory:procedural");
     }
 
     #[test]

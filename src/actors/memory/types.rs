@@ -192,7 +192,9 @@ pub enum MemoryError {
     InvalidSalience { reason: String },
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -250,5 +252,160 @@ mod tests {
         let error = MemoryError::WindowNotFound { window_id };
         let message = format!("{}", error);
         assert!(message.contains("not found"));
+    }
+
+    #[test]
+    fn recall_query_default() {
+        let query = RecallQuery::default();
+        assert!(query.window_id.is_none());
+        assert!(query.min_salience.is_none());
+        assert!(query.limit.is_none());
+    }
+
+    #[test]
+    fn memory_error_window_already_closed_display() {
+        let window_id = WindowId::new();
+        let error = MemoryError::WindowAlreadyClosed { window_id };
+        let message = format!("{}", error);
+        assert!(message.contains("already closed"));
+    }
+
+    #[test]
+    fn memory_error_bounded_memory_exceeded_display() {
+        let error = MemoryError::BoundedMemoryExceeded { max: 10 };
+        let message = format!("{}", error);
+        assert!(message.contains("maximum"));
+        assert!(message.contains("10"));
+    }
+
+    #[test]
+    fn memory_error_bounded_memory_insufficient_display() {
+        let error = MemoryError::BoundedMemoryInsufficient { min: 2 };
+        let message = format!("{}", error);
+        assert!(message.contains("minimum"));
+        assert!(message.contains('2'));
+    }
+
+    #[test]
+    fn memory_error_invalid_salience_display() {
+        let error = MemoryError::InvalidSalience {
+            reason: "out of range".to_string(),
+        };
+        let message = format!("{}", error);
+        assert!(message.contains("Invalid salience"));
+        assert!(message.contains("out of range"));
+    }
+
+    #[test]
+    fn memory_response_window_opened() {
+        let window_id = WindowId::new();
+        let response = MemoryResponse::WindowOpened { window_id };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn memory_response_window_closed() {
+        let window_id = WindowId::new();
+        let response = MemoryResponse::WindowClosed { window_id };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn memory_response_content_stored() {
+        let window_id = WindowId::new();
+        let response = MemoryResponse::ContentStored { window_id };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn memory_response_content_recalled() {
+        let content = Content::raw(vec![1, 2, 3]);
+        let response = MemoryResponse::ContentRecalled {
+            contents: vec![content],
+        };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn memory_response_window_list() {
+        let response = MemoryResponse::WindowList { windows: vec![] };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn memory_response_window_count() {
+        let response = MemoryResponse::WindowCount { count: 5 };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn memory_response_error() {
+        let error = MemoryError::WindowNotFound {
+            window_id: WindowId::new(),
+        };
+        let response = MemoryResponse::Error { error };
+        let cloned = response.clone();
+        assert_eq!(response, cloned);
+    }
+
+    #[test]
+    fn memory_error_clone_and_eq() {
+        let window_id = WindowId::new();
+
+        let e1 = MemoryError::WindowNotFound { window_id };
+        assert_eq!(e1.clone(), e1);
+
+        let e2 = MemoryError::WindowAlreadyClosed { window_id };
+        assert_eq!(e2.clone(), e2);
+
+        let e3 = MemoryError::BoundedMemoryExceeded { max: 10 };
+        assert_eq!(e3.clone(), e3);
+
+        let e4 = MemoryError::BoundedMemoryInsufficient { min: 1 };
+        assert_eq!(e4.clone(), e4);
+
+        let e5 = MemoryError::InvalidSalience {
+            reason: "test".to_string(),
+        };
+        assert_eq!(e5.clone(), e5);
+    }
+
+    #[test]
+    fn store_request_clone_and_eq() {
+        let window_id = WindowId::new();
+        let content = Content::raw(vec![1, 2, 3]);
+        let request = StoreRequest::new(window_id, content);
+        let cloned = request.clone();
+        assert_eq!(request, cloned);
+    }
+
+    #[test]
+    fn recall_query_clone_and_eq() {
+        let query = RecallQuery::all();
+        let cloned = query.clone();
+        assert_eq!(query, cloned);
+    }
+
+    #[test]
+    fn memory_message_debug() {
+        let (tx, _rx) = ractor::concurrency::oneshot();
+        let reply = ractor::RpcReplyPort::from(tx);
+        let msg = MemoryMessage::OpenWindow { label: None, reply };
+        let debug_str = format!("{:?}", msg);
+        assert!(debug_str.contains("OpenWindow"));
+    }
+
+    #[test]
+    fn memory_response_debug() {
+        let response = MemoryResponse::WindowCount { count: 5 };
+        let debug_str = format!("{:?}", response);
+        assert!(debug_str.contains("WindowCount"));
+        assert!(debug_str.contains('5'));
     }
 }

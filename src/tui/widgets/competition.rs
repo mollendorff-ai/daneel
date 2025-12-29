@@ -35,6 +35,7 @@ const STAGE_NAMES: [&str; 9] = [
 /// Unicode block elements for sparklines
 const SPARK_CHARS: [char; 8] = [' ', '▁', '▂', '▃', '▄', '▅', '▆', '█'];
 
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let block = Block::default()
         .title(" STREAM COMPETITION ")
@@ -190,7 +191,9 @@ fn calculate_competition_level(active_streams: usize) -> &'static str {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 

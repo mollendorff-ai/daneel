@@ -1,6 +1,12 @@
 //! Tests for AttentionActor
 //!
 //! Comprehensive test suite for TMI's "O Eu" - the attention mechanism.
+//!
+//! ADR-049: Test modules excluded from coverage - tests verify source code,
+//! not themselves. Dead branches (unreachable panics) would otherwise
+//! create false coverage gaps.
+
+#![cfg_attr(coverage_nightly, coverage(off))]
 
 use super::*;
 use crate::core::types::WindowId;
@@ -699,4 +705,149 @@ fn test_attention_config_default() {
     assert_eq!(config.min_focus_duration, Duration::milliseconds(100));
     assert_eq!(config.forget_threshold, 0.1);
     assert_eq!(config.connection_boost, 1.5);
+}
+
+#[test]
+fn test_state_cycle_same_window_wins_again() {
+    // Test the branch where the winner is the same as current focus
+    let mut state = AttentionState::new();
+    let window_id = WindowId::new();
+
+    // Add window and run first cycle to focus on it
+    state.update_window_salience(window_id, 0.8, 0.3);
+    let _ = state.cycle();
+    assert_eq!(state.focus.focused_window(), Some(window_id));
+
+    // Update focus duration so we can shift
+    state.focus.update_duration(Duration::milliseconds(100));
+
+    // Run another cycle - same window should win again
+    // This tests the inner if condition: self.focus.focused_window() != Some(window_id)
+    let response = state.cycle();
+
+    match response {
+        AttentionResponse::CycleComplete { focused, salience } => {
+            assert_eq!(focused, Some(window_id));
+            assert_eq!(salience, 0.8);
+            // Focus should remain on the same window
+            assert_eq!(state.focus.focused_window(), Some(window_id));
+        }
+        _ => panic!("Unexpected response: {:?}", response),
+    }
+}
+
+#[test]
+fn test_state_cycle_cannot_shift_yet() {
+    // Test the branch where can_shift_focus() returns false
+    // because min_focus_duration has not elapsed
+    let mut state = AttentionState::new();
+    let window1 = WindowId::new();
+    let window2 = WindowId::new();
+
+    // Focus on first window
+    state.update_window_salience(window1, 0.8, 0.3);
+    state.update_window_salience(window2, 0.5, 0.3);
+    let _ = state.cycle();
+    assert_eq!(state.focus.focused_window(), Some(window1));
+
+    // Don't update focus duration - we can't shift yet
+
+    // Make window2 the winner now
+    state.update_window_salience(window1, 0.3, 0.3);
+    state.update_window_salience(window2, 0.9, 0.3);
+
+    // Run cycle - should return window2 as winner but NOT shift focus
+    // because min_focus_duration hasn't elapsed
+    let response = state.cycle();
+
+    match response {
+        AttentionResponse::CycleComplete { focused, salience } => {
+            // Winner is reported as window2
+            assert_eq!(focused, Some(window2));
+            assert_eq!(salience, 0.9);
+            // But focus should still be on window1 (couldn't shift)
+            assert_eq!(state.focus.focused_window(), Some(window1));
+        }
+        _ => panic!("Unexpected response: {:?}", response),
+    }
+}
+
+#[test]
+fn test_state_cycle_updates_focus_duration_when_focused() {
+    // Test that cycle() updates focus_duration when already focused
+    let mut state = AttentionState::new();
+    let window_id = WindowId::new();
+
+    state.update_window_salience(window_id, 0.8, 0.3);
+
+    // First cycle to establish focus
+    let _ = state.cycle();
+    assert_eq!(state.focus.focused_window(), Some(window_id));
+    let initial_duration = state.focus.focus_duration;
+
+    // Second cycle should update duration
+    let _ = state.cycle();
+
+    // Duration should have increased by 1ms (the placeholder value)
+    assert!(state.focus.focus_duration > initial_duration);
+    assert_eq!(
+        state.focus.focus_duration,
+        initial_duration + Duration::milliseconds(1)
+    );
+}
+
+#[test]
+fn test_state_default_impl() {
+    // Test Default trait implementation
+    let state = AttentionState::default();
+
+    assert_eq!(state.cycle_count, 0);
+    assert!(state.attention_map.is_empty());
+    assert!(!state.focus.is_focused());
+    assert_eq!(state.config, AttentionConfig::default());
+}
+
+#[test]
+fn test_attention_config_clone() {
+    let config = AttentionConfig::default();
+    let cloned = config.clone();
+
+    assert_eq!(config, cloned);
+}
+
+#[test]
+fn test_attention_config_debug() {
+    let config = AttentionConfig::default();
+    let debug_str = format!("{:?}", config);
+
+    assert!(debug_str.contains("AttentionConfig"));
+    assert!(debug_str.contains("min_focus_duration"));
+    assert!(debug_str.contains("forget_threshold"));
+    assert!(debug_str.contains("connection_boost"));
+}
+
+#[test]
+fn test_attention_state_clone() {
+    let mut state = AttentionState::new();
+    let window_id = WindowId::new();
+    state.update_window_salience(window_id, 0.5, 0.3);
+    state.focus_on_window(window_id);
+
+    let cloned = state.clone();
+
+    assert_eq!(state.cycle_count, cloned.cycle_count);
+    assert_eq!(state.attention_map, cloned.attention_map);
+    assert_eq!(state.config, cloned.config);
+}
+
+#[test]
+fn test_attention_state_debug() {
+    let state = AttentionState::new();
+    let debug_str = format!("{:?}", state);
+
+    assert!(debug_str.contains("AttentionState"));
+    assert!(debug_str.contains("focus"));
+    assert!(debug_str.contains("attention_map"));
+    assert!(debug_str.contains("cycle_count"));
+    assert!(debug_str.contains("config"));
 }

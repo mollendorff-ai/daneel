@@ -219,7 +219,9 @@ impl StimulusInjector {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -323,5 +325,164 @@ mod tests {
     fn stimulus_injector_respects_custom_variance() {
         let injector = StimulusInjector::with_variance(0.1);
         assert!((injector.variance() - 0.1).abs() < f32::EPSILON);
+    }
+
+    #[test]
+    fn pink_noise_default_creates_8_octaves() {
+        let pink = PinkNoiseGenerator::default();
+        assert_eq!(pink.octaves, 8);
+        assert_eq!(pink.state.len(), 8);
+        assert_eq!(pink.counter, 0);
+    }
+
+    #[test]
+    fn power_law_timer_new_sets_parameters() {
+        let alpha = 1.5;
+        let min_interval = Duration::from_millis(50);
+        let max_interval = Duration::from_secs(5);
+
+        let timer = PowerLawBurstTimer::new(alpha, min_interval, max_interval);
+
+        assert!((timer.alpha - alpha).abs() < f32::EPSILON);
+        assert_eq!(timer.min_interval, min_interval);
+        assert_eq!(timer.max_interval, max_interval);
+    }
+
+    #[test]
+    fn power_law_timer_time_until_burst() {
+        let timer = PowerLawBurstTimer::default();
+        // Initially, next_burst is set to Instant::now(), so time_until_burst should be very small
+        let duration = timer.time_until_burst();
+        // Should be zero or very close to zero (just created)
+        assert!(duration <= Duration::from_millis(10));
+    }
+
+    #[test]
+    fn power_law_timer_check_and_schedule_returns_true_initially() {
+        let mut timer = PowerLawBurstTimer::default();
+        let mut rng = rand::rng();
+
+        // First check should return true (next_burst is set to now)
+        let result = timer.check_and_schedule(&mut rng);
+        assert!(result, "First check should trigger burst");
+    }
+
+    #[test]
+    fn power_law_timer_check_and_schedule_returns_false_after_scheduling() {
+        let mut timer = PowerLawBurstTimer::new(
+            1.2,
+            Duration::from_secs(10), // Long minimum interval
+            Duration::from_secs(60),
+        );
+        let mut rng = rand::rng();
+
+        // First check triggers and schedules next burst far in future
+        timer.check_and_schedule(&mut rng);
+
+        // Second check should return false (next burst is in the future)
+        let result = timer.check_and_schedule(&mut rng);
+        assert!(!result, "Second check should not trigger burst");
+    }
+
+    #[test]
+    fn stimulus_injector_sample_pink_produces_values() {
+        let mut injector = StimulusInjector::default();
+        let mut rng = rand::rng();
+
+        // Generate samples and verify they're reasonable
+        let samples: Vec<f32> = (0..100).map(|_| injector.sample_pink(&mut rng)).collect();
+
+        // Samples should be non-zero (statistically)
+        let non_zero_count = samples.iter().filter(|&&x| x.abs() > 1e-10).count();
+        assert!(non_zero_count > 50, "Most samples should be non-zero");
+    }
+
+    #[test]
+    fn stimulus_injector_check_burst_works() {
+        let mut injector = StimulusInjector::default();
+        let mut rng = rand::rng();
+
+        // First check should return true (burst timer starts at now)
+        let result = injector.check_burst(&mut rng);
+        assert!(result, "First burst check should trigger");
+    }
+
+    #[test]
+    fn stimulus_injector_set_variance_updates_value() {
+        let mut injector = StimulusInjector::default();
+        assert!((injector.variance() - 0.05).abs() < f32::EPSILON);
+
+        injector.set_variance(0.1);
+        assert!((injector.variance() - 0.1).abs() < f32::EPSILON);
+
+        injector.set_variance(0.2);
+        assert!((injector.variance() - 0.2).abs() < f32::EPSILON);
+    }
+
+    #[test]
+    fn stimulus_injector_modulate_salience_handles_burst_path() {
+        // Create injector where burst will trigger immediately
+        let mut injector = StimulusInjector::default();
+        let mut rng = rand::rng();
+
+        // First call triggers burst (timer starts at now)
+        let modulated = injector.modulate_salience(&mut rng, 0.3);
+
+        // With burst: base (0.3) + 0.4 + noise, clamped to [0, 1]
+        // Should be higher than base due to +0.4 boost
+        assert!((0.0..=1.0).contains(&modulated));
+    }
+
+    #[test]
+    fn stimulus_injector_modulate_salience_handles_non_burst_path() {
+        // Create injector with long burst interval to ensure no burst
+        let mut injector = StimulusInjector::default();
+        let mut rng = rand::rng();
+
+        // Trigger first burst to schedule next one far in future
+        injector.modulate_salience(&mut rng, 0.5);
+
+        // Force burst timer to have a long interval by manipulating it
+        // Actually, let's just call again - second call won't be a burst
+        // because the burst timer schedules the next burst in the future
+        let modulated = injector.modulate_salience(&mut rng, 0.5);
+
+        // Non-burst path: base + noise, clamped
+        assert!((0.0..=1.0).contains(&modulated));
+    }
+
+    #[test]
+    fn power_law_timer_sample_interval_respects_max() {
+        let timer = PowerLawBurstTimer::new(
+            1.2,
+            Duration::from_millis(100),
+            Duration::from_millis(500), // Short max for testing
+        );
+        let mut rng = rand::rng();
+
+        for _ in 0..100 {
+            let interval = timer.sample_interval(&mut rng);
+            assert!(
+                interval <= Duration::from_millis(500),
+                "Interval {:?} exceeds max",
+                interval
+            );
+        }
+    }
+
+    #[test]
+    fn power_law_timer_sample_interval_at_least_min() {
+        let timer =
+            PowerLawBurstTimer::new(1.2, Duration::from_millis(100), Duration::from_secs(10));
+        let mut rng = rand::rng();
+
+        for _ in 0..100 {
+            let interval = timer.sample_interval(&mut rng);
+            assert!(
+                interval >= Duration::from_millis(100),
+                "Interval {:?} below min",
+                interval
+            );
+        }
     }
 }

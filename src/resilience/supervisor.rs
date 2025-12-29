@@ -348,7 +348,9 @@ impl Supervisor {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -520,5 +522,238 @@ mod tests {
         assert!(events
             .iter()
             .any(|e| matches!(e, SupervisorEvent::ActorRestarted { .. })));
+    }
+
+    #[test]
+    fn test_config_builder_with_max_restarts() {
+        let config = SupervisorConfig::default().with_max_restarts(5);
+        assert_eq!(config.max_restarts, 5);
+        assert!(config.validate().is_ok());
+    }
+
+    #[test]
+    fn test_config_builder_with_restart_window() {
+        let config = SupervisorConfig::default().with_restart_window(Duration::from_secs(30));
+        assert_eq!(config.restart_window, Duration::from_secs(30));
+        assert!(config.validate().is_ok());
+    }
+
+    #[test]
+    fn test_rest_for_one_strategy() {
+        let config = SupervisorConfig {
+            strategy: SupervisionStrategy::RestForOne,
+            ..Default::default()
+        };
+        let mut supervisor = Supervisor::new(config).unwrap();
+
+        supervisor.register_actor("actor1");
+        supervisor.register_actor("actor2");
+        supervisor.register_actor("actor3");
+
+        // RestForOne currently behaves like OneForOne (simplified implementation)
+        let to_restart = supervisor.get_actors_to_restart("actor2");
+        assert_eq!(to_restart, vec!["actor2"]);
+    }
+
+    #[test]
+    fn test_trigger_full_restart() {
+        let config = SupervisorConfig::default();
+        let mut supervisor = Supervisor::new(config).unwrap();
+
+        supervisor.register_actor("actor1");
+        supervisor.register_actor("actor2");
+
+        // Cause some crashes to build restart history
+        supervisor.report_crash("actor1", "crash").unwrap();
+        supervisor.mark_restarted("actor1").unwrap();
+
+        // Trigger full restart
+        supervisor.trigger_full_restart("system upgrade");
+
+        // All actors should be in Restarting state
+        assert_eq!(
+            supervisor.get_actor_state("actor1"),
+            Some(ActorState::Restarting)
+        );
+        assert_eq!(
+            supervisor.get_actor_state("actor2"),
+            Some(ActorState::Restarting)
+        );
+
+        // Restart history should be cleared
+        assert_eq!(supervisor.get_restart_count("actor1"), Some(0));
+
+        // Event should be emitted
+        let events = supervisor.drain_events();
+        assert!(events
+            .iter()
+            .any(|e| matches!(e, SupervisorEvent::FullRestartTriggered { .. })));
+    }
+
+    #[test]
+    fn test_get_actor_state_unknown_actor() {
+        let config = SupervisorConfig::default();
+        let supervisor = Supervisor::new(config).unwrap();
+
+        assert_eq!(supervisor.get_actor_state("nonexistent"), None);
+    }
+
+    #[test]
+    fn test_get_restart_count_unknown_actor() {
+        let config = SupervisorConfig::default();
+        let supervisor = Supervisor::new(config).unwrap();
+
+        assert_eq!(supervisor.get_restart_count("nonexistent"), None);
+    }
+
+    #[test]
+    fn test_mark_restarted_unknown_actor() {
+        let config = SupervisorConfig::default();
+        let mut supervisor = Supervisor::new(config).unwrap();
+
+        let result = supervisor.mark_restarted("nonexistent");
+        assert!(matches!(result, Err(SupervisorError::ActorNotFound(_))));
+    }
+
+    #[test]
+    fn test_drain_events_empties_queue() {
+        let config = SupervisorConfig::default();
+        let mut supervisor = Supervisor::new(config).unwrap();
+
+        supervisor.register_actor("test_actor");
+
+        // First drain should have events
+        let events = supervisor.drain_events();
+        assert!(!events.is_empty());
+
+        // Second drain should be empty
+        let events2 = supervisor.drain_events();
+        assert!(events2.is_empty());
+    }
+
+    #[test]
+    fn test_supervisor_new_with_invalid_config() {
+        let invalid_config = SupervisorConfig {
+            max_restarts: 0,
+            ..Default::default()
+        };
+        let result = Supervisor::new(invalid_config);
+        assert!(matches!(result, Err(SupervisorError::InvalidConfig(_))));
+
+        let invalid_config2 = SupervisorConfig {
+            restart_window: Duration::ZERO,
+            ..Default::default()
+        };
+        let result2 = Supervisor::new(invalid_config2);
+        assert!(matches!(result2, Err(SupervisorError::InvalidConfig(_))));
+    }
+
+    #[test]
+    fn test_supervision_strategy_default() {
+        let strategy = SupervisionStrategy::default();
+        assert_eq!(strategy, SupervisionStrategy::OneForOne);
+    }
+
+    #[test]
+    fn test_error_display_messages() {
+        let err1 = SupervisorError::InvalidConfig("test error".to_string());
+        assert!(err1.to_string().contains("test error"));
+
+        let err2 =
+            SupervisorError::RestartLimitExceeded("actor1".to_string(), 5, Duration::from_secs(10));
+        assert!(err2.to_string().contains("actor1"));
+        assert!(err2.to_string().contains('5'));
+
+        let err3 = SupervisorError::ActorNotFound("missing".to_string());
+        assert!(err3.to_string().contains("missing"));
+
+        let err4 =
+            SupervisorError::RestartFailed("actor1".to_string(), "connection lost".to_string());
+        assert!(err4.to_string().contains("actor1"));
+        assert!(err4.to_string().contains("connection lost"));
+    }
+
+    #[test]
+    fn test_restart_history_count_within_window() {
+        let mut history = RestartHistory::new();
+        let window = Duration::from_secs(60);
+
+        // Initially empty
+        assert_eq!(history.count_within_window(window), 0);
+
+        // Record some restarts
+        history.record_restart(window);
+        assert_eq!(history.count_within_window(window), 1);
+
+        history.record_restart(window);
+        assert_eq!(history.count_within_window(window), 2);
+
+        // Clear should reset
+        history.clear();
+        assert_eq!(history.count_within_window(window), 0);
+    }
+
+    #[test]
+    fn test_actor_state_enum_values() {
+        // Test all variants are distinct
+        assert_ne!(ActorState::Running, ActorState::Crashed);
+        assert_ne!(ActorState::Crashed, ActorState::Restarting);
+        assert_ne!(ActorState::Restarting, ActorState::Stopped);
+        assert_ne!(ActorState::Running, ActorState::Stopped);
+    }
+
+    #[test]
+    fn test_trigger_full_restart_with_empty_actors() {
+        let config = SupervisorConfig::default();
+        let mut supervisor = Supervisor::new(config).unwrap();
+
+        // Should not panic with no actors
+        supervisor.trigger_full_restart("test reason");
+
+        let events = supervisor.drain_events();
+        assert!(events
+            .iter()
+            .any(|e| matches!(e, SupervisorEvent::FullRestartTriggered { reason, .. } if reason == "test reason")));
+    }
+
+    #[test]
+    fn test_multiple_actors_crash_and_restart_cycle() {
+        let config = SupervisorConfig {
+            max_restarts: 2,
+            ..Default::default()
+        };
+        let mut supervisor = Supervisor::new(config).unwrap();
+
+        supervisor.register_actor("actor1");
+        supervisor.register_actor("actor2");
+
+        // Crash actor1
+        assert!(supervisor.report_crash("actor1", "error1").unwrap());
+        assert_eq!(
+            supervisor.get_actor_state("actor1"),
+            Some(ActorState::Crashed)
+        );
+        assert_eq!(
+            supervisor.get_actor_state("actor2"),
+            Some(ActorState::Running)
+        );
+
+        // Restart actor1
+        supervisor.mark_restarted("actor1").unwrap();
+        assert_eq!(
+            supervisor.get_actor_state("actor1"),
+            Some(ActorState::Running)
+        );
+
+        // Crash actor2
+        assert!(supervisor.report_crash("actor2", "error2").unwrap());
+        assert_eq!(
+            supervisor.get_actor_state("actor2"),
+            Some(ActorState::Crashed)
+        );
+
+        // Both actors have independent restart counts
+        assert_eq!(supervisor.get_restart_count("actor1"), Some(1));
+        assert_eq!(supervisor.get_restart_count("actor2"), Some(1));
     }
 }

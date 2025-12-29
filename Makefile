@@ -29,15 +29,15 @@ else
     BINARY_PATH := target/release/$(BINARY_NAME)
 endif
 
-.PHONY: all check fix fmt clippy test build blog clean install-hooks install paper paper-mermaid paper-plantuml paper-ascii paper-arxiv paper-clean
+.PHONY: all check fix fmt clippy test coverage coverage-html build blog clean install-hooks install paper paper-mermaid paper-plantuml paper-ascii paper-arxiv paper-clean
 
 # Default: build and install
 all: build install
 
 # === Quality Gates ===
 
-check: fmt clippy test
-	@echo "✅ All checks passed"
+check: fmt clippy test coverage
+	@echo "✅ All checks passed (including coverage gate)"
 
 fix:
 	cargo fmt --all
@@ -57,6 +57,23 @@ clippy:
 test:
 	@echo "🧪 Running tests..."
 	cargo test --all-features
+
+# === Coverage (ADR-049) ===
+# 100% coverage on testable code or failure
+# Requires: cargo install cargo-llvm-cov
+
+COVERAGE_THRESHOLD := 100
+
+coverage:
+	@echo "📊 Running coverage analysis (100% required - ADR-049)..."
+	cargo +nightly llvm-cov --fail-under-lines $(COVERAGE_THRESHOLD) --fail-under-functions $(COVERAGE_THRESHOLD)
+	@echo "✅ Coverage meets 100% threshold"
+
+coverage-html:
+	@echo "📊 Generating HTML coverage report..."
+	cargo +nightly llvm-cov --html
+	@echo "✅ Report at target/llvm-cov/html/index.html"
+	open target/llvm-cov/html/index.html
 
 # === Build ===
 
@@ -157,11 +174,13 @@ help:
 	@echo "  make install      Install binary to ~/bin/daneel"
 	@echo ""
 	@echo "Quality Checks:"
-	@echo "  make check        Run all quality checks (fmt, clippy, test)"
+	@echo "  make check        Run all quality checks (fmt, clippy, test, coverage)"
 	@echo "  make fix          Auto-fix formatting and lint issues"
 	@echo "  make fmt          Check code formatting"
 	@echo "  make clippy       Run clippy lints"
 	@echo "  make test         Run tests"
+	@echo "  make coverage     Check coverage >= 95% (fails if below)"
+	@echo "  make coverage-html Generate HTML coverage report"
 	@echo ""
 	@echo "Paper Generation:"
 	@echo "  make paper          Generate PDF with TikZ diagrams"

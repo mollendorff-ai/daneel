@@ -1,6 +1,10 @@
 //! Tests for ContinuityActor
 //!
 //! Comprehensive test suite for DANEEL's identity persistence and memory anchor system.
+//!
+//! ADR-049: Test modules excluded from coverage.
+
+#![cfg_attr(coverage_nightly, coverage(off))]
 
 use super::*;
 use crate::core::types::{Content, SalienceScore, Thought};

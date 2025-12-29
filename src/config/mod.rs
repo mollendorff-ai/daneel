@@ -214,7 +214,9 @@ impl Default for CognitiveConfig {
     }
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 

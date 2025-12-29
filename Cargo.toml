@@ -1,6 +1,6 @@
 [package]
 name = "daneel"
-version = "0.6.0"
+version = "0.8.0"
 edition = "2021"
 license = "AGPL-3.0-or-later"
 description = "DANEEL - Architecture-based AI alignment through TMI cognitive architecture"
@@ -157,3 +157,15 @@ unchecked_duration_subtraction = "allow"  # Duration subtraction guarded by if
 
 # === Dependencies ===
 multiple_crate_versions = "allow"  # Transitive deps we don't control
+
+# === Coverage (ADR-049) ===
+# Allow coverage_nightly cfg for #[coverage(off)] attribute
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(coverage_nightly)'] }
+
+# Coverage requirements (ADR-049: 100% on testable code)
+[package.metadata.coverage]
+threshold = 100
+fail_under_lines = 100
+fail_under_functions = 100
+policy = "All testable code must have 100% coverage. Untestable code marked with #[coverage(off)]."

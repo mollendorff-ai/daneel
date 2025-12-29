@@ -1,4 +1,8 @@
 //! Tests for MemoryActor
+//!
+//! ADR-049: Test modules excluded from coverage.
+
+#![cfg_attr(coverage_nightly, coverage(off))]
 
 use super::*;
 use crate::core::invariants::{MAX_MEMORY_WINDOWS, MIN_MEMORY_WINDOWS};
@@ -574,4 +578,81 @@ fn test_memory_state_bounded_memory() {
         result,
         Err(MemoryError::BoundedMemoryExceeded { .. })
     ));
+}
+
+#[test]
+fn test_memory_state_close_already_closed_window() {
+    let mut state = MemoryState::new();
+
+    // Open a new window (so we can close it without hitting min limit)
+    let window_id = state.open_window(None).expect("Should open window");
+
+    // Close it first time
+    state.close_window(window_id).expect("Should close window");
+
+    // Try to close again - should get WindowAlreadyClosed error
+    let result = state.close_window(window_id);
+    assert!(matches!(
+        result,
+        Err(MemoryError::WindowAlreadyClosed { .. })
+    ));
+}
+
+#[test]
+fn test_memory_state_store_with_salience() {
+    let mut state = MemoryState::new();
+
+    // Get a window
+    let windows: Vec<_> = state.windows.keys().copied().collect();
+    let window_id = windows[0];
+
+    // Store content with salience
+    let content = Content::raw(vec![1, 2, 3]);
+    let salience = SalienceScore::new_without_arousal(0.8, 0.7, 0.9, 0.6, 0.5);
+    let request = StoreRequest::new(window_id, content).with_salience(salience);
+
+    state.store(request).expect("Should store content");
+
+    // Verify salience was updated (importance is first arg to new_without_arousal)
+    let window = state.windows.get(&window_id).unwrap();
+    assert!((window.salience.importance - 0.8).abs() < 0.001);
+}
+
+#[test]
+fn test_memory_state_recall_with_min_salience() {
+    let mut state = MemoryState::new();
+
+    // Open two windows
+    let window1_id = state.open_window(None).expect("Should open window");
+    let window2_id = state.open_window(None).expect("Should open window");
+
+    // Store in window1 with high salience
+    let content1 = Content::raw(vec![1, 1, 1]);
+    let high_salience = SalienceScore::new_without_arousal(0.9, 0.9, 0.9, 0.9, 0.9);
+    state
+        .store(StoreRequest::new(window1_id, content1.clone()).with_salience(high_salience))
+        .unwrap();
+
+    // Store in window2 with low salience
+    let content2 = Content::raw(vec![2, 2, 2]);
+    let low_salience = SalienceScore::new_without_arousal(0.1, 0.1, 0.1, 0.1, 0.1);
+    state
+        .store(StoreRequest::new(window2_id, content2.clone()).with_salience(low_salience))
+        .unwrap();
+
+    // Recall with high min_salience - should only get content1
+    let query = RecallQuery::all().with_min_salience(0.5);
+    let contents = state.recall(query);
+
+    assert!(contents.contains(&content1));
+    assert!(!contents.contains(&content2));
+}
+
+#[test]
+fn test_memory_state_list_windows() {
+    let state = MemoryState::new();
+    let windows = state.list_windows();
+
+    assert_eq!(windows.len(), MIN_MEMORY_WINDOWS);
+    assert!(windows.iter().all(|w| w.is_open));
 }

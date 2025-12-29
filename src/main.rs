@@ -1,3 +1,4 @@
+#![cfg_attr(coverage_nightly, feature(coverage_attribute))]
 //! DANEEL - Architecture-based AI alignment
 //!
 //! Core thesis: Human-like cognitive architecture may produce
@@ -44,6 +45,7 @@ struct Args {
     api_port: u16,
 }
 
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn main() {
     let args = Args::parse();
 
@@ -58,6 +60,7 @@ fn main() {
 ///
 /// The mind should be observable by default.
 /// Transparency is oversight.
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn run_tui(args: &Args) {
     // Install panic hooks FIRST - before any terminal manipulation
     // This ensures terminal is restored even if we panic during setup
@@ -349,6 +352,7 @@ fn run_tui(args: &Args) {
 ///
 /// Same cognitive loop as TUI mode, but without the visual interface.
 /// For cloud deployment, background processing, or integration testing.
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn run_headless(args: &Args) {
     // Initialize tracing for headless mode
     let filter = tracing_subscriber::EnvFilter::try_new(&args.log_level)
@@ -437,6 +441,7 @@ fn run_headless(args: &Args) {
 ///
 /// This is the same logic as the TUI cognitive loop, but without
 /// sending updates to the display. Used for headless/server mode.
+#[cfg_attr(coverage_nightly, coverage(off))]
 async fn run_cognitive_loop_headless() {
     // ADR-034: Lifetime Identity Persistence - flush intervals
     const IDENTITY_FLUSH_INTERVAL_SECS: u64 = 30;

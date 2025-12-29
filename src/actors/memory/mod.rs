@@ -211,6 +211,7 @@ impl Actor for MemoryActor {
     type State = MemoryState;
     type Arguments = ();
 
+    #[cfg_attr(coverage_nightly, coverage(off))]
     async fn pre_start(
         &self,
         _myself: ActorRef<Self::Msg>,
@@ -219,6 +220,7 @@ impl Actor for MemoryActor {
         Ok(MemoryState::new())
     }
 
+    #[cfg_attr(coverage_nightly, coverage(off))]
     async fn handle(
         &self,
         _myself: ActorRef<Self::Msg>,

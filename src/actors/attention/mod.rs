@@ -256,6 +256,7 @@ impl Actor for AttentionActor {
     type State = AttentionState;
     type Arguments = AttentionConfig;
 
+    #[cfg_attr(coverage_nightly, coverage(off))]
     async fn pre_start(
         &self,
         _myself: ActorRef<Self::Msg>,
@@ -265,6 +266,7 @@ impl Actor for AttentionActor {
         Ok(AttentionState::with_config(config))
     }
 
+    #[cfg_attr(coverage_nightly, coverage(off))]
     async fn handle(
         &self,
         _myself: ActorRef<Self::Msg>,

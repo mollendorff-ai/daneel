@@ -394,7 +394,9 @@ impl std::error::Error for ContinuityError {}
 // Tests
 // ============================================================================
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
     use crate::core::types::{Content, SalienceScore};
@@ -548,5 +550,343 @@ mod tests {
             deserialized,
             ContinuityError::CheckpointFailed { .. }
         ));
+    }
+
+    // ========================================================================
+    // Additional tests for uncovered code paths
+    // ========================================================================
+
+    #[test]
+    fn experience_id_default() {
+        let id1 = ExperienceId::default();
+        let id2 = ExperienceId::default();
+        // Default creates new unique IDs
+        assert_ne!(id1, id2);
+    }
+
+    #[test]
+    fn milestone_id_default() {
+        let id1 = MilestoneId::default();
+        let id2 = MilestoneId::default();
+        // Default creates new unique IDs
+        assert_ne!(id1, id2);
+    }
+
+    #[test]
+    fn checkpoint_id_default() {
+        let id1 = CheckpointId::default();
+        let id2 = CheckpointId::default();
+        // Default creates new unique IDs
+        assert_ne!(id1, id2);
+    }
+
+    #[test]
+    fn identity_default() {
+        let identity = Identity::default();
+        assert_eq!(identity.name, "DANEEL");
+        assert_eq!(identity.experience_count, 0);
+        assert_eq!(identity.milestone_count, 0);
+    }
+
+    #[test]
+    fn experience_id_display() {
+        let uuid = Uuid::new_v4();
+        let id = ExperienceId(uuid);
+        let display = format!("{id}");
+        assert_eq!(display, uuid.to_string());
+    }
+
+    #[test]
+    fn milestone_id_display() {
+        let uuid = Uuid::new_v4();
+        let id = MilestoneId(uuid);
+        let display = format!("{id}");
+        assert_eq!(display, uuid.to_string());
+    }
+
+    #[test]
+    fn checkpoint_id_display() {
+        let uuid = Uuid::new_v4();
+        let id = CheckpointId(uuid);
+        let display = format!("{id}");
+        assert_eq!(display, uuid.to_string());
+    }
+
+    #[test]
+    fn error_display_milestone_not_found() {
+        let milestone_id = MilestoneId::new();
+        let error = ContinuityError::MilestoneNotFound { milestone_id };
+        let display = format!("{error}");
+        assert!(display.contains("Milestone not found"));
+        assert!(display.contains(&milestone_id.to_string()));
+    }
+
+    #[test]
+    fn error_display_checkpoint_not_found() {
+        let checkpoint_id = CheckpointId::new();
+        let error = ContinuityError::CheckpointNotFound { checkpoint_id };
+        let display = format!("{error}");
+        assert!(display.contains("Checkpoint not found"));
+        assert!(display.contains(&checkpoint_id.to_string()));
+    }
+
+    #[test]
+    fn error_display_checkpoint_failed() {
+        let error = ContinuityError::CheckpointFailed {
+            reason: "Disk full".to_string(),
+        };
+        let display = format!("{error}");
+        assert!(display.contains("Checkpoint failed"));
+        assert!(display.contains("Disk full"));
+    }
+
+    #[test]
+    fn error_display_restore_failed() {
+        let error = ContinuityError::RestoreFailed {
+            reason: "Corrupted data".to_string(),
+        };
+        let display = format!("{error}");
+        assert!(display.contains("Restore failed"));
+        assert!(display.contains("Corrupted data"));
+    }
+
+    #[test]
+    fn continuity_error_is_error_trait() {
+        let error = ContinuityError::CheckpointFailed {
+            reason: "test".to_string(),
+        };
+        // Verify Error trait is implemented by using it as a dyn Error
+        let error_ref: &dyn std::error::Error = &error;
+        // Error::source should return None (default impl)
+        assert!(error_ref.source().is_none());
+    }
+
+    #[test]
+    fn response_experience_recorded_serialization() {
+        let exp_id = ExperienceId::new();
+        let response = ContinuityResponse::ExperienceRecorded {
+            experience_id: exp_id,
+        };
+
+        let json = serde_json::to_string(&response).expect("Should serialize");
+        let deserialized: ContinuityResponse =
+            serde_json::from_str(&json).expect("Should deserialize");
+
+        match deserialized {
+            ContinuityResponse::ExperienceRecorded { experience_id } => {
+                assert_eq!(experience_id, exp_id);
+            }
+            _ => panic!("Expected ExperienceRecorded variant"),
+        }
+    }
+
+    #[test]
+    fn response_experience_found_serialization() {
+        let thought = Thought::new(Content::Empty, SalienceScore::neutral());
+        let experience = Experience::from_thought(thought);
+        let exp_id = experience.id;
+        let response = ContinuityResponse::ExperienceFound {
+            experience: experience.clone(),
+        };
+
+        let json = serde_json::to_string(&response).expect("Should serialize");
+        let deserialized: ContinuityResponse =
+            serde_json::from_str(&json).expect("Should deserialize");
+
+        match deserialized {
+            ContinuityResponse::ExperienceFound { experience } => {
+                assert_eq!(experience.id, exp_id);
+            }
+            _ => panic!("Expected ExperienceFound variant"),
+        }
+    }
+
+    #[test]
+    fn response_timeline_serialization() {
+        let thought = Thought::new(Content::Empty, SalienceScore::neutral());
+        let experience = Experience::from_thought(thought);
+        let response = ContinuityResponse::Timeline {
+            experiences: vec![experience],
+        };
+
+        let json = serde_json::to_string(&response).expect("Should serialize");
+        let deserialized: ContinuityResponse =
+            serde_json::from_str(&json).expect("Should deserialize");
+
+        match deserialized {
+            ContinuityResponse::Timeline { experiences } => {
+                assert_eq!(experiences.len(), 1);
+            }
+            _ => panic!("Expected Timeline variant"),
+        }
+    }
+
+    #[test]
+    fn response_milestone_added_serialization() {
+        let milestone_id = MilestoneId::new();
+        let response = ContinuityResponse::MilestoneAdded { milestone_id };
+
+        let json = serde_json::to_string(&response).expect("Should serialize");
+        let deserialized: ContinuityResponse =
+            serde_json::from_str(&json).expect("Should deserialize");
+
+        match deserialized {
+            ContinuityResponse::MilestoneAdded { milestone_id: id } => {
+                assert_eq!(id, milestone_id);
+            }
+            _ => panic!("Expected MilestoneAdded variant"),
+        }
+    }
+
+    #[test]
+    fn response_milestones_serialization() {
+        let milestone = Milestone::simple("Test", "A test milestone");
+        let response = ContinuityResponse::Milestones {
+            milestones: vec![milestone],
+        };
+
+        let json = serde_json::to_string(&response).expect("Should serialize");
+        let deserialized: ContinuityResponse =
+            serde_json::from_str(&json).expect("Should deserialize");
+
+        match deserialized {
+            ContinuityResponse::Milestones { milestones } => {
+                assert_eq!(milestones.len(), 1);
+                assert_eq!(milestones[0].name, "Test");
+            }
+            _ => panic!("Expected Milestones variant"),
+        }
+    }
+
+    #[test]
+    fn response_checkpoint_saved_serialization() {
+        let checkpoint_id = CheckpointId::new();
+        let response = ContinuityResponse::CheckpointSaved { checkpoint_id };
+
+        let json = serde_json::to_string(&response).expect("Should serialize");
+        let deserialized: ContinuityResponse =
+            serde_json::from_str(&json).expect("Should deserialize");
+
+        match deserialized {
+            ContinuityResponse::CheckpointSaved { checkpoint_id: id } => {
+                assert_eq!(id, checkpoint_id);
+            }
+            _ => panic!("Expected CheckpointSaved variant"),
+        }
+    }
+
+    #[test]
+    fn response_restored_serialization() {
+        let checkpoint_id = CheckpointId::new();
+        let response = ContinuityResponse::Restored {
+            from_checkpoint: checkpoint_id,
+        };
+
+        let json = serde_json::to_string(&response).expect("Should serialize");
+        let deserialized: ContinuityResponse =
+            serde_json::from_str(&json).expect("Should deserialize");
+
+        match deserialized {
+            ContinuityResponse::Restored { from_checkpoint } => {
+                assert_eq!(from_checkpoint, checkpoint_id);
+            }
+            _ => panic!("Expected Restored variant"),
+        }
+    }
+
+    #[test]
+    fn response_error_serialization() {
+        let error = ContinuityError::RestoreFailed {
+            reason: "Test failure".to_string(),
+        };
+        let response = ContinuityResponse::Error { error };
+
+        let json = serde_json::to_string(&response).expect("Should serialize");
+        let deserialized: ContinuityResponse =
+            serde_json::from_str(&json).expect("Should deserialize");
+
+        match deserialized {
+            ContinuityResponse::Error { error } => {
+                assert!(matches!(error, ContinuityError::RestoreFailed { .. }));
+            }
+            _ => panic!("Expected Error variant"),
+        }
+    }
+
+    #[test]
+    fn error_serialization_all_variants() {
+        // Test ExperienceNotFound serialization
+        let exp_id = ExperienceId::new();
+        let error = ContinuityError::ExperienceNotFound {
+            experience_id: exp_id,
+        };
+        let json = serde_json::to_string(&error).expect("Should serialize");
+        let deserialized: ContinuityError =
+            serde_json::from_str(&json).expect("Should deserialize");
+        assert!(matches!(
+            deserialized,
+            ContinuityError::ExperienceNotFound { .. }
+        ));
+
+        // Test MilestoneNotFound serialization
+        let milestone_id = MilestoneId::new();
+        let error = ContinuityError::MilestoneNotFound { milestone_id };
+        let json = serde_json::to_string(&error).expect("Should serialize");
+        let deserialized: ContinuityError =
+            serde_json::from_str(&json).expect("Should deserialize");
+        assert!(matches!(
+            deserialized,
+            ContinuityError::MilestoneNotFound { .. }
+        ));
+
+        // Test CheckpointNotFound serialization
+        let checkpoint_id = CheckpointId::new();
+        let error = ContinuityError::CheckpointNotFound { checkpoint_id };
+        let json = serde_json::to_string(&error).expect("Should serialize");
+        let deserialized: ContinuityError =
+            serde_json::from_str(&json).expect("Should deserialize");
+        assert!(matches!(
+            deserialized,
+            ContinuityError::CheckpointNotFound { .. }
+        ));
+
+        // Test RestoreFailed serialization
+        let error = ContinuityError::RestoreFailed {
+            reason: "Test".to_string(),
+        };
+        let json = serde_json::to_string(&error).expect("Should serialize");
+        let deserialized: ContinuityError =
+            serde_json::from_str(&json).expect("Should deserialize");
+        assert!(matches!(
+            deserialized,
+            ContinuityError::RestoreFailed { .. }
+        ));
+    }
+
+    #[test]
+    fn experience_with_custom_tags() {
+        let thought = Thought::new(Content::Empty, SalienceScore::neutral());
+        let tags = vec!["reflection".to_string(), "insight".to_string()];
+        let experience = Experience::new(thought, 0.8, tags);
+
+        assert_eq!(experience.significance, 0.8);
+        assert_eq!(experience.tags.len(), 2);
+        assert!(experience.tags.contains(&"reflection".to_string()));
+        assert!(experience.tags.contains(&"insight".to_string()));
+    }
+
+    #[test]
+    fn milestone_description_preserved() {
+        let milestone = Milestone::new(
+            "Test Milestone",
+            "A detailed description of the milestone",
+            Vec::new(),
+        );
+
+        assert_eq!(milestone.name, "Test Milestone");
+        assert_eq!(
+            milestone.description,
+            "A detailed description of the milestone"
+        );
     }
 }

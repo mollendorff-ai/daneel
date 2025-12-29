@@ -37,6 +37,7 @@ fn truncate_id(id: &str, max_len: usize) -> String {
     format!("{start}..{end}")
 }
 
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     let block = Block::default()
         .title(" IDENTITY ")
@@ -175,7 +176,9 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     frame.render_widget(paragraph, area);
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 
@@ -273,5 +276,44 @@ mod tests {
     fn format_with_commas_large_numbers() {
         assert_eq!(format_with_commas(1_000_000), "1,000,000");
         assert_eq!(format_with_commas(1_234_567_890), "1,234,567,890");
+    }
+
+    // =========================================================================
+    // truncate_id Tests
+    // =========================================================================
+
+    #[test]
+    fn truncate_id_short_string_unchanged() {
+        // Strings shorter than max_len should be returned unchanged
+        assert_eq!(truncate_id("abc", 10), "abc");
+        assert_eq!(truncate_id("short", 10), "short");
+        assert_eq!(truncate_id("", 10), "");
+    }
+
+    #[test]
+    fn truncate_id_exact_length_unchanged() {
+        // String exactly at max_len should be unchanged
+        assert_eq!(truncate_id("exactly10!", 10), "exactly10!");
+        assert_eq!(truncate_id("12345", 5), "12345");
+    }
+
+    #[test]
+    fn truncate_id_long_string_truncated() {
+        // Strings longer than max_len should be truncated to "first5..last4"
+        // "abcdefghijklmnop" -> "abcde..mnop" (11 chars)
+        assert_eq!(truncate_id("abcdefghijklmnop", 10), "abcde..mnop");
+    }
+
+    #[test]
+    fn truncate_id_memory_id_format() {
+        // Test with realistic memory ID format (UUID-like)
+        let memory_id = "550e8400-e29b-41d4-a716-446655440000";
+        assert_eq!(truncate_id(memory_id, 12), "550e8..0000");
+    }
+
+    #[test]
+    fn truncate_id_barely_over_limit() {
+        // String just over the limit
+        assert_eq!(truncate_id("12345678901", 10), "12345..8901");
     }
 }

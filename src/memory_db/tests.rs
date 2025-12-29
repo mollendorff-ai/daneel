@@ -3,6 +3,8 @@
 //! Unit tests for memory types and mock integration tests.
 //! Full integration tests require running Qdrant.
 
+#![cfg_attr(coverage_nightly, coverage(off))]
+
 use super::*;
 
 #[test]
@@ -211,6 +213,7 @@ fn episode_serialization() {
 /// Run with: cargo test --features integration -- --ignored
 #[test]
 #[ignore = "Requires running Qdrant instance"]
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn integration_qdrant_connection() {
     // This test requires: docker compose up -d
     tokio_test::block_on(async {
@@ -221,6 +224,7 @@ fn integration_qdrant_connection() {
 
 #[test]
 #[ignore = "Requires running Qdrant instance"]
+#[cfg_attr(coverage_nightly, coverage(off))]
 fn integration_store_and_retrieve() {
     tokio_test::block_on(async {
         let db = MemoryDb::connect("http://localhost:6334").await.unwrap();

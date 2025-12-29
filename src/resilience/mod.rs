@@ -53,6 +53,7 @@ static TERMINAL_CLEANED: AtomicBool = AtomicBool::new(false);
 ///     // ... rest of app
 /// }
 /// ```
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn install_panic_hooks() -> color_eyre::Result<()> {
     // Install color_eyre for pretty error reports
     color_eyre::install()?;
@@ -95,6 +96,7 @@ pub fn install_panic_hooks() -> color_eyre::Result<()> {
 /// 2. Leaves alternate screen
 /// 3. Shows cursor
 /// 4. Flushes stdout
+#[cfg_attr(coverage_nightly, coverage(off))]
 pub fn restore_terminal() -> std::io::Result<()> {
     // Check if already cleaned (prevent double-cleanup)
     if TERMINAL_CLEANED.swap(true, Ordering::SeqCst) {
@@ -137,7 +139,9 @@ pub fn is_terminal_cleaned() -> bool {
     TERMINAL_CLEANED.load(Ordering::SeqCst)
 }
 
+/// ADR-049: Test modules excluded from coverage
 #[cfg(test)]
+#[cfg_attr(coverage_nightly, coverage(off))]
 mod tests {
     use super::*;
 

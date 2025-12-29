@@ -10,7 +10,7 @@
 meta:
   created: 2025-12-28
   project: daneel
-  total: 47
+  total: 48
   generator: "Claude Opus 4.5 (8 parallel agents)"
 
 adrs:
@@ -591,7 +591,7 @@ adrs:
 
   - id: "ADR-031"
     title: "Test Coverage Philosophy"
-    status: accepted
+    status: superseded
     date: "2025-12-19"
     deciders: []
     categories:
@@ -600,7 +600,7 @@ adrs:
       - testing
     summary: "Adopt a layered testing strategy with 90%+ coverage on pure logic while using the livestream as integration testing for I/O and TUI components."
     supersedes: null
-    superseded_by: null
+    superseded_by: "ADR-049"
     depends_on: []
     related_to:
       - "ADR-028"
@@ -947,14 +947,34 @@ adrs:
       - "ADR-011"
       - "ADR-046"
 
+  - id: "ADR-049"
+    title: "100% Test Coverage Policy"
+    status: accepted
+    date: "2025-12-28"
+    deciders:
+      - "Louis C. Tavares"
+      - "Claude Opus 4.5"
+    categories:
+      - testing
+      - process
+      - safety
+    summary: "Mandates 100% test coverage on all testable code. Untestable code (I/O, TUI, main) marked with #[coverage(off)] and documented."
+    supersedes: "ADR-031"
+    superseded_by: null
+    depends_on:
+      - "ADR-005"
+    related_to:
+      - "ADR-031"
+      - "ADR-015"
+
 # =============================================================================
 # STATISTICS
 # =============================================================================
 #
 # By Status:
-#   accepted:   39
+#   accepted:   40
 #   proposed:    6  (ADR-013, ADR-016, ADR-017, ADR-037, ADR-046, ADR-047)
-#   superseded:  2  (ADR-004 → ADR-006, ADR-042 → ADR-043)
+#   superseded:  3  (ADR-004 → ADR-006, ADR-031 → ADR-049, ADR-042 → ADR-043)
 #
 # By Category (top 10):
 #   architecture:  24
