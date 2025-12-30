@@ -22,7 +22,9 @@ pub mod types;
 
 // Re-exports for public API (allow unused - used by external consumers)
 #[allow(unused_imports)]
-pub use cognitive_loop::{CognitiveLoop, CycleMetrics, CycleResult, LoopState};
+pub use cognitive_loop::{
+    CognitiveLoop, CognitiveStage, CycleMetrics, CycleResult, LoopState, StageDurations,
+};
 #[allow(unused_imports)]
 pub use invariants::{check_all_invariants, Invariant, InvariantViolation};
 #[allow(unused_imports)]
