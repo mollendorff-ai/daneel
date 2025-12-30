@@ -245,3 +245,150 @@ posts:
   posted:
     x: 2025-12-28T23:35:44.399207+00:00
     linkedin: 2025-12-28T23:42:34.618478+00:00
+- id: 86-ai-hallucinates-numbers
+  title: AI Hallucinates Numbers
+  url: https://royalbit.github.io/daneel/posts/86-ai-hallucinates-numbers/
+  x: |
+    AI hallucinates numbers.
+
+    Your $50M model just invented a 2.3% drift in volatility because it felt right.
+
+    Finance can't live on vibes.
+
+    Today: Forge goes Source Available.
+
+    github.com/royalbit/forge
+
+    ---
+
+    The problem nobody admits:
+    - Excel burns 100K+ tokens when AI parses it
+    - AI hallucinates formulas, invents relationships
+    - Spreadsheets can't be diffed or version controlled
+
+    Excel is a 40-year-old format. AI parsing it is putting lipstick on a pig.
+
+    ---
+
+    The fix:
+    - YAML financial models (diff them, version them)
+    - 173 Excel-compatible + FP&A functions
+    - Monte Carlo, Bayesian nets, decision trees, real options
+    - 2,133 tests. 100% coverage. Validated vs Gnumeric & R
+    - <2K tokens vs Excel's 100K+ bloat
+
+    ---
+
+    Elastic License 2.0:
+    Read/audit/verify everything ✓
+    Production use → license required
+    No hosted competitors stealing the sauce ✗
+
+    MCP server included. Let Claude USE Forge as a tool. Safe math, finally.
+
+    ---
+
+    This calculator started the DANEEL saga.
+
+    Star if you're done praying your AI doesn't lie about NPV.
+
+    Forge: github.com/royalbit/forge
+    forge-e2e: github.com/royalbit/forge-e2e
+
+    https://royalbit.github.io/daneel/posts/86-ai-hallucinates-numbers/
+
+    #Forge #Finance #AI #Rust #FinancialModeling
+  linkedin: |
+    AI hallucinates numbers. And finance can't afford it anymore.
+
+    Today I'm announcing that Forge is now publicly available on GitHub.
+
+    THE PROBLEM
+
+    In 2025, we're trusting multi-billion-dollar decisions to models that confidently invent interest rates, miscalculate IRR, or quietly drift on Monte Carlo paths.
+
+    Google lost $100B in market cap over one hallucinated fact. In finance, the stakes are higher - and the errors quieter.
+
+    Here's what happens when you paste a spreadsheet into AI:
+    - A 50KB Excel file burns 100K+ tokens
+    - Cell references like B7:G42 become "probably important?"
+    - The AI hallucinates formulas and invents relationships
+    - It sounds confident. It's wrong.
+
+    THE SOLUTION
+
+    Forge: YAML-based financial modeling with Excel formula evaluation.
+
+    Same model in YAML? Under 2K tokens. That's 50x savings.
+
+    But more importantly: deterministic calculation. No hallucinations. No guessing. No prayers.
+
+    CAPABILITIES
+
+    173 functions - everything Excel has, plus what it doesn't:
+
+    - Monte Carlo simulation - 6 distributions, 10K+ iterations
+    - Bayesian networks for causal reasoning
+    - Decision trees with backward induction
+    - Real options analysis - Black-Scholes, binomial
+    - Bootstrap resampling for confidence intervals
+    - Tornado diagrams for sensitivity analysis
+
+    Plus 6 FP&A functions Excel doesn't have: VARIANCE, VARIANCE_PCT, VARIANCE_STATUS, BREAKEVEN_UNITS, BREAKEVEN_REVENUE, SCENARIO.
+
+    VALIDATION
+
+    We don't trust ourselves. We trust independent validators.
+
+    Tier 1: Gnumeric - 714 formulas validated against independent spreadsheet engine
+    Tier 2: R - 2,957 conditions validated - FDA/EMA-grade statistical accuracy
+
+    If Gnumeric and R agree with Forge, the math is right. No "trust me" - just proof.
+
+    MCP INTEGRATION
+
+    Forge includes an MCP server. Claude can use Forge as a tool.
+
+    The AI doesn't guess the numbers. It calls Forge. Forge computes. Deterministically.
+
+    LICENSE
+
+    Elastic License 2.0 - Source Available.
+
+    - Read, audit, verify every calculation: YES
+    - Evaluation and testing: YES
+    - Internal development: YES
+    - Commercial production use: License required
+    - Hosted service: Not permitted
+
+    Finance needs auditable code. Enterprise software needs sustainable revenue. Elastic-2.0 balances both.
+
+    THE NUMBERS
+
+    Tests: 2,133 Forge + 836 forge-e2e
+    Coverage: 100%
+    Warnings: 0
+    External validators: Gnumeric and R
+    Token savings: 50x vs Excel
+
+    THE ORIGIN
+
+    This calculator started the DANEEL saga. Before the cognitive architecture. Before THE BOX. Before Timmy.
+
+    There was a question: What if financial models didn't lie?
+
+    Today, Chapter 1 goes public.
+
+    REPOSITORIES
+
+    Forge: github.com/royalbit/forge
+    forge-e2e: github.com/royalbit/forge-e2e
+
+    I'd love to hear from FP&A teams, quant groups, and fintech builders. Reach out if you'd like to discuss evaluation or commercial licensing.
+
+    "AI hallucinates numbers. Forge doesn't."
+
+    Blog: https://royalbit.github.io/daneel/posts/86-ai-hallucinates-numbers/
+  posted:
+    x: 2025-12-30T03:17:34.703906+00:00
+    linkedin: 2025-12-30T03:18:13.077641+00:00
