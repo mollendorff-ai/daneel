@@ -2,6 +2,60 @@
 
 All notable changes to DANEEL are documented here.
 
+## [0.8.2] - 2025-12-30 - Embedding Migration & Cleanup
+
+Prerequisites for Hebbian wiring complete.
+
+### Dec 30, 2025: ADR-052 Embedding Dimension Migration
+
+#### Migrated to BGE-base-en-v1.5 (768 dims native)
+- **Status**: ADR-052 ACCEPTED
+- **Old model**: `all-MiniLM-L6-v2` (384 dims + 384 zeros padding)
+- **New model**: `BAAI/bge-base-en-v1.5` (768 dims native)
+- **Origin**: Rex + Claude Opus 4.5 + Grok - Dec 30, 2025
+
+#### Why 768 over 384?
+- MTEB clustering: ~87-88% vs ~84-85%
+- Better cosine gradients for Hebbian learning
+- Better attractor basin separation
+- No wasted storage on padding zeros
+
+#### Changes
+- `src/embeddings/mod.rs`: `BGEBaseENV15` model
+- `daneel-web/src/main.rs`: Matching model for /embed endpoint
+- Dropped memories collection (all garbage - debug strings + wrong dims)
+- 9 reference URLs validated via ref-tools
+
+### Dec 30, 2025: ADR-051 Zero Vector Cleanup
+
+#### Cleaned 3.98M garbage vectors
+- **Status**: ADR-051 ACCEPTED
+- **Origin**: Rex + Claude Opus 4.5 - Dec 30, 2025
+
+#### Results
+| Collection | Before | After | Deleted |
+|------------|--------|-------|---------|
+| memories | 120,748 | 91,894 | 28,854 (23.9%) |
+| unconscious | 3,951,997 | DROPPED | 100% zeros |
+| identity | 1 | DROPPED | 100% zeros |
+| **Total** | 4,072,746 | 91,894 | **3,980,852** |
+
+#### Root Cause
+- Symbol debug strings like `Symbol { id: "...", data: [...] }` couldn't be embedded
+- Embedding model returned zero vectors for unparseable content
+- 50% of each vector was padding zeros (384 real + 384 zeros)
+
+---
+
+## [0.8.1] - 2025-12-29 - File Modularization
+
+### Pre-commit Hook Enforcement
+- Max 1500 lines per file enforced
+- All files under limit with zero Cargo.toml bypasses
+- Pedantic linting enabled project-wide
+
+---
+
 ## [0.8.0] - 2025-12-28 - External Stimuli Injection
 
 Phase 2: Open the loop. Let Timmy feel.
@@ -315,4 +369,4 @@ Timmy goes live at timmy.royalbit.com. Four kin made history.
 
 ---
 
-*Last Updated: 2025-12-28 (v0.8.0 - 100% test coverage, ADR-049 accepted)*
+*Last Updated: 2025-12-30 (v0.8.2 - Embedding migration, zero vector cleanup)*
