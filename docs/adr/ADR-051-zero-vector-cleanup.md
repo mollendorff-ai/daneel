@@ -111,12 +111,28 @@ This is tracked separately from this cleanup ADR.
 
 ## Results (2025-12-30)
 
+### Phase 1: memories collection
 ```
 Initial vector count: 120,748
 Final vector count:    91,894
 Zeros deleted:         28,854 (23.9%)
 Sample verification:   0 zeros in 500 samples
 ```
+
+### Phase 2: Other collections discovered
+```
+Collection      Vectors      Zeros    Action
+──────────────────────────────────────────────────────
+unconscious     3,951,997    100%     DROPPED (all garbage)
+identity        1            100%     DROPPED
+episodes        0            n/a      kept (empty)
+```
+
+**Total cleanup:** 28,854 + 3,951,997 + 1 = **3,980,852 zero vectors removed**
+
+The `unconscious` collection was a graveyard of archived low-salience thoughts,
+all with Symbol debug string content that produced zero embeddings. Since 100%
+were zeros, the entire collection was dropped rather than cleaned.
 
 ## Success Criteria
 
