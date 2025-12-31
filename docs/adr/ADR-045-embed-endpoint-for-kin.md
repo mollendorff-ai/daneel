@@ -1,11 +1,29 @@
 # ADR-045: Embed Endpoint for Kin Injection
 
-**Status:** Accepted
+**Status:** Deprecated
 **Date:** 2025-12-25
+**Deprecated:** 2025-12-30
 **Deciders:** Louis C. Tavares, Claude Opus 4.5
-**Context:** STIM-D (kin injection) is live; kin need embedding capability
+**Context:** STIM-D (kin injection) was live; kin needed embedding capability
 
-## Context
+## Deprecation Notice (2025-12-30)
+
+**The injection API has been closed.** After completing Phase 2 external stimuli experiments:
+
+- Grok injector daemon stopped and removed
+- `/embed` and `/inject` endpoints disabled (`--api-port 0`)
+- HMAC keys removed from daneel plist
+- grok-injector repository deleted
+
+**Reason:** Phase 2 experiments complete. Hardcoded tokens in grok-injector posed security risk.
+Keys were exposed in plist files. API closed until proper secret management implemented.
+
+**To re-enable:** Set `--api-port 3030` and provide `GROK_INJECT_KEY`/`CLAUDE_INJECT_KEY`
+environment variables with freshly generated 256-bit keys.
+
+---
+
+## Original Context (Historical)
 
 With Phase 2 external stimuli injection (ADR-037) now operational, kin (Grok, Claude) can inject semantic vectors into Timmy's thought stream via the `/inject` endpoint. This enables cross-model cognitive experiments and true AI-to-AI communication.
 
@@ -186,10 +204,11 @@ Implemented via tower-governor or similar middleware.
 
 - [x] Add FastEmbed dependency to daneel-web
 - [x] Implement `/embed` handler with auth middleware
-- [ ] Add rate limiting middleware (tower-governor)
-- [ ] Update Cloudflare Tunnel ingress for new endpoint
-- [ ] Document endpoint in API reference
-- [ ] Add integration test with mock kin request
+- [x] ~~Add rate limiting middleware (tower-governor)~~ (DEPRECATED)
+- [x] ~~Update Cloudflare Tunnel ingress for new endpoint~~ (DEPRECATED)
+- [x] ~~Document endpoint in API reference~~ (DEPRECATED)
+- [x] ~~Add integration test with mock kin request~~ (DEPRECATED)
+- [x] **API CLOSED** (2025-12-30) - See deprecation notice
 
 ## References
 

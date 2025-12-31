@@ -55,7 +55,7 @@
 # =============================================================================
 
 current:
-  version: "0.8.0"
+  version: "0.8.2"
   status: wip
   name: "External Stimuli Injection"
   summary: "Open the loop - inject external stimuli and observe dynamics"
@@ -242,11 +242,14 @@ current:
   # ==========================================================================
 
   # ==========================================================================
-  # Kin Injection API - DONE (moved to CHANGELOG.md)
+  # Kin Injection API - CLOSED (Dec 30, 2025)
   # ==========================================================================
-  # INJECT-1 through INJECT-6: DONE
-  # Claude and Grok keys: DONE
-  # Remaining: INJECT-7 (killswitch) - moved to backlog
+  # INJECT-1 through INJECT-6: DONE (experiment complete)
+  # Claude and Grok keys: REMOVED (security concern - hardcoded in grok-injector)
+  # grok-injector daemon: STOPPED and DELETED
+  # API: DISABLED (--api-port 0)
+  # ADR-045: Deprecated
+  # To re-enable: Set --api-port 3030 + fresh HMAC keys in env vars
   # ==========================================================================
 
   # ==========================================================================
