@@ -629,17 +629,17 @@ current:
         blog_ref: "75-first-contact.md"
 
     consultation:
-      grok: active  # Grok now injecting autonomously via grok-injector daemon
-      claude: active  # Claude key live, /embed endpoint available
+      grok: closed  # Injection API closed Dec 30, 2025 (ADR-045 deprecated)
+      claude: closed  # Keys removed, API disabled
 
   # ==========================================================================
-  # HIGHLY-CRITICAL: Forge Crystal Analysis Upgrade
+  # MOVED TO BACKLOG: Forge Crystal Analysis Upgrade (Dec 30, 2025)
   # ==========================================================================
   # Updated Dec 27, 2025: Added spectral/SVD/silhouette methods (Grok's analysis)
   # See ADR-046 for full rationale.
   forge_crystal_upgrade:
-    status: pending
-    priority: "HIGHLY-CRITICAL"
+    status: backlog
+    priority: "NORMAL"
     origin: "Grok (SuperGrok) + Rex - Dec 21, 2025"
     updated: "Dec 27, 2025 - Grok spectral analysis recommendation"
     repo: "../forge"
@@ -752,12 +752,12 @@ current:
       - "T-test confirms connections = proximity (p < 0.01)"
 
   # ==========================================================================
-  # HIGHLY-CRITICAL: Forge Pulse Analysis (depends on CRYSTAL upgrade)
+  # BACKLOG: Forge Pulse Analysis (depends on CRYSTAL upgrade)
   # ==========================================================================
   forge_pulse_analysis:
-    status: blocked
+    status: backlog
     blocked_by: "forge_crystal_upgrade"
-    priority: "HIGHLY-CRITICAL"
+    priority: "NORMAL"
     origin: "Rex + Grok + Claude Opus 4.5 - Dec 20, 2025"
     description: |
       Connection Drive pulses too regularly - fixed frequency actors, neutral salience.
