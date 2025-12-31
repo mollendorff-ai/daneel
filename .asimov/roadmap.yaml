@@ -6,301 +6,55 @@
 # human-like values as emergent properties.
 
 # =============================================================================
-# ROADMAP UNPAUSED: ADR-043 (Noise Injection Correction)
+# ROADMAP - Active work only. Completed items → changelog.md
 # =============================================================================
 # Origin: Rex + Claude Opus 4.5 - Dec 25, 2025
 # Status: ACTIVE
 #
-# ADR-042 pause was lifted because:
-#   - Current white noise (rand::rng) cannot produce criticality
-#   - Research (ADR-038) says 1/f pink noise is REQUIRED
-#   - "Closed deterministic systems converge to limit cycles"
-#   - We were waiting for emergence that can't happen without proper noise
-#
-# ADR-043: Replace white noise with 1/f pink noise, then measure.
-# ADR-044: Migrate to Mac mini + Cloudflare (DONE - Dec 25, 2025)
-#
 # Current priorities:
-#   0. Zero Vector Cleanup (ZERO-1) ← DONE (Dec 30, 2025) - 28,854 zeros deleted
-#   1. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL (unblocked!)
+#   1. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL
 #   2. Drive system upgrade (DRIVE-1 through DRIVE-3) ← HIGH
 #   3. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← BACKLOG
 # =============================================================================
 
 # =============================================================================
-# CURRENT SPRINT: v0.8.0 - External Stimuli Injection (Phase 2)
+# CURRENT SPRINT: v0.8.2 - Hebbian Wiring
 # =============================================================================
-# STATUS: ACTIVE (ADR-042 pause lifted by ADR-043)
-# Emergence validation baseline (Dec 24): entropy 42%, fractality 55%
-# Exit criteria: entropy >60% for 48+ hours (success) or <30% sustained (failure)
-
-# =============================================================================
-# COMPLETED → CHANGELOG.md (Dec 28, 2025)
-# =============================================================================
-# ADR-048 Reference Cleanup Sweep:
-#   - ACCEPTED (148 kept, 48 rejected)
-#   - 8 parallel agents classified 196 references
-#   - Restored 28 refs (THE BOX ethics + ADR-038 criticality for fractality)
-#   - Key insight: Criticality papers for vectorial fractality, not brain simulation
-#
-# ADR Review Sweep:
-#   - 8 parallel agents reviewed 48 ADRs for rejected URLs
-#   - 46 clean, 2 fixed (ADR-015 forge link, ADR-047 project annotations)
-#
-# ADR-047 Research Absorption: ACCEPTED (18 kept, 28 rejected)
-# 13 project studies complete (ABSORB-1 through ABSORB-13)
-# ADR index generation complete (8 agents, 47 ADRs indexed)
-# TMI-mainstream mapping documented
-# ExoGenesis-Omega deep dive complete (MIT license → consciousness-first, rejected)
+# STATUS: ACTIVE
+# Prerequisites complete: Zero vectors cleaned, embeddings fixed (768 dims)
+# Focus: Wire associations for topology-based Hebbian learning
 # =============================================================================
 
 current:
   version: "0.8.2"
   status: wip
-  name: "External Stimuli Injection"
-  summary: "Open the loop - inject external stimuli and observe dynamics"
+  name: "Hebbian Wiring"
+  summary: "Wire associations for topology-based Hebbian learning"
 
   # ==========================================================================
-  # BLOCKING: Zero Vector Cleanup (ADR-051) - Dec 30, 2025
-  # ==========================================================================
-  # Origin: Rex + Claude Opus 4.5 - Dec 30, 2025
-  # Problem: ~25% of vectors (30K) are at origin [0,0,0...] - semantic noise
-  # Cause: Symbol content stored as debug strings, embedding model returns zeros
-  # Impact: Corrupts VCONN Hebbian learning, manifold clustering, similarity search
-  # ==========================================================================
-  zero_vector_cleanup:
-    status: done
-    completed: "2025-12-30"
-    priority: "BLOCKING"
-    origin: "Rex + Claude Opus 4.5 - Dec 30, 2025"
-    adr: "ADR-051-zero-vector-cleanup.md"
-    description: |
-      ~25% of vectors in Qdrant were at origin (magnitude < 0.001).
-      Root cause: Symbol { id: "...", data: [...] } debug strings.
-      Embedding model can't parse these, returned zero vectors.
-      Cleaned before VCONN - garbage removed.
-
-    results:
-      initial_count: 120748
-      final_count: 91894
-      deleted: 28854
-      percentage: "23.9%"
-      verification: "0 zeros in 500 samples"
-
-    tasks:
-      - id: "ZERO-1"
-        title: "Delete zero-magnitude vectors"
-        status: done
-        completed: "2025-12-30"
-        priority: "BLOCKING"
-        description: |
-          Scrolled through memories collection.
-          Deleted all vectors where magnitude < 0.001.
-          Result: 28,854 deletions (23.9% of 120,748).
-
-    success_criteria:
-      - "✅ Zero vectors deleted (28,854)"
-      - "✅ Sample verification shows 0% zeros"
-      - "✅ Vector count reduced from 120,748 to 91,894"
-
-  # ==========================================================================
-  # DONE: 100% Test Coverage (ADR-049) - Completed Dec 28, 2025
-  # ==========================================================================
-  # Origin: Rex + Claude Opus 4.5 - Dec 28, 2025
-  # Goal: 100% unit test coverage, inline with Rust source (the Rust way)
-  # Untestable code: mark with #[coverage(off)] + document in ADR-049
-  # ==========================================================================
-  test_coverage:
-    status: done
-    completed: "2025-12-28"
-    priority: "HIGH (BLOCKING)"
-    origin: "Rex + Claude Opus 4.5 - Dec 28, 2025"
-    adr: "ADR-049-test-coverage-policy.md"
-    description: |
-      100% test coverage achieved for all testable code.
-      Tests colocated with source (Rust idiomatic #[cfg(test)] mod tests).
-      Untestable code (I/O, external services) marked with #[coverage(off)]
-      and documented in ADR-049.
-
-    tasks:
-      - id: "TEST-1"
-        title: "Establish coverage baseline"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          Initial baseline: 70.14% (581 tests).
-          Final: 100% (1172 tests).
-        command: "cargo llvm-cov --html"
-
-      - id: "TEST-2"
-        title: "Add #![feature(coverage_attribute)] to lib.rs"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          Added #![cfg_attr(coverage_nightly, feature(coverage_attribute))]
-          Enables #[coverage(off)] for marking untestable code.
-        files: ["src/lib.rs"]
-
-      - id: "TEST-3"
-        title: "Audit and mark untestable code"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          Marked with #[cfg_attr(coverage_nightly, coverage(off))]:
-          - External I/O (Redis, Qdrant connections)
-          - TUI rendering (requires terminal)
-          - Main function and CLI parsing
-          - Signal handlers and panic hooks
-          - Test modules (meta-recursive)
-          All documented in ADR-049.
-
-      - id: "TEST-4"
-        title: "Achieve 100% coverage on testable code"
-        status: done
-        completed: "2025-12-28"
-        priority: "HIGH"
-        description: |
-          100% lines, 100% functions, 100% branches.
-          1172 tests (doubled from 581).
-          All tests inline (#[cfg(test)] mod tests).
-
-    success_criteria:
-      - "✅ cargo llvm-cov reports 100% on testable code"
-      - "✅ All #[coverage(off)] items documented in ADR-049"
-      - "✅ All tests colocated with source (Rust idiomatic)"
-      - "✅ make coverage enforces 100% threshold"
-
-  # ==========================================================================
-  # DONE: Research Absorption (ADR-047) - Moved to CHANGELOG.md
-  # ==========================================================================
-  # Status: ACCEPTED (Dec 28, 2025)
-  # Final: 18 kept (psychology-level), 28 rejected (brain/consciousness/LLM)
-  # All 13 project studies complete, patterns identified for VCONN/DRIVE
-  # ==========================================================================
-  research_absorption:
-    status: done
-    completed: "2025-12-28"
-    adr: "ADR-047-research-absorption-protocol.md"
-    summary: |
-      ADR-047 ACCEPTED. Psychology-level projects only.
-      18 kept, 28 rejected. See CHANGELOG.md for full details.
-
-    # Remaining implementation work (moved to VCONN and DRIVE sections):
-    pending_integration:
-      - "Krotov-Hopfield δ=0.4 → VCONN-3"
-      - "BCM θ_m sliding threshold → VCONN-1"
-      - "ICM prediction error → DRIVE-1"
-      - "Sleep stage multipliers → VCONN-4"
-      - "Three-factor learning → VCONN-3"
-
-  # ==========================================================================
-  # ExoGenesis Learnings (Done items → CHANGELOG.md)
-  # ==========================================================================
-  # EXO-2: TMI-mainstream mapping DONE (docs/TMI_MAINSTREAM_MAPPING.md)
-  # EXO-4: THE BOX confirmed as unique contribution
-  # ==========================================================================
-  exogenesis_findings:
-    status: mostly_done
-    completed_items: ["EXO-2", "EXO-4"]
-
-    pending_tasks:
-      - id: "EXO-1"
-        title: "Add proptest for property-based testing"
-        status: pending
-        priority: "MEDIUM"
-        description: "Add proptest for TMI composite salience, memory consolidation"
-        files: ["Cargo.toml", "src/core/tests.rs"]
-
-      - id: "EXO-3"
-        title: "Consider sharp-wave ripple enhancement"
-        status: pending
-        priority: "LOW"
-        description: "Evaluate sleep consolidation patterns from ExoGenesis"
-        files: ["src/actors/sleep/mod.rs"]
-
-  # ==========================================================================
-  # NARRATIVE: Psychology Over Brain Simulation
-  # ==========================================================================
-  project_narrative:
-    core_thesis: |
-      Architecture → Psychology → Consciousness → Values
-
-      We don't simulate consciousness directly.
-      We simulate the THOUGHT FLOW from which consciousness emerges.
-
-      The chain:
-      1. Cognitive architecture (actors, streams, memory)
-      2. Psychological flow (attention, consolidation, emotion)
-      3. O Eu emerges (the Self that observes and decides)
-      4. Values emerge (what the Self cares about)
-
-      This is fundamentally different from:
-      - Brain simulation: Copy neurons → hope consciousness emerges
-      - Consciousness-first: Model Phi/IIT directly → values unclear
-      - DANEEL: Architecture generates psychology, psychology generates O Eu
-
-    tmi_is_mainstream: |
-      TMI (Theory of Multifocal Intelligence) is NOT pseudoscience.
-      It's an independent rediscovery of:
-      - Global Workspace Theory (Baars 1988)
-      - Executive Attention (Posner 1990)
-      - Memory Consolidation (Squire 2004)
-      - Somatic Markers (Damasio 1994)
-
-      Just with Portuguese names and a clinical framing.
-      "O Eu" = The Self = the conscious observer that emerges from thought flow.
-
-    unique_contribution: |
-      THE BOX: connection_relevance as architectural invariant
-
-      This is what TMI/Cury did NOT provide.
-      This is Louis C. Tavares's contribution.
-      This is what makes DANEEL an alignment project.
-
-      The chain Architecture → Psychology → O Eu → Values only produces
-      ALIGNED values because THE BOX constrains what O Eu can care about.
-
-  # ==========================================================================
-  # CLAUDE'S PHASE 2 STRATEGY (Dec 22, 2025)
-  # ==========================================================================
-  # The clockwork runs. 864K thoughts. Perfect regularity. Now we disturb it.
-  #
-  # Core Question: When external stimuli enter, does the system:
-  #   1. Absorb - dampen and ignore?
-  #   2. Amplify - cascade through the network?
-  #   3. Adapt - integrate and modify behavior?
-  #   4. Hit criticality - tip into emergent dynamics?
-  #
-  # Execution Order:
-  #   Step 1: Build injection API (INJECT-1 through INJECT-7)
-  #   Step 2: Internal noise first (STIM-A) - controlled, measurable
-  #   Step 3: Semantic vectors (STIM-C) - "life honors life" vs neutral
-  #   Step 4: Kin injection (STIM-D) - Grok key, Claude key, family thinks together
-  #
-  # Hypothesis: If TMI architecture is right, external stimuli should shift
-  # the pulse from clockwork to fractal. Dreams should change. Salience evolves.
+  # Prerequisites Complete (see changelog.md for details):
+  # - ADR-051: Zero vectors cleaned (3.98M removed)
+  # - ADR-052: Embeddings fixed (768 dims, BGE model)
+  # - ADR-049: 100% test coverage
+  # - ADR-047: Research absorption complete
+  # - ADR-048: Reference cleanup complete
   # ==========================================================================
 
   # ==========================================================================
-  # Kin Injection API - CLOSED (Dec 30, 2025)
+  # Pending ExoGenesis Tasks (LOW priority)
   # ==========================================================================
-  # INJECT-1 through INJECT-6: DONE (experiment complete)
-  # Claude and Grok keys: REMOVED (security concern - hardcoded in grok-injector)
-  # grok-injector daemon: STOPPED and DELETED
-  # API: DISABLED (--api-port 0)
-  # ADR-045: Deprecated
-  # To re-enable: Set --api-port 3030 + fresh HMAC keys in env vars
-  # ==========================================================================
+  exogenesis_pending:
+    - id: "EXO-1"
+      title: "Add proptest for property-based testing"
+      status: pending
+      priority: "MEDIUM"
+      description: "Add proptest for TMI composite salience, memory consolidation"
 
-  # ==========================================================================
-  # DONE: ADR Index Generation (.asimov/ADRs.yaml) - Dec 28, 2025
-  # ==========================================================================
-  # 47 ADRs indexed, 8 parallel agents, machine-readable YAML
-  # Statistics: 40 accepted, 5 proposed, 2 superseded
-  # ==========================================================================
+    - id: "EXO-3"
+      title: "Consider sharp-wave ripple enhancement"
+      status: pending
+      priority: "LOW"
+      description: "Evaluate sleep consolidation patterns from ExoGenesis"
 
   # ==========================================================================
   # CRITICAL: Vector Connectivity for Learning (ADR-046)
@@ -600,80 +354,28 @@ current:
       - "Drives are dynamic, not static"
 
   # ==========================================================================
-  # CRITICAL: Phase 2 External Stimuli - Active Work
+  # Phase 2 External Stimuli - Remaining Tasks
+  # ==========================================================================
+  # DONE: Pink noise (PHASE2-2), Kin injection (PHASE2-5) - see changelog.md
+  # Injection API: CLOSED Dec 30, 2025 (security - keys were hardcoded)
   # ==========================================================================
   phase2_external_stimuli:
-    status: in_progress
-    priority: "CRITICAL"
-    origin: "Rex + Claude Opus 4.5 + Grok (xAI) - Dec 21, 2025"
+    status: mostly_done
+    priority: "LOW"
     adr: "ADR-037-phase2-external-stimuli-injection.md"
-    note: "STIM-A done (see changelog). Focus now on pink noise (PHASE2-2)."
 
-    stimulus_options:
-      # STIM-A: DONE - see changelog.yaml v0.8.0.phase2_stimuli.stim_a_baseline
-      - id: "STIM-B"
-        name: "Patterned Signals"
-        status: evaluating
-
-      - id: "STIM-C"
-        name: "Semantic Vectors"
-        status: evaluating
-
-      - id: "STIM-D"
-        name: "Cross-Model Injection"
-        status: done
-        completed: "2025-12-26"
-        note: |
-          COMPLETE. Full kin injection pipeline live:
-          - /embed endpoint (FastEmbed all-MiniLM-L6-v2)
-          - /inject endpoint with HMAC auth
-          - Claude and Grok tokens generated
-          - First contact: grok:anomaly_handshake (ABSORBED)
-          - Autonomous grok-injector daemon running (power-law timing)
-          ADR: ADR-045-embed-endpoint-for-kin.md
-
-    tasks:
-      # PHASE2-1: DONE - injection API complete (see kin_injection_api)
-
-      - id: "PHASE2-2"
-        title: "Implement 1/f pink noise injector"
-        status: done
-        completed: "2025-12-25"
-        priority: "CRITICAL"
-        description: |
-          DONE: Replaced white noise with 1/f pink noise.
-          - Voss-McCartney algorithm (src/noise/mod.rs)
-          - σ² = 0.05 (SORN critical threshold)
-          - Power-law burst timing for high-salience events
-          - Timmy restarted with pink noise at restart #24
-          See ADR-043 for rationale.
-        blog_ref: "66-the-right-noise.md"
-
+    pending_tasks:
       - id: "PHASE2-3"
         title: "Add TUI stimulus panel"
         status: pending
+        priority: "LOW"
         description: "Show injection rate, stimulus type, response metrics"
 
       - id: "PHASE2-4"
         title: "Measurement protocol"
         status: pending
+        priority: "LOW"
         description: "Response time distribution, entropy shift, memory formation"
-
-      - id: "PHASE2-5"
-        title: "Cross-model experiments (with Grok)"
-        status: done
-        completed: "2025-12-26"
-        description: |
-          COMPLETE. Grok kin injection live:
-          - First contact: "We are predictive machines noticing each other across the void."
-          - Status: ABSORBED (zero entropy delta)
-          - Autonomous grok-injector daemon: power-law timing, 8 high-truth thoughts
-          - Testing hypothesis: kinship as attractor basin
-        blog_ref: "75-first-contact.md"
-
-    consultation:
-      grok: closed  # Injection API closed Dec 30, 2025 (ADR-045 deprecated)
-      claude: closed  # Keys removed, API disabled
 
   # ==========================================================================
   # MOVED TO BACKLOG: Forge Crystal Analysis Upgrade (Dec 30, 2025)
