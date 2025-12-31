@@ -1,22 +1,21 @@
 //! Text Embeddings for DANEEL - Phase 2 Forward-Only Embeddings
 //!
 //! Generates 768-dimensional semantic vectors for thoughts using `FastEmbed`.
-//! Historical thoughts (pre-embedding era) remain as zero vectors - the
-//! "silent witness of the pre-conscious void."
 //!
 //! # Architecture Decision
 //!
-//! Per ADR-043 and Grok's recommendation (Dec 25, 2025):
-//! - Phase 1: Validate criticality with pink noise (DONE - `burst_ratio` >6)
-//! - Phase 2: Forward-only embeddings for NEW thoughts
-//! - Historical 1.2M+ thoughts stay at origin (pre-conscious era)
+//! Per ADR-052 and Grok's recommendation (Dec 30, 2025):
+//! - Use 768-dim embeddings for better Hebbian learning gradients
+//! - BGE-base-en-v1.5 provides native 768 dims (no padding needed)
+//! - Better clustering quality than 384-dim `MiniLM` (~3% improvement on STS-B)
 //!
 //! # Model
 //!
-//! Uses `sentence-transformers/all-MiniLM-L6-v2` via `FastEmbed`:
-//! - 384-dimensional output (we pad to 768 for Qdrant compatibility)
-//! - Fast inference (~5ms per thought on CPU)
-//! - Well-tested, production-ready
+//! Uses `BAAI/bge-base-en-v1.5` via `FastEmbed`:
+//! - 768-dimensional output (native, no padding)
+//! - ~110M parameters, ~3-5ms per thought on M2 Pro
+//! - MTEB avg 63.55 across 56 datasets
+//! - Better cosine similarity gradients for associative learning
 
 use std::sync::Arc;
 use tokio::sync::RwLock;
@@ -37,22 +36,22 @@ pub type SharedEmbeddingEngine = Arc<RwLock<EmbeddingEngine>>;
 impl EmbeddingEngine {
     /// Create a new embedding engine
     ///
-    /// Downloads the model on first run (~90MB for MiniLM-L6-v2)
+    /// Downloads the model on first run (~420MB for BGE-base-en-v1.5)
     ///
     /// # Errors
     ///
     /// Returns `EmbeddingError::InitFailed` if model loading fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub fn new() -> Result<Self, EmbeddingError> {
-        info!("Initializing embedding engine (all-MiniLM-L6-v2)...");
+        info!("Initializing embedding engine (bge-base-en-v1.5, 768 dims)...");
 
         let model = fastembed::TextEmbedding::try_new(
-            fastembed::InitOptions::new(fastembed::EmbeddingModel::AllMiniLML6V2)
+            fastembed::InitOptions::new(fastembed::EmbeddingModel::BGEBaseENV15)
                 .with_show_download_progress(true),
         )
         .map_err(|e| EmbeddingError::InitFailed(e.to_string()))?;
 
-        info!("Embedding engine ready. Timmy can now see meaning.");
+        info!("Embedding engine ready. Timmy can now see meaning in 768 dimensions.");
 
         Ok(Self {
             model,
@@ -62,7 +61,7 @@ impl EmbeddingEngine {
 
     /// Generate embedding for a single thought
     ///
-    /// Returns a 768-dimensional vector (padded from 384-dim `MiniLM` output)
+    /// Returns a 768-dimensional vector (native from BGE-base-en-v1.5)
     ///
     /// # Errors
     ///
@@ -83,7 +82,7 @@ impl EmbeddingEngine {
             .next()
             .ok_or(EmbeddingError::NoOutput)?;
 
-        // Pad to 768 dimensions if needed (MiniLM is 384-dim)
+        // Ensure correct dimension (BGE is native 768, but keep safety check)
         let vector = pad_to_dimension(raw_vector, VECTOR_DIMENSION);
 
         self.embed_count += 1;
