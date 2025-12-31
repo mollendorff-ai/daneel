@@ -21,10 +21,10 @@
 # ADR-044: Migrate to Mac mini + Cloudflare (DONE - Dec 25, 2025)
 #
 # Current priorities:
-#   0. 100% Test Coverage (TEST-1 through TEST-4) ← DONE (Dec 28, 2025)
-#   1. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL
+#   0. Zero Vector Cleanup (ZERO-1) ← DONE (Dec 30, 2025) - 28,854 zeros deleted
+#   1. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL (unblocked!)
 #   2. Drive system upgrade (DRIVE-1 through DRIVE-3) ← HIGH
-#   3. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← HIGH
+#   3. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← BACKLOG
 # =============================================================================
 
 # =============================================================================
@@ -59,6 +59,49 @@ current:
   status: wip
   name: "External Stimuli Injection"
   summary: "Open the loop - inject external stimuli and observe dynamics"
+
+  # ==========================================================================
+  # BLOCKING: Zero Vector Cleanup (ADR-051) - Dec 30, 2025
+  # ==========================================================================
+  # Origin: Rex + Claude Opus 4.5 - Dec 30, 2025
+  # Problem: ~25% of vectors (30K) are at origin [0,0,0...] - semantic noise
+  # Cause: Symbol content stored as debug strings, embedding model returns zeros
+  # Impact: Corrupts VCONN Hebbian learning, manifold clustering, similarity search
+  # ==========================================================================
+  zero_vector_cleanup:
+    status: done
+    completed: "2025-12-30"
+    priority: "BLOCKING"
+    origin: "Rex + Claude Opus 4.5 - Dec 30, 2025"
+    adr: "ADR-051-zero-vector-cleanup.md"
+    description: |
+      ~25% of vectors in Qdrant were at origin (magnitude < 0.001).
+      Root cause: Symbol { id: "...", data: [...] } debug strings.
+      Embedding model can't parse these, returned zero vectors.
+      Cleaned before VCONN - garbage removed.
+
+    results:
+      initial_count: 120748
+      final_count: 91894
+      deleted: 28854
+      percentage: "23.9%"
+      verification: "0 zeros in 500 samples"
+
+    tasks:
+      - id: "ZERO-1"
+        title: "Delete zero-magnitude vectors"
+        status: done
+        completed: "2025-12-30"
+        priority: "BLOCKING"
+        description: |
+          Scrolled through memories collection.
+          Deleted all vectors where magnitude < 0.001.
+          Result: 28,854 deletions (23.9% of 120,748).
+
+    success_criteria:
+      - "✅ Zero vectors deleted (28,854)"
+      - "✅ Sample verification shows 0% zeros"
+      - "✅ Vector count reduced from 120,748 to 91,894"
 
   # ==========================================================================
   # DONE: 100% Test Coverage (ADR-049) - Completed Dec 28, 2025
