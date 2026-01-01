@@ -581,6 +581,12 @@ async fn run_cognitive_loop_headless() {
                         }
                         if consolidated > 0 {
                             total_dream_cycles += 1;
+
+                            // "Nada se apaga" - record dream in identity (was missing!)
+                            if let Some(ref mut id) = identity {
+                                id.record_dream(consolidated as u32, candidates.len() as u32);
+                            }
+
                             info!(
                                 "Dream cycle #{}: consolidated {} memories",
                                 total_dream_cycles, consolidated
