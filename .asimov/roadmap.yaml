@@ -32,40 +32,31 @@ current:
   summary: "Wire associations for topology-based Hebbian learning"
 
   # ==========================================================================
-  # HOTFIX: ADR-051 Wrong Conclusion - Collections Needed (Jan 1, 2026)
+  # HOTFIX-1: COMPLETED (2026-01-01)
   # ==========================================================================
   hotfix:
     - id: "HOTFIX-1"
       title: "Fix Symbol embedding - unconscious/identity collections filling with zeros"
-      status: pending
+      status: completed
       priority: "HIGH"
       discovered: "2026-01-01"
-      description: |
-        ADR-051 incorrectly concluded "drop collections" when the real problem
-        is Symbol content producing zero vectors. Collections ARE architecturally
-        necessary for the cognitive model.
-
-        Root cause:
-        - Symbol debug strings like {"Symbol":{"id":"...","data":[71,71,...]}}
-        - FastEmbed cannot produce meaningful embeddings for Rust debug output
-        - Result: zero vectors at origin, corrupting manifold
-
-        Current state:
-        - unconscious: 657,578 vectors (actively growing with garbage zeros)
-        - identity: 1 vector
-        - archive_and_forget() writes Symbol content → zero embeddings
-
-        Fix required:
-        1. Fix Symbol content embedding strategy:
-           - Option A: Skip embedding for Symbol content types
-           - Option B: Extract semantic label from Symbol for embedding
-           - Option C: Mark Symbol memories as embeddable: false
-        2. Clean existing zero vectors from unconscious/identity
-        3. Keep collections - they're architecturally necessary
+      completed: "2026-01-01"
+      resolution: |
+        Added Content::is_embeddable() and to_embedding_text() methods.
+        - Symbol/Raw/Empty content now skips consolidation entirely
+        - archive_and_forget() skips non-embeddable content
+        - get_replay_candidates() filter fixed (strength<0.9 in Qdrant query)
+        - thought_to_memory() uses semantic text instead of Debug format
+        - Cleaned garbage from unconscious (825K) and identity (1) collections
+        Commit: 0230a6c
+      remaining:
+        - Restart Timmy to apply fixes
+        - Add unconscious retrieval method (read path missing)
+        - Wire sleep consolidation to SleepActor (currently hardcoded in main.rs)
       files:
+        - "src/core/types.rs"
         - "src/core/cognitive_loop/execution.rs"
         - "src/memory_db/mod.rs"
-        - "src/actors/thought/types.rs"
 
   # ==========================================================================
   # Prerequisites Complete (see changelog.md for details):
