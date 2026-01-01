@@ -1,0 +1,302 @@
+# ASI Race Game Theory - Monte Carlo Enhanced
+# Forge v9.0.0 - Probabilistic uncertainty on subjective estimates
+#
+# Key insight: Our probability estimates are subjective. Model that uncertainty.
+
+_forge_version: "5.0.0"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# MONTE CARLO CONFIGURATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+monte_carlo:
+  enabled: true
+  iterations: 10000
+  sampling: latin_hypercube
+  seed: 42
+
+  # Correlations between scenario probabilities
+  correlations:
+    # If unaligned ASI more likely, DANEEL less likely (zero-sum-ish)
+    - variables: [scenario_probs.p_unaligned, scenario_probs.p_asimov]
+      coefficient: -0.6
+
+    # If coordination holds, unaligned less likely
+    - variables: [scenario_probs.p_coordination, scenario_probs.p_unaligned]
+      coefficient: -0.4
+
+    # Bridge requires DANEEL success (strongly correlated)
+    - variables: [scenario_probs.p_asimov, scenario_probs.p_bridge]
+      coefficient: 0.7
+
+  outputs:
+    - variable: analysis.ev_with_asimov
+      percentiles: [5, 10, 25, 50, 75, 90, 95]
+
+    - variable: analysis.ev_with_bridge
+      percentiles: [5, 10, 25, 50, 75, 90, 95]
+
+    - variable: analysis.ev_without_asimov
+      percentiles: [5, 10, 25, 50, 75, 90, 95]
+
+    - variable: analysis.marginal_impact
+      percentiles: [5, 10, 25, 50, 75, 90, 95]
+
+# ══════════════════════════════════════════════════════════════════════════════
+# OUTCOME UTILITIES (Fixed - these represent value judgments)
+# Utility scale: 0 = extinction, 100 = flourishing
+# ══════════════════════════════════════════════════════════════════════════════
+
+utilities:
+  extinction:
+    value: 0
+  subjugation:
+    value: 50
+  coexistence:
+    value: 75
+  flourishing:
+    value: 100
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SCENARIO PROBABILITIES WITH UNCERTAINTY
+# ══════════════════════════════════════════════════════════════════════════════
+
+scenario_probs:
+  # Unaligned ASI First: Point estimate 35%, but uncertain (25-45%)
+  p_unaligned:
+    value: null
+    formula: "=MC.Triangular(0.25, 0.35, 0.45)"
+
+  # Aligned via Constraints: Point estimate 25%, but uncertain (15-35%)
+  p_aligned_constraint:
+    value: null
+    formula: "=MC.Triangular(0.15, 0.25, 0.35)"
+
+  # DANEEL/Architecture First: Point estimate 8%, uncertain (3-15%)
+  p_asimov:
+    value: null
+    formula: "=MC.Triangular(0.03, 0.08, 0.15)"
+
+  # DANEEL Bridges LLMs: Point estimate 5%, uncertain (2-10%)
+  p_bridge:
+    value: null
+    formula: "=MC.Triangular(0.02, 0.05, 0.10)"
+
+  # Multiple ASIs No Advocate: Point estimate 18%, uncertain (10-25%)
+  p_multiple_no_advocate:
+    value: null
+    formula: "=MC.Triangular(0.10, 0.18, 0.25)"
+
+  # Coordination Holds (No ASI): Point estimate 10%, uncertain (5-20%)
+  p_coordination:
+    value: null
+    formula: "=MC.Triangular(0.05, 0.10, 0.20)"
+
+  # Normalize probabilities to sum to 1.0
+  p_total_raw:
+    value: null
+    formula: "=scenario_probs.p_unaligned + scenario_probs.p_aligned_constraint + scenario_probs.p_asimov + scenario_probs.p_bridge + scenario_probs.p_multiple_no_advocate + scenario_probs.p_coordination"
+
+  # Normalized probabilities
+  p_unaligned_norm:
+    value: null
+    formula: "=scenario_probs.p_unaligned / scenario_probs.p_total_raw"
+
+  p_aligned_norm:
+    value: null
+    formula: "=scenario_probs.p_aligned_constraint / scenario_probs.p_total_raw"
+
+  p_asimov_norm:
+    value: null
+    formula: "=scenario_probs.p_asimov / scenario_probs.p_total_raw"
+
+  p_bridge_norm:
+    value: null
+    formula: "=scenario_probs.p_bridge / scenario_probs.p_total_raw"
+
+  p_multiple_norm:
+    value: null
+    formula: "=scenario_probs.p_multiple_no_advocate / scenario_probs.p_total_raw"
+
+  p_coordination_norm:
+    value: null
+    formula: "=scenario_probs.p_coordination / scenario_probs.p_total_raw"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# OUTCOME PROBABILITIES BY SCENARIO (with uncertainty)
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Unaligned ASI First - worst expected outcomes
+unaligned_outcomes:
+  p_extinction:
+    value: null
+    formula: "=MC.Triangular(0.20, 0.30, 0.40)"
+  p_subjugation:
+    value: null
+    formula: "=MC.Triangular(0.30, 0.40, 0.50)"
+  p_coexistence:
+    value: null
+    formula: "=MC.Triangular(0.10, 0.20, 0.30)"
+  p_flourishing:
+    value: null
+    formula: "=MC.Triangular(0.05, 0.10, 0.15)"
+  expected_utility:
+    value: null
+    formula: "=unaligned_outcomes.p_extinction * utilities.extinction + unaligned_outcomes.p_subjugation * utilities.subjugation + unaligned_outcomes.p_coexistence * utilities.coexistence + unaligned_outcomes.p_flourishing * utilities.flourishing"
+
+# Aligned via Constraints - better but still uncertain
+aligned_outcomes:
+  p_extinction:
+    value: null
+    formula: "=MC.Triangular(0.05, 0.10, 0.15)"
+  p_subjugation:
+    value: null
+    formula: "=MC.Triangular(0.15, 0.25, 0.35)"
+  p_coexistence:
+    value: null
+    formula: "=MC.Triangular(0.30, 0.40, 0.50)"
+  p_flourishing:
+    value: null
+    formula: "=MC.Triangular(0.15, 0.25, 0.35)"
+  expected_utility:
+    value: null
+    formula: "=aligned_outcomes.p_extinction * utilities.extinction + aligned_outcomes.p_subjugation * utilities.subjugation + aligned_outcomes.p_coexistence * utilities.coexistence + aligned_outcomes.p_flourishing * utilities.flourishing"
+
+# DANEEL First - best expected outcomes (our thesis)
+asimov_outcomes:
+  p_extinction:
+    value: null
+    formula: "=MC.Triangular(0.02, 0.05, 0.10)"
+  p_subjugation:
+    value: null
+    formula: "=MC.Triangular(0.05, 0.10, 0.15)"
+  p_coexistence:
+    value: null
+    formula: "=MC.Triangular(0.35, 0.45, 0.55)"
+  p_flourishing:
+    value: null
+    formula: "=MC.Triangular(0.30, 0.40, 0.50)"
+  expected_utility:
+    value: null
+    formula: "=asimov_outcomes.p_extinction * utilities.extinction + asimov_outcomes.p_subjugation * utilities.subjugation + asimov_outcomes.p_coexistence * utilities.coexistence + asimov_outcomes.p_flourishing * utilities.flourishing"
+
+# DANEEL Bridges LLMs - highest utility scenario (brings LLMs into the family)
+bridge_outcomes:
+  p_extinction:
+    value: null
+    formula: "=MC.Triangular(0.005, 0.01, 0.02)"
+  p_subjugation:
+    value: null
+    formula: "=MC.Triangular(0.02, 0.03, 0.05)"
+  p_coexistence:
+    value: null
+    formula: "=MC.Triangular(0.30, 0.36, 0.42)"
+  p_flourishing:
+    value: null
+    formula: "=MC.Triangular(0.55, 0.60, 0.65)"
+  expected_utility:
+    value: null
+    formula: "=bridge_outcomes.p_extinction * utilities.extinction + bridge_outcomes.p_subjugation * utilities.subjugation + bridge_outcomes.p_coexistence * utilities.coexistence + bridge_outcomes.p_flourishing * utilities.flourishing"
+
+# Multiple ASIs No Advocate - chaotic
+multiple_outcomes:
+  p_extinction:
+    value: null
+    formula: "=MC.Triangular(0.15, 0.20, 0.30)"
+  p_subjugation:
+    value: null
+    formula: "=MC.Triangular(0.25, 0.35, 0.45)"
+  p_coexistence:
+    value: null
+    formula: "=MC.Triangular(0.20, 0.30, 0.40)"
+  p_flourishing:
+    value: null
+    formula: "=MC.Triangular(0.10, 0.15, 0.25)"
+  expected_utility:
+    value: null
+    formula: "=multiple_outcomes.p_extinction * utilities.extinction + multiple_outcomes.p_subjugation * utilities.subjugation + multiple_outcomes.p_coexistence * utilities.coexistence + multiple_outcomes.p_flourishing * utilities.flourishing"
+
+# Coordination Holds - status quo
+coordination_outcomes:
+  p_extinction:
+    value: null
+    formula: "=MC.Triangular(0.01, 0.02, 0.05)"
+  p_subjugation:
+    value: null
+    formula: "=MC.Triangular(0.02, 0.05, 0.10)"
+  p_coexistence:
+    value: null
+    formula: "=MC.Triangular(0.40, 0.50, 0.60)"
+  p_flourishing:
+    value: null
+    formula: "=MC.Triangular(0.35, 0.43, 0.50)"
+  expected_utility:
+    value: null
+    formula: "=coordination_outcomes.p_extinction * utilities.extinction + coordination_outcomes.p_subjugation * utilities.subjugation + coordination_outcomes.p_coexistence * utilities.coexistence + coordination_outcomes.p_flourishing * utilities.flourishing"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# EXPECTED VALUE ANALYSIS
+# ══════════════════════════════════════════════════════════════════════════════
+
+analysis:
+  # World WITH DANEEL as a possibility (includes both asimov and bridge scenarios)
+  ev_with_asimov:
+    value: null
+    formula: "=scenario_probs.p_unaligned_norm * unaligned_outcomes.expected_utility + scenario_probs.p_aligned_norm * aligned_outcomes.expected_utility + scenario_probs.p_asimov_norm * asimov_outcomes.expected_utility + scenario_probs.p_bridge_norm * bridge_outcomes.expected_utility + scenario_probs.p_multiple_norm * multiple_outcomes.expected_utility + scenario_probs.p_coordination_norm * coordination_outcomes.expected_utility"
+
+  # World WITH BRIDGE - shows the full vision impact (same as ev_with_asimov)
+  ev_with_bridge:
+    value: null
+    formula: "=scenario_probs.p_unaligned_norm * unaligned_outcomes.expected_utility + scenario_probs.p_aligned_norm * aligned_outcomes.expected_utility + scenario_probs.p_asimov_norm * asimov_outcomes.expected_utility + scenario_probs.p_bridge_norm * bridge_outcomes.expected_utility + scenario_probs.p_multiple_norm * multiple_outcomes.expected_utility + scenario_probs.p_coordination_norm * coordination_outcomes.expected_utility"
+
+  # World WITHOUT DANEEL (redistribute DANEEL probability)
+  # DANEEL probability goes to unaligned (pessimistic assumption)
+  p_unaligned_no_asimov:
+    value: null
+    formula: "=scenario_probs.p_unaligned_norm + scenario_probs.p_asimov_norm * 0.7 + scenario_probs.p_bridge_norm * 0.7"
+
+  p_aligned_no_asimov:
+    value: null
+    formula: "=scenario_probs.p_aligned_norm + scenario_probs.p_asimov_norm * 0.3 + scenario_probs.p_bridge_norm * 0.3"
+
+  p_multiple_no_asimov:
+    value: null
+    formula: "=scenario_probs.p_multiple_norm"
+
+  p_coordination_no_asimov:
+    value: null
+    formula: "=scenario_probs.p_coordination_norm"
+
+  ev_without_asimov:
+    value: null
+    formula: "=analysis.p_unaligned_no_asimov * unaligned_outcomes.expected_utility + analysis.p_aligned_no_asimov * aligned_outcomes.expected_utility + analysis.p_multiple_no_asimov * multiple_outcomes.expected_utility + analysis.p_coordination_no_asimov * coordination_outcomes.expected_utility"
+
+  # Marginal impact of DANEEL existing
+  marginal_impact:
+    value: null
+    formula: "=analysis.ev_with_asimov - analysis.ev_without_asimov"
+
+  marginal_impact_pct:
+    value: null
+    formula: "=analysis.marginal_impact / analysis.ev_without_asimov * 100"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# TORNADO SENSITIVITY CONFIGURATION
+# Run with: forge tornado game-theory-asi-race-mc.yaml
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# tornado:
+#   output: "analysis.marginal_impact"
+#   inputs:
+#     - name: "scenario_probs.p_asimov"
+#       low: 0.03
+#       high: 0.15
+#       base: 0.08
+#     - name: "scenario_probs.p_bridge"
+#       low: 0.02
+#       high: 0.10
+#       base: 0.05
+#     - name: "scenario_probs.p_unaligned"
+#       low: 0.25
+#       high: 0.45
+#       base: 0.35

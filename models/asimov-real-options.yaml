@@ -1,0 +1,129 @@
+# DANEEL Development Real Options Analysis
+# Forge v5.0.0 - Value of flexibility in development timing
+#
+# Models the value of waiting vs. acting on DANEEL development.
+# Key question: Should we defer to gather more information?
+
+_forge_version: "5.0.0"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# REAL OPTIONS CONFIGURATION (Forge v8.5.0 feature)
+# ══════════════════════════════════════════════════════════════════════════════
+
+real_options:
+  name: "DANEEL Development Timing"
+  method: binomial
+  binomial_steps: 100
+
+  underlying:
+    # Value of having DANEEL complete (in utility points × opportunity window)
+    current_value: 3700000  # 3.70 marginal impact × 1M weighted by urgency
+    volatility: 0.40        # High uncertainty in outcomes
+    risk_free_rate: 0.00    # No financial discounting for existential risk
+    time_horizon: 5.0       # Years until ASI likely emerges
+    dividend_yield: 0.20    # Value decay as unaligned AI advances
+
+  options:
+    - type: defer
+      name: "Wait 2 years for more information"
+      max_deferral: 2.0
+      exercise_cost: 1000000  # Opportunity cost of waiting
+
+    - type: abandon
+      name: "Pivot if approach fails"
+      salvage_value: 500000   # Value of research/documentation even if TMI fails
+
+# ══════════════════════════════════════════════════════════════════════════════
+# UNDERLYING VALUE CALCULATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+assumptions:
+  # Marginal impact of DANEEL (from game theory model)
+  marginal_utility: 3.70
+  utility_scale: 100  # 0-100 scale
+
+  # Timeline factors
+  years_until_asi: 5
+  probability_window_closes: 0.15  # Per year probability of too late
+
+  # Development factors
+  current_dev_cost: 50000        # Estimated development cost ($)
+  wait_info_value: 0.10          # How much clearer will things be per year?
+
+  # Value decay model
+  # Each year we wait, P(window still open) decreases
+  p_window_open_year:
+    - 1.00  # Year 0 (now)
+    - 0.85  # Year 1
+    - 0.72  # Year 2
+    - 0.61  # Year 3
+    - 0.52  # Year 4
+    - 0.44  # Year 5
+
+# ══════════════════════════════════════════════════════════════════════════════
+# OPTION VALUE ANALYSIS
+# ══════════════════════════════════════════════════════════════════════════════
+
+analysis:
+  # Value of acting now
+  act_now_value: "=assumptions.marginal_utility * 1.00"
+
+  # Value of waiting 1 year (more info, but higher risk)
+  wait_1_info_gain: "=assumptions.marginal_utility * (1 + assumptions.wait_info_value)"
+  wait_1_window_open: 0.85
+  wait_1_expected: "=wait_1_info_gain * wait_1_window_open"
+
+  # Value of waiting 2 years
+  wait_2_info_gain: "=assumptions.marginal_utility * (1 + 2 * assumptions.wait_info_value)"
+  wait_2_window_open: 0.72
+  wait_2_expected: "=wait_2_info_gain * wait_2_window_open"
+
+  # Comparison
+  act_now_ev: "=act_now_value"
+  wait_1_ev: "=wait_1_expected"
+  wait_2_ev: "=wait_2_expected"
+
+  # Option value of waiting (should be negative given urgency)
+  defer_value: "=MAX(wait_1_ev, wait_2_ev) - act_now_ev"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# DECISION TABLE
+# ══════════════════════════════════════════════════════════════════════════════
+
+decision_matrix:
+  strategy:
+    - "Act now"
+    - "Wait 1 year"
+    - "Wait 2 years"
+  expected_value:
+    - 3.70
+    - 3.37   # 4.07 * 0.85 - info gain offset by window risk
+    - 3.19   # 4.44 * 0.72 - more info but window closing
+  window_probability:
+    - 1.00
+    - 0.85
+    - 0.72
+  recommendation:
+    - "OPTIMAL"
+    - "Suboptimal"
+    - "Risky"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# INTERPRETATION
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# The Real Options analysis reveals a NEGATIVE value of waiting.
+#
+# Traditional options theory says: "uncertainty has value, wait to learn more"
+# But DANEEL faces CLOSING WINDOW dynamics:
+#   - Each year, P(unaligned ASI first) increases
+#   - Information gain is small (~10% per year clearer)
+#   - Window closure risk is high (~15% per year)
+#
+# Net result: Act Now > Wait
+#
+# This is the "Daneel Strategy" - build the ally before the crisis.
+# Waiting to be certain means waiting until it's too late.
+#
+# The option to abandon (pivot if TMI fails) has positive value,
+# but only if we START now and discover failure early.

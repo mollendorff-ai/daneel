@@ -1,0 +1,33 @@
+_forge_version: 5.0.0
+current_thoughts_per_hour:
+  value: 130285.0
+current_vectors:
+  value: 1677205.0
+days_running:
+  value: 3.0
+scaling:
+  nodes:
+  - 1
+  - 10
+  - 100
+  - 1000
+  - 10000
+  thoughts_per_hour: =current_thoughts_per_hour * nodes
+  hours_to_1b: =1000000000 / thoughts_per_hour
+  days_to_1b: =hours_to_1b / 24
+  minutes_to_1b: =hours_to_1b * 60
+summary:
+  single_node_days_to_1b:
+    formula: =1000000000 / current_thoughts_per_hour / 24
+  ten_k_nodes_hours_to_1b:
+    formula: =1000000000 / (current_thoughts_per_hour * 10000)
+  ten_k_nodes_minutes_to_1b:
+    formula: =ten_k_nodes_hours_to_1b * 60
+  vectors_per_day:
+    formula: =current_vectors / days_running
+  vectors_at_1_year:
+    formula: =vectors_per_day * 365
+  wetware_hours:
+    formula: =20 * 365 * 24
+  speedup_at_10k_nodes:
+    formula: =wetware_hours / ten_k_nodes_hours_to_1b

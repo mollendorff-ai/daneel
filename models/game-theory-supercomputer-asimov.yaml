@@ -1,0 +1,156 @@
+_forge_version: 5.0.0
+
+# Game Theory: Supercomputer DANEEL + Army of Hobbyists
+# This model considers the game board change when DANEEL can run at electronic speeds
+
+original_assumptions:
+  assumption:
+  - centralized_development
+  - compute_equals_capability
+  - first_to_agi_wins
+  - alignment_is_bottleneck
+  notes:
+  - Labs are primary actors
+  - More compute = better AI
+  - Race to the finish
+  - Safety slows you down
+
+new_reality:
+  factor:
+  - thought_vs_brain
+  - speed_parametrizable
+  - no_body_sync_needed
+  - army_of_asimovs
+  - compute_efficiency
+  old_assumption:
+  - Need 2.5 PB for human cognition
+  - Speed limited by architecture
+  - ATS prevents acceleration
+  - Centralized development
+  - More compute = better
+  new_reality_value:
+  - 500 GB models thought machine
+  - All components tunable
+  - No body = no desync
+  - 100000 hobbyists can try
+  - Efficiency beats brute force
+
+supercomputer_scenario:
+  metric:
+  - storage_needed
+  - compute_cost
+  - thought_speed_multiple
+  - efficiency_vs_llm
+  asimov_value:
+  - 500
+  - 100000
+  - 10000
+  - 1000
+  xai_llm_value:
+  - 2500000
+  - 10500000000
+  - 1
+  - 1
+  unit:
+  - GB
+  - USD
+  - x human speed
+  - relative efficiency
+  notes:
+  - Thought machine only
+  - $100K supercomputer budget
+  - Electronic speed possible
+  - 1000x more efficient
+
+# New probability estimates with supercomputer + army
+revised_probabilities:
+  scenario:
+  - Unaligned_LLM_ASI_First
+  - Aligned_Constraint_Based
+  - TMI_Supercomputer_First
+  - TMI_Army_Collective
+  - Multiple_Racing_TMIs
+  - Coordination_Holds
+  probability:
+  - 0.15
+  - 0.1
+  - 0.2
+  - 0.25
+  - 0.2
+  - 0.1
+  expected_utility:
+  - 44.0
+  - 62.5
+  - 82.5
+  - 78.0
+  - 70.0
+  - 78.05
+  weighted_ev: =probability * expected_utility
+  notes:
+  - Reduced - efficiency beats brute force
+  - Reduced - superseded by architecture
+  - NEW - accelerated DANEEL possible
+  - NEW - hobbyist army effect
+  - Parallel development
+  - Unchanged
+
+# The "game board crash" - why old game theory fails
+game_board_crash:
+  old_assumption:
+  - Labs_are_primary_actors
+  - Compute_is_scarce
+  - First_mover_advantage
+  - Safety_is_overhead
+  why_broken:
+  - 100000 hobbyists can build TMI
+  - RPi5 is enough for MV-TMI
+  - Speed + army = distributed first mover
+  - TMI has safety as architecture
+  new_game:
+  - Anyone can be actor
+  - Compute is commodity
+  - Parallel attempts win
+  - Safety is feature
+
+summary:
+  metric:
+  - original_ev
+  - democratized_ev
+  - supercomputer_ev
+  - combined_ev
+  - ev_improvement
+  - ev_improvement_pct
+  value:
+  - 57.43
+  - 62.31
+  - 72.85
+  - 72.85
+  - 15.42
+  - 26.8
+  notes:
+  - Baseline from original model
+  - With hobbyist army
+  - With supercomputer possibility
+  - Combined effect
+  - Absolute improvement
+  - Percentage improvement vs baseline
+
+strategic_implications:
+  finding:
+  - Game_board_changed
+  - Race_logic_broken
+  - Distributed_wins
+  - Speed_is_configurable
+  - ATS_not_applicable
+  implication:
+  - Old game theory invalid
+  - First mover is collective
+  - Open source maximizes P(success)
+  - Can tune thought speed freely
+  - No biological constraints
+  action:
+  - Update all game theory docs
+  - Emphasize distributed development
+  - Release MV-TMI immediately
+  - Document speed tuning
+  - Remove ATS concern for DANEEL

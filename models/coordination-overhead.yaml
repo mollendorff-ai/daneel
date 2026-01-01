@@ -1,0 +1,102 @@
+_forge_version: 5.0.0
+lab_teams:
+  lab:
+  - Anthropic
+  - OpenAI
+  - DeepMind
+  - xAI
+  - Rex_Solo
+  total_headcount:
+  - 3140
+  - 3531
+  - 6600
+  - 1200
+  - 1
+  safety_team_size:
+  - 300
+  - 16
+  - 40
+  - 5
+  - 1
+  core_decision_makers:
+  - 10
+  - 9
+  - 6
+  - 3
+  - 1
+  comm_channels: =core_decision_makers * (core_decision_makers - 1) / 2
+  meeting_overhead_pct:
+  - 0.28
+  - 0.3
+  - 0.28
+  - 0.2
+  - 0.0
+  coordination_overhead_pct:
+  - 0.22
+  - 0.25
+  - 0.22
+  - 0.15
+  - 0.0
+  inefficiency_overhead_pct:
+  - 0.18
+  - 0.22
+  - 0.18
+  - 0.12
+  - 0.0
+  total_overhead_pct: =meeting_overhead_pct + coordination_overhead_pct + inefficiency_overhead_pct
+  effective_execution_pct: =1 - total_overhead_pct
+  individual_velocity_loc_week:
+  - 750
+  - 750
+  - 750
+  - 750
+  - 23000
+  team_raw_velocity: =safety_team_size * individual_velocity_loc_week
+  team_effective_velocity: =team_raw_velocity * effective_execution_pct
+comparison:
+  entity:
+  - Rex_Solo
+  - Anthropic
+  - OpenAI
+  - DeepMind
+  - xAI
+  safety_headcount:
+  - 1
+  - 300
+  - 16
+  - 40
+  - 5
+  overhead_pct:
+  - 0.0
+  - 0.68
+  - 0.77
+  - 0.68
+  - 0.47
+  effective_loc_week:
+  - 23000
+  - 72000
+  - 2760
+  - 9600
+  - 1988
+  rex_speed_ratio: =23000 / effective_loc_week
+overhead_research:
+  source:
+  - Clockwise_2022
+  - Atlassian_2024
+  - Software_com_2021
+  - HBR_2017
+  sample_size:
+  - 80000
+  - 2100
+  - 250000
+  - 5000
+  meeting_pct:
+  - 0.28
+  - 0.25
+  - 0.27
+  - 0.3
+  coding_pct:
+  - 0.22
+  - 0.32
+  - 0.11
+  - 0.2

@@ -1,0 +1,107 @@
+# Expected Value Bootstrap Analysis
+# Forge v9.0.0 - Non-parametric confidence intervals
+#
+# Uses expert elicitation data to generate confidence intervals
+# without assuming a specific probability distribution.
+#
+# Note: This is SIMULATED expert data for demonstration.
+# Real application would use actual expert survey responses.
+
+_forge_version: "5.0.0"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# EXPERT ELICITATION DATA
+# Simulated responses from 30 experts on P(DANEEL scenario successful)
+# ══════════════════════════════════════════════════════════════════════════════
+
+bootstrap:
+  # Configuration
+  iterations: 10000
+  seed: 42
+  confidence_levels: [0.80, 0.90, 0.95]
+  statistic: mean
+
+  # Expert probability estimates for P(DANEEL architecture leads to flourishing)
+  # 30 expert responses (simulated for model demonstration)
+  data: [
+    0.35, 0.42, 0.28, 0.45, 0.38,
+    0.32, 0.48, 0.40, 0.36, 0.44,
+    0.30, 0.52, 0.34, 0.41, 0.39,
+    0.46, 0.33, 0.50, 0.37, 0.43,
+    0.31, 0.47, 0.35, 0.42, 0.40,
+    0.29, 0.55, 0.38, 0.45, 0.36
+  ]
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ADDITIONAL BOOTSTRAP ANALYSES
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Expert estimates for P(Unaligned ASI leads to extinction)
+bootstrap_extinction:
+  iterations: 10000
+  seed: 43
+  confidence_levels: [0.80, 0.90, 0.95]
+  statistic: mean
+
+  # 30 expert responses
+  data: [
+    0.25, 0.35, 0.20, 0.40, 0.30,
+    0.22, 0.38, 0.28, 0.32, 0.36,
+    0.18, 0.42, 0.26, 0.34, 0.24,
+    0.45, 0.27, 0.33, 0.29, 0.37,
+    0.21, 0.39, 0.31, 0.35, 0.23,
+    0.19, 0.50, 0.28, 0.33, 0.30
+  ]
+
+# Expert estimates for P(DANEEL scenario probability)
+bootstrap_asimov_scenario:
+  iterations: 10000
+  seed: 44
+  confidence_levels: [0.80, 0.90, 0.95]
+  statistic: mean
+
+  # 30 expert responses on "what's probability DANEEL-style approach wins?"
+  data: [
+    0.08, 0.15, 0.05, 0.18, 0.12,
+    0.06, 0.20, 0.10, 0.14, 0.16,
+    0.04, 0.22, 0.09, 0.13, 0.11,
+    0.25, 0.07, 0.17, 0.10, 0.15,
+    0.05, 0.19, 0.08, 0.14, 0.12,
+    0.03, 0.30, 0.11, 0.16, 0.09
+  ]
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SCENARIO UTILITY ESTIMATES
+# Using bootstrap means in EV calculations
+# ══════════════════════════════════════════════════════════════════════════════
+
+analysis:
+  # Use bootstrap mean estimates
+  p_asimov_flourishing: "=BOOTSTRAP.Mean(bootstrap.data)"
+  p_extinction_unaligned: "=BOOTSTRAP.Mean(bootstrap_extinction.data)"
+  p_asimov_scenario: "=BOOTSTRAP.Mean(bootstrap_asimov_scenario.data)"
+
+  # Calculate expected utilities with bootstrapped estimates
+  asimov_eu: "=p_asimov_flourishing * 100 + (1 - p_asimov_flourishing) * 0.45 * 75 + (1 - p_asimov_flourishing) * 0.10 * 50 + (1 - p_asimov_flourishing) * 0.05 * 0"
+
+  unaligned_eu: "=(1 - p_extinction_unaligned) * 0.15 * 100 + (1 - p_extinction_unaligned) * 0.30 * 75 + (1 - p_extinction_unaligned) * 0.55 * 50 + p_extinction_unaligned * 0"
+
+  # Overall EV contribution from DANEEL scenario
+  asimov_contribution: "=p_asimov_scenario * asimov_eu"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# INTERPRETATION GUIDE
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# Bootstrap gives us confidence intervals WITHOUT assuming normal distribution.
+# This is important because expert probability estimates are often:
+# - Bimodal (optimists vs pessimists)
+# - Skewed (more uncertainty on upside or downside)
+# - Heavy-tailed (occasional extreme views)
+#
+# Sample interpretation:
+# If bootstrap returns CI_95 = [0.35, 0.48] for P(flourishing|DANEEL),
+# we can say: "95% confident the true expert consensus lies between 35-48%"
+#
+# This is MORE rigorous than assuming normal distribution and calculating
+# standard error, because it lets the DATA determine the uncertainty shape.

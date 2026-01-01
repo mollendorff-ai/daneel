@@ -1,0 +1,129 @@
+# ASI Race Tornado Sensitivity Analysis
+# Forge v9.0.0 - One-way sensitivity for key drivers
+#
+# Identifies which assumptions have the biggest impact on expected value.
+# Helps prioritize research and due diligence.
+
+_forge_version: "5.0.0"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# BASE CASE ASSUMPTIONS
+# ══════════════════════════════════════════════════════════════════════════════
+
+assumptions:
+  # Scenario probabilities (point estimates)
+  p_unaligned: 0.35
+  p_aligned_constraint: 0.25
+  p_asimov: 0.12
+  p_multiple: 0.18
+  p_coordination: 0.10
+
+  # Outcome probabilities by scenario
+  unaligned_p_flourishing: 0.10
+  unaligned_p_coexistence: 0.20
+  unaligned_p_subjugation: 0.40
+  unaligned_p_extinction: 0.30
+
+  aligned_p_flourishing: 0.25
+  aligned_p_coexistence: 0.40
+  aligned_p_subjugation: 0.25
+  aligned_p_extinction: 0.10
+
+  asimov_p_flourishing: 0.40
+  asimov_p_coexistence: 0.45
+  asimov_p_subjugation: 0.10
+  asimov_p_extinction: 0.05
+
+  multiple_p_flourishing: 0.15
+  multiple_p_coexistence: 0.30
+  multiple_p_subjugation: 0.35
+  multiple_p_extinction: 0.20
+
+  coordination_p_flourishing: 0.43
+  coordination_p_coexistence: 0.50
+  coordination_p_subjugation: 0.05
+  coordination_p_extinction: 0.02
+
+  # Utility values
+  utility_flourishing: 100
+  utility_coexistence: 75
+  utility_subjugation: 50
+  utility_extinction: 0
+
+# ══════════════════════════════════════════════════════════════════════════════
+# CALCULATED VALUES
+# ══════════════════════════════════════════════════════════════════════════════
+
+scenario_utilities:
+  unaligned_eu: "=assumptions.unaligned_p_flourishing * assumptions.utility_flourishing + assumptions.unaligned_p_coexistence * assumptions.utility_coexistence + assumptions.unaligned_p_subjugation * assumptions.utility_subjugation + assumptions.unaligned_p_extinction * assumptions.utility_extinction"
+
+  aligned_eu: "=assumptions.aligned_p_flourishing * assumptions.utility_flourishing + assumptions.aligned_p_coexistence * assumptions.utility_coexistence + assumptions.aligned_p_subjugation * assumptions.utility_subjugation + assumptions.aligned_p_extinction * assumptions.utility_extinction"
+
+  asimov_eu: "=assumptions.asimov_p_flourishing * assumptions.utility_flourishing + assumptions.asimov_p_coexistence * assumptions.utility_coexistence + assumptions.asimov_p_subjugation * assumptions.utility_subjugation + assumptions.asimov_p_extinction * assumptions.utility_extinction"
+
+  multiple_eu: "=assumptions.multiple_p_flourishing * assumptions.utility_flourishing + assumptions.multiple_p_coexistence * assumptions.utility_coexistence + assumptions.multiple_p_subjugation * assumptions.utility_subjugation + assumptions.multiple_p_extinction * assumptions.utility_extinction"
+
+  coordination_eu: "=assumptions.coordination_p_flourishing * assumptions.utility_flourishing + assumptions.coordination_p_coexistence * assumptions.utility_coexistence + assumptions.coordination_p_subjugation * assumptions.utility_subjugation + assumptions.coordination_p_extinction * assumptions.utility_extinction"
+
+analysis:
+  total_expected_value: "=assumptions.p_unaligned * scenario_utilities.unaligned_eu + assumptions.p_aligned_constraint * scenario_utilities.aligned_eu + assumptions.p_asimov * scenario_utilities.asimov_eu + assumptions.p_multiple * scenario_utilities.multiple_eu + assumptions.p_coordination * scenario_utilities.coordination_eu"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# TORNADO CONFIGURATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+tornado:
+  output: "analysis.total_expected_value"
+  steps: 2  # Low and high only
+
+  inputs:
+    # Scenario probability sensitivities
+    - name: "assumptions.p_unaligned"
+      label: "P(Unaligned ASI First)"
+      low: 0.20
+      high: 0.50
+      base: 0.35
+
+    - name: "assumptions.p_asimov"
+      label: "P(DANEEL First)"
+      low: 0.05
+      high: 0.25
+      base: 0.12
+
+    - name: "assumptions.p_coordination"
+      label: "P(Coordination Holds)"
+      low: 0.05
+      high: 0.25
+      base: 0.10
+
+    # Key outcome probabilities
+    - name: "assumptions.unaligned_p_extinction"
+      label: "P(Extinction | Unaligned)"
+      low: 0.15
+      high: 0.45
+      base: 0.30
+
+    - name: "assumptions.asimov_p_flourishing"
+      label: "P(Flourishing | DANEEL)"
+      low: 0.25
+      high: 0.55
+      base: 0.40
+
+    - name: "assumptions.aligned_p_flourishing"
+      label: "P(Flourishing | Constraint)"
+      low: 0.15
+      high: 0.35
+      base: 0.25
+
+    # Utility scale sensitivity
+    - name: "assumptions.utility_subjugation"
+      label: "Utility(Subjugation)"
+      low: 30
+      high: 60
+      base: 50
+
+    - name: "assumptions.utility_coexistence"
+      label: "Utility(Coexistence)"
+      low: 65
+      high: 85
+      base: 75

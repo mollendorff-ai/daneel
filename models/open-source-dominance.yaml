@@ -1,0 +1,356 @@
+_forge_version: 5.0.0
+overhead_research:
+  source:
+  - Software_com_2021
+  - Atlassian_2025
+  sample_size:
+  - 250000
+  - 3500
+  coding_time_pct:
+  - 0.11
+  - 0.16
+  overhead_pct:
+  - 0.89
+  - 0.84
+  verification_status:
+  - VERIFIED
+  - VERIFIED
+  source_url:
+  - https://www.software.com/reports/state-of-software-development-2021
+  - https://www.atlassian.com/blog/state-of-teams-2025
+  notes:
+  - 250K+ devs surveyed, avg 52 min/day coding = 10.8%
+  - 3,500 devs surveyed, 16% time on 'heads down work'
+research_summary:
+  total_surveyed:
+    value: 253500.0
+    formula: =SUM(overhead_research.sample_size)
+  weighted_coding_pct:
+    value: 0.11069033530571992
+    formula: =(250000*0.11 + 3500*0.16) / 253500
+  weighted_overhead_pct:
+    value: 0.8893096646942801
+    formula: =1 - research_summary.weighted_coding_pct
+brooks_law:
+  team_size:
+  - 1
+  - 5
+  - 10
+  - 50
+  - 100
+  - 500
+  - 1000
+  - 3000
+  comm_channels: =team_size * (team_size - 1) / 2
+  channels_per_person: =comm_channels / team_size
+  notes:
+  - Solo developer
+  - Small team
+  - Typical squad
+  - Department
+  - Division
+  - Large company
+  - Enterprise
+  - Big Tech AI lab
+lab_headcount:
+  lab:
+  - xAI
+  - OpenAI
+  - Anthropic
+  - DeepMind
+  - Meta_AI
+  total_headcount:
+  - 1200
+  - 3531
+  - 3140
+  - 6600
+  - 3000
+  safety_team_size:
+  - 10
+  - 16
+  - 300
+  - 40
+  - 50
+  safety_focus_pct: =safety_team_size / total_headcount
+lab_totals:
+  all_labs_headcount:
+    value: 17471.0
+    formula: =SUM(lab_headcount.total_headcount)
+  all_labs_safety:
+    value: 416.0
+    formula: =SUM(lab_headcount.safety_team_size)
+  avg_safety_pct:
+    value: 0.02381088661210005
+    formula: =lab_totals.all_labs_safety / lab_totals.all_labs_headcount
+lab_effective:
+  scenario:
+  - Best_Case_Labs
+  - Expected_Case
+  - Worst_Case_Labs
+  coding_efficiency:
+  - 0.16
+  - 0.11
+  - 0.08
+  safety_headcount:
+  - 416
+  - 416
+  - 416
+  effective_safety_devs: =safety_headcount * coding_efficiency
+  notes:
+  - Labs at Atlassian 2025 levels (16%)
+  - Weighted average from verified research (11%)
+  - Conservative estimate for large orgs (8%)
+open_source_army:
+  scenario:
+  - Pessimistic
+  - Base
+  - Optimistic
+  - Viral
+  total_interested:
+  - 10000
+  - 50000
+  - 100000
+  - 500000
+  active_contributor_pct:
+  - 0.1
+  - 0.15
+  - 0.2
+  - 0.25
+  active_contributors: =total_interested * active_contributor_pct
+  solo_efficiency:
+  - 0.8
+  - 0.9
+  - 0.95
+  - 0.95
+  effective_devs: =active_contributors * solo_efficiency
+  notes:
+  - Conservative estimate
+  - Typical OSS project
+  - High-interest topic
+  - Movement goes viral
+ratio_matrix:
+  lab_scenario:
+  - Best_Case_Labs
+  - Expected_Case
+  - Worst_Case_Labs
+  lab_effective_devs:
+  - 66.56
+  - 45.76
+  - 33.28
+  oss_pessimistic:
+  - 800
+  - 800
+  - 800
+  oss_base:
+  - 6750
+  - 6750
+  - 6750
+  oss_optimistic:
+  - 19000
+  - 19000
+  - 19000
+  oss_viral:
+  - 118750
+  - 118750
+  - 118750
+  ratio_pessimistic: =oss_pessimistic / lab_effective_devs
+  ratio_base: =oss_base / lab_effective_devs
+  ratio_optimistic: =oss_optimistic / lab_effective_devs
+  ratio_viral: =oss_viral / lab_effective_devs
+key_findings:
+  metric:
+  - Total_Lab_Headcount
+  - Total_Lab_Safety_Staff
+  - Lab_Effective_Devs_Expected
+  - OSS_Effective_Base
+  - Ratio_Base_vs_Expected
+  - Ratio_Pessimistic_vs_Best
+  - Ratio_Viral_vs_Worst
+  value:
+  - 17471
+  - 416
+  - 45.76
+  - 6750
+  - 147.5
+  - 12.0
+  - 3568.5
+  notes:
+  - All major AI labs combined
+  - All safety teams combined
+  - 416 * 0.11 coding efficiency (verified)
+  - 50K * 15% active * 90% efficient
+  - 6750 / 45.76 = 147x advantage (up from 90x)
+  - Even worst OSS beats best labs 12x
+  - Viral scenario is 3568x
+implications:
+  finding:
+  - Coordination_Overhead_Fatal
+  - Solo_Efficiency_100pct
+  - Safety_Teams_Tiny
+  - Open_Source_Dominates
+  - Game_Theory_Invalid
+  quantified:
+  - 0.889
+  - 1.0
+  - 0.024
+  - 147.5
+  - 0
+  evidence:
+  - 88.9% overhead (253K developers surveyed, VERIFIED)
+  - Independent work has zero coordination cost
+  - Labs average 2.4% headcount on safety
+  - 147x effective developer advantage at base case
+  - Traditional game theory assumes coordinated actors
+  action:
+  - Lead README with this data
+  - Recruit independent contributors
+  - Publish all code open source
+  - Emphasize lab safety neglect
+  - Reframe entire competition model
+agentic_ai_research:
+  source:
+  - GitHub_Copilot_Study_2022
+  - Accenture_Enterprise_RCT_2024
+  - GitClear_Code_Quality_2024
+  - Stack_Overflow_Survey_2024
+  - McKinsey_Dev_Productivity_2024
+  sample_size:
+  - 95
+  - 450
+  - 153000000
+  - 65000
+  - 40
+  key_finding:
+  - 55% faster coding (lab conditions)
+  - 8.69% PR throughput increase (enterprise)
+  - 41% higher code churn with AI
+  - 62% of devs using AI tools
+  - 35-45% time reduction on code generation
+  verification_status:
+  - VERIFIED
+  - VERIFIED
+  - VERIFIED
+  - VERIFIED
+  - VERIFIED
+ai_productivity_impact:
+  scenario:
+  - Lab_Developer
+  - Solo_Developer
+  coding_time_pct:
+  - 0.25
+  - 0.7
+  ai_coding_speedup:
+  - 1.55
+  - 1.55
+  coordination_overhead_pct:
+  - 0.5
+  - 0.0
+  review_overhead_pct:
+  - 0.15
+  - 0.2
+  other_overhead_pct:
+  - 0.1
+  - 0.1
+  time_saved_hours: =coding_time_pct * (1 - 1/ai_coding_speedup) * 8
+  net_productivity_gain: =time_saved_hours / 8
+  notes:
+  - 'Lab: 25% coding, 50% meetings, 15% reviews, 10% other'
+  - 'Solo: 70% coding, 0% meetings, 20% self-review, 10% other'
+ai_multiplier_effect:
+  metric:
+  - Pre_AI_Solo_Advantage
+  - Lab_AI_Productivity_Gain
+  - Solo_AI_Productivity_Gain
+  - AI_Multiplier_Effect
+  - Post_AI_Solo_Advantage
+  value:
+  - 147.5
+  - 0.087
+  - 0.25
+  - 2.87
+  - 169.4
+  formula:
+  - Base ratio from verified research
+  - 8.7% from Accenture RCT
+  - 25% (2.9x the lab gain)
+  - 0.25 / 0.087 = 2.87x
+  - 147.5 * 1.25 / 1.087 = 169.4
+  notes:
+  - 'Baseline: 147x OSS advantage'
+  - Labs only get 8.7% overall boost (Accenture verified)
+  - Solo devs get 25% boost (no coordination dilution)
+  - Solo devs benefit 2.87x more from same AI tools
+  - AI INCREASES solo advantage by 15%
+bottleneck_shift:
+  metric:
+  - PR_Review_Time_Increase
+  - Code_Review_Overhead
+  - Enterprise_Approval_Timeline
+  - Individual_Adoption_Time
+  - Adoption_Gap_Months
+  value:
+  - 0.91
+  - 0.15
+  - 6.0
+  - 0.001
+  - 6.0
+  notes:
+  - 91% INCREASE in PR wait time with AI adoption
+  - 15% of team time on code review
+  - 3-9 months enterprise approval cycle
+  - 1 minute for individual adoption
+  - 6 month head start for solo devs
+enterprise_ai_barriers:
+  barrier:
+  - Security_Review
+  - Legal_Compliance
+  - Budget_Approval
+  - Governance_Framework
+  - Training_Programs
+  - Change_Management
+  percentage_stuck:
+  - 70
+  - 70
+  - 74
+  - 75
+  - 66
+  - 70
+  source:
+  - Gartner_2024
+  - Gartner_2024
+  - BCG_2024
+  - Gartner_2024
+  - BCG_2024
+  - BCG_2024
+  notes:
+  - 70% cite security/governance as top concern
+  - 70% legal/compliance leaders cite rapid AI as top issue
+  - 74% of companies struggle to scale AI value
+  - Less than 25% confident in GenAI governance
+  - 66% spend more time fixing almost-right AI code
+  - 70% of AI challenges are people/process, not tech
+agentic_ai_findings:
+  finding:
+  - AI_Increases_Solo_Advantage
+  - Coordination_Remains_Bottleneck
+  - Review_Time_Increases
+  - Enterprise_Adoption_Lags
+  - Shadow_AI_Prevalent
+  quantified:
+  - 169.4
+  - 0.889
+  - 0.91
+  - 6.0
+  - 0.78
+  evidence:
+  - 169x advantage (up from 147x) with AI tools
+  - 88.9% overhead UNCHANGED by AI (coordination not sped up)
+  - 91% increase in PR review time with AI
+  - 6 month enterprise approval vs instant individual
+  - 78% of developers use personal AI tools at work
+  implication:
+  - Open source advantage GROWS in agentic AI era
+  - Labs gain velocity but not efficiency
+  - Bottleneck shifts from coding to review
+  - Solo devs have 6 month adoption head start
+  - Enterprise governance unable to keep pace

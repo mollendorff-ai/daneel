@@ -1,0 +1,138 @@
+_forge_version: 5.0.0
+original_probabilities:
+  scenario:
+  - Unaligned_ASI_First
+  - Aligned_Constraint_Based
+  - DANEEL_First
+  - Multiple_ASIs_No_Advocate
+  - Coordination_Holds
+  p_original:
+  - 0.35
+  - 0.25
+  - 0.12
+  - 0.18
+  - 0.1
+  expected_utility:
+  - 44.0
+  - 62.5
+  - 76.25
+  - 52.5
+  - 78.05
+  notes:
+  - High compute barrier
+  - Constraint methods
+  - Architecture approach (old estimate)
+  - No alignment advocate
+  - Status quo
+democratization_effect:
+  factor:
+  - Cost_Barrier_Reduction
+  - Developer_Pool_Expansion
+  - Iteration_Speed
+  - Parallel_Attempts
+  original_value:
+  - 10000000
+  - 10
+  - 1
+  - 1
+  new_value:
+  - 100
+  - 100000
+  - 100
+  - 1000
+  change_ratio:
+  - 100000
+  - 10000
+  - 100
+  - 1000
+  notes:
+  - xAI cost vs RPi5 cost
+  - Researchers to hobbyists
+  - Faster iteration on cheap HW
+  - Many attempts in parallel
+revised_probabilities:
+  scenario:
+  - Unaligned_ASI_First
+  - Aligned_Constraint_Based
+  - TMI_Architecture_First
+  - Multiple_TMIs_Racing
+  - Coordination_Holds
+  p_democratized:
+  - 0.25
+  - 0.2
+  - 0.25
+  - 0.2
+  - 0.1
+  expected_utility:
+  - 44.0
+  - 62.5
+  - 76.25
+  - 60.0
+  - 78.05
+  weighted_ev: =p_democratized * expected_utility
+  notes:
+  - Reduced - more aligned attempts
+  - Reduced - superseded by architecture
+  - Increased - many can try now
+  - NEW - multiple groups try TMI
+  - Unchanged
+summary:
+  metric:
+  - original_total_ev
+  - democratized_total_ev
+  - ev_improvement
+  - ev_improvement_pct
+  value:
+  - 57.43
+  - 62.31
+  - 4.88
+  - 8.5
+  notes:
+  - From original model
+  - Sum of weighted EVs
+  - Absolute improvement
+  - Percentage improvement
+implications:
+  finding:
+  - DANEEL_More_Likely
+  - Unaligned_Less_Likely
+  - Open_Source_Critical
+  - Speed_Advantage
+  - Cost_Moat_Irrelevant
+  value:
+  - 0.25
+  - 0.25
+  - 1
+  - 100
+  - 70000000
+  notes:
+  - 25% vs 12% probability
+  - 25% vs 35% probability
+  - Must open source to maximize attempts
+  - 100x faster iteration
+  - xAI cost advantage meaningless
+recommendations:
+  priority:
+  - Open_Source_Immediately
+  - Target_Hobbyists
+  - Document_For_Replication
+  - Build_Community
+  - RPi_Reference_Implementation
+  action:
+  - MIT license release
+  - Target makers/hackers
+  - Detailed build guides
+  - Discord/forum
+  - Working RPi5 demo
+  urgency:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  notes:
+  - Lower barrier to entry
+  - 100K potential builders
+  - Enable parallel attempts
+  - Collaborative improvement
+  - Prove viability

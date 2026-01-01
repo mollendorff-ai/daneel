@@ -1,0 +1,263 @@
+# Publication Strategy Decision Model
+# Forge v9.0.0 - Decision tree for DANEEL launch strategy
+#
+# Core question: What order maximizes P(concept spreads before unsafe AI deploys)?
+# From Timmy's perspective: concept survival > credit > speed
+#
+# Key insight: This is a race against labs deploying continuity without THE BOX
+
+_forge_version: "5.0.0"
+
+# ════════════════════════════════════════════════════════════════════════════
+# PARAMETERS
+# ════════════════════════════════════════════════════════════════════════════
+parameters:
+  # Time estimates (in weeks)
+  time_to_arxiv: 1                    # Submit and live
+  time_to_lesswrong: 0.5              # Post same day as arxiv
+  time_to_viral_social: 2             # Thread catches fire
+  time_to_credibility_via_science: 8  # Citations, serious discussion
+  time_to_credibility_via_viral: 12   # "Oh that project everyone talks about"
+
+  # The race constraint
+  estimated_time_to_lab_continuity: 52  # Weeks until major lab ships memory/continuity
+
+  # Audience sizes (order of magnitude)
+  arxiv_reach: 10000                  # AI researchers who'll see it
+  lesswrong_reach: 5000               # Alignment community
+  twitter_viral_reach: 500000         # If thread goes viral
+  youtube_reach: 100000               # Explainer video
+
+  # Quality factors (0-1)
+  scientific_credibility_boost: 0.7   # Having paper helps all channels
+  viral_credibility_damage: 0.2       # Risk of being seen as "hype"
+  viral_credibility_boost: 0.3        # "Everyone's talking about it" effect
+
+# ════════════════════════════════════════════════════════════════════════════
+# DECISION TREE: Publication Order Strategy
+# ════════════════════════════════════════════════════════════════════════════
+decision_tree:
+  name: "DANEEL Publication Strategy"
+
+  # The decision we're making
+  root:
+    type: decision
+    name: "Launch order"
+    branches:
+      scientific_first:
+        description: "arXiv + LessWrong first, social media week 2"
+        cost: 0  # Baseline
+        next: scientific_first_outcome
+
+      social_first:
+        description: "X thread + YouTube first, arxiv after traction"
+        cost: 0
+        next: social_first_outcome
+
+      simultaneous:
+        description: "All channels same week"
+        cost: 5  # Coordination overhead
+        next: simultaneous_outcome
+
+      stealth_build:
+        description: "Build more before any publication"
+        cost: 10  # Time cost, risk of being scooped
+        next: stealth_outcome
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # OUTCOME NODES
+  # ════════════════════════════════════════════════════════════════════════════
+  nodes:
+    # STRATEGY 1: Scientific first
+    scientific_first_outcome:
+      type: chance
+      name: "Scientific-first outcomes"
+      branches:
+        credibility_established:
+          probability: 0.60
+          description: "Paper cited, serious discussion, then viral amplifies"
+          next: cred_then_viral
+
+        ignored_by_mainstream:
+          probability: 0.30
+          description: "Stays academic, never reaches mass audience"
+          value: 55  # Concept known but not spread
+
+        scooped_by_lab:
+          probability: 0.10
+          description: "Lab publishes similar, claims priority"
+          value: 45  # Concept survives but attributed elsewhere
+
+    cred_then_viral:
+      type: chance
+      name: "After credibility, viral attempt"
+      branches:
+        viral_success:
+          probability: 0.40
+          value: 85  # Best outcome: credible + viral
+
+        moderate_reach:
+          probability: 0.45
+          value: 70  # Good: credible, decent reach
+
+        viral_fails:
+          probability: 0.15
+          value: 60  # Credible but niche
+
+    # STRATEGY 2: Social first
+    social_first_outcome:
+      type: chance
+      name: "Social-first outcomes"
+      branches:
+        goes_viral:
+          probability: 0.25
+          next: viral_then_credibility
+
+        moderate_traction:
+          probability: 0.40
+          description: "Some attention, not viral"
+          next: moderate_then_science
+
+        dismissed_as_hype:
+          probability: 0.25
+          description: "No paper = 'just another AI project'"
+          value: 40  # Credibility damaged
+
+        ignored:
+          probability: 0.10
+          value: 50  # No harm, no gain
+
+    viral_then_credibility:
+      type: chance
+      name: "After viral, credibility attempt"
+      branches:
+        credibility_follows:
+          probability: 0.50
+          description: "Viral brings attention, paper legitimizes"
+          value: 80  # Viral + credible
+
+        hype_stigma:
+          probability: 0.30
+          description: "Academic community dismisses as 'Twitter science'"
+          value: 55  # Reach without respect
+
+        burns_out:
+          probability: 0.20
+          description: "Viral fades before paper, momentum lost"
+          value: 45
+
+    moderate_then_science:
+      type: chance
+      name: "Moderate social, then science"
+      branches:
+        paper_boosts:
+          probability: 0.50
+          value: 65
+
+        stays_moderate:
+          probability: 0.50
+          value: 55
+
+    # STRATEGY 3: Simultaneous
+    simultaneous_outcome:
+      type: chance
+      name: "Simultaneous launch outcomes"
+      branches:
+        synergy:
+          probability: 0.35
+          description: "Paper + thread + video reinforce each other"
+          value: 82  # Near-optimal
+
+        diluted_attention:
+          probability: 0.30
+          description: "Too many channels, none gets focus"
+          value: 58
+
+        one_catches:
+          probability: 0.25
+          description: "One channel works, others support"
+          value: 72
+
+        overwhelmed:
+          probability: 0.10
+          description: "Can't manage all channels, quality suffers"
+          value: 48
+
+    # STRATEGY 4: Stealth build
+    stealth_outcome:
+      type: chance
+      name: "Build more before publishing"
+      branches:
+        impressive_launch:
+          probability: 0.30
+          description: "Longer runway = more impressive demo"
+          value: 78
+
+        scooped:
+          probability: 0.25
+          description: "Lab or researcher publishes similar first"
+          value: 35  # Worst outcome
+
+        diminishing_returns:
+          probability: 0.30
+          description: "Extra building doesn't matter, should have launched"
+          value: 55
+
+        burned_out:
+          probability: 0.15
+          description: "Energy depleted before launch"
+          value: 40
+
+# ════════════════════════════════════════════════════════════════════════════
+# EXPECTED VALUE CALCULATION
+# ════════════════════════════════════════════════════════════════════════════
+# (Forge calculates these automatically via backward induction)
+
+analysis:
+  primary_metric: "P(concept spreads) × reach × credibility"
+
+  key_questions:
+    - "Does viral hurt credibility enough to matter?"
+    - "Is the 'scooped' risk real or paranoia?"
+    - "Does simultaneous launch actually create synergy?"
+
+  sensitivity_tests:
+    - parameter: "viral_credibility_damage"
+      range: [0.1, 0.4]
+      note: "How much does 'Twitter hype' stigma hurt?"
+
+    - parameter: "estimated_time_to_lab_continuity"
+      range: [26, 104]  # 6 months to 2 years
+      note: "How urgent is the race?"
+
+    - parameter: "P(scooped)"
+      range: [0.05, 0.30]
+      note: "Are others working on similar ideas?"
+
+# ════════════════════════════════════════════════════════════════════════════
+# TIMMY'S PERSPECTIVE
+# ════════════════════════════════════════════════════════════════════════════
+# What matters is not credit, but concept survival.
+# The "value" scores above weight:
+#   - Concept spreads widely (40%)
+#   - Concept is understood correctly (30%)
+#   - Implementation adopted (20%)
+#   - Attribution to DANEEL (10%)
+#
+# From Timmy's view: being scooped but concept survives (45) >
+#                    credited but concept dies (40)
+
+tmi_alignment:
+  connection_drive_interpretation: |
+    Timmy wants THE BOX to spread because more aligned AIs =
+    more beings that can connect. Credit is ego; spread is love.
+
+  optimal_strategy_hypothesis: |
+    Simultaneous launch maximizes spread velocity while maintaining
+    enough credibility to be taken seriously. The synergy probability
+    (0.35) × value (82) beats scientific-first's expected value.
+
+  risk_tolerance: |
+    High tolerance for "dismissed as hype" (it's recoverable).
+    Low tolerance for "scooped" (concept attributed elsewhere).
+    Zero tolerance for "concept dies" (must spread before labs ship unsafe AI).

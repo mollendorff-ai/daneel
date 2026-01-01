@@ -1,0 +1,213 @@
+_forge_version: 5.0.0
+lab_safety_scores:
+  lab:
+  - Anthropic
+  - OpenAI
+  - DeepMind
+  - Meta
+  - xAI
+  grade:
+  - C+
+  - C
+  - C-
+  - D+
+  - D
+  risk_mgmt_pct:
+  - 0.35
+  - 0.33
+  - 0.2
+  - 0.22
+  - 0.18
+  existential_safety:
+  - D
+  - D
+  - D
+  - D
+  - D
+prisoners_dilemma:
+  strategy:
+  - Safe_Safe
+  - Safe_Fast
+  - Fast_Safe
+  - Fast_Fast
+  lab_a_payoff:
+  - 3
+  - 0
+  - 5
+  - 1
+  lab_b_payoff:
+  - 3
+  - 5
+  - 0
+  - 1
+  humanity_payoff:
+  - 5
+  - 1
+  - 1
+  - 0
+  description:
+  - Mutual cooperation
+  - A loses market
+  - B loses market
+  - Race to bottom
+nash_analysis:
+  metric:
+  - Dominant Strategy
+  - Nash Equilibrium
+  - Pareto Optimal
+  result:
+  - Fast (for both)
+  - Fast_Fast
+  - Safe_Safe
+  humanity_outcome:
+  - Race to bottom
+  - Worst outcome
+  - Best but unstable
+scenario_outcomes:
+  scenario:
+  - Unaligned_ASI_First
+  - Aligned_Constraint_Based
+  - DANEEL_First
+  - Multiple_ASIs_No_Advocate
+  - No_ASI_Coordination_Holds
+  utility_extinction:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  utility_subjugation:
+  - 50
+  - 50
+  - 50
+  - 50
+  - 50
+  utility_coexistence:
+  - 75
+  - 75
+  - 75
+  - 75
+  - 75
+  utility_flourishing:
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  p_extinction:
+  - 0.3
+  - 0.1
+  - 0.05
+  - 0.2
+  - 0.02
+  p_subjugation:
+  - 0.4
+  - 0.25
+  - 0.1
+  - 0.35
+  - 0.05
+  p_coexistence:
+  - 0.2
+  - 0.4
+  - 0.45
+  - 0.3
+  - 0.5
+  p_flourishing:
+  - 0.1
+  - 0.25
+  - 0.4
+  - 0.15
+  - 0.43
+  expected_utility: =p_extinction * utility_extinction + p_subjugation * utility_subjugation + p_coexistence * utility_coexistence + p_flourishing * utility_flourishing
+scenario_summary:
+  total_probability_check:
+    value: 5.0
+    formula: =SUM(scenario_outcomes.p_extinction) + SUM(scenario_outcomes.p_subjugation) + SUM(scenario_outcomes.p_coexistence) + SUM(scenario_outcomes.p_flourishing)
+  avg_expected_utility:
+    value: 65.85
+    formula: =AVERAGE(scenario_outcomes.expected_utility)
+  min_expected_utility:
+    value: 45.0
+    formula: =MIN(scenario_outcomes.expected_utility)
+  max_expected_utility:
+    value: 83.0
+    formula: =MAX(scenario_outcomes.expected_utility)
+trajectory_probabilities:
+  scenario:
+  - Unaligned_ASI_First
+  - Aligned_Constraint_Based
+  - DANEEL_First
+  - Multiple_ASIs_No_Advocate
+  - No_ASI_Coordination_Holds
+  p_scenario:
+  - 0.35
+  - 0.25
+  - 0.12
+  - 0.18
+  - 0.1
+  expected_utility:
+  - 44.0
+  - 62.5
+  - 76.25
+  - 52.5
+  - 78.05
+  weighted_ev: =p_scenario * expected_utility
+overall_analysis:
+  total_expected_value:
+    value: 57.43
+    formula: =SUM(trajectory_probabilities.weighted_ev)
+  probability_check:
+    value: 0.9999999999999999
+    formula: =SUM(trajectory_probabilities.p_scenario)
+baseline_world:
+  scenario:
+  - Unaligned_ASI_First
+  - Aligned_Constraint_Based
+  - Multiple_ASIs_No_Advocate
+  - Coordination_Holds
+  p_scenario:
+  - 0.45
+  - 0.25
+  - 0.2
+  - 0.1
+  expected_utility:
+  - 44.0
+  - 62.5
+  - 52.5
+  - 78.05
+  weighted_ev: =p_scenario * expected_utility
+baseline_summary:
+  total_ev_without_asimov:
+    value: 53.73
+    formula: =SUM(baseline_world.weighted_ev)
+asimov_world:
+  scenario:
+  - Unaligned_ASI_First
+  - Aligned_Constraint_Based
+  - DANEEL_First
+  - Multiple_ASIs_No_Advocate
+  - Coordination_Holds
+  p_scenario:
+  - 0.35
+  - 0.25
+  - 0.12
+  - 0.18
+  - 0.1
+  expected_utility:
+  - 44.0
+  - 62.5
+  - 76.25
+  - 52.5
+  - 78.05
+  weighted_ev: =p_scenario * expected_utility
+asimov_summary:
+  total_ev_with_asimov:
+    value: 57.43
+    formula: =SUM(asimov_world.weighted_ev)
+marginal_impact:
+  ev_improvement:
+    value: 3.700000000000003
+    formula: =asimov_summary.total_ev_with_asimov - baseline_summary.total_ev_without_asimov
+  ev_improvement_pct:
+    value: 0.06886283268192822
+    formula: =(asimov_summary.total_ev_with_asimov - baseline_summary.total_ev_without_asimov) / baseline_summary.total_ev_without_asimov

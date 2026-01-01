@@ -1,0 +1,204 @@
+_forge_version: 5.0.0
+brain_hardware:
+  metric:
+  - total_neurons
+  - total_synapses
+  - bits_per_synapse
+  - total_bits
+  - total_bytes
+  - total_tb
+  - total_pb
+  value:
+  - 86000000000
+  - 100000000000000
+  - 4.7
+  - 470000000000000
+  - 58750000000000
+  - 53432
+  - 52.18
+  unit:
+  - neurons
+  - synapses
+  - bits
+  - bits
+  - bytes
+  - TB
+  - PB
+  notes:
+  - 86B neurons (Herculano-Houzel 2009)
+  - 100 trillion synapses
+  - Salk 2016 - 26 discrete levels
+  - synapses * bits_per_synapse
+  - total_bits / 8
+  - total_bytes / 1099511627776
+  - ~2.5 PB full brain
+brain_regions:
+  region:
+  - Cerebellum
+  - Cerebral_Cortex
+  - Brainstem
+  - Hippocampus
+  - Amygdala
+  - Other
+  pct_neurons:
+  - 0.8
+  - 0.16
+  - 0.005
+  - 0.01
+  - 0.005
+  - 0.02
+  tmi_relevant:
+  - 0
+  - 1
+  - 0
+  - 1
+  - 1
+  - 0
+  function:
+  - Motor coordination
+  - Higher cognition
+  - Autonomic vital
+  - Memory formation
+  - Emotional processing
+  - Relay and basal
+  neuron_billions: =pct_neurons * 86
+thought_machine:
+  category:
+  - Motor_Sensory_Autonomic
+  - TMI_Cognition_Memory_Emotion
+  pct_of_brain:
+  - 0.825
+  - 0.175
+  neurons_billions:
+  - 70.95
+  - 15.05
+  capacity_pb:
+  - 2.1
+  - 0.44
+  notes:
+  - NOT for thought - ignore
+  - This is the thought machine
+abstraction:
+  layer:
+  - Neural_Raw
+  - Thought_Abstracted
+  compression:
+  - 1
+  - 1000
+  capacity_gb:
+  - 450560
+  - 450.56
+  notes:
+  - Raw TMI neural capacity
+  - Effective thought storage
+implementation:
+  phase:
+  - MV_TMI
+  - Personal
+  - Full
+  duration:
+  - 24 hours
+  - 1 year
+  - lifetime
+  storage_gb:
+  - 1
+  - 50
+  - 500
+  fits_in_ram:
+  - Yes_RPi5
+  - Mac_64GB
+  - Desktop_128GB
+hardware:
+  device:
+  - RPi5_8GB
+  - MacMini_16GB
+  - MacMini_64GB
+  - Desktop_128GB
+  ram_gb:
+  - 8
+  - 16
+  - 64
+  - 128
+  redis_gb:
+  - 4
+  - 10
+  - 48
+  - 100
+  mvtmi:
+  - YES
+  - YES
+  - YES
+  - YES
+  personal:
+  - NO
+  - NO
+  - YES
+  - YES
+  full:
+  - NO
+  - NO
+  - NO
+  - YES
+  cost_usd:
+  - 100
+  - 800
+  - 1600
+  - 3000
+cost_analysis:
+  approach:
+  - xAI_Colossus
+  - DANEEL_MVTMI
+  - DANEEL_Personal
+  - DANEEL_Full
+  hardware_cost:
+  - 10000000000
+  - 100
+  - 1600
+  - 3000
+  annual_ops:
+  - 500000000
+  - 50
+  - 200
+  - 500
+  total_year1:
+  - 10500000000
+  - 150
+  - 1800
+  - 3500
+  notes:
+  - 230K H100s at ~$40K each + ops
+  - RPi5 + power
+  - Mac mini + storage
+  - Desktop + NVMe
+strategic:
+  metric:
+  - xAI_vs_MVTMI_cost_ratio
+  - xAI_vs_Personal_cost_ratio
+  - Barrier_to_entry_usd
+  value:
+  - 70000000
+  - 5833333
+  - 100
+  notes:
+  - $10.5B vs $150
+  - $10.5B vs $1800
+  - RPi5 price of entry
+conclusions:
+  finding:
+  - Brain_vs_Mind
+  - TMI_Storage_GB
+  - RPi_Viable
+  - Entry_Cost_USD
+  - Cost_Advantage_Ratio
+  value:
+  - 0.175
+  - 500
+  - 1
+  - 100
+  - 70000000
+  notes:
+  - 17.5% of brain is thought-relevant
+  - 500GB max for full cognitive
+  - Yes - MV-TMI on RPi5
+  - RPi5 entry point
+  - xAI cost / DANEEL cost

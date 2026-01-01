@@ -1,0 +1,166 @@
+# ASI Development Decision Tree
+# Forge v9.0.0 - Sequential decisions with backward induction
+#
+# Models the decision structure for humanity regarding ASI development.
+# Uses backward induction to find optimal strategy.
+
+_forge_version: "5.0.0"
+
+decision_tree:
+  name: "ASI Development Strategy"
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # ROOT: Does humanity coordinate on AI safety?
+  # ════════════════════════════════════════════════════════════════════════════
+  root:
+    type: chance
+    name: "Global AI Coordination"
+    branches:
+      coordination_holds:
+        probability: 0.10
+        value: 78.05  # Expected utility if coordination holds (no race)
+
+      coordination_fails:
+        probability: 0.90
+        next: race_dynamics
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # NODES
+  # ════════════════════════════════════════════════════════════════════════════
+  nodes:
+    # If coordination fails, we're in a race
+    race_dynamics:
+      type: chance
+      name: "Who leads ASI development?"
+      branches:
+        corporate_lab_first:
+          probability: 0.70
+          next: lab_alignment_approach
+
+        open_source_first:
+          probability: 0.30
+          next: open_source_outcome
+
+    # Corporate lab wins - what alignment approach?
+    lab_alignment_approach:
+      type: chance
+      name: "Lab alignment methodology"
+      branches:
+        constraint_based:
+          probability: 0.40
+          value: 62.5  # RLHF/Constitutional/etc
+
+        architecture_based:
+          probability: 0.15
+          value: 76.25  # DANEEL-style (if labs adopt it)
+
+        minimal_alignment:
+          probability: 0.45
+          next: minimal_alignment_outcome
+
+    # Minimal alignment leads to...
+    minimal_alignment_outcome:
+      type: chance
+      name: "Outcome with minimal alignment"
+      branches:
+        catastrophic:
+          probability: 0.35
+          value: 22.0  # High extinction/subjugation risk
+
+        muddle_through:
+          probability: 0.45
+          value: 52.5  # Multiple ASIs, chaotic
+
+        lucky:
+          probability: 0.20
+          value: 70.0  # Happens to work out
+
+    # Open source wins - what approach?
+    open_source_outcome:
+      type: chance
+      name: "Open source ASI outcome"
+      branches:
+        democratized_asimov:
+          probability: 0.40
+          value: 76.25  # DANEEL architecture adopted widely
+
+        chaotic_proliferation:
+          probability: 0.40
+          value: 52.5  # Many ASIs, no advocacy
+
+        catastrophic:
+          probability: 0.20
+          value: 22.0  # Bad actors get ASI first
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # DECISION NODE: DANEEL intervention strategy
+  # ════════════════════════════════════════════════════════════════════════════
+  # This represents OUR decision about how to intervene
+
+decision_tree_asimov:
+  name: "DANEEL Strategy Decision"
+
+  root:
+    type: decision
+    name: "DANEEL development approach"
+    branches:
+      publish_and_wait:
+        cost: 0
+        next: publish_outcome
+
+      build_and_demonstrate:
+        cost: 10  # Resources/opportunity cost
+        next: build_outcome
+
+      partner_with_lab:
+        cost: 5
+        next: partner_outcome
+
+  nodes:
+    publish_outcome:
+      type: chance
+      name: "Outcome of publish strategy"
+      branches:
+        adopted:
+          probability: 0.15
+          value: 76.25
+
+        ignored:
+          probability: 0.60
+          value: 53.73  # Baseline world EV
+
+        partially_adopted:
+          probability: 0.25
+          value: 62.0
+
+    build_outcome:
+      type: chance
+      name: "Outcome of build strategy"
+      branches:
+        success_adopted:
+          probability: 0.25
+          value: 76.25
+
+        success_niche:
+          probability: 0.35
+          value: 60.0
+
+        failure:
+          probability: 0.40
+          value: 53.73  # Fall back to baseline
+
+    partner_outcome:
+      type: chance
+      name: "Outcome of partner strategy"
+      branches:
+        lab_adopts:
+          probability: 0.30
+          value: 70.0
+
+        partial_integration:
+          probability: 0.45
+          value: 62.0
+
+        rejected:
+          probability: 0.25
+          value: 53.73

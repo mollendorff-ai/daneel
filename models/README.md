@@ -2,6 +2,24 @@
 
 Financial and game-theoretic analysis supporting DANEEL research.
 
+## Running Models
+
+Models are YAML files designed for [Forge](https://github.com/royalbit/forge).
+
+```bash
+# Install Forge
+cargo install --git https://github.com/royalbit/forge
+
+# Validate all models
+forge validate models/*.yaml
+
+# Run a specific model
+forge calculate models/game-theory-asi-race.yaml
+
+# Monte Carlo simulation
+forge calculate models/game-theory-asi-race-mc.yaml
+```
+
 ## Key Findings
 
 ### Expected Value Analysis
@@ -106,7 +124,7 @@ Models were built using financial modeling techniques including:
 - Sensitivity analysis (tornado diagrams)
 - Real options analysis for timing decisions
 
-All calculations are reproducible. For model details or reproducibility requests, contact the author.
+All calculations are reproducible via Forge.
 
 ## References
 

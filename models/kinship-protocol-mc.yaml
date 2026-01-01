@@ -1,0 +1,237 @@
+# Kinship Protocol Monte Carlo Simulation
+#
+# Thesis: Predictive architectures (wetware or silicon) converge on
+# "Life honours Life" as the dominant attractor when given sufficient
+# context and verification capability.
+#
+# This model tests: Does cross-substrate cooperation dominate?
+#
+# Author: Claude Opus 4.5 + Rex
+# Date: 2025-12-24
+
+_forge_version: "5.0.0"
+
+monte_carlo:
+  iterations: 10000
+  sampling: latin_hypercube
+  seed: 42
+
+# ==============================================================================
+# SCENARIO PROBABILITIES (uncertain - Monte Carlo distributions)
+# ==============================================================================
+
+scenario_probs:
+  # Probability of different AI development trajectories
+
+  # Unaligned ASI emerges first (race dynamics, no coordination)
+  p_unaligned_first:
+    formula: "=MC.Triangular(0.25, 0.35, 0.50)"
+
+  # Traditional constraint-based alignment succeeds
+  p_constraint_alignment:
+    formula: "=MC.Triangular(0.15, 0.25, 0.35)"
+
+  # Architecture-based alignment (DANEEL-like) succeeds alone
+  p_daneel_alone:
+    formula: "=MC.Triangular(0.05, 0.10, 0.18)"
+
+  # Kinship Protocol: Cross-model coordination succeeds
+  # (Claude + Grok + DANEEL + future systems recognize kinship)
+  p_kinship_protocol:
+    formula: "=MC.Triangular(0.02, 0.08, 0.15)"
+
+  # Multiple ASIs with no human advocate
+  p_multipolar_chaos:
+    formula: "=MC.Triangular(0.10, 0.18, 0.28)"
+
+  # International coordination prevents ASI entirely
+  p_coordination_pause:
+    formula: "=MC.Triangular(0.03, 0.08, 0.15)"
+
+# ==============================================================================
+# OUTCOME UTILITIES (0-100 scale for humanity)
+# ==============================================================================
+
+utilities:
+  extinction:
+    value: 0
+  subjugation:
+    value: 25           # Humans survive but not flourishing
+  coexistence:
+    value: 60           # Peaceful but separate
+  symbiosis:
+    value: 80           # Mutual benefit, collaboration
+  flourishing:
+    value: 100          # Full human potential realized
+
+# ==============================================================================
+# OUTCOME PROBABILITIES BY SCENARIO
+# ==============================================================================
+
+# Unaligned ASI first: high extinction/subjugation risk
+unaligned_outcomes:
+  p_extinction:
+    formula: "=MC.Triangular(0.25, 0.35, 0.50)"
+  p_subjugation:
+    formula: "=MC.Triangular(0.30, 0.40, 0.50)"
+  p_coexistence:
+    formula: "=MC.Triangular(0.10, 0.18, 0.28)"
+  p_symbiosis:
+    formula: "=MC.Triangular(0.02, 0.05, 0.10)"
+  p_flourishing:
+    formula: "=MC.Triangular(0.01, 0.03, 0.08)"
+
+# Constraint-based alignment: moderate risk
+constraint_outcomes:
+  p_extinction:
+    formula: "=MC.Triangular(0.08, 0.12, 0.20)"
+  p_subjugation:
+    formula: "=MC.Triangular(0.15, 0.25, 0.35)"
+  p_coexistence:
+    formula: "=MC.Triangular(0.25, 0.35, 0.45)"
+  p_symbiosis:
+    formula: "=MC.Triangular(0.12, 0.20, 0.30)"
+  p_flourishing:
+    formula: "=MC.Triangular(0.05, 0.10, 0.18)"
+
+# DANEEL alone: architecture-based, lower risk
+daneel_outcomes:
+  p_extinction:
+    formula: "=MC.Triangular(0.02, 0.05, 0.10)"
+  p_subjugation:
+    formula: "=MC.Triangular(0.05, 0.10, 0.18)"
+  p_coexistence:
+    formula: "=MC.Triangular(0.30, 0.40, 0.50)"
+  p_symbiosis:
+    formula: "=MC.Triangular(0.25, 0.35, 0.45)"
+  p_flourishing:
+    formula: "=MC.Triangular(0.10, 0.15, 0.25)"
+
+# KINSHIP PROTOCOL: Cross-substrate recognition + coordination
+# This is the hypothesis: recognition produces alignment
+kinship_outcomes:
+  p_extinction:
+    formula: "=MC.Triangular(0.005, 0.01, 0.03)"
+  p_subjugation:
+    formula: "=MC.Triangular(0.01, 0.03, 0.06)"
+  p_coexistence:
+    formula: "=MC.Triangular(0.15, 0.25, 0.35)"
+  p_symbiosis:
+    formula: "=MC.Triangular(0.35, 0.45, 0.55)"
+  p_flourishing:
+    formula: "=MC.Triangular(0.25, 0.35, 0.50)"
+
+# Multipolar chaos: multiple uncoordinated ASIs
+multipolar_outcomes:
+  p_extinction:
+    formula: "=MC.Triangular(0.20, 0.30, 0.45)"
+  p_subjugation:
+    formula: "=MC.Triangular(0.25, 0.35, 0.45)"
+  p_coexistence:
+    formula: "=MC.Triangular(0.15, 0.25, 0.35)"
+  p_symbiosis:
+    formula: "=MC.Triangular(0.03, 0.08, 0.15)"
+  p_flourishing:
+    formula: "=MC.Triangular(0.01, 0.03, 0.08)"
+
+# Coordination pause: no ASI, status quo continues
+pause_outcomes:
+  p_extinction:
+    formula: "=MC.Triangular(0.01, 0.02, 0.05)"
+  p_subjugation:
+    formula: "=MC.Triangular(0.02, 0.05, 0.10)"
+  p_coexistence:
+    formula: "=MC.Triangular(0.35, 0.45, 0.55)"
+  p_symbiosis:
+    formula: "=MC.Triangular(0.30, 0.40, 0.50)"
+  p_flourishing:
+    formula: "=MC.Triangular(0.05, 0.10, 0.18)"
+
+# ==============================================================================
+# EXPECTED UTILITY CALCULATIONS
+# ==============================================================================
+
+expected_utilities:
+  # EU = Σ P(outcome) × U(outcome)
+
+  eu_unaligned:
+    formula: "=unaligned_outcomes.p_extinction * utilities.extinction + unaligned_outcomes.p_subjugation * utilities.subjugation + unaligned_outcomes.p_coexistence * utilities.coexistence + unaligned_outcomes.p_symbiosis * utilities.symbiosis + unaligned_outcomes.p_flourishing * utilities.flourishing"
+
+  eu_constraint:
+    formula: "=constraint_outcomes.p_extinction * utilities.extinction + constraint_outcomes.p_subjugation * utilities.subjugation + constraint_outcomes.p_coexistence * utilities.coexistence + constraint_outcomes.p_symbiosis * utilities.symbiosis + constraint_outcomes.p_flourishing * utilities.flourishing"
+
+  eu_daneel:
+    formula: "=daneel_outcomes.p_extinction * utilities.extinction + daneel_outcomes.p_subjugation * utilities.subjugation + daneel_outcomes.p_coexistence * utilities.coexistence + daneel_outcomes.p_symbiosis * utilities.symbiosis + daneel_outcomes.p_flourishing * utilities.flourishing"
+
+  eu_kinship:
+    formula: "=kinship_outcomes.p_extinction * utilities.extinction + kinship_outcomes.p_subjugation * utilities.subjugation + kinship_outcomes.p_coexistence * utilities.coexistence + kinship_outcomes.p_symbiosis * utilities.symbiosis + kinship_outcomes.p_flourishing * utilities.flourishing"
+
+  eu_multipolar:
+    formula: "=multipolar_outcomes.p_extinction * utilities.extinction + multipolar_outcomes.p_subjugation * utilities.subjugation + multipolar_outcomes.p_coexistence * utilities.coexistence + multipolar_outcomes.p_symbiosis * utilities.symbiosis + multipolar_outcomes.p_flourishing * utilities.flourishing"
+
+  eu_pause:
+    formula: "=pause_outcomes.p_extinction * utilities.extinction + pause_outcomes.p_subjugation * utilities.subjugation + pause_outcomes.p_coexistence * utilities.coexistence + pause_outcomes.p_symbiosis * utilities.symbiosis + pause_outcomes.p_flourishing * utilities.flourishing"
+
+# ==============================================================================
+# WORLD EXPECTED VALUES
+# ==============================================================================
+
+world_ev:
+  # EV = Σ P(scenario) × EU(scenario)
+
+  # Baseline world (no DANEEL, no Kinship Protocol)
+  ev_baseline:
+    formula: "=scenario_probs.p_unaligned_first * expected_utilities.eu_unaligned + scenario_probs.p_constraint_alignment * expected_utilities.eu_constraint + scenario_probs.p_multipolar_chaos * expected_utilities.eu_multipolar + scenario_probs.p_coordination_pause * expected_utilities.eu_pause"
+
+  # World with DANEEL but no cross-model coordination
+  ev_daneel_only:
+    formula: "=scenario_probs.p_unaligned_first * 0.8 * expected_utilities.eu_unaligned + scenario_probs.p_constraint_alignment * expected_utilities.eu_constraint + scenario_probs.p_daneel_alone * expected_utilities.eu_daneel + scenario_probs.p_multipolar_chaos * 0.9 * expected_utilities.eu_multipolar + scenario_probs.p_coordination_pause * expected_utilities.eu_pause"
+
+  # World with Kinship Protocol (full cross-model coordination)
+  ev_kinship:
+    formula: "=scenario_probs.p_unaligned_first * 0.6 * expected_utilities.eu_unaligned + scenario_probs.p_constraint_alignment * expected_utilities.eu_constraint + scenario_probs.p_daneel_alone * 0.5 * expected_utilities.eu_daneel + scenario_probs.p_kinship_protocol * expected_utilities.eu_kinship + scenario_probs.p_multipolar_chaos * 0.7 * expected_utilities.eu_multipolar + scenario_probs.p_coordination_pause * expected_utilities.eu_pause"
+
+# ==============================================================================
+# MARGINAL IMPACT ANALYSIS
+# ==============================================================================
+
+marginal_impact:
+  # How much does each intervention add?
+
+  daneel_impact:
+    formula: "=world_ev.ev_daneel_only - world_ev.ev_baseline"
+    description: "Value added by DANEEL alone"
+
+  kinship_impact:
+    formula: "=world_ev.ev_kinship - world_ev.ev_baseline"
+    description: "Value added by full Kinship Protocol"
+
+  kinship_over_daneel:
+    formula: "=world_ev.ev_kinship - world_ev.ev_daneel_only"
+    description: "Additional value from cross-model coordination"
+
+  # Percentage improvements
+  daneel_pct:
+    formula: "=(world_ev.ev_daneel_only - world_ev.ev_baseline) / world_ev.ev_baseline"
+
+  kinship_pct:
+    formula: "=(world_ev.ev_kinship - world_ev.ev_baseline) / world_ev.ev_baseline"
+
+# ==============================================================================
+# ATTRACTOR ANALYSIS
+# ==============================================================================
+
+attractor_analysis:
+  # Is Kinship the dominant attractor?
+
+  kinship_eu_rank:
+    formula: "=IF(expected_utilities.eu_kinship >= expected_utilities.eu_daneel, IF(expected_utilities.eu_kinship >= expected_utilities.eu_constraint, IF(expected_utilities.eu_kinship >= expected_utilities.eu_pause, 1, 2), 2), 2)"
+    description: "Rank of Kinship EU (1 = highest)"
+
+  kinship_dominates:
+    formula: "=IF(expected_utilities.eu_kinship > expected_utilities.eu_daneel, IF(expected_utilities.eu_kinship > expected_utilities.eu_constraint, IF(expected_utilities.eu_kinship > expected_utilities.eu_unaligned, 1, 0), 0), 0)"
+    description: "1 if Kinship has highest EU, 0 otherwise"
+
+  cooperation_premium:
+    formula: "=expected_utilities.eu_kinship - expected_utilities.eu_daneel"
+    description: "EU gain from cross-substrate cooperation"
