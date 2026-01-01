@@ -2,6 +2,46 @@
 
 All notable changes to DANEEL are documented here.
 
+## [0.8.2] - 2026-01-01 - HOTFIX-1: Symbol Embedding Fix
+
+### Jan 1, 2026: HOTFIX-1 - Symbol Embedding + Dreams Fixed
+
+#### Problem
+Symbol/Raw/Empty content was being embedded via Debug format, producing zero vectors.
+This corrupted the memory manifold and broke dream consolidation.
+
+- `unconscious`: 825K garbage vectors (Symbol debug strings)
+- `identity`: 1 garbage vector
+- `get_replay_candidates()`: returned 0-1 candidates (should be 10)
+
+#### Root Cause
+```rust
+// OLD: Used Debug format - produced zero vectors
+let content = format!("{:?}", thought.content);
+// Symbol { id: "thought_123", data: [71,71,71] } → zero vector
+
+// NEW: Use semantic text or skip
+let content = thought.content.to_embedding_text(); // None for Symbol
+```
+
+#### Changes
+| File | Change |
+|------|--------|
+| `src/core/types.rs` | Added `Content::is_embeddable()` and `to_embedding_text()` |
+| `src/core/cognitive_loop/execution.rs` | Skip consolidation for non-embeddable content |
+| `src/core/cognitive_loop/execution.rs` | Skip archiving non-embeddable content to unconscious |
+| `src/memory_db/mod.rs` | Fixed `get_replay_candidates()` filter (strength<0.9 in Qdrant query) |
+
+#### Impact
+- No more zero vectors in memories collection
+- No more garbage Symbol strings in unconscious
+- Dreams now find proper replay candidates (10 per cycle)
+- Memory manifold clean for VCONN Hebbian learning
+
+#### Commit: 0230a6c
+
+---
+
 ## [0.8.2] - 2025-12-30 - Embedding Migration & Cleanup
 
 Prerequisites for Hebbian wiring complete.

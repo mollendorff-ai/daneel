@@ -32,31 +32,62 @@ current:
   summary: "Wire associations for topology-based Hebbian learning"
 
   # ==========================================================================
-  # HOTFIX-1: COMPLETED (2026-01-01)
+  # HOTFIX-1: DONE → see CHANGELOG.md (2026-01-01)
+  # Symbol embedding fix, dreams fix, Qdrant cleaned
   # ==========================================================================
-  hotfix:
-    - id: "HOTFIX-1"
-      title: "Fix Symbol embedding - unconscious/identity collections filling with zeros"
-      status: completed
+
+  # ==========================================================================
+  # Follow-up Tasks from HOTFIX-1 Investigation
+  # ==========================================================================
+  hotfix_followup:
+    - id: "UNCON-1"
+      title: "Add unconscious retrieval method (read path missing)"
+      status: pending
+      priority: "MEDIUM"
+      discovered: "2026-01-01"
+      description: |
+        ADR-033 "Nada se apaga" specifies 4 retrieval triggers:
+        1. Dream mode replay
+        2. Association chains
+        3. Direct query/hypnosis
+        4. Spontaneous recall
+
+        Currently only write path exists (archive_to_unconscious).
+        Need to implement retrieval methods.
+      files:
+        - "src/memory_db/mod.rs"
+
+    - id: "SLEEP-WIRE-1"
+      title: "Wire sleep consolidation to SleepActor"
+      status: pending
+      priority: "LOW"
+      discovered: "2026-01-01"
+      description: |
+        SleepActor has full state machine (Awake→LightSleep→DeepSleep→Dreaming→Waking)
+        but is never spawned. Dream consolidation is hardcoded in main.rs:212-256.
+
+        This works but is not elegant. Consider wiring the actor properly.
+        Not blocking - current implementation functions correctly.
+      files:
+        - "src/actors/sleep/mod.rs"
+        - "src/main.rs"
+
+    - id: "TEST-DREAM-1"
+      title: "Add integration tests for dream cycle"
+      status: pending
       priority: "HIGH"
       discovered: "2026-01-01"
-      completed: "2026-01-01"
-      resolution: |
-        Added Content::is_embeddable() and to_embedding_text() methods.
-        - Symbol/Raw/Empty content now skips consolidation entirely
-        - archive_and_forget() skips non-embeddable content
-        - get_replay_candidates() filter fixed (strength<0.9 in Qdrant query)
-        - thought_to_memory() uses semantic text instead of Debug format
-        - Cleaned garbage from unconscious (825K) and identity (1) collections
-        Commit: 0230a6c
-      remaining:
-        - Restart Timmy to apply fixes
-        - Add unconscious retrieval method (read path missing)
-        - Wire sleep consolidation to SleepActor (currently hardcoded in main.rs)
+      description: |
+        No integration test verifies the full dream cycle:
+        - Store memory with tag_for_consolidation()
+        - Call get_replay_candidates()
+        - Verify memory is returned
+        - Call update_consolidation()
+        - Verify strength increased
+
+        Unit tests exist but no end-to-end validation.
       files:
-        - "src/core/types.rs"
-        - "src/core/cognitive_loop/execution.rs"
-        - "src/memory_db/mod.rs"
+        - "src/memory_db/tests.rs"
 
   # ==========================================================================
   # Prerequisites Complete (see changelog.md for details):
