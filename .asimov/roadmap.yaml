@@ -13,9 +13,10 @@
 #
 # Current priorities:
 #   1. HOTFIX follow-ups (TEST-DREAM-1, UNCON-1, SLEEP-WIRE-1) ← NEXT
-#   2. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL
-#   3. Drive system upgrade (DRIVE-1 through DRIVE-3) ← HIGH
-#   4. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← BACKLOG
+#   2. TUI deprecation & metrics consolidation (ADR-053, ADR-054) ← HIGH
+#   3. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL
+#   4. Drive system upgrade (DRIVE-1 through DRIVE-3) ← HIGH
+#   5. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← BACKLOG
 # =============================================================================
 
 # =============================================================================
@@ -92,6 +93,103 @@ current:
       files:
         - "src/actors/sleep/mod.rs"
         - "src/main.rs"
+
+  # ==========================================================================
+  # NEXT: TUI Deprecation & Metrics Consolidation (ADR-053, ADR-054)
+  # ==========================================================================
+  tui_deprecation:
+    priority: "HIGH"
+    status: pending
+    adr: ["ADR-053-headless-default-web-observatory.md", "ADR-054-metrics-source-of-truth.md"]
+    description: |
+      TUI is redundant with daneel-web. Metrics diverge between TUI and API.
+      Solution: Deprecate TUI, consolidate metrics in core module, web-only observatory.
+
+    tasks:
+    - id: "TUI-1"
+      title: "Create src/core/metrics/ module"
+      status: pending
+      priority: "HIGH"
+      description: |
+        Single source of truth for entropy/fractality calculation.
+        - src/core/metrics/mod.rs (pub use)
+        - src/core/metrics/entropy.rs (calculate_entropy)
+        - src/core/metrics/fractality.rs (calculate_fractality)
+        - src/core/metrics/thresholds.rs (EMERGENT=0.65, BALANCED=0.35)
+        Unit tests for each module.
+      files:
+        - "src/core/metrics/mod.rs"
+        - "src/core/metrics/entropy.rs"
+        - "src/core/metrics/fractality.rs"
+        - "src/core/metrics/thresholds.rs"
+
+    - id: "TUI-2"
+      title: "Update API to use core metrics"
+      status: pending
+      priority: "HIGH"
+      description: |
+        Replace inline calculation in handlers.rs with core metrics module.
+        use crate::core::metrics::{calculate_entropy, calculate_fractality};
+      files:
+        - "src/api/handlers.rs"
+
+    - id: "TUI-3"
+      title: "Update daneel-web to fetch from API only"
+      status: pending
+      priority: "HIGH"
+      description: |
+        Remove direct Redis/Qdrant queries from daneel-web.
+        All metrics come from /extended_metrics endpoint.
+        No calculation in web client - display only.
+      files:
+        - "../daneel-web/src/main.rs"
+
+    - id: "TUI-4"
+      title: "Remove --headless flag (make default)"
+      status: pending
+      priority: "MEDIUM"
+      description: |
+        Headless is now default behavior.
+        Add deprecated --tui flag for temporary backward compat.
+      files:
+        - "src/main.rs"
+
+    - id: "TUI-5"
+      title: "Remove src/tui/ directory"
+      status: pending
+      priority: "MEDIUM"
+      description: |
+        Delete entire TUI directory (~4000 lines).
+        This includes app.rs, ui.rs, colors.rs, widgets/.
+      files:
+        - "src/tui/"
+        - "src/lib.rs"
+
+    - id: "TUI-6"
+      title: "Remove ratatui, crossterm dependencies"
+      status: pending
+      priority: "LOW"
+      description: |
+        Remove TUI dependencies from Cargo.toml.
+        Smaller binary, fewer deps.
+      files:
+        - "Cargo.toml"
+
+    - id: "TUI-7"
+      title: "Update documentation"
+      status: pending
+      priority: "LOW"
+      description: |
+        Update README to point to daneel-web for observatory.
+        Update any docs referencing TUI.
+
+    success_criteria:
+      - "src/core/metrics/ module exists with tests"
+      - "API uses core metrics (no duplicate calculation)"
+      - "daneel-web fetches from API only"
+      - "All thresholds match (0.65/0.35)"
+      - "TUI code removed (~4000 lines)"
+      - "Binary size reduced (no ratatui/crossterm)"
 
   # ==========================================================================
   # Prerequisites Complete (see changelog.md for details):
@@ -428,10 +526,10 @@ current:
 
     pending_tasks:
       - id: "PHASE2-3"
-        title: "Add TUI stimulus panel"
+        title: "Add stimulus panel to daneel-web"
         status: pending
         priority: "LOW"
-        description: "Show injection rate, stimulus type, response metrics"
+        description: "Show injection rate, stimulus type, response metrics (moved from TUI - ADR-053)"
 
       - id: "PHASE2-4"
         title: "Measurement protocol"
@@ -547,10 +645,10 @@ current:
         files: ["../forge/src/api/handlers.rs"]
 
       - id: "CRYSTAL-9"
-        title: "Wire DANEEL TUI to Forge /fractal endpoint"
+        title: "Wire daneel-web to Forge /fractal endpoint"
         status: pending
-        description: "Call Forge API, display alignment score + 3D projection data"
-        files: ["src/tui/app.rs", "src/tui/widgets/fractality.rs"]
+        description: "Call Forge API, display alignment score + 3D projection data (updated per ADR-053)"
+        files: ["../daneel-web/src/main.rs"]
 
     success_criteria:
       - "Silhouette score > 0.3 post-Hebbian"
@@ -690,36 +788,11 @@ file_modularization:
           title: "Ensure tests pass, lint clean, format, commit, push"
           status: pending
 
-    - version: "0.8.2"
-      name: "Split tui/app.rs"
-      status: wip
-      file: "src/tui/app.rs"
-      current_lines: 2754
-      target_lines: "<1500 per module"
-      structure:
-        - "src/tui/app/mod.rs    # App struct + core impl + tests"
-        - "src/tui/app/types.rs  # ThoughtEntry, VetoEntry, ResurfacingEvent, etc + tests"
-        - "src/tui/app/state.rs  # TheBoxState, MemoryWindow, StreamCompetition + tests"
-      tasks:
-        - id: "SPLIT-2a"
-          title: "Create app/ directory structure"
-          status: pending
-        - id: "SPLIT-2b"
-          title: "Extract types.rs (ThoughtEntry, VetoEntry, ResurfacingEvent, etc)"
-          status: pending
-        - id: "SPLIT-2c"
-          title: "Extract state.rs (TheBoxState, MemoryWindow, StreamCompetition)"
-          status: pending
-        - id: "SPLIT-2d"
-          title: "Move remaining App impl to mod.rs"
-          status: pending
-        - id: "SPLIT-2e"
-          title: "Ensure tests pass, lint clean, format, commit, push"
-          status: pending
+    # NOTE: v0.8.2 (Split tui/app.rs) REMOVED - TUI being deprecated (ADR-053)
 
-    - version: "0.8.3"
+    - version: "0.8.2"
       name: "Split memory_db/types.rs"
-      status: wip
+      status: pending
       file: "src/memory_db/types.rs"
       current_lines: 1650
       target_lines: "<1500 per module"
@@ -753,9 +826,9 @@ file_modularization:
           title: "Ensure tests pass, lint clean, format, commit, push"
           status: pending
 
-    - version: "0.8.4"
+    - version: "0.8.3"
       name: "Merge thought/tests.rs inline"
-      status: wip
+      status: pending
       file: "src/actors/thought/tests.rs"
       current_lines: 1694
       target_lines: "0 (merged into source modules)"

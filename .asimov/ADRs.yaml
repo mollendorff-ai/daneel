@@ -991,6 +991,54 @@ adrs:
       docker_overhead_eliminated: true
       platforms: 5
 
+  - id: "ADR-053"
+    title: "Headless Default, Web Observatory"
+    status: accepted
+    date: "2026-01-01"
+    deciders:
+      - "Louis C. Tavares"
+      - "Claude Opus 4.5"
+    categories:
+      - architecture
+      - infrastructure
+      - process
+    summary: "Headless is the default mode; daneel-web replaces TUI as the observatory. TUI code deprecated and removed. Transparency preserved via web interface."
+    supersedes: "ADR-026"
+    superseded_by: null
+    depends_on: []
+    related_to:
+      - "ADR-027"
+      - "ADR-054"
+    deprecates:
+      - "ADR-027"
+    code_removal:
+      files: "src/tui/ (~4000 lines)"
+      dependencies: ["ratatui", "crossterm"]
+
+  - id: "ADR-054"
+    title: "Metrics Source of Truth"
+    status: accepted
+    date: "2026-01-01"
+    deciders:
+      - "Louis C. Tavares"
+      - "Claude Opus 4.5"
+    categories:
+      - architecture
+      - tmi
+      - infrastructure
+    summary: "Single source of truth for metrics (entropy, fractality). daneel core calculates, API exposes, clients display only. Fixes divergent thresholds between TUI and API."
+    supersedes: null
+    superseded_by: null
+    depends_on: []
+    related_to:
+      - "ADR-041"
+      - "ADR-053"
+    updates: "ADR-041"
+    unified_thresholds:
+      emergent: "> 0.65"
+      balanced: "> 0.35"
+      clockwork: "<= 0.35"
+
 # =============================================================================
 # STATISTICS
 # =============================================================================
