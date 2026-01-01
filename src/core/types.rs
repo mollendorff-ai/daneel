@@ -132,6 +132,67 @@ impl Content {
     pub const fn is_empty(&self) -> bool {
         matches!(self, Self::Empty)
     }
+
+    /// Check if content is embeddable (has semantic meaning)
+    ///
+    /// Symbol and Raw content are pre-linguistic patterns without semantic
+    /// meaning - they cannot be embedded by language models.
+    #[must_use]
+    pub const fn is_embeddable(&self) -> bool {
+        matches!(self, Self::Relation { .. } | Self::Composite(_))
+    }
+
+    /// Convert content to text suitable for embedding
+    ///
+    /// Returns `None` for non-embeddable content (Symbol, Raw, Empty).
+    /// For Relation and Composite, extracts semantic predicates and
+    /// recursively builds embeddable text.
+    ///
+    /// # Why Symbol/Raw return None
+    ///
+    /// TMI models pre-linguistic thought. Symbol content like
+    /// `Symbol { id: "thought_123", data: [71,71,71] }` has no semantic
+    /// meaning - it's abstract pattern, not language. Embedding models
+    /// (`FastEmbed`, `BERT`, etc.) require semantic text to produce meaningful
+    /// vectors. Debug strings produce zero vectors.
+    #[must_use]
+    pub fn to_embedding_text(&self) -> Option<String> {
+        match self {
+            // Pre-linguistic content - no semantic meaning
+            Self::Symbol { .. } | Self::Raw(_) | Self::Empty => None,
+
+            // Relation: extract predicate and recurse on subject/object
+            Self::Relation {
+                subject,
+                predicate,
+                object,
+            } => {
+                let subj = subject.to_embedding_text().unwrap_or_default();
+                let obj = object.to_embedding_text().unwrap_or_default();
+
+                // Predicate is always semantic (e.g., "causes", "resembles")
+                let text = format!("{subj} {predicate} {obj}").trim().to_string();
+
+                if text.is_empty() || text == *predicate {
+                    // Just the predicate if subject/object are non-embeddable
+                    Some(predicate.clone())
+                } else {
+                    Some(text)
+                }
+            }
+
+            // Composite: join embeddable children
+            Self::Composite(items) => {
+                let parts: Vec<String> = items.iter().filter_map(Self::to_embedding_text).collect();
+
+                if parts.is_empty() {
+                    None
+                } else {
+                    Some(parts.join(" "))
+                }
+            }
+        }
+    }
 }
 
 /// Salience score - emotional/importance weighting
@@ -466,6 +527,96 @@ mod tests {
         let object = Content::symbol("B", vec![]);
         let relation = Content::relation(subject, "causes", object);
         assert!(matches!(relation, Content::Relation { .. }));
+    }
+
+    // =========================================================================
+    // Content Embedding Tests (HOTFIX-1: Symbol embedding fix)
+    // =========================================================================
+
+    #[test]
+    fn content_symbol_not_embeddable() {
+        let content = Content::symbol("thought_123", vec![71, 71, 71]);
+        assert!(!content.is_embeddable());
+        assert!(content.to_embedding_text().is_none());
+    }
+
+    #[test]
+    fn content_raw_not_embeddable() {
+        let content = Content::raw(vec![1, 2, 3, 4]);
+        assert!(!content.is_embeddable());
+        assert!(content.to_embedding_text().is_none());
+    }
+
+    #[test]
+    fn content_empty_not_embeddable() {
+        let content = Content::Empty;
+        assert!(!content.is_embeddable());
+        assert!(content.to_embedding_text().is_none());
+    }
+
+    #[test]
+    fn content_relation_embeddable() {
+        let subject = Content::symbol("A", vec![]);
+        let object = Content::symbol("B", vec![]);
+        let relation = Content::relation(subject, "causes", object);
+
+        assert!(relation.is_embeddable());
+        // Subject/object are non-embeddable, so just predicate
+        assert_eq!(relation.to_embedding_text(), Some("causes".to_string()));
+    }
+
+    #[test]
+    fn content_relation_with_nested_relation() {
+        // "A causes B" resembles "C causes D"
+        let inner1 = Content::relation(
+            Content::symbol("A", vec![]),
+            "causes",
+            Content::symbol("B", vec![]),
+        );
+        let inner2 = Content::relation(
+            Content::symbol("C", vec![]),
+            "causes",
+            Content::symbol("D", vec![]),
+        );
+        let outer = Content::relation(inner1, "resembles", inner2);
+
+        assert!(outer.is_embeddable());
+        let text = outer.to_embedding_text().unwrap();
+        assert!(text.contains("causes"));
+        assert!(text.contains("resembles"));
+    }
+
+    #[test]
+    fn content_composite_with_mixed_content() {
+        let items = vec![
+            Content::symbol("noise", vec![1, 2, 3]),
+            Content::relation(
+                Content::symbol("X", vec![]),
+                "implies",
+                Content::symbol("Y", vec![]),
+            ),
+            Content::Empty,
+        ];
+        let composite = Content::Composite(items);
+
+        assert!(composite.is_embeddable());
+        // Only the relation is embeddable
+        assert_eq!(composite.to_embedding_text(), Some("implies".to_string()));
+    }
+
+    #[test]
+    fn content_composite_all_non_embeddable_returns_none() {
+        let items = vec![
+            Content::symbol("a", vec![]),
+            Content::raw(vec![1]),
+            Content::Empty,
+        ];
+        let composite = Content::Composite(items);
+
+        // Composite of non-embeddable items is technically "embeddable" type
+        // but to_embedding_text returns None since no children are embeddable
+        assert!(composite.is_embeddable());
+        assert!(composite.to_embedding_text().is_none());
     }
 
     #[test]

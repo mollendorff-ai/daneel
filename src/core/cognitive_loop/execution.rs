@@ -382,9 +382,18 @@ impl CognitiveLoop {
             return;
         }
 
+        // Skip non-embeddable content entirely - don't store zero vectors
+        // Symbol/Raw/Empty content is pre-linguistic and cannot be meaningfully embedded
+        let Some(content_for_embedding) = thought.content.to_embedding_text() else {
+            debug!(
+                thought_id = %thought.id,
+                "Non-embeddable content (Symbol/Raw/Empty) - skipping consolidation"
+            );
+            return;
+        };
+
         let memory = Self::thought_to_memory(thought, salience);
         let memory_id = memory.id;
-        let content_for_embedding = format!("{:?}", thought.content);
         let memory_db = Arc::clone(memory_db);
         let embedding_engine = self.embedding_engine.clone();
 
@@ -510,6 +519,9 @@ impl CognitiveLoop {
     }
 
     /// Archive and forget low-salience thoughts during anchor stage
+    ///
+    /// Only archives embeddable content (Relation, Composite) - Symbol/Raw/Empty
+    /// content is pre-linguistic noise with no semantic value worth preserving.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub(crate) async fn archive_and_forget(
         &mut self,
@@ -526,26 +538,33 @@ impl CognitiveLoop {
             return;
         };
 
+        // Only archive embeddable content - Symbol/Raw/Empty is pre-linguistic noise
+        // that has no semantic value worth preserving in the unconscious
         if let Some(ref memory_db) = self.memory_db {
-            let content_str = serde_json::to_string(&thought.content)
-                .unwrap_or_else(|_| "serialization_error".to_string());
-            if let Err(e) = memory_db
-                .archive_to_unconscious(
-                    &content_str,
-                    composite_salience,
-                    ArchiveReason::LowSalience,
-                    Some(redis_id),
-                )
-                .await
-            {
-                warn!(
-                    "Cycle {}: Failed to archive thought {} to unconscious: {}",
-                    cycle_number, redis_id, e
-                );
+            if let Some(content_str) = thought.content.to_embedding_text() {
+                if let Err(e) = memory_db
+                    .archive_to_unconscious(
+                        &content_str,
+                        composite_salience,
+                        ArchiveReason::LowSalience,
+                        Some(redis_id),
+                    )
+                    .await
+                {
+                    warn!(
+                        "Cycle {}: Failed to archive thought {} to unconscious: {}",
+                        cycle_number, redis_id, e
+                    );
+                } else {
+                    debug!(
+                        "Cycle {}: Archived thought {} to unconscious (salience {:.3})",
+                        cycle_number, redis_id, composite_salience
+                    );
+                }
             } else {
                 debug!(
-                    "Cycle {}: Archived thought {} to unconscious (salience {:.3})",
-                    cycle_number, redis_id, composite_salience
+                    "Cycle {}: Skipping non-embeddable thought {} (pre-linguistic noise)",
+                    cycle_number, redis_id
                 );
             }
         }
@@ -569,8 +588,14 @@ impl CognitiveLoop {
     }
 
     /// Convert a Thought to a Memory record
+    ///
+    /// Uses `to_embedding_text()` for semantic content storage.
+    /// This should only be called for embeddable content (checked by caller).
     pub(crate) fn thought_to_memory(thought: &Thought, _salience: f32) -> Memory {
-        let content = format!("{:?}", thought.content);
+        // Use semantic embedding text, falling back to JSON for non-embeddable
+        let content = thought.content.to_embedding_text().unwrap_or_else(|| {
+            serde_json::to_string(&thought.content).unwrap_or_else(|_| "content_error".into())
+        });
 
         let source = thought.source_stream.as_ref().map_or(
             MemorySource::Reasoning { chain: vec![] },

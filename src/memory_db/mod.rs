@@ -292,7 +292,20 @@ impl MemoryDb {
     /// Returns error if Qdrant query fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub async fn get_replay_candidates(&self, limit: u32) -> Result<Vec<Memory>> {
-        let filter = Filter::must([Condition::matches("consolidation.consolidation_tag", true)]);
+        use qdrant_client::qdrant::Range;
+
+        // Filter: consolidation_tag = true AND strength < 0.9
+        // Both filters in Qdrant query to avoid fetching permanent memories
+        let filter = Filter::must([
+            Condition::matches("consolidation.consolidation_tag", true),
+            Condition::range(
+                "consolidation.strength",
+                Range {
+                    lt: Some(0.9),
+                    ..Default::default()
+                },
+            ),
+        ]);
 
         let results = self
             .client
@@ -318,9 +331,6 @@ impl MemoryDb {
                 .partial_cmp(&a.replay_priority())
                 .unwrap_or(std::cmp::Ordering::Equal)
         });
-
-        // Filter by consolidation strength < 0.9
-        memories.retain(|m| m.consolidation.strength < 0.9);
 
         Ok(memories)
     }
