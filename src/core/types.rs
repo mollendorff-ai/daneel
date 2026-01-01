@@ -133,33 +133,48 @@ impl Content {
         matches!(self, Self::Empty)
     }
 
-    /// Check if content is embeddable (has semantic meaning)
+    /// Check if content is embeddable
     ///
-    /// Symbol and Raw content are pre-linguistic patterns without semantic
-    /// meaning - they cannot be embedded by language models.
+    /// All content types except Empty are embeddable. Symbol and Raw are
+    /// pre-linguistic patterns (TMI Phase 1) that use their identifiers
+    /// for embedding until semantic labels are added in Phase 2.
     #[must_use]
     pub const fn is_embeddable(&self) -> bool {
-        matches!(self, Self::Relation { .. } | Self::Composite(_))
+        !matches!(self, Self::Empty)
     }
 
     /// Convert content to text suitable for embedding
     ///
-    /// Returns `None` for non-embeddable content (Symbol, Raw, Empty).
-    /// For Relation and Composite, extracts semantic predicates and
-    /// recursively builds embeddable text.
+    /// Returns `None` only for Empty content.
     ///
-    /// # Why Symbol/Raw return None
+    /// # Pre-linguistic Content (Symbol, Raw)
     ///
-    /// TMI models pre-linguistic thought. Symbol content like
-    /// `Symbol { id: "thought_123", data: [71,71,71] }` has no semantic
-    /// meaning - it's abstract pattern, not language. Embedding models
-    /// (`FastEmbed`, `BERT`, etc.) require semantic text to produce meaningful
-    /// vectors. Debug strings produce zero vectors.
+    /// TMI models thought before language. Symbol and Raw content are
+    /// meaningful pre-linguistic patterns - NOT noise. They represent
+    /// cognitive states that will acquire semantic labels in Phase 2
+    /// (LLM integration).
+    ///
+    /// For embedding in Phase 1, we use the symbol identifier. This produces
+    /// non-zero embeddings (avoiding the manifold corruption from ADR-051)
+    /// while preserving the thought's place in the memory system.
     #[must_use]
     pub fn to_embedding_text(&self) -> Option<String> {
         match self {
-            // Pre-linguistic content - no semantic meaning
-            Self::Symbol { .. } | Self::Raw(_) | Self::Empty => None,
+            // Empty has no content to embed
+            Self::Empty => None,
+
+            // Pre-linguistic patterns: use identifier for embedding
+            // Phase 2 will add semantic labels; for now, identifier prevents zero vectors
+            Self::Symbol { id, .. } => Some(format!("symbol {id}")),
+            Self::Raw(data) => {
+                // Use a hash-like representation for raw data
+                use std::fmt::Write;
+                let mut preview = String::with_capacity(8);
+                for b in data.iter().take(4) {
+                    let _ = write!(preview, "{b:02x}");
+                }
+                Some(format!("raw pattern {preview}"))
+            }
 
             // Relation: extract predicate and recurse on subject/object
             Self::Relation {
@@ -534,21 +549,30 @@ mod tests {
     // =========================================================================
 
     #[test]
-    fn content_symbol_not_embeddable() {
+    fn content_symbol_embeddable() {
+        // Symbol IS embeddable - it's pre-linguistic but meaningful (TMI Phase 1)
         let content = Content::symbol("thought_123", vec![71, 71, 71]);
-        assert!(!content.is_embeddable());
-        assert!(content.to_embedding_text().is_none());
+        assert!(content.is_embeddable());
+        assert_eq!(
+            content.to_embedding_text(),
+            Some("symbol thought_123".to_string())
+        );
     }
 
     #[test]
-    fn content_raw_not_embeddable() {
+    fn content_raw_embeddable() {
+        // Raw IS embeddable - uses hex preview for pattern identification
         let content = Content::raw(vec![1, 2, 3, 4]);
-        assert!(!content.is_embeddable());
-        assert!(content.to_embedding_text().is_none());
+        assert!(content.is_embeddable());
+        assert_eq!(
+            content.to_embedding_text(),
+            Some("raw pattern 01020304".to_string())
+        );
     }
 
     #[test]
     fn content_empty_not_embeddable() {
+        // Only Empty is not embeddable - nothing to embed
         let content = Content::Empty;
         assert!(!content.is_embeddable());
         assert!(content.to_embedding_text().is_none());
@@ -561,8 +585,11 @@ mod tests {
         let relation = Content::relation(subject, "causes", object);
 
         assert!(relation.is_embeddable());
-        // Subject/object are non-embeddable, so just predicate
-        assert_eq!(relation.to_embedding_text(), Some("causes".to_string()));
+        // Subject/object are now embeddable symbols, so full relation text
+        assert_eq!(
+            relation.to_embedding_text(),
+            Some("symbol A causes symbol B".to_string())
+        );
     }
 
     #[test]
@@ -584,12 +611,13 @@ mod tests {
         let text = outer.to_embedding_text().unwrap();
         assert!(text.contains("causes"));
         assert!(text.contains("resembles"));
+        assert!(text.contains("symbol A"));
     }
 
     #[test]
     fn content_composite_with_mixed_content() {
         let items = vec![
-            Content::symbol("noise", vec![1, 2, 3]),
+            Content::symbol("pattern", vec![1, 2, 3]),
             Content::relation(
                 Content::symbol("X", vec![]),
                 "implies",
@@ -600,23 +628,32 @@ mod tests {
         let composite = Content::Composite(items);
 
         assert!(composite.is_embeddable());
-        // Only the relation is embeddable
-        assert_eq!(composite.to_embedding_text(), Some("implies".to_string()));
+        // All non-empty items contribute to embedding text
+        let text = composite.to_embedding_text().unwrap();
+        assert!(text.contains("symbol pattern"));
+        assert!(text.contains("implies"));
     }
 
     #[test]
-    fn content_composite_all_non_embeddable_returns_none() {
-        let items = vec![
-            Content::symbol("a", vec![]),
-            Content::raw(vec![1]),
-            Content::Empty,
-        ];
+    fn content_composite_all_empty_returns_none() {
+        let items = vec![Content::Empty, Content::Empty];
         let composite = Content::Composite(items);
 
-        // Composite of non-embeddable items is technically "embeddable" type
-        // but to_embedding_text returns None since no children are embeddable
+        // Composite is embeddable but Empty children contribute nothing
         assert!(composite.is_embeddable());
         assert!(composite.to_embedding_text().is_none());
+    }
+
+    #[test]
+    fn content_composite_symbols_and_raw() {
+        // Symbols and Raw are now embeddable
+        let items = vec![Content::symbol("a", vec![]), Content::raw(vec![0xab, 0xcd])];
+        let composite = Content::Composite(items);
+
+        assert!(composite.is_embeddable());
+        let text = composite.to_embedding_text().unwrap();
+        assert!(text.contains("symbol a"));
+        assert!(text.contains("raw pattern abcd"));
     }
 
     #[test]

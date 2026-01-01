@@ -382,12 +382,12 @@ impl CognitiveLoop {
             return;
         }
 
-        // Skip non-embeddable content entirely - don't store zero vectors
-        // Symbol/Raw/Empty content is pre-linguistic and cannot be meaningfully embedded
+        // Get embedding text - only Empty content returns None
+        // Symbol/Raw are pre-linguistic patterns that use identifiers for embedding
         let Some(content_for_embedding) = thought.content.to_embedding_text() else {
             debug!(
                 thought_id = %thought.id,
-                "Non-embeddable content (Symbol/Raw/Empty) - skipping consolidation"
+                "Empty content - skipping consolidation"
             );
             return;
         };
@@ -520,8 +520,9 @@ impl CognitiveLoop {
 
     /// Archive and forget low-salience thoughts during anchor stage
     ///
-    /// Only archives embeddable content (Relation, Composite) - Symbol/Raw/Empty
-    /// content is pre-linguistic noise with no semantic value worth preserving.
+    /// Archives all embeddable content to the unconscious. Only Empty content
+    /// is skipped (nothing to archive). Symbol/Raw are pre-linguistic patterns
+    /// that get archived with their identifier-based embeddings.
     #[cfg_attr(coverage_nightly, coverage(off))]
     pub(crate) async fn archive_and_forget(
         &mut self,
@@ -538,8 +539,7 @@ impl CognitiveLoop {
             return;
         };
 
-        // Only archive embeddable content - Symbol/Raw/Empty is pre-linguistic noise
-        // that has no semantic value worth preserving in the unconscious
+        // Archive embeddable content to unconscious - only Empty is skipped
         if let Some(ref memory_db) = self.memory_db {
             if let Some(content_str) = thought.content.to_embedding_text() {
                 if let Err(e) = memory_db
@@ -563,7 +563,7 @@ impl CognitiveLoop {
                 }
             } else {
                 debug!(
-                    "Cycle {}: Skipping non-embeddable thought {} (pre-linguistic noise)",
+                    "Cycle {}: Skipping empty content thought {} (nothing to archive)",
                     cycle_number, redis_id
                 );
             }
