@@ -86,15 +86,15 @@ pub enum Content {
     /// Relational structure (subject-predicate-object)
     Relation {
         /// Subject of the relation
-        subject: Box<Content>,
+        subject: Box<Self>,
         /// Type of relation (e.g., "causes", "contains", "resembles")
         predicate: String,
         /// Object of the relation
-        object: Box<Content>,
+        object: Box<Self>,
     },
 
     /// Composite of multiple content elements
-    Composite(Vec<Content>),
+    Composite(Vec<Self>),
 
     /// Empty/null content
     #[default]

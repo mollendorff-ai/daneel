@@ -374,12 +374,7 @@ impl CognitiveLoop {
     pub fn time_until_next_cycle(&self) -> Duration {
         let target_duration = Duration::from_secs_f64(self.config.cycle_ms() / 1000.0);
         let elapsed = self.time_since_last_cycle();
-
-        if elapsed >= target_duration {
-            Duration::ZERO
-        } else {
-            target_duration - elapsed
-        }
+        target_duration.saturating_sub(elapsed)
     }
 
     /// Test-only: Inject a thought for the next cycle
