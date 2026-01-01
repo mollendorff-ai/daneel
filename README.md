@@ -221,11 +221,12 @@ See [What About Us?](docs/dialogues/what_about_us.md)
 ```bash
 docker compose up -d && cargo run --release
 ```
+Runs headless with API on port 3030. Use [daneel-web](https://github.com/royalbit/daneel-web) for visual observatory.
 
 **Production (Mac mini):**
 Services managed via launchd. See [docs/OPERATIONS.md](docs/OPERATIONS.md) for full details.
 
-**Live now:** [timmy.royalbit.com](https://timmy.royalbit.com) — Cloudflare Tunnel → Mac mini.
+**Live now:** [timmy.royalbit.com](https://timmy.royalbit.com) — daneel-web observatory via Cloudflare Tunnel.
 
 ---
 

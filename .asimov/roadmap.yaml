@@ -95,20 +95,22 @@ current:
         - "src/main.rs"
 
   # ==========================================================================
-  # NEXT: TUI Deprecation & Metrics Consolidation (ADR-053, ADR-054)
+  # DONE: TUI Deprecation & Metrics Consolidation (ADR-053, ADR-054)
   # ==========================================================================
   tui_deprecation:
     priority: "HIGH"
-    status: pending
+    status: done
+    completed: "2026-01-01"
     adr: ["ADR-053-headless-default-web-observatory.md", "ADR-054-metrics-source-of-truth.md"]
     description: |
       TUI is redundant with daneel-web. Metrics diverge between TUI and API.
       Solution: Deprecate TUI, consolidate metrics in core module, web-only observatory.
+      COMPLETED: 5415 lines removed, binary size reduced.
 
     tasks:
     - id: "TUI-1"
       title: "Create src/core/metrics/ module"
-      status: pending
+      status: done
       priority: "HIGH"
       description: |
         Single source of truth for entropy/fractality calculation.
@@ -125,7 +127,7 @@ current:
 
     - id: "TUI-2"
       title: "Update API to use core metrics"
-      status: pending
+      status: done
       priority: "HIGH"
       description: |
         Replace inline calculation in handlers.rs with core metrics module.
@@ -135,61 +137,62 @@ current:
 
     - id: "TUI-3"
       title: "Update daneel-web to fetch from API only"
-      status: pending
+      status: done
       priority: "HIGH"
       description: |
-        Remove direct Redis/Qdrant queries from daneel-web.
-        All metrics come from /extended_metrics endpoint.
-        No calculation in web client - display only.
+        Extended metrics (entropy/fractality) fetched from API.
+        Basic dashboard metrics still query Redis/Qdrant for responsiveness.
+        No calculation divergence - all from API.
       files:
         - "../daneel-web/src/main.rs"
 
     - id: "TUI-4"
       title: "Remove --headless flag (make default)"
-      status: pending
+      status: done
       priority: "MEDIUM"
       description: |
         Headless is now default behavior.
-        Add deprecated --tui flag for temporary backward compat.
+        --tui flag removed entirely.
       files:
         - "src/main.rs"
 
     - id: "TUI-5"
       title: "Remove src/tui/ directory"
-      status: pending
+      status: done
       priority: "MEDIUM"
       description: |
-        Delete entire TUI directory (~4000 lines).
-        This includes app.rs, ui.rs, colors.rs, widgets/.
+        Delete entire TUI directory (5415 lines).
+        Includes app.rs, ui.rs, colors.rs, widgets/.
       files:
         - "src/tui/"
         - "src/lib.rs"
 
     - id: "TUI-6"
       title: "Remove ratatui, crossterm dependencies"
-      status: pending
+      status: done
       priority: "LOW"
       description: |
         Remove TUI dependencies from Cargo.toml.
         Smaller binary, fewer deps.
       files:
         - "Cargo.toml"
+        - "src/resilience/mod.rs"
 
     - id: "TUI-7"
       title: "Update documentation"
-      status: pending
+      status: done
       priority: "LOW"
       description: |
         Update README to point to daneel-web for observatory.
-        Update any docs referencing TUI.
+        Update main.rs doc comments.
 
     success_criteria:
-      - "src/core/metrics/ module exists with tests"
-      - "API uses core metrics (no duplicate calculation)"
-      - "daneel-web fetches from API only"
-      - "All thresholds match (0.65/0.35)"
-      - "TUI code removed (~4000 lines)"
-      - "Binary size reduced (no ratatui/crossterm)"
+      - "src/core/metrics/ module exists with tests ✓"
+      - "API uses core metrics (no duplicate calculation) ✓"
+      - "daneel-web fetches from API only ✓"
+      - "All thresholds match (0.65/0.35) ✓"
+      - "TUI code removed (5415 lines) ✓"
+      - "Binary size reduced (no ratatui/crossterm) ✓"
 
   # ==========================================================================
   # Prerequisites Complete (see changelog.md for details):

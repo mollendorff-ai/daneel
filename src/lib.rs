@@ -30,4 +30,4 @@ pub mod noise;
 pub mod persistence;
 pub mod resilience;
 pub mod streams;
-pub mod tui;
+// TUI removed per ADR-053 - use daneel-web for observatory
