@@ -32,33 +32,40 @@ current:
   summary: "Wire associations for topology-based Hebbian learning"
 
   # ==========================================================================
-  # HOTFIX: ADR-051 Incomplete Execution (discovered Jan 1, 2026)
+  # HOTFIX: ADR-051 Wrong Conclusion - Collections Needed (Jan 1, 2026)
   # ==========================================================================
   hotfix:
     - id: "HOTFIX-1"
-      title: "ADR-051 incomplete - unconscious collection still exists and growing"
+      title: "Fix Symbol embedding - unconscious/identity collections filling with zeros"
       status: pending
       priority: "HIGH"
       discovered: "2026-01-01"
       description: |
-        ADR-051 proposed dropping unconscious (3.9M zeros) and identity (1 zero)
-        collections, but execution was incomplete:
+        ADR-051 incorrectly concluded "drop collections" when the real problem
+        is Symbol content producing zero vectors. Collections ARE architecturally
+        necessary for the cognitive model.
+
+        Root cause:
+        - Symbol debug strings like {"Symbol":{"id":"...","data":[71,71,...]}}
+        - FastEmbed cannot produce meaningful embeddings for Rust debug output
+        - Result: zero vectors at origin, corrupting manifold
 
         Current state:
-        - unconscious: 657,578 vectors (actively growing with garbage)
-        - identity: 1 vector (still exists)
-        - archive_and_forget() in execution.rs still writes to unconscious
-
-        All unconscious content is Symbol debug strings producing zero vectors:
-        {"Symbol":{"id":"thought_683377","data":[136,136,136,136,136,136,136,136]}}
+        - unconscious: 657,578 vectors (actively growing with garbage zeros)
+        - identity: 1 vector
+        - archive_and_forget() writes Symbol content → zero embeddings
 
         Fix required:
-        1. Drop unconscious and identity collections from Qdrant
-        2. Remove or disable archive_and_forget() calls in cognitive_loop/execution.rs
-        3. Prevent collection auto-recreation
+        1. Fix Symbol content embedding strategy:
+           - Option A: Skip embedding for Symbol content types
+           - Option B: Extract semantic label from Symbol for embedding
+           - Option C: Mark Symbol memories as embeddable: false
+        2. Clean existing zero vectors from unconscious/identity
+        3. Keep collections - they're architecturally necessary
       files:
         - "src/core/cognitive_loop/execution.rs"
         - "src/memory_db/mod.rs"
+        - "src/actors/thought/types.rs"
 
   # ==========================================================================
   # Prerequisites Complete (see changelog.md for details):
