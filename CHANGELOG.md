@@ -4,6 +4,36 @@ All notable changes to DANEEL are documented here.
 
 ## [0.8.2] - 2026-01-01 - HOTFIX-1: Symbol Embedding Fix
 
+### Jan 1, 2026: HOTFIX-1.2 - Headless Mode Dream Recording
+
+#### Problem
+Dreams were running in headless mode (launchd) but NOT being recorded to identity.
+The `id.record_dream()` call existed in TUI mode but was missing in headless mode.
+
+Result: daneel-web showed 0 dreams despite dreams running correctly.
+
+#### Root Cause
+```rust
+// TUI mode had this:
+if let Some(ref mut id) = identity {
+    id.record_dream(consolidated, candidates_count);
+}
+
+// Headless mode was MISSING this call entirely
+```
+
+#### Changes
+| File | Change |
+|------|--------|
+| `src/main.rs` | Added `id.record_dream()` call to headless mode dream consolidation |
+
+#### Impact
+- Identity now tracks dreams in headless mode
+- daneel-web correctly shows dream count
+- `lifetime_dream_count`, `last_dream_at`, `cumulative_dream_strengthened` all update
+
+---
+
 ### Jan 1, 2026: HOTFIX-1.1 - Symbol IS Meaningful (Pre-Semantic Learning)
 
 #### Problem with Original HOTFIX-1

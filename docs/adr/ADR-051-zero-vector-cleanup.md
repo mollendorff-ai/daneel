@@ -85,11 +85,11 @@ Threshold 0.001 catches true zeros while preserving any legitimate low-magnitude
 
 Future work should address why Symbol content gets stored with debug strings:
 
-1. **Option A**: Skip embedding for Symbol content types entirely
-2. **Option B**: Extract semantic label from Symbol for embedding
-3. **Option C**: Mark Symbol memories as `embeddable: false` in payload
+1. ~~**Option A**: Skip embedding for Symbol content types entirely~~ **REJECTED** - Symbol content is meaningful pre-semantic learning (TMI Phase 1), not noise. Skipping it breaks memory storage entirely.
+2. **Option B**: Extract semantic label from Symbol for embedding ✅ **IMPLEMENTED** (HOTFIX-1.1) - Symbol now embeds as `"symbol {id}"`, Raw as `"raw pattern {hex}"`
+3. **Option C**: Mark Symbol memories as `embeddable: false` in payload - Not needed since Option B works.
 
-This is tracked separately from this cleanup ADR.
+**Resolution**: Option B implemented Jan 1, 2026. See CHANGELOG.md HOTFIX-1.1.
 
 ## Consequences
 
