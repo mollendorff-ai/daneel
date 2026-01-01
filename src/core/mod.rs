@@ -18,6 +18,7 @@
 pub mod cognitive_loop;
 pub mod invariants;
 pub mod laws;
+pub mod metrics;
 pub mod types;
 
 // Re-exports for public API (allow unused - used by external consumers)
@@ -29,5 +30,10 @@ pub use cognitive_loop::{
 pub use invariants::{check_all_invariants, Invariant, InvariantViolation};
 #[allow(unused_imports)]
 pub use laws::{Law, FIRST_LAW, LAWS, SECOND_LAW, THIRD_LAW, ZEROTH_LAW};
+#[allow(unused_imports)]
+pub use metrics::{
+    calculate_entropy, calculate_fractality, calculate_fractality_from_timestamps, CognitiveState,
+    EntropyResult, FractalityResult, SalienceComponents, BALANCED_THRESHOLD, EMERGENT_THRESHOLD,
+};
 #[allow(unused_imports)]
 pub use types::{Content, SalienceScore, Thought, ThoughtId, WindowId};

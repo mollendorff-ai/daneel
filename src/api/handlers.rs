@@ -20,6 +20,9 @@ use super::{
     },
     AppState,
 };
+use crate::core::metrics::{
+    calculate_entropy, calculate_fractality_from_timestamps, CognitiveState, SalienceComponents,
+};
 use crate::core::types::{Content, SalienceScore};
 
 /// Vector dimension (matches Qdrant schema)
@@ -460,8 +463,8 @@ async fn compute_stream_competition(
     }
 }
 
-/// Salience components for stage mapping
-struct SalienceComponents {
+/// Salience components for stage mapping (local struct for Redis parsing)
+struct LocalSalienceComponents {
     importance: f32,
     novelty: f32,
     relevance: f32,
@@ -473,7 +476,7 @@ struct SalienceComponents {
 /// Extract full salience object from Redis stream entry
 #[allow(clippy::cast_possible_truncation)] // JSON f64 to f32: acceptable for salience
 #[cfg_attr(coverage_nightly, coverage(off))]
-fn extract_full_salience(entry: &redis::Value) -> Option<SalienceComponents> {
+fn extract_full_salience(entry: &redis::Value) -> Option<LocalSalienceComponents> {
     if let redis::Value::Array(arr) = entry {
         if arr.len() >= 2 {
             if let redis::Value::Array(fields) = &arr[1] {
@@ -484,7 +487,7 @@ fn extract_full_salience(entry: &redis::Value) -> Option<SalienceComponents> {
                         if key_str == "salience" {
                             let val_str = String::from_utf8_lossy(v);
                             if let Ok(json) = serde_json::from_str::<serde_json::Value>(&val_str) {
-                                return Some(SalienceComponents {
+                                return Some(LocalSalienceComponents {
                                     importance: json
                                         .get("importance")
                                         .and_then(serde_json::Value::as_f64)
@@ -526,13 +529,9 @@ fn extract_full_salience(entry: &redis::Value) -> Option<SalienceComponents> {
     None
 }
 
-/// Compute Cognitive Diversity Index using TMI-aligned composite salience (ADR-041)
+/// Compute Cognitive Diversity Index using TMI-aligned composite salience (ADR-041, ADR-054)
 ///
-/// Per Grok validation (Dec 24, 2025) and TMI research:
-/// - Emotional intensity (|valence| × arousal) is PRIMARY per Cury's RAM/killer windows
-/// - Weighted 40% emotional + 30% importance + 20% relevance + 20% novelty + 10% connection
-/// - Uses 5 categorical bins matching cognitive state research
-#[allow(clippy::cast_precision_loss)] // Metrics: precision loss acceptable
+/// Uses core metrics module for calculation (single source of truth).
 #[cfg_attr(coverage_nightly, coverage(off))]
 async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> EntropyMetrics {
     let entries: Vec<redis::Value> = conn
@@ -540,83 +539,48 @@ async fn compute_entropy(conn: &mut redis::aio::MultiplexedConnection) -> Entrop
         .await
         .unwrap_or_default();
 
-    // Extract TMI composite salience values
-    let mut composites: Vec<f32> = Vec::new();
-    for entry in &entries {
-        if let Some(salience) = extract_full_salience(entry) {
-            // TMI composite: emotional_intensity (40%) + cognitive (60%)
-            // emotional_intensity = |valence| × arousal (PRIMARY per TMI)
-            let emotional_intensity = salience.valence.abs() * salience.arousal;
-            let cognitive = salience.importance.mul_add(0.3, salience.relevance * 0.2);
-            let novelty = salience.novelty * 0.2;
-            let connection = salience.connection_relevance * 0.1;
-            let tmi_composite =
-                (emotional_intensity.mul_add(0.4, cognitive) + novelty + connection)
-                    .clamp(0.0, 1.0);
-            composites.push(tmi_composite);
-        }
-    }
+    // Convert Redis entries to core SalienceComponents
+    let saliences: Vec<SalienceComponents> = entries
+        .iter()
+        .filter_map(|entry| {
+            extract_full_salience(entry).map(|local| SalienceComponents {
+                importance: local.importance,
+                novelty: local.novelty,
+                relevance: local.relevance,
+                valence: local.valence,
+                arousal: local.arousal,
+                connection_relevance: local.connection_relevance,
+            })
+        })
+        .collect();
 
-    if composites.is_empty() {
+    if saliences.is_empty() {
         return EntropyMetrics {
             current: 0.0,
             history: vec![0.0; 50],
-            description: "CLOCKWORK".to_string(),
+            description: CognitiveState::Clockwork.to_string(),
             normalized: 0.0,
         };
     }
 
-    // Bin TMI composites into 5 categorical cognitive states (ADR-041)
-    // - 0: MINIMAL (neutral windows, background processing)
-    // - 1: LOW (routine cognition)
-    // - 2: MODERATE (active processing)
-    // - 3: HIGH (focused attention)
-    // - 4: INTENSE (killer window formation)
-    let mut bins = [0u32; 5];
-    for s in &composites {
-        let bin = match *s {
-            v if v < 0.2 => 0, // MINIMAL
-            v if v < 0.4 => 1, // LOW
-            v if v < 0.6 => 2, // MODERATE
-            v if v < 0.8 => 3, // HIGH
-            _ => 4,            // INTENSE
-        };
-        bins[bin] += 1;
-    }
-
-    let total = composites.len() as f32;
-    let mut entropy = 0.0f32;
-    for &count in &bins {
-        if count > 0 {
-            let p = count as f32 / total;
-            entropy -= p * p.log2();
-        }
-    }
-
-    // Normalize: max entropy for 5 bins is log2(5) ≈ 2.32
-    let max_entropy = 5.0f32.log2();
-    let normalized = (entropy / max_entropy).clamp(0.0, 1.0);
-
-    let description = if normalized > 0.7 {
-        "EMERGENT"
-    } else if normalized > 0.4 {
-        "BALANCED"
-    } else {
-        "CLOCKWORK"
-    }
-    .to_string();
+    // Use core metrics module for calculation (ADR-054: single source of truth)
+    let composites: Vec<f32> = saliences
+        .iter()
+        .map(crate::core::metrics::calculate_tmi_composite)
+        .collect();
+    let result = calculate_entropy(&composites);
 
     EntropyMetrics {
-        current: entropy,
-        history: vec![entropy; 50], // Simplified: same value for now
-        description,
-        normalized,
+        current: result.raw,
+        history: vec![result.raw; 50], // Simplified: same value for now
+        description: result.state.to_string(),
+        normalized: result.normalized,
     }
 }
 
-/// Compute fractality metrics from inter-arrival times
-/// Score ranges from 0 (clockwork/regular) to 1 (fractal/bursty)
-#[allow(clippy::cast_precision_loss, clippy::cast_possible_truncation)] // Metrics: precision loss acceptable
+/// Compute fractality metrics from inter-arrival times (ADR-054)
+///
+/// Uses core metrics module for calculation (single source of truth).
 #[cfg_attr(coverage_nightly, coverage(off))]
 async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> FractalityMetrics {
     let entries: Vec<redis::Value> = conn
@@ -625,19 +589,20 @@ async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> Fra
         .unwrap_or_default();
 
     // Extract timestamps from entry IDs (format: timestamp-sequence)
-    let mut timestamps: Vec<u64> = Vec::new();
-    for entry in &entries {
-        if let redis::Value::Array(arr) = entry {
-            if let Some(redis::Value::BulkString(id_bytes)) = arr.first() {
-                let id_str = String::from_utf8_lossy(id_bytes);
-                if let Some(ts_str) = id_str.split('-').next() {
-                    if let Ok(ts) = ts_str.parse::<u64>() {
-                        timestamps.push(ts);
+    let timestamps: Vec<u64> = entries
+        .iter()
+        .filter_map(|entry| {
+            if let redis::Value::Array(arr) = entry {
+                if let Some(redis::Value::BulkString(id_bytes)) = arr.first() {
+                    let id_str = String::from_utf8_lossy(id_bytes);
+                    if let Some(ts_str) = id_str.split('-').next() {
+                        return ts_str.parse::<u64>().ok();
                     }
                 }
             }
-        }
-    }
+            None
+        })
+        .collect();
 
     if timestamps.len() < 2 {
         return FractalityMetrics {
@@ -645,61 +610,21 @@ async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> Fra
             inter_arrival_sigma: 0.0,
             boot_sigma: 0.0,
             burst_ratio: 1.0,
-            description: "CLOCKWORK".to_string(),
+            description: CognitiveState::Clockwork.to_string(),
             history: vec![0.0; 50],
         };
     }
 
-    // Calculate inter-arrival times (timestamps are in reverse order)
-    timestamps.reverse();
-    let mut inter_arrivals: Vec<f32> = Vec::new();
-    for i in 1..timestamps.len() {
-        let delta = (timestamps[i] - timestamps[i - 1]) as f32;
-        inter_arrivals.push(delta);
-    }
-
-    // Calculate mean and standard deviation
-    let n = inter_arrivals.len() as f32;
-    let mean = inter_arrivals.iter().sum::<f32>() / n;
-    let variance = inter_arrivals
-        .iter()
-        .map(|x| (x - mean).powi(2))
-        .sum::<f32>()
-        / n;
-    let sigma = variance.sqrt();
-
-    // Calculate burst ratio (max / mean)
-    let max_gap = inter_arrivals.iter().copied().fold(0.0f32, f32::max);
-    let burst_ratio = if mean > 0.0 { max_gap / mean } else { 1.0 };
-
-    // Calculate fractality score with adjusted thresholds
-    // CV (coefficient of variation): 0 = perfectly regular, higher = more variable
-    // For a Poisson process, CV ≈ 1. Burst patterns have CV > 1.
-    let cv = if mean > 0.0 { sigma / mean } else { 0.0 };
-
-    // Adjusted thresholds:
-    // - CV component: CV of 2.0 = full score (bursty systems often have CV > 1)
-    // - Burst component: burst_ratio of 15 = full score (reasonable for bursty thinking)
-    let cv_component = (cv / 2.0).clamp(0.0, 1.0);
-    let burst_component = ((burst_ratio - 1.0) / 14.0).clamp(0.0, 1.0);
-    let score = cv_component * 0.6 + burst_component * 0.4;
-
-    let description = if score > 0.65 {
-        "EMERGENT"
-    } else if score > 0.35 {
-        "BALANCED"
-    } else {
-        "CLOCKWORK"
-    }
-    .to_string();
+    // Use core metrics module for calculation (ADR-054: single source of truth)
+    let result = calculate_fractality_from_timestamps(&timestamps);
 
     FractalityMetrics {
-        score,
-        inter_arrival_sigma: sigma / 1000.0, // Convert to seconds
-        boot_sigma: sigma / 1000.0,          // Same for now
-        burst_ratio,
-        description,
-        history: vec![score; 50],
+        score: result.score,
+        inter_arrival_sigma: result.sigma,
+        boot_sigma: result.sigma, // Same for now
+        burst_ratio: result.burst_ratio,
+        description: result.state.to_string(),
+        history: vec![result.score; 50],
     }
 }
 
