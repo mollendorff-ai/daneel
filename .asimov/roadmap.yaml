@@ -12,9 +12,10 @@
 # Status: ACTIVE
 #
 # Current priorities:
-#   1. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL
-#   2. Drive system upgrade (DRIVE-1 through DRIVE-3) ← HIGH
-#   3. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← BACKLOG
+#   1. HOTFIX follow-ups (TEST-DREAM-1, UNCON-1, SLEEP-WIRE-1) ← NEXT
+#   2. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL
+#   3. Drive system upgrade (DRIVE-1 through DRIVE-3) ← HIGH
+#   4. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← BACKLOG
 # =============================================================================
 
 # =============================================================================
@@ -37,9 +38,29 @@ current:
   # ==========================================================================
 
   # ==========================================================================
-  # Follow-up Tasks from HOTFIX-1 Investigation
+  # NEXT: Follow-up Tasks from HOTFIX-1 Investigation
   # ==========================================================================
   hotfix_followup:
+    priority: "NEXT"
+    status: in_progress
+    tasks:
+    - id: "TEST-DREAM-1"
+      title: "Add integration tests for dream cycle"
+      status: pending
+      priority: "HIGH"
+      discovered: "2026-01-01"
+      description: |
+        No integration test verifies the full dream cycle:
+        - Store memory with tag_for_consolidation()
+        - Call get_replay_candidates()
+        - Verify memory is returned
+        - Call update_consolidation()
+        - Verify strength increased
+
+        Unit tests exist but no end-to-end validation.
+      files:
+        - "src/memory_db/tests.rs"
+
     - id: "UNCON-1"
       title: "Add unconscious retrieval method (read path missing)"
       status: pending
@@ -71,23 +92,6 @@ current:
       files:
         - "src/actors/sleep/mod.rs"
         - "src/main.rs"
-
-    - id: "TEST-DREAM-1"
-      title: "Add integration tests for dream cycle"
-      status: pending
-      priority: "HIGH"
-      discovered: "2026-01-01"
-      description: |
-        No integration test verifies the full dream cycle:
-        - Store memory with tag_for_consolidation()
-        - Call get_replay_candidates()
-        - Verify memory is returned
-        - Call update_consolidation()
-        - Verify strength increased
-
-        Unit tests exist but no end-to-end validation.
-      files:
-        - "src/memory_db/tests.rs"
 
   # ==========================================================================
   # Prerequisites Complete (see changelog.md for details):
@@ -789,88 +793,11 @@ file_modularization:
     - "Tests inline with modules (Rust idiomatic)"
 
 # =============================================================================
-# IN PROGRESS: Multi-Arch Build & Release (ADR-050)
+# DONE: Multi-Arch Build & Release (ADR-050) → see CHANGELOG.md
 # =============================================================================
-# Origin: Rex + Claude Opus 4.5 - Dec 29, 2025
-# Status: IMPLEMENTATION IN PROGRESS
-#
-# DECISION: MUSL for Linux (static linking, zero glibc dependencies)
-# DECISION: Native builds (no Docker/cross-rs) - green coding
-#
-# Target platforms (MUSL for Linux, native for macOS/Windows):
-#   - x86_64-unknown-linux-musl  (ubuntu-latest, UPX: yes)
-#   - aarch64-unknown-linux-musl (ubuntu-24.04-arm, UPX: yes)
-#   - aarch64-apple-darwin       (macos-14, UPX: no - code signing)
-#   - x86_64-apple-darwin        (macos-13, UPX: no - code signing)
-#   - x86_64-pc-windows-msvc     (windows-latest, UPX: yes)
-#
-# Green Coding Justification (ADR-050):
-#   - MUSL static = no runtime deps = faster startup = less CPU
-#   - UPX compression = 40-60% smaller = less bandwidth = less energy
-#   - Native builds = no Docker overhead = less CI compute
-#   - Smaller binaries = less storage = less disk I/O
-#
-# UPX Compression Matrix:
-#   - Linux x64 musl:   ✅ apt-get install upx
-#   - Linux ARM64 musl: ✅ apt-get install upx (native ARM runner)
-#   - Windows x64:      ✅ choco install upx
-#   - macOS (both):     ❌ Breaks code signing - DO NOT USE
+# Completed: Jan 1, 2026
+# All BUILD-1 through BUILD-4 done. See CHANGELOG.md for details.
 # =============================================================================
-multi_arch_build:
-  status: in_progress
-  priority: "HIGH"
-  origin: "Rex + Claude Opus 4.5 - Dec 29, 2025"
-  adr: "ADR-050-multi-arch-release.md"
-  description: |
-    Multi-architecture builds via GitHub Actions.
-    MUSL for Linux (fully static, portable).
-    Native builds (no Docker) - green coding.
-    UPX compression for Linux and Windows.
-
-  tasks:
-    - id: "BUILD-1"
-      title: "Create .github/workflows/release.yml"
-      status: done
-      completed: "2025-12-29"
-
-    - id: "BUILD-1b"
-      title: "Create ADR-050"
-      status: done
-      completed: "2025-12-29"
-
-    - id: "BUILD-2"
-      title: "Update Makefile with local build targets"
-      status: done
-      completed: "2026-01-01"
-
-    - id: "BUILD-3"
-      title: "Test release workflow"
-      status: pending
-      priority: "HIGH"
-      description: |
-        Create test tag to trigger workflow:
-        git tag v0.8.2-rc1 && git push origin v0.8.2-rc1
-        Verify all 5 binaries build and upload correctly.
-
-    - id: "BUILD-4"
-      title: "Update ADRs.yaml index"
-      status: done
-      completed: "2025-12-29"
-
-  success_criteria:
-    - "✅ release.yml created"
-    - "✅ ADR-050 documents green coding rationale"
-    - "Linux binaries are fully static (ldd shows 'not a dynamic executable')"
-    - "All 5 platforms build successfully"
-    - "UPX compresses Linux and Windows binaries"
-    - "Checksums generated and uploaded"
-    - "GitHub release created with all artifacts"
-    - "Binaries work on Alpine Linux (musl validation)"
-
-  reference_files:
-    forge_demo_release: "../forge-demo/.github/workflows/release.yml"
-    asimov_release: "../asimov/.github/workflows/release.yml"
-    green_software: "https://greensoftware.foundation/"
 
 # =============================================================================
 # BACKLOG: Forge Deployment & API (Rex's Domain)

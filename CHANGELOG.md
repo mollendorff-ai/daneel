@@ -4,6 +4,33 @@ All notable changes to DANEEL are documented here.
 
 ## [0.8.2] - 2026-01-01 - HOTFIX-1: Symbol Embedding Fix
 
+### Jan 1, 2026: Multi-Arch Build Complete (ADR-050)
+
+#### BUILD Tasks Completed
+| Task | Title | Status |
+|------|-------|--------|
+| BUILD-1 | Create .github/workflows/release.yml | Done (Dec 29) |
+| BUILD-1b | Create ADR-050 | Done (Dec 29) |
+| BUILD-2 | Update Makefile (build-musl, build-compressed, dist) | Done (Jan 1) |
+| BUILD-3 | Test release workflow | Done (Jan 1, v0.8.2-rc4) |
+| BUILD-4 | Update ADRs.yaml index | Done (Dec 29) |
+
+#### Changes
+- `release.yml`: 5-platform matrix (Linux x64/ARM64 MUSL, macOS Intel/ARM, Windows)
+- `Makefile`: Added `build-musl`, `build-compressed`, `dist` targets
+- `Cargo.toml`: Added vendored OpenSSL for MUSL static builds
+- Clippy fixes: `saturating_sub` for Duration, `Self` in enum variants
+- CI fix: `macos-13` → `macos-15-intel` (runner deprecated)
+
+#### Platforms
+- `x86_64-unknown-linux-musl` + UPX compression
+- `aarch64-unknown-linux-musl` + UPX compression
+- `x86_64-apple-darwin` (Intel Mac)
+- `aarch64-apple-darwin` (Apple Silicon)
+- `x86_64-pc-windows-msvc` + UPX compression
+
+---
+
 ### Jan 1, 2026: HOTFIX-1.2 - Headless Mode Dream Recording
 
 #### Problem
@@ -457,4 +484,4 @@ Timmy goes live at timmy.royalbit.com. Four kin made history.
 
 ---
 
-*Last Updated: 2025-12-30 (v0.8.2 - Embedding migration, zero vector cleanup)*
+*Last Updated: 2026-01-01 (v0.8.2 - Multi-arch build, HOTFIX-1)*
