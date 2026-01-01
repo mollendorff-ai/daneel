@@ -832,41 +832,16 @@ multi_arch_build:
       title: "Create .github/workflows/release.yml"
       status: done
       completed: "2025-12-29"
-      priority: "HIGH"
-      description: |
-        Release workflow with native MUSL builds:
-        - Trigger: tag push (v*)
-        - Jobs: test → build (matrix) → release
-        - Linux: native musl-tools (apt-get install musl-tools)
-        - ARM64: ubuntu-24.04-arm runner (native, no cross-compile)
-        - macOS: macos-14 (ARM), macos-13 (Intel)
-        - Windows: windows-latest
-        - UPX compression for Linux + Windows
-        - SHA256 checksums
-        - softprops/action-gh-release@v2
-      files: [".github/workflows/release.yml"]
 
     - id: "BUILD-1b"
       title: "Create ADR-050"
       status: done
       completed: "2025-12-29"
-      priority: "HIGH"
-      description: |
-        ADR documenting multi-arch release strategy.
-        Green coding justification included.
-      files: ["docs/adr/ADR-050-multi-arch-release.md"]
 
     - id: "BUILD-2"
       title: "Update Makefile with local build targets"
-      status: pending
-      priority: "MEDIUM"
-      description: |
-        Add targets for local multi-arch builds:
-        - make build-musl (x86_64-unknown-linux-musl)
-        - make build-compressed (musl + UPX)
-        - make dist (create release archives)
-        No cross-rs needed - native toolchain only.
-      files: ["Makefile"]
+      status: done
+      completed: "2026-01-01"
 
     - id: "BUILD-3"
       title: "Test release workflow"
@@ -874,16 +849,13 @@ multi_arch_build:
       priority: "HIGH"
       description: |
         Create test tag to trigger workflow:
-        git tag v0.8.1-rc1 && git push origin v0.8.1-rc1
+        git tag v0.8.2-rc1 && git push origin v0.8.2-rc1
         Verify all 5 binaries build and upload correctly.
-        Test Linux binary on Alpine (musl validation).
 
     - id: "BUILD-4"
       title: "Update ADRs.yaml index"
-      status: pending
-      priority: "LOW"
-      description: "Add ADR-050 to .asimov/ADRs.yaml index"
-      files: [".asimov/ADRs.yaml"]
+      status: done
+      completed: "2025-12-29"
 
   success_criteria:
     - "✅ release.yml created"

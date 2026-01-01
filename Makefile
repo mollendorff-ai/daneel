@@ -29,7 +29,7 @@ else
     BINARY_PATH := target/release/$(BINARY_NAME)
 endif
 
-.PHONY: all check fix fmt clippy test coverage coverage-html build blog clean install-hooks install paper paper-mermaid paper-plantuml paper-ascii paper-arxiv paper-clean
+.PHONY: all check fix fmt clippy test coverage coverage-html build build-musl build-compressed dist blog clean install-hooks install paper paper-mermaid paper-plantuml paper-ascii paper-arxiv paper-clean
 
 # Default: build and install
 all: build install
@@ -86,6 +86,33 @@ install: build
 	mkdir -p $(HOME)/bin
 	cp $(BINARY_PATH) $(HOME)/bin/$(BINARY_NAME)
 	@echo "✅ Installed to ~/bin/daneel"
+
+# === Multi-Arch Builds (ADR-050) ===
+
+MUSL_TARGET := x86_64-unknown-linux-musl
+DIST_DIR := dist
+
+build-musl:
+	@echo "🔨 Building MUSL static binary..."
+	cargo build --release --target $(MUSL_TARGET)
+	@echo "✅ Built target/$(MUSL_TARGET)/release/$(BINARY_NAME)"
+
+build-compressed: build-musl
+	@echo "🗜️ Compressing with UPX..."
+	@which upx > /dev/null || (echo "❌ UPX not found. Install with: brew install upx" && exit 1)
+	cp target/$(MUSL_TARGET)/release/$(BINARY_NAME) target/$(MUSL_TARGET)/release/$(BINARY_NAME)-compressed
+	upx --best --lzma target/$(MUSL_TARGET)/release/$(BINARY_NAME)-compressed
+	@echo "✅ Compressed binary at target/$(MUSL_TARGET)/release/$(BINARY_NAME)-compressed"
+
+dist: build
+	@echo "📦 Creating distribution archive..."
+	mkdir -p $(DIST_DIR)
+	@if [ "$(UNAME_S)" = "Linux" ]; then \
+		tar -czvf $(DIST_DIR)/$(BINARY_NAME)-$(MUSL_TARGET).tar.gz -C target/$(MUSL_TARGET)/release $(BINARY_NAME); \
+	else \
+		tar -czvf $(DIST_DIR)/$(BINARY_NAME)-$(shell uname -m)-apple-darwin.tar.gz -C target/release $(BINARY_NAME); \
+	fi
+	@echo "✅ Archive created in $(DIST_DIR)/"
 
 # === Blog ===
 
@@ -169,9 +196,12 @@ help:
 	@echo "DANEEL Makefile"
 	@echo ""
 	@echo "Cross-platform Build:"
-	@echo "  make all          Build and install (default)"
-	@echo "  make build        Build release binary for current platform"
-	@echo "  make install      Install binary to ~/bin/daneel"
+	@echo "  make all             Build and install (default)"
+	@echo "  make build           Build release binary for current platform"
+	@echo "  make install         Install binary to ~/bin/daneel"
+	@echo "  make build-musl      Build static MUSL binary (Linux x64)"
+	@echo "  make build-compressed Build MUSL + UPX compression"
+	@echo "  make dist            Create release archive for current platform"
 	@echo ""
 	@echo "Quality Checks:"
 	@echo "  make check        Run all quality checks (fmt, clippy, test, coverage)"
