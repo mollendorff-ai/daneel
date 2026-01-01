@@ -32,6 +32,35 @@ current:
   summary: "Wire associations for topology-based Hebbian learning"
 
   # ==========================================================================
+  # HOTFIX: ADR-051 Incomplete Execution (discovered Jan 1, 2026)
+  # ==========================================================================
+  hotfix:
+    - id: "HOTFIX-1"
+      title: "ADR-051 incomplete - unconscious collection still exists and growing"
+      status: pending
+      priority: "HIGH"
+      discovered: "2026-01-01"
+      description: |
+        ADR-051 proposed dropping unconscious (3.9M zeros) and identity (1 zero)
+        collections, but execution was incomplete:
+
+        Current state:
+        - unconscious: 657,578 vectors (actively growing with garbage)
+        - identity: 1 vector (still exists)
+        - archive_and_forget() in execution.rs still writes to unconscious
+
+        All unconscious content is Symbol debug strings producing zero vectors:
+        {"Symbol":{"id":"thought_683377","data":[136,136,136,136,136,136,136,136]}}
+
+        Fix required:
+        1. Drop unconscious and identity collections from Qdrant
+        2. Remove or disable archive_and_forget() calls in cognitive_loop/execution.rs
+        3. Prevent collection auto-recreation
+      files:
+        - "src/core/cognitive_loop/execution.rs"
+        - "src/memory_db/mod.rs"
+
+  # ==========================================================================
   # Prerequisites Complete (see changelog.md for details):
   # - ADR-051: Zero vectors cleaned (3.98M removed)
   # - ADR-052: Embeddings fixed (768 dims, BGE model)
