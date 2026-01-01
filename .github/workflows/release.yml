@@ -111,7 +111,9 @@ jobs:
       # ----------------------------------------------------------------------
       - name: Install musl tools
         if: contains(matrix.target, 'musl')
-        run: sudo apt-get update && sudo apt-get install -y musl-tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y musl-tools musl-dev libssl-dev pkg-config
 
       # ----------------------------------------------------------------------
       # Install Rust with target
@@ -132,6 +134,7 @@ jobs:
 
       # ----------------------------------------------------------------------
       # Build release binary
+      # For MUSL targets, use vendored OpenSSL to avoid system dependency
       # ----------------------------------------------------------------------
       - name: Build release
         run: cargo build --release --target ${{ matrix.target }}
