@@ -1,5 +1,7 @@
 # DANEEL
 
+> 📌 **R&D Prototype** — Interpret claims as hypotheses, not proven facts.
+
 [Timmy/DANEEL "Brain Observatory"](https://timmy.royalbit.com)
 
 > **This is a hobby project, not a serious AGI attempt.**
