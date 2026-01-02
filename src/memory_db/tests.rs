@@ -258,9 +258,9 @@ fn integration_store_and_retrieve() {
 /// TEST-DREAM-1: Integration test for full dream consolidation cycle
 ///
 /// Validates the complete dream cycle pipeline:
-/// 1. Store memory with tag_for_consolidation()
-/// 2. Call get_replay_candidates() - memory should appear
-/// 3. Call update_consolidation() - strength should increase
+/// 1. Store memory with `tag_for_consolidation()`
+/// 2. Call `get_replay_candidates()` - memory should appear
+/// 3. Call `update_consolidation()` - strength should increase
 /// 4. Verify memory strength was updated
 #[test]
 #[ignore = "Requires running Qdrant instance"]
