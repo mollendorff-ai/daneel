@@ -16,19 +16,13 @@
 #   2. Drive system upgrade (DRIVE-1 through DRIVE-3) ← HIGH
 #   3. File modularization (split cognitive_loop.rs) ← HIGH
 #   4. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← BACKLOG
-#
-# DONE (moved to CHANGELOG.md):
-#   - HOTFIX follow-ups (TEST-DREAM-1, UNCON-1, SLEEP-WIRE-1) ← Jan 2, 2026
-#   - TUI deprecation & metrics (ADR-053, ADR-054) ← Jan 1, 2026
 # =============================================================================
 
 # =============================================================================
 # CURRENT SPRINT: v0.8.3 - Hebbian Wiring
 # =============================================================================
-# STATUS: ACTIVE
-# Prerequisites complete: Zero vectors cleaned, embeddings fixed (768 dims)
-# HOTFIX follow-ups complete (Jan 2, 2026) - see CHANGELOG.md
-# Focus: Wire associations for topology-based Hebbian learning
+# STATUS: ACTIVE - Focus: Wire associations for topology-based Hebbian learning
+# Prerequisites complete - see CHANGELOG.md for v0.8.2 and v0.8.3
 # =============================================================================
 
 current:
@@ -37,15 +31,7 @@ current:
   name: "Hebbian Wiring"
   summary: "Wire associations for topology-based Hebbian learning"
 
-  # ==========================================================================
-  # Prerequisites Complete (see CHANGELOG.md for details):
-  # - HOTFIX follow-ups: TEST-DREAM-1, UNCON-1, SLEEP-WIRE-1 (Jan 2, 2026)
-  # - TUI deprecation & metrics: ADR-053, ADR-054 (Jan 1, 2026)
-  # - Zero vectors cleaned: ADR-051 (3.98M removed)
-  # - Embeddings fixed: ADR-052 (768 dims, BGE model)
-  # - 100% test coverage: ADR-049
-  # - Research absorption: ADR-047, ADR-048
-  # ==========================================================================
+  # Prerequisites complete - see CHANGELOG.md for details
 
   # ==========================================================================
   # Pending ExoGenesis Tasks (LOW priority)

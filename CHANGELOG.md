@@ -43,6 +43,23 @@ Implemented 4 retrieval triggers from TMI:
 
 ## [0.8.2] - 2026-01-01 - HOTFIX-1: Symbol Embedding Fix
 
+### Jan 1, 2026: TUI Deprecation & Metrics Consolidation (ADR-053, ADR-054)
+
+#### ADR-053: TUI Deprecation
+- **Status**: ACCEPTED - TUI deprecated, headless mode is now default
+- Removed `--tui` flag from CLI
+- `daneel` now runs headless by default
+- Use daneel-web observatory at timmy.royalbit.com for visualization
+- TUI code retained but deprecated, will be removed in future version
+
+#### ADR-054: Metrics Consolidation
+- **Status**: ACCEPTED - Core metrics module created
+- Added `src/core/metrics.rs` for centralized metrics
+- Metrics available via daneel-web API
+- Removed TUI-specific metrics display code
+
+---
+
 ### Jan 1, 2026: Multi-Arch Build Complete (ADR-050)
 
 #### BUILD Tasks Completed
