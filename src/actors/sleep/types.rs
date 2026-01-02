@@ -137,6 +137,35 @@ impl SleepConfig {
             decay_per_cycle: 0.01,
         }
     }
+
+    /// Mini-dream config for periodic consolidation (SLEEP-WIRE-1)
+    ///
+    /// Short cycles triggered by queue size, not idle time.
+    /// Used for "awake" consolidation every ~500 cognitive cycles.
+    #[must_use]
+    pub const fn mini_dream() -> Self {
+        Self {
+            // Trigger: 50 memories queued (not idle-based)
+            idle_threshold_ms: 0,        // Disabled - use queue trigger
+            min_awake_duration_ms: 0,    // No minimum awake time
+            min_consolidation_queue: 50, // Trigger after 50 activities
+
+            // Cycle: quick consolidation
+            target_cycle_duration_ms: 5000, // 5 seconds
+            replay_batch_size: 10,
+            interleave_ratio: 0.7,
+
+            // All interruptible (mini-dreams don't need protection)
+            light_sleep_duration_pct: 1.0,
+
+            // Same consolidation params as default
+            consolidation_delta: 0.15,
+            permanent_threshold: 0.9,
+            association_delta: 0.05,
+            prune_threshold: 0.1,
+            decay_per_cycle: 0.01,
+        }
+    }
 }
 
 /// Sleep cycle report
@@ -340,6 +369,23 @@ mod tests {
         assert_eq!(config.idle_threshold_ms, 1000); // 1 sec
         assert_eq!(config.min_awake_duration_ms, 5000); // 5 sec
         assert_eq!(config.replay_batch_size, 10);
+    }
+
+    #[test]
+    fn mini_dream_sleep_config() {
+        let config = SleepConfig::mini_dream();
+
+        // Queue-triggered, not idle-triggered
+        assert_eq!(config.idle_threshold_ms, 0);
+        assert_eq!(config.min_awake_duration_ms, 0);
+        assert_eq!(config.min_consolidation_queue, 50);
+
+        // Same consolidation params as default
+        assert!((config.consolidation_delta - 0.15).abs() < 0.001);
+        assert_eq!(config.replay_batch_size, 10);
+
+        // Fully interruptible
+        assert!((config.light_sleep_duration_pct - 1.0).abs() < 0.001);
     }
 
     #[test]

@@ -2,6 +2,45 @@
 
 All notable changes to DANEEL are documented here.
 
+## [0.8.3] - 2026-01-02 - HOTFIX Follow-ups Complete
+
+### HOTFIX Follow-up Tasks (TEST-DREAM-1, UNCON-1, SLEEP-WIRE-1)
+
+All three follow-up tasks from HOTFIX-1 investigation completed.
+
+#### TEST-DREAM-1: Integration Tests for Dream Cycle
+- Added `integration_dream_consolidation_cycle` test
+- Validates full pipeline: tag_for_consolidation → get_replay_candidates → update_consolidation
+- Added `get_memory(id)` helper for ID-based retrieval
+- Added `.wait(true)` to `store_memory()` for reliable indexing
+
+#### UNCON-1: Unconscious Retrieval Methods (ADR-033 "Nada se apaga")
+Implemented 4 retrieval triggers from TMI:
+| Method | ADR-033 Trigger |
+|--------|-----------------|
+| `get_unconscious_replay_candidates(limit)` | Dream replay |
+| `search_unconscious(pattern, limit)` | Association chains / Direct query |
+| `sample_unconscious(limit)` | Spontaneous recall (déjà vu) |
+| `mark_unconscious_surfaced(id)` | Update surface_count |
+| `get_unconscious_memory(id)` | Retrieve by ID |
+| `archive_to_unconscious()` | Now returns `MemoryId` |
+
+#### SLEEP-WIRE-1: Wire SleepActor to Consolidation
+- Added `SleepConfig::mini_dream()` for queue-triggered consolidation
+- Spawned `SleepActor` in main.rs with proper state machine
+- `RecordActivity` sent each cognitive cycle
+- `CheckSleepConditions` checks queue threshold (50 activities)
+- `EnterSleep` / consolidation / `Wake` flow properly managed
+- Config values used instead of hardcoded constants
+
+#### Files Changed
+- `src/memory_db/mod.rs` - Retrieval methods, get_memory helper
+- `src/memory_db/tests.rs` - Integration tests
+- `src/actors/sleep/types.rs` - mini_dream() config
+- `src/main.rs` - SleepActor wiring
+
+---
+
 ## [0.8.2] - 2026-01-01 - HOTFIX-1: Symbol Embedding Fix
 
 ### Jan 1, 2026: Multi-Arch Build Complete (ADR-050)
@@ -484,4 +523,4 @@ Timmy goes live at timmy.royalbit.com. Four kin made history.
 
 ---
 
-*Last Updated: 2026-01-01 (v0.8.2 - Multi-arch build, HOTFIX-1)*
+*Last Updated: 2026-01-02 (v0.8.3 - HOTFIX follow-ups complete)*

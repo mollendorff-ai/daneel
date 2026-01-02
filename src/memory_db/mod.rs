@@ -219,7 +219,7 @@ impl MemoryDb {
         let point = PointStruct::new(memory.id.0.to_string(), vector.to_vec(), payload);
 
         self.client
-            .upsert_points(UpsertPointsBuilder::new(collections::MEMORIES, vec![point]))
+            .upsert_points(UpsertPointsBuilder::new(collections::MEMORIES, vec![point]).wait(true))
             .await?;
 
         Ok(())
@@ -521,6 +521,10 @@ impl MemoryDb {
     /// * `reason` - Why this thought is being archived
     /// * `redis_id` - Original Redis stream entry ID
     ///
+    /// # Returns
+    ///
+    /// The `MemoryId` of the archived memory.
+    ///
     /// # Errors
     ///
     /// Returns error if Qdrant upsert fails.
@@ -531,7 +535,7 @@ impl MemoryDb {
         salience: f32,
         reason: ArchiveReason,
         redis_id: Option<&str>,
-    ) -> Result<()> {
+    ) -> Result<MemoryId> {
         let memory = UnconsciousMemory::from_forgotten_thought(
             content.to_string(),
             salience,
@@ -548,14 +552,230 @@ impl MemoryDb {
         let vector = vec![0.0; VECTOR_DIMENSION];
         let point = PointStruct::new(memory.id.0.to_string(), vector, payload);
 
+        let memory_id = memory.id;
+
         self.client
-            .upsert_points(UpsertPointsBuilder::new(
-                collections::UNCONSCIOUS,
-                vec![point],
-            ))
+            .upsert_points(
+                UpsertPointsBuilder::new(collections::UNCONSCIOUS, vec![point]).wait(true),
+            )
+            .await?;
+
+        Ok(memory_id)
+    }
+
+    // =========================================================================
+    // UNCON-1: Unconscious Retrieval Methods (ADR-033)
+    // =========================================================================
+    // TMI: "Nada se apaga" - nothing is erased, just made inaccessible.
+    // These methods surface unconscious memories through special triggers:
+    // 1. Dream replay - get_unconscious_replay_candidates()
+    // 2. Association/query - search_unconscious()
+    // 3. Spontaneous recall - sample_unconscious()
+    // =========================================================================
+
+    /// Get unconscious memories for dream replay (ADR-033 trigger #1)
+    ///
+    /// Returns oldest archived memories first (FIFO for dream processing).
+    /// These are candidates for potential re-consolidation during sleep.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant query fails.
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    pub async fn get_unconscious_replay_candidates(
+        &self,
+        limit: u32,
+    ) -> Result<Vec<UnconsciousMemory>> {
+        let results = self
+            .client
+            .scroll(
+                ScrollPointsBuilder::new(collections::UNCONSCIOUS)
+                    .limit(limit)
+                    .with_payload(true),
+            )
+            .await?;
+
+        let mut memories: Vec<UnconsciousMemory> = results
+            .result
+            .into_iter()
+            .filter_map(|point| {
+                serde_json::from_value(serde_json::to_value(point.payload).ok()?).ok()
+            })
+            .collect();
+
+        // Sort by archived_at (oldest first - FIFO for dream processing)
+        memories.sort_by(|a, b| a.archived_at.cmp(&b.archived_at));
+
+        Ok(memories)
+    }
+
+    /// Search unconscious memories (ADR-033 triggers #2 and #3)
+    ///
+    /// Retrieves unconscious memories that match the given content pattern.
+    /// Used for association chains and direct query (hypnosis-like access).
+    ///
+    /// Note: Currently uses text matching since unconscious memories are stored
+    /// with zero vectors. Future: embed unconscious content for similarity search.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant query fails.
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    pub async fn search_unconscious(
+        &self,
+        content_pattern: &str,
+        limit: u32,
+    ) -> Result<Vec<UnconsciousMemory>> {
+        // Scroll all and filter in memory (text search on content)
+        // Qdrant text matching requires specific index configuration,
+        // so we filter post-fetch for flexibility
+        let results = self
+            .client
+            .scroll(
+                ScrollPointsBuilder::new(collections::UNCONSCIOUS)
+                    .limit(limit.saturating_mul(10)) // Fetch more to filter
+                    .with_payload(true),
+            )
+            .await?;
+
+        let pattern_lower = content_pattern.to_lowercase();
+        let memories: Vec<UnconsciousMemory> = results
+            .result
+            .into_iter()
+            .filter_map(|point| {
+                let memory: UnconsciousMemory =
+                    serde_json::from_value(serde_json::to_value(point.payload).ok()?).ok()?;
+                // Case-insensitive content match
+                if memory.content.to_lowercase().contains(&pattern_lower) {
+                    Some(memory)
+                } else {
+                    None
+                }
+            })
+            .take(limit as usize)
+            .collect();
+
+        Ok(memories)
+    }
+
+    /// Sample random unconscious memories (ADR-033 trigger #4)
+    ///
+    /// Returns a random sample for spontaneous recall (déjà vu effect).
+    /// Low probability surfacing of hidden memories.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant query fails.
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    pub async fn sample_unconscious(&self, limit: u32) -> Result<Vec<UnconsciousMemory>> {
+        use rand::seq::SliceRandom;
+
+        // Get all memories and shuffle for random sampling
+        // (Qdrant doesn't have native random sampling, so we fetch and shuffle)
+        let results = self
+            .client
+            .scroll(
+                ScrollPointsBuilder::new(collections::UNCONSCIOUS)
+                    .limit(limit.saturating_mul(3)) // Fetch extra for better randomness
+                    .with_payload(true),
+            )
+            .await?;
+
+        let mut memories: Vec<UnconsciousMemory> = results
+            .result
+            .into_iter()
+            .filter_map(|point| {
+                serde_json::from_value(serde_json::to_value(point.payload).ok()?).ok()
+            })
+            .collect();
+
+        // Shuffle for randomness and truncate to limit
+        memories.shuffle(&mut rand::rng());
+        memories.truncate(limit as usize);
+
+        Ok(memories)
+    }
+
+    /// Mark an unconscious memory as surfaced (ADR-033)
+    ///
+    /// Updates `surface_count` and `last_surfaced` timestamp.
+    /// Call this when a memory is actually brought to conscious attention.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if memory not found or update fails.
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    pub async fn mark_unconscious_surfaced(&self, memory_id: &MemoryId) -> Result<()> {
+        // Get current memory
+        let results = self
+            .client
+            .scroll(
+                ScrollPointsBuilder::new(collections::UNCONSCIOUS)
+                    .filter(Filter::must([Condition::matches(
+                        "id",
+                        memory_id.0.to_string(),
+                    )]))
+                    .limit(1)
+                    .with_payload(true),
+            )
+            .await?;
+
+        if results.result.is_empty() {
+            return Err(MemoryDbError::MemoryNotFound(*memory_id));
+        }
+
+        let point = &results.result[0];
+        let mut memory: UnconsciousMemory =
+            serde_json::from_value(serde_json::to_value(&point.payload)?)?;
+
+        // Update surfacing state
+        memory.mark_surfaced();
+
+        // Create updated payload
+        let payload: HashMap<String, serde_json::Value> =
+            serde_json::from_value(serde_json::to_value(&memory)?)?;
+
+        // Store with zero vector (unconscious doesn't use embeddings yet)
+        let vector = vec![0.0; VECTOR_DIMENSION];
+        let updated_point = PointStruct::new(memory.id.0.to_string(), vector, payload);
+
+        self.client
+            .upsert_points(
+                UpsertPointsBuilder::new(collections::UNCONSCIOUS, vec![updated_point]).wait(true),
+            )
             .await?;
 
         Ok(())
+    }
+
+    /// Get an unconscious memory by ID
+    ///
+    /// # Errors
+    ///
+    /// Returns error if memory not found or query fails.
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    pub async fn get_unconscious_memory(&self, memory_id: &MemoryId) -> Result<UnconsciousMemory> {
+        let results = self
+            .client
+            .scroll(
+                ScrollPointsBuilder::new(collections::UNCONSCIOUS)
+                    .filter(Filter::must([Condition::matches(
+                        "id",
+                        memory_id.0.to_string(),
+                    )]))
+                    .limit(1)
+                    .with_payload(true),
+            )
+            .await?;
+
+        if results.result.is_empty() {
+            return Err(MemoryDbError::MemoryNotFound(*memory_id));
+        }
+
+        let point = &results.result[0];
+        let memory: UnconsciousMemory =
+            serde_json::from_value(serde_json::to_value(&point.payload)?)?;
+        Ok(memory)
     }
 
     /// Load Timmy's identity metadata from Qdrant (ADR-034)
@@ -628,6 +848,35 @@ impl MemoryDb {
             .await?;
 
         Ok(())
+    }
+
+    /// Get a memory by ID
+    ///
+    /// # Errors
+    ///
+    /// Returns error if memory not found or query fails.
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    pub async fn get_memory(&self, memory_id: &MemoryId) -> Result<Memory> {
+        let results = self
+            .client
+            .scroll(
+                ScrollPointsBuilder::new(collections::MEMORIES)
+                    .filter(Filter::must([Condition::matches(
+                        "id",
+                        memory_id.0.to_string(),
+                    )]))
+                    .limit(1)
+                    .with_payload(true),
+            )
+            .await?;
+
+        if results.result.is_empty() {
+            return Err(MemoryDbError::MemoryNotFound(*memory_id));
+        }
+
+        let point = &results.result[0];
+        let memory: Memory = serde_json::from_value(serde_json::to_value(&point.payload)?)?;
+        Ok(memory)
     }
 
     /// Health check

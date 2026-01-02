@@ -15,11 +15,13 @@
 //! TUI is deprecated and will be removed in a future version.
 
 use clap::Parser;
+use daneel::actors::sleep::{SleepActor, SleepConfig, SleepMessage, SleepResult};
 use daneel::api;
 use daneel::core::cognitive_loop::CognitiveLoop;
 use daneel::core::laws::LAWS;
 use daneel::embeddings;
 use daneel::memory_db::types::IdentityMetadata;
+use ractor::Actor;
 use std::sync::Arc;
 use std::time::Instant;
 use tracing::info;
@@ -147,13 +149,22 @@ async fn run_cognitive_loop_headless() {
     const IDENTITY_FLUSH_INTERVAL_SECS: u64 = 30;
     const IDENTITY_FLUSH_THOUGHT_INTERVAL: u64 = 100;
 
-    // ADR-023: Sleep/Dream Consolidation - periodic memory strengthening
-    const CONSOLIDATION_INTERVAL_CYCLES: u64 = 500;
-    const CONSOLIDATION_BATCH_SIZE: u32 = 10;
-    const CONSOLIDATION_STRENGTH_DELTA: f32 = 0.15;
-
     // Periodic status logging
     const STATUS_LOG_INTERVAL: u64 = 1000;
+
+    // SLEEP-WIRE-1: Spawn SleepActor with mini-dream config
+    let sleep_config = SleepConfig::mini_dream();
+    let sleep_actor = SleepActor::with_config(sleep_config.clone());
+    let sleep_ref = match Actor::spawn(None, sleep_actor, ()).await {
+        Ok((actor_ref, _handle)) => {
+            info!("SleepActor spawned - mini-dream consolidation enabled");
+            Some(actor_ref)
+        }
+        Err(e) => {
+            eprintln!("Warning: Failed to spawn SleepActor: {e} - consolidation disabled");
+            None
+        }
+    };
 
     // Connect to Redis for thought streams
     let mut cognitive_loop = match CognitiveLoop::with_redis("redis://127.0.0.1:6379").await {
@@ -203,8 +214,7 @@ async fn run_cognitive_loop_headless() {
     let mut last_identity_flush = Instant::now();
     let mut thoughts_since_flush: u64 = 0;
 
-    // Track consolidation cycles (ADR-023)
-    let mut cycles_since_consolidation: u64 = 0;
+    // Track consolidation cycles (ADR-023 via SLEEP-WIRE-1)
     let mut total_dream_cycles: u64 = identity.as_ref().map_or(0, |id| id.lifetime_dream_count);
 
     if let Some(ref db) = memory_db {
@@ -258,42 +268,70 @@ async fn run_cognitive_loop_headless() {
             }
         }
 
-        // ADR-023: Periodic memory consolidation (mini-dreams)
-        cycles_since_consolidation += 1;
-        if cycles_since_consolidation >= CONSOLIDATION_INTERVAL_CYCLES {
-            if let Some(ref db) = memory_db {
-                match db.get_replay_candidates(CONSOLIDATION_BATCH_SIZE).await {
-                    Ok(candidates) => {
-                        let mut consolidated = 0;
-                        for memory in &candidates {
-                            if db
-                                .update_consolidation(&memory.id, CONSOLIDATION_STRENGTH_DELTA)
-                                .await
-                                .is_ok()
-                            {
-                                consolidated += 1;
+        // SLEEP-WIRE-1: Memory consolidation via SleepActor
+        if let Some(ref sleep) = sleep_ref {
+            // Record activity (increments queue estimate)
+            sleep.cast(SleepMessage::RecordActivity).ok();
+
+            // Check if sleep conditions are met (queue size threshold)
+            let should_sleep = sleep
+                .call(|reply| SleepMessage::CheckSleepConditions { reply }, None)
+                .await
+                .ok()
+                .and_then(|r| r.success_or(()).ok())
+                .unwrap_or(false);
+
+            if should_sleep {
+                // Enter sleep mode
+                let entered = sleep
+                    .call(|reply| SleepMessage::EnterSleep { reply }, None)
+                    .await
+                    .ok()
+                    .and_then(|r| r.success_or(()).ok())
+                    .is_some_and(|r| matches!(r, SleepResult::Started));
+
+                if entered {
+                    // Run consolidation cycle
+                    if let Some(ref db) = memory_db {
+                        let batch_size = sleep_config.replay_batch_size as u32;
+                        let strength_delta = sleep_config.consolidation_delta;
+
+                        match db.get_replay_candidates(batch_size).await {
+                            Ok(candidates) => {
+                                let mut consolidated = 0;
+                                for memory in &candidates {
+                                    if db
+                                        .update_consolidation(&memory.id, strength_delta)
+                                        .await
+                                        .is_ok()
+                                    {
+                                        consolidated += 1;
+                                    }
+                                }
+                                if consolidated > 0 {
+                                    total_dream_cycles += 1;
+
+                                    // "Nada se apaga" - record dream in identity
+                                    if let Some(ref mut id) = identity {
+                                        id.record_dream(consolidated, candidates.len() as u32);
+                                    }
+
+                                    info!(
+                                        "Mini-dream #{}: consolidated {} memories (via SleepActor)",
+                                        total_dream_cycles, consolidated
+                                    );
+                                }
+                            }
+                            Err(e) => {
+                                eprintln!("Warning: Failed to get replay candidates: {e}");
                             }
                         }
-                        if consolidated > 0 {
-                            total_dream_cycles += 1;
-
-                            // "Nada se apaga" - record dream in identity (was missing!)
-                            if let Some(ref mut id) = identity {
-                                id.record_dream(consolidated as u32, candidates.len() as u32);
-                            }
-
-                            info!(
-                                "Dream cycle #{}: consolidated {} memories",
-                                total_dream_cycles, consolidated
-                            );
-                        }
                     }
-                    Err(e) => {
-                        eprintln!("Warning: Failed to get replay candidates: {e}");
-                    }
+
+                    // Wake up
+                    let _ = sleep.call(|reply| SleepMessage::Wake { reply }, None).await;
                 }
             }
-            cycles_since_consolidation = 0;
         }
 
         // Periodic status log

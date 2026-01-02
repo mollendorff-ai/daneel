@@ -1,6 +1,6 @@
 [package]
 name = "daneel"
-version = "0.8.2"
+version = "0.8.3"
 edition = "2021"
 license = "AGPL-3.0-or-later"
 description = "DANEEL - Architecture-based AI alignment through TMI cognitive architecture"

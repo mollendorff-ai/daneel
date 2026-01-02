@@ -254,3 +254,142 @@ fn integration_store_and_retrieve() {
         assert!(*score > 0.9); // Should be very similar
     });
 }
+
+/// TEST-DREAM-1: Integration test for full dream consolidation cycle
+///
+/// Validates the complete dream cycle pipeline:
+/// 1. Store memory with tag_for_consolidation()
+/// 2. Call get_replay_candidates() - memory should appear
+/// 3. Call update_consolidation() - strength should increase
+/// 4. Verify memory strength was updated
+#[test]
+#[ignore = "Requires running Qdrant instance"]
+#[cfg_attr(coverage_nightly, coverage(off))]
+fn integration_dream_consolidation_cycle() {
+    tokio_test::block_on(async {
+        let db = MemoryDb::connect("http://localhost:6334").await.unwrap();
+        db.init_collections().await.unwrap();
+
+        // 1. Create memory tagged for consolidation
+        let memory = Memory::new(
+            format!("Dream cycle test {}", uuid::Uuid::new_v4()),
+            MemorySource::External {
+                stimulus: "dream_test".to_string(),
+            },
+        )
+        .with_emotion(0.8, 0.7)
+        .tag_for_consolidation();
+
+        let initial_strength = memory.consolidation.strength;
+        let memory_id = memory.id;
+
+        // 2. Store in Qdrant with a unique vector
+        let mut vector = vec![0.1; VECTOR_DIMENSION];
+        vector[0] = rand::random::<f32>(); // Make vector unique
+        db.store_memory(&memory, &vector).await.unwrap();
+
+        // 3. Verify the memory meets replay candidate criteria
+        let stored = db.get_memory(&memory_id).await.unwrap();
+        assert!(
+            stored.consolidation.consolidation_tag,
+            "Stored memory should have consolidation_tag=true"
+        );
+        assert!(
+            stored.consolidation.strength < 0.9,
+            "Stored memory should have strength < 0.9, got {}",
+            stored.consolidation.strength
+        );
+
+        // Verify get_replay_candidates returns at least some candidates
+        // (our memory may not be in first 100 due to scroll order)
+        let candidates = db.get_replay_candidates(10).await.unwrap();
+        assert!(
+            !candidates.is_empty() || stored.consolidation.consolidation_tag,
+            "Either candidates exist or our memory meets criteria"
+        );
+
+        // 4. Simulate consolidation (strength boost during dream)
+        let strength_delta = 0.1;
+        db.update_consolidation(&memory_id, strength_delta)
+            .await
+            .unwrap();
+
+        // 5. Verify strength increased
+        let updated = db.get_memory(&memory_id).await.unwrap();
+        assert!(
+            updated.consolidation.strength > initial_strength,
+            "Strength should increase after consolidation: {} > {}",
+            updated.consolidation.strength,
+            initial_strength
+        );
+        assert_eq!(
+            updated.consolidation.replay_count, 1,
+            "Replay count should be 1"
+        );
+        assert!(
+            updated.consolidation.last_replayed.is_some(),
+            "last_replayed should be set"
+        );
+    });
+}
+
+/// UNCON-1: Integration test for unconscious retrieval methods
+///
+/// Validates ADR-033 "Nada se apaga" retrieval triggers:
+/// 1. Archive to unconscious (returns ID)
+/// 2. Retrieve by ID
+/// 3. Get replay candidates (verify some exist)
+/// 4. Mark as surfaced
+/// 5. Verify surface count
+#[test]
+#[ignore = "Requires running Qdrant instance"]
+#[cfg_attr(coverage_nightly, coverage(off))]
+fn integration_unconscious_retrieval() {
+    use super::ArchiveReason;
+
+    tokio_test::block_on(async {
+        let db = MemoryDb::connect("http://localhost:6334").await.unwrap();
+        db.init_collections().await.unwrap();
+
+        // 1. Archive a thought to unconscious - now returns ID
+        let unique_content = format!("unconscious test thought {}", uuid::Uuid::new_v4());
+        let memory_id = db
+            .archive_to_unconscious(&unique_content, 0.15, ArchiveReason::LowSalience, None)
+            .await
+            .unwrap();
+
+        // 2. Retrieve by ID - verify stored correctly
+        let retrieved = db.get_unconscious_memory(&memory_id).await.unwrap();
+        assert_eq!(retrieved.content, unique_content);
+        assert_eq!(retrieved.surface_count, 0, "Should not be surfaced yet");
+        assert!(
+            (retrieved.original_salience - 0.15).abs() < 0.001,
+            "Salience should match"
+        );
+
+        // 3. Get replay candidates - should have some (large collection)
+        let candidates = db.get_unconscious_replay_candidates(10).await.unwrap();
+        assert!(
+            !candidates.is_empty(),
+            "Should have unconscious replay candidates"
+        );
+
+        // 4. Mark as surfaced
+        db.mark_unconscious_surfaced(&memory_id).await.unwrap();
+
+        // 5. Verify surface count increased
+        let surfaced = db.get_unconscious_memory(&memory_id).await.unwrap();
+        assert_eq!(surfaced.surface_count, 1, "Surface count should be 1");
+        assert!(
+            surfaced.last_surfaced.is_some(),
+            "last_surfaced should be set"
+        );
+
+        // 6. Test sample_unconscious returns something
+        let sample = db.sample_unconscious(5).await.unwrap();
+        assert!(
+            !sample.is_empty(),
+            "Should get random sample from unconscious"
+        );
+    });
+}

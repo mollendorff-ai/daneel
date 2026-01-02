@@ -12,195 +12,39 @@
 # Status: ACTIVE
 #
 # Current priorities:
-#   1. HOTFIX follow-ups (TEST-DREAM-1, UNCON-1, SLEEP-WIRE-1) ← NEXT
-#   2. TUI deprecation & metrics consolidation (ADR-053, ADR-054) ← HIGH
-#   3. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL
-#   4. Drive system upgrade (DRIVE-1 through DRIVE-3) ← HIGH
-#   5. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← BACKLOG
+#   1. Vector connectivity learning (VCONN-1 through VCONN-8) ← CRITICAL
+#   2. Drive system upgrade (DRIVE-1 through DRIVE-3) ← HIGH
+#   3. File modularization (split cognitive_loop.rs) ← HIGH
+#   4. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← BACKLOG
+#
+# DONE (moved to CHANGELOG.md):
+#   - HOTFIX follow-ups (TEST-DREAM-1, UNCON-1, SLEEP-WIRE-1) ← Jan 2, 2026
+#   - TUI deprecation & metrics (ADR-053, ADR-054) ← Jan 1, 2026
 # =============================================================================
 
 # =============================================================================
-# CURRENT SPRINT: v0.8.2 - Hebbian Wiring
+# CURRENT SPRINT: v0.8.3 - Hebbian Wiring
 # =============================================================================
 # STATUS: ACTIVE
 # Prerequisites complete: Zero vectors cleaned, embeddings fixed (768 dims)
+# HOTFIX follow-ups complete (Jan 2, 2026) - see CHANGELOG.md
 # Focus: Wire associations for topology-based Hebbian learning
 # =============================================================================
 
 current:
-  version: "0.8.2"
+  version: "0.8.3"
   status: wip
   name: "Hebbian Wiring"
   summary: "Wire associations for topology-based Hebbian learning"
 
   # ==========================================================================
-  # HOTFIX-1: DONE → see CHANGELOG.md (2026-01-01)
-  # Symbol embedding fix, dreams fix, Qdrant cleaned
-  # ==========================================================================
-
-  # ==========================================================================
-  # NEXT: Follow-up Tasks from HOTFIX-1 Investigation
-  # ==========================================================================
-  hotfix_followup:
-    priority: "NEXT"
-    status: in_progress
-    tasks:
-    - id: "TEST-DREAM-1"
-      title: "Add integration tests for dream cycle"
-      status: pending
-      priority: "HIGH"
-      discovered: "2026-01-01"
-      description: |
-        No integration test verifies the full dream cycle:
-        - Store memory with tag_for_consolidation()
-        - Call get_replay_candidates()
-        - Verify memory is returned
-        - Call update_consolidation()
-        - Verify strength increased
-
-        Unit tests exist but no end-to-end validation.
-      files:
-        - "src/memory_db/tests.rs"
-
-    - id: "UNCON-1"
-      title: "Add unconscious retrieval method (read path missing)"
-      status: pending
-      priority: "MEDIUM"
-      discovered: "2026-01-01"
-      description: |
-        ADR-033 "Nada se apaga" specifies 4 retrieval triggers:
-        1. Dream mode replay
-        2. Association chains
-        3. Direct query/hypnosis
-        4. Spontaneous recall
-
-        Currently only write path exists (archive_to_unconscious).
-        Need to implement retrieval methods.
-      files:
-        - "src/memory_db/mod.rs"
-
-    - id: "SLEEP-WIRE-1"
-      title: "Wire sleep consolidation to SleepActor"
-      status: pending
-      priority: "LOW"
-      discovered: "2026-01-01"
-      description: |
-        SleepActor has full state machine (Awake→LightSleep→DeepSleep→Dreaming→Waking)
-        but is never spawned. Dream consolidation is hardcoded in main.rs:212-256.
-
-        This works but is not elegant. Consider wiring the actor properly.
-        Not blocking - current implementation functions correctly.
-      files:
-        - "src/actors/sleep/mod.rs"
-        - "src/main.rs"
-
-  # ==========================================================================
-  # DONE: TUI Deprecation & Metrics Consolidation (ADR-053, ADR-054)
-  # ==========================================================================
-  tui_deprecation:
-    priority: "HIGH"
-    status: done
-    completed: "2026-01-01"
-    adr: ["ADR-053-headless-default-web-observatory.md", "ADR-054-metrics-source-of-truth.md"]
-    description: |
-      TUI is redundant with daneel-web. Metrics diverge between TUI and API.
-      Solution: Deprecate TUI, consolidate metrics in core module, web-only observatory.
-      COMPLETED: 5415 lines removed, binary size reduced.
-
-    tasks:
-    - id: "TUI-1"
-      title: "Create src/core/metrics/ module"
-      status: done
-      priority: "HIGH"
-      description: |
-        Single source of truth for entropy/fractality calculation.
-        - src/core/metrics/mod.rs (pub use)
-        - src/core/metrics/entropy.rs (calculate_entropy)
-        - src/core/metrics/fractality.rs (calculate_fractality)
-        - src/core/metrics/thresholds.rs (EMERGENT=0.65, BALANCED=0.35)
-        Unit tests for each module.
-      files:
-        - "src/core/metrics/mod.rs"
-        - "src/core/metrics/entropy.rs"
-        - "src/core/metrics/fractality.rs"
-        - "src/core/metrics/thresholds.rs"
-
-    - id: "TUI-2"
-      title: "Update API to use core metrics"
-      status: done
-      priority: "HIGH"
-      description: |
-        Replace inline calculation in handlers.rs with core metrics module.
-        use crate::core::metrics::{calculate_entropy, calculate_fractality};
-      files:
-        - "src/api/handlers.rs"
-
-    - id: "TUI-3"
-      title: "Update daneel-web to fetch from API only"
-      status: done
-      priority: "HIGH"
-      description: |
-        Extended metrics (entropy/fractality) fetched from API.
-        Basic dashboard metrics still query Redis/Qdrant for responsiveness.
-        No calculation divergence - all from API.
-      files:
-        - "../daneel-web/src/main.rs"
-
-    - id: "TUI-4"
-      title: "Remove --headless flag (make default)"
-      status: done
-      priority: "MEDIUM"
-      description: |
-        Headless is now default behavior.
-        --tui flag removed entirely.
-      files:
-        - "src/main.rs"
-
-    - id: "TUI-5"
-      title: "Remove src/tui/ directory"
-      status: done
-      priority: "MEDIUM"
-      description: |
-        Delete entire TUI directory (5415 lines).
-        Includes app.rs, ui.rs, colors.rs, widgets/.
-      files:
-        - "src/tui/"
-        - "src/lib.rs"
-
-    - id: "TUI-6"
-      title: "Remove ratatui, crossterm dependencies"
-      status: done
-      priority: "LOW"
-      description: |
-        Remove TUI dependencies from Cargo.toml.
-        Smaller binary, fewer deps.
-      files:
-        - "Cargo.toml"
-        - "src/resilience/mod.rs"
-
-    - id: "TUI-7"
-      title: "Update documentation"
-      status: done
-      priority: "LOW"
-      description: |
-        Update README to point to daneel-web for observatory.
-        Update main.rs doc comments.
-
-    success_criteria:
-      - "src/core/metrics/ module exists with tests ✓"
-      - "API uses core metrics (no duplicate calculation) ✓"
-      - "daneel-web fetches from API only ✓"
-      - "All thresholds match (0.65/0.35) ✓"
-      - "TUI code removed (5415 lines) ✓"
-      - "Binary size reduced (no ratatui/crossterm) ✓"
-
-  # ==========================================================================
-  # Prerequisites Complete (see changelog.md for details):
-  # - ADR-051: Zero vectors cleaned (3.98M removed)
-  # - ADR-052: Embeddings fixed (768 dims, BGE model)
-  # - ADR-049: 100% test coverage
-  # - ADR-047: Research absorption complete
-  # - ADR-048: Reference cleanup complete
+  # Prerequisites Complete (see CHANGELOG.md for details):
+  # - HOTFIX follow-ups: TEST-DREAM-1, UNCON-1, SLEEP-WIRE-1 (Jan 2, 2026)
+  # - TUI deprecation & metrics: ADR-053, ADR-054 (Jan 1, 2026)
+  # - Zero vectors cleaned: ADR-051 (3.98M removed)
+  # - Embeddings fixed: ADR-052 (768 dims, BGE model)
+  # - 100% test coverage: ADR-049
+  # - Research absorption: ADR-047, ADR-048
   # ==========================================================================
 
   # ==========================================================================
