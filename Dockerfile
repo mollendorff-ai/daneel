@@ -4,7 +4,7 @@
 # Build binary first: make build
 # Then: docker build -t timmy-daneel .
 
-FROM debian:bookworm-slim
+FROM ubuntu:24.04
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
