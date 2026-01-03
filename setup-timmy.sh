@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 # DANEEL Setup Script for Timmy
-# Run this ONCE on timmy to set up CI/CD
+# Run this ONCE on timmy to set up the build environment and CI/CD
 #
 # From your Mac:
 #   ssh timmy 'bash -s' < setup-timmy.sh
-#
-# Or on timmy:
-#   curl -fsSL https://raw.githubusercontent.com/royalbit/daneel/main/setup-timmy.sh | bash
 
 set -euo pipefail
 
@@ -21,7 +18,53 @@ LOG_DIR="$HOME/logs"
 echo "Creating directories..."
 mkdir -p "$SRC_DIR" "$LOG_DIR"
 
-# Clone repos (or pull if exists)
+# =============================================================================
+# Install Rust
+# =============================================================================
+if command -v rustc &> /dev/null; then
+    echo "Rust already installed: $(rustc --version)"
+else
+    echo "Installing Rust..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    source "$HOME/.cargo/env"
+fi
+
+# Ensure cargo is in PATH for this session
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# Add musl target for static builds
+echo "Adding musl target..."
+rustup target add x86_64-unknown-linux-musl
+
+# Add wasm target for frontend
+echo "Adding wasm target..."
+rustup target add wasm32-unknown-unknown
+
+# =============================================================================
+# Install system dependencies
+# =============================================================================
+echo "Installing system dependencies..."
+sudo apt-get update
+sudo apt-get install -y --no-install-recommends \
+    build-essential \
+    musl-tools \
+    pkg-config \
+    libssl-dev \
+    upx-ucl
+
+# =============================================================================
+# Install Trunk (WASM bundler)
+# =============================================================================
+if command -v trunk &> /dev/null; then
+    echo "Trunk already installed: $(trunk --version)"
+else
+    echo "Installing Trunk..."
+    cargo install trunk
+fi
+
+# =============================================================================
+# Clone repos
+# =============================================================================
 clone_or_pull() {
     local repo="$1"
     local dir="$SRC_DIR/$repo"
@@ -40,13 +83,13 @@ clone_or_pull "daneel-web"
 
 # Make scripts executable
 chmod +x "$SRC_DIR/daneel/ci.sh"
-chmod +x "$SRC_DIR/daneel/deploy.sh" 2>/dev/null || true
 
-# Setup crontab (every 5 minutes)
+# =============================================================================
+# Setup crontab
+# =============================================================================
 echo "Setting up crontab..."
 CRON_CMD="*/5 * * * * $SRC_DIR/daneel/ci.sh >> $LOG_DIR/daneel-ci.log 2>&1"
 
-# Check if already in crontab
 if crontab -l 2>/dev/null | grep -q "daneel/ci.sh"; then
     echo "Crontab already configured"
 else
@@ -54,16 +97,20 @@ else
     echo "Crontab installed: $CRON_CMD"
 fi
 
-# Create volumes (if not exist)
+# =============================================================================
+# Create Docker volumes
+# =============================================================================
 echo "Creating Docker volumes..."
 docker volume create timmy-traefik-certs 2>/dev/null || true
 docker volume create timmy-redis-data 2>/dev/null || true
 docker volume create timmy-qdrant-data 2>/dev/null || true
 docker volume create timmy-fastembed-cache 2>/dev/null || true
 
+# =============================================================================
 # Initial build and deploy
+# =============================================================================
 echo ""
-echo "=== Initial deployment ==="
+echo "=== Initial build and deployment ==="
 cd "$SRC_DIR/daneel"
 ./ci.sh --force
 

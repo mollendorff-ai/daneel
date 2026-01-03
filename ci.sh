@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # DANEEL CI/CD Script
-# Pull-based deployment: checks GitHub, rebuilds if changed
+# Pull-based deployment: checks GitHub, builds natively, deploys via Docker
 #
 # Crontab (every 5 min):
 #   */5 * * * * ~/src/daneel/ci.sh >> ~/logs/daneel-ci.log 2>&1
@@ -69,16 +69,35 @@ pull_updates() {
 }
 
 # =============================================================================
-# Build and deploy
+# Build binaries natively
+# =============================================================================
+build_binaries() {
+    log "Building daneel binary..."
+    cd "$DANEEL_DIR"
+    make build
+
+    log "Building daneel-web binary..."
+    cd "$DANEEL_WEB_DIR"
+    make build
+
+    log "Building daneel-web frontend (WASM)..."
+    cd "$DANEEL_WEB_DIR/frontend"
+    trunk build --release
+
+    log "Binaries built successfully"
+}
+
+# =============================================================================
+# Build Docker images and deploy
 # =============================================================================
 build_and_deploy() {
     cd "$DANEEL_DIR"
 
-    log "Building images..."
+    log "Building Docker images..."
     if docker compose build --quiet; then
-        log "Build successful"
+        log "Docker build successful"
     else
-        log "ERROR: Build failed!"
+        log "ERROR: Docker build failed!"
         return 1
     fi
 
@@ -114,8 +133,9 @@ if check_updates "$DANEEL_WEB_DIR"; then
     NEEDS_DEPLOY=true
 fi
 
-# Deploy if needed
+# Build and deploy if needed
 if [ "$NEEDS_DEPLOY" = true ]; then
+    build_binaries
     build_and_deploy
 else
     log "No updates, skipping deploy"
