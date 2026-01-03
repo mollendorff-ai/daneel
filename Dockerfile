@@ -14,8 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Copy pre-built binary (built with `make build` on Linux)
-COPY target/x86_64-unknown-linux-musl/release/daneel /app/daneel
+# Copy pre-built binary (built with `make build`)
+COPY target/release/daneel /app/daneel
 
 # fastembed cache directory (mounted as volume)
 RUN mkdir -p /root/.cache/fastembed
