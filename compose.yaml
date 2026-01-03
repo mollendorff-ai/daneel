@@ -57,6 +57,7 @@ services:
       --appendfsync everysec
       --maxmemory 1gb
       --maxmemory-policy noeviction
+      --protected-mode no
     volumes:
       - redis-data:/data
     networks:
