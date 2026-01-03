@@ -1,0 +1,158 @@
+# DANEEL Infrastructure Stack
+# Timmy's complete cognitive infrastructure
+#
+# Usage:
+#   docker compose up -d              # Start all services
+#   docker compose logs -f daneel     # Watch cognitive loop
+#   docker compose down               # Stop (preserves volumes)
+#
+# Domains: timmy.royalbit.com, timmy.royalbit.ca (HTTP → HTTPS redirect)
+# Daneel API: localhost:3001 (host-only, blocked by ufw externally)
+
+services:
+  # =============================================================================
+  # TRAEFIK - Reverse Proxy + Let's Encrypt
+  # =============================================================================
+  traefik:
+    image: traefik:v3.2
+    container_name: timmy-traefik
+    restart: unless-stopped
+    command:
+      # Docker provider
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      # Entrypoints
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      # Let's Encrypt ACME (HTTP challenge)
+      - --certificatesresolvers.letsencrypt.acme.email=rex@royalbit.ca
+      - --certificatesresolvers.letsencrypt.acme.storage=/certs/acme.json
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+      # Logging
+      - --log.level=INFO
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-certs:/certs
+    networks:
+      - timmy-net
+
+  # =============================================================================
+  # REDIS - Streams + Working Memory (Redis Stack for future RedisGraph)
+  # =============================================================================
+  redis:
+    image: redis/redis-stack-server:latest
+    container_name: timmy-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --maxmemory 1gb
+      --maxmemory-policy noeviction
+    volumes:
+      - redis-data:/data
+    networks:
+      - timmy-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # =============================================================================
+  # QDRANT - Vector Memory (Conscious, Unconscious, Identity)
+  # =============================================================================
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: timmy-qdrant
+    restart: unless-stopped
+    volumes:
+      - qdrant-data:/qdrant/storage
+    networks:
+      - timmy-net
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:6333/readyz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # =============================================================================
+  # DANEEL - Core Cognitive Loop
+  # =============================================================================
+  daneel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: timmy-daneel:latest
+    container_name: timmy-daneel
+    restart: unless-stopped
+    environment:
+      RUST_LOG: info
+      REDIS_URL: redis://redis:6379
+      QDRANT_URL: http://qdrant:6333
+      DANEEL_API_PORT: "3001"
+    ports:
+      # Host-only access (ufw blocks external)
+      - "127.0.0.1:3001:3001"
+    volumes:
+      - fastembed-cache:/root/.cache/fastembed
+    networks:
+      - timmy-net
+    depends_on:
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+
+  # =============================================================================
+  # DANEEL-WEB - Observation Dashboard
+  # =============================================================================
+  daneel-web:
+    build:
+      context: ../daneel-web
+      dockerfile: Dockerfile
+    image: timmy-daneel-web:latest
+    container_name: timmy-daneel-web
+    restart: unless-stopped
+    environment:
+      RUST_LOG: info
+      REDIS_URL: redis://redis:6379
+      QDRANT_URL: http://qdrant:6333
+      DANEEL_API_URL: http://daneel:3001
+      HOST: "0.0.0.0"
+      PORT: "3000"
+    volumes:
+      - fastembed-cache:/root/.cache/fastembed
+    networks:
+      - timmy-net
+    depends_on:
+      - redis
+      - qdrant
+      - daneel
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.daneel-web.rule=Host(`timmy.royalbit.com`) || Host(`timmy.royalbit.ca`)"
+      - "traefik.http.routers.daneel-web.entrypoints=websecure"
+      - "traefik.http.routers.daneel-web.tls=true"
+      - "traefik.http.routers.daneel-web.tls.certresolver=letsencrypt"
+      - "traefik.http.services.daneel-web.loadbalancer.server.port=3000"
+
+networks:
+  timmy-net:
+    driver: bridge
+
+volumes:
+  traefik-certs:
+    name: timmy-traefik-certs
+  redis-data:
+    name: timmy-redis-data
+  qdrant-data:
+    name: timmy-qdrant-data
+  fastembed-cache:
+    name: timmy-fastembed-cache
