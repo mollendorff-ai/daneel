@@ -2,6 +2,22 @@
 
 All notable changes to DANEEL are documented here.
 
+## [0.8.3] - 2026-01-03 - Docker Deployment & Environment Configuration
+
+### Docker Support
+- Added environment variable support for Redis and Qdrant connections
+- `REDIS_URL` and `QDRANT_URL` now configurable (defaults to localhost)
+- Fixed Redis protected mode for container networking
+- Updated Traefik to v3.3+ for Docker 29.x compatibility
+- Qdrant health check uses bash TCP check (no wget/curl dependency)
+
+### Files Changed
+- `src/main.rs` - Read REDIS_URL/QDRANT_URL from environment
+- `compose.yaml` - Production Docker Compose stack
+- `Dockerfile` - Runtime-only image (pre-built binary)
+
+---
+
 ## [0.8.3] - 2026-01-02 - HOTFIX Follow-ups Complete
 
 ### HOTFIX Follow-up Tasks (TEST-DREAM-1, UNCON-1, SLEEP-WIRE-1)
