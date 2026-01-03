@@ -2,21 +2,17 @@
 # Multi-stage build for minimal runtime image
 #
 # Build: docker build -t timmy-daneel .
-# Size: ~50MB (static musl binary + fastembed model)
 
 # =============================================================================
 # Stage 1: Build environment
 # =============================================================================
-FROM rust:1.83-alpine AS builder
+FROM rust:1.83-bookworm AS builder
 
 # Install build dependencies
-RUN apk add --no-cache \
-    musl-dev \
-    openssl-dev \
-    openssl-libs-static \
-    pkgconfig \
-    perl \
-    make
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -27,9 +23,6 @@ COPY Cargo.toml Cargo.lock ./
 RUN mkdir src && echo "fn main() {}" > src/main.rs
 
 # Build dependencies (this layer is cached)
-ENV OPENSSL_STATIC=1
-ENV OPENSSL_LIB_DIR=/usr/lib
-ENV OPENSSL_INCLUDE_DIR=/usr/include
 RUN cargo build --release && rm -rf src
 
 # Copy actual source
@@ -44,13 +37,14 @@ RUN strip /app/target/release/daneel
 # =============================================================================
 # Stage 2: Runtime
 # =============================================================================
-FROM alpine:3.21
+FROM debian:bookworm-slim
 
-# Install runtime dependencies (CA certs for HTTPS, curl for healthcheck)
-RUN apk add --no-cache ca-certificates curl
-
-# Create non-root user
-RUN addgroup -S daneel && adduser -S daneel -G daneel
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libssl3 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -63,6 +57,4 @@ RUN mkdir -p /root/.cache/fastembed
 # Expose injection API port
 EXPOSE 3001
 
-# Run as root (fastembed needs write access to cache)
-# In production, consider pre-downloading model in build stage
 ENTRYPOINT ["/app/daneel"]
