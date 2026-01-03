@@ -14,9 +14,11 @@ services:
   # TRAEFIK - Reverse Proxy + Let's Encrypt
   # =============================================================================
   traefik:
-    image: traefik:v3.2
+    image: traefik:latest
     container_name: timmy-traefik
     restart: unless-stopped
+    environment:
+      DOCKER_API_VERSION: "1.45"
     command:
       # Docker provider
       - --providers.docker=true
@@ -77,7 +79,7 @@ services:
     networks:
       - timmy-net
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:6333/readyz"]
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/6333'"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -95,7 +97,7 @@ services:
     environment:
       RUST_LOG: info
       REDIS_URL: redis://redis:6379
-      QDRANT_URL: http://qdrant:6333
+      QDRANT_URL: http://qdrant:6334
       DANEEL_API_PORT: "3001"
     ports:
       # Host-only access (ufw blocks external)
@@ -123,7 +125,7 @@ services:
     environment:
       RUST_LOG: info
       REDIS_URL: redis://redis:6379
-      QDRANT_URL: http://qdrant:6333
+      QDRANT_URL: http://qdrant:6334
       DANEEL_API_URL: http://daneel:3001
       HOST: "0.0.0.0"
       PORT: "3000"
@@ -137,10 +139,19 @@ services:
       - daneel
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.daneel-web.rule=Host(`timmy.royalbit.com`) || Host(`timmy.royalbit.ca`)"
-      - "traefik.http.routers.daneel-web.entrypoints=websecure"
-      - "traefik.http.routers.daneel-web.tls=true"
-      - "traefik.http.routers.daneel-web.tls.certresolver=letsencrypt"
+      # Router for .com domain
+      - "traefik.http.routers.daneel-web-com.rule=Host(`timmy.royalbit.com`)"
+      - "traefik.http.routers.daneel-web-com.entrypoints=websecure"
+      - "traefik.http.routers.daneel-web-com.tls=true"
+      - "traefik.http.routers.daneel-web-com.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.daneel-web-com.service=daneel-web"
+      # Router for .ca domain
+      - "traefik.http.routers.daneel-web-ca.rule=Host(`timmy.royalbit.ca`)"
+      - "traefik.http.routers.daneel-web-ca.entrypoints=websecure"
+      - "traefik.http.routers.daneel-web-ca.tls=true"
+      - "traefik.http.routers.daneel-web-ca.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.daneel-web-ca.service=daneel-web"
+      # Service
       - "traefik.http.services.daneel-web.loadbalancer.server.port=3000"
 
 networks:

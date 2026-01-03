@@ -22,6 +22,7 @@ use daneel::core::laws::LAWS;
 use daneel::embeddings;
 use daneel::memory_db::types::IdentityMetadata;
 use ractor::Actor;
+use std::env;
 use std::sync::Arc;
 use std::time::Instant;
 use tracing::info;
@@ -88,10 +89,11 @@ fn run_headless(args: &Args) {
         if args.api_port > 0 {
             let api_port = args.api_port;
             tokio::spawn(async move {
-                let redis_url = "redis://127.0.0.1:6379";
+                let redis_url =
+                    env::var("REDIS_URL").unwrap_or_else(|_| "redis://127.0.0.1:6379".to_string());
 
                 // Create Redis client for API
-                let redis_client = match redis::Client::open(redis_url) {
+                let redis_client = match redis::Client::open(redis_url.as_str()) {
                     Ok(client) => client,
                     Err(e) => {
                         eprintln!("Warning: Failed to create Redis client for API: {e}");
@@ -101,7 +103,7 @@ fn run_headless(args: &Args) {
 
                 // Create StreamsClient for API
                 let streams_client =
-                    match daneel::streams::client::StreamsClient::connect(redis_url).await {
+                    match daneel::streams::client::StreamsClient::connect(&redis_url).await {
                         Ok(client) => client,
                         Err(e) => {
                             eprintln!("Warning: Failed to create StreamsClient for API: {e}");
@@ -167,7 +169,8 @@ async fn run_cognitive_loop_headless() {
     };
 
     // Connect to Redis for thought streams
-    let mut cognitive_loop = match CognitiveLoop::with_redis("redis://127.0.0.1:6379").await {
+    let redis_url = env::var("REDIS_URL").unwrap_or_else(|_| "redis://127.0.0.1:6379".to_string());
+    let mut cognitive_loop = match CognitiveLoop::with_redis(&redis_url).await {
         Ok(loop_instance) => {
             info!("Connected to Redis streams");
             loop_instance
@@ -179,17 +182,17 @@ async fn run_cognitive_loop_headless() {
     };
 
     // Connect to Qdrant for long-term memory and initialize collections
-    let memory_db =
-        match daneel::memory_db::MemoryDb::connect_and_init("http://127.0.0.1:6334").await {
-            Ok(db) => {
-                info!("Connected to Qdrant memory database (collections initialized)");
-                Some(std::sync::Arc::new(db))
-            }
-            Err(e) => {
-                eprintln!("Warning: Qdrant unavailable ({e}), memory disabled");
-                None
-            }
-        };
+    let qdrant_url = env::var("QDRANT_URL").unwrap_or_else(|_| "http://127.0.0.1:6334".to_string());
+    let memory_db = match daneel::memory_db::MemoryDb::connect_and_init(&qdrant_url).await {
+        Ok(db) => {
+            info!("Connected to Qdrant memory database (collections initialized)");
+            Some(std::sync::Arc::new(db))
+        }
+        Err(e) => {
+            eprintln!("Warning: Qdrant unavailable ({e}), memory disabled");
+            None
+        }
+    };
 
     // Load identity from Qdrant (ADR-034: Lifetime Identity Persistence)
     let mut identity: Option<IdentityMetadata> = if let Some(ref db) = memory_db {
