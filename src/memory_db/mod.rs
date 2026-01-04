@@ -455,7 +455,7 @@ impl MemoryDb {
         }
 
         // 2. Perform K-Means clustering
-        let dataset = linfa::Dataset::from(data);
+        let dataset = linfa::Dataset::from(data.clone());
         let model = KMeans::params(k)
             .tolerance(1e-3)
             .max_n_iterations(100)
@@ -464,7 +464,21 @@ impl MemoryDb {
 
         let predictions = model.predict(&dataset);
 
-        // 3. Update points with cluster IDs
+        // 3. Calculate silhouette score (VCONN-7 validation)
+        let silhouette = Self::calculate_silhouette(&data, &predictions, k);
+        if silhouette < 0.3 {
+            tracing::warn!(
+                silhouette = silhouette,
+                "Manifold clustering weak - associations may be sparse"
+            );
+        } else {
+            tracing::info!(
+                silhouette = silhouette,
+                "Manifold validated - meaningful cluster structure detected"
+            );
+        }
+
+        // 4. Update points with cluster IDs
         for (i, (mut memory, vector)) in point_info.into_iter().enumerate() {
             let cluster_id = predictions[i];
             #[allow(clippy::cast_possible_truncation)]
@@ -475,10 +489,87 @@ impl MemoryDb {
         }
 
         tracing::debug!(
-            "Manifold clustering complete. {} memories labeled.",
-            num_points
+            num_points = num_points,
+            silhouette = silhouette,
+            "Manifold clustering complete"
         );
         Ok(())
+    }
+
+    /// Calculate silhouette score for clustering validation (VCONN-7)
+    ///
+    /// Measures how similar points are to their own cluster vs other clusters.
+    /// Score range: -1 to +1, where > 0.3 indicates meaningful structure.
+    #[allow(clippy::cast_precision_loss)]
+    fn calculate_silhouette(data: &Array2<f32>, labels: &ndarray::Array1<usize>, k: usize) -> f32 {
+        let n = data.nrows();
+        if n < 2 || k < 2 {
+            return 0.0;
+        }
+
+        let mut scores = Vec::with_capacity(n);
+
+        for i in 0..n {
+            let cluster_i = labels[i];
+            let point_i = data.row(i);
+
+            // a(i) = average distance to points in same cluster
+            let mut same_cluster_dist = 0.0;
+            let mut same_cluster_count = 0;
+
+            // b(i) = min average distance to points in other clusters
+            let mut other_cluster_dists: Vec<(f32, usize)> = vec![(0.0, 0); k];
+
+            for j in 0..n {
+                if i == j {
+                    continue;
+                }
+                let point_j = data.row(j);
+                let dist: f32 = point_i
+                    .iter()
+                    .zip(point_j.iter())
+                    .map(|(a, b)| (a - b).powi(2))
+                    .sum::<f32>()
+                    .sqrt();
+
+                let cluster_j = labels[j];
+                if cluster_j == cluster_i {
+                    same_cluster_dist += dist;
+                    same_cluster_count += 1;
+                } else {
+                    other_cluster_dists[cluster_j].0 += dist;
+                    other_cluster_dists[cluster_j].1 += 1;
+                }
+            }
+
+            let a_i = if same_cluster_count > 0 {
+                same_cluster_dist / same_cluster_count as f32
+            } else {
+                0.0
+            };
+
+            let b_i = other_cluster_dists
+                .iter()
+                .filter(|(_, count)| *count > 0)
+                .map(|(sum, count)| sum / *count as f32)
+                .fold(f32::MAX, f32::min);
+
+            let s_i = if a_i < b_i && b_i > 0.0 {
+                (b_i - a_i) / b_i
+            } else if a_i > b_i && a_i > 0.0 {
+                (b_i - a_i) / a_i
+            } else {
+                0.0
+            };
+
+            scores.push(s_i);
+        }
+
+        if scores.is_empty() {
+            0.0
+        } else {
+            scores.iter().sum::<f32>() / scores.len() as f32
+        }
     }
 
     /// Store an episode

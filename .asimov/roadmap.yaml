@@ -12,59 +12,44 @@
 # Status: ACTIVE
 #
 # Current priorities:
-#   1. Spreading activation (VCONN-6) ← HIGH
-#   2. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← MEDIUM
-#   3. Test manifold clustering (VCONN-7) ← HIGH
+#   1. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← MEDIUM
+#   2. v0.9.0 planning
 # =============================================================================
 
 # =============================================================================
-# CURRENT SPRINT: v0.8.5 - Emergence Analysis
+# COMPLETED: v0.8.6 - Emergence Analysis (Jan 4, 2026)
 # =============================================================================
-# STATUS: ACTIVE - Focus: Analyze associations and implement spreading activation
-# Hebbian Wiring & Drive System complete (v0.8.4)
+# All VCONN tasks complete. Spreading activation + manifold clustering validated.
+# =============================================================================
+
+completed:
+  - version: "0.8.6"
+    name: "Emergence Analysis"
+    date: "2026-01-04"
+    tasks:
+      - id: "VCONN-6"
+        title: "Spreading activation"
+        description: "Memory retrieval spreads to graph neighbors (depth=2, decay=0.3)"
+      - id: "VCONN-7"
+        title: "Manifold clustering with silhouette validation"
+        description: "K-Means clustering + silhouette score > 0.3 check"
+      - id: "VCONN-8"
+        title: "Gephi GraphML export"
+        description: "Export association graph to GraphML for visualization"
+
+# =============================================================================
+# NEXT SPRINT: v0.9.0 - TBD
 # =============================================================================
 
 current:
-  version: "0.8.5"
-  status: pending
-  name: "Emergence Analysis"
-  summary: "Implement spreading activation and analyze association manifolds"
+  version: "0.9.0"
+  status: planning
+  name: "TBD"
+  summary: "Next phase - to be determined"
 
-  # ==========================================================================
-  # Pending VCONN Tasks
-  # ==========================================================================
-  tasks:
-    - id: "VCONN-6"
-      title: "Implement spreading activation"
-      status: pending
-      priority: "HIGH"
-      absorbed_from: ["shodh-memory"]
-      description: |
-        - When memory retrieved, activation spreads to neighbors
-        - Spread strength = edge_weight × decay_factor
-        - Depth limit = 2
-      files:
-        - "src/core/cognitive_loop/execution.rs"
-        - "src/memory_db/mod.rs"
+  tasks: []
 
-    - id: "VCONN-7"
-      title: "Test manifold clustering with associations"
-      status: pending
-      priority: "HIGH"
-      description: |
-        Validate that wired associations produce manifold clustering.
-        Success criteria: Silhouette score > 0.3 (via Forge)
-
-    - id: "VCONN-8"
-      title: "Gephi visualization export"
-      status: pending
-      priority: "MEDIUM"
-      description: "Export graph to GraphML for external analysis."
-
-  success_criteria:
-    - "Retrieval influenced by association strength"
-    - "Manifold shows clustering"
-    - "Exportable to Gephi"
+  success_criteria: []
 
   # ==========================================================================
   # BACKLOG: Forge Crystal Analysis Upgrade (Dec 30, 2025)

@@ -2,6 +2,35 @@
 
 All notable changes to DANEEL are documented here.
 
+## [0.8.6] - 2026-01-04 - Emergence Analysis Complete (VCONN)
+
+### Spreading Activation (VCONN-6)
+- **Graph-based Memory Retrieval**: When a memory is retrieved from Qdrant, activation spreads to associated neighbors in RedisGraph.
+- **Depth-Limited Propagation**: Activation spreads up to depth 2 with decay factor 0.3 per level.
+- **Competitive Integration**: Spread-activated memories compete alongside direct retrievals in the autoflow stage.
+- **Biological Inspiration**: Mimics how human memory works - thinking of "beach" primes "sand", "waves", "vacation".
+
+### Manifold Clustering Validation (VCONN-7)
+- **K-Means Clustering**: Memories clustered by semantic similarity (K=10) during sleep consolidation.
+- **Silhouette Score Validation**: Clustering quality measured automatically.
+  - Score > 0.3 = meaningful structure detected (info log)
+  - Score < 0.3 = associations may be sparse (warning log)
+- **Cluster ID Persistence**: Each memory tagged with cluster_id for downstream analysis.
+
+### Gephi GraphML Export (VCONN-8)
+- **Full Graph Export**: `export_graphml()` queries all Memory nodes and ASSOCIATED edges from RedisGraph.
+- **Standard Format**: Valid GraphML XML with weight and type attributes.
+- **External Analysis**: Enables visualization in Gephi, NetworkX, or other graph tools.
+
+### Files Changed
+- `src/core/cognitive_loop/mod.rs` - Added `graph_client` field and `set_graph_client()`
+- `src/core/cognitive_loop/execution.rs` - `spread_activation()`, updated `trigger_memory_associations()`
+- `src/graph/mod.rs` - Fixed `query_neighbors()` for redis 1.0.2 API, implemented `export_graphml()`
+- `src/memory_db/mod.rs` - Added `cluster_id` field, `cluster_memories()`, `calculate_silhouette()`
+- `src/memory_db/types/mod.rs` - Added `cluster_id: Option<u32>` to Memory struct
+
+---
+
 ## [0.8.4] - 2026-01-04 - Hebbian Wiring & Drive System Upgrade
 
 ### Major Feature: Hebbian Learning & Association Wiring (VCONN)
