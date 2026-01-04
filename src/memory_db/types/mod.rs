@@ -91,6 +91,40 @@ pub struct Association {
 
     /// Number of co-activations
     pub coactivation_count: u32,
+
+    /// Eligibility trace for Three-Factor Learning (MSTDPET)
+    /// Persists ~100-500ms to allow delayed reward modulation
+    #[serde(default)]
+    pub eligibility_trace: f32,
+}
+
+impl Association {
+    /// Calculate weight decay based on time and consolidation status
+    ///
+    /// Implements "Hybrid Decay" (shodh-memory):
+    /// - Short-term (< 10 co-activations): Exponential decay (fast forgetting)
+    /// - Long-term (>= 10 co-activations): Power-law decay (slow forgetting)
+    #[must_use]
+    #[allow(clippy::cast_precision_loss)]
+    pub fn calculate_decay(&self, now: DateTime<Utc>) -> f32 {
+        let age_hours = (now - self.last_coactivated).num_minutes() as f32 / 60.0;
+
+        // Prevent decay for very recent associations (under 1 hour)
+        if age_hours < 1.0 {
+            return 1.0;
+        }
+
+        if self.coactivation_count < 10 {
+            // Short-term: Exponential decay
+            // Halflife approx 24 hours
+            (-0.03 * age_hours).exp()
+        } else {
+            // Long-term: Power-law decay (scale-free)
+            // Slower decay for consolidated memories
+            let t = age_hours.max(1.0);
+            t.powf(-0.1)
+        }
+    }
 }
 
 /// Types of memory associations
@@ -240,6 +274,10 @@ pub struct Memory {
     /// Connection relevance (THE critical weight for alignment)
     pub connection_relevance: f32,
 
+    /// BCM Sliding Threshold (`theta_m`)
+    /// Running average of post-synaptic activity (E[y^2]) for Hebbian learning
+    pub theta_m: f32,
+
     /// Semantic salience
     pub semantic_salience: f32,
 
@@ -275,6 +313,7 @@ impl Memory {
             context_vector: None,
             emotional_state: EmotionalState::neutral(),
             connection_relevance: 0.5,
+            theta_m: 0.1, // Start with low threshold to encourage initial learning
             semantic_salience: 0.5,
             consolidation: ConsolidationState::new(),
             associations: Vec::new(),
@@ -343,6 +382,16 @@ impl Memory {
         let semantic = self.semantic_salience * 0.3;
         let connection = self.connection_relevance * 0.3;
         emotional + semantic + connection
+    }
+
+    /// Update BCM sliding threshold (`theta_m`)
+    ///
+    /// `theta_m` = `theta_m` + (y^2 - `theta_m`) / tau
+    /// Where y is the current activity/salience.
+    /// This keeps the threshold moving to stabilize learning.
+    pub fn update_bcm_threshold(&mut self, current_activity: f32, tau: f32) {
+        let activity_sq = current_activity.powi(2);
+        self.theta_m += (activity_sq - self.theta_m) / tau;
     }
 }
 
@@ -876,6 +925,7 @@ mod tests {
             association_type: AssociationType::Semantic,
             last_coactivated: Utc::now(),
             coactivation_count: 5,
+            eligibility_trace: 0.0,
         };
 
         let json = serde_json::to_string(&assoc).expect("should serialize");
@@ -1038,5 +1088,75 @@ mod tests {
         assert_eq!(IDENTITY_RECORD_ID, "00000000-0000-0000-0000-000000000001");
         let parsed = Uuid::parse_str(IDENTITY_RECORD_ID);
         assert!(parsed.is_ok());
+    }
+
+    // =========================================================================
+    // Hebbian Learning Tests (VCONN-1)
+    // =========================================================================
+
+    #[test]
+    fn bcm_threshold_update() {
+        let mut memory = Memory::new(
+            "Learning".to_string(),
+            MemorySource::External {
+                stimulus: "test".to_string(),
+            },
+        );
+
+        // Initial state
+        memory.theta_m = 0.0;
+
+        // High activity (1.0) -> threshold should rise
+        // theta_m += (1.0^2 - 0.0) / 10.0 = 0.1
+        memory.update_bcm_threshold(1.0, 10.0);
+        assert!((memory.theta_m - 0.1).abs() < f32::EPSILON);
+
+        // Low activity (0.0) -> threshold should fall
+        // theta_m += (0.0^2 - 0.1) / 10.0 = 0.1 - 0.01 = 0.09
+        memory.update_bcm_threshold(0.0, 10.0);
+        assert!((memory.theta_m - 0.09).abs() < 1e-6);
+    }
+
+    #[test]
+    fn hybrid_decay_short_term() {
+        let assoc = Association {
+            target_id: Uuid::new_v4(),
+            weight: 1.0,
+            association_type: AssociationType::Semantic,
+            last_coactivated: Utc::now() - chrono::Duration::hours(24),
+            coactivation_count: 5, // < 10, so exponential decay
+            eligibility_trace: 0.0,
+        };
+
+        let decay = assoc.calculate_decay(Utc::now());
+
+        // Exp decay: exp(-0.03 * 24) = exp(-0.72) ≈ 0.486
+        assert!(decay < 0.5);
+        assert!(decay > 0.4);
+    }
+
+    #[test]
+    fn hybrid_decay_long_term() {
+        let assoc = Association {
+            target_id: Uuid::new_v4(),
+            weight: 1.0,
+            association_type: AssociationType::Semantic,
+            last_coactivated: Utc::now() - chrono::Duration::hours(24),
+            coactivation_count: 20, // >= 10, so power-law decay
+            eligibility_trace: 0.0,
+        };
+
+        let decay = assoc.calculate_decay(Utc::now());
+
+        // Power law: 24^(-0.1) ≈ 0.72
+        assert!(decay > 0.7);
+        assert!(decay < 0.8);
+
+        // Should be better preserved than short-term
+        let short_term_assoc = Association {
+            coactivation_count: 5,
+            ..assoc
+        };
+        assert!(decay > short_term_assoc.calculate_decay(Utc::now()));
     }
 }

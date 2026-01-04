@@ -31,6 +31,28 @@ pub enum SleepState {
     Waking,
 }
 
+impl SleepState {
+    /// Get consolidation multiplier for this stage (VCONN-4)
+    ///
+    /// Based on ExoGenesis-Omega research:
+    /// - Awake: 0.0 (No consolidation)
+    /// - Entering: 0.1 (Transition)
+    /// - `LightSleep` (NREM1/2): 0.5 (Average of 0.3 and 0.6)
+    /// - `DeepSleep` (NREM3): 1.0 (Maximum consolidation)
+    /// - Dreaming (REM): 0.8 (Strong, emotional focus)
+    /// - Waking: 0.0
+    #[must_use]
+    pub const fn consolidation_multiplier(&self) -> f32 {
+        match self {
+            Self::Awake | Self::Waking => 0.0,
+            Self::EnteringSleep => 0.1,
+            Self::LightSleep => 0.5,
+            Self::DeepSleep => 1.0,
+            Self::Dreaming => 0.8,
+        }
+    }
+}
+
 impl std::fmt::Display for SleepState {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -314,6 +336,24 @@ pub enum SleepMessage {
         config: SleepConfig,
         reply: RpcReplyPort<()>,
     },
+
+    /// Get current consolidation parameters (multiplier + focus)
+    GetConsolidationParams {
+        reply: RpcReplyPort<ConsolidationParams>,
+    },
+}
+
+/// Parameters for consolidation (based on sleep stage)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ConsolidationParams {
+    /// Strength multiplier (0.0 - 1.0)
+    pub multiplier: f32,
+
+    /// Whether to prioritize emotional memories (REM sleep)
+    pub prioritize_emotional: bool,
+
+    /// Whether to prune weak associations (Homeostasis)
+    pub pruning_enabled: bool,
 }
 
 /// Sleep operation result

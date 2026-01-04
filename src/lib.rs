@@ -25,6 +25,7 @@ pub mod api;
 pub mod config;
 pub mod core;
 pub mod embeddings;
+pub mod graph;
 pub mod memory_db;
 pub mod noise;
 pub mod persistence;
