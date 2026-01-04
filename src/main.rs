@@ -396,13 +396,34 @@ async fn run_cognitive_loop_headless() {
                                     // Occasionally re-cluster memories to discover emergent themes
                                     if total_dream_cycles.is_multiple_of(5) {
                                         let db_clone = db.clone();
+                                        let redis_url_clone = redis_url.clone();
                                         tokio::spawn(async move {
-                                            if let Err(e) = db_clone.cluster_memories(10).await {
-                                                tracing::warn!("Manifold clustering failed: {}", e);
-                                            } else {
-                                                tracing::info!(
-                                                    "Manifold clustering complete (K=10)"
-                                                );
+                                            match db_clone.cluster_memories(10).await {
+                                                Ok(silhouette) => {
+                                                    tracing::info!(
+                                                        silhouette = silhouette,
+                                                        "Manifold clustering complete (K=10)"
+                                                    );
+                                                    // Store silhouette in Redis for dashboard
+                                                    if let Ok(client) = redis::Client::open(redis_url_clone.as_str()) {
+                                                        if let Ok(mut conn) = client.get_multiplexed_async_connection().await {
+                                                            use redis::AsyncCommands;
+                                                            let _: Result<(), _> = conn.hset(
+                                                                "daneel:metrics",
+                                                                "silhouette",
+                                                                silhouette.to_string()
+                                                            ).await;
+                                                            let _: Result<(), _> = conn.hset(
+                                                                "daneel:metrics",
+                                                                "silhouette_updated_at",
+                                                                chrono::Utc::now().to_rfc3339()
+                                                            ).await;
+                                                        }
+                                                    }
+                                                }
+                                                Err(e) => {
+                                                    tracing::warn!("Manifold clustering failed: {}", e);
+                                                }
                                             }
                                         });
                                     }

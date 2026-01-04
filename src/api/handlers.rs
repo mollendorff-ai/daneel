@@ -13,10 +13,10 @@ use uuid::Uuid;
 use super::{
     rate_limit::{check_rate_limit, RateLimitConfig, RateLimitResult},
     types::{
-        AuthenticatedKey, EntropyMetrics, ExtendedMetricsResponse, FractalityMetrics,
-        HealthResponse, InjectRequest, InjectResponse, InjectionRecord, MemorySlot,
-        MemoryWindowsMetrics, PhilosophyMetrics, StageMetrics, StreamCompetitionMetrics,
-        SystemMetrics,
+        AuthenticatedKey, ClusteringMetrics, EntropyMetrics, ExtendedMetricsResponse,
+        FractalityMetrics, HealthResponse, InjectRequest, InjectResponse, InjectionRecord,
+        MemorySlot, MemoryWindowsMetrics, PhilosophyMetrics, StageMetrics,
+        StreamCompetitionMetrics, SystemMetrics,
     },
     AppState,
 };
@@ -317,6 +317,9 @@ pub async fn extended_metrics(
     // Compute fractality from inter-arrival times
     let fractality = compute_fractality(&mut conn).await;
 
+    // Fetch clustering metrics from Redis (VCONN-7)
+    let clustering = fetch_clustering_metrics(&mut conn).await;
+
     // Memory windows (simplified - first 5 active)
     let memory_windows = MemoryWindowsMetrics {
         slots: (0..9)
@@ -355,6 +358,7 @@ pub async fn extended_metrics(
         memory_windows,
         philosophy,
         system,
+        clustering,
     }))
 }
 
@@ -625,6 +629,23 @@ async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> Fra
         burst_ratio: result.burst_ratio,
         description: result.state.to_string(),
         history: vec![result.score; 50],
+    }
+}
+
+/// Fetch clustering metrics from Redis (VCONN-7)
+#[cfg_attr(coverage_nightly, coverage(off))]
+async fn fetch_clustering_metrics(conn: &mut redis::aio::MultiplexedConnection) -> ClusteringMetrics {
+    let silhouette: Option<String> = conn.hget("daneel:metrics", "silhouette").await.ok();
+    let updated_at: Option<String> = conn.hget("daneel:metrics", "silhouette_updated_at").await.ok();
+
+    let silhouette_val = silhouette
+        .and_then(|s| s.parse::<f32>().ok())
+        .unwrap_or(0.0);
+
+    ClusteringMetrics {
+        silhouette: silhouette_val,
+        updated_at,
+        has_structure: silhouette_val > 0.3,
     }
 }
 
