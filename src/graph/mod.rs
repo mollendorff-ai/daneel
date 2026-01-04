@@ -173,14 +173,112 @@ impl GraphClient {
         }
     }
 
-    /// Export graph to `GraphML` format for Gephi
+    /// Export graph to `GraphML` format for Gephi (VCONN-8)
+    ///
+    /// Queries all nodes and edges from `RedisGraph` and serializes to `GraphML` XML.
     ///
     /// # Errors
     ///
-    /// Returns error if export fails.
-    pub fn export_graphml(&self) -> Result<String> {
-        // Placeholder for GraphML export logic
-        Ok("<graphml></graphml>".to_string())
+    /// Returns error if Redis query fails.
+    pub async fn export_graphml(&self) -> Result<String> {
+        use std::fmt::Write;
+
+        let mut conn = self.client.get_multiplexed_async_connection().await?;
+
+        // Query all nodes
+        let nodes_query = "MATCH (n:Memory) RETURN n.id";
+        let nodes_result: redis::Value = redis::cmd("GRAPH.QUERY")
+            .arg(&self.graph_name)
+            .arg(nodes_query)
+            .query_async(&mut conn)
+            .await?;
+
+        let mut node_ids: Vec<String> = Vec::new();
+        if let redis::Value::Array(sections) = &nodes_result {
+            if sections.len() >= 2 {
+                if let redis::Value::Array(ref rows) = sections[1] {
+                    for row in rows {
+                        if let redis::Value::Array(ref fields) = row {
+                            if let Some(id) = fields.first().and_then(Self::extract_string) {
+                                node_ids.push(id);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Query all edges
+        let edges_query =
+            "MATCH (a:Memory)-[r:ASSOCIATED]->(b:Memory) RETURN a.id, b.id, r.weight, r.type";
+        let edges_result: redis::Value = redis::cmd("GRAPH.QUERY")
+            .arg(&self.graph_name)
+            .arg(edges_query)
+            .query_async(&mut conn)
+            .await?;
+
+        let mut edges: Vec<(String, String, f32, String)> = Vec::new();
+        if let redis::Value::Array(sections) = &edges_result {
+            if sections.len() >= 2 {
+                if let redis::Value::Array(ref rows) = sections[1] {
+                    for row in rows {
+                        if let redis::Value::Array(ref fields) = row {
+                            if fields.len() >= 4 {
+                                let source = Self::extract_string(&fields[0]);
+                                let target = Self::extract_string(&fields[1]);
+                                let weight = Self::extract_float(&fields[2]).unwrap_or(0.0);
+                                let edge_type = Self::extract_string(&fields[3])
+                                    .unwrap_or_else(|| "Unknown".to_string());
+
+                                if let (Some(s), Some(t)) = (source, target) {
+                                    edges.push((s, t, weight, edge_type));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Build GraphML XML
+        let mut xml = String::new();
+        xml.push_str(
+            r#"<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>
+  <key id="type" for="edge" attr.name="type" attr.type="string"/>
+  <graph id="daneel" edgedefault="directed">
+"#,
+        );
+
+        // Add nodes
+        for id in &node_ids {
+            let _ = writeln!(xml, "    <node id=\"{id}\"/>");
+        }
+
+        // Add edges
+        for (i, (source, target, weight, edge_type)) in edges.iter().enumerate() {
+            let _ = writeln!(
+                xml,
+                "    <edge id=\"e{i}\" source=\"{source}\" target=\"{target}\">"
+            );
+            let _ = writeln!(xml, "      <data key=\"weight\">{weight}</data>");
+            let _ = writeln!(xml, "      <data key=\"type\">{edge_type}</data>");
+            xml.push_str("    </edge>\n");
+        }
+
+        xml.push_str("  </graph>\n</graphml>\n");
+
+        tracing::info!(
+            nodes = node_ids.len(),
+            edges = edges.len(),
+            "Exported graph to GraphML"
+        );
+
+        Ok(xml)
     }
 }
 impl std::fmt::Debug for GraphClient {
