@@ -389,6 +389,21 @@ async fn run_cognitive_loop_headless() {
                                         "Mini-dream #{}: consolidated {} memories, {} associations (via SleepActor)",
                                         total_dream_cycles, consolidated, associations_strengthened
                                     );
+
+                                    // VCONN-7: Manifold Clustering
+                                    // Occasionally re-cluster memories to discover emergent themes
+                                    if total_dream_cycles.is_multiple_of(5) {
+                                        let db_clone = db.clone();
+                                        tokio::spawn(async move {
+                                            if let Err(e) = db_clone.cluster_memories(10).await {
+                                                tracing::warn!("Manifold clustering failed: {}", e);
+                                            } else {
+                                                tracing::info!(
+                                                    "Manifold clustering complete (K=10)"
+                                                );
+                                            }
+                                        });
+                                    }
                                 }
                             }
                             Err(e) => {
