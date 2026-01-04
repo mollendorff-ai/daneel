@@ -62,6 +62,7 @@ use crate::core::types::Content;
 use crate::core::types::SalienceScore;
 use crate::drives::{CuriosityModule, FreeEnergyModule};
 use crate::embeddings::SharedEmbeddingEngine;
+use crate::graph::GraphClient;
 use crate::memory_db::MemoryDb;
 use crate::noise::StimulusInjector;
 use crate::streams::client::StreamsClient;
@@ -125,6 +126,9 @@ pub struct CognitiveLoop {
     /// When present, new thoughts get real embeddings; historical stay at origin
     pub(crate) embedding_engine: Option<SharedEmbeddingEngine>,
 
+    /// Graph client for association queries (VCONN-6 spreading activation)
+    pub(crate) graph_client: Option<Arc<GraphClient>>,
+
     /// Test-only: Injected thought for testing veto path (ADR-049)
     #[cfg(test)]
     pub(crate) test_injected_thought: Option<(Content, SalienceScore)>,
@@ -159,6 +163,7 @@ impl CognitiveLoop {
             curiosity_module: CuriosityModule::new(crate::drives::CuriosityConfig::default()),
             free_energy_module: FreeEnergyModule::new(crate::drives::FreeEnergyConfig::default()),
             embedding_engine: None,
+            graph_client: None,
             #[cfg(test)]
             test_injected_thought: None,
         }
@@ -217,6 +222,15 @@ impl CognitiveLoop {
     #[must_use]
     pub const fn memory_db(&self) -> Option<&Arc<MemoryDb>> {
         self.memory_db.as_ref()
+    }
+
+    /// Set the graph client for association queries (VCONN-6)
+    ///
+    /// When set, spreading activation can query neighbors in `RedisGraph`.
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    pub fn set_graph_client(&mut self, graph_client: Arc<GraphClient>) {
+        self.graph_client = Some(graph_client);
+        tracing::info!("Graph client attached - spreading activation enabled");
     }
 
     /// Set the consolidation threshold
@@ -288,6 +302,7 @@ impl CognitiveLoop {
             curiosity_module: CuriosityModule::new(crate::drives::CuriosityConfig::default()),
             free_energy_module: FreeEnergyModule::new(crate::drives::FreeEnergyConfig::default()),
             embedding_engine: None,
+            graph_client: None,
             #[cfg(test)]
             test_injected_thought: None,
         })

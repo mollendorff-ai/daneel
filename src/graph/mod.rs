@@ -109,21 +109,68 @@ impl GraphClient {
                  RETURN b.id, r.weight"
         );
 
-        // RedisGraph returns a complex structure.
-        // For simplicity in this initial implementation, we'll parse the raw result if possible
-        // or just return empty for now until full parser is wired.
-        let _results: Vec<Vec<redis::Value>> = redis::cmd("GRAPH.QUERY")
+        // RedisGraph returns: Array([headers, rows, statistics])
+        let result: redis::Value = redis::cmd("GRAPH.QUERY")
             .arg(&self.graph_name)
             .arg(query)
             .query_async(&mut conn)
             .await?;
 
-        // Note: Real RedisGraph parsing is non-trivial.
-        // This is a placeholder for the logic.
-        let neighbors = Vec::new();
-        // ... parsing logic here ...
+        let mut neighbors = Vec::new();
+
+        // Parse RedisGraph response structure
+        if let redis::Value::Array(sections) = result {
+            if sections.len() >= 2 {
+                // sections[1] is the result rows
+                if let redis::Value::Array(ref rows) = sections[1] {
+                    for row in rows {
+                        if let redis::Value::Array(ref fields) = row {
+                            if fields.len() >= 2 {
+                                // field[0] = b.id (string), field[1] = r.weight (double/string)
+                                let id_opt = Self::extract_string(&fields[0]);
+                                let weight_opt = Self::extract_float(&fields[1]);
+
+                                if let (Some(id_str), Some(weight)) = (id_opt, weight_opt) {
+                                    if let Ok(uuid) = uuid::Uuid::parse_str(&id_str) {
+                                        neighbors.push((MemoryId(uuid), weight));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         Ok(neighbors)
+    }
+
+    /// Extract string from Redis Value
+    fn extract_string(value: &redis::Value) -> Option<String> {
+        match value {
+            redis::Value::BulkString(bytes) => String::from_utf8(bytes.clone()).ok(),
+            redis::Value::SimpleString(s) => Some(s.clone()),
+            redis::Value::Array(items) if !items.is_empty() => {
+                // Sometimes scalars are wrapped
+                Self::extract_string(&items[0])
+            }
+            _ => None,
+        }
+    }
+
+    /// Extract float from Redis Value
+    #[allow(clippy::cast_possible_truncation, clippy::cast_precision_loss)]
+    fn extract_float(value: &redis::Value) -> Option<f32> {
+        match value {
+            redis::Value::Double(d) => Some(*d as f32),
+            redis::Value::Int(i) => Some(*i as f32),
+            redis::Value::BulkString(bytes) => String::from_utf8(bytes.clone())
+                .ok()
+                .and_then(|s| s.parse::<f32>().ok()),
+            redis::Value::SimpleString(s) => s.parse::<f32>().ok(),
+            redis::Value::Array(items) if !items.is_empty() => Self::extract_float(&items[0]),
+            _ => None,
+        }
     }
 
     /// Export graph to `GraphML` format for Gephi

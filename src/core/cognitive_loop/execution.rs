@@ -11,7 +11,7 @@ use crate::actors::attention::AttentionResponse;
 use crate::actors::volition::VetoDecision;
 use crate::core::cognitive_loop::{CognitiveLoop, CycleResult, StageDurations};
 use crate::core::types::{Content, SalienceScore, Thought, ThoughtId, WindowId};
-use crate::memory_db::{ArchiveReason, Memory, MemorySource, VECTOR_DIMENSION};
+use crate::memory_db::{ArchiveReason, Memory, MemoryId, MemorySource, VECTOR_DIMENSION};
 use crate::streams::types::{StreamEntry, StreamName};
 
 impl CognitiveLoop {
@@ -43,14 +43,17 @@ impl CognitiveLoop {
         let mut stage_durations = StageDurations::default();
 
         // Stage 1: Trigger (Gatilho da Memória)
+        // Memory retrieval + spreading activation (VCONN-6)
         let stage_start = Instant::now();
-        self.trigger_memory_associations().await;
+        let mut triggered_thoughts = self.trigger_memory_associations().await;
         tokio::time::sleep(self.config.trigger_delay()).await;
         stage_durations.trigger = stage_start.elapsed();
 
         // Stage 2: Autoflow (Autofluxo)
+        // External stimuli + triggered memories + random thought compete
         let stage_start = Instant::now();
         let mut thoughts = self.read_external_stimuli().await;
+        thoughts.append(&mut triggered_thoughts); // Add memories to competition
         thoughts.push(self.generate_random_thought());
 
         let (content, salience) = thoughts
@@ -475,32 +478,59 @@ impl CognitiveLoop {
     }
 
     /// Query memory associations from Qdrant during trigger stage
+    ///
+    /// Returns triggered thoughts that can compete in the autoflow stage.
+    /// Also performs spreading activation via graph neighbors (VCONN-6).
     #[cfg_attr(coverage_nightly, coverage(off))]
-    pub(crate) async fn trigger_memory_associations(&self) {
+    pub(crate) async fn trigger_memory_associations(&self) -> Vec<(Content, SalienceScore)> {
+        let mut triggered_thoughts = Vec::new();
+
         let Some(ref memory_db) = self.memory_db else {
             debug!("Memory database not connected - skipping memory trigger");
-            return;
+            return triggered_thoughts;
         };
 
         let query_vector = vec![0.0; VECTOR_DIMENSION];
 
         match memory_db.find_by_context(&query_vector, None, 5).await {
             Ok(memories) => {
-                if memories.is_empty() {
-                    debug!("No memories retrieved from Qdrant (database may be empty)");
-                } else {
+                if !memories.is_empty() {
                     debug!(
                         count = memories.len(),
                         "Retrieved memories from Qdrant for associative priming"
                     );
+
+                    let mut initial_ids = Vec::new();
                     for (memory, score) in &memories {
+                        // Convert memory to thought candidate
+                        let content = Content::raw(memory.content.clone());
+                        let salience = SalienceScore {
+                            importance: memory.composite_salience(),
+                            novelty: 0.1, // Not novel - it's a retrieved memory
+                            relevance: *score,
+                            connection_relevance: memory.connection_relevance,
+                            valence: memory.emotional_state.valence,
+                            arousal: memory.emotional_state.arousal,
+                        };
+                        triggered_thoughts.push((content, salience));
+                        initial_ids.push(memory.id);
+
                         debug!(
                             memory_id = %memory.id,
                             similarity = score,
                             content_preview = %memory.content.chars().take(50).collect::<String>(),
-                            connection_relevance = memory.connection_relevance,
                             "Memory association triggered"
                         );
+                    }
+
+                    // VCONN-6: Spreading activation to neighbors
+                    let spread_results = self.spread_activation(&initial_ids).await;
+                    if !spread_results.is_empty() {
+                        debug!(
+                            count = spread_results.len(),
+                            "Activation spread to neighbors"
+                        );
+                        triggered_thoughts.extend(spread_results);
                     }
                 }
             }
@@ -511,6 +541,80 @@ impl CognitiveLoop {
                 );
             }
         }
+
+        triggered_thoughts
+    }
+
+    /// Spreading Activation (VCONN-6)
+    ///
+    /// Given a set of active memories, spreads activation to their neighbors
+    /// in the association graph up to depth 2.
+    ///
+    /// Spread strength = weight × 0.3 per depth level
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    async fn spread_activation(&self, initial_ids: &[MemoryId]) -> Vec<(Content, SalienceScore)> {
+        const DECAY_FACTOR: f32 = 0.3;
+
+        let Some(ref graph) = self.graph_client else {
+            return Vec::new();
+        };
+        let Some(ref db) = self.memory_db else {
+            return Vec::new();
+        };
+
+        let mut activated: std::collections::HashMap<MemoryId, f32> =
+            std::collections::HashMap::new();
+
+        // Depth 1: Direct neighbors
+        for id in initial_ids {
+            if let Ok(neighbors) = graph.query_neighbors(id, 0.1).await {
+                for (neighbor_id, weight) in neighbors {
+                    // Skip if already in initial set
+                    if initial_ids.contains(&neighbor_id) {
+                        continue;
+                    }
+                    let boost = weight * DECAY_FACTOR;
+                    let entry = activated.entry(neighbor_id).or_insert(0.0);
+                    if boost > *entry {
+                        *entry = boost;
+                    }
+
+                    // Depth 2: Neighbors of neighbors
+                    if let Ok(neighbors2) = graph.query_neighbors(&neighbor_id, 0.1).await {
+                        for (neighbor2_id, weight2) in neighbors2 {
+                            if initial_ids.contains(&neighbor2_id) {
+                                continue;
+                            }
+                            let boost2 = weight2 * DECAY_FACTOR * DECAY_FACTOR; // 0.09
+                            let entry2 = activated.entry(neighbor2_id).or_insert(0.0);
+                            if boost2 > *entry2 {
+                                *entry2 = boost2;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Fetch memory content for activated neighbors
+        let mut results = Vec::new();
+        for (id, boost) in activated {
+            if let Ok(memory) = db.get_memory(&id).await {
+                let importance = memory.composite_salience() * boost;
+                let content = Content::raw(memory.content);
+                let salience = SalienceScore {
+                    importance,
+                    novelty: 0.05,    // Very low novelty - spread activation
+                    relevance: boost, // Boost from spreading
+                    connection_relevance: memory.connection_relevance,
+                    valence: memory.emotional_state.valence,
+                    arousal: memory.emotional_state.arousal,
+                };
+                results.push((content, salience));
+            }
+        }
+
+        results
     }
 
     /// Write thought to Redis stream during assembly stage

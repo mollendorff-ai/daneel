@@ -194,11 +194,13 @@ async fn run_cognitive_loop_headless() {
         }
     };
 
-    // VCONN-5: Connect to RedisGraph
+    // VCONN-5: Connect to RedisGraph (VCONN-6: Spreading Activation)
     let graph_client = match daneel::graph::GraphClient::connect(&redis_url, "daneel") {
         Ok(client) => {
             info!("Connected to RedisGraph ('daneel')");
-            Some(std::sync::Arc::new(client))
+            let arc_client = std::sync::Arc::new(client);
+            cognitive_loop.set_graph_client(arc_client.clone());
+            Some(arc_client)
         }
         Err(e) => {
             eprintln!("Warning: RedisGraph unavailable ({e}), graph disabled");
