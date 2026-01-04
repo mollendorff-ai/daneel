@@ -39,12 +39,48 @@ struct Args {
     /// Port for injection API (0 to disable)
     #[arg(long, default_value = "3030")]
     api_port: u16,
+
+    /// Run memory migration (adds missing fields to old memories)
+    #[arg(long)]
+    migrate: bool,
 }
 
 #[cfg_attr(coverage_nightly, coverage(off))]
 fn main() {
     let args = Args::parse();
-    run_headless(&args);
+
+    if args.migrate {
+        run_migration(&args);
+    } else {
+        run_headless(&args);
+    }
+}
+
+/// Run memory migration and exit
+#[cfg_attr(coverage_nightly, coverage(off))]
+fn run_migration(args: &Args) {
+    // Initialize tracing
+    let filter = tracing_subscriber::EnvFilter::try_new(&args.log_level)
+        .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info"));
+    tracing_subscriber::registry()
+        .with(filter)
+        .with(tracing_subscriber::fmt::layer())
+        .init();
+
+    let rt = tokio::runtime::Runtime::new().expect("Failed to create runtime");
+    rt.block_on(async {
+        let qdrant_url = env::var("QDRANT_URL").unwrap_or_else(|_| "http://localhost:6334".into());
+        info!("Connecting to Qdrant at {}", qdrant_url);
+
+        let db = daneel::memory_db::MemoryDb::connect(&qdrant_url)
+            .await
+            .expect("Failed to connect to Qdrant");
+
+        match db.migrate_memories().await {
+            Ok(count) => info!("Migration complete: {} memories updated", count),
+            Err(e) => tracing::error!("Migration failed: {}", e),
+        }
+    });
 }
 
 /// Run in headless mode (default since ADR-053)

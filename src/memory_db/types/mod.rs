@@ -20,6 +20,11 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
+/// Default BCM threshold for old memories without theta_m field
+const fn default_theta_m() -> f32 {
+    0.1
+}
+
 /// Vector dimension for context embeddings
 /// Using sentence-transformers/all-mpnet-base-v2 (768-dim)
 pub const VECTOR_DIMENSION: usize = 768;
@@ -276,6 +281,7 @@ pub struct Memory {
 
     /// BCM Sliding Threshold (`theta_m`)
     /// Running average of post-synaptic activity (E[y^2]) for Hebbian learning
+    #[serde(default = "default_theta_m")]
     pub theta_m: f32,
 
     /// Semantic salience

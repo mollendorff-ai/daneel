@@ -501,6 +501,56 @@ impl MemoryDb {
         Ok(silhouette)
     }
 
+    /// Migrate old memories to add missing fields (theta_m, cluster_id)
+    ///
+    /// This is a one-time migration for memories created before these fields existed.
+    /// Safe to run multiple times - only updates memories missing the fields.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant operations fail.
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    pub async fn migrate_memories(&self) -> Result<u32> {
+        tracing::info!("Starting memory migration...");
+
+        let results = self
+            .client
+            .scroll(
+                ScrollPointsBuilder::new(collections::MEMORIES)
+                    .limit(10000)
+                    .with_payload(true)
+                    .with_vectors(true),
+            )
+            .await?;
+
+        let mut migrated = 0u32;
+
+        for point in results.result {
+            // Deserialize with defaults (theta_m will get 0.1 if missing)
+            let payload_json = serde_json::to_value(&point.payload)?;
+            let memory: Memory = serde_json::from_value(payload_json)?;
+
+            // Extract vector (same pattern as cluster_memories)
+            let vector: Option<Vec<f32>> = point.vectors.as_ref().and_then(|vo| {
+                match &vo.vectors_options {
+                    Some(qdrant_client::qdrant::vectors_output::VectorsOptions::Vector(v)) => {
+                        Some(v.data.iter().copied().collect())
+                    }
+                    _ => None,
+                }
+            });
+
+            if let Some(vec) = vector {
+                // Re-store with updated schema (theta_m now explicitly set)
+                self.store_memory(&memory, &vec).await?;
+                migrated += 1;
+            }
+        }
+
+        tracing::info!(migrated = migrated, "Memory migration complete");
+        Ok(migrated)
+    }
+
     /// Calculate silhouette score for clustering validation (VCONN-7)
     ///
     /// Measures how similar points are to their own cluster vs other clusters.
