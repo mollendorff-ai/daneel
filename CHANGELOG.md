@@ -2,6 +2,34 @@
 
 All notable changes to DANEEL are documented here.
 
+## [0.8.4] - 2026-01-04 - Hebbian Wiring & Drive System Upgrade
+
+### Major Feature: Hebbian Learning & Association Wiring (VCONN)
+- **Krotov-Hopfield Rule**: Implemented biological learning rule with anti-Hebbian term (δ=0.4) to prevent winner-take-all collapse.
+- **Three-Factor Learning**: Associations now modulated by reward signal and eligibility traces (MSTDPET).
+- **Hybrid Decay**: Associations forget at different rates:
+  - Short-term (<10 co-activations): Exponential decay (fast forgetting)
+  - Long-term (>=10 co-activations): Power-law decay (slow forgetting)
+- **Sleep Stage Multipliers**: Consolidation strength varies by stage:
+  - Light Sleep (0.5x), Deep Sleep (1.0x), REM (0.8x + emotional priority).
+- **Dual-Write Architecture**: Associations persisted to both Qdrant (payloads) and RedisGraph (visualization).
+
+### Major Feature: Drive System Upgrade (DRIVE)
+- **Intrinsic Curiosity Module (ICM)**: DANEEL now has "intrinsic motivation" to learn.
+  - Forward model predicts next thought embedding.
+  - Prediction error = Surprise = Curiosity Reward.
+  - Salience boost for surprising thoughts (preventing "doomscrolling").
+- **Expected Free Energy (EFE)**: Active Inference decision making.
+  - Pragmatic Value: Alignment with Law Crystals (goals).
+  - Epistemic Value: Information gain (surprise).
+  - Attention selection maximizes EFE.
+
+### Infrastructure
+- **RedisGraph**: Added client module for high-speed graph operations.
+- **File Modularization**: Split `cognitive_loop.rs` into modular structure (`mod.rs`, `types.rs`, `execution.rs`).
+
+---
+
 ## [0.8.3] - 2026-01-03 - Docker Deployment & Environment Configuration
 
 ### Docker Support
