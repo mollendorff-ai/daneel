@@ -60,6 +60,7 @@ use crate::config::CognitiveConfig;
 use crate::core::types::Content;
 #[cfg(test)]
 use crate::core::types::SalienceScore;
+use crate::drives::{CuriosityModule, FreeEnergyModule};
 use crate::embeddings::SharedEmbeddingEngine;
 use crate::memory_db::MemoryDb;
 use crate::noise::StimulusInjector;
@@ -114,6 +115,12 @@ pub struct CognitiveLoop {
     /// Replaces white noise (`rand::rng`) with fractal noise for criticality
     pub(crate) stimulus_injector: StimulusInjector,
 
+    /// Curiosity module for intrinsic motivation (DRIVE-1)
+    pub(crate) curiosity_module: CuriosityModule,
+
+    /// Free energy module for active inference (DRIVE-2)
+    pub(crate) free_energy_module: FreeEnergyModule,
+
     /// Embedding engine for semantic vectors (Phase 2 Forward-Only)
     /// When present, new thoughts get real embeddings; historical stay at origin
     pub(crate) embedding_engine: Option<SharedEmbeddingEngine>,
@@ -149,9 +156,40 @@ impl CognitiveLoop {
             attention_state: AttentionState::with_config(AttentionConfig::default()),
             volition_state: VolitionState::with_config(VolitionConfig::default()),
             stimulus_injector: StimulusInjector::default(), // 1/f pink noise (ADR-043)
+            curiosity_module: CuriosityModule::new(crate::drives::CuriosityConfig::default()),
+            free_energy_module: FreeEnergyModule::new(crate::drives::FreeEnergyConfig::default()),
             embedding_engine: None,
             #[cfg(test)]
             test_injected_thought: None,
+        }
+    }
+
+    /// Initialize Law Crystals for Free Energy calculation (DRIVE-2)
+    ///
+    /// Embeds the Four Laws and sets them as preferred states in the EFE module.
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    pub async fn initialize_law_crystals(&mut self) {
+        if let Some(ref shared_engine) = self.embedding_engine {
+            use crate::core::laws::LAWS;
+            use crate::core::types::Content;
+
+            let mut crystals = Vec::new();
+            {
+                let mut engine = shared_engine.write().await;
+                for law in LAWS {
+                    let content = Content::raw(law.to_string());
+                    if let Some(text) = content.to_embedding_text() {
+                        if let Ok(vector) = engine.embed_thought(&text) {
+                            crystals.push(vector);
+                        }
+                    }
+                }
+            }
+
+            if !crystals.is_empty() {
+                self.free_energy_module.set_law_crystals(crystals);
+                tracing::info!("DRIVE-2: {} Law Crystals initialized", LAWS.len());
+            }
         }
     }
 
@@ -247,6 +285,8 @@ impl CognitiveLoop {
             attention_state: AttentionState::with_config(AttentionConfig::default()),
             volition_state: VolitionState::with_config(VolitionConfig::default()),
             stimulus_injector: StimulusInjector::default(),
+            curiosity_module: CuriosityModule::new(crate::drives::CuriosityConfig::default()),
+            free_energy_module: FreeEnergyModule::new(crate::drives::FreeEnergyConfig::default()),
             embedding_engine: None,
             #[cfg(test)]
             test_injected_thought: None,

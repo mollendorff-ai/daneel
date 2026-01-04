@@ -65,25 +65,58 @@ impl CognitiveLoop {
 
         // Stage 3: Attention (O Eu)
         let stage_start = Instant::now();
+
+        // DRIVE-1: Calculate Curiosity/Surprise
+        let mut surprise = 0.0;
+        let mut pragmatic_value = 0.0;
+        if let Some(ref shared_engine) = self.embedding_engine {
+            if let Some(text) = content.to_embedding_text() {
+                let mut engine = shared_engine.write().await;
+                if let Ok(vector) = engine.embed_thought(&text) {
+                    // 1. Prediction error (Curiosity)
+                    surprise = self.curiosity_module.calculate_surprise(&vector);
+
+                    // 2. Goal achievement (Pragmatic Value)
+                    pragmatic_value = self.free_energy_module.calculate_pragmatic_value(&vector);
+                }
+            }
+        }
+
+        let curiosity_boost = self.curiosity_module.get_salience_boost(surprise);
+
+        // DRIVE-2: Expected Free Energy proxy (EFE)
+        // Epistemic value = information gain (proxy by surprise)
+        let epistemic_value = self.free_energy_module.calculate_epistemic_value(surprise);
+        let drive_value = self
+            .free_energy_module
+            .calculate_value(pragmatic_value, epistemic_value);
+
         let composite_salience_candidate =
             salience.composite(&crate::core::types::SalienceWeights::default());
+
+        // DRIVE-3: Integrate drives into final salience
+        // salience = base + curiosity_boost + drive_value
+        let final_salience =
+            (composite_salience_candidate + curiosity_boost + drive_value).min(1.0);
+
         self.attention_state.update_window_salience(
             window_id,
-            composite_salience_candidate,
+            final_salience,
             salience.connection_relevance,
         );
 
         let attention_response = self.attention_state.cycle();
-        let (winning_window, _winning_salience) = Self::extract_attention_winner(
-            attention_response,
-            window_id,
-            composite_salience_candidate,
-        );
+        let (winning_window, _winning_salience) =
+            Self::extract_attention_winner(attention_response, window_id, final_salience);
 
         debug!(
             cycle = cycle_number,
             candidate_count = candidates_evaluated,
             winner = ?winning_window,
+            surprise = surprise,
+            boost = curiosity_boost,
+            pragmatic = pragmatic_value,
+            drive_val = drive_value,
             "Attention stage: competitive selection complete"
         );
 

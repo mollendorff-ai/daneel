@@ -241,6 +241,9 @@ async fn run_cognitive_loop_headless() {
         Ok(engine) => {
             info!("Embedding engine initialized - Timmy can now see meaning");
             cognitive_loop.set_embedding_engine(engine);
+
+            // DRIVE-2: Initialize Law Crystals for Free Energy calculation
+            cognitive_loop.initialize_law_crystals().await;
         }
         Err(e) => {
             eprintln!("Warning: Embedding engine unavailable ({e}), using zero vectors");
