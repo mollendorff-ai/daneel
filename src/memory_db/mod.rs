@@ -879,6 +879,131 @@ impl MemoryDb {
         Ok(memory)
     }
 
+    /// Strengthen association between two memories (Hebbian Learning)
+    ///
+    /// Implements Krotov-Hopfield Rule + Three-Factor Learning (VCONN-3):
+    /// - Krotov-Hopfield: Prevents winner-take-all collapse (delta=0.4)
+    /// - Three-Factor: Modulates plasticity by reward signal
+    /// - Eligibility Traces: Allows delayed reinforcement
+    ///
+    /// # Arguments
+    ///
+    /// * `source_id` - Pre-synaptic memory ID
+    /// * `target_id` - Post-synaptic memory ID
+    /// * `source_salience` - Activity of source (x)
+    /// * `target_salience` - Activity of target (y)
+    /// * `reward` - Global reward signal (default 1.0)
+    ///
+    /// # Errors
+    ///
+    /// Returns error if source memory not found or update fails.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the association index logic is incorrect (should be unreachable).
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    pub async fn strengthen_association(
+        &self,
+        source_id: &MemoryId,
+        target_id: &MemoryId,
+        source_salience: f32,
+        target_salience: f32,
+        reward: f32,
+    ) -> Result<()> {
+        // Constants (from research/roadmap)
+        const LEARNING_RATE: f32 = 0.05; // eta
+        const ANTI_HEBBIAN_DELTA: f32 = 0.4; // delta
+        const TRACE_DECAY: f32 = 0.8; // Decay per update
+
+        // 1. Get source memory
+        let mut memory = self.get_memory(source_id).await?;
+
+        // 2. Find or create association
+        let target_uuid = target_id.0;
+        let mut assoc_index = None;
+
+        for (i, assoc) in memory.associations.iter().enumerate() {
+            if assoc.target_id == target_uuid {
+                assoc_index = Some(i);
+                break;
+            }
+        }
+
+        if assoc_index.is_none() {
+            // Create new association
+            memory.associations.push(Association {
+                target_id: target_uuid,
+                weight: 0.1,                                 // Initial weak connection
+                association_type: AssociationType::Semantic, // Default
+                last_coactivated: chrono::Utc::now(),
+                coactivation_count: 0,
+                eligibility_trace: 0.0,
+            });
+            assoc_index = Some(memory.associations.len() - 1);
+        }
+
+        let assoc = &mut memory.associations[assoc_index.unwrap()];
+
+        // 3. Update Eligibility Trace (MSTDPET)
+        // e(t) = e(t-1) * decay + coincidence
+        let coincidence = source_salience * target_salience;
+        assoc.eligibility_trace = assoc.eligibility_trace.mul_add(TRACE_DECAY, coincidence);
+
+        // 4. Krotov-Hopfield Rule
+        // Delta w = eta * (y^2 - delta) * x
+        // We use eligibility trace instead of raw x*y for the update base to allow delay
+        let hebbian_term = target_salience.mul_add(target_salience, -ANTI_HEBBIAN_DELTA);
+
+        // 5. Three-Factor Update        // dw = eligibility * reward * learning_rate * hebbian_factor
+        let weight_delta = assoc.eligibility_trace * reward * LEARNING_RATE * hebbian_term;
+
+        // Apply update and clamp
+        assoc.weight = (assoc.weight + weight_delta).clamp(0.0, 1.0);
+
+        // Update metadata
+        assoc.last_coactivated = chrono::Utc::now();
+        assoc.coactivation_count += 1;
+
+        // 6. Save updated memory
+        // We need the vector to re-save. Since we don't have it (get_memory doesn't return it),
+        // we must fetch it or store with zero vector if not critical for now.
+        // Ideally get_memory should return the vector too, but for now we fetch it via scroll.
+
+        // Use scroll to get vector + payload to ensure we don't lose the embedding
+        let results = self
+            .client
+            .scroll(
+                ScrollPointsBuilder::new(collections::MEMORIES)
+                    .filter(Filter::must([Condition::matches(
+                        "id",
+                        source_id.0.to_string(),
+                    )]))
+                    .limit(1)
+                    .with_payload(true)
+                    .with_vectors(true),
+            )
+            .await?;
+
+        if let Some(point) = results.result.first() {
+            #[allow(deprecated)]
+            let vector: Vec<f32> = point
+                .vectors
+                .as_ref()
+                .and_then(|v| v.vectors_options.as_ref())
+                .and_then(|opts| match opts {
+                    qdrant_client::qdrant::vectors_output::VectorsOptions::Vector(v) => {
+                        Some(v.data.clone())
+                    }
+                    qdrant_client::qdrant::vectors_output::VectorsOptions::Vectors(_) => None,
+                })
+                .unwrap_or_else(|| vec![0.0; VECTOR_DIMENSION]);
+
+            self.store_memory(&memory, &vector).await?;
+        }
+
+        Ok(())
+    }
+
     /// Health check
     ///
     /// # Errors

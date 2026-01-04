@@ -194,6 +194,18 @@ async fn run_cognitive_loop_headless() {
         }
     };
 
+    // VCONN-5: Connect to RedisGraph
+    let graph_client = match daneel::graph::GraphClient::connect(&redis_url, "daneel") {
+        Ok(client) => {
+            info!("Connected to RedisGraph ('daneel')");
+            Some(std::sync::Arc::new(client))
+        }
+        Err(e) => {
+            eprintln!("Warning: RedisGraph unavailable ({e}), graph disabled");
+            None
+        }
+    };
+
     // Load identity from Qdrant (ADR-034: Lifetime Identity Persistence)
     let mut identity: Option<IdentityMetadata> = if let Some(ref db) = memory_db {
         match db.load_identity().await {
@@ -296,12 +308,27 @@ async fn run_cognitive_loop_headless() {
                 if entered {
                     // Run consolidation cycle
                     if let Some(ref db) = memory_db {
+                        // VCONN-4: Get stage-specific parameters
+                        let params = sleep
+                            .call(|reply| SleepMessage::GetConsolidationParams { reply }, None)
+                            .await
+                            .ok()
+                            .and_then(|r| r.success_or(()).ok())
+                            .unwrap_or(daneel::actors::sleep::ConsolidationParams {
+                                multiplier: 1.0,
+                                prioritize_emotional: false,
+                                pruning_enabled: false,
+                            });
+
                         let batch_size = sleep_config.replay_batch_size as u32;
-                        let strength_delta = sleep_config.consolidation_delta;
+                        let strength_delta = sleep_config.consolidation_delta * params.multiplier;
 
                         match db.get_replay_candidates(batch_size).await {
                             Ok(candidates) => {
                                 let mut consolidated = 0;
+                                let mut associations_strengthened = 0;
+
+                                // 1. Strengthen individual memories (Consolidation)
                                 for memory in &candidates {
                                     if db
                                         .update_consolidation(&memory.id, strength_delta)
@@ -311,6 +338,42 @@ async fn run_cognitive_loop_headless() {
                                         consolidated += 1;
                                     }
                                 }
+
+                                // 2. Strengthen associations between replayed memories (Hebbian Wiring)
+                                // VCONN-4b: Co-replayed memories -> weight += 0.05
+                                for i in 0..candidates.len() {
+                                    for j in 0..candidates.len() {
+                                        if i == j {
+                                            continue;
+                                        }
+                                        let m1 = &candidates[i];
+                                        let m2 = &candidates[j];
+
+                                        // Strengthen in Qdrant (Krotov-Hopfield)
+                                        if db
+                                            .strengthen_association(
+                                                &m1.id, &m2.id, 1.0, // x (active)
+                                                1.0, // y (active)
+                                                1.0, // reward (neutral in sleep)
+                                            )
+                                            .await
+                                            .is_ok()
+                                        {
+                                            associations_strengthened += 1;
+
+                                            // Dual-write: RedisGraph
+                                            if let Some(ref graph) = graph_client {
+                                                let _ = graph.merge_edge(
+                                                    &m1.id,
+                                                    &m2.id,
+                                                    0.1, // Placeholder for weight - ideally fetch from assoc
+                                                    daneel::memory_db::types::AssociationType::Semantic
+                                                ).await;
+                                            }
+                                        }
+                                    }
+                                }
+
                                 if consolidated > 0 {
                                     total_dream_cycles += 1;
 
@@ -320,8 +383,8 @@ async fn run_cognitive_loop_headless() {
                                     }
 
                                     info!(
-                                        "Mini-dream #{}: consolidated {} memories (via SleepActor)",
-                                        total_dream_cycles, consolidated
+                                        "Mini-dream #{}: consolidated {} memories, {} associations (via SleepActor)",
+                                        total_dream_cycles, consolidated, associations_strengthened
                                     );
                                 }
                             }

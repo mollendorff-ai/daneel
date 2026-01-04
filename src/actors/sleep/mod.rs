@@ -66,6 +66,9 @@ pub struct SleepState {
 
     /// Number of memories pending consolidation (estimated)
     consolidation_queue_estimate: usize,
+
+    /// Progress through current sleep cycle (ticks)
+    sleep_ticks: u32,
 }
 
 impl SleepState {
@@ -79,6 +82,7 @@ impl SleepState {
             awake_since: now,
             current_summary: None,
             consolidation_queue_estimate: 0,
+            sleep_ticks: 0,
         }
     }
 
@@ -166,14 +170,37 @@ impl SleepState {
 
     /// Transition to next sleep phase
     ///
-    /// Used during sleep cycle execution (will be called by `SleepActor`'s sleep loop).
-    #[allow(dead_code)]
-    fn advance_sleep_phase(&mut self, cycle_elapsed_pct: f32) {
-        self.state = match cycle_elapsed_pct {
+    /// Updates state based on tick count.
+    /// Cycle: Light (20%) -> Deep (50%) -> Dream (30%)
+    #[allow(clippy::cast_precision_loss)]
+    fn advance_sleep_phase(&mut self) {
+        if self.state == types::SleepState::Awake || self.state == types::SleepState::Waking {
+            return;
+        }
+
+        self.sleep_ticks += 1;
+        let cycle_len = 100; // Arbitrary ticks per cycle
+        let progress = (self.sleep_ticks % cycle_len) as f32 / cycle_len as f32;
+
+        self.state = match progress {
             x if x < self.config.light_sleep_duration_pct => types::SleepState::LightSleep,
-            x if x < 0.7 => types::SleepState::DeepSleep,
-            _ => types::SleepState::Dreaming,
+            x if x < 0.7 => types::SleepState::DeepSleep, // 20% to 70% is Deep Sleep
+            _ => types::SleepState::Dreaming,             // 70% to 100% is REM
         };
+    }
+
+    /// Get consolidation parameters for current state
+    fn get_consolidation_params(&mut self) -> ConsolidationParams {
+        // Auto-advance phase on each query (simulating time passing)
+        if self.state != types::SleepState::Awake {
+            self.advance_sleep_phase();
+        }
+
+        ConsolidationParams {
+            multiplier: self.state.consolidation_multiplier(),
+            prioritize_emotional: self.state == types::SleepState::Dreaming,
+            pruning_enabled: self.state == types::SleepState::DeepSleep,
+        }
     }
 
     /// Add cycle report to summary
@@ -269,6 +296,11 @@ impl Actor for SleepActor {
             SleepMessage::UpdateConfig { config, reply } => {
                 state.config = config;
                 let _ = reply.send(());
+            }
+
+            SleepMessage::GetConsolidationParams { reply } => {
+                let params = state.get_consolidation_params();
+                let _ = reply.send(params);
             }
         }
 

@@ -86,6 +86,7 @@ fn association_creation() {
         association_type: AssociationType::Semantic,
         last_coactivated: chrono::Utc::now(),
         coactivation_count: 1,
+        eligibility_trace: 0.0,
     };
 
     assert_eq!(assoc.weight, 0.5);
@@ -391,5 +392,91 @@ fn integration_unconscious_retrieval() {
             !sample.is_empty(),
             "Should get random sample from unconscious"
         );
+    });
+}
+
+/// VCONN-3: Integration test for Hebbian learning
+///
+/// Validates `strengthen_association()` logic:
+/// 1. Create source and target memories
+/// 2. Strengthen association between them
+/// 3. Verify association created, weight increased, trace updated
+#[test]
+#[ignore = "Requires running Qdrant instance"]
+#[cfg_attr(coverage_nightly, coverage(off))]
+fn integration_hebbian_learning() {
+    tokio_test::block_on(async {
+        // Connect to Qdrant (env var support handled in main, here we assume default or localhost)
+        // If testing against remote kveldulf, ensure tunnel or direct access
+        let url =
+            std::env::var("QDRANT_URL").unwrap_or_else(|_| "http://localhost:6334".to_string());
+        let db = MemoryDb::connect_and_init(&url).await.unwrap();
+
+        // 1. Create Source and Target memories
+        let source = Memory::new(
+            format!("Hebbian Source {}", uuid::Uuid::new_v4()),
+            MemorySource::External {
+                stimulus: "source".to_string(),
+            },
+        );
+        let target = Memory::new(
+            format!("Hebbian Target {}", uuid::Uuid::new_v4()),
+            MemorySource::External {
+                stimulus: "target".to_string(),
+            },
+        );
+
+        // Vectors needed for storage
+        let vector = vec![0.1; VECTOR_DIMENSION];
+        db.store_memory(&source, &vector).await.unwrap();
+        db.store_memory(&target, &vector).await.unwrap(); // Target needs to exist too? Actually strengthen_assoc only updates source.
+
+        // 2. Strengthen Association
+        // source (x=0.8) -> target (y=0.9), reward=1.0
+        db.strengthen_association(
+            &source.id, &target.id, 0.8, // source salience
+            0.9, // target salience
+            1.0, // reward
+        )
+        .await
+        .unwrap();
+
+        // 3. Verify updates
+        let updated_source = db.get_memory(&source.id).await.unwrap();
+
+        assert_eq!(updated_source.associations.len(), 1);
+        let assoc = &updated_source.associations[0];
+
+        assert_eq!(assoc.target_id, target.id.0);
+
+        // Initial weight 0.1
+        // Trace = 0.0 * 0.8 + (0.8 * 0.9) = 0.72
+        // Hebbian = 0.9^2 - 0.4 = 0.81 - 0.4 = 0.41
+        // Delta = 0.72 * 1.0 * 0.05 * 0.41 ≈ 0.01476
+        // New Weight ≈ 0.11476
+        assert!(
+            assoc.weight > 0.1,
+            "Weight should increase: {}",
+            assoc.weight
+        );
+        assert!(
+            assoc.eligibility_trace > 0.0,
+            "Trace should be updated: {}",
+            assoc.eligibility_trace
+        );
+
+        // Run again to test trace decay and accumulation
+        db.strengthen_association(&source.id, &target.id, 0.8, 0.9, 1.0)
+            .await
+            .unwrap();
+
+        let updated_source_2 = db.get_memory(&source.id).await.unwrap();
+        let assoc_2 = &updated_source_2.associations[0];
+
+        assert!(
+            assoc_2.weight > assoc.weight,
+            "Weight should increase further"
+        );
+        assert!(assoc_2.coactivation_count == 2);
     });
 }

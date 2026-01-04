@@ -16,10 +16,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     info!("Starting CognitiveLoop Redis integration test");
 
     // Try to connect to Redis
-    let redis_url = "redis://127.0.0.1:6379";
+    let redis_url =
+        std::env::var("REDIS_URL").unwrap_or_else(|_| "redis://127.0.0.1:6379".to_string());
     info!("Connecting to Redis at {}", redis_url);
 
-    let mut cognitive_loop = match CognitiveLoop::with_redis(redis_url).await {
+    let mut cognitive_loop = match CognitiveLoop::with_redis(&redis_url).await {
         Ok(loop_instance) => {
             info!("Successfully connected to Redis!");
             loop_instance

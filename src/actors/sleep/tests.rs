@@ -231,17 +231,21 @@ fn sleep_state_interruptibility() {
 fn sleep_phase_advancement() {
     let config = SleepConfig::default();
     let mut state = SleepState::new(config);
+    state.state = types::SleepState::EnteringSleep;
 
-    // Light sleep at 10%
-    state.advance_sleep_phase(0.1);
+    // Light sleep at 10% (10 ticks)
+    state.sleep_ticks = 10;
+    state.advance_sleep_phase();
     assert_eq!(state.state, types::SleepState::LightSleep);
 
-    // Deep sleep at 30%
-    state.advance_sleep_phase(0.3);
+    // Deep sleep at 30% (30 ticks)
+    state.sleep_ticks = 30;
+    state.advance_sleep_phase();
     assert_eq!(state.state, types::SleepState::DeepSleep);
 
-    // Dreaming at 80%
-    state.advance_sleep_phase(0.8);
+    // Dreaming at 80% (80 ticks)
+    state.sleep_ticks = 80;
+    state.advance_sleep_phase();
     assert_eq!(state.state, types::SleepState::Dreaming);
 }
 
@@ -508,29 +512,34 @@ fn advance_sleep_phase_boundary_conditions() {
         ..SleepConfig::default()
     };
     let mut state = SleepState::new(config);
+    state.state = types::SleepState::EnteringSleep;
 
-    // Exactly at light sleep threshold
-    state.advance_sleep_phase(0.0);
+    // Light sleep (ticks 0-19)
+    state.sleep_ticks = 0;
+    state.advance_sleep_phase();
     assert_eq!(state.state, types::SleepState::LightSleep);
 
-    // Just under light sleep threshold
-    state.advance_sleep_phase(0.19);
-    assert_eq!(state.state, types::SleepState::LightSleep);
-
-    // At light sleep threshold (should move to deep)
-    state.advance_sleep_phase(0.2);
+    // Tick 19 -> increments to 20 -> DeepSleep (at threshold 0.2)
+    state.sleep_ticks = 19;
+    state.advance_sleep_phase();
     assert_eq!(state.state, types::SleepState::DeepSleep);
 
-    // Between deep sleep and dreaming
-    state.advance_sleep_phase(0.5);
+    // Deep sleep (ticks 20-69)
+    state.sleep_ticks = 20;
+    state.advance_sleep_phase();
     assert_eq!(state.state, types::SleepState::DeepSleep);
 
-    // At 70% threshold (should move to dreaming)
-    state.advance_sleep_phase(0.7);
+    state.sleep_ticks = 50;
+    state.advance_sleep_phase();
+    assert_eq!(state.state, types::SleepState::DeepSleep);
+
+    // Dreaming (ticks 70-99)
+    state.sleep_ticks = 75;
+    state.advance_sleep_phase();
     assert_eq!(state.state, types::SleepState::Dreaming);
 
-    // Well into dreaming
-    state.advance_sleep_phase(0.99);
+    state.sleep_ticks = 98;
+    state.advance_sleep_phase();
     assert_eq!(state.state, types::SleepState::Dreaming);
 }
 
@@ -746,4 +755,60 @@ async fn sleep_actor_check_conditions_when_should_sleep() {
 
     actor_ref.stop(None);
     handle.await.expect("Actor failed");
+}
+
+#[test]
+fn sleep_phase_progression() {
+    // Use mini_dream config (all interruptible, but logic still applies)
+    // We override light_sleep_pct for testing
+    let mut config = SleepConfig::mini_dream();
+    config.light_sleep_duration_pct = 0.2;
+
+    let mut state = SleepState::new(config);
+
+    // Start awake
+    assert_eq!(state.state, types::SleepState::Awake);
+    assert!((state.get_consolidation_params().multiplier - 0.0).abs() < f32::EPSILON);
+
+    // Satisfy entry conditions (queue threshold)
+    for _ in 0..50 {
+        state.increment_queue();
+    }
+
+    // Need a tiny wait for idle_duration > 0
+    std::thread::sleep(std::time::Duration::from_millis(1));
+
+    // Enter sleep
+    let _ = state.enter_sleep();
+    assert_eq!(state.state, types::SleepState::EnteringSleep);
+
+    // First query auto-advances EnteringSleep (0) -> LightSleep (1)
+    let params = state.get_consolidation_params();
+    assert_eq!(state.state, types::SleepState::LightSleep);
+    assert!((params.multiplier - 0.5).abs() < f32::EPSILON);
+
+    // Advance into Light Sleep (ticks 1-20)
+    // get_consolidation_params auto-advances
+    for _ in 0..5 {
+        let params = state.get_consolidation_params();
+        if state.sleep_ticks > 2 {
+            // Give it a few ticks to transition
+            assert_eq!(state.state, types::SleepState::LightSleep);
+            assert!((params.multiplier - 0.5).abs() < f32::EPSILON);
+        }
+    }
+
+    // Advance to Deep Sleep (ticks > 20)
+    state.sleep_ticks = 25;
+    let params = state.get_consolidation_params();
+    assert_eq!(state.state, types::SleepState::DeepSleep);
+    assert!((params.multiplier - 1.0).abs() < f32::EPSILON);
+    assert!(params.pruning_enabled);
+
+    // Advance to Dreaming (ticks > 70)
+    state.sleep_ticks = 75;
+    let params = state.get_consolidation_params();
+    assert_eq!(state.state, types::SleepState::Dreaming);
+    assert!((params.multiplier - 0.8).abs() < f32::EPSILON);
+    assert!(params.prioritize_emotional);
 }
