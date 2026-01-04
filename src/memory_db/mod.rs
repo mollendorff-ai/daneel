@@ -404,11 +404,16 @@ impl MemoryDb {
     /// Fetches all memory vectors, clusters them using K-Means,
     /// and updates payloads with cluster IDs.
     ///
+    /// # Returns
+    ///
+    /// The silhouette score (0.0-1.0) indicating cluster quality.
+    /// Score > 0.3 indicates meaningful structure.
+    ///
     /// # Errors
     ///
     /// Returns error if Qdrant query fails, clustering fails, or memory update fails.
     #[cfg_attr(coverage_nightly, coverage(off))]
-    pub async fn cluster_memories(&self, k: usize) -> Result<()> {
+    pub async fn cluster_memories(&self, k: usize) -> Result<f32> {
         tracing::debug!("Starting manifold clustering (K={})...", k);
 
         // 1. Scroll through all memories to get vectors and IDs
@@ -493,7 +498,7 @@ impl MemoryDb {
             silhouette = silhouette,
             "Manifold clustering complete"
         );
-        Ok(())
+        Ok(silhouette)
     }
 
     /// Calculate silhouette score for clustering validation (VCONN-7)

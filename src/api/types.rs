@@ -70,6 +70,7 @@ pub struct ExtendedMetricsResponse {
     pub memory_windows: MemoryWindowsMetrics,
     pub philosophy: PhilosophyMetrics,
     pub system: SystemMetrics,
+    pub clustering: ClusteringMetrics,
 }
 
 /// 9-stage stream competition (cognitive spotlight)
@@ -168,4 +169,15 @@ pub struct SystemMetrics {
     pub dream_cycles: u64,
     /// Veto count
     pub veto_count: u64,
+}
+
+/// Clustering metrics (VCONN-7)
+#[derive(Debug, Clone, Serialize)]
+pub struct ClusteringMetrics {
+    /// Silhouette score (-1.0 to 1.0, > 0.3 = meaningful structure)
+    pub silhouette: f32,
+    /// Timestamp of last clustering run
+    pub updated_at: Option<String>,
+    /// Whether clustering has meaningful structure
+    pub has_structure: bool,
 }
