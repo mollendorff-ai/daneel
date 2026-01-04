@@ -284,6 +284,10 @@ pub struct Memory {
     /// Consolidation state
     pub consolidation: ConsolidationState,
 
+    /// Cluster ID from manifold clustering (VCONN-7)
+    #[serde(default)]
+    pub cluster_id: Option<u32>,
+
     /// Associations to other memories
     pub associations: Vec<Association>,
 
@@ -316,6 +320,7 @@ impl Memory {
             theta_m: 0.1, // Start with low threshold to encourage initial learning
             semantic_salience: 0.5,
             consolidation: ConsolidationState::new(),
+            cluster_id: None,
             associations: Vec::new(),
             episode_id: None,
             source,

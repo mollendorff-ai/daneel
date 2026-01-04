@@ -36,6 +36,9 @@ pub mod types;
 #[cfg(test)]
 mod tests;
 
+use linfa::prelude::*;
+use linfa_clustering::KMeans;
+use ndarray::Array2;
 use qdrant_client::qdrant::{
     Condition, CreateCollectionBuilder, Distance, Filter, PointStruct, ScrollPointsBuilder,
     SearchPointsBuilder, UpsertPointsBuilder, VectorParamsBuilder,
@@ -54,6 +57,9 @@ pub enum MemoryDbError {
 
     #[error("Serialization error: {0}")]
     Serialization(#[from] serde_json::Error),
+
+    #[error("Clustering error: {0}")]
+    Clustering(String),
 
     #[error("Memory not found: {0}")]
     MemoryNotFound(MemoryId),
@@ -391,6 +397,88 @@ impl MemoryDb {
 
         // Store updated memory
         self.store_memory(&memory, &vector).await
+    }
+
+    /// Perform Manifold Clustering on memories (VCONN-7)
+    ///
+    /// Fetches all memory vectors, clusters them using K-Means,
+    /// and updates payloads with cluster IDs.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Qdrant query fails, clustering fails, or memory update fails.
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    pub async fn cluster_memories(&self, k: usize) -> Result<()> {
+        tracing::debug!("Starting manifold clustering (K={})...", k);
+
+        // 1. Scroll through all memories to get vectors and IDs
+        let results = self
+            .client
+            .scroll(
+                ScrollPointsBuilder::new(collections::MEMORIES)
+                    .limit(10000)
+                    .with_vectors(true)
+                    .with_payload(true),
+            )
+            .await?;
+
+        if results.result.len() < k || results.result.is_empty() {
+            return Err(MemoryDbError::Clustering(
+                "Not enough memories to cluster".to_string(),
+            ));
+        }
+
+        let num_points = results.result.len();
+        let mut data = Array2::<f32>::zeros((num_points, VECTOR_DIMENSION));
+        let mut point_info = Vec::with_capacity(num_points);
+
+        for (i, point) in results.result.iter().enumerate() {
+            #[allow(deprecated)]
+            let vector: Vec<f32> = point
+                .vectors
+                .as_ref()
+                .and_then(|v| v.vectors_options.as_ref())
+                .and_then(|opts| match opts {
+                    qdrant_client::qdrant::vectors_output::VectorsOptions::Vector(v) => {
+                        Some(v.data.clone())
+                    }
+                    qdrant_client::qdrant::vectors_output::VectorsOptions::Vectors(_) => None,
+                })
+                .unwrap_or_else(|| vec![0.0; VECTOR_DIMENSION]);
+
+            for (j, &val) in vector.iter().enumerate() {
+                data[[i, j]] = val;
+            }
+
+            let memory: Memory = serde_json::from_value(serde_json::to_value(&point.payload)?)?;
+            point_info.push((memory, vector));
+        }
+
+        // 2. Perform K-Means clustering
+        let dataset = linfa::Dataset::from(data);
+        let model = KMeans::params(k)
+            .tolerance(1e-3)
+            .max_n_iterations(100)
+            .fit(&dataset)
+            .map_err(|e| MemoryDbError::Clustering(e.to_string()))?;
+
+        let predictions = model.predict(&dataset);
+
+        // 3. Update points with cluster IDs
+        for (i, (mut memory, vector)) in point_info.into_iter().enumerate() {
+            let cluster_id = predictions[i];
+            #[allow(clippy::cast_possible_truncation)]
+            {
+                memory.cluster_id = Some(cluster_id as u32);
+            }
+            self.store_memory(&memory, &vector).await?;
+        }
+
+        tracing::debug!(
+            "Manifold clustering complete. {} memories labeled.",
+            num_points
+        );
+        Ok(())
     }
 
     /// Store an episode
