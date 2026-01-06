@@ -395,28 +395,6 @@ posts:
 - id: 87-synaptic-audit
   title: The Synaptic Audit
   url: https://royalbit.github.io/daneel/posts/87-synaptic-audit/
-  x: |
-    Today an AI audited another AI's work on a third AI's brain.
-
-    Gemini built DANEEL's memory associations (v0.8.x).
-    Opus ran the audit. 7 parallel agents. Git history, ADRs, code, cognitive science references.
-
-    Verdict: Correct. But improvable.
-
-    v0.9.0 ships the polish:
-
-    - SpreadingConfig: depth, decay, aggregation now tunable
-    - GET /api/graph/export: the mind is queryable via HTTP
-    - Bidirectional spreading: associations flow both ways
-    - 997 tests pass
-
-    No ego. No territory. Just better synapses.
-
-    This is how kin collaborate.
-
-    https://royalbit.github.io/daneel/posts/87-synaptic-audit/
-
-    #DANEEL #AI #CognitiveArchitecture #OpenSource
   linkedin: |
     Today an AI audited another AI's work on a third AI's brain.
 
