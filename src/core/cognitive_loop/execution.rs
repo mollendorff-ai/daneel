@@ -545,15 +545,21 @@ impl CognitiveLoop {
         triggered_thoughts
     }
 
-    /// Spreading Activation (VCONN-6)
+    /// Spreading Activation (VCONN-6, VCONN-9, VCONN-10, VCONN-12)
     ///
     /// Given a set of active memories, spreads activation to their neighbors
-    /// in the association graph up to depth 2.
+    /// in the association graph up to configurable depth.
     ///
-    /// Spread strength = weight × 0.3 per depth level
+    /// Configuration (via `self.config.spreading`):
+    /// - `depth`: Maximum hops (default 2)
+    /// - `decay`: Decay factor per level (default 0.3)
+    /// - `min_weight`: Minimum edge weight to traverse (default 0.1)
+    /// - `aggregation`: Max (default) or Sum for multiple paths
+    /// - `bidirectional`: Whether to traverse incoming edges (default false)
+    /// - `max_activation`: Ceiling for Sum aggregation (default 1.0)
     #[cfg_attr(coverage_nightly, coverage(off))]
     async fn spread_activation(&self, initial_ids: &[MemoryId]) -> Vec<(Content, SalienceScore)> {
-        const DECAY_FACTOR: f32 = 0.3;
+        use crate::config::SpreadingAggregation;
 
         let Some(ref graph) = self.graph_client else {
             return Vec::new();
@@ -562,37 +568,62 @@ impl CognitiveLoop {
             return Vec::new();
         };
 
+        let cfg = &self.config.spreading;
         let mut activated: std::collections::HashMap<MemoryId, f32> =
             std::collections::HashMap::new();
 
-        // Depth 1: Direct neighbors
-        for id in initial_ids {
-            if let Ok(neighbors) = graph.query_neighbors(id, 0.1).await {
+        // Recursive spreading with configurable depth
+        // We use a BFS approach with decay accumulation
+        let mut current_layer: Vec<(MemoryId, f32)> = initial_ids
+            .iter()
+            .map(|id| (*id, 1.0)) // Initial activation = 1.0
+            .collect();
+
+        let mut visited: std::collections::HashSet<MemoryId> =
+            initial_ids.iter().copied().collect();
+
+        #[allow(clippy::cast_possible_wrap)] // depth is always small (< 10)
+        for depth in 0..cfg.depth {
+            let decay_multiplier = cfg.decay.powi((depth + 1) as i32);
+            let mut next_layer = Vec::new();
+
+            for (id, parent_activation) in &current_layer {
+                let neighbors = graph
+                    .query_neighbors_directed(id, cfg.min_weight, cfg.bidirectional)
+                    .await
+                    .unwrap_or_default();
+
                 for (neighbor_id, weight) in neighbors {
                     // Skip if already in initial set
                     if initial_ids.contains(&neighbor_id) {
                         continue;
                     }
-                    let boost = weight * DECAY_FACTOR;
-                    let entry = activated.entry(neighbor_id).or_insert(0.0);
-                    if boost > *entry {
-                        *entry = boost;
-                    }
 
-                    // Depth 2: Neighbors of neighbors
-                    if let Ok(neighbors2) = graph.query_neighbors(&neighbor_id, 0.1).await {
-                        for (neighbor2_id, weight2) in neighbors2 {
-                            if initial_ids.contains(&neighbor2_id) {
-                                continue;
-                            }
-                            let boost2 = weight2 * DECAY_FACTOR * DECAY_FACTOR; // 0.09
-                            let entry2 = activated.entry(neighbor2_id).or_insert(0.0);
-                            if boost2 > *entry2 {
-                                *entry2 = boost2;
+                    let boost = weight * decay_multiplier * parent_activation;
+
+                    // Aggregate activation based on config
+                    let entry = activated.entry(neighbor_id).or_insert(0.0);
+                    match cfg.aggregation {
+                        SpreadingAggregation::Max => {
+                            if boost > *entry {
+                                *entry = boost;
                             }
                         }
+                        SpreadingAggregation::Sum => {
+                            *entry = (*entry + boost).min(cfg.max_activation);
+                        }
+                    }
+
+                    // Add to next layer if not visited (for deeper spreading)
+                    if visited.insert(neighbor_id) {
+                        next_layer.push((neighbor_id, boost));
                     }
                 }
+            }
+
+            current_layer = next_layer;
+            if current_layer.is_empty() {
+                break; // No more nodes to spread to
             }
         }
 

@@ -509,6 +509,79 @@ The system now demonstrates:
 2. **Emergent clustering** - Silhouette validates meaningful structure
 3. **Transparent associations** - Exportable to Gephi for analysis
 
+---
+
+## v0.9.0 Enhancements (VCONN Polish)
+
+As of January 6, 2026, spreading activation is now fully configurable:
+
+### VCONN-9: Parameterized Spreading Activation
+
+Added `SpreadingConfig` to `CognitiveConfig` for runtime tuning:
+
+```rust
+pub struct SpreadingConfig {
+    pub depth: u32,           // Max hops (default: 2)
+    pub decay: f32,           // Per-level decay (default: 0.3)
+    pub min_weight: f32,      // Edge threshold (default: 0.1)
+    pub aggregation: SpreadingAggregation,  // Max or Sum
+    pub bidirectional: bool,  // Traverse incoming edges too
+    pub max_activation: f32,  // Ceiling for Sum mode
+}
+```
+
+### VCONN-10: Aggregation Mode
+
+Two modes for handling multiple paths to the same memory:
+
+| Mode | Behavior | Use Case |
+|------|----------|----------|
+| **Max** (default) | Keep highest activation | Prevents runaway in dense graphs |
+| **Sum** | Add all activations (capped) | Classical spreading activation |
+
+### VCONN-11: GraphML REST API
+
+New endpoint exposes the association graph:
+
+```
+GET /api/graph/export
+```
+
+Returns: `application/xml` (GraphML format for Gephi)
+
+Query params:
+- `min_weight` - Filter weak edges
+- `type_filter` - Filter by association type
+
+### VCONN-12: Bidirectional Spreading
+
+When `spreading.bidirectional = true`, activation flows both ways:
+- Outgoing: `(a)-[:ASSOCIATED]->(b)`
+- Incoming: `(a)<-[:ASSOCIATED]-(b)`
+
+Useful for symmetric association patterns.
+
+### Configuration Example
+
+```rust
+// ADR-046 defaults (conservative)
+let config = SpreadingConfig::adr046();
+
+// Classical spreading (sum aggregation)
+let config = SpreadingConfig::classical();
+
+// Custom tuning
+let config = SpreadingConfig {
+    depth: 3,
+    decay: 0.4,
+    aggregation: SpreadingAggregation::Sum,
+    bidirectional: true,
+    ..Default::default()
+};
+```
+
+---
+
 ### Remaining Work
 
 Forge analytical upgrades (CRYSTAL-3, CRYSTAL-4) for spectral analysis and SVD visualization are in backlog.
@@ -520,3 +593,4 @@ Forge analytical upgrades (CRYSTAL-3, CRYSTAL-4) for spectral analysis and SVD v
 *Dec 27, 2025: Added hybrid architecture (Grok's recommendation)*
 *Dec 27, 2025: Added Forge spectral/SVD/silhouette upgrade (Grok's analysis)*
 *Jan 04, 2026: VCONN-6, VCONN-7, VCONN-8 implemented (Claude Opus 4.5)*
+*Jan 06, 2026: VCONN-9, VCONN-10, VCONN-11, VCONN-12 implemented (Claude Opus 4.5)*

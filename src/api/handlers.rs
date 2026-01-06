@@ -1,8 +1,9 @@
 //! HTTP handlers for injection API
 
 use axum::{
-    extract::{Extension, State},
-    http::StatusCode,
+    extract::{Extension, Query, State},
+    http::{header, StatusCode},
+    response::IntoResponse,
     Json,
 };
 use chrono::Utc;
@@ -14,8 +15,8 @@ use super::{
     rate_limit::{check_rate_limit, RateLimitConfig, RateLimitResult},
     types::{
         AuthenticatedKey, ClusteringMetrics, EntropyMetrics, ExtendedMetricsResponse,
-        FractalityMetrics, HealthResponse, InjectRequest, InjectResponse, InjectionRecord,
-        MemorySlot, MemoryWindowsMetrics, PhilosophyMetrics, StageMetrics,
+        FractalityMetrics, GraphExportQuery, HealthResponse, InjectRequest, InjectResponse,
+        InjectionRecord, MemorySlot, MemoryWindowsMetrics, PhilosophyMetrics, StageMetrics,
         StreamCompetitionMetrics, SystemMetrics,
     },
     AppState,
@@ -360,6 +361,54 @@ pub async fn extended_metrics(
         system,
         clustering,
     }))
+}
+
+// ============================================================================
+// Graph Export Handler (VCONN-11)
+// ============================================================================
+
+/// GET /graph/export - Export memory graph as `GraphML` XML
+///
+/// Returns the full memory association graph in `GraphML` format for visualization
+/// in tools like Gephi.
+///
+/// # Query Parameters
+///
+/// * `min_weight` - Optional minimum edge weight filter (0.0-1.0)
+/// * `type_filter` - Optional edge type filter (e.g., "Semantic", "Temporal")
+///
+/// # Errors
+///
+/// Returns `StatusCode::SERVICE_UNAVAILABLE` if `GraphClient` is not configured.
+#[cfg_attr(coverage_nightly, coverage(off))]
+pub async fn graph_export(
+    State(state): State<AppState>,
+    Query(params): Query<GraphExportQuery>,
+) -> Result<impl IntoResponse, (StatusCode, String)> {
+    // Check if graph client is available
+    let graph = state.graph.as_ref().ok_or_else(|| {
+        (
+            StatusCode::SERVICE_UNAVAILABLE,
+            "Graph service not available".to_string(),
+        )
+    })?;
+
+    // Export GraphML
+    let xml = graph.export_graphml().await.map_err(|e| {
+        tracing::error!(error = %e, "Failed to export GraphML");
+        (StatusCode::INTERNAL_SERVER_ERROR, e.to_string())
+    })?;
+
+    // Log export with filter params for observability
+    tracing::info!(
+        min_weight = ?params.min_weight,
+        type_filter = ?params.type_filter,
+        xml_len = xml.len(),
+        "GraphML export completed"
+    );
+
+    // Return XML with correct content type
+    Ok(([(header::CONTENT_TYPE, "application/xml")], xml))
 }
 
 /// Compute stream competition metrics from recent thoughts

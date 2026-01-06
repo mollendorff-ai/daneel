@@ -45,54 +45,29 @@ completed:
 # opportunities for improvement and missing API exposure.
 # =============================================================================
 
+completed:
+  - version: "0.9.0"
+    name: "VCONN Polish"
+    date: "2026-01-06"
+    tasks:
+      - id: "VCONN-9"
+        title: "Parameterize spreading activation"
+        description: "SpreadingConfig in CognitiveConfig (depth, decay, min_weight)"
+      - id: "VCONN-10"
+        title: "Add spreading activation aggregation mode"
+        description: "Max (default) vs Sum aggregation with max_activation ceiling"
+      - id: "VCONN-11"
+        title: "Expose GraphML export via REST API"
+        description: "GET /api/graph/export returns GraphML XML"
+      - id: "VCONN-12"
+        title: "Add bidirectional spreading option"
+        description: "spreading.bidirectional traverses incoming edges too"
+
 current:
-  version: "0.9.0"
-  status: ready
-  name: "VCONN Polish"
-  summary: "Harden spreading activation, expose GraphML API, add configurability"
-
-  tasks:
-    - id: "VCONN-9"
-      title: "Parameterize spreading activation"
-      status: pending
-      priority: "HIGH"
-      description: |
-        Make depth and decay configurable via config/env instead of hard-coded.
-        Current: depth=2, decay=0.3 in execution.rs:548-618
-        Goal: Read from DaneelConfig, allow runtime tuning.
-
-    - id: "VCONN-10"
-      title: "Add spreading activation aggregation mode"
-      status: pending
-      priority: "MEDIUM"
-      description: |
-        Audit found max-keeping logic (keeps highest boost per node).
-        Classical spreading activation sums contributions from multiple paths.
-        Add configurable aggregation: "max" (current) vs "sum" (classical).
-        Consider: sum may cause runaway activation - add ceiling if implemented.
-
-    - id: "VCONN-11"
-      title: "Expose GraphML export via REST API"
-      status: pending
-      priority: "HIGH"
-      description: |
-        export_graphml() exists but not wired to HTTP handlers.
-        Add: GET /api/graph/export -> returns GraphML XML
-        Optional: ?min_weight=0.3&type=semantic filters
-
-    - id: "VCONN-12"
-      title: "Add bidirectional spreading option"
-      status: pending
-      priority: "LOW"
-      description: |
-        Current: Only follows outgoing edges (a)-[:ASSOCIATED]->(b)
-        Option: Also traverse incoming edges for symmetric activation.
-        May improve recall in sparse graphs.
-
-  success_criteria:
-    - "Spreading activation params in DaneelConfig"
-    - "GET /api/graph/export returns valid GraphML"
-    - "Aggregation mode documented in ADR-046"
+  version: "0.10.0"
+  status: planning
+  name: "Crystal Validation"
+  summary: "Forge spectral analysis + SVD for emergence validation"
 
 # =============================================================================
 # PLANNED: v0.10.0 - Crystal Validation

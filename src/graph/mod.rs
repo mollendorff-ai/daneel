@@ -90,7 +90,7 @@ impl GraphClient {
         Ok(())
     }
 
-    /// Query neighbors of a memory
+    /// Query neighbors of a memory (outgoing edges only)
     ///
     /// # Errors
     ///
@@ -100,14 +100,46 @@ impl GraphClient {
         memory_id: &MemoryId,
         min_weight: f32,
     ) -> Result<Vec<(MemoryId, f32)>> {
+        self.query_neighbors_directed(memory_id, min_weight, false)
+            .await
+    }
+
+    /// Query neighbors of a memory with direction control (VCONN-12)
+    ///
+    /// When `bidirectional` is true, returns both outgoing and incoming neighbors.
+    ///
+    /// # Errors
+    ///
+    /// Returns error if Redis command fails.
+    pub async fn query_neighbors_directed(
+        &self,
+        memory_id: &MemoryId,
+        min_weight: f32,
+        bidirectional: bool,
+    ) -> Result<Vec<(MemoryId, f32)>> {
         let mut conn = self.client.get_multiplexed_async_connection().await?;
         let uuid_str = memory_id.0.to_string();
 
-        let query = format!(
-            "MATCH (a:Memory {{id: '{uuid_str}'}})-[r:ASSOCIATED]->(b:Memory) \
+        // Build query based on direction
+        let query = if bidirectional {
+            // Match both directions using UNION
+            format!(
+                "MATCH (a:Memory {{id: '{uuid_str}'}})-[r:ASSOCIATED]->(b:Memory) \
+                 WHERE r.weight >= {min_weight} \
+                 RETURN b.id, r.weight \
+                 UNION \
+                 MATCH (a:Memory {{id: '{uuid_str}'}})<-[r:ASSOCIATED]-(b:Memory) \
                  WHERE r.weight >= {min_weight} \
                  RETURN b.id, r.weight"
-        );
+            )
+        } else {
+            // Outgoing only (original behavior)
+            format!(
+                "MATCH (a:Memory {{id: '{uuid_str}'}})-[r:ASSOCIATED]->(b:Memory) \
+                 WHERE r.weight >= {min_weight} \
+                 RETURN b.id, r.weight"
+            )
+        };
 
         // RedisGraph returns: Array([headers, rows, statistics])
         let result: redis::Value = redis::cmd("GRAPH.QUERY")

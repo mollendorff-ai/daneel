@@ -147,9 +147,24 @@ fn run_headless(args: &Args) {
                         }
                     };
 
+                // Create GraphClient for API (VCONN-11: GraphML export)
+                let graph_client = match daneel::graph::GraphClient::connect(&redis_url, "daneel") {
+                    Ok(client) => {
+                        info!("API: Connected to RedisGraph for GraphML export");
+                        Some(Arc::new(client))
+                    }
+                    Err(e) => {
+                        eprintln!(
+                            "Warning: GraphClient unavailable for API ({e}), export disabled"
+                        );
+                        None
+                    }
+                };
+
                 let api_state = api::AppState {
                     streams: Arc::new(streams_client),
                     redis: redis_client,
+                    graph: graph_client,
                 };
 
                 let app = api::router(api_state);

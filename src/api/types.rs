@@ -181,3 +181,16 @@ pub struct ClusteringMetrics {
     /// Whether clustering has meaningful structure
     pub has_structure: bool,
 }
+
+// ============================================================================
+// Graph Export (VCONN-11)
+// ============================================================================
+
+/// Query parameters for GET /graph/export
+#[derive(Debug, Clone, Deserialize, Default)]
+pub struct GraphExportQuery {
+    /// Minimum edge weight filter (optional)
+    pub min_weight: Option<f32>,
+    /// Edge type filter (optional, e.g., "Semantic", "Temporal")
+    pub type_filter: Option<String>,
+}

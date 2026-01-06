@@ -18,6 +18,91 @@
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
+/// Aggregation mode for spreading activation (VCONN-10)
+///
+/// Controls how activation from multiple paths is combined when
+/// the same memory is reached via different routes.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+pub enum SpreadingAggregation {
+    /// Keep maximum activation (prevents runaway, default)
+    #[default]
+    Max,
+    /// Sum all activations (classical spreading activation)
+    /// Note: May cause high activation in dense graphs
+    Sum,
+}
+
+/// Spreading activation configuration (VCONN-6, VCONN-9, VCONN-10, VCONN-12)
+///
+/// Controls memory retrieval spreading through the association graph.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SpreadingConfig {
+    /// Maximum depth of spreading (number of hops)
+    /// Default: 2 (direct neighbors + neighbors of neighbors)
+    pub depth: u32,
+
+    /// Decay factor per depth level (multiplied at each hop)
+    /// Default: 0.3 (depth 1 = 0.3, depth 2 = 0.09)
+    pub decay: f32,
+
+    /// Minimum edge weight to traverse
+    /// Default: 0.1 (ignore weak associations)
+    pub min_weight: f32,
+
+    /// How to aggregate activation from multiple paths
+    /// Default: Max (keeps highest, prevents runaway)
+    pub aggregation: SpreadingAggregation,
+
+    /// Whether to traverse incoming edges (bidirectional spreading)
+    /// Default: false (only outgoing edges)
+    pub bidirectional: bool,
+
+    /// Maximum activation ceiling (only applies to Sum aggregation)
+    /// Default: 1.0
+    pub max_activation: f32,
+}
+
+impl Default for SpreadingConfig {
+    fn default() -> Self {
+        Self {
+            depth: 2,
+            decay: 0.3,
+            min_weight: 0.1,
+            aggregation: SpreadingAggregation::Max,
+            bidirectional: false,
+            max_activation: 1.0,
+        }
+    }
+}
+
+impl SpreadingConfig {
+    /// Create config matching ADR-046 spec
+    #[must_use]
+    pub const fn adr046() -> Self {
+        Self {
+            depth: 2,
+            decay: 0.3,
+            min_weight: 0.1,
+            aggregation: SpreadingAggregation::Max,
+            bidirectional: false,
+            max_activation: 1.0,
+        }
+    }
+
+    /// Create config for classical spreading activation (sum aggregation)
+    #[must_use]
+    pub const fn classical() -> Self {
+        Self {
+            depth: 2,
+            decay: 0.3,
+            min_weight: 0.1,
+            aggregation: SpreadingAggregation::Sum,
+            bidirectional: false,
+            max_activation: 1.0,
+        }
+    }
+}
+
 /// Speed mode for runtime switching
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, Default)]
 pub enum SpeedMode {
@@ -83,6 +168,9 @@ pub struct CognitiveConfig {
     pub assembly_delay_ms: f64,
     /// Âncora da Memória: 5ms (10%)
     pub anchor_delay_ms: f64,
+
+    /// Spreading activation configuration (VCONN-6)
+    pub spreading: SpreadingConfig,
 }
 
 impl CognitiveConfig {
@@ -103,6 +191,8 @@ impl CognitiveConfig {
             attention_delay_ms: 15.0,
             assembly_delay_ms: 15.0,
             anchor_delay_ms: 5.0,
+            // Spreading activation (VCONN-6)
+            spreading: SpreadingConfig::adr046(),
         }
     }
 
@@ -123,6 +213,8 @@ impl CognitiveConfig {
             attention_delay_ms: 15.0,
             assembly_delay_ms: 15.0,
             anchor_delay_ms: 5.0,
+            // Spreading activation (VCONN-6)
+            spreading: SpreadingConfig::adr046(),
         }
     }
 
@@ -408,5 +500,78 @@ mod tests {
             + human.anchor_delay().as_secs_f64())
             * 1000.0;
         assert!((total_ms - 50.0).abs() < 0.001);
+    }
+
+    // =========================================================================
+    // SpreadingConfig Tests (VCONN-9, VCONN-10, VCONN-12)
+    // =========================================================================
+
+    #[test]
+    fn spreading_config_default_matches_adr046() {
+        let default = SpreadingConfig::default();
+        let adr046 = SpreadingConfig::adr046();
+
+        assert_eq!(default.depth, adr046.depth);
+        assert!((default.decay - adr046.decay).abs() < 0.001);
+        assert!((default.min_weight - adr046.min_weight).abs() < 0.001);
+        assert_eq!(default.aggregation, adr046.aggregation);
+        assert_eq!(default.bidirectional, adr046.bidirectional);
+    }
+
+    #[test]
+    fn spreading_config_adr046_values() {
+        let cfg = SpreadingConfig::adr046();
+
+        assert_eq!(cfg.depth, 2);
+        assert!((cfg.decay - 0.3).abs() < 0.001);
+        assert!((cfg.min_weight - 0.1).abs() < 0.001);
+        assert_eq!(cfg.aggregation, SpreadingAggregation::Max);
+        assert!(!cfg.bidirectional);
+        assert!((cfg.max_activation - 1.0).abs() < 0.001);
+    }
+
+    #[test]
+    fn spreading_config_classical_uses_sum() {
+        let cfg = SpreadingConfig::classical();
+
+        assert_eq!(cfg.aggregation, SpreadingAggregation::Sum);
+        // Other values should match ADR-046
+        assert_eq!(cfg.depth, 2);
+        assert!((cfg.decay - 0.3).abs() < 0.001);
+    }
+
+    #[test]
+    fn spreading_aggregation_default_is_max() {
+        let agg = SpreadingAggregation::default();
+        assert_eq!(agg, SpreadingAggregation::Max);
+    }
+
+    #[test]
+    fn cognitive_config_includes_spreading() {
+        let config = CognitiveConfig::human();
+        assert_eq!(config.spreading.depth, 2);
+
+        let super_config = CognitiveConfig::supercomputer();
+        assert_eq!(super_config.spreading.depth, 2);
+    }
+
+    #[test]
+    fn spreading_config_serde_roundtrip() {
+        let cfg = SpreadingConfig {
+            depth: 3,
+            decay: 0.5,
+            min_weight: 0.2,
+            aggregation: SpreadingAggregation::Sum,
+            bidirectional: true,
+            max_activation: 0.8,
+        };
+
+        let json = serde_json::to_string(&cfg).unwrap();
+        let parsed: SpreadingConfig = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(parsed.depth, 3);
+        assert!((parsed.decay - 0.5).abs() < 0.001);
+        assert!(parsed.bidirectional);
+        assert_eq!(parsed.aggregation, SpreadingAggregation::Sum);
     }
 }

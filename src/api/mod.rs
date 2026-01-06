@@ -8,6 +8,7 @@ pub mod handlers;
 pub mod rate_limit;
 pub mod types;
 
+use crate::graph::GraphClient;
 use crate::streams::client::StreamsClient;
 use axum::{
     middleware,
@@ -21,6 +22,8 @@ use std::sync::Arc;
 pub struct AppState {
     pub streams: Arc<StreamsClient>,
     pub redis: redis::Client,
+    /// Optional graph client for `GraphML` export (VCONN-11)
+    pub graph: Option<Arc<GraphClient>>,
 }
 
 /// Build the API router
@@ -36,6 +39,7 @@ pub fn router(state: AppState) -> Router {
     Router::new()
         .route("/health", get(handlers::health))
         .route("/extended_metrics", get(handlers::extended_metrics))
+        .route("/graph/export", get(handlers::graph_export))
         .merge(protected)
         .with_state(state)
 }
