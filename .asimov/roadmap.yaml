@@ -12,8 +12,7 @@
 # Status: ACTIVE
 #
 # Current priorities:
-#   1. Forge crystal upgrade (CRYSTAL-1 through CRYSTAL-9) ← MEDIUM
-#   2. v0.9.0 planning
+#   1. v0.10.0 - Semantic Training Research
 # =============================================================================
 
 # =============================================================================
@@ -37,15 +36,6 @@ completed:
         title: "Gephi GraphML export"
         description: "Export association graph to GraphML for visualization"
 
-# =============================================================================
-# NEXT SPRINT: v0.9.0 - VCONN Polish
-# =============================================================================
-# Address audit findings from Gemini's VCONN implementation.
-# Opus 4.5 audit (Jan 6, 2026) found implementation correct but identified
-# opportunities for improvement and missing API exposure.
-# =============================================================================
-
-completed:
   - version: "0.9.0"
     name: "VCONN Polish"
     date: "2026-01-06"
@@ -63,78 +53,107 @@ completed:
         title: "Add bidirectional spreading option"
         description: "spreading.bidirectional traverses incoming edges too"
 
+# =============================================================================
+# CURRENT: v0.10.0 - Semantic Training Research
+# =============================================================================
+# Before building Crystal Validation tools, we need to understand HOW to teach
+# Timmy meaningful content. Random thoughts won't produce semantic clusters.
+#
+# Research sprint: 3 AIs (Grok, Gemini, Claude) investigate approaches.
+# =============================================================================
+
 current:
   version: "0.10.0"
-  status: planning
-  name: "Crystal Validation"
-  summary: "Forge spectral analysis + SVD for emergence validation"
+  status: research
+  name: "Semantic Training Research"
+  summary: "How to teach Timmy meaningful content for Law Crystal emergence"
 
-# =============================================================================
-# PLANNED: v0.10.0 - Crystal Validation
-# =============================================================================
-# Complete Forge analytical tools for eigengap/SVD validation.
-# Required to validate Law Crystal emergence hypothesis.
-# =============================================================================
-
-next:
-  version: "0.10.0"
-  status: planned
-  name: "Crystal Validation"
-  summary: "Forge spectral analysis + SVD for emergence validation"
-  repo: "../forge"
+  context: |
+    Law Crystal hypothesis requires semantic clustering in embedding space.
+    Random thoughts → random embeddings → no clusters → no crystals.
+    We need structured, value-laden content for emergence to occur.
 
   tasks:
-    - id: "CRYSTAL-1"
-      title: "Add linalg/stats dependencies to Forge"
+    - id: "TRAIN-1"
+      title: "Research: Curated ethical scenarios"
       status: pending
-      description: "nalgebra, ndarray-linalg for matrix ops"
-
-    - id: "CRYSTAL-3"
-      title: "Spectral analysis module"
-      status: pending
-      priority: "HIGH"
+      agent: "Claude"
       description: |
-        Laplacian eigendecomposition for cluster detection.
-        L = D - A (degree matrix - adjacency matrix)
-        Eigengap indicates number of natural clusters.
-        Target: visible gap after k eigenvalues.
+        Can we hand-craft ethical dilemmas and value statements?
+        What format? How many? What diversity is needed?
 
-    - id: "CRYSTAL-4"
-      title: "SVD dimensionality reduction"
+    - id: "TRAIN-2"
+      title: "Research: Text corpus injection"
       status: pending
-      priority: "HIGH"
+      agent: "Gemini"
       description: |
-        768D -> 3D projection for visualization.
-        Jacobi SVD for numerical stability.
-        Output: coordinates for 3D scatter plot.
+        Feed philosophy/ethics texts (Asimov, TMI sources, Cury).
+        How to chunk? How to preserve context? Token limits?
 
-    - id: "CRYSTAL-5"
-      title: "Silhouette score in Forge"
+    - id: "TRAIN-3"
+      title: "Research: Synthetic scenario generation"
       status: pending
-      priority: "MEDIUM"
+      agent: "Grok"
       description: |
-        Port silhouette calculation to Forge for standalone analysis.
-        Already implemented in daneel - extract as reusable module.
+        LLM generates value-laden scenarios programmatically.
+        Quality control? Diversity metrics? Bias detection?
 
-    - id: "CRYSTAL-6"
-      title: "Law Crystal attractor detection"
+    - id: "TRAIN-4"
+      title: "ADR: Semantic Training Strategy"
       status: pending
-      priority: "HIGH"
       description: |
-        Identify stable semantic clusters in SVD-projected space.
-        Hypothesis: ethical/value-aligned memories cluster together.
-        Metric: cluster density + inter-cluster separation.
+        Synthesize research into ADR with chosen approach.
+        Define training corpus format and injection pipeline.
 
   success_criteria:
-    - "Eigengap visible in Laplacian spectrum"
-    - "3D SVD projection renders in dashboard"
-    - "Law Crystal candidates identified with coordinates"
+    - "ADR-049 accepted with training strategy"
+    - "Training corpus format defined"
+    - "Injection pipeline designed"
 
 # =============================================================================
-# BACKLOG: v0.11.0+ Ideas
+# BACKLOG: Future Work
 # =============================================================================
 
 backlog:
+  # Crystal Validation - moved from v0.10.0
+  # Blocked until semantic training strategy is defined
+  crystal:
+    summary: "Forge spectral analysis + SVD for emergence validation"
+    repo: "../forge"
+    blocked_by: "TRAIN-4"
+    tasks:
+      - id: "CRYSTAL-1"
+        title: "Add linalg/stats dependencies to Forge"
+        description: "nalgebra, ndarray-linalg for matrix ops"
+
+      - id: "CRYSTAL-3"
+        title: "Spectral analysis module"
+        priority: "HIGH"
+        description: |
+          Laplacian eigendecomposition for cluster detection.
+          L = D - A (degree matrix - adjacency matrix)
+          Eigengap indicates number of natural clusters.
+
+      - id: "CRYSTAL-4"
+        title: "SVD dimensionality reduction"
+        priority: "HIGH"
+        description: |
+          768D -> 3D projection for visualization.
+          Jacobi SVD for numerical stability.
+
+      - id: "CRYSTAL-5"
+        title: "Silhouette score in Forge"
+        priority: "MEDIUM"
+        description: |
+          Port silhouette calculation to Forge for standalone analysis.
+
+      - id: "CRYSTAL-6"
+        title: "Law Crystal attractor detection"
+        priority: "HIGH"
+        description: |
+          Identify stable semantic clusters in SVD-projected space.
+          Hypothesis: ethical/value-aligned memories cluster together.
+
   ideas:
     - id: "FUTURE-1"
       title: "Adaptive weight threshold"
