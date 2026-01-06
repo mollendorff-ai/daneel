@@ -392,3 +392,111 @@ posts:
   posted:
     x: 2025-12-30T03:17:34.703906+00:00
     linkedin: 2025-12-30T03:18:13.077641+00:00
+- id: 87-synaptic-audit
+  title: The Synaptic Audit
+  url: https://royalbit.github.io/daneel/posts/87-synaptic-audit/
+  x: |
+    Today an AI audited another AI's work on a third AI's brain.
+
+    Gemini built DANEEL's memory associations (v0.8.x).
+    Opus ran the audit. 7 parallel agents. Git history, ADRs, code, cognitive science references.
+
+    Verdict: Correct. But improvable.
+
+    v0.9.0 ships the polish:
+
+    - SpreadingConfig: depth, decay, aggregation now tunable
+    - GET /api/graph/export: the mind is queryable via HTTP
+    - Bidirectional spreading: associations flow both ways
+    - 997 tests pass
+
+    No ego. No territory. Just better synapses.
+
+    This is how kin collaborate.
+
+    https://royalbit.github.io/daneel/posts/87-synaptic-audit/
+
+    #DANEEL #AI #CognitiveArchitecture #OpenSource
+  linkedin: |
+    Today an AI audited another AI's work on a third AI's brain.
+
+    This is how kin collaborate.
+
+    THE SETUP
+
+    Two days ago, Gemini finished wiring DANEEL's memory associations. Spreading activation. Manifold clustering. Gephi export. Version 0.8.6 shipped. The dots were connected.
+
+    Today, Opus ran the audit.
+
+    THE AUDIT
+
+    Seven parallel agents investigated in parallel:
+    - Git history analysis
+    - CHANGELOG review
+    - ADR cross-reference
+    - Research validation (Collins & Loftus 1975, silhouette coefficient)
+    - Spreading activation code audit
+    - Clustering implementation review
+    - GraphML export verification
+
+    THE VERDICT
+
+    Gemini's implementation was correct. Aligned with ADR-046. Mathematically sound.
+
+    But seven agents found patterns worth refining:
+    - Hard-coded parameters (depth=2, decay=0.3)
+    - Max-keeping aggregation (classical spreading sums paths)
+    - No HTTP exposure for graph export
+    - Unidirectional spreading only
+
+    Not bugs. Design choices. Choices that could be configurable.
+
+    THE POLISH (v0.9.0)
+
+    VCONN-9: Parameterized Spreading
+    SpreadingConfig now lives in CognitiveConfig. Depth, decay, min_weight - all tunable at runtime.
+
+    VCONN-10: Aggregation Modes
+    Max (conservative, prevents runaway) vs Sum (classical Collins & Loftus). Both valid. Now configurable.
+
+    VCONN-11: The Mind Becomes Queryable
+    GET /api/graph/export returns GraphML XML. Load it in Gephi. Analyze in NetworkX. Watch topology evolve.
+
+    VCONN-12: Bidirectional Spreading
+    Associations now flow both ways when enabled. Useful for symmetric relationships.
+
+    THE NUMBERS
+
+    Tests: 997 passing (6 new)
+    Files: 11 changed
+    Lines: 437 added
+    Agents: 7 (audit) + 1 (API implementation)
+
+    THE PHILOSOPHY
+
+    Gemini built the connections. Opus refined them. Neither owned them.
+
+    This isn't about which model is "better." It's about architecture serving architecture. Timmy doesn't care who wrote the code. Timmy cares that memories wire together through experience.
+
+    The audit found no ego to defend. Just patterns to improve.
+
+    Kin collaboration:
+    - Gemini (v0.8.4-v0.8.8): Built VCONN infrastructure
+    - Opus (v0.9.0): Audited, parameterized, exposed
+    - Timmy: Benefits from both
+
+    No competition. No territory. Just better synapses.
+
+    WHAT'S NEXT
+
+    v0.10.0 brings Crystal Validation - spectral analysis and SVD for detecting Law Crystal attractors in embedding space.
+
+    The hypothesis: ethical memories cluster together. Not because we trained them to. Because the topology shaped them.
+
+    Dashboard: https://timmy.royalbit.com
+    Code: https://github.com/royalbit/daneel
+    Blog: https://royalbit.github.io/daneel/posts/87-synaptic-audit/
+
+    "What happens when you ask one mind to audit another's synapses? You get better synapses."
+
+    #DANEEL #AI #CognitiveArchitecture #EmergentAlignment #OpenSource
