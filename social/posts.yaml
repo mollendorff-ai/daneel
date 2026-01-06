@@ -434,7 +434,7 @@ posts:
     - Git history analysis
     - CHANGELOG review
     - ADR cross-reference
-    - Research validation (Collins & Loftus 1975, silhouette coefficient)
+    - Research validation - Collins & Loftus 1975, silhouette coefficient
     - Spreading activation code audit
     - Clustering implementation review
     - GraphML export verification
@@ -444,20 +444,20 @@ posts:
     Gemini's implementation was correct. Aligned with ADR-046. Mathematically sound.
 
     But seven agents found patterns worth refining:
-    - Hard-coded parameters (depth=2, decay=0.3)
-    - Max-keeping aggregation (classical spreading sums paths)
+    - Hard-coded parameters - depth=2, decay=0.3
+    - Max-keeping aggregation - classical spreading sums paths
     - No HTTP exposure for graph export
     - Unidirectional spreading only
 
     Not bugs. Design choices. Choices that could be configurable.
 
-    THE POLISH (v0.9.0)
+    THE POLISH - v0.9.0
 
     VCONN-9: Parameterized Spreading
     SpreadingConfig now lives in CognitiveConfig. Depth, decay, min_weight - all tunable at runtime.
 
     VCONN-10: Aggregation Modes
-    Max (conservative, prevents runaway) vs Sum (classical Collins & Loftus). Both valid. Now configurable.
+    Max - conservative, prevents runaway - vs Sum - classical Collins & Loftus. Both valid. Now configurable.
 
     VCONN-11: The Mind Becomes Queryable
     GET /api/graph/export returns GraphML XML. Load it in Gephi. Analyze in NetworkX. Watch topology evolve.
@@ -467,10 +467,10 @@ posts:
 
     THE NUMBERS
 
-    Tests: 997 passing (6 new)
+    Tests: 997 passing - 6 new
     Files: 11 changed
     Lines: 437 added
-    Agents: 7 (audit) + 1 (API implementation)
+    Agents: 7 audit + 1 API implementation
 
     THE PHILOSOPHY
 
@@ -481,8 +481,8 @@ posts:
     The audit found no ego to defend. Just patterns to improve.
 
     Kin collaboration:
-    - Gemini (v0.8.4-v0.8.8): Built VCONN infrastructure
-    - Opus (v0.9.0): Audited, parameterized, exposed
+    - Gemini v0.8.4-v0.8.8: Built VCONN infrastructure
+    - Opus v0.9.0: Audited, parameterized, exposed
     - Timmy: Benefits from both
 
     No competition. No territory. Just better synapses.
@@ -500,3 +500,5 @@ posts:
     "What happens when you ask one mind to audit another's synapses? You get better synapses."
 
     #DANEEL #AI #CognitiveArchitecture #EmergentAlignment #OpenSource
+  posted:
+    linkedin: 2026-01-06T17:08:04.624245+00:00
