@@ -501,7 +501,7 @@ impl MemoryDb {
         Ok(silhouette)
     }
 
-    /// Migrate old memories to add missing fields (theta_m, cluster_id)
+    /// Migrate old memories to add missing fields (`theta_m`, `cluster_id`)
     ///
     /// This is a one-time migration for memories created before these fields existed.
     /// Safe to run multiple times - only updates memories missing the fields.
@@ -531,14 +531,18 @@ impl MemoryDb {
             let memory: Memory = serde_json::from_value(payload_json)?;
 
             // Extract vector (same pattern as cluster_memories)
-            let vector: Option<Vec<f32>> = point.vectors.as_ref().and_then(|vo| {
-                match &vo.vectors_options {
-                    Some(qdrant_client::qdrant::vectors_output::VectorsOptions::Vector(v)) => {
-                        Some(v.data.iter().copied().collect())
-                    }
-                    _ => None,
-                }
-            });
+            #[allow(deprecated)]
+            // VectorOutput.data deprecated in qdrant 1.16, but still functional
+            let vector: Option<Vec<f32>> =
+                point
+                    .vectors
+                    .as_ref()
+                    .and_then(|vo| match &vo.vectors_options {
+                        Some(qdrant_client::qdrant::vectors_output::VectorsOptions::Vector(v)) => {
+                            Some(v.data.clone())
+                        }
+                        _ => None,
+                    });
 
             if let Some(vec) = vector {
                 // Re-store with updated schema (theta_m now explicitly set)
