@@ -192,8 +192,8 @@ The cognitive loop is ready for the 24-hour livestream:
 
 ## Files Modified
 
-- `/Users/rex/src/royalbit/daneel/src/core/cognitive_loop.rs` - Main integration
-- `/Users/rex/src/royalbit/daneel/examples/cognitive_loop_redis_test.rs` - Test example (new)
+- `src/core/cognitive_loop.rs` - Main integration
+- `examples/cognitive_loop_redis_test.rs` - Test example (new)
 
 ## Compilation Status
 

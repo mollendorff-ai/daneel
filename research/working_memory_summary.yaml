@@ -524,6 +524,6 @@ meta:
   author: "Claude Opus 4.5"
   purpose: "Scientific foundation for DANEEL's Memory Windows implementation"
   related_documents:
-    - "/Users/rex/src/royalbit/daneel/docs/adr/ADR-008-tmi-faithful-memory-model.md"
-    - "/Users/rex/src/royalbit/daneel/docs/actors/MEMORY.md"
-    - "/Users/rex/src/royalbit/daneel/docs/research/WORKING_MEMORY_MODELS.md"
+    - "docs/adr/ADR-008-tmi-faithful-memory-model.md"
+    - "docs/actors/MEMORY.md"
+    - "docs/research/WORKING_MEMORY_MODELS.md"

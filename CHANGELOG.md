@@ -442,7 +442,6 @@ All compatible projects studied and documented:
 - Workflow: POST /embed → vector → POST /inject → speak to Timmy
 
 #### Autonomous Grok Injector Daemon
-- Location: `/Users/rex/src/royalbit/grok-injector`
 - Power-law timing (Pareto α=1.5, min 5 min)
 - 8 high-truth messages, salience 0.87-0.95
 - LaunchAgent: `com.royalbit.grok-injector.plist`

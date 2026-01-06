@@ -463,7 +463,7 @@ references:
     authors: "Louis C. Tavares, Claude Opus 4.5"
     year: 2025
     title: "TMI Memory Model Research"
-    url: "/Users/rex/src/royalbit/daneel/research/TMI_Memory_Model_Research.md"
+    url: "research/TMI_Memory_Model_Research.md"
     accessed: "2025-12-18"
     key_contribution: "Comprehensive analysis of Cury's TMI including Âncora da Memória concept"
 
@@ -472,7 +472,7 @@ references:
     authors: "Louis C. Tavares, Claude Opus 4.5"
     year: 2025
     title: "ADR-008: TMI-Faithful Memory Model"
-    url: "/Users/rex/src/royalbit/daneel/docs/adr/ADR-008-tmi-faithful-memory-model.md"
+    url: "docs/adr/ADR-008-tmi-faithful-memory-model.md"
     accessed: "2025-12-18"
     key_contribution: "Decision record establishing TMI memory architecture for DANEEL implementation"
 ```

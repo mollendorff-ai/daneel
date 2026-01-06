@@ -1072,13 +1072,13 @@ references:
 
   TMI-1:
     title: "TMI_Memory_Model_Research.md"
-    path: "/Users/rex/src/royalbit/daneel/research/TMI_Memory_Model_Research.md"
+    path: "research/TMI_Memory_Model_Research.md"
     date: "2025-12-14"
     relevance: "TMI framework that this research maps to"
 
   TMI-2:
     title: "TMI_TO_DANEEL_MAPPING.md"
-    path: "/Users/rex/src/royalbit/daneel/research/TMI_TO_DANEEL_MAPPING.md"
+    path: "research/TMI_TO_DANEEL_MAPPING.md"
     date: "2025-12-17"
     relevance: "Implementation mapping of TMI to DANEEL architecture"
 

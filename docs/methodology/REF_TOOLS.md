@@ -196,7 +196,7 @@ Then analyze the JSON output to verify the claimed statistic appears in the sour
 
 ### Case Study: Open Source Dominance Model
 
-In developing [ADR-029: Open Source Dominance Strategy](/Users/rex/src/royalbit/daneel/docs/adr/ADR-029-open-source-dominance-strategy.md), we needed to verify claims about developer productivity. Initial research cited several sources, but ref-tools verification revealed critical errors:
+In developing [ADR-029: Open Source Dominance Strategy](docs/adr/ADR-029-open-source-dominance-strategy.md), we needed to verify claims about developer productivity. Initial research cited several sources, but ref-tools verification revealed critical errors:
 
 **What we found:**
 

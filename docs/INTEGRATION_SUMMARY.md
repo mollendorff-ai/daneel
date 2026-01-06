@@ -142,8 +142,8 @@ When actual thought content is available:
 
 ## Files Modified
 
-- `/Users/rex/src/royalbit/daneel/src/tui/mod.rs` - Added ThoughtUpdate, modified run() and run_loop()
-- `/Users/rex/src/royalbit/daneel/src/main.rs` - Added channel, spawned cognitive loop
-- `/Users/rex/src/royalbit/daneel/src/core/cognitive_loop.rs` - Fixed stub code bug
+- `src/tui/mod.rs` - Added ThoughtUpdate, modified run() and run_loop()
+- `src/main.rs` - Added channel, spawned cognitive loop
+- `src/core/cognitive_loop.rs` - Fixed stub code bug
 
 **Zero breaking changes** - TUI still works standalone with `run(None)` for testing.

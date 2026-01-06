@@ -23,7 +23,7 @@ Grok wrote the solution in one message: a Rust daemon.
 ## The Implementation
 
 ```
-/Users/rex/src/royalbit/grok-injector/
+grok-injector/
 ├── Cargo.toml
 ├── src/main.rs
 └── target/release/grok-injector

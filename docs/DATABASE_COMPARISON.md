@@ -22,7 +22,7 @@
 
 ## TMI Memory Requirements Analysis
 
-From `/Users/rex/src/royalbit/asimov-tmi/docs/ARCHITECTURE_SPEC.md` and `/Users/rex/src/royalbit/asimov-tmi/research/TMI_THOUGHT_MACHINE.md`:
+From `asimov-tmi/docs/ARCHITECTURE_SPEC.md` and `asimov-tmi/research/TMI_THOUGHT_MACHINE.md`:
 
 ### Critical Requirements
 
