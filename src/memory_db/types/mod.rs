@@ -20,7 +20,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-/// Default BCM threshold for old memories without theta_m field
+/// Default BCM threshold for old memories without `theta_m` field
 const fn default_theta_m() -> f32 {
     0.1
 }

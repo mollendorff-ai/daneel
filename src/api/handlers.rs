@@ -634,9 +634,14 @@ async fn compute_fractality(conn: &mut redis::aio::MultiplexedConnection) -> Fra
 
 /// Fetch clustering metrics from Redis (VCONN-7)
 #[cfg_attr(coverage_nightly, coverage(off))]
-async fn fetch_clustering_metrics(conn: &mut redis::aio::MultiplexedConnection) -> ClusteringMetrics {
+async fn fetch_clustering_metrics(
+    conn: &mut redis::aio::MultiplexedConnection,
+) -> ClusteringMetrics {
     let silhouette: Option<String> = conn.hget("daneel:metrics", "silhouette").await.ok();
-    let updated_at: Option<String> = conn.hget("daneel:metrics", "silhouette_updated_at").await.ok();
+    let updated_at: Option<String> = conn
+        .hget("daneel:metrics", "silhouette_updated_at")
+        .await
+        .ok();
 
     let silhouette_val = silhouette
         .and_then(|s| s.parse::<f32>().ok())

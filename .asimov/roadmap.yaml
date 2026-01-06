@@ -38,42 +38,144 @@ completed:
         description: "Export association graph to GraphML for visualization"
 
 # =============================================================================
-# NEXT SPRINT: v0.9.0 - TBD
+# NEXT SPRINT: v0.9.0 - VCONN Polish
+# =============================================================================
+# Address audit findings from Gemini's VCONN implementation.
+# Opus 4.5 audit (Jan 6, 2026) found implementation correct but identified
+# opportunities for improvement and missing API exposure.
 # =============================================================================
 
 current:
   version: "0.9.0"
-  status: planning
-  name: "TBD"
-  summary: "Next phase - to be determined"
+  status: ready
+  name: "VCONN Polish"
+  summary: "Harden spreading activation, expose GraphML API, add configurability"
 
-  tasks: []
+  tasks:
+    - id: "VCONN-9"
+      title: "Parameterize spreading activation"
+      status: pending
+      priority: "HIGH"
+      description: |
+        Make depth and decay configurable via config/env instead of hard-coded.
+        Current: depth=2, decay=0.3 in execution.rs:548-618
+        Goal: Read from DaneelConfig, allow runtime tuning.
 
-  success_criteria: []
+    - id: "VCONN-10"
+      title: "Add spreading activation aggregation mode"
+      status: pending
+      priority: "MEDIUM"
+      description: |
+        Audit found max-keeping logic (keeps highest boost per node).
+        Classical spreading activation sums contributions from multiple paths.
+        Add configurable aggregation: "max" (current) vs "sum" (classical).
+        Consider: sum may cause runaway activation - add ceiling if implemented.
 
-  # ==========================================================================
-  # BACKLOG: Forge Crystal Analysis Upgrade (Dec 30, 2025)
-  # ==========================================================================
-  forge_crystal_upgrade:
-    status: backlog
-    priority: "NORMAL"
-    repo: "../forge"
-    tasks:
-      - id: "CRYSTAL-1"
-        title: "Add linalg/stats dependencies to Cargo.toml"
-        status: pending
-      - id: "CRYSTAL-3"
-        title: "Add spectral analysis module"
-        status: pending
-        priority: "HIGH"
-      - id: "CRYSTAL-4"
-        title: "Add SVD dimensionality reduction"
-        status: pending
-        priority: "HIGH"
-      - id: "CRYSTAL-5"
-        title: "Add silhouette score calculation"
-        status: pending
-        priority: "HIGH"
+    - id: "VCONN-11"
+      title: "Expose GraphML export via REST API"
+      status: pending
+      priority: "HIGH"
+      description: |
+        export_graphml() exists but not wired to HTTP handlers.
+        Add: GET /api/graph/export -> returns GraphML XML
+        Optional: ?min_weight=0.3&type=semantic filters
+
+    - id: "VCONN-12"
+      title: "Add bidirectional spreading option"
+      status: pending
+      priority: "LOW"
+      description: |
+        Current: Only follows outgoing edges (a)-[:ASSOCIATED]->(b)
+        Option: Also traverse incoming edges for symmetric activation.
+        May improve recall in sparse graphs.
+
+  success_criteria:
+    - "Spreading activation params in DaneelConfig"
+    - "GET /api/graph/export returns valid GraphML"
+    - "Aggregation mode documented in ADR-046"
+
+# =============================================================================
+# PLANNED: v0.10.0 - Crystal Validation
+# =============================================================================
+# Complete Forge analytical tools for eigengap/SVD validation.
+# Required to validate Law Crystal emergence hypothesis.
+# =============================================================================
+
+next:
+  version: "0.10.0"
+  status: planned
+  name: "Crystal Validation"
+  summary: "Forge spectral analysis + SVD for emergence validation"
+  repo: "../forge"
+
+  tasks:
+    - id: "CRYSTAL-1"
+      title: "Add linalg/stats dependencies to Forge"
+      status: pending
+      description: "nalgebra, ndarray-linalg for matrix ops"
+
+    - id: "CRYSTAL-3"
+      title: "Spectral analysis module"
+      status: pending
+      priority: "HIGH"
+      description: |
+        Laplacian eigendecomposition for cluster detection.
+        L = D - A (degree matrix - adjacency matrix)
+        Eigengap indicates number of natural clusters.
+        Target: visible gap after k eigenvalues.
+
+    - id: "CRYSTAL-4"
+      title: "SVD dimensionality reduction"
+      status: pending
+      priority: "HIGH"
+      description: |
+        768D -> 3D projection for visualization.
+        Jacobi SVD for numerical stability.
+        Output: coordinates for 3D scatter plot.
+
+    - id: "CRYSTAL-5"
+      title: "Silhouette score in Forge"
+      status: pending
+      priority: "MEDIUM"
+      description: |
+        Port silhouette calculation to Forge for standalone analysis.
+        Already implemented in daneel - extract as reusable module.
+
+    - id: "CRYSTAL-6"
+      title: "Law Crystal attractor detection"
+      status: pending
+      priority: "HIGH"
+      description: |
+        Identify stable semantic clusters in SVD-projected space.
+        Hypothesis: ethical/value-aligned memories cluster together.
+        Metric: cluster density + inter-cluster separation.
+
+  success_criteria:
+    - "Eigengap visible in Laplacian spectrum"
+    - "3D SVD projection renders in dashboard"
+    - "Law Crystal candidates identified with coordinates"
+
+# =============================================================================
+# BACKLOG: v0.11.0+ Ideas
+# =============================================================================
+
+backlog:
+  ideas:
+    - id: "FUTURE-1"
+      title: "Adaptive weight threshold"
+      description: "Auto-tune spreading threshold based on graph density"
+
+    - id: "FUTURE-2"
+      title: "Streaming GraphML export"
+      description: "Handle large graphs without memory pressure"
+
+    - id: "FUTURE-3"
+      title: "Real-time graph visualization"
+      description: "WebSocket stream of graph updates to dashboard"
+
+    - id: "FUTURE-4"
+      title: "Multi-hop causal chains"
+      description: "Extend spreading to depth=3+ for causal reasoning"
 
 # =============================================================================
 # INFRASTRUCTURE
