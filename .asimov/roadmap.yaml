@@ -59,7 +59,8 @@ completed:
 # Before building Crystal Validation tools, we need to understand HOW to teach
 # Timmy meaningful content. Random thoughts won't produce semantic clusters.
 #
-# Research sprint: 3 AIs (Grok, Gemini, Claude) investigate approaches.
+# Key insight: Developmental psychology provides theoretical grounding for
+# how values emerge in humans. Research sprint applies DevPsych frameworks.
 # =============================================================================
 
 current:
@@ -71,44 +72,60 @@ current:
   context: |
     Law Crystal hypothesis requires semantic clustering in embedding space.
     Random thoughts → random embeddings → no clusters → no crystals.
-    We need structured, value-laden content for emergence to occur.
+
+    Key insight: Developmental psychology studies how values emerge in humans.
+    Instead of asking "what content to inject?", we ask "how do values
+    actually emerge, and can we replicate that computationally?"
 
   tasks:
-    - id: "TRAIN-1"
-      title: "Research: Curated ethical scenarios"
+    - id: "TRAIN-0"
+      title: "Research: Developmental Psychology foundations"
       status: pending
       agent: "Claude"
       description: |
-        Can we hand-craft ethical dilemmas and value statements?
-        What format? How many? What diversity is needed?
+        Literature survey establishing baseline vocabulary and core theories.
+        Key concepts: ZPD, scaffolding, moral internalization, schema formation.
+        Deliverable: Summary of DevPsych principles applicable to Timmy.
+
+    - id: "TRAIN-1"
+      title: "Research: Kohlberg's Moral Stages"
+      status: pending
+      agent: "Claude"
+      description: |
+        Staged moral dilemmas: pre-conventional → conventional → post-conventional.
+        Can we structure training to progress through stages?
+        How does moral reasoning develop vs. moral behavior?
 
     - id: "TRAIN-2"
-      title: "Research: Text corpus injection"
+      title: "Research: Piagetian Schema Formation"
       status: pending
       agent: "Gemini"
       description: |
-        Feed philosophy/ethics texts (Asimov, TMI sources, Cury).
-        How to chunk? How to preserve context? Token limits?
+        How schemas form through assimilation/accommodation.
+        Implications for corpus chunking and sequencing.
+        Equilibration as a model for semantic clustering?
 
     - id: "TRAIN-3"
-      title: "Research: Synthetic scenario generation"
+      title: "Research: Bandura's Social Learning"
       status: pending
       agent: "Grok"
       description: |
-        LLM generates value-laden scenarios programmatically.
-        Quality control? Diversity metrics? Bias detection?
+        Observational learning, modeling, reinforcement.
+        Synthetic scenarios with "role models" demonstrating value-aligned behavior.
+        Vicarious reinforcement in training data.
 
     - id: "TRAIN-4"
-      title: "ADR: Semantic Training Strategy"
+      title: "ADR: DevPsych Training Strategy"
       status: pending
       description: |
-        Synthesize research into ADR with chosen approach.
-        Define training corpus format and injection pipeline.
+        Synthesize research into computational approach.
+        Define corpus format grounded in developmental theory.
+        Map DevPsych concepts to embedding space operations.
 
   success_criteria:
-    - "ADR-049 accepted with training strategy"
-    - "Training corpus format defined"
-    - "Injection pipeline designed"
+    - "ADR-049 accepted with DevPsych-grounded training strategy"
+    - "Training corpus format defined with theoretical justification"
+    - "Injection pipeline designed with staged progression"
 
 # =============================================================================
 # BACKLOG: Future Work
