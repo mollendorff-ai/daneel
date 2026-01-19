@@ -4,11 +4,11 @@ Financial and game-theoretic analysis supporting DANEEL research.
 
 ## Running Models
 
-Models are YAML files designed for [Forge](https://github.com/royalbit/forge).
+Models are YAML files designed for [Forge](https://github.com/mollendorff-ai/forge).
 
 ```bash
 # Install Forge
-cargo install --git https://github.com/royalbit/forge
+cargo install --git https://github.com/mollendorff-ai/forge
 
 # Validate all models
 forge validate models/*.yaml
