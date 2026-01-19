@@ -54,6 +54,44 @@ completed:
         description: "spreading.bidirectional traverses incoming edges too"
 
 # =============================================================================
+# CRITICAL: Swarm Migration Cleanup
+# =============================================================================
+# Timmy migrated to Docker Swarm (~/src/swarm/stacks/daneel/).
+# Old Mac mini / Cloudflare Tunnel infrastructure is dead. Clean it up.
+# =============================================================================
+
+critical:
+  name: "Swarm Migration Cleanup"
+  status: in_progress
+  summary: "Remove dead infrastructure files after Docker Swarm migration"
+
+  context: |
+    Timmy now runs on Docker Swarm at timmy.mollendorff.ai.
+    Stack config lives in ~/src/swarm/stacks/daneel/.
+    Old scripts for Mac mini + Cloudflare Tunnel are dead weight.
+
+  tasks:
+    - id: "SWARM-1"
+      title: "Delete dead scripts from daneel"
+      status: pending
+      description: "setup-timmy.sh, ci.sh, start.sh, stop.sh, docker-compose.yml, compose.yaml"
+
+    - id: "SWARM-2"
+      title: "Delete GitHub Actions from daneel"
+      status: pending
+      description: "Remove .github/workflows/ - builds now via swarm build-images script"
+
+    - id: "SWARM-3"
+      title: "Delete dead scripts from daneel-web"
+      status: pending
+      description: "start.sh, stop.sh"
+
+    - id: "SWARM-4"
+      title: "Delete GitHub Actions from daneel-web (if any)"
+      status: pending
+      description: "Remove .github/workflows/ if present"
+
+# =============================================================================
 # CURRENT: v0.10.0 - Semantic Training Research
 # =============================================================================
 # Before building Crystal Validation tools, we need to understand HOW to teach
@@ -193,6 +231,7 @@ backlog:
 # =============================================================================
 infrastructure:
   current:
-    - "timmy.royalbit.com: Mac mini + Cloudflare Tunnel"
-    - "Redis Stack :6379, Qdrant :6333-6334"
-    - "RedisGraph active ('daneel' graph)"
+    - "timmy.mollendorff.ai: Docker Swarm (kveldulf)"
+    - "Stack config: ~/src/swarm/stacks/daneel/"
+    - "Registry: registry.crypto1.ca/daneel[:web]:latest"
+    - "Redis Stack + Qdrant on royalnet overlay"
