@@ -110,7 +110,7 @@ Do thoughts cluster around "Law Crystals" in embedding space? Tight clustering =
 
 | Resource | Description |
 |----------|-------------|
-| [Blog & Dialogues](https://royalbit.github.io/daneel/) | Rex, Claude, and Grok building Timmy |
+| [Blog & Dialogues](https://mollendorff-ai.github.io/daneel/) | Rex, Claude, and Grok building Timmy |
 | [TMI Mainstream Mapping](docs/TMI_MAINSTREAM_MAPPING.md) | How TMI maps to cognitive science |
 | [ADRs](docs/adr/) | 38 architecture decision records |
 | [Roadmap](.asimov/roadmap.yaml) | Current sprint and backlog |
@@ -223,7 +223,7 @@ See [What About Us?](docs/dialogues/what_about_us.md)
 ```bash
 docker compose up -d && cargo run --release
 ```
-Runs headless with API on port 3030. Use [daneel-web](https://github.com/royalbit/daneel-web) for visual observatory.
+Runs headless with API on port 3030. Use [daneel-web](https://github.com/mollendorff-ai/daneel-web) for visual observatory.
 
 **Production (Mac mini):**
 Services managed via launchd. See [docs/OPERATIONS.md](docs/OPERATIONS.md) for full details.
@@ -248,7 +248,7 @@ Services managed via launchd. See [docs/OPERATIONS.md](docs/OPERATIONS.md) for f
 
 **Pull requests are not accepted.** This project uses AI-assisted autonomous development with protocol-enforced quality.
 
-**To contribute:** Open a [GitHub Issue](https://github.com/royalbit/daneel/issues) describing your idea. Good ideas get incorporated.
+**To contribute:** Open a [GitHub Issue](https://github.com/mollendorff-ai/daneel/issues) describing your idea. Good ideas get incorporated.
 
 ---
 

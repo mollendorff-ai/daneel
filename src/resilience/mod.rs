@@ -51,7 +51,7 @@ pub fn install_panic_hooks() -> color_eyre::Result<()> {
         eprintln!("\n");
         eprintln!("=== DANEEL CRASH ===");
         eprintln!("Timmy will be reborn.");
-        eprintln!("Please report: https://github.com/royalbit/daneel/issues");
+        eprintln!("Please report: https://github.com/mollendorff-ai/daneel/issues");
         eprintln!();
 
         // Call the default hook (which is now color_eyre's hook)

@@ -6,7 +6,7 @@
 |----------|---------|
 | [Architecture Spec](ARCHITECTURE_SPEC.md) | Technical specification of TMI cognitive architecture |
 | [ADRs](adr/) | 38 Architecture Decision Records |
-| [Blog & Dialogues](https://royalbit.github.io/daneel/) | Rex, Claude, and Grok building Timmy |
+| [Blog & Dialogues](https://mollendorff-ai.github.io/daneel/) | Rex, Claude, and Grok building Timmy |
 
 ---
 

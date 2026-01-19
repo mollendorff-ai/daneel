@@ -4,8 +4,8 @@ version = "0.9.0"
 edition = "2021"
 license = "AGPL-3.0-or-later"
 description = "DANEEL - Architecture-based AI alignment through TMI cognitive architecture"
-authors = ["Louis C. Tavares <louis@royalbit.io>"]
-repository = "https://github.com/royalbit/daneel"
+authors = ["Louis C. Tavares <louis@mollendorff.ai>"]
+repository = "https://github.com/mollendorff-ai/daneel"
 keywords = ["ai", "alignment", "cognitive-architecture", "tmi"]
 categories = ["science", "simulation"]
 
