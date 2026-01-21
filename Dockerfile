@@ -1,10 +1,35 @@
 # DANEEL - Core Cognitive Loop
-# Runtime-only image (binary built externally via `make build`)
+# Multi-stage build: compiles inside Docker for correct architecture
 #
-# Build binary first: make build
-# Then: docker build -t timmy-daneel .
+# Usage: docker build -t daneel .
 
-FROM ubuntu:24.04
+# === Build Stage ===
+FROM debian:bookworm AS builder
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Rust via rustup (gets latest stable)
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+WORKDIR /build
+
+# Copy manifests and source
+COPY Cargo.toml Cargo.lock ./
+COPY src ./src
+
+# Build
+RUN cargo build --release
+
+# === Runtime Stage ===
+FROM debian:bookworm-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -14,8 +39,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Copy pre-built binary (built with `make build`)
-COPY target/release/daneel /app/daneel
+# Copy binary from builder
+COPY --from=builder /build/target/release/daneel /app/daneel
 
 # fastembed cache directory (mounted as volume)
 RUN mkdir -p /root/.cache/fastembed
