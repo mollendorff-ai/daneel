@@ -2,6 +2,61 @@
 
 All notable changes to DANEEL are documented here.
 
+## [Unreleased]
+
+### Rebranding: RoyalBit to Möllendorff Group Inc.
+
+Complete organizational rebrand to disassociate from cryptocurrency scammers who hijacked the RoyalBit name.
+
+### Changed
+
+- **Domain references**: `royalbit.com` → `mollendorff.ai`
+- **Blog baseURL**: `timmy.royalbit.com` → `timmy.mollendorff.ai`
+- **All documentation**: 74 files with royalbit references to be updated
+- **ADRs**: Infrastructure and other ADRs referencing old domains
+
+### Why Rebrand?
+
+The "RoyalBit" name (company founded 2006) was hijacked by unrelated cryptocurrency scammers:
+
+- **UK FCA Warning (Oct 2024)**: Official warning about "Royalbit Miners" - unauthorized firm
+- **Fraudulent domains**: royalbit.ltd (trust score 38/100), royalbit.top, royal-bit.club
+- **HYIP Ponzi schemes**: Offering impossible returns (155-580% in days)
+- **Sources**: [FCA Warning](https://www.fca.org.uk/news/warnings/royalbit-miners), [Scam Detector](https://www.scam-detector.com/validator/royalbit-ltd-review/)
+
+---
+
+## [0.9.1] - 2026-01-24 - Multi-Stage Docker Build & Swarm Cleanup
+
+### Changed
+
+- **Dockerfile**: Multi-stage build for arm64 compatibility
+- **Version**: Bumped to 0.9.1
+
+### Removed (Swarm Migration Cleanup)
+
+Dead infrastructure after Docker Swarm migration to kveldulf:
+
+- **daneel**: setup-timmy.sh, ci.sh, start.sh, stop.sh, docker-compose.yml, compose.yaml
+- **daneel**: .github/workflows/ (builds now via swarm build-images script)
+- **daneel-web**: start.sh, stop.sh, .github/workflows/
+
+---
+
+## [0.9.0] - 2026-01-06 - VCONN Polish
+
+### Spreading Activation Improvements (VCONN-9, VCONN-10)
+
+- **SpreadingConfig**: Parameterized spreading activation in CognitiveConfig (depth, decay, min_weight)
+- **Aggregation Mode**: Max (default) vs Sum aggregation with max_activation ceiling
+
+### API & Graph Enhancements (VCONN-11, VCONN-12)
+
+- **GraphML REST API**: GET /api/graph/export returns GraphML XML
+- **Bidirectional Spreading**: spreading.bidirectional traverses incoming edges too
+
+---
+
 ## [0.8.6] - 2026-01-04 - Emergence Analysis Complete (VCONN)
 
 ### Spreading Activation (VCONN-6)
