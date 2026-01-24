@@ -6,90 +6,70 @@
 # human-like values as emergent properties.
 
 # =============================================================================
-# ROADMAP - Active work only. Completed items → changelog.md
+# ROADMAP - Active work only. Completed items → CHANGELOG.md
 # =============================================================================
 # Origin: Rex + Claude Opus 4.5 - Dec 25, 2025
 # Status: ACTIVE
 #
 # Current priorities:
-#   1. v0.10.0 - Semantic Training Research
+#   1. RoyalBit → Möllendorff Rebrand (CRITICAL)
+#   2. v0.10.0 - Semantic Training Research
 # =============================================================================
 
 # =============================================================================
-# COMPLETED: v0.8.6 - Emergence Analysis (Jan 4, 2026)
+# CRITICAL: RoyalBit → Möllendorff Rebrand
 # =============================================================================
-# All VCONN tasks complete. Spreading activation + manifold clustering validated.
-# =============================================================================
-
-completed:
-  - version: "0.8.6"
-    name: "Emergence Analysis"
-    date: "2026-01-04"
-    tasks:
-      - id: "VCONN-6"
-        title: "Spreading activation"
-        description: "Memory retrieval spreads to graph neighbors (depth=2, decay=0.3)"
-      - id: "VCONN-7"
-        title: "Manifold clustering with silhouette validation"
-        description: "K-Means clustering + silhouette score > 0.3 check"
-      - id: "VCONN-8"
-        title: "Gephi GraphML export"
-        description: "Export association graph to GraphML for visualization"
-
-  - version: "0.9.0"
-    name: "VCONN Polish"
-    date: "2026-01-06"
-    tasks:
-      - id: "VCONN-9"
-        title: "Parameterize spreading activation"
-        description: "SpreadingConfig in CognitiveConfig (depth, decay, min_weight)"
-      - id: "VCONN-10"
-        title: "Add spreading activation aggregation mode"
-        description: "Max (default) vs Sum aggregation with max_activation ceiling"
-      - id: "VCONN-11"
-        title: "Expose GraphML export via REST API"
-        description: "GET /api/graph/export returns GraphML XML"
-      - id: "VCONN-12"
-        title: "Add bidirectional spreading option"
-        description: "spreading.bidirectional traverses incoming edges too"
-
-# =============================================================================
-# CRITICAL: Swarm Migration Cleanup
-# =============================================================================
-# Timmy migrated to Docker Swarm (~/src/swarm/stacks/daneel/).
-# Old Mac mini / Cloudflare Tunnel infrastructure is dead. Clean it up.
+# The "RoyalBit" name (company founded 2006) was hijacked by cryptocurrency
+# scammers. UK FCA issued official warning about "Royalbit Miners" (Oct 2024).
+# Multiple fraudulent domains: royalbit.ltd, royalbit.top, royal-bit.club
+# offering impossible HYIP Ponzi returns (155-580% in days).
+#
+# Sources:
+#   - https://www.fca.org.uk/news/warnings/royalbit-miners
+#   - https://www.scam-detector.com/validator/royalbit-ltd-review/
 # =============================================================================
 
 critical:
-  name: "Swarm Migration Cleanup"
+  name: "RoyalBit → Möllendorff Rebrand"
   status: in_progress
-  summary: "Remove dead infrastructure files after Docker Swarm migration"
+  summary: "Replace all RoyalBit references with Möllendorff Group Inc."
 
   context: |
-    Timmy now runs on Docker Swarm at timmy.mollendorff.ai.
-    Stack config lives in ~/src/swarm/stacks/daneel/.
-    Old scripts for Mac mini + Cloudflare Tunnel are dead weight.
+    74 files in daneel still reference "royalbit" or "RoyalBit".
+    Forge rebrand completed in v10.0.0-alpha.6.
+    Asimov rebrand completed (unreleased).
+    DANEEL is the last major project to rebrand.
 
   tasks:
-    - id: "SWARM-1"
-      title: "Delete dead scripts from daneel"
+    - id: "REBRAND-1"
+      title: "Update blog hugo.toml and content"
       status: pending
-      description: "setup-timmy.sh, ci.sh, start.sh, stop.sh, docker-compose.yml, compose.yaml"
+      description: "blog/hugo.toml baseURL, blog/content/* references"
 
-    - id: "SWARM-2"
-      title: "Delete GitHub Actions from daneel"
+    - id: "REBRAND-2"
+      title: "Update source code references"
       status: pending
-      description: "Remove .github/workflows/ - builds now via swarm build-images script"
+      description: "src/main.rs and any hardcoded royalbit URLs"
 
-    - id: "SWARM-3"
-      title: "Delete dead scripts from daneel-web"
+    - id: "REBRAND-3"
+      title: "Update documentation"
       status: pending
-      description: "start.sh, stop.sh"
+      description: "README.md, docs/*, research/*, strategy/*, origins/*"
 
-    - id: "SWARM-4"
-      title: "Delete GitHub Actions from daneel-web (if any)"
+    - id: "REBRAND-4"
+      title: "Update ADRs"
       status: pending
-      description: "Remove .github/workflows/ if present"
+      description: "All docs/adr/ADR-*.md files with royalbit references"
+
+    - id: "REBRAND-5"
+      title: "Update references and social"
+      status: pending
+      description: "references.yaml, rejected-references.yaml, social/posts.yaml"
+
+    - id: "REBRAND-6"
+      title: "Update scripts and paper"
+      status: pending
+      description: "scripts/*, paper/*"
 
 # =============================================================================
 # CURRENT: v0.10.0 - Semantic Training Research
@@ -234,4 +214,4 @@ infrastructure:
     - "timmy.mollendorff.ai: Docker Swarm (kveldulf)"
     - "Stack config: ~/src/swarm/stacks/daneel/"
     - "Registry: registry.crypto1.ca/daneel[:web]:latest"
-    - "Redis Stack + Qdrant on royalnet overlay"
+    - "Redis Stack + Qdrant on mollendorff overlay"
