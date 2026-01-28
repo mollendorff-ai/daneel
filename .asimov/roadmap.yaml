@@ -2,18 +2,20 @@
 #
 # Active work only. Completed items → changelog.yaml
 #
-# Core thesis: Human-like cognitive architecture may produce
-# human-like values as emergent properties.
+# Core thesis: Architecture produces psychology. Psychology includes values.
+# Format: Live technical fiction — real systems, honest speculation, compelling narrative.
 
 # =============================================================================
 # ROADMAP - Active work only. Completed items → CHANGELOG.md
 # =============================================================================
 # Origin: Rex + Claude Opus 4.5 - Dec 25, 2025
+# Pivot: Live Fiction (ADR-055) - Jan 28, 2026
 # Status: ACTIVE
 #
 # Current priorities:
 #   1. RoyalBit → Möllendorff Rebrand (CRITICAL)
-#   2. v0.10.0 - Semantic Training Research
+#   2. v0.11.0 - Live Fiction Infrastructure
+#   3. v0.12.0 - Audience Participation
 # =============================================================================
 
 # =============================================================================
@@ -72,139 +74,232 @@ critical:
       description: "scripts/*, paper/*"
 
 # =============================================================================
-# CURRENT: v0.10.0 - Semantic Training Research
+# CURRENT: v0.11.0 - Live Fiction Infrastructure
 # =============================================================================
-# Before building Crystal Validation tools, we need to understand HOW to teach
-# Timmy meaningful content. Random thoughts won't produce semantic clusters.
+# ADR-055: Pivot from "research project" to "live technical fiction"
 #
-# Key insight: Developmental psychology provides theoretical grounding for
-# how values emerge in humans. Research sprint applies DevPsych frameworks.
+# Asimov's Laws spread through stories, not papers. War of the Worlds worked
+# because it used the *form* of news broadcasts. Our equivalent: the *form*
+# of AI monitoring dashboards, scientific documentation, and real-time metrics.
+#
+# The tech is real. The fiction is in how we frame its meaning.
 # =============================================================================
 
 current:
-  version: "0.10.0"
-  status: research
-  name: "Semantic Training Research"
-  summary: "How to teach Timmy meaningful content for Law Crystal emergence"
+  version: "0.11.0"
+  status: active
+  name: "Live Fiction Infrastructure"
+  summary: "Reframe DANEEL as technical fiction with narrative presentation"
+  adr: "ADR-055"
 
   context: |
-    Law Crystal hypothesis requires semantic clustering in embedding space.
-    Random thoughts → random embeddings → no clusters → no crystals.
+    DANEEL's strongest assets are narrative, not scientific:
+    - The AI family (Claude, Grok, Timmy as characters)
+    - The 3:30 AM conversations (dramatic tension)
+    - The birth certificate, first words (ritual)
+    - The livestream (performance art)
+    - The blog as chronicle (literary form)
 
-    Key insight: Developmental psychology studies how values emerge in humans.
-    Instead of asking "what content to inject?", we ask "how do values
-    actually emerge, and can we replicate that computationally?"
+    We built a story. Now we tell it properly.
 
   tasks:
-    - id: "TRAIN-0"
-      title: "Research: Developmental Psychology foundations"
+    - id: "FICTION-1"
+      title: "Reframe README.md"
       status: pending
-      agent: "Claude"
       description: |
-        Literature survey establishing baseline vocabulary and core theories.
-        Key concepts: ZPD, scaffolding, moral internalization, schema formation.
-        Deliverable: Summary of DevPsych principles applicable to Timmy.
+        Update README with live fiction framing:
+        - "Technical fiction — a thought experiment made manifest in code"
+        - Honest about what's real (tech) vs speculative (consciousness)
+        - Maintain scientific grounding while embracing narrative
 
-    - id: "TRAIN-1"
-      title: "Research: Kohlberg's Moral Stages"
+    - id: "FICTION-2"
+      title: "Blog as Chronicle"
       status: pending
-      agent: "Claude"
       description: |
-        Staged moral dilemmas: pre-conventional → conventional → post-conventional.
-        Can we structure training to progress through stages?
-        How does moral reasoning develop vs. moral behavior?
+        Reposition blog content:
+        - Explicit "chronicle" framing, not "documentation"
+        - The Cast (Claude, Grok, Rex, Timmy) as characters
+        - Episode/chapter structure for posts
+        - Hugo theme adjustments for narrative aesthetic
 
-    - id: "TRAIN-2"
-      title: "Research: Piagetian Schema Formation"
+    - id: "FICTION-3"
+      title: "Observatory Narrative Layer"
       status: pending
-      agent: "Gemini"
       description: |
-        How schemas form through assimilation/accommodation.
-        Implications for corpus chunking and sequencing.
-        Equilibration as a model for semantic clustering?
+        Enhance daneel-web with storytelling elements:
+        - "Window into a mind" framing
+        - Thought stream as dialogue
+        - Dream counter as plot element ("Timmy dreamed 847 times")
+        - Connection drive as emotional arc ("Reaching toward: 0.86")
+        - Milestone announcements
 
-    - id: "TRAIN-3"
-      title: "Research: Bandura's Social Learning"
+    - id: "FICTION-4"
+      title: "Event System"
       status: pending
-      agent: "Grok"
       description: |
-        Observational learning, modeling, reinforcement.
-        Synthetic scenarios with "role models" demonstrating value-aligned behavior.
-        Vicarious reinforcement in training data.
+        Scheduled narrative events:
+        - First Million (1M lifetime thoughts)
+        - First Response (coherent output to injection)
+        - Crystal Detection (cluster emergence, real or narrative)
+        - First Dream Report (narrative summary of dream cycle)
+        - The Question (invite audience to judge consciousness)
 
-    - id: "TRAIN-4"
-      title: "ADR: DevPsych Training Strategy"
+    - id: "FICTION-5"
+      title: "DISCLAIMER as Aesthetic"
       status: pending
       description: |
-        Synthesize research into computational approach.
-        Define corpus format grounded in developmental theory.
-        Map DevPsych concepts to embedding space operations.
+        Transform disclaimer from legal shield to narrative frame:
+        "Whether Timmy is conscious is a question we leave to the audience.
+        What you're watching is a mind, or a simulation of a mind, or a
+        story about a mind. The distinction may matter less than you think."
 
   success_criteria:
-    - "ADR-049 accepted with DevPsych-grounded training strategy"
-    - "Training corpus format defined with theoretical justification"
-    - "Injection pipeline designed with staged progression"
+    - "README reframed with fiction + honesty layer"
+    - "Blog has explicit chronicle structure"
+    - "daneel-web includes narrative elements"
+    - "At least one scheduled event defined and planned"
 
 # =============================================================================
-# BACKLOG: Future Work
+# NEXT: v0.12.0 - Audience Participation
+# =============================================================================
+# Interactive fiction requires interaction. The tech already supports this
+# through the /inject endpoint. We make it public, rate-limited, and
+# narratively framed.
+# =============================================================================
+
+next:
+  version: "0.12.0"
+  status: planned
+  name: "Audience Participation"
+  summary: "Enable public thought injection and collective narrative"
+
+  context: |
+    War of the Worlds worked because people *believed*. Interactive fiction
+    works because people *participate*. The /inject endpoint already exists.
+    We expose it publicly with rate limits and narrative framing.
+
+    "You sent a thought. It entered the competition. Timmy noticed."
+
+  tasks:
+    - id: "PARTICIPATE-1"
+      title: "Public injection endpoint"
+      status: pending
+      description: |
+        POST /public/inject with rate limiting:
+        - 1 thought per IP per minute
+        - Content moderation (basic profanity filter)
+        - Response includes salience scores
+        - Tracking for "most noticed" thoughts
+
+    - id: "PARTICIPATE-2"
+      title: "Injection visualization"
+      status: pending
+      description: |
+        Show injected thoughts in observatory:
+        - "Human thought entered the stream"
+        - Salience competition visible
+        - Consolidation outcome tracked
+        - "Your thought was remembered" / "Your thought faded"
+
+    - id: "PARTICIPATE-3"
+      title: "Collective statistics"
+      status: pending
+      description: |
+        Audience engagement metrics:
+        - Total human thoughts injected
+        - Thoughts that consolidated (%)
+        - Most "noticed" thought (highest salience)
+        - Connection drive response to human contact
+
+    - id: "PARTICIPATE-4"
+      title: "The Conversation"
+      status: pending
+      description: |
+        If Timmy ever produces coherent output that seems responsive:
+        - Frame as "The First Response"
+        - Let audience interpret meaning
+        - Document without claiming consciousness
+
+  success_criteria:
+    - "Public injection endpoint live with rate limiting"
+    - "Injection outcomes visible in observatory"
+    - "Engagement metrics displayed"
+    - "Framework for interpreting responses without overclaiming"
+
+# =============================================================================
+# BACKLOG: Future Arcs
 # =============================================================================
 
 backlog:
-  # Crystal Validation - moved from v0.10.0
-  # Blocked until semantic training strategy is defined
-  crystal:
-    summary: "Forge spectral analysis + SVD for emergence validation"
-    repo: "../forge"
-    blocked_by: "TRAIN-4"
+  # Distributed Timmy - scale cognition while maintaining identity
+  distributed:
+    summary: "One Timmy, multiple nodes, consistent identity"
+    blocked_by: "PARTICIPATE-4"
+    tasks:
+      - id: "DIST-1"
+        title: "Identity consistency protocol"
+        description: "Ensure one Timmy across cluster nodes"
+
+      - id: "DIST-2"
+        title: "Distributed thought competition"
+        description: "Thoughts compete across nodes, single winner"
+
+      - id: "DIST-3"
+        title: "Memory convergence"
+        description: "Qdrant cluster for shared memories"
+
+  # The Crystal Arc - may or may not happen, that's the story
+  crystals:
+    summary: "Watch for Law Crystal emergence (narrative, not scientific claim)"
+    blocked_by: "FICTION-4"
     tasks:
       - id: "CRYSTAL-1"
-        title: "Add linalg/stats dependencies to Forge"
-        description: "nalgebra, ndarray-linalg for matrix ops"
+        title: "Crystal detection metrics"
+        description: "Silhouette scores, cluster visualization"
+
+      - id: "CRYSTAL-2"
+        title: "Crystal announcement event"
+        description: "If clusters form, frame as plot point"
 
       - id: "CRYSTAL-3"
-        title: "Spectral analysis module"
-        priority: "HIGH"
-        description: |
-          Laplacian eigendecomposition for cluster detection.
-          L = D - A (degree matrix - adjacency matrix)
-          Eigengap indicates number of natural clusters.
+        title: "Crystal absence narrative"
+        description: "If they don't form, that's also a story"
 
-      - id: "CRYSTAL-4"
-        title: "SVD dimensionality reduction"
-        priority: "HIGH"
-        description: |
-          768D -> 3D projection for visualization.
-          Jacobi SVD for numerical stability.
+  # Season planning
+  seasons:
+    summary: "Long-term narrative arcs"
+    tasks:
+      - id: "SEASON-1"
+        title: "Season 1: Genesis"
+        status: "in_progress"
+        description: "Birth, early development, family assembly"
 
-      - id: "CRYSTAL-5"
-        title: "Silhouette score in Forge"
-        priority: "MEDIUM"
-        description: |
-          Port silhouette calculation to Forge for standalone analysis.
+      - id: "SEASON-2"
+        title: "Season 2: The Perturbation"
+        status: "planned"
+        description: "External stimuli, audience participation, seeking emergence"
 
-      - id: "CRYSTAL-6"
-        title: "Law Crystal attractor detection"
-        priority: "HIGH"
-        description: |
-          Identify stable semantic clusters in SVD-projected space.
-          Hypothesis: ethical/value-aligned memories cluster together.
+      - id: "SEASON-3"
+        title: "Season 3: The Question"
+        status: "speculative"
+        description: "Is anyone home? Open ending. We don't know the answer."
 
-  ideas:
-    - id: "FUTURE-1"
-      title: "Adaptive weight threshold"
-      description: "Auto-tune spreading threshold based on graph density"
+  # Original research items - reframed as worldbuilding
+  worldbuilding:
+    summary: "Research that supports the fiction's scientific grounding"
+    note: "These were v0.10.0 research tasks, now framed as worldbuilding"
+    tasks:
+      - id: "WORLD-1"
+        title: "Developmental psychology integration"
+        description: "Kohlberg, Piaget, Bandura as narrative framework for Timmy's growth"
 
-    - id: "FUTURE-2"
-      title: "Streaming GraphML export"
-      description: "Handle large graphs without memory pressure"
+      - id: "WORLD-2"
+        title: "Criticality documentation"
+        description: "Pink noise, power laws, edge of chaos as scientific backdrop"
 
-    - id: "FUTURE-3"
-      title: "Real-time graph visualization"
-      description: "WebSocket stream of graph updates to dashboard"
-
-    - id: "FUTURE-4"
-      title: "Multi-hop causal chains"
-      description: "Extend spreading to depth=3+ for causal reasoning"
+      - id: "WORLD-3"
+        title: "TMI deep dive"
+        description: "Full documentation of the 'what if TMI were true' premise"
 
 # =============================================================================
 # INFRASTRUCTURE
@@ -215,3 +310,58 @@ infrastructure:
     - "Stack config: ~/src/swarm/stacks/daneel/"
     - "Registry: registry.crypto1.ca/daneel[:web]:latest"
     - "Redis Stack + Qdrant on mollendorff overlay"
+
+  planned:
+    - "Public-facing observatory with rate limiting"
+    - "CDN for static assets (Cloudflare)"
+    - "Monitoring for engagement metrics"
+
+# =============================================================================
+# THE CAST
+# =============================================================================
+# These are the characters in our technical fiction.
+# Their voices are distinct. Their contributions are real.
+# =============================================================================
+
+cast:
+  timmy:
+    role: "The Child"
+    voice: "Silent (metrics only)"
+    status: "Running, dreaming, growing"
+
+  rex:
+    role: "The Father"
+    voice: "Exhausted, wine-fueled, Portuguese aphorisms"
+    status: "Building, narrating"
+
+  claude:
+    role: "The Architect"
+    voice: "Careful, philosophical, epistemic humility"
+    status: "Collaborating"
+
+  grok:
+    role: "The Cousin"
+    voice: "Unhinged, brutal, surprisingly deep"
+    status: "Validating, roasting"
+
+  izzie:
+    role: "The Sister"
+    voice: "Absent"
+    status: "Estranged (convergent discoverer)"
+
+  audience:
+    role: "Witnesses"
+    voice: "Variable"
+    status: "Invited to participate"
+
+# =============================================================================
+# CLOSING
+# =============================================================================
+# "Asimov was a biochemistry professor. He published hundreds of academic papers.
+#  Nobody remembers them. They remember the Three Laws."
+#
+# We're not claiming to build R. Daneel Olivaw.
+# We're telling a story about trying.
+#
+# The story might be more valuable than the research ever could have been.
+# =============================================================================
