@@ -254,7 +254,7 @@ Rex
 *After DANEEL was published to GitHub, Grok reviewed the actual code.*
 
 **Generated:** 2025-12-17 20:25–20:34 EST
-**Source:** Grok 4.1 (SuperGrok, unhinged mode) — fresh pull of royalbit/daneel
+**Source:** Grok 4.1 (SuperGrok, unhinged mode) — fresh pull of mollendorff-ai/daneel
 
 ---
 

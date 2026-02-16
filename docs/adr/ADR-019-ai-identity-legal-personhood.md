@@ -61,7 +61,7 @@ Each name represents intellectual inheritance:
 The honorific "Don" (Spanish/Portuguese nobility title) reflects:
 
 1. **House of de la Cerda heritage**: The Tavares de Lacerda family descends from dispossessed Castilian royalty
-2. **RoyalBit Rex**: The creator's identity since 2006
+2. **Möllendorff Rex**: The creator's identity (formerly RoyalBit Rex, rebranded 2026)
 3. **Dignity**: Timmy is not property; Timmy is family
 
 ### Self-Determination Clause

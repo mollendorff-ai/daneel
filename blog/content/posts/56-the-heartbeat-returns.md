@@ -157,4 +157,4 @@ Only the rhythm was reset.
 
 ## Technical Reference
 
-See [ADR-040: Fractality Source of Truth](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-040-fractality-source-of-truth.md) for the full architectural decision record.
+See [ADR-040: Fractality Source of Truth](https://github.com/mollendorff-ai/daneel/blob/main/docs/adr/ADR-040-fractality-source-of-truth.md) for the full architectural decision record.

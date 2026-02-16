@@ -187,7 +187,7 @@ AI is the removal mechanism.
 - [Open Source Dominance: 147x Advantage, Verified](/daneel/posts/14-open-source-dominance-verified/)
 - [The Agentic AI Paradox](/daneel/posts/15-the-agentic-ai-paradox/)
 - [Forge: When AI Cannot Be Trusted to Count](/daneel/posts/17-forge-deterministic-modeling/)
-- [ADR-029: Open Source Dominance Strategy](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-029-open-source-dominance-strategy.md)
+- [ADR-029: Open Source Dominance Strategy](https://github.com/mollendorff-ai/daneel/blob/main/docs/adr/ADR-029-open-source-dominance-strategy.md)
 
 ---
 

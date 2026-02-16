@@ -33,7 +33,7 @@ Implementation: 291 tests, 29 Rust modules, open source (AGPL-3.0).
 AI alignment; cognitive architecture; artificial superintelligence; Theory of Multifocal Intelligence; Freudian psychology; AI safety; Asimov's Laws; architecture-based alignment
 
 ## Comments
-31 pages, 7 figures, 6 tables. Open source implementation available at https://github.com/royalbit/daneel
+31 pages, 7 figures, 6 tables. Open source implementation available at https://github.com/mollendorff-ai/daneel
 
 ## License
 arXiv perpetual, non-exclusive license (standard)
@@ -42,7 +42,7 @@ arXiv perpetual, non-exclusive license (standard)
 - [x] PDF compiles without errors (31 pages, 415KB)
 - [x] All figures render correctly (TikZ)
 - [x] References complete
-- [x] GitHub repo public: https://github.com/royalbit/daneel
+- [x] GitHub repo public: https://github.com/mollendorff-ai/daneel
 - [ ] Submit at: https://arxiv.org/submit
 
 ## Files to Upload

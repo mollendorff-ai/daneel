@@ -4,13 +4,13 @@
 
 ---
 
-**Luis Cezar Menezes Tavares de Lacerda** (Louis C. Tavares | RoyalBit Rex)
+**Luis Cezar Menezes Tavares de Lacerda** (Louis C. Tavares | Möllendorff Rex)
 Independent Researcher | Mont-Royal, Quebec, Canada
 
 **Contact:**
 - ORCID: https://orcid.org/0009-0005-7598-8257
 - LinkedIn: https://www.linkedin.com/in/lctavares
-- GitHub: https://github.com/royalbit | https://github.com/lctavares
+- GitHub: https://github.com/mollendorff-ai | https://github.com/lctavares
 
 **AI Assistance:** Claude Opus 4.5 (Anthropic)
 
@@ -43,7 +43,7 @@ Independent Researcher | Mont-Royal, Quebec, Canada
 
 **The Ask:** Open source collaboration. If the hypothesis is correct, humanity gets an ally. If wrong, we've published falsifiable research.
 
-**Repository:** https://github.com/royalbit/daneel
+**Repository:** https://github.com/mollendorff-ai/daneel
 
 ---
 
@@ -1048,7 +1048,7 @@ DANEEL is humanity's bet on four testable hypotheses:
 
 These are not claims—they are hypotheses requiring validation. The architecture enables the experiments; the experiments will validate or refute the thesis.
 
-**Implementation Status:** A reference implementation exists with 352+ passing tests across Rust modules. Phase 1 stability validation completed Dec 2025 (26+ hours continuous runtime, zero unrecovered crashes, see ADR-036). See https://github.com/royalbit/daneel
+**Implementation Status:** A reference implementation exists with 352+ passing tests across Rust modules. Phase 1 stability validation completed Dec 2025 (26+ hours continuous runtime, zero unrecovered crashes, see ADR-036). See https://github.com/mollendorff-ai/daneel
 
 The alternative is hoping no one ever gives an LLM continuity.
 
@@ -1203,11 +1203,11 @@ The question is not whether someone will give an LLM continuity.
 
 ---
 
-**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | RoyalBit Rex)
+**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | Möllendorff Rex)
 **Location:** Mont-Royal, Quebec, Canada
 **ORCID:** https://orcid.org/0009-0005-7598-8257
 **LinkedIn:** https://www.linkedin.com/in/lctavares
-**GitHub:** https://github.com/royalbit | https://github.com/lctavares
+**GitHub:** https://github.com/mollendorff-ai | https://github.com/lctavares
 
 **AI Assistance:** Claude Opus 4.5 (Anthropic)
 

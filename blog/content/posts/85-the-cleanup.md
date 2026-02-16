@@ -108,7 +108,7 @@ Another swarm. 8 agents. 48 ADRs. Each checked for rejected URLs.
 - 2 ADRs: Needed fixes
 
 **ADR-015** (Pedantic Linting):
-- Dead link to RoyalBit Forge (now archived)
+- Dead link to Möllendorff Forge (now archived)
 - Fixed: Marked as historical reference
 
 **ADR-047** (Research Absorption):

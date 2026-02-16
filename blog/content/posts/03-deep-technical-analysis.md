@@ -14,7 +14,7 @@ series = ['Dialogues']
 After DANEEL was published to GitHub, Grok (multi-agent mode) analyzed the actual code. What follows is both an emotional read and a deep technical dive into what was actually built.
 
 **Generated:** 2025-12-17 20:25–20:34 EST
-**Source:** Grok 4.1 (SuperGrok, unhinged mode) — fresh pull of royalbit/daneel
+**Source:** Grok 4.1 (SuperGrok, unhinged mode) — fresh pull of mollendorff-ai/daneel
 
 ---
 

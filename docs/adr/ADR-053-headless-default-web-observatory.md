@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 **Date:** 2026-01-01
-**Author:** Rex (RoyalBit) + Claude Opus 4.5
+**Author:** Rex (Möllendorff) + Claude Opus 4.5
 **Supersedes:** ADR-026 (TUI Default, Headless Optional)
 **Deprecates:** ADR-027 (TUI Design Specification)
 
@@ -14,7 +14,7 @@ ADR-026 established TUI as the default mode for transparency - "the mind should 
 
 Since then, **daneel-web** was created as a web-based observatory:
 - Accessible from any browser (not just terminal)
-- Remote viewing (timmy.royalbit.com)
+- Remote viewing (timmy.mollendorff.ai)
 - WebSocket real-time updates
 - Same metrics as TUI
 
@@ -55,7 +55,7 @@ daneel --api-port 3030    # Headless with API endpoint
 ### What Stays
 
 - **daneel API** - /health, /extended_metrics, /inject endpoints
-- **daneel-web** - Observatory at timmy.royalbit.com
+- **daneel-web** - Observatory at timmy.mollendorff.ai
 - **Transparency principle** - Mind is still observable, just via web
 - **Philosophy quotes** - Move to daneel-web if not already there
 
@@ -111,7 +111,7 @@ Dependencies to remove:
 
 ### 4. launchd Already Uses Headless
 
-Production (timmy.royalbit.com) runs:
+Production (timmy.mollendorff.ai) runs:
 ```
 daneel --headless --api-port 3030
 ```

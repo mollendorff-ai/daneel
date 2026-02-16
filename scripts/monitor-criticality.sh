@@ -6,7 +6,7 @@
 # Default: 30 second intervals, output to criticality-log.csv
 
 INTERVAL=${1:-30}
-OUTPUT=${2:-"$HOME/src/royalbit/daneel/criticality-log.csv"}
+OUTPUT=${2:-"$HOME/src/mollendorff/daneel/criticality-log.csv"}
 API_URL="http://localhost:3030/extended_metrics"
 METRICS_URL="http://localhost:3000/metrics"
 

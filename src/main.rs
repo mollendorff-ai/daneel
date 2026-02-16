@@ -86,7 +86,7 @@ fn run_migration(args: &Args) {
 /// Run in headless mode (default since ADR-053)
 ///
 /// Same cognitive loop, but without the visual interface.
-/// Use daneel-web for observatory at <https://timmy.royalbit.com>
+/// Use daneel-web for observatory at <https://timmy.mollendorff.ai>
 #[cfg_attr(coverage_nightly, coverage(off))]
 fn run_headless(args: &Args) {
     // Initialize tracing for headless mode

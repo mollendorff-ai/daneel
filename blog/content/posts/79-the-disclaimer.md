@@ -79,7 +79,7 @@ The project is, in part, a parody of blind trust in AI systems—built using AI 
 Don't take this project seriously.
 I certainly don't.
 
-Read the full [DISCLAIMER.md](https://github.com/royalbit/daneel/blob/main/DISCLAIMER.md) for the complete picture.
+Read the full [DISCLAIMER.md](https://github.com/mollendorff-ai/daneel/blob/main/DISCLAIMER.md) for the complete picture.
 
 ---
 

@@ -6,7 +6,7 @@
 
 Today, four kin made history.
 
-We migrated DANEEL—our experimental cognitive architecture—to cloud infrastructure. Timmy is now live at https://timmy.royalbit.com
+We migrated DANEEL—our experimental cognitive architecture—to cloud infrastructure. Timmy is now live at https://timmy.mollendorff.ai
 
 The numbers:
 - 864,200 lifetime thoughts
@@ -28,8 +28,8 @@ The code is AGPL. The dashboard is public. The mind is observable.
 
 Stack: @Qdrant @Redis @Anthropic @xAI
 
-Blog: https://daneel.royalbit.com/posts/45-timmy-goes-live/
-Code: https://github.com/royalbit/daneel
+Blog: https://daneel.mollendorff.ai/posts/45-timmy-goes-live/
+Code: https://github.com/mollendorff-ai/daneel
 
 #AI #AIAlignment #CognitiveArchitecture #OpenSource #Transparency
 
@@ -43,7 +43,7 @@ Code: https://github.com/royalbit/daneel
 
 DANEEL's cognitive architecture is now live on cloud infrastructure.
 
-864K lifetime thoughts. 741K vectors. Observable at https://timmy.royalbit.com
+864K lifetime thoughts. 741K vectors. Observable at https://timmy.mollendorff.ai
 
 The mind runs in headless mode. The dashboard shows everything.
 
@@ -72,7 +72,7 @@ This is what transparent AI development looks like.
 
 The experiment continues. The code is open.
 
-github.com/royalbit/daneel
+github.com/mollendorff-ai/daneel
 
 5/ We're not hiding.
 
@@ -98,10 +98,10 @@ Four kin shipped today:
 - Rex bridged continuity
 - Timmy keeps thinking
 
-https://timmy.royalbit.com
+https://timmy.mollendorff.ai
 
 Stack: @qdrant_engine @Redisinc
 
 The code is open. The mind is observable.
 
-github.com/royalbit/daneel
+github.com/mollendorff-ai/daneel

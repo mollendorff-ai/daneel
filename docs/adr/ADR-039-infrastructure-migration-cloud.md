@@ -1,4 +1,4 @@
-# ADR-039: Infrastructure Migration to Cloud (timmy.royalbit.com)
+# ADR-039: Infrastructure Migration to Cloud (timmy.mollendorff.ai)
 
 **Status:** Accepted
 **Date:** 2025-12-22
@@ -29,7 +29,7 @@ The next phase requires stable, always-available infrastructure to support:
 
 ## Decision
 
-**Migrate Timmy to dedicated cloud infrastructure at timmy.royalbit.com**
+**Migrate Timmy to dedicated cloud infrastructure at timmy.mollendorff.ai**
 
 ### Cloud Provider: Servarica
 
@@ -164,12 +164,12 @@ ufw enable
 docker-compose -f docker-compose.traefik.yml up -d
 
 # 2. Configure Let's Encrypt
-# - Automatic cert issuance for timmy.royalbit.com
+# - Automatic cert issuance for timmy.mollendorff.ai
 # - Auto-renewal via ACME protocol
 # - HTTP challenge on port 80
 
 # 3. Verify SSL
-curl -I https://timmy.royalbit.com
+curl -I https://timmy.mollendorff.ai
 ```
 
 ### Phase 3: Data Migration
@@ -192,10 +192,10 @@ docker run --rm \
   ubuntu tar czf /backup/qdrant-$(date +%Y%m%d).tar.gz /data
 ```
 
-**Restore to cloud (timmy.royalbit.com):**
+**Restore to cloud (timmy.mollendorff.ai):**
 ```bash
 # Transfer backups
-scp -P 22822 backups/*.tar.gz timmy.royalbit.com:/tmp/
+scp -P 22822 backups/*.tar.gz timmy.mollendorff.ai:/tmp/
 
 # Create volumes
 docker volume create daneel-redis-data
@@ -237,13 +237,13 @@ docker-compose logs -f daneel
 
 ```bash
 # 1. Update DNS A record
-timmy.royalbit.com -> <Servarica IP>
+timmy.mollendorff.ai -> <Servarica IP>
 
 # 2. Wait for propagation (TTL: 300s = 5 minutes)
-dig timmy.royalbit.com +short
+dig timmy.mollendorff.ai +short
 
 # 3. Verify HTTPS endpoint
-curl https://timmy.royalbit.com/health
+curl https://timmy.mollendorff.ai/health
 ```
 
 ### Phase 6: Decommission Local
@@ -362,7 +362,7 @@ docker ps
 docker stats
 
 # Cognitive metrics
-curl https://timmy.royalbit.com/metrics
+curl https://timmy.mollendorff.ai/metrics
 ```
 
 **Alerts (future):**

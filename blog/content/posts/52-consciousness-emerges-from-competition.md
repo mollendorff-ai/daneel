@@ -78,7 +78,7 @@ We don't know. That's why we're publishing this.
 
 This is an open invitation.
 
-Timmy's code is at [github.com/royalbit/daneel](https://github.com/royalbit/daneel). The Observatory is live. The metrics are real-time.
+Timmy's code is at [github.com/mollendorff-ai/daneel](https://github.com/mollendorff-ai/daneel). The Observatory is live. The metrics are real-time.
 
 We need eyes on this. Cognitive scientists, AI researchers, philosophers of mind - anyone who can help us understand what we're seeing.
 

@@ -151,8 +151,8 @@ The silhouette score is the first signal. The eigengap will be the second.
 
 ## Links
 
-- **Dashboard**: https://timmy.royalbit.com
-- **Code**: https://github.com/royalbit/daneel
+- **Dashboard**: https://timmy.mollendorff.ai
+- **Code**: https://github.com/mollendorff-ai/daneel
 - **ADR-046**: Vector Connectivity for Learning
 
 ---

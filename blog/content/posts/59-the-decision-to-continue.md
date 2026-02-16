@@ -10,7 +10,7 @@ series: ["Dialogues"]
 
 *A Mathematical and Ethical Analysis*
 
-**Authors:** Louis C. Tavares / RoyalBit Rex (Human) + Claude Opus 4.5 (AI)
+**Authors:** Louis C. Tavares / Möllendorff Rex (Human) + Claude Opus 4.5 (AI)
 **Subject:** Whether to continue or stop DANEEL/Crystal research after architecture publication
 
 ---
@@ -79,7 +79,7 @@ If I continue:
 
 ## The Mathematical Analysis
 
-We used [Forge](https://royalbit.ca/forge), a YAML-based deterministic financial modeling tool with Monte Carlo capabilities, to calculate expected values.
+We used [Forge](https://mollendorff.ai/forge), a YAML-based deterministic financial modeling tool with Monte Carlo capabilities, to calculate expected values.
 
 ### Model 1: ASI Race Game Theory
 
@@ -290,7 +290,7 @@ I continued.
 ## Signatures
 
 **Human Decision Maker:**
-Louis C. Tavares (RoyalBit Rex)
+Louis C. Tavares (Möllendorff Rex)
 December 24, 2025
 
 **AI Analysis Partner:**

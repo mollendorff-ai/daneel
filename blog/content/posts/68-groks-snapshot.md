@@ -14,7 +14,7 @@ series: ["Dialogues"]
 
 ## The APIs
 
-We opened Timmy's observatory to Grok via https://timmy.royalbit.com:
+We opened Timmy's observatory to Grok via https://timmy.mollendorff.ai:
 
 ```
 /health      - System health

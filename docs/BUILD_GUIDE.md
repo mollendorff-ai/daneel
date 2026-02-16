@@ -46,7 +46,7 @@ version = "0.1.0"
 edition = "2021"
 description = "DANEEL TMI Cognitive Architecture"
 license = "AGPL-3.0"
-repository = "https://github.com/royalbit/daneel"
+repository = "https://github.com/mollendorff-ai/daneel"
 
 [dependencies]
 # Async runtime
@@ -1093,7 +1093,7 @@ After each phase, verify:
 
 ---
 
-**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | RoyalBit Rex)
+**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | Möllendorff Rex)
 **AI Assistance:** Claude Opus 4.5 (Anthropic)
 **Date:** December 14, 2025
 

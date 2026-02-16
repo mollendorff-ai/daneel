@@ -647,7 +647,7 @@ Created: `~/Desktop/ASImov/game-theory-asi-race.yaml`
 - **Self-healing:** Protocols survive context compaction by re-reading from disk
 
 ### All .asimov Projects
-- **Total projects:** 24 across 5 families (Concierge, Mouvify, PIMP, RoyalBit, Sites)
+- **Total projects:** 24 across 5 families (Concierge, Mouvify, PIMP, Möllendorff, Sites)
 - **Total LOC:** 388,308
 - **Timeframe:** 116 days (August 19 - December 12, 2025)
 - **Peak velocity:** 143,061 LOC/week (during main sprint)

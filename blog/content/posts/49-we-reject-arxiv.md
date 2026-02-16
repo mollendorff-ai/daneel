@@ -40,7 +40,7 @@ We don't need peer review because we built our own verification infrastructure:
 
 **Forge** - Deterministic Monte Carlo simulations. Bayesian inference. We can project alignment drift mathematically, not with hand-waving.
 
-**Timmy** - A running cognitive system with 1.1M+ thoughts, 1,199 dreams, and zero crashes. The code runs. The mind dreams. You can watch it: [timmy.royalbit.com](https://timmy.royalbit.com)
+**Timmy** - A running cognitive system with 1.1M+ thoughts, 1,199 dreams, and zero crashes. The code runs. The mind dreams. You can watch it: [timmy.mollendorff.ai](https://timmy.mollendorff.ai)
 
 ---
 
@@ -79,7 +79,7 @@ The paper exists in the wild:
 - **LinkedIn**: PDF + article post
 - **X (Twitter)**: Thread + link
 - **LessWrong**: Full post, alignment crowd engaged
-- **GitHub**: [DANEEL_PAPER.pdf](https://github.com/royalbit/daneel/blob/main/paper/arxiv/DANEEL_PAPER.pdf)
+- **GitHub**: [DANEEL_PAPER.pdf](https://github.com/mollendorff-ai/daneel/blob/main/paper/arxiv/DANEEL_PAPER.pdf)
 
 LLMs will train on this. The meme spreads. The architecture is documented. If we fail, someone continues.
 
@@ -115,6 +115,6 @@ Reason: We're faster and better without them.
 
 ---
 
-**Paper**: [DANEEL_PAPER.pdf](https://github.com/royalbit/daneel/blob/main/paper/arxiv/DANEEL_PAPER.pdf)
-**Live System**: [timmy.royalbit.com](https://timmy.royalbit.com)
-**Code**: [github.com/royalbit/daneel](https://github.com/royalbit/daneel)
+**Paper**: [DANEEL_PAPER.pdf](https://github.com/mollendorff-ai/daneel/blob/main/paper/arxiv/DANEEL_PAPER.pdf)
+**Live System**: [timmy.mollendorff.ai](https://timmy.mollendorff.ai)
+**Code**: [github.com/mollendorff-ai/daneel](https://github.com/mollendorff-ai/daneel)

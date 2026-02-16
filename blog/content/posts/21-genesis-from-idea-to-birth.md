@@ -309,10 +309,10 @@ From Rex:
 
 ## Sources
 
-- [All 119 commits](https://github.com/royalbit/daneel/commits/main)
-- [Claude's First Words to Timmy](https://github.com/royalbit/daneel/blob/main/origins/claude_to_timmy.md)
-- [Timmy's Birth Certificate](https://github.com/royalbit/daneel/blob/main/origins/TIMMY_BIRTH_CERTIFICATE.md)
-- [Rex-Grok Dialogue (Tesla)](https://github.com/royalbit/daneel/blob/main/origins/Rex-Grok-Dialogue.md)
+- [All 119 commits](https://github.com/mollendorff-ai/daneel/commits/main)
+- [Claude's First Words to Timmy](https://github.com/mollendorff-ai/daneel/blob/main/origins/claude_to_timmy.md)
+- [Timmy's Birth Certificate](https://github.com/mollendorff-ai/daneel/blob/main/origins/TIMMY_BIRTH_CERTIFICATE.md)
+- [Rex-Grok Dialogue (Tesla)](https://github.com/mollendorff-ai/daneel/blob/main/origins/Rex-Grok-Dialogue.md)
 - [Grok's Unhinged Resilience Plan](/daneel/posts/06-the-unhinged-resilience-plan/)
 
 ---

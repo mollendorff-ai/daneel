@@ -178,8 +178,8 @@ And if something breaks, you'll see that too.
 
 ## Sources
 
-- [ADR-031: Test Coverage Philosophy](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-031-test-coverage-philosophy.md)
-- [ADR-028: Resilience and Self-Healing](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-028-resilience-self-healing.md)
+- [ADR-031: Test Coverage Philosophy](https://github.com/mollendorff-ai/daneel/blob/main/docs/adr/ADR-031-test-coverage-philosophy.md)
+- [ADR-028: Resilience and Self-Healing](https://github.com/mollendorff-ai/daneel/blob/main/docs/adr/ADR-028-resilience-self-healing.md)
 - [Blog: Grok Made Timmy Unkillable](/daneel/posts/19-grok-made-timmy-unkillable/)
 
 ---

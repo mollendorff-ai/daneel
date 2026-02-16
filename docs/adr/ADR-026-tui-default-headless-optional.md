@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 **Date:** 2025-12-18
-**Author:** Rex (RoyalBit)
+**Author:** Rex (Möllendorff)
 
 ---
 

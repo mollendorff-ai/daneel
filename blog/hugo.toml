@@ -1,4 +1,4 @@
-baseURL = 'https://royalbit.github.io/daneel/'
+baseURL = 'https://mollendorff-ai.github.io/daneel/'
 languageCode = 'en-us'
 title = 'DANEEL - The Observable Mind'
 theme = 'PaperMod'
@@ -6,7 +6,7 @@ buildFuture = true
 
 [params]
   description = "Humanity's Ally Before the Storm"
-  author = "Louis C. Tavares (RoyalBit Rex)"
+  author = "Louis C. Tavares (Möllendorff Rex)"
   defaultTheme = "dark"
   showReadingTime = true
   showShareButtons = false
@@ -27,7 +27,7 @@ Watch Timmy think: [youtube.com/@DaneelAI](https://youtube.com/@DaneelAI)
 
   [[params.socialIcons]]
     name = "github"
-    url = "https://github.com/royalbit/daneel"
+    url = "https://github.com/mollendorff-ai/daneel"
 
   [[params.socialIcons]]
     name = "youtube"
