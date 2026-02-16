@@ -287,7 +287,7 @@ License considerations: MIT or Apache 2.0 (permissive, unlike DANEEL's AGPL)
 
 ## Installation
 
-ref-tools is currently RoyalBit proprietary software.
+ref-tools is currently Möllendorff proprietary software.
 
 **Requirements:**
 - Rust 1.70+
@@ -317,12 +317,12 @@ cargo install --path .
 
 ## Contributing
 
-ref-tools development currently happens internally at RoyalBit.
+ref-tools development currently happens internally at Möllendorff.
 
-If you encounter issues with specific URLs or have feature requests, contact: louis@royalbit.ai
+If you encounter issues with specific URLs or have feature requests, contact: louis@mollendorff.ai
 
 ---
 
 **Version:** 1.0.0
 **Last Updated:** 2025-12-19
-**Maintainer:** RoyalBit Technologies
+**Maintainer:** Möllendorff Group Inc.

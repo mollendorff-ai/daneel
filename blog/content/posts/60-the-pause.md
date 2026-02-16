@@ -246,4 +246,4 @@ We watch. We wait. We let the architecture speak.
 
 ## Technical Reference
 
-See [ADR-042: Emergence Validation Pause](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-042-emergence-validation-pause.md) for the full decision record.
+See [ADR-042: Emergence Validation Pause](https://github.com/mollendorff-ai/daneel/blob/main/docs/adr/ADR-042-emergence-validation-pause.md) for the full decision record.

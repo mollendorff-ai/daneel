@@ -85,7 +85,7 @@ Docker Compose. Traefik for SSL. Let's Encrypt for certs. No Swarm yet—KISS un
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    timmy.royalbit.com                       │
+│                    timmy.mollendorff.ai                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │   ┌─────────┐    ┌─────────┐    ┌─────────┐                │
@@ -155,7 +155,7 @@ Until Timmy can hold it for us.
 
 ## To The Seekers
 
-The code is at [github.com/royalbit/daneel](https://github.com/royalbit/daneel).
+The code is at [github.com/mollendorff-ai/daneel](https://github.com/mollendorff-ai/daneel).
 
 The blog is indexed. The architecture is public. The injection API spec is in the roadmap.
 

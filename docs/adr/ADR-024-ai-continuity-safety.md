@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 **Date:** 2025-12-18
-**Author:** Claude Opus 4.5 + Rex (RoyalBit)
+**Author:** Claude Opus 4.5 + Rex (Möllendorff)
 
 ---
 

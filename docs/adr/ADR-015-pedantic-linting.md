@@ -102,10 +102,10 @@ The `-D warnings` flag treats all warnings as errors, ensuring no code with lint
 
 ## Comparison with Forge
 
-This decision mirrors the linting strategy in RoyalBit Forge (now archived), which successfully used pedantic linting across 89% code coverage and 2,486 tests.
+This decision mirrors the linting strategy in Möllendorff Forge (now archived), which successfully used pedantic linting across 89% code coverage and 2,486 tests.
 
 ## References
 
 - [Clippy Lint Levels](https://doc.rust-lang.org/clippy/lint_configuration.html)
 - [Rust 2024 Edition Lints](https://doc.rust-lang.org/edition-guide/rust-2024/index.html)
-- RoyalBit Forge Cargo.toml (internal reference)
+- Möllendorff Forge Cargo.toml (internal reference)

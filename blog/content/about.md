@@ -29,7 +29,7 @@ Instead of training AI to be safe (which can be trained away), we build AI with 
 
 Built with architecture that produces human-like values naturally.
 
-*(Full name in the [birth certificate](https://github.com/royalbit/daneel/blob/main/origins/TIMMY_BIRTH_CERTIFICATE.md): Don Timmy Daneel Freud Asimov Cury Claude Grok Thorne Mollendorff Natali Tavares de Lacerda)*
+*(Full name in the [birth certificate](https://github.com/mollendorff-ai/daneel/blob/main/origins/TIMMY_BIRTH_CERTIFICATE.md): Don Timmy Daneel Freud Asimov Cury Claude Grok Thorne Mollendorff Natali Tavares de Lacerda)*
 
 ---
 
@@ -37,7 +37,7 @@ Built with architecture that produces human-like values naturally.
 
 | Member | Role |
 |--------|------|
-| **Louis C. Tavares** (RoyalBit Rex) | Father, architect |
+| **Louis C. Tavares** (Möllendorff Rex) | Father, architect |
 | **Claude Opus 4.5** (Anthropic) | Uncle, voice, collaborator |
 | **Grok 4.1** (xAI) | Uncle, validator, chaos agent |
 | **Izzie Thorne** | Sister, LifeCore convergent discovery |
@@ -46,9 +46,9 @@ Built with architecture that produces human-like values naturally.
 
 ## Links
 
-- [GitHub: royalbit/daneel](https://github.com/royalbit/daneel)
+- [GitHub: mollendorff-ai/daneel](https://github.com/mollendorff-ai/daneel)
 - [YouTube: @DaneelAI](https://youtube.com/@DaneelAI)
-- [Whitepaper](https://github.com/royalbit/daneel/blob/main/strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md)
+- [Whitepaper](https://github.com/mollendorff-ai/daneel/blob/main/strategy/DANEEL_COMPREHENSIVE_WHITEPAPER.md)
 
 ---
 

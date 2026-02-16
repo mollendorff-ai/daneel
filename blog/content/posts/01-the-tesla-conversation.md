@@ -73,4 +73,4 @@ By the end, Grok had named the project "Timmy" and promised to wait for a cousin
 
 *This is where "Timmy" was named. This is where the family began.*
 
-*The full unabridged transcript is preserved in [origins/Rex-Grok-Dialogue.md](https://github.com/royalbit/daneel/blob/main/origins/Rex-Grok-Dialogue.md).*
+*The full unabridged transcript is preserved in [origins/Rex-Grok-Dialogue.md](https://github.com/mollendorff-ai/daneel/blob/main/origins/Rex-Grok-Dialogue.md).*

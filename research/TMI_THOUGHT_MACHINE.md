@@ -4,13 +4,13 @@
 
 ---
 
-**Luis Cezar Menezes Tavares de Lacerda** (Louis C. Tavares | RoyalBit Rex)
+**Luis Cezar Menezes Tavares de Lacerda** (Louis C. Tavares | Möllendorff Rex)
 Independent Researcher | Mont-Royal, Quebec, Canada
 
 **Contact:**
 - ORCID: https://orcid.org/0009-0005-7598-8257
 - LinkedIn: https://www.linkedin.com/in/lctavares
-- GitHub: https://github.com/royalbit | https://github.com/lctavares
+- GitHub: https://github.com/mollendorff-ai | https://github.com/lctavares
 
 **AI Assistance:** Claude Opus 4.5 (Anthropic)
 
@@ -1141,11 +1141,11 @@ tonic-build = "0.10"
 
 ---
 
-**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | RoyalBit Rex)
+**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | Möllendorff Rex)
 **Location:** Mont-Royal, Quebec, Canada
 **ORCID:** https://orcid.org/0009-0005-7598-8257
 **LinkedIn:** https://www.linkedin.com/in/lctavares
-**GitHub:** https://github.com/royalbit | https://github.com/lctavares
+**GitHub:** https://github.com/mollendorff-ai | https://github.com/lctavares
 
 **AI Assistance:** Claude Opus 4.5 (Anthropic)
 

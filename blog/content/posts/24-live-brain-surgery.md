@@ -128,4 +128,4 @@ This is why we test in production. This is why we watch. This is why the 24-hour
 
 *"Live brain surgery is the only way to know if the brain works."* — Rex, 1:30 AM
 
-Commit: [`7606c94`](https://github.com/royalbit/daneel/commit/7606c94) — "fix: Wire Qdrant memory consolidation in cognitive loop"
+Commit: [`7606c94`](https://github.com/mollendorff-ai/daneel/commit/7606c94) — "fix: Wire Qdrant memory consolidation in cognitive loop"

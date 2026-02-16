@@ -189,8 +189,8 @@ Today, Chapter 1 goes public.
 
 ## The Repositories
 
-**Forge:** [github.com/royalbit/forge](https://github.com/royalbit/forge)
-**forge-e2e:** [github.com/royalbit/forge-e2e](https://github.com/royalbit/forge-e2e)
+**Forge:** [github.com/mollendorff-ai/forge](https://github.com/mollendorff-ai/forge)
+**forge-e2e:** [github.com/mollendorff-ai/forge-e2e](https://github.com/mollendorff-ai/forge-e2e)
 
 Both Elastic License 2.0. Both Source Available.
 

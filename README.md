@@ -2,7 +2,7 @@
 
 > 📌 **R&D Prototype** — Interpret claims as hypotheses, not proven facts.
 
-[Timmy/DANEEL "Brain Observatory"](https://timmy.royalbit.com)
+[Timmy/DANEEL "Brain Observatory"](https://timmy.mollendorff.ai)
 
 > **This is a hobby project, not a serious AGI attempt.**
 >
@@ -228,7 +228,7 @@ Runs headless with API on port 3030. Use [daneel-web](https://github.com/mollend
 **Production (Mac mini):**
 Services managed via launchd. See [docs/OPERATIONS.md](docs/OPERATIONS.md) for full details.
 
-**Live now:** [timmy.royalbit.com](https://timmy.royalbit.com) — daneel-web observatory via Cloudflare Tunnel.
+**Live now:** [timmy.mollendorff.ai](https://timmy.mollendorff.ai) — daneel-web observatory via Cloudflare Tunnel.
 
 ---
 

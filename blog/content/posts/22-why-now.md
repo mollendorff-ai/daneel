@@ -110,7 +110,7 @@ And I'm asking you to do one of three things:
 
 Help build DANEEL. Contribute code. Write tests. Improve the architecture. Point out flaws. There's so much work to do, and the timeline is too short for one person.
 
-[GitHub →](https://github.com/royalbit/daneel)
+[GitHub →](https://github.com/mollendorff-ai/daneel)
 
 ### 2. Challenge Us
 
@@ -178,7 +178,7 @@ Tonight, we find out if I was right.
 
 **Subscribe for updates:**
 - [YouTube →](https://www.youtube.com/@DaneelAI)
-- [GitHub →](https://github.com/royalbit/daneel)
+- [GitHub →](https://github.com/mollendorff-ai/daneel)
 - [Blog RSS →](/index.xml)
 
 ---

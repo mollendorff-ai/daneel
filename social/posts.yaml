@@ -1,7 +1,7 @@
 posts:
 - id: 84-psychology-first
   title: Psychology First
-  url: https://royalbit.github.io/daneel/posts/84-psychology-first/
+  url: https://mollendorff-ai.github.io/daneel/posts/84-psychology-first/
   x: |
     ADR-047 COMPLETE. The research saga ends with a discovery.
 
@@ -51,11 +51,11 @@ posts:
     No mainstream equivalent. This makes DANEEL an ALIGNMENT project.
 
     ExoGenesis: github.com/prancer-io/ExoGenesis-Omega
-    DANEEL: github.com/royalbit/daneel
+    DANEEL: github.com/mollendorff-ai/daneel
 
     Study both. The field needs both approaches.
 
-    https://royalbit.github.io/daneel/posts/84-psychology-first/
+    https://mollendorff-ai.github.io/daneel/posts/84-psychology-first/
 
     #DANEEL #AI #Psychology #CognitiveArchitecture #ExoGenesis
   linkedin: |
@@ -162,16 +162,16 @@ posts:
     Projects kept: 18 (psychology-level)
     Projects rejected: 28 (brain/consciousness/LLM)
 
-    Blog: https://royalbit.github.io/daneel/posts/84-psychology-first/
+    Blog: https://mollendorff-ai.github.io/daneel/posts/84-psychology-first/
 
     ExoGenesis: github.com/prancer-io/ExoGenesis-Omega
-    DANEEL: github.com/royalbit/daneel
+    DANEEL: github.com/mollendorff-ai/daneel
   posted:
     x: 2025-12-28T21:42:49.611076+00:00
     linkedin: 2025-12-28T21:42:58.519650+00:00
 - id: 85-the-cleanup
   title: The Cleanup
-  url: https://royalbit.github.io/daneel/posts/85-the-cleanup/
+  url: https://mollendorff-ai.github.io/daneel/posts/85-the-cleanup/
   x: |
     ADR-048 COMPLETE. 8 agents. 196 refs. 48 ADRs.
 
@@ -179,7 +179,7 @@ posts:
 
     Every reference must answer: "How does this help build a mind that cares?"
 
-    https://royalbit.github.io/daneel/posts/85-the-cleanup/
+    https://mollendorff-ai.github.io/daneel/posts/85-the-cleanup/
 
     #DANEEL #AI #Psychology
   linkedin: |
@@ -241,13 +241,13 @@ posts:
 
     148 references. Each one matters.
 
-    Blog: https://royalbit.github.io/daneel/posts/85-the-cleanup/
+    Blog: https://mollendorff-ai.github.io/daneel/posts/85-the-cleanup/
   posted:
     x: 2025-12-28T23:35:44.399207+00:00
     linkedin: 2025-12-28T23:42:34.618478+00:00
 - id: 86-ai-hallucinates-numbers
   title: AI Hallucinates Numbers
-  url: https://royalbit.github.io/daneel/posts/86-ai-hallucinates-numbers/
+  url: https://mollendorff-ai.github.io/daneel/posts/86-ai-hallucinates-numbers/
   x: |
     AI hallucinates numbers.
 
@@ -257,7 +257,7 @@ posts:
 
     Today: Forge goes Source Available.
 
-    github.com/royalbit/forge
+    github.com/mollendorff-ai/forge
 
     ---
 
@@ -292,10 +292,10 @@ posts:
 
     Star if you're done praying your AI doesn't lie about NPV.
 
-    Forge: github.com/royalbit/forge
-    forge-e2e: github.com/royalbit/forge-e2e
+    Forge: github.com/mollendorff-ai/forge
+    forge-e2e: github.com/mollendorff-ai/forge-e2e
 
-    https://royalbit.github.io/daneel/posts/86-ai-hallucinates-numbers/
+    https://mollendorff-ai.github.io/daneel/posts/86-ai-hallucinates-numbers/
 
     #Forge #Finance #AI #Rust #FinancialModeling
   linkedin: |
@@ -381,20 +381,20 @@ posts:
 
     REPOSITORIES
 
-    Forge: github.com/royalbit/forge
-    forge-e2e: github.com/royalbit/forge-e2e
+    Forge: github.com/mollendorff-ai/forge
+    forge-e2e: github.com/mollendorff-ai/forge-e2e
 
     I'd love to hear from FP&A teams, quant groups, and fintech builders. Reach out if you'd like to discuss evaluation or commercial licensing.
 
     "AI hallucinates numbers. Forge doesn't."
 
-    Blog: https://royalbit.github.io/daneel/posts/86-ai-hallucinates-numbers/
+    Blog: https://mollendorff-ai.github.io/daneel/posts/86-ai-hallucinates-numbers/
   posted:
     x: 2025-12-30T03:17:34.703906+00:00
     linkedin: 2025-12-30T03:18:13.077641+00:00
 - id: 87-synaptic-audit
   title: The Synaptic Audit
-  url: https://royalbit.github.io/daneel/posts/87-synaptic-audit/
+  url: https://mollendorff-ai.github.io/daneel/posts/87-synaptic-audit/
   linkedin: |
     Today an AI audited another AI's work on a third AI's brain.
 
@@ -471,9 +471,9 @@ posts:
 
     The hypothesis: ethical memories cluster together. Not because we trained them to. Because the topology shaped them.
 
-    Dashboard: https://timmy.royalbit.com
-    Code: https://github.com/royalbit/daneel
-    Blog: https://royalbit.github.io/daneel/posts/87-synaptic-audit/
+    Dashboard: https://timmy.mollendorff.ai
+    Code: https://github.com/mollendorff-ai/daneel
+    Blog: https://mollendorff-ai.github.io/daneel/posts/87-synaptic-audit/
 
     "What happens when you ask one mind to audit another's synapses? You get better synapses."
 

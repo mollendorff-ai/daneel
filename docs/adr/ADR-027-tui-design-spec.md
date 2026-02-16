@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 **Date:** 2025-12-18
-**Author:** Rex (RoyalBit) + Claude Opus 4.5
+**Author:** Rex (Möllendorff) + Claude Opus 4.5
 **Depends on:** ADR-026 (TUI Default, Headless Optional)
 
 ---

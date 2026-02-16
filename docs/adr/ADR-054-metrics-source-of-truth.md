@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 **Date:** 2026-01-01
-**Author:** Rex (RoyalBit) + Claude Opus 4.5
+**Author:** Rex (Möllendorff) + Claude Opus 4.5
 **Updates:** ADR-041 (Entropy Calculation Standardization)
 **Related:** ADR-053 (Headless Default, Web Observatory)
 

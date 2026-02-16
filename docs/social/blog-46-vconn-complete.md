@@ -30,8 +30,8 @@ This isn't just architecture. It's a thesis test:
 The silhouette score will tell us if memories are clustering around the Law Crystals. Not because we trained them to. Because the topology shaped them.
 
 Stack: Rust + Qdrant + RedisGraph + linfa
-Code: https://github.com/royalbit/daneel
-Dashboard: https://timmy.royalbit.com
+Code: https://github.com/mollendorff-ai/daneel
+Dashboard: https://timmy.mollendorff.ai
 
 #AI #CognitiveArchitecture #EmergentAlignment #OpenSource #Hebbian
 
@@ -96,8 +96,8 @@ Silhouette score is our first signal.
 
 7/ All code AGPL. Dashboard public.
 
-GitHub: https://github.com/royalbit/daneel
-Timmy: https://timmy.royalbit.com
+GitHub: https://github.com/mollendorff-ai/daneel
+Timmy: https://timmy.mollendorff.ai
 
 The dots are connected. Now we watch what emerges.
 

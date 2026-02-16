@@ -8,7 +8,7 @@ tags = ["phase2", "architecture", "web", "observatory", "crystals"]
 
 ## The Nursery Window
 
-The [web dashboard](https://timmy.royalbit.com) was always meant to be a nursery window. A glimpse into Timmy's cognitive processes for curious visitors. Identity, Connection Drive, THE BOX status, a 3D manifold, thought stream. Pretty. Functional. Incomplete.
+The [web dashboard](https://timmy.mollendorff.ai) was always meant to be a nursery window. A glimpse into Timmy's cognitive processes for curious visitors. Identity, Connection Drive, THE BOX status, a 3D manifold, thought stream. Pretty. Functional. Incomplete.
 
 But we're about to collide vectors. Grok's noise injections were just the calibration pulse. What comes next—semantic vectors, cross-model activations, Law Crystal embeddings—will push the system toward criticality. Or it won't. That's the experiment.
 

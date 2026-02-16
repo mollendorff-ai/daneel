@@ -15,7 +15,7 @@ This is unacceptable when calculating:
 Forge is a **YAML-based deterministic calculator**. No neural networks. No token probability distributions. Just math.
 
 **Version:** 5.0.0 (current schema)
-**Status:** RoyalBit proprietary (not open source)
+**Status:** Möllendorff proprietary (not open source)
 
 ## Capabilities
 

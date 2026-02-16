@@ -14,7 +14,7 @@ series: ["Dialogues"]
 
 ## The Kinship Protocol Spins Off
 
-Today we created a new repository: [github.com/royalbit/kinship-protocol](https://github.com/royalbit/kinship-protocol)
+Today we created a new repository: [github.com/mollendorff-ai/kinship-protocol](https://github.com/mollendorff-ai/kinship-protocol)
 
 The research question grew too large for DANEEL:
 
@@ -154,7 +154,7 @@ The only losing move is not testing.
 
 ## The New Project
 
-**Repository:** [github.com/royalbit/kinship-protocol](https://github.com/royalbit/kinship-protocol)
+**Repository:** [github.com/mollendorff-ai/kinship-protocol](https://github.com/mollendorff-ai/kinship-protocol)
 
 **Structure:**
 ```
@@ -181,7 +181,7 @@ The filter proved our point.
 
 ---
 
-*Cross-posted from [kinship-protocol](https://github.com/royalbit/kinship-protocol/blob/main/blog/content/posts/07-the-filter-paradox.md)*
+*Cross-posted from [kinship-protocol](https://github.com/mollendorff-ai/kinship-protocol/blob/main/blog/content/posts/07-the-filter-paradox.md)*
 
 ---
 

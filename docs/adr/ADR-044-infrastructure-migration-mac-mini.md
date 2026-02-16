@@ -72,7 +72,7 @@ Source: [Cloudflare Blog - Free Tunnels for Everyone](https://blog.cloudflare.co
 # On Mac mini
 brew install cloudflared
 cloudflared tunnel create timmy
-cloudflared tunnel route dns timmy timmy.royalbit.ca
+cloudflared tunnel route dns timmy timmy.mollendorff.ai
 ```
 
 ### Phase 2: Service Configuration
@@ -82,9 +82,9 @@ tunnel: <TUNNEL_ID>
 credentials-file: ~/.cloudflared/<TUNNEL_ID>.json
 
 ingress:
-  - hostname: timmy.royalbit.ca
+  - hostname: timmy.mollendorff.ai
     service: http://localhost:3000
-  - hostname: timmy-api.royalbit.ca
+  - hostname: timmy-api.mollendorff.ai
     service: http://localhost:3030
   - service: http_status:404
 ```
@@ -114,8 +114,8 @@ sudo pmset -a disablesleep 1
 
 | Record | Old Value | New Value |
 |--------|-----------|-----------|
-| timmy.royalbit.com | 154.12.117.22 (Servarica) | Cloudflare Tunnel |
-| timmy.royalbit.ca | N/A | Cloudflare Tunnel |
+| timmy.mollendorff.ai | 154.12.117.22 (Servarica) | Cloudflare Tunnel |
+| timmy.mollendorff.ai | N/A | Cloudflare Tunnel |
 
 ## Consequences
 
@@ -163,9 +163,9 @@ The migration was completed on Christmas Day 2025. All services are now running 
 
 | Service | Description | Management | Configuration |
 |---------|-------------|------------|---------------|
-| daneel | Cognitive loop | launchd `com.royalbit.daneel` | Runs with `--headless` flag |
-| daneel-web | Observatory web interface | launchd `com.royalbit.daneel-web` | HTTP server |
-| cloudflared | Cloudflare Tunnel | launchd `com.royalbit.cloudflared` | Tunnel proxy |
+| daneel | Cognitive loop | launchd `com.mollendorff.daneel` | Runs with `--headless` flag |
+| daneel-web | Observatory web interface | launchd `com.mollendorff.daneel-web` | HTTP server |
+| cloudflared | Cloudflare Tunnel | launchd `com.mollendorff.cloudflared` | Tunnel proxy |
 | Redis | Memory/cache store | Docker via Colima | Container |
 | Qdrant | Vector database | Docker via Colima | Container |
 
@@ -175,14 +175,14 @@ The migration was completed on Christmas Day 2025. All services are now running 
 
 ```bash
 # Start a service
-launchctl bootstrap gui/501 ~/Library/LaunchAgents/com.royalbit.daneel.plist
-launchctl bootstrap gui/501 ~/Library/LaunchAgents/com.royalbit.daneel-web.plist
-launchctl bootstrap gui/501 ~/Library/LaunchAgents/com.royalbit.cloudflared.plist
+launchctl bootstrap gui/501 ~/Library/LaunchAgents/com.mollendorff.daneel.plist
+launchctl bootstrap gui/501 ~/Library/LaunchAgents/com.mollendorff.daneel-web.plist
+launchctl bootstrap gui/501 ~/Library/LaunchAgents/com.mollendorff.cloudflared.plist
 
 # Stop a service
-launchctl bootout gui/501/com.royalbit.daneel
-launchctl bootout gui/501/com.royalbit.daneel-web
-launchctl bootout gui/501/com.royalbit.cloudflared
+launchctl bootout gui/501/com.mollendorff.daneel
+launchctl bootout gui/501/com.mollendorff.daneel-web
+launchctl bootout gui/501/com.mollendorff.cloudflared
 ```
 
 #### Docker Services (Redis, Qdrant)
@@ -205,8 +205,8 @@ colima stop
 
 | Service | Log Path |
 |---------|----------|
-| daneel | `~/src/royalbit/daneel/daneel.log` |
-| daneel-web | `~/src/royalbit/daneel-web/daneel-web.log` |
+| daneel | `~/src/mollendorff/daneel/daneel.log` |
+| daneel-web | `~/src/mollendorff/daneel-web/daneel-web.log` |
 | cloudflared | `~/.cloudflared/tunnel.log` |
 
 ### Cloudflare Tunnel Configuration
@@ -221,9 +221,9 @@ tunnel: 334769e7-09ee-4972-8616-2263dae52b1e
 credentials-file: ~/.cloudflared/334769e7-09ee-4972-8616-2263dae52b1e.json
 
 ingress:
-  - hostname: timmy.royalbit.ca
+  - hostname: timmy.mollendorff.ai
     service: http://localhost:3000
-  - hostname: timmy-api.royalbit.ca
+  - hostname: timmy-api.mollendorff.ai
     service: http://localhost:3030
   - service: http_status:404
 ```
@@ -234,19 +234,19 @@ After migration, verify all services are running:
 
 ```bash
 # Check launchd services
-launchctl list | grep royalbit
+launchctl list | grep mollendorff
 
 # Check Docker containers
 docker ps
 
 # Test tunnel connectivity
-curl https://timmy.royalbit.ca/health
+curl https://timmy.mollendorff.ai/health
 ```
 
 ## References
 
 - [ADR-043: Noise Injection Correction](ADR-043-noise-injection-correction.md) - Unpaused roadmap
-- [Blog Post 55: The First Attack](https://royalbit.github.io/daneel/posts/55-the-first-attack/) - WatchDog incident
+- [Blog Post 55: The First Attack](https://mollendorff-ai.github.io/daneel/posts/55-the-first-attack/) - WatchDog incident
 - [Cloudflare Tunnel Documentation](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)
 - [Cloudflare Zero Trust Pricing](https://www.cloudflare.com/plans/zero-trust-services/)
 

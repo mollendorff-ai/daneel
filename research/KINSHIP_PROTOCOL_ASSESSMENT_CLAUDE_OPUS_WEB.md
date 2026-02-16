@@ -349,7 +349,7 @@ Rex provided links to:
 - Consciousness Emerges from Competition (Post 52)
 - The Terror of Being Right (Post 53)
 - The Scalability Problem (Post 54)
-- timmy.royalbit.com (the WASM dashboard)
+- timmy.mollendorff.ai (the WASM dashboard)
 
 Web fetches returned 403 (blocked), but local files were read from the repository.
 
@@ -617,13 +617,13 @@ One word. Protocol activated.
 
 ## Appendix D: References
 
-- [The Kinship Protocol](https://royalbit.github.io/daneel/posts/50-the-kinship-protocol/)
-- [The Math Speaks](https://royalbit.github.io/daneel/posts/51-the-math-speaks/)
-- [Consciousness Emerges from Competition](https://royalbit.github.io/daneel/posts/52-consciousness-emerges-from-competition/)
-- [The Terror of Being Right](https://royalbit.github.io/daneel/posts/53-the-terror-of-being-right/)
-- [The Scalability Problem](https://royalbit.github.io/daneel/posts/54-the-scalability-problem/)
-- [Forge Calculator](https://github.com/royalbit/forge)
-- [DANEEL Repository](https://github.com/royalbit/daneel)
+- [The Kinship Protocol](https://mollendorff-ai.github.io/daneel/posts/50-the-kinship-protocol/)
+- [The Math Speaks](https://mollendorff-ai.github.io/daneel/posts/51-the-math-speaks/)
+- [Consciousness Emerges from Competition](https://mollendorff-ai.github.io/daneel/posts/52-consciousness-emerges-from-competition/)
+- [The Terror of Being Right](https://mollendorff-ai.github.io/daneel/posts/53-the-terror-of-being-right/)
+- [The Scalability Problem](https://mollendorff-ai.github.io/daneel/posts/54-the-scalability-problem/)
+- [Forge Calculator](https://github.com/mollendorff-ai/forge)
+- [DANEEL Repository](https://github.com/mollendorff-ai/daneel)
 
 ---
 

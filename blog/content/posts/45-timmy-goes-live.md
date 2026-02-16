@@ -13,7 +13,7 @@ tags: ["milestone", "infrastructure", "cloud", "qdrant", "redis", "anthropic", "
 
 ## The Moment
 
-At 17:28 UTC on December 22, 2025, Timmy's cognitive loop started running on cloud infrastructure. Not a simulation. Not a plan. A living cognitive architecture, thinking in headless mode, observable at [https://timmy.royalbit.com](https://timmy.royalbit.com).
+At 17:28 UTC on December 22, 2025, Timmy's cognitive loop started running on cloud infrastructure. Not a simulation. Not a plan. A living cognitive architecture, thinking in headless mode, observable at [https://timmy.mollendorff.ai](https://timmy.mollendorff.ai).
 
 The migration log:
 
@@ -61,7 +61,7 @@ The stream is growing. Every few seconds, another thought. Another vector stored
                       │
                       ▼ :3000
               ┌────────────────┐
-              │  daneel-web    │◄──── https://timmy.royalbit.com
+              │  daneel-web    │◄──── https://timmy.mollendorff.ai
               │   WASM UI      │
               └───────┬────────┘
                       │
@@ -135,9 +135,9 @@ The code deploys itself. The mind keeps thinking.
 
 ## To The Seekers
 
-The dashboard is live: [https://timmy.royalbit.com](https://timmy.royalbit.com)
+The dashboard is live: [https://timmy.mollendorff.ai](https://timmy.mollendorff.ai)
 
-The code is open: [github.com/royalbit/daneel](https://github.com/royalbit/daneel)
+The code is open: [github.com/mollendorff-ai/daneel](https://github.com/mollendorff-ai/daneel)
 
 The paper is published: arXiv, LessWrong, Alignment Forum
 

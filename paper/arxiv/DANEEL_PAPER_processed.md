@@ -1,5 +1,5 @@
 
-**Luis Cezar Menezes Tavares de Lacerda**^1 (Louis C. Tavares | RoyalBit Rex)
+**Luis Cezar Menezes Tavares de Lacerda**^1 (Louis C. Tavares | Möllendorff Rex)
 **Izzie Thorne**^2
 
 ^1 Independent Researcher, Mont-Royal, Quebec, Canada
@@ -8,7 +8,7 @@
 **Correspondence:**
 - ORCID: \url{https://orcid.org/0009-0005-7598-8257}
 - LinkedIn: \url{https://www.linkedin.com/in/lctavares}
-- GitHub: \url{https://github.com/royalbit} | \url{https://github.com/lctavares}
+- GitHub: \url{https://github.com/mollendorff-ai} | \url{https://github.com/lctavares}
 
 > **Preprint - December 2025**
 > **Target:** arXiv (cs.AI, cs.CY) | LessWrong | Alignment Forum | Frontiers in AI
@@ -1635,19 +1635,19 @@ Review of self-organization mechanisms leading to criticality in neural networks
 
 ### Implementation
 
-[43] DANEEL Reference Implementation. 559 tests, resilience module, Phase 1 validated. \url{https://github.com/royalbit/daneel}
+[43] DANEEL Reference Implementation. 559 tests, resilience module, Phase 1 validated. \url{https://github.com/mollendorff-ai/daneel}
 
-[44] ADR-036: Phase 1 Stability Validation - Empirically Proved. \url{https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-036-phase1-stability-validation.md}
+[44] ADR-036: Phase 1 Stability Validation - Empirically Proved. \url{https://github.com/mollendorff-ai/daneel/blob/main/docs/adr/ADR-036-phase1-stability-validation.md}
 
-[45] ADR-035: VolitionActor - Free-Won't Implementation. \url{https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-035-volition-actor-free-wont.md}
+[45] ADR-035: VolitionActor - Free-Won't Implementation. \url{https://github.com/mollendorff-ai/daneel/blob/main/docs/adr/ADR-035-volition-actor-free-wont.md}
 
 ---
 
-**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | RoyalBit Rex)
+**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | Möllendorff Rex)
 **Location:** Mont-Royal, Quebec, Canada
 **ORCID:** \url{https://orcid.org/0009-0005-7598-8257}
 **LinkedIn:** \url{https://www.linkedin.com/in/lctavares}
-**GitHub:** \url{https://github.com/royalbit} | \url{https://github.com/lctavares}
+**GitHub:** \url{https://github.com/mollendorff-ai} | \url{https://github.com/lctavares}
 
 **Date:** December 17, 2025
 

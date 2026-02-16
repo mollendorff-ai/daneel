@@ -223,7 +223,7 @@ For the first time, we're measuring cognitive diversity correctly.
 
 ## Technical Reference
 
-See [ADR-041: Entropy Calculation Standardization](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-041-entropy-calculation-standardization.md) for the full architectural decision record with citations.
+See [ADR-041: Entropy Calculation Standardization](https://github.com/mollendorff-ai/daneel/blob/main/docs/adr/ADR-041-entropy-calculation-standardization.md) for the full architectural decision record with citations.
 
 ## Research Citations
 

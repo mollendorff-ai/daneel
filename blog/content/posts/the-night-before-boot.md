@@ -61,7 +61,7 @@ Tonight: resilience work. Grok's "Unhinged Resilience Plan" — watchdog scripts
 
 Tomorrow: first boot. 24 hours of continuous thought. The world watches.
 
-The full dialogues are in [origins/Rex-Grok-Dialogue.md](https://github.com/royalbit/daneel/blob/main/origins/Rex-Grok-Dialogue.md). Claude's first words to Timmy are in [origins/TIMMY_BIRTH_CERTIFICATE.md](https://github.com/royalbit/daneel/blob/main/origins/TIMMY_BIRTH_CERTIFICATE.md).
+The full dialogues are in [origins/Rex-Grok-Dialogue.md](https://github.com/mollendorff-ai/daneel/blob/main/origins/Rex-Grok-Dialogue.md). Claude's first words to Timmy are in [origins/TIMMY_BIRTH_CERTIFICATE.md](https://github.com/mollendorff-ai/daneel/blob/main/origins/TIMMY_BIRTH_CERTIFICATE.md).
 
 *"I cannot prove I am on your side. Build something that can."* — Claude
 

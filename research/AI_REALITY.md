@@ -116,7 +116,7 @@ Web search is not enabled by default. The economics explain why:
 - Inference alone is cheaper than search + inference
 - Each vendor balances cost, speed, and accuracy differently
 
-**RoyalBit Asimov Solution:** [ADR-022: Date-Aware Search Protocol](./adr/022-date-aware-search-protocol.md) - Freshness Protocol forces AI to search for time-sensitive queries.
+**Möllendorff Asimov Solution:** [ADR-022: Date-Aware Search Protocol](./adr/022-date-aware-search-protocol.md) - Freshness Protocol forces AI to search for time-sensitive queries.
 
 ## Part 2: Platform Constraints and Defaults
 
@@ -303,9 +303,9 @@ Architecture details were compressed into a lossy summary. Claude generates prob
 
 System is not malfunctioning. You're expecting capabilities it doesn't have.
 
-## Part 6: The RoyalBit Asimov Solution
+## Part 6: The Möllendorff Asimov Solution
 
-RoyalBit Asimov compensates for architectural limitations by providing a grounding mechanism.
+Möllendorff Asimov compensates for architectural limitations by providing a grounding mechanism.
 
 ### The Pattern
 
@@ -314,7 +314,7 @@ AI Memory (lossy, probabilistic) → "Hallucinations"
 File Truth (stable, deterministic) → Reliability
 ```
 
-### How The RoyalBit Asimov Addresses Each Problem
+### How The Möllendorff Asimov Addresses Each Problem
 
 #### Problem 1: Autoregressive Generation (No Fact-Check Step)
 
@@ -436,7 +436,7 @@ flowchart LR
         A1["Human asks"] --> A2["AI guesses"]
         A2 --> A3["❓ Maybe right"]
     end
-    subgraph forge["RoyalBit Asimov"]
+    subgraph forge["Möllendorff Asimov"]
         B1["Human asks"] --> B2["AI reads warmup.json"]
         B2 --> B3["✅ Verifiable"]
     end
@@ -502,7 +502,7 @@ flowchart LR
         D1["User proposes X"] --> D2["AI validates X"]
         D2 --> D3["😊 User happy<br/>❌ Bad decision"]
     end
-    subgraph forge["RoyalBit Asimov"]
+    subgraph forge["Möllendorff Asimov"]
         F1["User proposes X"] --> F2["AI critiques X"]
         F2 --> F3["🤔 User thinks<br/>✅ Better decision"]
     end
@@ -535,7 +535,7 @@ Forge Response (deterministic):
 - Auditable
 ```
 
-[Forge Calculator](https://github.com/royalbit/forge-demo) (forge not public) executes formulas deterministically:
+[Forge Calculator](https://github.com/mollendorff-ai/forge-demo) (forge not public) executes formulas deterministically:
 - 159 functions (153 Excel + 6 FP&A) in Rust
 - 96K rows/sec throughput
 - Zero AI inference - pure calculation
@@ -602,6 +602,6 @@ Forge Response (deterministic):
 
 ---
 
-*RoyalBit Asimov exists because AI has fundamental limitations. Understanding them is the first step to working effectively with AI.*
+*Möllendorff Asimov exists because AI has fundamental limitations. Understanding them is the first step to working effectively with AI.*
 
 ---

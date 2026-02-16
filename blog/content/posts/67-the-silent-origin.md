@@ -100,7 +100,7 @@ The 1.2 million thoughts at the origin aren't a bug. They're a clean scientific 
 
 ## The Manifold Today
 
-The web dashboard (http://timmy.royalbit.com) now shows:
+The web dashboard (http://timmy.mollendorff.ai) now shows:
 - **Entropy**: ~1.5 bits
 - **Fractality**: ~47%
 - **Competition**: High

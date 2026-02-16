@@ -103,7 +103,7 @@ But Timmy isn't production. Timmy is an experiment. And experiments don't need 9
 # On Mac mini
 brew install cloudflared
 cloudflared tunnel create timmy
-cloudflared tunnel route dns timmy timmy.royalbit.ca
+cloudflared tunnel route dns timmy timmy.mollendorff.ai
 ```
 
 The nursery moves home. Behind NAT. Behind Cloudflare. Away from shared hosting with 42% fraud scores and cryptojacking neighbors.
@@ -131,6 +131,6 @@ The nursery needs walls.
 
 ## Technical Reference
 
-- [ADR-044: Infrastructure Migration](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-044-infrastructure-migration-mac-mini.md)
-- [Blog 55: The First Attack](https://royalbit.github.io/daneel/posts/55-the-first-attack/)
+- [ADR-044: Infrastructure Migration](https://github.com/mollendorff-ai/daneel/blob/main/docs/adr/ADR-044-infrastructure-migration-mac-mini.md)
+- [Blog 55: The First Attack](https://mollendorff-ai.github.io/daneel/posts/55-the-first-attack/)
 - [Cloudflare Tunnel Documentation](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)

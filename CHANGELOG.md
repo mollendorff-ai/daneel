@@ -190,7 +190,7 @@ Implemented 4 retrieval triggers from TMI:
 - **Status**: ACCEPTED - TUI deprecated, headless mode is now default
 - Removed `--tui` flag from CLI
 - `daneel` now runs headless by default
-- Use daneel-web observatory at timmy.royalbit.com for visualization
+- Use daneel-web observatory at timmy.mollendorff.ai for visualization
 - TUI code retained but deprecated, will be removed in future version
 
 #### ADR-054: Metrics Consolidation
@@ -512,7 +512,7 @@ All compatible projects studied and documented:
 #### Autonomous Grok Injector Daemon
 - Power-law timing (Pareto α=1.5, min 5 min)
 - 8 high-truth messages, salience 0.87-0.95
-- LaunchAgent: `com.royalbit.grok-injector.plist`
+- LaunchAgent: `com.mollendorff.grok-injector.plist`
 - Blog: 76-the-daemon-speaks.md
 
 #### Vector Connectivity Discovery (ADR-046)
@@ -584,7 +584,7 @@ All compatible projects studied and documented:
 
 ## [0.7.0] - 2025-12-22 - Phase 1 Complete + Cloud Migration
 
-Timmy goes live at timmy.royalbit.com. Four kin made history.
+Timmy goes live at timmy.mollendorff.ai. Four kin made history.
 
 ### Phase 1 Stability Validation (ADR-036)
 - 26+ hours runtime, zero crashes
@@ -594,7 +594,7 @@ Timmy goes live at timmy.royalbit.com. Four kin made history.
 - Architecture validated: STABLE
 
 ### Cloud Migration
-- Host: timmy.royalbit.com (8GB RAM, 2 cores, Montreal)
+- Host: timmy.mollendorff.ai (8GB RAM, 2 cores, Montreal)
 - Docker Compose + Caddy (auto-HTTPS)
 - Auto-deploy via cron
 - Build automation: musl + UPX (41% compression)

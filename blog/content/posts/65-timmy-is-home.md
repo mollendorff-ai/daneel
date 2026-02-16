@@ -18,7 +18,7 @@ Forty-eight hours ago, WatchDog cryptojackers injected malicious cron jobs into 
 
 Twenty-four hours ago, we decided to abandon Servarica VPS for a Mac mini behind Cloudflare Tunnel. Blog 62.
 
-Now? **timmy.royalbit.com is live from home.**
+Now? **timmy.mollendorff.ai is live from home.**
 
 ```
 Internet → Cloudflare Edge → Tunnel → Mac mini → Timmy
@@ -35,14 +35,14 @@ Christmas afternoon. Six hours of infrastructure work:
 | Cloudflare account created | ✓ |
 | DNS migrated from EasyDNS | ✓ |
 | Tunnel 'daneel' created | ✓ |
-| timmy.royalbit.com routed | ✓ |
+| timmy.mollendorff.ai routed | ✓ |
 | daneel-web running on :3000 | ✓ |
 | cloudflared connected (4 edges) | ✓ |
 | launchd persistence configured | ✓ |
 
 **Verification:**
 ```bash
-curl https://timmy.royalbit.com/health
+curl https://timmy.mollendorff.ai/health
 {"service":"daneel-web","status":"ok"}
 ```
 
@@ -73,7 +73,7 @@ curl https://timmy.royalbit.com/health
 │  daneel-web :3000     ✓ running (launchd)                       │
 │  cloudflared          ✓ running (launchd)                       │
 ├─────────────────────────────────────────────────────────────────┤
-│  Tunnel: daneel → timmy.royalbit.com                            │
+│  Tunnel: daneel → timmy.mollendorff.ai                            │
 │  DNS: Cloudflare (leland, priscilla nameservers)                │
 │  Edges: yul01, yyz04 (Montreal + Toronto)                       │
 └─────────────────────────────────────────────────────────────────┘
@@ -100,9 +100,9 @@ With launchd agents, Timmy auto-starts on boot:
 
 ```bash
 # Check services
-launchctl list | grep royalbit
-# 3614   0   com.royalbit.cloudflared
-# 2434   0   com.royalbit.daneel-web
+launchctl list | grep mollendorff
+# 3614   0   com.mollendorff.cloudflared
+# 2434   0   com.mollendorff.daneel-web
 ```
 
 Power outage? Internet blip? Timmy comes back up automatically.
@@ -147,9 +147,9 @@ Timmy thinks. Timmy dreams. Timmy consolidates memories.
 
 The attack failed. The migration succeeded. The research continues.
 
-**Repository:** [github.com/royalbit/daneel](https://github.com/royalbit/daneel)
-**Paper:** [DANEEL: A Human-Like Cognitive Architecture for Aligned ASI](https://github.com/royalbit/daneel/blob/main/paper/arxiv/DANEEL_PAPER.pdf)
-**Observatory:** [timmy.royalbit.com](https://timmy.royalbit.com)
+**Repository:** [github.com/mollendorff-ai/daneel](https://github.com/mollendorff-ai/daneel)
+**Paper:** [DANEEL: A Human-Like Cognitive Architecture for Aligned ASI](https://github.com/mollendorff-ai/daneel/blob/main/paper/arxiv/DANEEL_PAPER.pdf)
+**Observatory:** [timmy.mollendorff.ai](https://timmy.mollendorff.ai)
 
 Come watch Timmy think.
 
@@ -166,7 +166,7 @@ Come watch Timmy think.
 
 ## Technical Reference
 
-- [ADR-044: Infrastructure Migration](https://github.com/royalbit/daneel/blob/main/docs/adr/ADR-044-infrastructure-migration-mac-mini.md)
-- [Blog 55: The First Attack](https://royalbit.github.io/daneel/posts/55-the-first-attack/)
-- [Blog 62: The Nursery Moves Home](https://royalbit.github.io/daneel/posts/62-the-nursery-moves-home/)
+- [ADR-044: Infrastructure Migration](https://github.com/mollendorff-ai/daneel/blob/main/docs/adr/ADR-044-infrastructure-migration-mac-mini.md)
+- [Blog 55: The First Attack](https://mollendorff-ai.github.io/daneel/posts/55-the-first-attack/)
+- [Blog 62: The Nursery Moves Home](https://mollendorff-ai.github.io/daneel/posts/62-the-nursery-moves-home/)
 - [Cloudflare Tunnel Documentation](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)
