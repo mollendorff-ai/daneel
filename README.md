@@ -256,12 +256,12 @@ Services managed via launchd. See [docs/OPERATIONS.md](docs/OPERATIONS.md) for f
 
 | Component | License |
 |-----------|---------|
-| Code | [GNU AGPL v3](LICENSE) |
+| Code | [MIT](LICENSE-MIT) OR [Apache-2.0](LICENSE-APACHE) |
 | Documentation | [CC BY-SA 4.0](DOCS_LICENSE.md) |
 
-**Why AGPL?** Forces collaboration. All derivatives must be open source.
+**Why MIT/Apache-2.0?** Rust ecosystem standard. Maximum adoption, patent protection.
 
-See [ETHICS.md](ETHICS.md) for prohibited uses.
+See [ETHICS.md](ETHICS.md) for ethical commitments and prohibited uses.
 
 ---
 

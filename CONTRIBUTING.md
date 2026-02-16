@@ -24,4 +24,4 @@ Read [ETHICS.md](ETHICS.md) for the project's ethical commitments, including the
 
 ## License
 
-DANEEL is licensed under [AGPL-3.0-or-later](LICENSE). All contributions and derivative works must comply with this license. If you won't share your improvements to an AI safety project, you shouldn't use it.
+DANEEL is dual-licensed under [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option. See [ETHICS.md](ETHICS.md) for the project's ethical commitments.
