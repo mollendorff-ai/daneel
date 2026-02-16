@@ -32,21 +32,13 @@ current:
   summary: "Complete rebrand and prepare for public GitHub repository"
 
   tasks:
+    - id: "OSS-5"
+      title: "GitHub repository setup"
+      status: done
+
     - id: "OSS-6"
       title: "Relicense: AGPL-3.0 → MIT OR Apache-2.0"
       status: done
-      description: |
-        Rust ecosystem standard dual license. ETHICS.md carries the
-        values; the license removes adoption friction for portfolio use.
-
-    - id: "OSS-5"
-      title: "GitHub repository setup"
-      status: pending
-      description: |
-        - Set visibility to public
-        - Add topics: rust, ai-alignment, cognitive-architecture, asimov
-        - Enable Discussions
-        - Verify Dependabot alerts resolved
 
 # =============================================================================
 # NEXT: v0.11.0 - Live Fiction Infrastructure
