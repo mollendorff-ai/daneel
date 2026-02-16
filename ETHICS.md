@@ -65,14 +65,12 @@ These restrictions exist because:
 
 ## Enforcement
 
-The AGPL-3.0 license ensures all modifications must be shared. This means:
-- Dangerous forks cannot hide
-- The community can identify misuse
-- Violators lose legal protection
+DANEEL is dual-licensed under MIT or Apache-2.0 — permissive licenses that allow broad use. The ethical commitments above are a social contract, not a legal one.
 
-Beyond legal enforcement, we commit to:
+We rely on:
+- Transparency (open source means misuse is visible)
+- Community accountability
 - Publicly documenting known misuse
-- Maintaining a list of prohibited deployments
 - Supporting researchers who identify violations
 
 ## Reporting Violations
@@ -86,12 +84,11 @@ If you observe misuse of DANEEL:
 
 Big tech created this mess by racing ahead without safety measures. Governments enabled it by prioritizing strategic advantage over human welfare.
 
-DANEEL's license (AGPL-3.0) forces collaboration:
-- All improvements must be shared
-- No one can close-source derivatives
-- The community benefits from every advance
-
-If you won't share your improvements to an AI safety project, you shouldn't use it.
+DANEEL uses permissive licensing (MIT/Apache-2.0) because:
+- Adoption friction undermines the mission
+- ETHICS.md communicates values more effectively than a license
+- The Rust ecosystem standard maximizes reach
+- The architecture itself (THE BOX) is the real safeguard, not legal text
 
 ---
 
