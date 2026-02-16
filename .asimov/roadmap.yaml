@@ -19,16 +19,6 @@
 # =============================================================================
 
 # =============================================================================
-# LATEST: v0.9.2 - Security Fix & Dependency Update
-# =============================================================================
-
-latest:
-  version: "0.9.2"
-  date: "2026-02-16"
-  status: released
-  summary: "CVE fix (bytes integer overflow), 110 crates updated, asimov cleanup"
-
-# =============================================================================
 # CURRENT: v0.10.0 - Open-Source Release
 # =============================================================================
 # Prepare DANEEL for public GitHub. Complete the rebrand, ensure no secrets
