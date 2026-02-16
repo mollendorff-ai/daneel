@@ -31,40 +31,7 @@ current:
   name: "Open-Source Release"
   summary: "Complete rebrand and prepare for public GitHub repository"
 
-  context: |
-    DANEEL is going public as a FOSS portfolio project.
-    72 files still reference "royalbit" or "RoyalBit".
-    Security audit passed (no secrets, no PII).
-    License (AGPL-3.0) and ethics docs already in place.
-
   tasks:
-    - id: "OSS-1"
-      title: "Complete RoyalBit → Möllendorff rebrand"
-      status: in_progress
-      description: |
-        72 files still reference royalbit. Batch update:
-        - blog/hugo.toml and blog/content/*
-        - src/main.rs and hardcoded URLs
-        - README.md, docs/*, research/*, strategy/*, origins/*
-        - All ADRs with royalbit references
-        - references.yaml, rejected-references.yaml, social/posts.yaml
-        - scripts/*, paper/*
-
-    - id: "OSS-2"
-      title: "Add .env.example"
-      status: pending
-      description: "Document required environment variables for contributors"
-
-    - id: "OSS-3"
-      title: "Add CONTRIBUTING.md"
-      status: pending
-      description: "Contribution guidelines, issue templates, code of conduct"
-
-    - id: "OSS-4"
-      title: "Add SECURITY.md"
-      status: pending
-      description: "Security policy and vulnerability reporting (GitHub expects this)"
-
     - id: "OSS-5"
       title: "GitHub repository setup"
       status: pending
@@ -73,11 +40,6 @@ current:
         - Add topics: rust, ai-alignment, cognitive-architecture, asimov
         - Enable Discussions
         - Verify Dependabot alerts resolved
-
-  success_criteria:
-    - "Zero royalbit references in codebase"
-    - "All GitHub community health files present"
-    - "Repository public and discoverable"
 
 # =============================================================================
 # NEXT: v0.11.0 - Live Fiction Infrastructure
