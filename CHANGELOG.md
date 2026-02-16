@@ -26,6 +26,19 @@ The "RoyalBit" name (company founded 2006) was hijacked by unrelated cryptocurre
 
 ---
 
+## [0.9.2] - 2026-02-16 - Security Fix & Dependency Update
+
+### Security
+
+- **CVE fix**: `bytes` 1.11.0 → 1.11.1 (integer overflow in `BytesMut::reserve`)
+
+### Changed
+
+- **Dependencies**: Updated 110 crates to latest compatible versions
+- **Asimov**: Refactored project.yaml, removed legacy protocol files
+
+---
+
 ## [0.9.1] - 2026-01-24 - Multi-Stage Docker Build & Swarm Cleanup
 
 ### Changed

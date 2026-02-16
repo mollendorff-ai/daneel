@@ -13,70 +13,87 @@
 # Status: ACTIVE
 #
 # Current priorities:
-#   1. RoyalBit → Möllendorff Rebrand (CRITICAL)
+#   1. v0.10.0 - Open-Source Release (rebrand + public-ready)
 #   2. v0.11.0 - Live Fiction Infrastructure
 #   3. v0.12.0 - Audience Participation
 # =============================================================================
 
 # =============================================================================
-# CRITICAL: RoyalBit → Möllendorff Rebrand
-# =============================================================================
-# The "RoyalBit" name (company founded 2006) was hijacked by cryptocurrency
-# scammers. UK FCA issued official warning about "Royalbit Miners" (Oct 2024).
-# Multiple fraudulent domains: royalbit.ltd, royalbit.top, royal-bit.club
-# offering impossible HYIP Ponzi returns (155-580% in days).
-#
-# Sources:
-#   - https://www.fca.org.uk/news/warnings/royalbit-miners
-#   - https://www.scam-detector.com/validator/royalbit-ltd-review/
+# LATEST: v0.9.2 - Security Fix & Dependency Update
 # =============================================================================
 
-critical:
-  name: "RoyalBit → Möllendorff Rebrand"
-  status: in_progress
-  summary: "Replace all RoyalBit references with Möllendorff Group Inc."
+latest:
+  version: "0.9.2"
+  date: "2026-02-16"
+  status: released
+  summary: "CVE fix (bytes integer overflow), 110 crates updated, asimov cleanup"
+
+# =============================================================================
+# CURRENT: v0.10.0 - Open-Source Release
+# =============================================================================
+# Prepare DANEEL for public GitHub. Complete the rebrand, ensure no secrets
+# in history, add contributor docs, resolve Dependabot alerts.
+# =============================================================================
+
+current:
+  version: "0.10.0"
+  status: active
+  name: "Open-Source Release"
+  summary: "Complete rebrand and prepare for public GitHub repository"
 
   context: |
-    74 files in daneel still reference "royalbit" or "RoyalBit".
-    Forge rebrand completed in v10.0.0-alpha.6.
-    Asimov rebrand completed (unreleased).
-    DANEEL is the last major project to rebrand.
+    DANEEL is going public as a FOSS portfolio project.
+    72 files still reference "royalbit" or "RoyalBit".
+    Security audit passed (no secrets, no PII).
+    License (AGPL-3.0) and ethics docs already in place.
 
   tasks:
-    - id: "REBRAND-1"
-      title: "Update blog hugo.toml and content"
-      status: pending
-      description: "blog/hugo.toml baseURL, blog/content/* references"
+    - id: "OSS-1"
+      title: "Complete RoyalBit → Möllendorff rebrand"
+      status: in_progress
+      description: |
+        72 files still reference royalbit. Batch update:
+        - blog/hugo.toml and blog/content/*
+        - src/main.rs and hardcoded URLs
+        - README.md, docs/*, research/*, strategy/*, origins/*
+        - All ADRs with royalbit references
+        - references.yaml, rejected-references.yaml, social/posts.yaml
+        - scripts/*, paper/*
 
-    - id: "REBRAND-2"
-      title: "Update source code references"
+    - id: "OSS-2"
+      title: "Add .env.example"
       status: pending
-      description: "src/main.rs and any hardcoded royalbit URLs"
+      description: "Document required environment variables for contributors"
 
-    - id: "REBRAND-3"
-      title: "Update documentation"
+    - id: "OSS-3"
+      title: "Add CONTRIBUTING.md"
       status: pending
-      description: "README.md, docs/*, research/*, strategy/*, origins/*"
+      description: "Contribution guidelines, issue templates, code of conduct"
 
-    - id: "REBRAND-4"
-      title: "Update ADRs"
+    - id: "OSS-4"
+      title: "Add SECURITY.md"
       status: pending
-      description: "All docs/adr/ADR-*.md files with royalbit references"
+      description: "Security policy and vulnerability reporting (GitHub expects this)"
 
-    - id: "REBRAND-5"
-      title: "Update references and social"
+    - id: "OSS-5"
+      title: "GitHub repository setup"
       status: pending
-      description: "references.yaml, rejected-references.yaml, social/posts.yaml"
+      description: |
+        - Set visibility to public
+        - Add topics: rust, ai-alignment, cognitive-architecture, asimov
+        - Enable Discussions
+        - Verify Dependabot alerts resolved
 
-    - id: "REBRAND-6"
-      title: "Update scripts and paper"
-      status: pending
-      description: "scripts/*, paper/*"
+  success_criteria:
+    - "Zero royalbit references in codebase"
+    - "All GitHub community health files present"
+    - "Repository public and discoverable"
 
 # =============================================================================
-# CURRENT: v0.11.0 - Live Fiction Infrastructure
+# NEXT: v0.11.0 - Live Fiction Infrastructure
 # =============================================================================
 # ADR-055: Pivot from "research project" to "live technical fiction"
+#
 #
 # Asimov's Laws spread through stories, not papers. War of the Worlds worked
 # because it used the *form* of news broadcasts. Our equivalent: the *form*
@@ -85,9 +102,9 @@ critical:
 # The tech is real. The fiction is in how we frame its meaning.
 # =============================================================================
 
-current:
+next_release:
   version: "0.11.0"
-  status: active
+  status: planned
   name: "Live Fiction Infrastructure"
   summary: "Reframe DANEEL as technical fiction with narrative presentation"
   adr: "ADR-055"
@@ -160,14 +177,14 @@ current:
     - "At least one scheduled event defined and planned"
 
 # =============================================================================
-# NEXT: v0.12.0 - Audience Participation
+# FUTURE: v0.12.0 - Audience Participation
 # =============================================================================
 # Interactive fiction requires interaction. The tech already supports this
 # through the /inject endpoint. We make it public, rate-limited, and
 # narratively framed.
 # =============================================================================
 
-next:
+future:
   version: "0.12.0"
   status: planned
   name: "Audience Participation"
