@@ -4,16 +4,24 @@ All notable changes to DANEEL are documented here.
 
 ## [Unreleased]
 
+### Remaining
+
+- **OSS-5**: GitHub repository setup (public visibility, topics, Discussions)
+
+---
+
+## [0.10.0] - 2026-02-16 - Open-Source Release
+
 ### Rebranding: RoyalBit to Möllendorff Group Inc.
 
 Complete organizational rebrand to disassociate from cryptocurrency scammers who hijacked the RoyalBit name.
-
-### Changed
+73 files updated; 26 historical references intentionally preserved in dialogue transcripts and changelog.
 
 - **Domain references**: `royalbit.com` → `mollendorff.ai`
 - **Blog baseURL**: `timmy.royalbit.com` → `timmy.mollendorff.ai`
-- **All documentation**: 74 files with royalbit references to be updated
-- **ADRs**: Infrastructure and other ADRs referencing old domains
+- **GitHub URLs**: `github.com/royalbit` → `github.com/mollendorff-ai`
+- **All documentation**: ADRs, paper, research, strategy, blog, social posts
+- **Source code**: `src/main.rs` hardcoded URLs
 
 ### Why Rebrand?
 
@@ -23,6 +31,17 @@ The "RoyalBit" name (company founded 2006) was hijacked by unrelated cryptocurre
 - **Fraudulent domains**: royalbit.ltd (trust score 38/100), royalbit.top, royal-bit.club
 - **HYIP Ponzi schemes**: Offering impossible returns (155-580% in days)
 - **Sources**: [FCA Warning](https://www.fca.org.uk/news/warnings/royalbit-miners), [Scam Detector](https://www.scam-detector.com/validator/royalbit-ltd-review/)
+
+### Added
+
+- `.env.example` -- documented environment variables for contributors
+- `CONTRIBUTING.md` -- issues-only contribution workflow (AI-built project)
+- `SECURITY.md` -- vulnerability reporting policy
+
+### Changed
+
+- `project.yaml` refactored to match current asimov schema
+- Removed legacy asimov protocol files (superseded by v11 hardcoded protocols)
 
 ---
 
