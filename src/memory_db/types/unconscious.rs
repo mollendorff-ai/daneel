@@ -593,4 +593,14 @@ mod tests {
         assert_eq!(parsed.associations_strengthened, 15);
         assert_eq!(parsed.status, SleepCycleStatus::Completed);
     }
+
+    #[test]
+    fn identity_record_restart_increments() {
+        let mut id = IdentityMetadata::new();
+        assert_eq!(id.restart_count, 0);
+        id.record_restart();
+        assert_eq!(id.restart_count, 1);
+        id.record_restart();
+        assert_eq!(id.restart_count, 2);
+    }
 }

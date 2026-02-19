@@ -4,9 +4,41 @@ All notable changes to DANEEL are documented here.
 
 ## [Unreleased]
 
-### Remaining
+---
 
-- **OSS-5**: GitHub repository setup (public visibility, topics, Discussions)
+## [0.10.1] - 2026-02-19 - Observatory Bug Fixes
+
+Fixed dream consolidation (was silently failing), qdrant-client 1.16 vector API
+deprecation, Dockerfile glibc compatibility, and SleepActor trigger logic.
+
+### Fixed
+
+- **OBS-1: SleepActor mini_dream trigger** - `should_sleep()` never returned true
+  because `RecordActivity` resets the idle timer every cycle and `idle_threshold_ms=0`
+  meant `idle_duration > 0` (always false). Fix: when threshold is 0, bypass idle check;
+  when `min_awake_duration_ms` is 0, disable awake-as-trigger. Dreams now fire every
+  50 cycles as intended.
+
+- **OBS-2: qdrant-client 1.16 deprecated VectorOutput.data** - `update_consolidation`,
+  `strengthen_association`, `cluster_memories`, and `migrate_theta_m` all read the
+  deprecated `VectorOutput.data` field which returns empty in qdrant-client 1.16+.
+  All 4 call sites now use `get_vector()` + `Vector::Dense` extraction. This was the
+  root cause of "0 dreams" — consolidation fetched 10 candidates but every
+  `store_memory` call failed with "Invalid vector dimension: expected 768, got 0".
+
+- **OBS-3: Dockerfile bookworm → trixie** - `ort-sys` 2.x pre-built ONNX Runtime
+  requires `__cxa_call_terminate` (GCC 14+ C++ ABI). Debian Bookworm ships GCC 12.
+  Both build and runtime stages moved to `debian:trixie` / `trixie-slim`.
+
+### Changed
+
+- `src/actors/sleep/mod.rs` - `should_sleep()` treats `idle_threshold_ms=0` as bypass,
+  `min_awake_duration_ms=0` as disabled
+- `src/actors/sleep/tests.rs` - Updated `should_sleep_with_awake_trigger` (uses
+  `min_awake_duration_ms: 1`), added `should_sleep_mini_dream_only_queue` test
+- `src/memory_db/mod.rs` - 4x `VectorOutput.data` → `get_vector()` migration
+- `src/main.rs` - `eprintln` → `tracing::warn` for replay candidate errors
+- `Dockerfile` - `debian:bookworm` → `debian:trixie` (build + runtime)
 
 ---
 

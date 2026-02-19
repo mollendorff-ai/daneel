@@ -535,4 +535,9 @@ mod tests {
         assert!(interrupted.to_string().contains("Interrupted"));
         assert!(config_err.to_string().contains("Configuration error"));
     }
+
+    #[test]
+    fn entering_sleep_consolidation_multiplier() {
+        assert_eq!(SleepState::EnteringSleep.consolidation_multiplier(), 0.1);
+    }
 }

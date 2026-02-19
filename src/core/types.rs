@@ -955,4 +955,14 @@ mod tests {
         let score: SalienceScore = serde_json::from_str(json).unwrap();
         assert_eq!(score.arousal, 0.5); // default_arousal() returns 0.5
     }
+
+    #[test]
+    fn relation_embedding_text_empty_subject_object() {
+        let content = Content::Relation {
+            subject: Box::new(Content::Empty),
+            predicate: "causes".to_string(),
+            object: Box::new(Content::Empty),
+        };
+        assert_eq!(content.to_embedding_text(), Some("causes".to_string()));
+    }
 }

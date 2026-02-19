@@ -4,7 +4,8 @@
 # Usage: docker build -t daneel .
 
 # === Build Stage ===
-FROM debian:bookworm AS builder
+# Trixie (testing) has GCC 14+ needed by ort-sys 2.x pre-built ONNX Runtime
+FROM debian:trixie AS builder
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -29,7 +30,7 @@ COPY src ./src
 RUN cargo build --release
 
 # === Runtime Stage ===
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \

@@ -105,8 +105,13 @@ impl SleepState {
             .as_millis()
             .min(u128::from(u64::MAX)) as u64;
 
-        let idle_trigger = idle_duration > self.config.idle_threshold_ms;
-        let awake_trigger = awake_duration > self.config.min_awake_duration_ms;
+        // When threshold is 0, the check is disabled (bypassed).
+        // This lets mini_dream config trigger purely on queue size.
+        let idle_trigger =
+            self.config.idle_threshold_ms == 0 || idle_duration > self.config.idle_threshold_ms;
+        // When min_awake is 0, awake duration is not a trigger (disabled).
+        let awake_trigger = self.config.min_awake_duration_ms > 0
+            && awake_duration > self.config.min_awake_duration_ms;
         let queue_trigger =
             self.consolidation_queue_estimate >= self.config.min_consolidation_queue;
 

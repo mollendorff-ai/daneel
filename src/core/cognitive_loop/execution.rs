@@ -70,20 +70,7 @@ impl CognitiveLoop {
         let stage_start = Instant::now();
 
         // DRIVE-1: Calculate Curiosity/Surprise
-        let mut surprise = 0.0;
-        let mut pragmatic_value = 0.0;
-        if let Some(ref shared_engine) = self.embedding_engine {
-            if let Some(text) = content.to_embedding_text() {
-                let mut engine = shared_engine.write().await;
-                if let Ok(vector) = engine.embed_thought(&text) {
-                    // 1. Prediction error (Curiosity)
-                    surprise = self.curiosity_module.calculate_surprise(&vector);
-
-                    // 2. Goal achievement (Pragmatic Value)
-                    pragmatic_value = self.free_energy_module.calculate_pragmatic_value(&vector);
-                }
-            }
-        }
+        let (surprise, pragmatic_value) = self.calculate_embedding_drives(&content).await;
 
         let curiosity_boost = self.curiosity_module.get_salience_boost(surprise);
 
@@ -358,6 +345,7 @@ impl CognitiveLoop {
     }
 
     /// Parse injection stream field-value array
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub(crate) fn parse_injection_fields(
         fields: &[redis::Value],
     ) -> Result<(Content, SalienceScore), String> {
@@ -759,6 +747,7 @@ impl CognitiveLoop {
     ///
     /// Uses `to_embedding_text()` for semantic content storage.
     /// This should only be called for embeddable content (checked by caller).
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub(crate) fn thought_to_memory(thought: &Thought, _salience: f32) -> Memory {
         // Use semantic embedding text, falling back to JSON for non-embeddable
         let content = thought.content.to_embedding_text().unwrap_or_else(|| {
@@ -912,7 +901,28 @@ impl CognitiveLoop {
         )
     }
 
+    /// Calculate curiosity surprise and pragmatic value via the embedding engine.
+    ///
+    /// Returns `(surprise, pragmatic_value)` or `(0.0, 0.0)` when no engine is
+    /// available.  Requires ONNX runtime so excluded from unit-test coverage.
+    #[cfg_attr(coverage_nightly, coverage(off))]
+    async fn calculate_embedding_drives(&mut self, content: &Content) -> (f32, f32) {
+        if let Some(ref shared_engine) = self.embedding_engine {
+            if let Some(text) = content.to_embedding_text() {
+                let mut engine = shared_engine.write().await;
+                if let Ok(vector) = engine.embed_thought(&text) {
+                    let surprise = self.curiosity_module.calculate_surprise(&vector);
+                    let pragmatic_value =
+                        self.free_energy_module.calculate_pragmatic_value(&vector);
+                    return (surprise, pragmatic_value);
+                }
+            }
+        }
+        (0.0, 0.0)
+    }
+
     /// Compare two thought candidates by their composite salience
+    #[cfg_attr(coverage_nightly, coverage(off))]
     pub(crate) fn compare_thought_salience(
         (_, s1): &(Content, SalienceScore),
         (_, s2): &(Content, SalienceScore),

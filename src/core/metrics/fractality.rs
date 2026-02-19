@@ -245,4 +245,12 @@ mod tests {
         assert!(result.cv > 1.0);
         assert!(result.score > 0.3);
     }
+
+    #[test]
+    fn from_seconds_insufficient_data() {
+        let result = calculate_fractality_from_seconds(&[]);
+        assert_eq!(result.score, 0.0);
+        let result = calculate_fractality_from_seconds(&[1.0]);
+        assert_eq!(result.score, 0.0);
+    }
 }
