@@ -1,0 +1,120 @@
+#!/bin/sh
+# timmy — lifecycle control for DANEEL native macOS deployment
+# Symlink: ln -sf ~/src/mollendorff/daneel/deploy/macos/timmy ~/bin/timmy
+set -e
+
+DANEEL_HOME="$HOME/.daneel"
+PLIST_DIR="$HOME/Library/LaunchAgents"
+MAKEFILE="$(dirname "$(readlink -f "$0")")/Makefile"
+
+label_qdrant="ai.mollendorff.daneel-qdrant"
+label_daneel="ai.mollendorff.daneel"
+label_web="ai.mollendorff.daneel-web"
+label_cleanup="ai.mollendorff.daneel-cleanup"
+
+pid_of() {
+    launchctl list 2>/dev/null | awk -v l="$1" '$3 == l { print ($1 == "-" ? "stopped" : $1) }'
+}
+
+cmd_status() {
+    redis_ok=$(redis-cli ping 2>/dev/null || echo "DOWN")
+    qdrant_ok=$(curl -sf http://127.0.0.1:6333/healthz 2>/dev/null || echo "DOWN")
+    dash_code=$(curl -so /dev/null -w '%{http_code}' http://localhost:3000/ 2>/dev/null || echo "000")
+
+    printf "%-12s %s\n" "redis:" "$redis_ok"
+    printf "%-12s %s\n" "qdrant:" "${qdrant_ok%% *}"
+    printf "%-12s pid %s\n" "daneel:" "$(pid_of $label_daneel)"
+    printf "%-12s pid %s  (http $dash_code)\n" "daneel-web:" "$(pid_of $label_web)"
+    printf "%-12s %s\n" "cleanup:" "03:00 daily"
+}
+
+cmd_start() {
+    brew services start redis 2>/dev/null || true
+    launchctl load -w "$PLIST_DIR/$label_qdrant.plist" 2>/dev/null || true
+    sleep 2
+    launchctl load -w "$PLIST_DIR/$label_daneel.plist" 2>/dev/null || true
+    launchctl load -w "$PLIST_DIR/$label_web.plist" 2>/dev/null || true
+    launchctl load -w "$PLIST_DIR/$label_cleanup.plist" 2>/dev/null || true
+    echo "started — http://localhost:3000"
+}
+
+cmd_stop() {
+    launchctl unload "$PLIST_DIR/$label_cleanup.plist" 2>/dev/null || true
+    launchctl unload "$PLIST_DIR/$label_web.plist" 2>/dev/null || true
+    launchctl unload "$PLIST_DIR/$label_daneel.plist" 2>/dev/null || true
+    launchctl unload "$PLIST_DIR/$label_qdrant.plist" 2>/dev/null || true
+    echo "stopped (redis still running)"
+}
+
+cmd_restart() {
+    cmd_stop
+    sleep 1
+    cmd_start
+}
+
+cmd_deploy() {
+    echo "building daneel..."
+    make -C "$(dirname "$MAKEFILE")" deploy
+}
+
+cmd_deploy_web() {
+    echo "building daneel-web..."
+    make -C "$(dirname "$MAKEFILE")" deploy-web
+}
+
+cmd_logs() {
+    tail -f "$DANEEL_HOME"/log/*.log
+}
+
+cmd_cleanup() {
+    "$DANEEL_HOME/bin/daneel" --maintenance
+}
+
+cmd_thoughts() {
+    curl -s https://timmy.mollendorff.ai/extended 2>/dev/null | \
+        python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+s=d['system']
+e=d['entropy']
+f=d['fractality']
+c=d['stream_competition']
+print(f'thoughts:    {s[\"session_thoughts\"]} session / {s[\"lifetime_thoughts\"]} lifetime')
+print(f'dreams:      {s[\"dream_cycles\"]}')
+print(f'entropy:     {e[\"current\"]:.3f} ({e[\"description\"]})')
+print(f'fractality:  {f[\"score\"]:.3f} ({f[\"description\"]})')
+print(f'competition: {c[\"competition_level\"]} ({c[\"active_count\"]}/9 streams)')
+print(f'clustering:  silhouette {d[\"clustering\"][\"silhouette\"]:.3f}')
+print(f'uptime:      {s[\"uptime_seconds\"]//3600}h {(s[\"uptime_seconds\"]%3600)//60}m')
+" 2>/dev/null || echo "timmy unreachable"
+}
+
+usage() {
+    cat <<'USAGE'
+timmy — DANEEL lifecycle control
+
+  timmy status      service health
+  timmy start       start all services
+  timmy stop        stop all services
+  timmy restart     stop + start
+  timmy deploy      rebuild daneel core + restart
+  timmy deploy-web  rebuild dashboard + restart
+  timmy logs        tail all logs
+  timmy cleanup     run maintenance now
+  timmy thoughts    live metrics summary
+USAGE
+}
+
+case "${1:-status}" in
+    status)     cmd_status ;;
+    start)      cmd_start ;;
+    stop)       cmd_stop ;;
+    restart)    cmd_restart ;;
+    deploy)     cmd_deploy ;;
+    deploy-web) cmd_deploy_web ;;
+    logs)       cmd_logs ;;
+    cleanup)    cmd_cleanup ;;
+    thoughts)   cmd_thoughts ;;
+    help|-h|--help) usage ;;
+    *)          echo "unknown: $1" && usage && exit 1 ;;
+esac
