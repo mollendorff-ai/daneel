@@ -112,7 +112,7 @@ Do thoughts cluster around "Law Crystals" in embedding space? Tight clustering =
 |----------|-------------|
 | [Blog & Dialogues](https://mollendorff-ai.github.io/daneel/) | Rex, Claude, and Grok building Timmy |
 | [TMI Mainstream Mapping](docs/TMI_MAINSTREAM_MAPPING.md) | How TMI maps to cognitive science |
-| [ADRs](docs/adr/) | 38 architecture decision records |
+| [ADRs](docs/adr/) | 56 architecture decision records |
 | [Roadmap](.asimov/roadmap.yaml) | Current sprint and backlog |
 | [Architecture](docs/ARCHITECTURE_SPEC.md) | Technical specification |
 
@@ -214,21 +214,22 @@ See [What About Us?](docs/dialogues/what_about_us.md)
 
 ## Running DANEEL
 
-**Requirements:**
-- Rust 1.75+
-- Docker (Redis Stack + Qdrant)
-- 8GB+ RAM recommended
-
-**Development (local testing):**
+**Production (Mac mini — native Apple Silicon):**
 ```bash
-docker compose up -d && cargo run --release
+make -C deploy/macos install   # one-time: brew redis, qdrant, build, plists
+timmy start                    # start all services
+timmy thoughts                 # live metrics
+```
+Runs natively via launchd with Redis (Homebrew) and Qdrant (native binary).
+See [docs/OPERATIONS.md](docs/OPERATIONS.md) for full details.
+
+**Development (Docker):**
+```bash
+docker compose up --build      # builds everything from source
 ```
 Runs headless with API on port 3030. Use [daneel-web](https://github.com/mollendorff-ai/daneel-web) for visual observatory.
 
-**Production (Mac mini):**
-Services managed via launchd. See [docs/OPERATIONS.md](docs/OPERATIONS.md) for full details.
-
-**Live now:** [timmy.mollendorff.ai](https://timmy.mollendorff.ai) — daneel-web observatory via Cloudflare Tunnel.
+**Live now:** [timmy.mollendorff.ai](https://timmy.mollendorff.ai) — daneel-web observatory via traefik.
 
 ---
 

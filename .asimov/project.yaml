@@ -11,9 +11,9 @@ description: >
 
 stack:
   - Rust (tokio, ractor actors, axum)
-  - Redis Stack (streams, JSON)
+  - Redis (streams)
   - Qdrant (vector memory)
-  - Docker Swarm
+  - macOS launchd (production), Docker Compose (dev)
   - Hugo (blog)
 
 conventions:

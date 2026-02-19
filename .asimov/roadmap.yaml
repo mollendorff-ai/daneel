@@ -312,12 +312,11 @@ backlog:
 # =============================================================================
 infrastructure:
   current:
-    - "berserker (macOS Apple Silicon): native binaries via launchd"
-    - "Redis 8.6 via Homebrew, Qdrant 1.16.3 native binary"
+    - "Mac mini (Apple Silicon): native binaries via launchd"
+    - "Redis 8.x via Homebrew, Qdrant 1.16.x native binary"
     - "All data under ~/.daneel/{bin,data,log,etc}"
-    - "deploy/macos/Makefile for lifecycle management"
-    - "kveldulf (Ubuntu 24.04): Docker Swarm, traefik → berserker:3000"
-    - "timmy.mollendorff.ai routed via traefik on kveldulf"
+    - "deploy/macos/Makefile + timmy CLI for lifecycle management"
+    - "timmy.mollendorff.ai via reverse proxy → localhost:3000"
     - "Nightly maintenance at 03:00 via launchd timer"
     - "RedisGraph deprecated (ADR-056), graceful degradation"
 

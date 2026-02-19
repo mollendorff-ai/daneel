@@ -46,6 +46,6 @@ COPY --from=builder /build/target/release/daneel /app/daneel
 # fastembed cache directory (mounted as volume)
 RUN mkdir -p /root/.cache/fastembed
 
-EXPOSE 3001
+EXPOSE 3030
 
 ENTRYPOINT ["/app/daneel"]
