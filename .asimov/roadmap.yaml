@@ -13,7 +13,7 @@
 # Status: ACTIVE
 #
 # Current priorities:
-#   1. v0.10.0 - Open-Source Release (rebrand + public-ready)
+#   1. v0.10.1 - Observatory Bug Fixes (DONE)
 #   2. v0.11.0 - Live Fiction Infrastructure
 #   3. v0.12.0 - Audience Participation
 # =============================================================================
@@ -26,19 +26,34 @@
 # =============================================================================
 
 current:
-  version: "0.10.0"
-  status: active
-  name: "Open-Source Release"
-  summary: "Complete rebrand and prepare for public GitHub repository"
+  version: "0.10.1"
+  status: done
+  name: "Observatory Bug Fixes"
+  summary: "Fix dream consolidation, Dockerfile compat, and qdrant-client 1.16 vector API"
 
   tasks:
-    - id: "OSS-5"
-      title: "GitHub repository setup"
+    - id: "OBS-1"
+      title: "Fix SleepActor mini_dream trigger logic"
       status: done
+      description: |
+        should_sleep() never returned true because RecordActivity reset the idle
+        timer every cycle and idle_threshold_ms=0 meant 'idle > 0' (always false).
+        Fix: treat 0 as 'bypass' for idle, 'disabled' for awake duration.
 
-    - id: "OSS-6"
-      title: "Relicense: AGPL-3.0 → MIT OR Apache-2.0"
+    - id: "OBS-2"
+      title: "Fix qdrant-client 1.16 deprecated VectorOutput.data"
       status: done
+      description: |
+        update_consolidation, strengthen_association, cluster_memories, and
+        migrate_theta_m all used deprecated VectorOutput.data (empty in 1.16).
+        Fix: use get_vector() + Vector::Dense extraction (4 call sites).
+
+    - id: "OBS-3"
+      title: "Dockerfile: bookworm → trixie (GCC 14+ for ort-sys)"
+      status: done
+      description: |
+        ort-sys 2.x requires __cxa_call_terminate (GCC 14+ ABI). Bookworm has
+        GCC 12. Both build and runtime stages moved to debian:trixie[-slim].
 
 # =============================================================================
 # NEXT: v0.11.0 - Live Fiction Infrastructure
@@ -274,10 +289,11 @@ backlog:
 # =============================================================================
 infrastructure:
   current:
-    - "timmy.mollendorff.ai: Docker Swarm (kveldulf)"
+    - "timmy.mollendorff.ai: Docker Compose (berserker, Hetzner ARM)"
     - "Stack config: ~/src/swarm/stacks/daneel/"
     - "Registry: registry.crypto1.ca/daneel[:web]:latest"
     - "Redis Stack + Qdrant on mollendorff overlay"
+    - "Dockerfile: debian:trixie (GCC 14+ required by ort-sys)"
 
   planned:
     - "Public-facing observatory with rate limiting"

@@ -126,4 +126,18 @@ mod tests {
         let val2 = module.calculate_pragmatic_value(&opposite);
         assert!(val2 < 0.1);
     }
+
+    #[test]
+    fn test_pragmatic_value_no_crystals_or_wrong_dim() {
+        let module = FreeEnergyModule::new(FreeEnergyConfig::default());
+        // No crystals set
+        assert_eq!(
+            module.calculate_pragmatic_value(&vec![0.0; VECTOR_DIMENSION]),
+            0.0
+        );
+        // Wrong dimension
+        let mut module2 = FreeEnergyModule::new(FreeEnergyConfig::default());
+        module2.set_law_crystals(vec![vec![1.0; VECTOR_DIMENSION]]);
+        assert_eq!(module2.calculate_pragmatic_value(&[1.0, 2.0]), 0.0);
+    }
 }

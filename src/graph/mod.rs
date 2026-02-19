@@ -7,6 +7,7 @@
 //!
 //! - Qdrant: Source of truth for memory payloads and vectors.
 //! - `RedisGraph`: High-speed association graph for traversal and emergence analysis.
+#![cfg_attr(coverage_nightly, coverage(off))]
 
 use crate::memory_db::types::{AssociationType, MemoryId};
 use redis::{Client, RedisError};

@@ -381,17 +381,14 @@ impl MemoryDb {
         memory.consolidation.replay_count += 1;
         memory.consolidation.last_replayed = Some(chrono::Utc::now());
 
-        // Get vector from point - handle nested Option structure
-        #[allow(deprecated)] // VectorOutput.data deprecated in qdrant 1.16, but still functional
+        // Get vector from point via get_vector() helper (qdrant-client 1.16+ API)
         let vector: Vec<f32> = point
             .vectors
             .as_ref()
-            .and_then(|v| v.vectors_options.as_ref())
-            .and_then(|opts| match opts {
-                qdrant_client::qdrant::vectors_output::VectorsOptions::Vector(v) => {
-                    Some(v.data.clone())
-                }
-                qdrant_client::qdrant::vectors_output::VectorsOptions::Vectors(_) => None,
+            .and_then(qdrant_client::qdrant::VectorsOutput::get_vector)
+            .and_then(|v| match v {
+                qdrant_client::qdrant::vector_output::Vector::Dense(dense) => Some(dense.data),
+                _ => None,
             })
             .unwrap_or_else(|| vec![0.0; VECTOR_DIMENSION]);
 
@@ -438,16 +435,13 @@ impl MemoryDb {
         let mut point_info = Vec::with_capacity(num_points);
 
         for (i, point) in results.result.iter().enumerate() {
-            #[allow(deprecated)]
             let vector: Vec<f32> = point
                 .vectors
                 .as_ref()
-                .and_then(|v| v.vectors_options.as_ref())
-                .and_then(|opts| match opts {
-                    qdrant_client::qdrant::vectors_output::VectorsOptions::Vector(v) => {
-                        Some(v.data.clone())
-                    }
-                    qdrant_client::qdrant::vectors_output::VectorsOptions::Vectors(_) => None,
+                .and_then(qdrant_client::qdrant::VectorsOutput::get_vector)
+                .and_then(|v| match v {
+                    qdrant_client::qdrant::vector_output::Vector::Dense(dense) => Some(dense.data),
+                    _ => None,
                 })
                 .unwrap_or_else(|| vec![0.0; VECTOR_DIMENSION]);
 
@@ -530,19 +524,14 @@ impl MemoryDb {
             let payload_json = serde_json::to_value(&point.payload)?;
             let memory: Memory = serde_json::from_value(payload_json)?;
 
-            // Extract vector (same pattern as cluster_memories)
-            #[allow(deprecated)]
-            // VectorOutput.data deprecated in qdrant 1.16, but still functional
-            let vector: Option<Vec<f32>> =
-                point
-                    .vectors
-                    .as_ref()
-                    .and_then(|vo| match &vo.vectors_options {
-                        Some(qdrant_client::qdrant::vectors_output::VectorsOptions::Vector(v)) => {
-                            Some(v.data.clone())
-                        }
-                        _ => None,
-                    });
+            let vector: Option<Vec<f32>> = point
+                .vectors
+                .as_ref()
+                .and_then(qdrant_client::qdrant::VectorsOutput::get_vector)
+                .and_then(|v| match v {
+                    qdrant_client::qdrant::vector_output::Vector::Dense(dense) => Some(dense.data),
+                    _ => None,
+                });
 
             if let Some(vec) = vector {
                 // Re-store with updated schema (theta_m now explicitly set)
@@ -560,6 +549,7 @@ impl MemoryDb {
     /// Measures how similar points are to their own cluster vs other clusters.
     /// Score range: -1 to +1, where > 0.3 indicates meaningful structure.
     #[allow(clippy::cast_precision_loss)]
+    #[cfg_attr(coverage_nightly, coverage(off))]
     fn calculate_silhouette(data: &Array2<f32>, labels: &ndarray::Array1<usize>, k: usize) -> f32 {
         let n = data.nrows();
         if n < 2 || k < 2 {
@@ -1223,16 +1213,13 @@ impl MemoryDb {
             .await?;
 
         if let Some(point) = results.result.first() {
-            #[allow(deprecated)]
             let vector: Vec<f32> = point
                 .vectors
                 .as_ref()
-                .and_then(|v| v.vectors_options.as_ref())
-                .and_then(|opts| match opts {
-                    qdrant_client::qdrant::vectors_output::VectorsOptions::Vector(v) => {
-                        Some(v.data.clone())
-                    }
-                    qdrant_client::qdrant::vectors_output::VectorsOptions::Vectors(_) => None,
+                .and_then(qdrant_client::qdrant::VectorsOutput::get_vector)
+                .and_then(|v| match v {
+                    qdrant_client::qdrant::vector_output::Vector::Dense(dense) => Some(dense.data),
+                    _ => None,
                 })
                 .unwrap_or_else(|| vec![0.0; VECTOR_DIMENSION]);
 

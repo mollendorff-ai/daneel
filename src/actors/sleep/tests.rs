@@ -312,19 +312,36 @@ fn should_sleep_with_queue_trigger() {
 
 #[test]
 fn should_sleep_with_awake_trigger() {
-    // Create config with very low thresholds for testing
+    // awake_trigger requires min_awake_duration_ms > 0 (0 = disabled)
     let config = SleepConfig {
-        idle_threshold_ms: 0,                // immediate idle trigger
-        min_awake_duration_ms: 0,            // immediate awake trigger
+        idle_threshold_ms: 0,                // bypass idle check
+        min_awake_duration_ms: 1,            // 1ms awake threshold
         min_consolidation_queue: usize::MAX, // queue trigger will NOT be met
         ..SleepConfig::default()
     };
     let state = SleepState::new(config);
 
-    // Need a tiny wait for idle_duration and awake_duration > 0 (since it's strict >)
-    std::thread::sleep(std::time::Duration::from_millis(1));
+    // Wait for awake_duration > 1ms
+    std::thread::sleep(std::time::Duration::from_millis(2));
 
-    // idle_trigger && awake_trigger should be true (even though queue_trigger is false)
+    // idle_trigger (bypassed) && awake_trigger should be true
+    assert!(state.should_sleep());
+}
+
+#[test]
+fn should_sleep_mini_dream_only_queue() {
+    // mini_dream: idle=0 (bypass), awake=0 (disabled), queue=50 (the sole trigger)
+    let config = SleepConfig::mini_dream();
+    let mut state = SleepState::new(config);
+
+    // Queue not yet full — should NOT sleep
+    for _ in 0..49 {
+        state.increment_queue();
+    }
+    assert!(!state.should_sleep());
+
+    // Queue reaches threshold — should sleep
+    state.increment_queue();
     assert!(state.should_sleep());
 }
 
@@ -811,4 +828,12 @@ fn sleep_phase_progression() {
     assert_eq!(state.state, types::SleepState::Dreaming);
     assert!((params.multiplier - 0.8).abs() < f32::EPSILON);
     assert!(params.prioritize_emotional);
+}
+
+#[test]
+fn advance_sleep_phase_noop_when_awake() {
+    let mut state = SleepState::new(SleepConfig::default());
+    state.state = types::SleepState::Awake;
+    state.advance_sleep_phase();
+    assert_eq!(state.state, types::SleepState::Awake);
 }

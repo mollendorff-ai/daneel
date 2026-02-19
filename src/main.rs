@@ -493,7 +493,7 @@ async fn run_cognitive_loop_headless() {
                                 }
                             }
                             Err(e) => {
-                                eprintln!("Warning: Failed to get replay candidates: {e}");
+                                tracing::warn!("Failed to get replay candidates: {e}");
                             }
                         }
                     }

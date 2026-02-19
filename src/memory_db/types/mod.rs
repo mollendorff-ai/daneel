@@ -1170,4 +1170,22 @@ mod tests {
         };
         assert!(decay > short_term_assoc.calculate_decay(Utc::now()));
     }
+
+    #[test]
+    fn decay_recent_association_no_decay() {
+        let assoc = Association {
+            target_id: Uuid::new_v4(),
+            weight: 1.0,
+            association_type: AssociationType::Temporal,
+            last_coactivated: Utc::now() - chrono::Duration::minutes(30),
+            coactivation_count: 1,
+            eligibility_trace: 0.0,
+        };
+        assert_eq!(assoc.calculate_decay(Utc::now()), 1.0);
+    }
+
+    #[test]
+    fn default_theta_m_value() {
+        assert_eq!(default_theta_m(), 0.1);
+    }
 }

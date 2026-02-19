@@ -162,4 +162,34 @@ mod tests {
         assert!((module.get_salience_boost(0.4) - 0.0).abs() < f32::EPSILON);
         assert!(module.get_salience_boost(0.6) > 0.0);
     }
+
+    #[test]
+    fn test_wrong_dimension_returns_zero() {
+        let mut module = CuriosityModule::new(CuriosityConfig::default());
+        assert_eq!(module.calculate_surprise(&[1.0, 2.0, 3.0]), 0.0);
+    }
+
+    #[test]
+    fn test_history_eviction() {
+        let mut module = CuriosityModule::new(CuriosityConfig {
+            history_size: 3,
+            ..Default::default()
+        });
+        let v = vec![0.1; VECTOR_DIMENSION];
+        for _ in 0..5 {
+            module.calculate_surprise(&v);
+        }
+        assert_eq!(module.history.len(), 3);
+    }
+
+    #[test]
+    fn test_reset() {
+        let mut module = CuriosityModule::new(CuriosityConfig::default());
+        let v = vec![0.5; VECTOR_DIMENSION];
+        module.calculate_surprise(&v);
+        assert!(!module.history.is_empty());
+        module.reset();
+        assert!(module.history.is_empty());
+        assert!(module.expected_state.iter().all(|&x| x == 0.0));
+    }
 }
