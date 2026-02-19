@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>ai.mollendorff.daneel-cleanup</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>${DANEEL_HOME}/bin/daneel</string>
+		<string>--maintenance</string>
+	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>RUST_LOG</key>
+		<string>info</string>
+		<key>REDIS_URL</key>
+		<string>redis://127.0.0.1:6379</string>
+		<key>QDRANT_URL</key>
+		<string>http://127.0.0.1:6334</string>
+	</dict>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>3</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
+	<key>StandardOutPath</key>
+	<string>${DANEEL_HOME}/log/maintenance.log</string>
+	<key>StandardErrorPath</key>
+	<string>${DANEEL_HOME}/log/maintenance.log</string>
+	<key>WorkingDirectory</key>
+	<string>${DANEEL_HOME}</string>
+</dict>
+</plist>

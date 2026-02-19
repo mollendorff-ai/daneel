@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>ai.mollendorff.daneel-web</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>${DANEEL_HOME}/bin/daneel-web</string>
+	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>RUST_LOG</key>
+		<string>info</string>
+		<key>REDIS_URL</key>
+		<string>redis://127.0.0.1:6379</string>
+		<key>QDRANT_URL</key>
+		<string>http://127.0.0.1:6334</string>
+		<key>DANEEL_CORE_URL</key>
+		<string>http://127.0.0.1:3030</string>
+		<key>HOST</key>
+		<string>0.0.0.0</string>
+		<key>PORT</key>
+		<string>3000</string>
+	</dict>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>StandardOutPath</key>
+	<string>${DANEEL_HOME}/log/daneel-web.log</string>
+	<key>StandardErrorPath</key>
+	<string>${DANEEL_HOME}/log/daneel-web.log</string>
+	<key>WorkingDirectory</key>
+	<string>${DANEEL_HOME}</string>
+</dict>
+</plist>

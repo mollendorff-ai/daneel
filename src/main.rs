@@ -43,17 +43,191 @@ struct Args {
     /// Run memory migration (adds missing fields to old memories)
     #[arg(long)]
     migrate: bool,
+
+    /// Run nightly maintenance (trim streams, delete old vectors, compact)
+    #[arg(long)]
+    maintenance: bool,
 }
 
 #[cfg_attr(coverage_nightly, coverage(off))]
 fn main() {
     let args = Args::parse();
 
-    if args.migrate {
+    if args.maintenance {
+        run_maintenance(&args);
+    } else if args.migrate {
         run_migration(&args);
     } else {
         run_headless(&args);
     }
+}
+
+/// Run nightly maintenance and exit
+///
+/// Trims Redis streams, deletes old Qdrant vectors, and compacts Redis AOF.
+/// Called by launchd at 03:00 daily via `daneel --maintenance`.
+#[allow(clippy::too_many_lines)]
+#[cfg_attr(coverage_nightly, coverage(off))]
+fn run_maintenance(args: &Args) {
+    use qdrant_client::qdrant::{DeletePointsBuilder, ScrollPointsBuilder};
+
+    let filter = tracing_subscriber::EnvFilter::try_new(&args.log_level)
+        .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info"));
+    tracing_subscriber::registry()
+        .with(filter)
+        .with(tracing_subscriber::fmt::layer())
+        .init();
+
+    info!("DANEEL maintenance starting...");
+
+    let rt = tokio::runtime::Runtime::new().expect("Failed to create runtime");
+
+    rt.block_on(async {
+        // ── 1. Trim Redis streams ──
+        let redis_url =
+            env::var("REDIS_URL").unwrap_or_else(|_| "redis://127.0.0.1:6379".to_string());
+        let streams_trimmed = match redis::Client::open(redis_url.as_str()) {
+            Ok(client) => match client.get_multiplexed_async_connection().await {
+                Ok(mut conn) => {
+                    let streams = [
+                        "daneel:stream:awake",
+                        "daneel:stream:dream",
+                        "daneel:stream:salience",
+                        "daneel:stream:inject",
+                    ];
+                    let mut total_trimmed: u64 = 0;
+                    for stream in &streams {
+                        let trimmed: u64 = redis::cmd("XTRIM")
+                            .arg(stream)
+                            .arg("MAXLEN")
+                            .arg("~")
+                            .arg(1000)
+                            .query_async(&mut conn)
+                            .await
+                            .unwrap_or(0);
+                        if trimmed > 0 {
+                            info!("Trimmed {} entries from {}", trimmed, stream);
+                        }
+                        total_trimmed += trimmed;
+                    }
+                    info!(
+                        "Redis streams: {} total entries trimmed across {} streams",
+                        total_trimmed,
+                        streams.len()
+                    );
+                    true
+                }
+                Err(e) => {
+                    tracing::warn!("Redis connection failed: {}", e);
+                    false
+                }
+            },
+            Err(e) => {
+                tracing::warn!("Redis client creation failed: {}", e);
+                false
+            }
+        };
+
+        // ── 2. Delete old Qdrant vectors (>30 days) ──
+        let qdrant_url = env::var("QDRANT_URL").unwrap_or_else(|_| "http://localhost:6334".into());
+        match qdrant_client::Qdrant::from_url(&qdrant_url).build() {
+            Ok(qdrant) => {
+                let cutoff = (chrono::Utc::now() - chrono::Duration::days(30)).to_rfc3339();
+
+                let cleanup_targets = [
+                    (daneel::memory_db::collections::MEMORIES, "encoded_at"),
+                    (daneel::memory_db::collections::EPISODES, "started_at"),
+                    (daneel::memory_db::collections::UNCONSCIOUS, "archived_at"),
+                ];
+
+                for (collection, time_field) in &cleanup_targets {
+                    // Qdrant doesn't natively support date range filters on
+                    // string fields, so scroll all points and filter client-side.
+                    let mut offset: Option<qdrant_client::qdrant::PointId> = None;
+                    let mut deleted = 0u64;
+                    loop {
+                        let mut scroll = ScrollPointsBuilder::new((*collection).to_string())
+                            .limit(100)
+                            .with_payload(true);
+                        if let Some(ref o) = offset {
+                            scroll = scroll.offset(o.clone());
+                        }
+
+                        match qdrant.scroll(scroll).await {
+                            Ok(result) => {
+                                if result.result.is_empty() {
+                                    break;
+                                }
+
+                                let mut ids_to_delete = Vec::new();
+                                for point in &result.result {
+                                    if let Some(val) = point.payload.get(*time_field) {
+                                        if let Some(
+                                            qdrant_client::qdrant::value::Kind::StringValue(
+                                                date_str,
+                                            ),
+                                        ) = &val.kind
+                                        {
+                                            if date_str.as_str() < cutoff.as_str() {
+                                                ids_to_delete
+                                                    .push(point.id.clone().expect("point has id"));
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if !ids_to_delete.is_empty() {
+                                    let count = ids_to_delete.len() as u64;
+                                    let _ = qdrant
+                                        .delete_points(
+                                            DeletePointsBuilder::new((*collection).to_string())
+                                                .points(ids_to_delete)
+                                                .wait(true),
+                                        )
+                                        .await;
+                                    deleted += count;
+                                }
+
+                                offset = result.next_page_offset;
+                                if offset.is_none() {
+                                    break;
+                                }
+                            }
+                            Err(e) => {
+                                tracing::warn!("Failed to scroll {}: {}", collection, e);
+                                break;
+                            }
+                        }
+                    }
+
+                    if deleted > 0 {
+                        info!(
+                            "Deleted {} old points from {} (older than 30 days)",
+                            deleted, collection
+                        );
+                    } else {
+                        info!("{}: no points older than 30 days", collection);
+                    }
+                }
+            }
+            Err(e) => {
+                tracing::warn!("Qdrant connection failed: {}", e);
+            }
+        }
+
+        // ── 3. Compact Redis AOF ──
+        if streams_trimmed {
+            if let Ok(client) = redis::Client::open(redis_url.as_str()) {
+                if let Ok(mut conn) = client.get_multiplexed_async_connection().await {
+                    let _: Result<String, _> =
+                        redis::cmd("BGREWRITEAOF").query_async(&mut conn).await;
+                    info!("Redis BGREWRITEAOF triggered");
+                }
+            }
+        }
+
+        info!("DANEEL maintenance complete.");
+    });
 }
 
 /// Run memory migration and exit

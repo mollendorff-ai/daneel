@@ -13,7 +13,7 @@
 # Status: ACTIVE
 #
 # Current priorities:
-#   1. v0.10.1 - Observatory Bug Fixes (DONE)
+#   1. v0.10.2 - Native macOS Deployment (DONE)
 #   2. v0.11.0 - Live Fiction Infrastructure
 #   3. v0.12.0 - Audience Participation
 # =============================================================================
@@ -26,34 +26,57 @@
 # =============================================================================
 
 current:
+  version: "0.10.2"
+  status: done
+  name: "Native macOS Deployment"
+  summary: "Drop Docker Desktop, run natively on Apple Silicon via launchd"
+  adr: "ADR-056"
+
+  context: |
+    Docker Desktop runs a Linux VM on Apple Silicon. ONNX Runtime sees
+    "Unknown CPU vendor" and falls back to generic NEON → 150ms/cycle.
+    Native macOS gets CoreML/Metal acceleration → ~20-30ms/cycle.
+    Also eliminates 4-8GB RAM overhead from the VM.
+
+  tasks:
+    - id: "NATIVE-1"
+      title: "launchd plists for daneel, qdrant, daneel-web"
+      status: done
+      description: |
+        User-level LaunchAgents under ~/Library/LaunchAgents/.
+        Auto-start on login, KeepAlive for crash recovery.
+        All data under ~/.daneel/{bin,data,log,etc}.
+        Qdrant plist includes SoftResourceLimits for 65536 fds.
+
+    - id: "NATIVE-2"
+      title: "Makefile for install/start/stop/deploy/uninstall"
+      status: done
+      description: |
+        make install  — brew redis, download qdrant 1.16.3, build, install plists
+        make start    — launchctl load all
+        make stop     — launchctl unload all
+        make deploy   — build + restart
+        make uninstall — stop + remove everything
+
+    - id: "NATIVE-3"
+      title: "daneel --maintenance subcommand"
+      status: done
+      description: |
+        XTRIM redis streams (~1000 entries), delete qdrant points >30 days,
+        BGREWRITEAOF. Triggered by launchd timer at 03:00 daily.
+
+    - id: "NATIVE-4"
+      title: "Native redis via Homebrew (ADR-056)"
+      status: done
+      description: |
+        brew install redis (8.6.0). Replaces redis-stack-server.
+        RedisGraph no longer required — graceful degradation handles it.
+
+previous:
   version: "0.10.1"
   status: done
   name: "Observatory Bug Fixes"
   summary: "Fix dream consolidation, Dockerfile compat, and qdrant-client 1.16 vector API"
-
-  tasks:
-    - id: "OBS-1"
-      title: "Fix SleepActor mini_dream trigger logic"
-      status: done
-      description: |
-        should_sleep() never returned true because RecordActivity reset the idle
-        timer every cycle and idle_threshold_ms=0 meant 'idle > 0' (always false).
-        Fix: treat 0 as 'bypass' for idle, 'disabled' for awake duration.
-
-    - id: "OBS-2"
-      title: "Fix qdrant-client 1.16 deprecated VectorOutput.data"
-      status: done
-      description: |
-        update_consolidation, strengthen_association, cluster_memories, and
-        migrate_theta_m all used deprecated VectorOutput.data (empty in 1.16).
-        Fix: use get_vector() + Vector::Dense extraction (4 call sites).
-
-    - id: "OBS-3"
-      title: "Dockerfile: bookworm → trixie (GCC 14+ for ort-sys)"
-      status: done
-      description: |
-        ort-sys 2.x requires __cxa_call_terminate (GCC 14+ ABI). Bookworm has
-        GCC 12. Both build and runtime stages moved to debian:trixie[-slim].
 
 # =============================================================================
 # NEXT: v0.11.0 - Live Fiction Infrastructure
@@ -289,13 +312,14 @@ backlog:
 # =============================================================================
 infrastructure:
   current:
-    - "timmy.mollendorff.ai: Docker Compose on kveldulf (Hetzner ARM)"
-    - "Stack config: ~/src/swarm/stacks/daneel/"
-    - "Registry: registry.crypto1.ca/daneel[:web]:latest"
-    - "Plain Redis (RedisGraph deprecated — ADR-056)"
-    - "Qdrant on mollendorff overlay"
-    - "Dockerfile: debian:trixie (GCC 14+ required by ort-sys)"
-    - "macOS dev: docker CLI → kveldulf via SSH context"
+    - "berserker (macOS Apple Silicon): native binaries via launchd"
+    - "Redis 8.6 via Homebrew, Qdrant 1.16.3 native binary"
+    - "All data under ~/.daneel/{bin,data,log,etc}"
+    - "deploy/macos/Makefile for lifecycle management"
+    - "kveldulf (Ubuntu 24.04): Docker Swarm, traefik → berserker:3000"
+    - "timmy.mollendorff.ai routed via traefik on kveldulf"
+    - "Nightly maintenance at 03:00 via launchd timer"
+    - "RedisGraph deprecated (ADR-056), graceful degradation"
 
   planned:
     - id: "INFRA-1"
@@ -304,11 +328,10 @@ infrastructure:
       description: "Switch to plain redis, graceful degradation handles the rest"
     - id: "INFRA-2"
       title: "Nightly DB maintenance (cleanup timer)"
-      status: pending
+      status: done
       description: |
-        daneel --maintenance subcommand: XTRIM redis streams,
-        delete old qdrant points, BGREWRITEAOF.
-        Triggered by cron/timer on kveldulf.
+        daneel --maintenance: XTRIM redis streams, delete old qdrant
+        points, BGREWRITEAOF. launchd timer at 03:00 daily.
     - id: "INFRA-3"
       title: "In-process graph via petgraph (ADR-056 Phase 2)"
       status: backlog
