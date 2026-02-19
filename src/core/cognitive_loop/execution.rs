@@ -2,7 +2,7 @@
 //!
 //! Contains `run_cycle` and all helper methods for cognitive cycle execution.
 
-use rand::Rng;
+use rand::RngExt;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tracing::{debug, error, warn};

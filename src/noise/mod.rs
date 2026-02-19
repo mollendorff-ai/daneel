@@ -11,7 +11,7 @@
 //!
 //! See ADR-038 (External Stimuli Research) and ADR-043 (Noise Correction).
 
-use rand::Rng;
+use rand::RngExt;
 use std::time::{Duration, Instant};
 
 /// Pink noise generator using Voss-McCartney algorithm.
@@ -51,7 +51,7 @@ impl PinkNoiseGenerator {
     /// Generate next pink noise sample using Voss-McCartney algorithm.
     ///
     /// Returns a value in the range [-1.0, 1.0].
-    pub fn next(&mut self, rng: &mut impl Rng) -> f32 {
+    pub fn next(&mut self, rng: &mut impl RngExt) -> f32 {
         self.counter = self.counter.wrapping_add(1);
 
         // Update octaves based on counter bits
@@ -75,7 +75,7 @@ impl PinkNoiseGenerator {
     /// Generate next sample scaled to a specific variance.
     ///
     /// SORN research suggests σ² = 0.05 for criticality.
-    pub fn next_scaled(&mut self, rng: &mut impl Rng, variance: f32) -> f32 {
+    pub fn next_scaled(&mut self, rng: &mut impl RngExt, variance: f32) -> f32 {
         let raw = self.next(rng);
         // Scale to desired standard deviation (sqrt of variance)
         raw * variance.sqrt()
@@ -125,7 +125,7 @@ impl PowerLawBurstTimer {
     /// Sample next inter-arrival interval using inverse transform sampling.
     ///
     /// Returns a duration following power-law distribution.
-    pub fn sample_interval(&self, rng: &mut impl Rng) -> Duration {
+    pub fn sample_interval(&self, rng: &mut impl RngExt) -> Duration {
         // Inverse transform sampling for power-law: k = (1-u)^(-1/(α-1))
         let u: f32 = rng.random();
         let k = (1.0 - u + f32::EPSILON).powf(-1.0 / (self.alpha - 1.0));
@@ -134,7 +134,7 @@ impl PowerLawBurstTimer {
     }
 
     /// Check if it's time for a burst and schedule next if so.
-    pub fn check_and_schedule(&mut self, rng: &mut impl Rng) -> bool {
+    pub fn check_and_schedule(&mut self, rng: &mut impl RngExt) -> bool {
         if Instant::now() >= self.next_burst {
             self.next_burst = Instant::now() + self.sample_interval(rng);
             true
@@ -187,14 +187,14 @@ impl StimulusInjector {
     /// Generate a pink noise sample for salience perturbation.
     ///
     /// Returns a value scaled to the configured variance.
-    pub fn sample_pink(&mut self, rng: &mut impl Rng) -> f32 {
+    pub fn sample_pink(&mut self, rng: &mut impl RngExt) -> f32 {
         self.pink.next_scaled(rng, self.variance)
     }
 
     /// Check if a high-salience burst should occur.
     ///
     /// Returns true when it's time for a burst event.
-    pub fn check_burst(&mut self, rng: &mut impl Rng) -> bool {
+    pub fn check_burst(&mut self, rng: &mut impl RngExt) -> bool {
         self.bursts.check_and_schedule(rng)
     }
 
@@ -202,7 +202,7 @@ impl StimulusInjector {
     ///
     /// Base salience is modulated by pink noise, with occasional
     /// high-salience bursts following power-law timing.
-    pub fn modulate_salience(&mut self, rng: &mut impl Rng, base_salience: f32) -> f32 {
+    pub fn modulate_salience(&mut self, rng: &mut impl RngExt, base_salience: f32) -> f32 {
         let noise = self.sample_pink(rng);
         let is_burst = self.check_burst(rng);
 
