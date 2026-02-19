@@ -1,59 +1,117 @@
 # DANEEL Operations Runbook
 
 ## Architecture
-- Mac mini (berserker) running:
-  - daneel (cognitive loop) - launchd
-  - daneel-web (observatory) - launchd
-  - cloudflared (tunnel) - launchd
-  - Redis + Qdrant - Docker via Colima
+
+Mac mini (Apple Silicon) running natively:
+
+- Redis 8.x via Homebrew (`brew services`)
+- Qdrant 1.16.x native binary (`~/.daneel/bin/qdrant`)
+- daneel (cognitive loop) via launchd
+- daneel-web (observatory) via launchd
+- daneel --maintenance (nightly cleanup) via launchd timer at 03:00
+
+All daneel data lives under `~/.daneel/{bin,data,log,etc}`.
+
+External access via reverse proxy to port 3000.
+
+## CLI
+
+```bash
+timmy              # status (default)
+timmy start        # start all services
+timmy stop         # stop all services
+timmy restart      # stop + start
+timmy deploy       # rebuild daneel core + restart
+timmy deploy-web   # rebuild dashboard + restart
+timmy logs         # tail all logs
+timmy cleanup      # run maintenance now
+timmy thoughts     # live metrics summary
+```
+
+Symlink: `~/bin/timmy` -> `deploy/macos/timmy`
 
 ## Starting Everything (after reboot)
-1. Colima (Docker): `colima start`
-2. Docker containers: `cd ~/src/mollendorff/daneel && docker compose up -d`
-3. Services auto-start via launchd
+
+Redis auto-starts via `brew services`.
+All other services auto-start via launchd (`RunAtLoad`).
+
+If needed manually: `timmy start`
 
 ## Stopping Everything
-1. launchd services:
-   - `launchctl bootout gui/501/com.mollendorff.daneel`
-   - `launchctl bootout gui/501/com.mollendorff.daneel-web`
-   - `launchctl bootout gui/501/com.mollendorff.cloudflared`
-2. Docker: `docker compose down`
-3. Colima: `colima stop`
 
-## Restarting Individual Services
-- daneel: `launchctl kickstart -k gui/501/com.mollendorff.daneel`
-- daneel-web: `launchctl kickstart -k gui/501/com.mollendorff.daneel-web`
-- cloudflared: `launchctl kickstart -k gui/501/com.mollendorff.cloudflared`
+```bash
+timmy stop
+brew services stop redis   # if you also want redis down
+```
 
 ## Checking Status
-- `launchctl list | grep mollendorff`
-- `docker ps`
-- `curl http://localhost:3000/health`
-- `curl https://timmy.mollendorff.ai/health`
+
+```bash
+timmy status
+timmy thoughts
+curl http://localhost:3000/extended   # dashboard API
+curl https://timmy.mollendorff.ai/    # via reverse proxy
+```
 
 ## Logs
-- daneel: `tail -f ~/src/mollendorff/daneel/daneel.log`
-- daneel-web: `tail -f ~/src/mollendorff/daneel-web/daneel-web.log`
-- cloudflared: `tail -f ~/.cloudflared/tunnel.log`
-- Redis: `docker logs -f daneel-redis`
-- Qdrant: `docker logs -f daneel-qdrant`
 
-## Tunnel Configuration
-- Config: ~/.cloudflared/config.yml
-- Tunnel ID: 334769e7-09ee-4972-8616-2263dae52b1e
-- DNS: timmy.mollendorff.ai → Cloudflare Tunnel → localhost:3000
+All logs under `~/.daneel/log/`:
+
+```bash
+timmy logs                              # tail all
+tail -f ~/.daneel/log/daneel.log        # core only
+tail -f ~/.daneel/log/daneel-web.log    # dashboard only
+tail -f ~/.daneel/log/qdrant.log        # vector DB only
+```
+
+## Deploying Changes
+
+```bash
+timmy deploy       # rebuild daneel from source + restart
+timmy deploy-web   # rebuild daneel-web from source + restart
+```
+
+Or via Makefile directly:
+
+```bash
+make -C deploy/macos deploy
+make -C deploy/macos deploy-web
+```
+
+## Maintenance
+
+Runs automatically at 03:00 daily via launchd timer.
+To run manually: `timmy cleanup`
+
+What it does:
+
+- XTRIM Redis streams to ~1000 entries
+- Delete Qdrant points older than 30 days
+- BGREWRITEAOF to compact Redis
 
 ## launchd Plist Locations
-- ~/Library/LaunchAgents/com.mollendorff.daneel.plist
-- ~/Library/LaunchAgents/com.mollendorff.daneel-web.plist
-- ~/Library/LaunchAgents/com.mollendorff.cloudflared.plist
 
-## Docker Compose
-- Location: ~/src/mollendorff/daneel/docker-compose.yml
-- Volumes: daneel-redis-data, daneel-qdrant-data (external, persistent)
+- `~/Library/LaunchAgents/ai.mollendorff.daneel-qdrant.plist`
+- `~/Library/LaunchAgents/ai.mollendorff.daneel.plist`
+- `~/Library/LaunchAgents/ai.mollendorff.daneel-web.plist`
+- `~/Library/LaunchAgents/ai.mollendorff.daneel-cleanup.plist`
+
+Templates: `deploy/macos/*.plist` (use `envsubst` for `${DANEEL_HOME}`)
 
 ## Ports
+
 - 3000: daneel-web (observatory)
 - 3030: daneel injection API
-- 6379: Redis
-- 6333-6334: Qdrant
+- 6379: Redis (localhost only)
+- 6333: Qdrant HTTP (localhost only)
+- 6334: Qdrant gRPC (localhost only)
+
+## Docker (development only)
+
+The `compose.yaml` in the repo root is for local development / CI.
+Production runs natively via launchd (see above).
+
+```bash
+docker compose up --build    # build and run everything in Docker
+docker compose down          # stop
+```
