@@ -46,7 +46,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 clap = { version = "4", features = ["derive"] }
 
 # Random (for cognitive noise/variance)
-rand = "0.9"
+rand = "0.10"
 
 # HTTP API (Phase 2 - Injection API)
 axum = "0.8"
