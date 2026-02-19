@@ -289,13 +289,32 @@ backlog:
 # =============================================================================
 infrastructure:
   current:
-    - "timmy.mollendorff.ai: Docker Compose (berserker, Hetzner ARM)"
+    - "timmy.mollendorff.ai: Docker Compose on kveldulf (Hetzner ARM)"
     - "Stack config: ~/src/swarm/stacks/daneel/"
     - "Registry: registry.crypto1.ca/daneel[:web]:latest"
-    - "Redis Stack + Qdrant on mollendorff overlay"
+    - "Plain Redis (RedisGraph deprecated — ADR-056)"
+    - "Qdrant on mollendorff overlay"
     - "Dockerfile: debian:trixie (GCC 14+ required by ort-sys)"
+    - "macOS dev: docker CLI → kveldulf via SSH context"
 
   planned:
+    - id: "INFRA-1"
+      title: "Drop RedisGraph dependency (ADR-056 Phase 1)"
+      status: done
+      description: "Switch to plain redis, graceful degradation handles the rest"
+    - id: "INFRA-2"
+      title: "Nightly DB maintenance (cleanup timer)"
+      status: pending
+      description: |
+        daneel --maintenance subcommand: XTRIM redis streams,
+        delete old qdrant points, BGREWRITEAOF.
+        Triggered by cron/timer on kveldulf.
+    - id: "INFRA-3"
+      title: "In-process graph via petgraph (ADR-056 Phase 2)"
+      status: backlog
+      description: |
+        Replace RedisGraph with petgraph crate. Hydrate from Qdrant
+        on startup, BFS in-process, serialize on shutdown.
     - "Public-facing observatory with rate limiting"
     - "CDN for static assets (Cloudflare)"
     - "Monitoring for engagement metrics"
