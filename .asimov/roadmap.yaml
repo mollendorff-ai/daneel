@@ -344,6 +344,13 @@ infrastructure:
         rand 0.9→0.10 (Rng→RngExt rename), fastembed 5.9→5.11,
         clap 4.5.59→4.5.60, redis 1.0.3→1.0.4, native-tls 0.2.16→0.2.18.
         ndarray 0.16→0.17 blocked by linfa 0.8.1 (no compatible release).
+    - id: "INFRA-5"
+      title: "timmy reset + daily reset timer"
+      status: done
+      description: |
+        `timmy reset` stops daneel+web, drops qdrant collections, flushes
+        redis daneel:* keys, restarts. Daily launchd timer at 04:00.
+        Without audience injection, long runs are just noise accumulation.
     - "Public-facing observatory with rate limiting"
     - "CDN for static assets (Cloudflare)"
     - "Monitoring for engagement metrics"

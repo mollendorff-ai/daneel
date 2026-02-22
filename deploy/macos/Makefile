@@ -34,6 +34,7 @@ LABEL_QDRANT  := ai.mollendorff.daneel-qdrant
 LABEL_DANEEL  := ai.mollendorff.daneel
 LABEL_WEB     := ai.mollendorff.daneel-web
 LABEL_CLEANUP := ai.mollendorff.daneel-cleanup
+LABEL_RESET   := ai.mollendorff.daneel-reset
 
 .PHONY: install uninstall start stop restart status logs deploy deploy-web cleanup build build-web dirs deps qdrant plists
 
@@ -92,6 +93,9 @@ plists:
 	@DANEEL_HOME="$(DANEEL_HOME)" envsubst < $(DANEEL_REPO)/deploy/macos/ai.mollendorff.daneel.plist > $(PLIST_DIR)/$(LABEL_DANEEL).plist
 	@DANEEL_HOME="$(DANEEL_HOME)" envsubst < $(DANEEL_REPO)/deploy/macos/ai.mollendorff.daneel-web.plist > $(PLIST_DIR)/$(LABEL_WEB).plist
 	@DANEEL_HOME="$(DANEEL_HOME)" envsubst < $(DANEEL_REPO)/deploy/macos/ai.mollendorff.daneel-cleanup.plist > $(PLIST_DIR)/$(LABEL_CLEANUP).plist
+	@DANEEL_HOME="$(DANEEL_HOME)" envsubst < $(DANEEL_REPO)/deploy/macos/ai.mollendorff.daneel-reset.plist > $(PLIST_DIR)/$(LABEL_RESET).plist
+	@cp $(DANEEL_REPO)/deploy/macos/daily-reset.sh $(DANEEL_HOME)/bin/daily-reset.sh
+	@chmod +x $(DANEEL_HOME)/bin/daily-reset.sh
 	@echo "Config and plists installed"
 
 # ─────────────────────────────────────────────────────────────────────
@@ -106,10 +110,12 @@ start:
 	@launchctl load -w $(PLIST_DIR)/$(LABEL_DANEEL).plist 2>/dev/null || true
 	@launchctl load -w $(PLIST_DIR)/$(LABEL_WEB).plist 2>/dev/null || true
 	@launchctl load -w $(PLIST_DIR)/$(LABEL_CLEANUP).plist 2>/dev/null || true
+	@launchctl load -w $(PLIST_DIR)/$(LABEL_RESET).plist 2>/dev/null || true
 	@echo "All services started. Dashboard: http://localhost:3000"
 
 stop:
 	@echo "── Stopping DANEEL ──"
+	@launchctl unload $(PLIST_DIR)/$(LABEL_RESET).plist 2>/dev/null || true
 	@launchctl unload $(PLIST_DIR)/$(LABEL_CLEANUP).plist 2>/dev/null || true
 	@launchctl unload $(PLIST_DIR)/$(LABEL_WEB).plist 2>/dev/null || true
 	@launchctl unload $(PLIST_DIR)/$(LABEL_DANEEL).plist 2>/dev/null || true
@@ -165,5 +171,6 @@ uninstall: stop
 	@rm -f $(PLIST_DIR)/$(LABEL_DANEEL).plist
 	@rm -f $(PLIST_DIR)/$(LABEL_WEB).plist
 	@rm -f $(PLIST_DIR)/$(LABEL_CLEANUP).plist
+	@rm -f $(PLIST_DIR)/$(LABEL_RESET).plist
 	@rm -rf $(DANEEL_HOME)
 	@echo "DANEEL uninstalled. Redis left in place (brew services stop redis to remove)."
