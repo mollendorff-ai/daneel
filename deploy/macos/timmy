@@ -70,6 +70,31 @@ cmd_cleanup() {
     "$DANEEL_HOME/bin/daneel" --maintenance
 }
 
+cmd_reset() {
+    echo "resetting Timmy..."
+
+    # Stop daneel + web (keep qdrant + redis running for wipe)
+    launchctl unload "$PLIST_DIR/$label_web.plist" 2>/dev/null || true
+    launchctl unload "$PLIST_DIR/$label_daneel.plist" 2>/dev/null || true
+    sleep 2
+
+    # Wipe Qdrant collections
+    for c in memories episodes identity unconscious; do
+        curl -sf -X DELETE "http://127.0.0.1:6333/collections/$c" >/dev/null 2>&1
+    done
+    echo "  qdrant: collections dropped"
+
+    # Wipe Redis daneel keys
+    redis-cli KEYS 'daneel:*' 2>/dev/null | xargs -r redis-cli DEL >/dev/null 2>&1
+    echo "  redis: keys flushed"
+
+    # Restart — collections auto-created by connect_and_init()
+    launchctl load -w "$PLIST_DIR/$label_daneel.plist" 2>/dev/null || true
+    sleep 2
+    launchctl load -w "$PLIST_DIR/$label_web.plist" 2>/dev/null || true
+    echo "reset complete — fresh start at http://localhost:3000"
+}
+
 cmd_thoughts() {
     curl -s https://timmy.mollendorff.ai/extended 2>/dev/null | \
         python3 -c "
@@ -101,6 +126,7 @@ timmy — DANEEL lifecycle control
   timmy deploy-web  rebuild dashboard + restart
   timmy logs        tail all logs
   timmy cleanup     run maintenance now
+  timmy reset       stop, wipe DB, restart fresh
   timmy thoughts    live metrics summary
 USAGE
 }
@@ -114,6 +140,7 @@ case "${1:-status}" in
     deploy-web) cmd_deploy_web ;;
     logs)       cmd_logs ;;
     cleanup)    cmd_cleanup ;;
+    reset)      cmd_reset ;;
     thoughts)   cmd_thoughts ;;
     help|-h|--help) usage ;;
     *)          echo "unknown: $1" && usage && exit 1 ;;
