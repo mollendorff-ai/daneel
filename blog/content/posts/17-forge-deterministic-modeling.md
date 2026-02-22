@@ -152,7 +152,7 @@ LLMs are trained on 13.4M YAML files. Not spreadsheets.
 | Excel (XML) | ~100,000 | Low |
 | YAML | ~2,000 | High |
 
-**50x fewer tokens. Native comprehension.**
+**10-15x fewer tokens. Native comprehension.**
 
 ## Why YAML?
 
