@@ -1,5 +1,10 @@
 # DANEEL
 
+[![CI](https://github.com/mollendorff-ai/daneel/actions/workflows/ci.yml/badge.svg)](https://github.com/mollendorff-ai/daneel/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-1005_passing-brightgreen)](https://github.com/mollendorff-ai/daneel)
+[![ADRs](https://img.shields.io/badge/ADRs-56-blue)](https://github.com/mollendorff-ai/daneel/tree/main/docs/adr)
+[![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%2FApache--2.0-blue.svg)](LICENSE-MIT)
+
 > 📌 **R&D Prototype** — Interpret claims as hypotheses, not proven facts.
 
 [Timmy/DANEEL "Brain Observatory"](https://timmy.mollendorff.ai)
