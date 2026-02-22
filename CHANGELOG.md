@@ -44,7 +44,7 @@ deprecation, Dockerfile glibc compatibility, and SleepActor trigger logic.
 
 ## [0.10.0] - 2026-02-16 - Open-Source Release
 
-### Rebranding: RoyalBit to Möllendorff Group Inc.
+### Rebranding: RoyalBit to Möllendorff AI
 
 Complete organizational rebrand to disassociate from cryptocurrency scammers who hijacked the RoyalBit name.
 73 files updated; 26 historical references intentionally preserved in dialogue transcripts and changelog.

@@ -325,4 +325,4 @@ If you encounter issues with specific URLs or have feature requests, contact: lo
 
 **Version:** 1.0.0
 **Last Updated:** 2025-12-19
-**Maintainer:** Möllendorff Group Inc.
+**Maintainer:** Möllendorff AI
