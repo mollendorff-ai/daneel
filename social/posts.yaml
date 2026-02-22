@@ -319,7 +319,7 @@ posts:
 
     Forge: YAML-based financial modeling with Excel formula evaluation.
 
-    Same model in YAML? Under 2K tokens. That's 50x savings.
+    Same model in YAML? Under 2K tokens. That's 10-15x savings (measured via tiktoken).
 
     But more importantly: deterministic calculation. No hallucinations. No guessing. No prayers.
 
@@ -369,7 +369,7 @@ posts:
     Coverage: 100%
     Warnings: 0
     External validators: Gnumeric and R
-    Token savings: 50x vs Excel
+    Token savings: 10-15x vs Excel (measured)
 
     THE ORIGIN
 

@@ -225,7 +225,7 @@ AI proposes → Human defines YAML → Forge calculates → Gnumeric verifies �
 YAML is the optimal format for AI-assisted financial modeling:
 
 **Token efficiency:**
-- **50x fewer tokens** than equivalent Excel models
+- **10-15x fewer tokens** than equivalent Excel models
 - LLMs can process larger models within context windows
 - Faster generation, lower API costs
 

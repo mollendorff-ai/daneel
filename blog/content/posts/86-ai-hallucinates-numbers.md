@@ -40,7 +40,7 @@ Here's what happens when you paste a spreadsheet into Claude or GPT:
 
 The math: A 50KB Excel file burns 100K+ tokens when parsed. The same model in YAML? **Under 2K tokens.**
 
-That's 50x savings. But it gets worse.
+That's 10-15x savings (measured via tiktoken). But it gets worse.
 
 AI doesn't just burn tokens on Excel. It **hallucinates the formulas**. It guesses what `B7:G42` means. It invents relationships. It sounds confident.
 
@@ -171,7 +171,7 @@ Elastic-2.0 balances both.
 | Coverage | 100% |
 | Warnings | 0 |
 | External validators | 2 (Gnumeric, R) |
-| Token savings | 50x vs Excel |
+| Token savings | 10-15x vs Excel (measured) |
 
 ---
 
