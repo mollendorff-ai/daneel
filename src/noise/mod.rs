@@ -379,7 +379,7 @@ mod tests {
         let mut timer = PowerLawBurstTimer::new(
             1.2,
             Duration::from_secs(10), // Long minimum interval
-            Duration::from_secs(60),
+            Duration::from_mins(1),
         );
         let mut rng = rand::rng();
 

@@ -164,6 +164,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::float_cmp)] // exact 0.0 is the documented sentinel
     fn test_wrong_dimension_returns_zero() {
         let mut module = CuriosityModule::new(CuriosityConfig::default());
         assert_eq!(module.calculate_surprise(&[1.0, 2.0, 3.0]), 0.0);

@@ -20,7 +20,7 @@ The implementation ended up being a blend of mainstream ideas rather than a fait
 | Affective Science | Russell's circumplex model | Emotional coloring (valence × arousal) |
 | Cognitive Architectures | ACT-R, SOAR, LIDA timing models | Actor-based cognitive loop (~260ms cycles) |
 
-See `references.yaml` for 170+ academic citations.
+See `references.yaml` for ~150 academic citations.
 
 **TMI was the inspiration.
 Mainstream cognitive research is the (attempted) implementation.**
@@ -87,7 +87,7 @@ Despite all disclaimers, there might be some legitimate value:
 - **Novel experiment**: Attempting architecture-first alignment instead of training-based constraints.
 - **Criticality dynamics**: Testing whether pink noise produces edge-of-chaos behavior in cognitive streams.
 - **Vector topology**: Whether Hebbian edges can form meaningful semantic graphs at runtime.
-- **Fun codebase**: Complex Rust, 400+ tests, 46 ADRs, actor-based architecture.
+- **Fun codebase**: Complex Rust, 1,000+ unit tests, 56 ADRs, a stream-based cognitive loop.
 
 If nothing else, it's an interesting coding project.
 

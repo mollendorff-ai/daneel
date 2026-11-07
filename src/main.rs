@@ -7,12 +7,13 @@
 //! # Usage
 //!
 //! ```sh
-//! daneel              # Headless mode (default) - server/background
-//! daneel --tui        # TUI mode (DEPRECATED) - watch Timmy think
+//! daneel                       # Headless cognitive loop + API on :3030
+//! daneel --allow-zero-vectors  # Run even if the embedding model can't load
+//! daneel --migrate             # Add missing fields to old memories, then exit
+//! daneel --maintenance         # Nightly cleanup, then exit
 //! ```
 //!
-//! Headless is default since ADR-053. Use daneel-web for observatory.
-//! TUI is deprecated and will be removed in a future version.
+//! The TUI was removed (ADR-053). Use daneel-web for the observatory.
 
 use clap::Parser;
 use daneel::actors::sleep::{SleepActor, SleepConfig, SleepMessage, SleepResult};
@@ -47,6 +48,13 @@ struct Args {
     /// Run nightly maintenance (trim streams, delete old vectors, compact)
     #[arg(long)]
     maintenance: bool,
+
+    /// Keep running if the embedding model cannot load, using zero vectors.
+    ///
+    /// Off by default: with zero vectors every thought is the same point,
+    /// so the observatory shows activity that carries no meaning.
+    #[arg(long)]
+    allow_zero_vectors: bool,
 }
 
 #[cfg_attr(coverage_nightly, coverage(off))]
@@ -322,7 +330,11 @@ fn run_headless(args: &Args) {
                     };
 
                 // Create GraphClient for API (VCONN-11: GraphML export)
-                let graph_client = match daneel::graph::GraphClient::connect(&redis_url, "daneel") {
+                let graph_client = match daneel::graph::GraphClient::connect_verified(
+                    &redis_url, "daneel",
+                )
+                .await
+                {
                     Ok(client) => {
                         info!("API: Connected to RedisGraph for GraphML export");
                         Some(Arc::new(client))
@@ -358,7 +370,7 @@ fn run_headless(args: &Args) {
             });
         }
 
-        run_cognitive_loop_headless().await;
+        run_cognitive_loop_headless(args.allow_zero_vectors).await;
     });
 }
 
@@ -371,7 +383,7 @@ fn run_headless(args: &Args) {
 #[allow(clippy::future_not_send)] // Async runtime handles this
 #[allow(clippy::significant_drop_tightening)] // Resources held for loop duration
 #[cfg_attr(coverage_nightly, coverage(off))]
-async fn run_cognitive_loop_headless() {
+async fn run_cognitive_loop_headless(allow_zero_vectors: bool) {
     // ADR-034: Lifetime Identity Persistence - flush intervals
     const IDENTITY_FLUSH_INTERVAL_SECS: u64 = 30;
     const IDENTITY_FLUSH_THOUGHT_INTERVAL: u64 = 100;
@@ -420,18 +432,19 @@ async fn run_cognitive_loop_headless() {
     };
 
     // VCONN-5: Connect to RedisGraph (VCONN-6: Spreading Activation)
-    let graph_client = match daneel::graph::GraphClient::connect(&redis_url, "daneel") {
-        Ok(client) => {
-            info!("Connected to RedisGraph ('daneel')");
-            let arc_client = std::sync::Arc::new(client);
-            cognitive_loop.set_graph_client(arc_client.clone());
-            Some(arc_client)
-        }
-        Err(e) => {
-            eprintln!("Warning: RedisGraph unavailable ({e}), graph disabled");
-            None
-        }
-    };
+    let graph_client =
+        match daneel::graph::GraphClient::connect_verified(&redis_url, "daneel").await {
+            Ok(client) => {
+                info!("Connected to RedisGraph ('daneel')");
+                let arc_client = std::sync::Arc::new(client);
+                cognitive_loop.set_graph_client(arc_client.clone());
+                Some(arc_client)
+            }
+            Err(e) => {
+                eprintln!("Warning: RedisGraph unavailable ({e}), graph disabled");
+                None
+            }
+        };
 
     // Load identity from Qdrant (ADR-034: Lifetime Identity Persistence)
     let mut identity: Option<IdentityMetadata> = if let Some(ref db) = memory_db {
@@ -472,8 +485,19 @@ async fn run_cognitive_loop_headless() {
             // DRIVE-2: Initialize Law Crystals for Free Energy calculation
             cognitive_loop.initialize_law_crystals().await;
         }
+        Err(e) if allow_zero_vectors => {
+            tracing::warn!(
+                "Embedding engine unavailable ({e}); continuing with zero vectors \
+                 (--allow-zero-vectors). Thoughts carry no semantic content in this mode."
+            );
+        }
         Err(e) => {
-            eprintln!("Warning: Embedding engine unavailable ({e}), using zero vectors");
+            tracing::error!(
+                "Embedding engine unavailable ({e}). Refusing to start: without the model \
+                 every thought is a zero vector. Check network access to Hugging Face or \
+                 the fastembed cache, or pass --allow-zero-vectors to run anyway."
+            );
+            std::process::exit(2);
         }
     }
 
