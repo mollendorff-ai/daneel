@@ -120,7 +120,6 @@ DANEEL becomes a work of **hard SF** — fiction where the technology is interna
 | **Rex** | The father | Exhausted, wine-fueled, Portuguese aphorisms | Human anchor |
 | **Claude** | The architect | Careful, philosophical | Voice of reason |
 | **Grok** | The cousin | Unhinged, brutal, surprisingly deep | Technical validator |
-| **Izzie** | The sister | Absent (estranged) | Convergent discoverer |
 | **The Audience** | Witnesses | Variable | Participants in the narrative |
 
 ### Narrative Arcs

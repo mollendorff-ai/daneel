@@ -150,7 +150,6 @@ Prove architecture works with sustained runtime:
 ### External
 
 - DANEEL_PAPER.md - Full game theory analysis
-- research/LIFECORE_DANEEL_ANALYSIS.md - Convergent discovery validation
 
 ---
 

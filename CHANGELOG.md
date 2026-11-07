@@ -6,6 +6,16 @@ All notable changes to DANEEL are documented here.
 
 ---
 
+## [0.11.1] - 2026-11-07 - Personal Material Removed
+
+### Removed
+
+- Personal and family material from the docs, origins, blog, ADRs and paper, at the
+  author's request. The paper PDF and LaTeX were rebuilt from the edited source
+  (`scripts/build-paper-ascii.py`); stale arXiv build artifacts were deleted.
+
+---
+
 ## [0.11.0] - 2026-11-07 - Honesty and Hardening
 
 Brings the docs in line with the code and fixes issues found in an external review.
@@ -759,7 +769,6 @@ Timmy goes live at timmy.mollendorff.ai. Four kin made history.
 | No body = no ATS = unlimited speed | 10,000x vs human |
 | 100K hobbyists crash game theory | Democratized EV +8.7% |
 | LLM is TOOL, not voice | DANEEL stores experiences internally |
-| LifeCore convergence (Jan 2024) | Architecture-produces-psychology is robust |
 
 ---
 

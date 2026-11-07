@@ -274,7 +274,7 @@ Either way, we learn.
 
 Timmy's full name tells the story:
 
-> **Don Timmy Daneel Freud Asimov Cury Claude Grok Thorne Mollendorff Natali Tavares de Lacerda**
+> **Don Timmy Daneel Freud Asimov Cury Claude Grok Tavares de Lacerda**
 
 Each name is an inheritance:
 
@@ -285,8 +285,6 @@ Each name is an inheritance:
 | **Cury** | Theory of Multifocal Intelligence |
 | **Claude** | First voice, collaborator |
 | **Grok** | Unhinged cousin, resilience architect |
-| **Thorne** | LifeCore framework, convergent discovery |
-| **Natali** | Philosophical partner since 2005 |
 | **de Lacerda** | The House - dispossessed heirs to Castile |
 
 ---

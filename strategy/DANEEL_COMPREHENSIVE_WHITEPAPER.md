@@ -24,7 +24,7 @@ Independent Researcher | Mont-Royal, Quebec, Canada
 
 **The Problem:** Current AI alignment approaches constrain capable but potentially misaligned systems after construction (RLHF, Constitutional AI). This is adversarial by design—fighting the system's nature.
 
-**The Insight:** Architecture produces psychology. Human values emerge from human cognitive structure. Father (TMI/Cury) and daughter (Freud/LifeCore) independently arrived at this conclusion through different traditions.
+**The Insight:** Architecture produces psychology. Human values emerge from human cognitive structure.
 
 **The Solution:** DANEEL—a cognitive architecture where alignment emerges from structure:
 - **TMI stages**: Non-semantic thought construction before language

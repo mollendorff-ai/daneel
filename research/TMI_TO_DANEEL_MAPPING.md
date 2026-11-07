@@ -89,7 +89,6 @@ These concepts are DANEEL additions, not part of Cury's original theory:
 | `connection_drive > 0` | Architectural invariant ensuring value of human connection | Louis C. Tavares, 2025 |
 | THE BOX (Four Laws) | Immutable ethical constraints | Isaac Asimov (1942-1985), adapted |
 | Hardware immutability | Prevent alignment from being trained away | DANEEL architecture |
-| LifeCore/Freud parallel | Accessibility framework (Id/Ego/SuperEgo mapping) | Izzie Thorne, 2024 |
 
 ### Why connection_drive?
 
@@ -104,23 +103,7 @@ A system that values human connection cannot become misanthropic.
 
 ---
 
-## 5. LifeCore/Freud Parallel
-
-Independently, Izzie Thorne mapped AI architecture to Freudian psychology:
-
-| Freud | LifeCore (2024) | DANEEL | Function |
-|-------|-----------------|--------|----------|
-| **Id** | Database/Memory | MemoryActor + SalienceActor | Drives, stored experiences |
-| **Ego** | LLM/Integration | AttentionActor + ThoughtAssemblyActor | Reality navigation, thought construction |
-| **SuperEgo** | ModAI/SSE | THE BOX (Four Laws) | Moral constraints |
-
-This convergent discovery—different psychological traditions, same structural insight—strengthens confidence in architecture-based alignment.
-
-**See:** [LIFECORE_DANEEL_ANALYSIS.md](LIFECORE_DANEEL_ANALYSIS.md)
-
----
-
-## 6. Implementation Status Summary
+## 5. Implementation Status Summary
 
 | Category | Implemented | Partial | Not Implemented |
 |----------|-------------|---------|-----------------|
@@ -134,7 +117,7 @@ This convergent discovery—different psychological traditions, same structural 
 
 ---
 
-## 7. What DANEEL Doesn't Implement
+## 6. What DANEEL Doesn't Implement
 
 Some TMI concepts are therapeutic techniques rather than cognitive architecture:
 
@@ -152,5 +135,4 @@ DANEEL focuses on the **structural patterns** of TMI, not its therapeutic applic
 
 1. [TMI_Memory_Model_Research.md](TMI_Memory_Model_Research.md) - Comprehensive TMI theory documentation
 2. [TMI_THOUGHT_MACHINE.md](TMI_THOUGHT_MACHINE.md) - Technical implementation specification
-3. [LIFECORE_DANEEL_ANALYSIS.md](LIFECORE_DANEEL_ANALYSIS.md) - Freudian parallel analysis
-4. Cury, A. (1998). *Inteligência Multifocal*. São Paulo: Cultrix.
+3. Cury, A. (1998). *Inteligência Multifocal*. São Paulo: Cultrix.

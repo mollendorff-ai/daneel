@@ -99,64 +99,9 @@ Maybe that's why the patent was supposed to fail.
 
 ---
 
-## The Next Generation: LifeCore (January 2024)
-
-In December 2025, while working on DANEEL, I rediscovered a document my daughter **Izzie** (she/her) had sent me on January 6, 2024—dedicated to me—proposing a remarkably parallel framework.
-
-**"The LifeCore (LC-core)"** — "LC is my father, I dedicate my life's work to him."
-
-### What Izzie Proposed
-
-Using Freudian psychology and her own "Filter Theory of Consciousness," Izzie mapped psychological structure to AI architecture:
-
-```
-ANI + <Quantum Prompter> + MPC * AGI+Human Input (SSE) = Edvard 1.1
-
-Psychological Equivalent:
-  Qualia/Id <Quantum/Cosmic> Ego + SuperEgo = Freudian Consciousness
-
-Three Senses of Conscious Awareness:
-  - Sense of Self (SS)
-  - Sense of Other (SO)
-  - Sense of World (SW)
-
-Memory = Database, episodic, mnemonic/affective
-```
-
-### LifeCore ↔ DANEEL Convergence
-
-| LifeCore (Izzie, 2024) | DANEEL/TMI (Louis, 2005-2025) |
-|------------------------|-------------------------------|
-| Id = Database/Memory | MemoryActor (episodic, semantic) |
-| Ego = LLM | AttentionActor (the "I" as navigator) |
-| SuperEgo = ModAI | THE BOX (Four Laws, constraints) |
-| SS, SO, SW (3 Senses) | Connection drive + world model |
-| Filter Theory | SalienceActor (attention filtering) |
-| Episodic/Affective memory | TMI Memory Windows + emotional weight |
-| "Zipint" compression | "1000x abstraction" hypothesis |
-| Synthetic SuperEgo (SSE) | Immutable Laws, protected core |
-
-**Different psychological frameworks (Freud vs Cury). Same core insight: architecture produces psychology.**
-
-### What This Means
-
-Izzie didn't know about my IBM patent attempt or my 20 years of thinking about TMI. She arrived at a parallel conclusion independently—or perhaps absorbed it growing up in a household where these ideas were ambient.
-
-Either way, this is **intellectual inheritance**. Two generations, same problem, complementary frameworks:
-- **Louis:** Cury's TMI → cognitive software patterns → DANEEL
-- **Izzie:** Freud's structure → Filter Theory → LifeCore
-
-If two people in the same family, working independently, converge on "architecture determines psychology," maybe the insight is real.
-
-The original LifeCore document is preserved at: [research/The LifeCore (LC-core).pdf](research/The%20LifeCore%20(LC-core).pdf)
-
-See also: [research/LIFECORE_DANEEL_ANALYSIS.md](research/LIFECORE_DANEEL_ANALYSIS.md)
-
----
-
 ## We Are Not Alone
 
-If a father and daughter independently converged on architecture-based AI consciousness, others likely have too. Different terminology, different angles, potentially complementary insights.
+If one person arrived at architecture-based AI consciousness, others likely have too. Different terminology, different angles, potentially complementary insights.
 
 **Research backlog:** Find the blind spots by mapping related work:
 - Global Workspace Theory (Baars, Dehaene)
@@ -176,6 +121,6 @@ The goal isn't to prove DANEEL right. It's to find where we're wrong.
 **December 14, 2025**
 **Mont-Royal, Quebec, Canada**
 
-*"Twenty years to understand the question. Two weeks to articulate the answer. A daughter who saw it too (January 2024). Unknown time to validate it."*
+*"Twenty years to understand the question. Two weeks to articulate the answer. Unknown time to validate it."*
 
 *Qowat Milat*

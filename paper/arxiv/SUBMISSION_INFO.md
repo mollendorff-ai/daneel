@@ -9,8 +9,6 @@ DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintellig
    - ORCID: 0009-0005-7598-8257
    - Email: [your email]
 
-2. **Izzie Thorne**
-   - Affiliation: Independent Researcher (LifeCore Framework, Filter Theory)
 
 ## Categories
 - **Primary:** cs.AI (Artificial Intelligence)
@@ -21,9 +19,7 @@ Current approaches to AI alignment apply constraints to opaque systems (RLHF, Co
 
 Core thesis: Architecture produces psychology. Structure determines values.
 
-DANEEL synthesizes insights from multiple frameworks: Freud (1923) on psychological architecture, Asimov (1942-1985) on ethical constraints as invariants, Cury (1998) on pre-linguistic thought construction via Theory of Multifocal Intelligence, and LifeCore (2024) providing independent convergent discovery via Freudian Filter Theory.
-
-This convergence—father and daughter arriving at the same structural insight through different psychological traditions—suggests the approach may be robust.
+DANEEL synthesizes insights from multiple frameworks: Freud (1923) on psychological architecture, Asimov (1942-1985) on ethical constraints as invariants, and Cury (1998) on pre-linguistic thought construction via Theory of Multifocal Intelligence.
 
 We present a modular monolith architecture (Rust + Ractor actors + Redis Streams) with a protected immutable core ("THE BOX") containing Asimov's Four Laws including the Zeroth Law. Rather than constraining dangerous systems after the fact, DANEEL aims to build humanity's ally through structure—alignment as an emergent property of architecture, not a trained behavior.
 

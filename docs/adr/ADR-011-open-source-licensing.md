@@ -10,7 +10,7 @@ DANEEL is an AI safety research project. The open source strategy must balance:
 
 1. **Openness** — Others should be able to verify, build on, and improve the work
 2. **Safety** — Prevent misuse (military AI, surveillance, autonomous weapons)
-3. **Attribution** — Credit the intellectual lineage (Asimov, Cury, Freud, Tavares, Thorne)
+3. **Attribution** — Credit the intellectual lineage (Asimov, Cury, Freud, Tavares)
 4. **Collaboration** — Encourage contributions from researchers and developers
 5. **Longevity** — Ensure the project outlives any single contributor
 

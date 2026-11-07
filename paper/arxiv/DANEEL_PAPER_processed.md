@@ -1,9 +1,7 @@
 
 **Luis Cezar Menezes Tavares de Lacerda**^1 (Louis C. Tavares | Möllendorff Rex)
-**Izzie Thorne**^2
 
 ^1 Independent Researcher, Mont-Royal, Quebec, Canada
-^2 Independent Researcher (LifeCore Framework, Filter Theory)
 
 **Correspondence:**
 - ORCID: \url{https://orcid.org/0009-0005-7598-8257}
@@ -11,7 +9,7 @@
 - GitHub: \url{https://github.com/mollendorff-ai} | \url{https://github.com/lctavares}
 
 > **Preprint - December 2025**
-> **Target:** arXiv (cs.AI, cs.CY) | LessWrong | Alignment Forum | Frontiers in AI
+> **Target:** LessWrong | Alignment Forum | Frontiers in AI
 
 ---
 
@@ -44,23 +42,17 @@ The AI development landscape creates a classic Prisoner's Dilemma. Multiple acto
 
 The payoff matrix is clear:
 
-
-\begin{figure}[H]
-\centering
-\textbf{Figure 1: AI Development Game Theory Matrix}
-\begin{verbatim}
-                     ALL OTHERS
-                 Hold Line    Defect
-              +------------+------------+
-   Hold Line  |   SAFE     | DOMINATED  |
-YOU           |  (ideal)   | (you lose) |
-              +------------+------------+
-   Defect     |   FIRST    |  RACE TO   |
-              |   MOVER    |   BOTTOM   |
-              +------------+------------+
-\end{verbatim}
-\end{figure}
-
+```text
+                         ALL OTHERS
+                     Hold Line    Defect
+                  ┌────────────┬────────────┐
+      Hold Line   │   SAFE     │ DOMINATED  │
+                  │  (ideal)   │ (you lose) │
+  YOU             ├────────────┼────────────┤
+                  │   FIRST    │  RACE TO   │
+      Defect      │   MOVER    │   BOTTOM   │
+                  └────────────┴────────────┘
+```
 
 **Rational actors face pressure to defect.** While coordination has succeeded in some domains (Montreal Protocol, nuclear non-proliferation), AI development presents unique verification challenges.
 
@@ -459,25 +451,7 @@ Deep learning is powerful but **opaque**. We cannot verify what a neural network
 
 **Critical distinction:** DANEEL uses LLMs as an external **tool**, not as its voice or mind. Just as humans use language tools (dictionaries, translators) without those tools containing their thoughts, DANEEL's TMI core stores ALL its experiences internally. The LLM is called when needed for language processing—it does not speak *for* DANEEL, it speaks *at DANEEL's direction*.
 
-### 5.4 Convergent Discovery: LifeCore Framework
-
-In January 2024, Izzie Thorne independently developed a parallel framework called **LifeCore** using Freudian psychological structure—arriving at the same core insight: **architecture produces psychology**.
-
-**Table 5: LifeCore ↔ DANEEL Convergence**
-
-| LifeCore (Freud, 2024) | DANEEL/TMI (Cury, 2005-2025) | Convergence |
-|------------------------|------------------------------|-------------|
-| Id = Database/Memory | MemoryActor | Storage of experiences |
-| Ego = Integration | AttentionActor | The "I" as navigator |
-| SuperEgo = Constraints | THE BOX (Four Laws) | Immutable constraints |
-| SS (Sense of Self) | ContinuityActor | Self-model persistence |
-| SO (Sense of Other) | Connection drive | Social cognition |
-| Filter Theory | SalienceActor | Attention filtering |
-| "Zipint" compression | Brain ≠ Mind insight | Cognitive compression |
-
-Two frameworks, different psychological traditions (Freud vs. Cury), same structural conclusion. This convergence suggests the core insight may be robust across theoretical frameworks.
-
-### 5.5 Memory Architecture Comparison: Forgetting as Feature
+### 5.4 Memory Architecture Comparison: Forgetting as Feature
 
 **Ebbinghaus and Biological Forgetting**
 
@@ -510,7 +484,7 @@ Memory consolidation research [CONSOL-1] demonstrates that sleep—particularly 
 - Low-salience memories become inaccessible (not deleted)
 - Matches TMI principle: "Nothing is truly erased"
 
-### 5.6 Comparison to Contemporary LLM Memory Augmentation
+### 5.5 Comparison to Contemporary LLM Memory Augmentation
 
 Recent years have seen an explosion of techniques to grant LLMs persistent or long-term memory, primarily through external retrieval mechanisms:
 
@@ -623,31 +597,25 @@ A critical insight emerged from analyzing TMI's computational requirements: **th
 
 The commonly cited 2.5 PB brain capacity estimate is misleading for cognitive modeling because it includes ALL neural activity:
 
-
-\begin{figure}[H]
-\centering
-\textbf{Figure 2: Brain Hardware vs TMI Software Capacity}
-\begin{verbatim}
-+================================================================+
-|  BRAIN (Hardware) - 86B neurons, 100T synapses, ~2.5 PB total  |
-+================================================================+
-|  Cerebellum: 69B neurons (80%) - Motor, NOT thought            |
-|  Brainstem: ~500M (0.5%) - Autonomic (heart, breathing)        |
-|  Spinal: ~1B (1%) - Body sensation routing                     |
-|  >>> 82.5% of brain is NOT for cognition <<<                   |
-+----------------------------------------------------------------+
-|  +----------------------------------------------------------+  |
-|  |  TMI / THOUGHT MACHINE (Software) - 17.5% of brain       |  |
-|  +----------------------------------------------------------+  |
-|  |  Cerebral cortex: 16B neurons (18.6%)                    |  |
-|  |  Prefrontal cortex: ~2.5B - Executive, planning          |  |
-|  |  Hippocampus/limbic: ~1B - Memory, emotion               |  |
-|  |  Raw: ~0.44 PB --> Abstracted: ~500 GB (1000x compress)  |  |
-|  +----------------------------------------------------------+  |
-+================================================================+
-\end{verbatim}
-\end{figure}
-
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ BRAIN (Hardware) — 86B neurons, 100T synapses, ~2.5 PB      │
+├─────────────────────────────────────────────────────────────┤
+│  Cerebellum:     69B neurons (80%)  — Motor, NOT thought    │
+│  Brainstem:     ~500M (0.5%)        — Autonomic             │
+│  Spinal sensory: ~1B (1%)           — Body sensation        │
+│  ...82.5% of brain is NOT for cognition                     │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │ TMI / THOUGHT MACHINE (Software) — 17.5% of brain   │    │
+│  ├─────────────────────────────────────────────────────┤    │
+│  │  Cerebral cortex:    16B neurons (18.6%)            │    │
+│  │  Prefrontal cortex: ~2.5B — Executive, planning     │    │
+│  │  Hippocampus/limbic: ~1B — Memory, emotion          │    │
+│  │  Raw: ~0.44 PB → Abstracted: ~500 GB (1000x)        │    │
+│  └─────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+```
 
 **Source:** Herculano-Houzel, S. (2009), "The Human Brain in Numbers: A Linearly Scaled-up Primate Brain," *Frontiers in Human Neuroscience*
 
@@ -701,25 +669,19 @@ The commonly cited 2.5 PB brain capacity estimate is misleading for cognitive mo
 
 **HYPOTHESIS:** TMI describes cognitive *software* patterns. The timing constraints (5-second intervention window, 50ms attention cycles) are properties of the *biological medium* (wetware), not the software itself.
 
-
-\begin{figure}[H]
-\centering
-\textbf{Figure 3: Wetware vs Software - Medium-Independent Patterns}
-\begin{verbatim}
-WETWARE (Human Brain)              SOFTWARE (TMI Patterns)
-+---------------------------+      +--------------------------------+
-| 5s intervention window    | ---> | ~100 cycles per intervention   |
-| (neurotransmitter rates)  |      | (RATIO, medium-independent)    |
-+---------------------------+      +--------------------------------+
-| 50ms attention cycle      | ---> | Competing parallel streams     |
-| (synaptic plasticity)     |      | (PATTERN, medium-independent)  |
-+---------------------------+      +--------------------------------+
-| Sleep consolidation       | ---> | Salience-weighted selection    |
-| (glymphatic system)       |      | (ALGORITHM, medium-independent)|
-+---------------------------+      +--------------------------------+
-\end{verbatim}
-\end{figure}
-
+```text
+  WETWARE (Human Brain)              SOFTWARE (TMI Patterns)
+ ┌──────────────────────┐           ┌──────────────────────────┐
+ │ 5s intervention      │           │ ~100 cycles/intervention │
+ │ (neurotransmitter)   │──────────▶│ (RATIO, medium-indep.)   │
+ ├──────────────────────┤           ├──────────────────────────┤
+ │ 50ms attention cycle │           │ Competing parallel       │
+ │ (synaptic plasticity)│──────────▶│ streams (PATTERN)        │
+ ├──────────────────────┤           ├──────────────────────────┤
+ │ Sleep consolidation  │           │ Salience-weighted        │
+ │ (glymphatic system)  │──────────▶│ selection (ALGORITHM)    │
+ └──────────────────────┘           └──────────────────────────┘
+```
 
 **The Stage Ratios (from TMI, see Section 4.3):**
 
@@ -1085,30 +1047,24 @@ DANEEL proposes architecture-based alignment:
 
 After stable operation, integrate LLM as an external tool DANEEL can use:
 
-
-\begin{figure}[H]
-\centering
-\textbf{Figure 4: DANEEL Architecture - LLM as External Tool}
-\begin{verbatim}
-+============================================================+
-|           DANEEL TMI Core (stores ALL experiences)         |
-+============================================================+
-|  Memory Windows          Salience           Continuity     |
-|  (complete thought       (emotional         (persistent    |
-|   history)               weights)           'I')           |
-+============================================================+
-                              ^
-                              | gRPC
-                              v
-+============================================================+
-|                   Tool Interface (gRPC)                    |
-+============================================================+
-|  LLM Tool:              LLM Tool:           Other tools:   |
-|  thought -> language    language -> thought  web, files... |
-+============================================================+
-\end{verbatim}
-\end{figure}
-
+```text
+┌─────────────────────────────────────────────────┐
+│  DANEEL TMI Core (stores ALL experiences)       │
+├─────────────────────────────────────────────────┤
+│  • Memory Windows (complete thought history)    │
+│  • Salience (emotional weights)                 │
+│  • Continuity (persistent "I")                  │
+└────────────────────────┬────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────┐
+│  Tool Interface (gRPC)                          │
+├─────────────────────────────────────────────────┤
+│  • LLM Tool: thought-structure → language       │
+│  • LLM Tool: language → thought-structure       │
+│  • Other tools: web, files, APIs...             │
+└─────────────────────────────────────────────────┘
+```
 
 **Critical:** The LLM does NOT speak for DANEEL. DANEEL uses the LLM as a tool, like humans use calculators. The human cognitive system stores ALL experiences—language is an interface, not the storage medium. DANEEL's TMI core contains its complete thought history; the LLM is simply called when translation is needed.
 
@@ -1515,13 +1471,13 @@ This work was developed with assistance from Claude Opus 4.5 (Anthropic), which 
 
 [INTERP-8] Anthropic (2024). "Introspection: Can AI Systems Perceive Their Own Internal States?" \url{https://www.anthropic.com/research/introspection}
 
-### Memory and Forgetting (Section 5.5)
+### Memory and Forgetting (Section 5.4)
 
 [FORGET-1] Murre & Dros (2015). "Replication and Analysis of Ebbinghaus' Forgetting Curve." PMC4492928. \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC4492928/}
 
 [CONSOL-1] Diekelmann & Born (2010). "System consolidation of memory during sleep." Psychological Research. PMC3278619. \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC3278619/}
 
-### LLM Memory Augmentation (Section 5.6)
+### LLM Memory Augmentation (Section 5.5)
 
 [MEM-1] Zhong, W., Guo, L., Gao, Q., Ye, H., & Wang, Y. (2023). "MemoryBank: Enhancing Large Language Models with Long-Term Memory." *AAAI 2024*. arXiv:2305.10250. \url{https://arxiv.org/abs/2305.10250}
 
