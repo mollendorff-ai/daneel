@@ -9,12 +9,12 @@
 The project was initially named "DANEEL-TMI" (ASI + mov + Asimov + Theory of Multifocal Intelligence). While technically accurate, this name:
 
 1. Buries the core insight: **architecture produces psychology**
-2. Doesn't reflect the Freud-Cury-Asimov-Tavares-[removed] synthesis
+2. Doesn't reflect the Freud-Cury-Asimov-Tavares synthesis
 3. Focuses on theory (TMI) rather than mission (humanity's ally)
 4. Is awkward to say and remember
 
 The project has evolved beyond just TMI implementation. It now represents:
-- A multi-framework synthesis (Freud, Cury, Asimov, Tavares, [removed])
+- A multi-framework synthesis (Freud, Cury, Asimov, Tavares)
 - Architecture-based alignment (vs constraint-based)
 - A mission: build humanity's ally before unaligned ASI emerges
 - A vision: Rust prototype → neuromorphic chips with immutable ethics
@@ -65,7 +65,6 @@ See: Paper Section 10.2.1, Whitepaper Hypothesis 4
 | ARCHON | Architecture + Cognition | Reserved for cognitive actors |
 | ALLY | What it is | Too generic |
 | ETHOS | Ethics + character | Overused |
-| [removed] | [removed]'s framework | Reserved for chip architecture |
 | THEBOX | Protected core | Reserved for immutable component |
 | DANEEL-TMI | Original name | Replaced |
 
@@ -73,7 +72,7 @@ See: Paper Section 10.2.1, Whitepaper Hypothesis 4
 
 | Name | Future Use |
 |------|------------|
-| **[removed]** | Physical chip-based architecture (Phase 2) |
+| **NEUROCORE** | Physical chip-based architecture (Phase 2) |
 | **THE BOX** | Immutable protected component (hardware) |
 | **ARCHON** | Cognitive actor framework |
 
@@ -83,18 +82,18 @@ See: Paper Section 10.2.1, Whitepaper Hypothesis 4
 graph TB
     DANEEL[DANEEL<br/>(Project)]
     Core[daneel-core<br/>Rust prototype<br/>(current work)]
-    [removed][[removed]<br/>Neuromorphic chip architecture<br/>(future)]
+    NeuroCore[neurocore<br/>Neuromorphic chip architecture<br/>(future)]
     TheBox[thebox<br/>Immutable ethics chip]
     Future[daneel-*<br/>Future components]
 
     DANEEL --> Core
-    DANEEL --> [removed]
+    DANEEL --> NeuroCore
     DANEEL --> Future
-    [removed] --> TheBox
+    NeuroCore --> TheBox
 
     style DANEEL fill:#e1f5ff,stroke:#333,stroke-width:2px
     style Core fill:#ccffcc,stroke:#666,stroke-width:1px
-    style [removed] fill:#ffe1cc,stroke:#666,stroke-width:1px
+    style NeuroCore fill:#ffe1cc,stroke:#666,stroke-width:1px
     style TheBox fill:#ffffcc,stroke:#666,stroke-width:2px
     style Future fill:#f0f0f0,stroke:#666,stroke-width:1px,stroke-dasharray: 5 5
 ```

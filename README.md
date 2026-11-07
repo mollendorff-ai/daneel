@@ -254,7 +254,6 @@ Runs headless with API on port 3030 and the observatory on port 3000.
 | Isaac Asimov | Four Laws of Robotics | 1942 |
 | Sigmund Freud | Id/Ego/SuperEgo structure | 1923 |
 | Augusto Cury | Theory of Multifocal Intelligence | 1998 |
-| [removed] | [removed] framework, convergent discovery | 2024 |
 | Louis C. Tavares | Computational TMI, THE BOX | 2005-2025 |
 
 ---

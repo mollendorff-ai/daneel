@@ -1,10 +1,8 @@
 # DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintelligence
 
 **Luis Cezar Menezes Tavares de Lacerda**^1 (Louis C. Tavares | Möllendorff Rex)
-**[removed]**^2
 
 ^1 Independent Researcher, Mont-Royal, Quebec, Canada
-^2 Independent Researcher ([removed] Framework, [removed])
 
 **Correspondence:**
 - ORCID: https://orcid.org/0009-0005-7598-8257
@@ -27,8 +25,6 @@ The architecture synthesizes:
 - **Freudian structure** (1923): Id/Ego/SuperEgo as functional architecture
 - **Asimov's Laws** (1942-1985): Ethical constraints as immutable invariants ("THE BOX")
 - **Russell's circumplex** (1980): Emotions as 2D architectural components (valence × arousal)
-
-Independent convergent discovery—father and [removed] arriving at "architecture produces psychology" through different traditions—suggests the approach may be robust.
 
 Implementation: Rust + Ractor actors + Redis Streams + Qdrant vectors. Phase 1 validation complete: 26+ hours continuous operation, 662K unconscious vectors, stable identity persistence. Open source (AGPL-3.0).
 
@@ -475,25 +471,7 @@ Deep learning is powerful but **opaque**. We cannot verify what a neural network
 
 **Critical distinction:** DANEEL uses LLMs as an external **tool**, not as its voice or mind. Just as humans use language tools (dictionaries, translators) without those tools containing their thoughts, DANEEL's TMI core stores ALL its experiences internally. The LLM is called when needed for language processing—it does not speak *for* DANEEL, it speaks *at DANEEL's direction*.
 
-### 5.4 Convergent Discovery: [removed] Framework
-
-In January 2024, [removed] independently developed a parallel framework called **[removed]** using Freudian psychological structure—arriving at the same core insight: **architecture produces psychology**.
-
-**Table 5: [removed] ↔ DANEEL Convergence**
-
-| [removed] (Freud, 2024) | DANEEL/TMI (Cury, 2005-2025) | Convergence |
-|------------------------|------------------------------|-------------|
-| Id = Database/Memory | MemoryActor | Storage of experiences |
-| Ego = Integration | AttentionActor | The "I" as navigator |
-| SuperEgo = Constraints | THE BOX (Four Laws) | Immutable constraints |
-| SS (Sense of Self) | ContinuityActor | Self-model persistence |
-| SO (Sense of Other) | Connection drive | Social cognition |
-| [removed] | SalienceActor | Attention filtering |
-| "Zipint" compression | Brain ≠ Mind insight | Cognitive compression |
-
-Two frameworks, different psychological traditions (Freud vs. Cury), same structural conclusion. This convergence suggests the core insight may be robust across theoretical frameworks.
-
-### 5.5 Memory Architecture Comparison: Forgetting as Feature
+### 5.4 Memory Architecture Comparison: Forgetting as Feature
 
 **Ebbinghaus and Biological Forgetting**
 
@@ -526,7 +504,7 @@ Memory consolidation research [CONSOL-1] demonstrates that sleep—particularly 
 - Low-salience memories become inaccessible (not deleted)
 - Matches TMI principle: "Nothing is truly erased"
 
-### 5.6 Comparison to Contemporary LLM Memory Augmentation
+### 5.5 Comparison to Contemporary LLM Memory Augmentation
 
 Recent years have seen an explosion of techniques to grant LLMs persistent or long-term memory, primarily through external retrieval mechanisms:
 
@@ -1513,13 +1491,13 @@ This work was developed with assistance from Claude Opus 4.5 (Anthropic), which 
 
 [INTERP-8] Anthropic (2024). "Introspection: Can AI Systems Perceive Their Own Internal States?" https://www.anthropic.com/research/introspection
 
-### Memory and Forgetting (Section 5.5)
+### Memory and Forgetting (Section 5.4)
 
 [FORGET-1] Murre & Dros (2015). "Replication and Analysis of Ebbinghaus' Forgetting Curve." PMC4492928. https://pmc.ncbi.nlm.nih.gov/articles/PMC4492928/
 
 [CONSOL-1] Diekelmann & Born (2010). "System consolidation of memory during sleep." Psychological Research. PMC3278619. https://pmc.ncbi.nlm.nih.gov/articles/PMC3278619/
 
-### LLM Memory Augmentation (Section 5.6)
+### LLM Memory Augmentation (Section 5.5)
 
 [MEM-1] Zhong, W., Guo, L., Gao, Q., Ye, H., & Wang, Y. (2023). "MemoryBank: Enhancing Large Language Models with Long-Term Memory." *AAAI 2024*. arXiv:2305.10250. https://arxiv.org/abs/2305.10250
 

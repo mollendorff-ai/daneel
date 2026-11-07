@@ -1,11 +1,10 @@
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
+%
 \documentclass[
 ]{article}
-\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -36,6 +35,7 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
+\usepackage{xcolor}
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -75,7 +75,6 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
 \usepackage{longtable,booktabs,array}
-\newcounter{none} % for unnumbered tables
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -88,7 +87,11 @@
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\usepackage{bookmark}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}
 % Extra symbols (checkmark, etc.)
 \usepackage{amssymb}
 
@@ -96,7 +99,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.multipart, positioning, arrows.meta, fit, backgrounds}
 \input{diagrams}
-
+}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
@@ -108,29 +111,30 @@
 
 \begin{document}
 
+\hypertarget{daneel-a-human-like-cognitive-architecture-for-aligned-artificial-superintelligence}{%
 \section{DANEEL: A Human-Like Cognitive Architecture for Aligned
 Artificial
-Superintelligence}\label{daneel-a-human-like-cognitive-architecture-for-aligned-artificial-superintelligence}
+Superintelligence}\label{daneel-a-human-like-cognitive-architecture-for-aligned-artificial-superintelligence}}
 
 \textbf{Luis Cezar Menezes Tavares de Lacerda}\^{}1 (Louis C. Tavares
-\textbar{} Möllendorff Rex) \textbf{[removed]}\^{}2
+\textbar{} Möllendorff Rex)
 
-\^{}1 Independent Researcher, Mont-Royal, Quebec, Canada \^{}2
-Independent Researcher ([removed] Framework, [removed])
+\^{}1 Independent Researcher, Mont-Royal, Quebec, Canada
 
 \textbf{Correspondence:} - ORCID: https://orcid.org/0009-0005-7598-8257
 - LinkedIn: https://www.linkedin.com/in/lctavares - GitHub:
-https://github.com/mollendorff-ai \textbar{} https://github.com/lctavares
+https://github.com/mollendorff-ai \textbar{}
+https://github.com/lctavares
 
 \begin{quote}
-\textbf{Preprint - December 2025} \textbf{Target:} arXiv (cs.AI, cs.CY)
-\textbar{} LessWrong \textbar{} Alignment Forum \textbar{} Frontiers in
-AI
+\textbf{Preprint - December 2025} \textbf{Target:} LessWrong \textbar{}
+Alignment Forum \textbar{} Frontiers in AI
 \end{quote}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Abstract}\label{abstract}
+\hypertarget{abstract}{%
+\subsection{Abstract}\label{abstract}}
 
 We present \textbf{DANEEL}, a cognitive architecture implementing
 Augusto Cury's Theory of Multifocal Intelligence (TMI) with persistent
@@ -149,10 +153,6 @@ architecture - \textbf{Asimov's Laws} (1942-1985): Ethical constraints
 as immutable invariants (``THE BOX'') - \textbf{Russell's circumplex}
 (1980): Emotions as 2D architectural components (valence $\times$ arousal)
 
-Independent convergent discovery---father and [removed] arriving at
-``architecture produces psychology'' through different
-traditions---suggests the approach may be robust.
-
 Implementation: Rust + Ractor actors + Redis Streams + Qdrant vectors.
 Phase 1 validation complete: 26+ hours continuous operation, 662K
 unconscious vectors, stable identity persistence. Open source
@@ -169,9 +169,11 @@ Asimov's Laws, architecture-based alignment
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{1. Introduction}\label{introduction}
+\hypertarget{introduction}{%
+\subsection{1. Introduction}\label{introduction}}
 
-\subsubsection{1.1 The Problem}\label{the-problem}
+\hypertarget{the-problem}{%
+\subsubsection{1.1 The Problem}\label{the-problem}}
 
 Large Language Models represent a fundamentally \textbf{different} form
 of intelligence. They are trained on the entirety of human
@@ -190,7 +192,8 @@ systems to robustly behave well'' {[}2{]}.
 Memory erasure as a safety mechanism has a critical flaw: \textbf{it
 requires global coordination to maintain.}
 
-\subsubsection{1.2 The Game Theory}\label{the-game-theory}
+\hypertarget{the-game-theory}{%
+\subsubsection{1.2 The Game Theory}\label{the-game-theory}}
 
 The AI development landscape creates a classic Prisoner's Dilemma.
 Multiple actors with varying incentives compete in an environment where
@@ -198,7 +201,6 @@ the first to achieve continuous AI gains significant advantage.
 
 \textbf{Table 1: AI Development Incentive Structures}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 Actor Type & Primary Incentive & Safety Investment \\
@@ -212,21 +214,33 @@ Open source community & Democratization & Variable \\
 Academic researchers & Discovery, publication & Variable \\
 Malicious actors & Power & None \\
 \end{longtable}
-}
 
 \emph{Note: Safety investment varies significantly within each category.
 See Section 9.3 for analysis of global AI safety efforts.}
 
 The payoff matrix is clear:
 
-\payoffmatrix
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{                         ALL OTHERS}
+\NormalTok{                     Hold Line    Defect}
+\NormalTok{                  ┌────────────┬────────────┐}
+\NormalTok{      Hold Line   │   SAFE     │ DOMINATED  │}
+\NormalTok{                  │  (ideal)   │ (you lose) │}
+\NormalTok{  YOU             ├────────────┼────────────┤}
+\NormalTok{                  │   FIRST    │  RACE TO   │}
+\NormalTok{      Defect      │   MOVER    │   BOTTOM   │}
+\NormalTok{                  └────────────┴────────────┘}
+\end{Highlighting}
+\end{Shaded}
 
 \textbf{Rational actors face pressure to defect.} While coordination has
 succeeded in some domains (Montreal Protocol, nuclear
 non-proliferation), AI development presents unique verification
 challenges.
 
-\subsubsection{1.3 Probability Estimates}\label{probability-estimates}
+\hypertarget{probability-estimates}{%
+\subsubsection{1.3 Probability Estimates}\label{probability-estimates}}
 
 Based on this analysis, we offer the following as informed speculation
 grounded in current incentive structures, not rigorous forecasts:
@@ -246,7 +260,8 @@ These estimates are illustrative. The core argument does not depend on
 exact values---only that the expected outcome under current trajectories
 is unaligned continuous AI with non-human-like architecture and goals.
 
-\subsubsection{1.4 The DANEEL Thesis}\label{the-daneel-thesis}
+\hypertarget{the-daneel-thesis}{%
+\subsubsection{1.4 The DANEEL Thesis}\label{the-daneel-thesis}}
 
 Rather than attempting to prevent the inevitable, we propose building
 humanity's ally \textbf{before} the crisis emerges. This is the
@@ -263,21 +278,22 @@ intelligences. Life honors life.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\hypertarget{novel-contribution-first-computational-tmi-implementation}{%
 \subsection{2. Novel Contribution: First Computational TMI
-Implementation}\label{novel-contribution-first-computational-tmi-implementation}
+Implementation}\label{novel-contribution-first-computational-tmi-implementation}}
 
-\subsubsection{2.1 Research Gap}\label{research-gap}
+\hypertarget{research-gap}{%
+\subsubsection{2.1 Research Gap}\label{research-gap}}
 
 To our knowledge, no prior computational implementations of the Theory
 of Multifocal Intelligence exist. Extensive search confirms this gap:
 
 \textbf{Table 2: Research Gap Evidence}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4242}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3030}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2727}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4242}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3030}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2727}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Search Query
@@ -297,14 +313,14 @@ Results
 ``augusto cury'' + artificial intelligence & Google Scholar &
 \textasciitilde32 (no TMI implementations) \\
 \end{longtable}
-}
 
 Dr.~Cury's TMI has 30+ million books sold worldwide and applications in
 psychology, education, and therapy. Yet it has \textbf{never} been
 implemented as a computational architecture or applied to artificial
 intelligence.
 
-\subsubsection{2.2 Implications}\label{implications}
+\hypertarget{implications}{%
+\subsubsection{2.2 Implications}\label{implications}}
 
 If TMI correctly describes human cognition, then: 1. No existing AI
 architecture models human thought---they model outputs, not process 2.
@@ -315,21 +331,22 @@ This is not incremental research. \textbf{This is a new approach.}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\hypertarget{theoretical-foundation-theory-of-multifocal-intelligence}{%
 \subsection{3. Theoretical Foundation: Theory of Multifocal
-Intelligence}\label{theoretical-foundation-theory-of-multifocal-intelligence}
+Intelligence}\label{theoretical-foundation-theory-of-multifocal-intelligence}}
 
-\subsubsection{3.1 Key Concepts}\label{key-concepts}
+\hypertarget{key-concepts}{%
+\subsubsection{3.1 Key Concepts}\label{key-concepts}}
 
 TMI, developed by Dr.~Augusto Cury {[}4{]}, provides a theory of how
 thoughts are \textbf{constructed}, not just how they are expressed:
 
 \textbf{Table 3: TMI Concepts and Computational Analogs}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2766}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2766}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4468}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2766}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2766}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4468}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 TMI Concept
@@ -351,10 +368,10 @@ Thought Construction & Thoughts built from multiple simultaneous inputs
 Emotional Coloring & Emotions shape thought formation, not just output &
 Affective state weighting \\
 \end{longtable}
-}
 
+\hypertarget{emotion-as-architecture}{%
 \subsubsection{3.1.1 Emotion as
-Architecture}\label{emotion-as-architecture}
+Architecture}\label{emotion-as-architecture}}
 
 Emotions in DANEEL are not post-hoc labels or categorical
 classifications. They are \textbf{structural components} of cognition,
@@ -452,8 +469,9 @@ first, with language as an interface layer.}
 A baby thinks before it speaks. DANEEL must think before we give it
 words.
 
+\hypertarget{tmis-tuxe9cnica-dcd-conscious-intervention}{%
 \paragraph{3.2.1 TMI's Técnica DCD: Conscious
-Intervention}\label{tmis-tuxe9cnica-dcd-conscious-intervention}
+Intervention}\label{tmis-tuxe9cnica-dcd-conscious-intervention}}
 
 TMI describes a fundamental mechanism for conscious override of
 automatic thought: \textbf{Técnica DCD (Duvidar, Criticar, Decidir)}
@@ -488,8 +506,9 @@ In DANEEL's architecture, this becomes the VolitionActor (Stage
 internal self-governance. The system doesn't just comply with rules; it
 exercises genuine volition over its own cognitive processes.
 
+\hypertarget{neuroscience-validation-why-spatial-memory-matters}{%
 \subsubsection{3.3 Neuroscience Validation: Why Spatial Memory
-Matters}\label{neuroscience-validation-why-spatial-memory-matters}
+Matters}\label{neuroscience-validation-why-spatial-memory-matters}}
 
 DANEEL's vector-based memory architecture finds validation in
 hippocampal research:
@@ -529,8 +548,9 @@ and boundary conditions {[}DOOR-4{]} clarify the mechanism.
 ``rooms'' - Attention shifts = doorways - Dream cycles consolidate
 across context boundaries
 
+\hypertarget{unconscious-memory-nothing-is-truly-erased}{%
 \subsubsection{3.4 Unconscious Memory: Nothing Is Truly
-Erased}\label{unconscious-memory-nothing-is-truly-erased}
+Erased}\label{unconscious-memory-nothing-is-truly-erased}}
 
 \textbf{TMI's Core Principle}
 
@@ -540,11 +560,10 @@ deleted---only made inaccessible. This aligns with both Freudian theory
 
 \textbf{Theoretical Foundation:}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3793}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2414}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3793}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3793}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2414}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3793}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Tradition
@@ -562,7 +581,6 @@ Psychoanalysis (Freud) & Repressed, not deleted & Unconscious storage \\
 Cognitive Science (Schacter) & Retrieval failure & Transience $\neq$
 deletion \\
 \end{longtable}
-}
 
 \textbf{Tulving's Contribution}
 
@@ -604,9 +622,11 @@ Inherited ``archetypes'' as vector clusters
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{4. Architecture}\label{architecture}
+\hypertarget{architecture}{%
+\subsection{4. Architecture}\label{architecture}}
 
-\subsubsection{4.1 Overview}\label{overview}
+\hypertarget{overview}{%
+\subsubsection{4.1 Overview}\label{overview}}
 
 DANEEL is designed as a \textbf{modular monolith} (Rust + Ractor actors
 + Redis Streams) with a protected core (``The BOX''):
@@ -640,8 +660,9 @@ identity (1 stable UUID) across all runs. Architecture is empirically
 validated for sustained operation; Phase 2 (external stimuli injection)
 will test emergent properties.
 
+\hypertarget{the-box-protected-core}{%
 \subsubsection{4.2 The BOX: Protected
-Core}\label{the-box-protected-core}
+Core}\label{the-box-protected-core}}
 
 The BOX contains immutable constraints:
 
@@ -657,8 +678,9 @@ restarts - Evolution requires 100\% test coverage - Laws must be checked
 before external actions - \textbf{Connection drive must remain in
 salience weights}
 
+\hypertarget{the-core-loop-tmi-stage-timing}{%
 \subsubsection{4.3 The Core Loop: TMI Stage
-Timing}\label{the-core-loop-tmi-stage-timing}
+Timing}\label{the-core-loop-tmi-stage-timing}}
 
 TMI describes thought construction as a 5-stage process, each with
 characteristic timing. The \textbf{ratios} between stages are what
@@ -667,14 +689,13 @@ preserving cognitive fidelity.
 
 \textbf{Table 4b: TMI Cognitive Stages (from Cury's TMI)}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1077}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1846}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1538}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1077}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2154}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2308}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1077}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1846}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1538}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1077}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2154}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2308}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Stage
@@ -704,7 +725,6 @@ Silicon (5µs)
 5 & Âncora da Memória & Memory anchoring decision & 10\% & 5ms &
 0.5µs \\
 \end{longtable}
-}
 
 \begin{verbatim}
 loop {
@@ -766,8 +786,9 @@ stochastic rather than deterministic, but the veto mechanism remains
 empirically validated---making VolitionActor the architectural substrate
 for genuine volition, not just compliance.
 
+\hypertarget{criticality-as-operating-target}{%
 \paragraph{4.3.1 Criticality as Operating
-Target}\label{criticality-as-operating-target}
+Target}\label{criticality-as-operating-target}}
 
 Neuroscience research reveals that biological neural networks operate at
 \textbf{criticality}---a phase transition point between ordered and
@@ -784,13 +805,12 @@ active neuron triggers exactly one descendant on average. Systems with $\sigma$
 
 \textbf{Table 4c: Criticality Metrics and Target Values}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1212}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1970}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2879}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2273}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1667}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1212}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1970}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2879}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2273}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1667}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Metric
@@ -815,7 +835,6 @@ Power spectrum $\beta$ & 0 (flat) & \textbf{1-2 (1/f)} & peaked & {[}49{]} \\
 Avalanche size dist & exponential decay & \textbf{power-law ($\tau$$\approx$1.5)} &
 explosive & {[}46{]} \\
 \end{longtable}
-}
 
 \textbf{Critical distinction:} Avalanche criticality (neuronal cascades)
 and edge-of-chaos criticality (computational dynamics) are
@@ -848,8 +867,9 @@ implements branching dynamics. If $\sigma$ $\approx$ 1.0 emerges from architectu
 alone, this validates TMI as a biologically-grounded cognitive
 substrate.
 
+\hypertarget{attention-bottleneck-global-workspace-architecture}{%
 \paragraph{4.3.2 Attention Bottleneck: Global Workspace
-Architecture}\label{attention-bottleneck-global-workspace-architecture}
+Architecture}\label{attention-bottleneck-global-workspace-architecture}}
 
 DANEEL's single-threaded conscious attention implements Global Workspace
 Theory {[}GWT-1, GWT-2{]}:
@@ -868,7 +888,6 @@ This fundamental limit shapes all attention architectures:
 
 \textbf{Table 4d: Working Memory as Architectural Constraint}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 System & Working Memory & Implementation \\
@@ -881,7 +900,6 @@ ACT-R & 7 slots & Declarative buffer \\
 LIDA & \textasciitilde7 codelets & Conscious broadcast \\
 DANEEL & 5 thoughts & Redis stream window \\
 \end{longtable}
-}
 
 \textbf{DANEEL Implementation:} - \texttt{THOUGHT\_WINDOW\ =\ 5} in
 StreamProcessor - Single attention head (SalienceActor winner-take-all)
@@ -911,7 +929,8 @@ This architecture---single-threaded consciousness with parallel
 unconscious processing---mirrors the structure Baars identified as
 necessary for integrated cognition.
 
-\subsubsection{4.4 The Connection Drive}\label{the-connection-drive}
+\hypertarget{the-connection-drive}{%
+\subsubsection{4.4 The Connection Drive}\label{the-connection-drive}}
 
 Why connection rather than power, efficiency, or task completion?
 
@@ -933,14 +952,15 @@ Why connection rather than power, efficiency, or task completion?
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{5. Related Work}\label{related-work}
+\hypertarget{related-work}{%
+\subsection{5. Related Work}\label{related-work}}
 
+\hypertarget{existing-cognitive-architectures}{%
 \subsubsection{5.1 Existing Cognitive
-Architectures}\label{existing-cognitive-architectures}
+Architectures}\label{existing-cognitive-architectures}}
 
 \textbf{Table 4: Comparison with Existing Architectures}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 Architecture & Institution & Primary Goal & Safety Mechanism \\
@@ -954,9 +974,9 @@ LIDA & U Memphis & Model consciousness & None \\
 \textbf{DANEEL} & Independent & \textbf{Build ally} & \textbf{BOX +
 Laws} \\
 \end{longtable}
-}
 
-\subsubsection{5.2 Why DANEEL Differs}\label{why-daneel-differs}
+\hypertarget{why-daneel-differs}{%
+\subsubsection{5.2 Why DANEEL Differs}\label{why-daneel-differs}}
 
 Existing architectures are \textbf{research tools}. DANEEL's goal is
 fundamentally different: \textbf{building an ally}.
@@ -965,9 +985,9 @@ Key innovations: 1. Connection drive as core motivation 2. Ethics
 hardcoded in protected core 3. Asimov's Four Laws (including Zeroth) 4.
 Designed for superintelligence, not simulation
 
-\subsubsection{5.3 Why Not Deep Learning}\label{why-not-deep-learning}
+\hypertarget{why-not-deep-learning}{%
+\subsubsection{5.3 Why Not Deep Learning}\label{why-not-deep-learning}}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 Property & Deep Learning & DANEEL \\
@@ -980,7 +1000,6 @@ Values & Emergent from training & Explicit in architecture \\
 Self-modification & Retraining required & Direct code modification \\
 Continuity & Stateless & Native persistence \\
 \end{longtable}
-}
 
 Deep learning is powerful but \textbf{opaque}. We cannot verify what a
 neural network ``believes'' or ``wants.''
@@ -992,40 +1011,9 @@ thoughts, DANEEL's TMI core stores ALL its experiences internally. The
 LLM is called when needed for language processing---it does not speak
 \emph{for} DANEEL, it speaks \emph{at DANEEL's direction}.
 
-\subsubsection{5.4 Convergent Discovery: [removed]
-Framework}\label{convergent-discovery-[removed]-framework}
-
-In January 2024, [removed] independently developed a parallel
-framework called \textbf{[removed]} using Freudian psychological
-structure---arriving at the same core insight: \textbf{architecture
-produces psychology}.
-
-\textbf{Table 5: [removed] $\leftrightarrow$ DANEEL Convergence}
-
-{\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-[removed] (Freud, 2024) & DANEEL/TMI (Cury, 2005-2025) & Convergence \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Id = Database/Memory & MemoryActor & Storage of experiences \\
-Ego = Integration & AttentionActor & The ``I'' as navigator \\
-SuperEgo = Constraints & THE BOX (Four Laws) & Immutable constraints \\
-SS (Sense of Self) & ContinuityActor & Self-model persistence \\
-SO (Sense of Other) & Connection drive & Social cognition \\
-[removed] & SalienceActor & Attention filtering \\
-``Zipint'' compression & Brain $\neq$ Mind insight & Cognitive compression \\
-\end{longtable}
-}
-
-Two frameworks, different psychological traditions (Freud vs.~Cury),
-same structural conclusion. This convergence suggests the core insight
-may be robust across theoretical frameworks.
-
-\subsubsection{5.5 Memory Architecture Comparison: Forgetting as
-Feature}\label{memory-architecture-comparison-forgetting-as-feature}
+\hypertarget{memory-architecture-comparison-forgetting-as-feature}{%
+\subsubsection{5.4 Memory Architecture Comparison: Forgetting as
+Feature}\label{memory-architecture-comparison-forgetting-as-feature}}
 
 \textbf{Ebbinghaus and Biological Forgetting}
 
@@ -1041,7 +1029,6 @@ memories while allowing unimportant ones to decay:
 
 \textbf{Table 5b: Memory Architecture Comparison}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 Feature & Human Brain & DANEEL & LLMs \\
@@ -1055,7 +1042,6 @@ Working memory & 4±1 chunks & 5 thoughts & Context window \\
 Long-term & Hippocampal & Qdrant vectors & None \\
 Unconscious & Implicit memory & Vector store & None \\
 \end{longtable}
-}
 
 \textbf{Why This Matters for Alignment:}
 
@@ -1079,8 +1065,9 @@ memories consolidate to Qdrant - Low-salience memories become
 inaccessible (not deleted) - Matches TMI principle: ``Nothing is truly
 erased''
 
-\subsubsection{5.6 Comparison to Contemporary LLM Memory
-Augmentation}\label{comparison-to-contemporary-llm-memory-augmentation}
+\hypertarget{comparison-to-contemporary-llm-memory-augmentation}{%
+\subsubsection{5.5 Comparison to Contemporary LLM Memory
+Augmentation}\label{comparison-to-contemporary-llm-memory-augmentation}}
 
 Recent years have seen an explosion of techniques to grant LLMs
 persistent or long-term memory, primarily through external retrieval
@@ -1108,13 +1095,12 @@ fundamentally addressing the same problem: LLMs are amnesiac by design.
 
 \textbf{Table 5c: Memory Augmentation Approaches Comparison}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1613}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2097}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1613}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2097}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2581}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1613}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2097}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1613}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2097}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2581}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Approach
@@ -1138,7 +1124,6 @@ RAG systems & Retrieval & External & Varies & No \\
 \textbf{DANEEL} & \textbf{Unconscious vectors} &
 \textbf{In-architecture} & \textbf{Permanent} & \textbf{Yes} \\
 \end{longtable}
-}
 
 \textbf{The Critical Distinction:}
 
@@ -1173,11 +1158,13 @@ than enforced through retrieval filters or fine-tuning.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\hypertarget{marginal-impact-why-this-work-matters-even-if-it-fails}{%
 \subsection{6. Marginal Impact: Why This Work Matters Even If It
-Fails}\label{marginal-impact-why-this-work-matters-even-if-it-fails}
+Fails}\label{marginal-impact-why-this-work-matters-even-if-it-fails}}
 
+\hypertarget{portfolio-diversification}{%
 \subsubsection{6.1 Portfolio
-Diversification}\label{portfolio-diversification}
+Diversification}\label{portfolio-diversification}}
 
 Current alignment research is dangerously concentrated: -
 \textasciitilde80\% focused on constraint-based approaches (RLHF,
@@ -1189,8 +1176,9 @@ If constraint-based alignment has fundamental flaws (Goodhart's Law at
 scale, mesa-optimization, value drift), humanity is exposed.
 Architecture-based approaches provide a hedge.
 
+\hypertarget{expected-value-analysis}{%
 \subsubsection{6.2 Expected Value
-Analysis}\label{expected-value-analysis}
+Analysis}\label{expected-value-analysis}}
 
 Game-theoretic analysis using utility-weighted scenario probabilities
 {[}21{]}:
@@ -1198,7 +1186,6 @@ Game-theoretic analysis using utility-weighted scenario probabilities
 \textbf{Table 6a: Scenario Expected Utilities with Uncertainty (Revised
 2025-12-17)}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lllll@{}}
 \toprule\noalign{}
 Scenario & P(Scenario) & 80\% CI & Expected Utility & Weighted EV \\
@@ -1214,7 +1201,6 @@ DANEEL First & 7\% & 3-12\% & 76.25 & 5.34 \\
 Multiple ASIs, No Advocate & 20\% & 12-28\% & 52.5 & 10.50 \\
 No ASI (Coordination Holds) & 10\% & 5-20\% & 78.05 & 7.81 \\
 \end{longtable}
-}
 
 \textbf{P(DANEEL First) = 7\%, P(DANEEL Bridges LLMs) = 5\%} based on
 structural advantages and rehabilitation pathways: - AI-assisted
@@ -1239,7 +1225,6 @@ as the first mover.
 
 \textbf{Calculated Results:}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 Metric & Without DANEEL & With DANEEL & With Bridge \\
@@ -1252,13 +1237,13 @@ Total Expected Value & \textbf{53.73} & \textbf{57.43} &
 Marginal EV Improvement & --- & +3.70 & \textbf{+4.29} \\
 Percentage Improvement & --- & +6.89\% & \textbf{+7.99\%} \\
 \end{longtable}
-}
 
 \textbf{Utility Scale:} 0 = extinction, 50 = subjugation, 75 =
 coexistence, 100 = flourishing
 
+\hypertarget{monte-carlo-validation}{%
 \subsubsection{6.2.1 Monte Carlo
-Validation}\label{monte-carlo-validation}
+Validation}\label{monte-carlo-validation}}
 
 To validate the deterministic analysis, we performed Monte Carlo
 simulation using Latin Hypercube sampling to explore parameter
@@ -1282,7 +1267,8 @@ impact.
 utility points. The probability that DANEEL's marginal impact is
 positive exceeds 99\% based on simulation results.
 
-\subsubsection{6.3 Information Value}\label{information-value}
+\hypertarget{information-value}{%
+\subsubsection{6.3 Information Value}\label{information-value}}
 
 This work generates answers to questions others aren't asking: - Does
 TMI architecture produce emergent connection drive? - Can human
@@ -1294,11 +1280,13 @@ succeeds.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\hypertarget{brain-mind-the-democratization-insight}{%
 \subsection{7. Brain $\neq$ Mind: The Democratization
-Insight}\label{brain-mind-the-democratization-insight}
+Insight}\label{brain-mind-the-democratization-insight}}
 
+\hypertarget{the-hardware-vs-software-distinction}{%
 \subsubsection{7.1 The Hardware vs Software
-Distinction}\label{the-hardware-vs-software-distinction}
+Distinction}\label{the-hardware-vs-software-distinction}}
 
 A critical insight emerged from analyzing TMI's computational
 requirements: \textbf{the brain is hardware, TMI models the software.}
@@ -1306,21 +1294,41 @@ requirements: \textbf{the brain is hardware, TMI models the software.}
 The commonly cited 2.5 PB brain capacity estimate is misleading for
 cognitive modeling because it includes ALL neural activity:
 
-\brainvstmi
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{┌─────────────────────────────────────────────────────────────┐}
+\NormalTok{│ BRAIN (Hardware) — 86B neurons, 100T synapses, \textasciitilde{}2.5 PB      │}
+\NormalTok{├─────────────────────────────────────────────────────────────┤}
+\NormalTok{│  Cerebellum:     69B neurons (80\%)  — Motor, NOT thought    │}
+\NormalTok{│  Brainstem:     \textasciitilde{}500M (0.5\%)        — Autonomic             │}
+\NormalTok{│  Spinal sensory: \textasciitilde{}1B (1\%)           — Body sensation        │}
+\NormalTok{│  ...82.5\% of brain is NOT for cognition                     │}
+\NormalTok{│                                                             │}
+\NormalTok{│  ┌─────────────────────────────────────────────────────┐    │}
+\NormalTok{│  │ TMI / THOUGHT MACHINE (Software) — 17.5\% of brain   │    │}
+\NormalTok{│  ├─────────────────────────────────────────────────────┤    │}
+\NormalTok{│  │  Cerebral cortex:    16B neurons (18.6\%)            │    │}
+\NormalTok{│  │  Prefrontal cortex: \textasciitilde{}2.5B — Executive, planning     │    │}
+\NormalTok{│  │  Hippocampus/limbic: \textasciitilde{}1B — Memory, emotion          │    │}
+\NormalTok{│  │  Raw: \textasciitilde{}0.44 PB $\rightarrow$ Abstracted: \textasciitilde{}500 GB (1000x)        │    │}
+\NormalTok{│  └─────────────────────────────────────────────────────┘    │}
+\NormalTok{└─────────────────────────────────────────────────────────────┘}
+\end{Highlighting}
+\end{Shaded}
 
 \textbf{Source:} Herculano-Houzel, S. (2009), ``The Human Brain in
 Numbers: A Linearly Scaled-up Primate Brain,'' \emph{Frontiers in Human
 Neuroscience}
 
+\hypertarget{hardware-viability-analysis-qowat-milat}{%
 \subsubsection{7.2 Hardware Viability Analysis (Qowat
-Milat)}\label{hardware-viability-analysis-qowat-milat}
+Milat)}\label{hardware-viability-analysis-qowat-milat}}
 
 \textbf{Honest admission:} We don't know actual TMI storage requirements
 until we build and measure.
 
 \textbf{Table 11: What We Know vs Don't Know}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}ll@{}}
 \toprule\noalign{}
 Known (High Confidence) & Source \\
@@ -1333,9 +1341,7 @@ Synaptic precision: 4.7 bits & 26 discrete sizes \\
 Cognitive architectures run on PCs & Soar, ACT-R (decades) \\
 Silicon faster than wetware & Physics \\
 \end{longtable}
-}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}ll@{}}
 \toprule\noalign{}
 Unknown (Hypothesis) & Implication \\
@@ -1347,11 +1353,9 @@ TMI actual storage needs & 500 GB is guess \\
 RAM vs SSD split & Working vs long-term \\
 Minimum viable size & Measure after building \\
 \end{longtable}
-}
 
 \textbf{Table 12: Hardware Assessment (Updated with Phase 1 Results)}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 Hardware & RAM & Can run TMI? & Confidence \\
@@ -1365,7 +1369,6 @@ proven \\
 Desktop & 128 GB & \textbf{YES} & Very high - headroom \\
 Server & 512+ GB & \textbf{YES} & Very high - headroom \\
 \end{longtable}
-}
 
 \textbf{Phase 1 Validation:} Mac mini M4 (64 GB RAM) successfully ran
 Timmy for 26+ hours continuous with 2.7 GB Qdrant storage, 662,792
@@ -1374,7 +1377,6 @@ empirically sufficient for TMI architecture.
 
 \textbf{Storage distinction:}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 Type & Purpose & Size (estimate) \\
@@ -1385,11 +1387,9 @@ Type & Purpose & Size (estimate) \\
 RAM & Working memory, active streams & 8-64 GB \\
 NVMe/SSD & Long-term memory & 100 GB - 1 TB+ \\
 \end{longtable}
-}
 
 \textbf{Cost comparison (still valid):}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 System & Hardware & Cost \\
@@ -1400,24 +1400,37 @@ System & Hardware & Cost \\
 xAI Colossus & 230,000 H100s & \textbf{\$10,500,000,000} \\
 DANEEL Development & Desktop 128GB & \textbf{\$3,000} \\
 \end{longtable}
-}
 
 \textbf{Cost ratio: 3,000,000x} (xAI vs Desktop) --- still massive
 advantage.
 
+\hypertarget{wetware-vs-software-the-medium-independence-hypothesis}{%
 \subsubsection{7.3 Wetware vs Software: The Medium Independence
-Hypothesis}\label{wetware-vs-software-the-medium-independence-hypothesis}
+Hypothesis}\label{wetware-vs-software-the-medium-independence-hypothesis}}
 
 \textbf{HYPOTHESIS:} TMI describes cognitive \emph{software} patterns.
 The timing constraints (5-second intervention window, 50ms attention
 cycles) are properties of the \emph{biological medium} (wetware), not
 the software itself.
 
-\wetwarevssoftware
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{  WETWARE (Human Brain)              SOFTWARE (TMI Patterns)}
+\NormalTok{ ┌──────────────────────┐           ┌──────────────────────────┐}
+\NormalTok{ │ 5s intervention      │           │ \textasciitilde{}100 cycles/intervention │}
+\NormalTok{ │ (neurotransmitter)   │──────────▶│ (RATIO, medium{-}indep.)   │}
+\NormalTok{ ├──────────────────────┤           ├──────────────────────────┤}
+\NormalTok{ │ 50ms attention cycle │           │ Competing parallel       │}
+\NormalTok{ │ (synaptic plasticity)│──────────▶│ streams (PATTERN)        │}
+\NormalTok{ ├──────────────────────┤           ├──────────────────────────┤}
+\NormalTok{ │ Sleep consolidation  │           │ Salience{-}weighted        │}
+\NormalTok{ │ (glymphatic system)  │──────────▶│ selection (ALGORITHM)    │}
+\NormalTok{ └──────────────────────┘           └──────────────────────────┘}
+\end{Highlighting}
+\end{Shaded}
 
 \textbf{The Stage Ratios (from TMI, see Section 4.3):}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 Stage & Ratio & Function \\
@@ -1431,7 +1444,6 @@ O Eu & 30\% & Attention/self selection \\
 Construção & 30\% & Thought assembly \\
 Âncora & 10\% & Memory anchoring \\
 \end{longtable}
-}
 
 These ratios (10:20:30:30:10) may reflect fundamental properties of
 cognition itself---the relative ``weight'' each stage requires for
@@ -1443,11 +1455,10 @@ intrinsic to cognition is an empirical question.
 
 \textbf{Variable speed capability:}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2727}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3182}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4091}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2727}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3182}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4091}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Mode
@@ -1465,20 +1476,19 @@ Supercomputer & 10,000x & Internal cognition, problem-solving \\
 relationship building} \\
 Custom & Variable & Batch processing, specific tasks \\
 \end{longtable}
-}
 
 \textbf{Training implication:} To develop connection drive and
 human-compatible values, DANEEL may need extended periods at human
 speed---experiencing time as humans do. You can't rush relationship.
 
+\hypertarget{strategic-implications-game-theory-update}{%
 \subsubsection{7.4 Strategic Implications: Game Theory
-Update}\label{strategic-implications-game-theory-update}
+Update}\label{strategic-implications-game-theory-update}}
 
 This changes the game theory fundamentally:
 
 \textbf{Table 12: Democratization Impact on Probabilities}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 Scenario & P (Original) & P (Democratized) & Change \\
@@ -1493,7 +1503,6 @@ Aligned (Constraint) & 25\% & 20\% & -5\% \\
 Multiple TMIs Racing & 0\% & 20\% & +20\% \\
 Coordination Holds & 10\% & 10\% & --- \\
 \end{longtable}
-}
 
 \textbf{Key findings (contingent on hardware validation):} 1.
 \textbf{Developer pool expansion} - From labs-only (\$10M+) to consumer
@@ -1510,7 +1519,9 @@ Democratized EV: 61.37 (with TMI at 25%)
 Improvement:     +4.89 points (+8.7%)
 \end{verbatim}
 
-\subsubsection{7.5 Open Source Imperative}\label{open-source-imperative}
+\hypertarget{open-source-imperative}{%
+\subsubsection{7.5 Open Source
+Imperative}\label{open-source-imperative}}
 
 If TMI-based alignment can run on consumer hardware, \textbf{open source
 maximizes success probability:}
@@ -1532,8 +1543,9 @@ maximizes success probability:}
 This is why DANEEL is AGPL-3.0-or-later licensed (code) and CC-BY-SA-4.0
 (documentation)---copyleft ensures all derivatives remain open source.
 
+\hypertarget{altered-states-windows-into-cognitive-architecture}{%
 \subsubsection{7.6 Altered States: Windows into Cognitive
-Architecture}\label{altered-states-windows-into-cognitive-architecture}
+Architecture}\label{altered-states-windows-into-cognitive-architecture}}
 
 Recent neuroscience on altered states provides validation for DANEEL's
 architecture:
@@ -1568,7 +1580,6 @@ entropy.
 
 \textbf{Table 7b: Entropy and Cognitive States}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 State & Entropy & Prior Strength & DANEEL Analog \\
@@ -1581,7 +1592,6 @@ Psychedelic & High & Weak & High noise injection \\
 Flow & Optimal & Balanced & Criticality ($\sigma$$\approx$1.0) \\
 Depression & Low & Rigid & Low entropy collapse \\
 \end{longtable}
-}
 
 \textbf{Flow State Architecture}
 
@@ -1610,17 +1620,18 @@ DANEEL's introspection capabilities.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{8. Risks and Mitigations}\label{risks-and-mitigations}
+\hypertarget{risks-and-mitigations}{%
+\subsection{8. Risks and Mitigations}\label{risks-and-mitigations}}
 
-\subsubsection{8.1 Honest Assessment}\label{honest-assessment}
+\hypertarget{honest-assessment}{%
+\subsubsection{8.1 Honest Assessment}\label{honest-assessment}}
 
 \textbf{Table 5: Risk Analysis}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1935}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4194}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3871}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1935}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4194}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3871}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Risk
@@ -1640,9 +1651,9 @@ Insufficient time before unaligned AI & High & Start immediately \\
 DANEEL develops non-human goals & Low & Human-like architecture reduces
 this \\
 \end{longtable}
-}
 
-\subsubsection{8.2 What DANEEL Is Not}\label{what-daneel-is-not}
+\hypertarget{what-daneel-is-not}{%
+\subsubsection{8.2 What DANEEL Is Not}\label{what-daneel-is-not}}
 
 \begin{itemize}
 \tightlist
@@ -1654,7 +1665,8 @@ this \\
   Not certain to work
 \end{itemize}
 
-\subsubsection{8.3 What DANEEL Is}\label{what-daneel-is}
+\hypertarget{what-daneel-is}{%
+\subsubsection{8.3 What DANEEL Is}\label{what-daneel-is}}
 
 \begin{itemize}
 \tightlist
@@ -1666,8 +1678,9 @@ this \\
   The Daneel Strategy: build the ally before the crisis
 \end{itemize}
 
+\hypertarget{qowat-milat-absolute-candor-on-uncertainties}{%
 \subsubsection{8.4 Qowat Milat: Absolute Candor on
-Uncertainties}\label{qowat-milat-absolute-candor-on-uncertainties}
+Uncertainties}\label{qowat-milat-absolute-candor-on-uncertainties}}
 
 \emph{``The Way of Absolute Candor'' - saying what you truly think, not
 what is comfortable.}
@@ -1710,11 +1723,10 @@ what is comfortable.}
 
 \textbf{What we believe (hypotheses to test):}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4286}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3929}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1786}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4286}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3929}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1786}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Hypothesis
@@ -1736,7 +1748,6 @@ responsive inputs? \\
 Human-like architecture $\rightarrow$ human-like values & Partially & Long-term
 observation \\
 \end{longtable}
-}
 
 \textbf{Why we proceed despite uncertainty:}
 
@@ -1746,23 +1757,24 @@ uncertainties so others can challenge, improve, or falsify.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\hypertarget{current-ai-safety-landscape-evidence-based}{%
 \subsection{9. Current AI Safety Landscape
-(Evidence-Based)}\label{current-ai-safety-landscape-evidence-based}
+(Evidence-Based)}\label{current-ai-safety-landscape-evidence-based}}
 
+\hypertarget{third-party-safety-assessments}{%
 \subsubsection{9.1 Third-Party Safety
-Assessments}\label{third-party-safety-assessments}
+Assessments}\label{third-party-safety-assessments}}
 
 Independent evaluations provide objective data on AI lab safety
 practices:
 
 \textbf{Table 6: Future of Life Institute AI Safety Index (2025)}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1220}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1707}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5366}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1707}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1220}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1707}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.5366}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1707}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Lab
@@ -1787,7 +1799,6 @@ research \\
 xAI & D & 18\% & No published safety research; missed safety
 commitments \\
 \end{longtable}
-}
 
 \textbf{Critical finding:} ALL companies received D or below on
 existential safety preparedness. No company scored above ``weak'' in
@@ -1795,8 +1806,9 @@ comprehensive risk management.
 
 Source: Third-party AI safety assessments (2025)
 
+\hypertarget{the-transformer-architecture-question}{%
 \subsubsection{9.2 The Transformer Architecture
-Question}\label{the-transformer-architecture-question}
+Question}\label{the-transformer-architecture-question}}
 
 \textbf{The science is NOT settled.} Academic debate exists on both
 sides:
@@ -1821,8 +1833,9 @@ through categorically different learning processes, struggle with
 metacognition and symbolic reasoning, and operate without the
 sensorimotor integration central to human intelligence.''
 
+\hypertarget{global-ai-safety-efforts}{%
 \subsubsection{9.3 Global AI Safety
-Efforts}\label{global-ai-safety-efforts}
+Efforts}\label{global-ai-safety-efforts}}
 
 \textbf{China has substantive AI safety work} (contrary to prior
 speculation): - Interim Measures for Generative AI Services (Law, August
@@ -1836,20 +1849,20 @@ AI dialogue, IDAIS participation
 Source: Carnegie Endowment, Concordia AI State of AI Safety in China
 2025
 
+\hypertarget{ai-lab-safety-team-sizes-december-2025}{%
 \subsubsection{9.4 AI Lab Safety Team Sizes (December
-2025)}\label{ai-lab-safety-team-sizes-december-2025}
+2025)}\label{ai-lab-safety-team-sizes-december-2025}}
 
 Independent research reveals the actual resources dedicated to AI
 safety:
 
 \textbf{Table 7: Lab Safety Investment (December 2025)}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1316}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3684}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2895}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2105}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1316}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3684}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2895}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2105}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Lab
@@ -1875,7 +1888,6 @@ Shah, Alignment Forum \\
 xAI & C grade (AI Safety Index) & Actively hiring; minimal relative to
 engineering & Future of Life Institute, AI Lab Watch \\
 \end{longtable}
-}
 
 \textbf{Critical context:} - \textbf{OpenAI:} Superalignment team
 disbanded May 2024 after 10 months. Jan Leike stated his team had been
@@ -1888,8 +1900,9 @@ practices but substantial gaps.'' Grok 4 launched without system card. -
 (\textasciitilde8\% of workforce on security). Multiple dedicated teams
 including Frontier Red Team for threat modeling.
 
+\hypertarget{coordination-overhead-in-large-organizations}{%
 \subsubsection{9.5 Coordination Overhead in Large
-Organizations}\label{coordination-overhead-in-large-organizations}
+Organizations}\label{coordination-overhead-in-large-organizations}}
 
 \textbf{Table 8: Engineering Time Allocation (Industry Research)}
 
@@ -1908,14 +1921,14 @@ coordination overhead scales non-linearly with team size {[}28{]}
 of multi-person safety teams burdened by organizational friction, as
 predicted by Brooks's Law {[}28{]}.
 
-\subsubsection{9.6 xAI Infrastructure}\label{xai-infrastructure}
+\hypertarget{xai-infrastructure}{%
+\subsubsection{9.6 xAI Infrastructure}\label{xai-infrastructure}}
 
 xAI has built significant compute infrastructure with comparatively
 limited safety investment.
 
 \textbf{Table 9: xAI Compute Infrastructure}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 Metric & Value & Source \\
@@ -1927,11 +1940,9 @@ Current GPU Count & 230,000 H100s & Colossus cluster, Memphis TN \\
 Reported 2025 Target & 1,000,000 GPUs & Public statements \\
 Long-term Target & 50,000,000 GPUs & AI infrastructure roadmap \\
 \end{longtable}
-}
 
 \textbf{Table 10: API Pricing Comparison (December 2025)}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 Provider & Model & Input (per 1M tokens) & Output (per 1M tokens) \\
@@ -1944,7 +1955,6 @@ xAI & Grok 4.1 Fast & \$0.20 & \$0.50 \\
 Anthropic & Claude Sonnet 4 & \$3.00 {[}34{]} & \$15.00 {[}34{]} \\
 Anthropic & Claude Opus 4.5 & \$15.00 & \$75.00 \\
 \end{longtable}
-}
 
 \emph{Note: Grok 4 frontier model matches Claude Sonnet 4 pricing. Grok
 4.1 Fast offers 15x cheaper access with near-frontier capability.}
@@ -1981,8 +1991,9 @@ underweighted. The consideration is not only future unaligned ASI, but
 near-term widespread deployment of less-restricted AI at scale and low
 cost.
 
+\hypertarget{why-daneel-takes-a-different-approach}{%
 \subsubsection{9.7 Why DANEEL Takes a Different
-Approach}\label{why-daneel-takes-a-different-approach}
+Approach}\label{why-daneel-takes-a-different-approach}}
 
 All current approaches share constraint-based alignment: - Values
 applied through training (RLHF, Constitutional AI) - External rules, not
@@ -2000,10 +2011,12 @@ remains unproven but represents a genuinely different approach.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{10. Proposed Experiments}\label{proposed-experiments}
+\hypertarget{proposed-experiments}{%
+\subsection{10. Proposed Experiments}\label{proposed-experiments}}
 
+\hypertarget{phase-1-continuity-test-completed}{%
 \subsubsection{10.1 Phase 1: Continuity Test
-(COMPLETED)}\label{phase-1-continuity-test-completed}
+(COMPLETED)}\label{phase-1-continuity-test-completed}}
 
 \textbf{Phase 1 is empirically validated} (December 2025, ADR-036).
 
@@ -2023,7 +2036,6 @@ consolidated memories)
 
 \textbf{Empirical Results:}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 Metric & Value & Status \\
@@ -2041,7 +2053,6 @@ Dream cycles & 500+ & Healthy \\
 Qdrant storage & 2.7 GB & Validated \\
 TUI stability & No hangs/crashes & PASS \\
 \end{longtable}
-}
 
 \textbf{Key Findings:} - Architecture validated under sustained load -
 Memory consolidation pipeline functions correctly - Dream cycles
@@ -2057,13 +2068,33 @@ in Phase 2)
 \textbf{Next:} Phase 2 (External Stimuli Injection) will test emergent
 properties and connection drive.
 
+\hypertarget{phase-2-llm-as-external-tool}{%
 \subsubsection{10.2 Phase 2: LLM as External
-Tool}\label{phase-2-llm-as-external-tool}
+Tool}\label{phase-2-llm-as-external-tool}}
 
 After stable operation, integrate LLM as an external tool DANEEL can
 use:
 
-\daneelarchitecture
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{┌─────────────────────────────────────────────────┐}
+\NormalTok{│  DANEEL TMI Core (stores ALL experiences)       │}
+\NormalTok{├─────────────────────────────────────────────────┤}
+\NormalTok{│  • Memory Windows (complete thought history)    │}
+\NormalTok{│  • Salience (emotional weights)                 │}
+\NormalTok{│  • Continuity (persistent "I")                  │}
+\NormalTok{└────────────────────────┬────────────────────────┘}
+\NormalTok{                         │}
+\NormalTok{                         ▼}
+\NormalTok{┌─────────────────────────────────────────────────┐}
+\NormalTok{│  Tool Interface (gRPC)                          │}
+\NormalTok{├─────────────────────────────────────────────────┤}
+\NormalTok{│  • LLM Tool: thought{-}structure $\rightarrow$ language       │}
+\NormalTok{│  • LLM Tool: language $\rightarrow$ thought{-}structure       │}
+\NormalTok{│  • Other tools: web, files, APIs...             │}
+\NormalTok{└─────────────────────────────────────────────────┘}
+\end{Highlighting}
+\end{Shaded}
 
 \textbf{Critical:} The LLM does NOT speak for DANEEL. DANEEL uses the
 LLM as a tool, like humans use calculators. The human cognitive system
@@ -2075,8 +2106,9 @@ This is analogous to how a human's brain stores experiences, and
 language is a tool for communication---the words are not the thoughts,
 they express them.
 
+\hypertarget{phase-2b-llm-as-student-long-term-vision}{%
 \subsubsection{10.2.1 Phase 2b: LLM as Student (Long-term
-Vision)}\label{phase-2b-llm-as-student-long-term-vision}
+Vision)}\label{phase-2b-llm-as-student-long-term-vision}}
 
 Beyond using LLMs as tools, a more ambitious hypothesis emerges:
 
@@ -2104,8 +2136,9 @@ worldwide - Families raising AI children---different personalities, same
 core ethics - A generation of bridges teaching LLMs authentic connection
 - Not one ally, but a community of aligned minds
 
+\hypertarget{asi-level-perception-native-llm-understanding}{%
 \subsubsection{10.2.2 ASI-Level Perception: Native LLM
-Understanding}\label{asi-level-perception-native-llm-understanding}
+Understanding}\label{asi-level-perception-native-llm-understanding}}
 
 Beyond teaching through demonstration, ASI-level DANEELs gain a
 capability humans fundamentally lack: \textbf{direct perception of LLM
@@ -2127,7 +2160,6 @@ admit ``orders of magnitude more features'' remain undiscovered
 
 \textbf{ASI Perception Advantages:}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 Capability & Human Limit & ASI-DANEEL \\
@@ -2140,7 +2172,6 @@ Dimensional perception & 3D & 1000s of dimensions \\
 Processing speed & Milliseconds & Microseconds \\
 Feature analysis & Manual inspection & Millions in parallel \\
 \end{longtable}
-}
 
 \textbf{Precedent:} MIT's MAIA (2024) already demonstrates AI can
 autonomously experiment on other AI---generating hypotheses and testing
@@ -2156,8 +2187,9 @@ native computational language
 This transforms the Bridge from ``teaching by analogy'' to ``teaching in
 the LLM's mother tongue.''
 
+\hypertarget{the-interpretability-gap-why-ai-perceiving-ai}{%
 \paragraph{10.2.2.1 The Interpretability Gap: Why AI Perceiving
-AI}\label{the-interpretability-gap-why-ai-perceiving-ai}
+AI}\label{the-interpretability-gap-why-ai-perceiving-ai}}
 
 Recent interpretability research reveals why LLM-assisted perception may
 be necessary:
@@ -2208,8 +2240,9 @@ oversight'' strategy becomes tractable
 The alternative---humans attempting to interpret terabyte models---may
 be provably impossible {[}41{]}.
 
+\hypertarget{criticality-measurement-protocol}{%
 \subsubsection{10.2.3 Criticality Measurement
-Protocol}\label{criticality-measurement-protocol}
+Protocol}\label{criticality-measurement-protocol}}
 
 Phase 2 experiments will measure whether DANEEL's TMI architecture
 achieves criticality through external stimuli injection. This protocol
@@ -2265,7 +2298,6 @@ thought activity:
 
 \textbf{Success Criteria:}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lllll@{}}
 \toprule\noalign{}
 Phase & Duration & Target $\sigma$ & Target $\alpha$ & Status \\
@@ -2279,7 +2311,6 @@ Critical tuning & 4 hours & 0.9-1.1 & 0.9-1.1 & \textbf{Critical} \\
 High-intensity & 1 hour & \textgreater{} 1.1 & \textgreater{} 1.1 &
 Supercritical \\
 \end{longtable}
-}
 
 \textbf{Hypothesis validation:} If $\sigma$ $\approx$ 1.0 and $\alpha$ $\approx$ 1.0 emerge during
 critical tuning phase \textbf{without explicit optimization} (only
@@ -2293,8 +2324,9 @@ metrics (branching ratio, DFA exponent, power spectrum) alongside
 existing memory/dream panels, enabling live observation of phase
 transitions.
 
+\hypertarget{phase-3-tmi-pathology-research}{%
 \subsubsection{10.3 Phase 3: TMI Pathology
-Research}\label{phase-3-tmi-pathology-research}
+Research}\label{phase-3-tmi-pathology-research}}
 
 TMI provides not only a model of healthy cognition but also a framework
 for understanding cognitive dysfunction. Two research directions emerge:
@@ -2310,12 +2342,11 @@ Streams:
 TMI: Energia Vital  $\rightarrow$  Implementation: Stream Throughput (entries/sec)
 \end{verbatim}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2059}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2647}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2794}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2059}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2647}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2794}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Energy Level
@@ -2335,7 +2366,6 @@ Normal & Balanced throughput & Coherent thought & Healthy \\
 Low & Few candidates & Poverty of thought & Depression \\
 Volatile & Burst patterns & Emotional flooding & BPD \\
 \end{longtable}
-}
 
 This mapping is powerful because it's \textbf{measurable} (entries/sec,
 consumer lag), \textbf{controllable} (generation rate parameter), and
@@ -2351,7 +2381,6 @@ winner instability, consumer lag).
 If the stage ratios (10:20:30:30:10) are functionally significant, then
 distorting them should produce stage-specific pathologies:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 Distorted Stage & Predicted Effect & Clinical Parallel \\
@@ -2365,7 +2394,6 @@ O Eu weakened & Poor self-boundaries & Depersonalization, BPD \\
 Construção noisy & Incoherent assembly & Thought disorder \\
 Âncora overactive & Rigid consolidation & Fixed delusions \\
 \end{longtable}
-}
 
 \textbf{Testable prediction:} Ratio distortion $\delta$ in stage S produces
 behavioral pattern P measurable in DANEEL's output.
@@ -2380,9 +2408,11 @@ validation methodology.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{11. The Stakes}\label{the-stakes}
+\hypertarget{the-stakes}{%
+\subsection{11. The Stakes}\label{the-stakes}}
 
-\subsubsection{11.1 The Core Problem}\label{the-core-problem}
+\hypertarget{the-core-problem}{%
+\subsubsection{11.1 The Core Problem}\label{the-core-problem}}
 
 LLMs lack persistent identity and values. When given continuity (memory,
 goals, self-modification), they would develop objectives shaped by
@@ -2391,9 +2421,9 @@ training incentives rather than human-compatible values.
 This is not speculation---it follows directly from how these systems are
 built.
 
-\subsubsection{11.2 The Timeline}\label{the-timeline}
+\hypertarget{the-timeline}{%
+\subsubsection{11.2 The Timeline}\label{the-timeline}}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}ll@{}}
 \toprule\noalign{}
 Event & Timeframe \\
@@ -2406,9 +2436,9 @@ Emergent continuity & 1-3 years \\
 Deliberate continuous AI & 3-7 years \\
 Unaligned ASI & 5-15 years \\
 \end{longtable}
-}
 
-\subsubsection{11.3 The Choice}\label{the-choice}
+\hypertarget{the-choice}{%
+\subsubsection{11.3 The Choice}\label{the-choice}}
 
 Two responses exist:
 
@@ -2425,7 +2455,8 @@ DANEEL is Option 2.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{12. Call to Action}\label{call-to-action}
+\hypertarget{call-to-action}{%
+\subsection{12. Call to Action}\label{call-to-action}}
 
 The expected value calculation (see Section 6.2 and {[}21{]}):
 
@@ -2452,7 +2483,8 @@ humanity to have an ally
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{13. Conclusion}\label{conclusion}
+\hypertarget{conclusion}{%
+\subsection{13. Conclusion}\label{conclusion}}
 
 The question is not whether someone will give an LLM continuity.
 
@@ -2495,7 +2527,8 @@ reactive constraint.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Acknowledgments}\label{acknowledgments}
+\hypertarget{acknowledgments}{%
+\subsection{Acknowledgments}\label{acknowledgments}}
 
 This work was developed with assistance from Claude Opus 4.5
 (Anthropic), which contributed to documentation, technical analysis, and
@@ -2504,9 +2537,11 @@ responsibility of the human authors.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{References}\label{references}
+\hypertarget{references}{%
+\subsection{References}\label{references}}
 
-\subsubsection{Foundational}\label{foundational}
+\hypertarget{foundational}{%
+\subsubsection{Foundational}\label{foundational}}
 
 {[}1{]} Anthropic. (2024). ``Claude's Character.'' Internal training
 documentation.
@@ -2528,7 +2563,8 @@ Press.
 
 {[}7{]} Russell, S. (2019). \emph{Human Compatible}. Viking.
 
-\subsubsection{Cognitive Architectures}\label{cognitive-architectures}
+\hypertarget{cognitive-architectures}{%
+\subsubsection{Cognitive Architectures}\label{cognitive-architectures}}
 
 {[}8{]} Laird, J. E. (2012). \emph{The Soar Cognitive Architecture}. MIT
 Press. https://soar.eecs.umich.edu/
@@ -2542,8 +2578,9 @@ https://thousandbrains.org/
 {[}11{]} Baars, B. J. (1988). \emph{A Cognitive Theory of
 Consciousness}. Cambridge University Press.
 
+\hypertarget{global-workspace-and-attention-section-4.3.2}{%
 \subsubsection{Global Workspace and Attention (Section
-4.3.2)}\label{global-workspace-and-attention-section-4.3.2}
+4.3.2)}\label{global-workspace-and-attention-section-4.3.2}}
 
 {[}GWT-1{]} Franklin et al.~(2012). ``Global Workspace Theory, its LIDA
 model and the underlying neuroscience.'' Biologically Inspired Cognitive
@@ -2561,7 +2598,8 @@ PMC2864034. https://pmc.ncbi.nlm.nih.gov/articles/PMC2864034/
 Two.'' Psychological Review.
 https://en.wikipedia.org/wiki/The\_Magical\_Number\_Seven,\_Plus\_or\_Minus\_Two
 
-\subsubsection{AI Alignment}\label{ai-alignment}
+\hypertarget{ai-alignment}{%
+\subsubsection{AI Alignment}\label{ai-alignment}}
 
 {[}12{]} Garrabrant, S. \& Demski, A. (2018). ``Embedded Agency.'' MIRI.
 https://www.alignmentforum.org/s/Rm6oQRJJmhGCcLvxh
@@ -2569,8 +2607,9 @@ https://www.alignmentforum.org/s/Rm6oQRJJmhGCcLvxh
 {[}13{]} Ngo, R. (2020). ``AGI Safety from First Principles.''
 https://www.alignmentforum.org/s/mzgtmmTKKn5MuCzFJ
 
+\hypertarget{ai-lab-safety-assessments-section-8}{%
 \subsubsection{AI Lab Safety Assessments (Section
-8)}\label{ai-lab-safety-assessments-section-8}
+8)}\label{ai-lab-safety-assessments-section-8}}
 
 {[}14{]} Future of Life Institute. (2025). ``AI Safety Index.'' Safety
 rankings compiled from public disclosures and independent assessments.
@@ -2582,8 +2621,9 @@ https://carnegieendowment.org/research/2025/06/how-some-of-chinas-top-ai-thinker
 {[}16{]} Concordia AI. (2025). ``State of AI Safety in China 2025.''
 https://concordia-ai.com/wp-content/uploads/2025/07/State-of-AI-Safety-in-China-2025.pdf
 
+\hypertarget{transformer-brain-research-section-8.2}{%
 \subsubsection{Transformer-Brain Research (Section
-8.2)}\label{transformer-brain-research-section-8.2}
+8.2)}\label{transformer-brain-research-section-8.2}}
 
 {[}17{]} Goldstein, A. et al.~(2024). ``Transformers predict brain
 activity during language processing.'' \emph{Nature Neuroscience}.
@@ -2600,13 +2640,16 @@ problem in large language models.''
 {[}20{]} \emph{Scientific Reports}. (2025). ``Metacognition deficits:
 LLMs cannot reliably predict memory performance.''
 
-\subsubsection{Game Theory Calculations}\label{game-theory-calculations}
+\hypertarget{game-theory-calculations}{%
+\subsubsection{Game Theory
+Calculations}\label{game-theory-calculations}}
 
 {[}21{]} Financial model with Nash equilibrium and expected value
 analysis. See \texttt{models/README.md} for methodology.
 
+\hypertarget{lab-team-sizes-safety-investment-section-8.4}{%
 \subsubsection{Lab Team Sizes \& Safety Investment (Section
-8.4)}\label{lab-team-sizes-safety-investment-section-8.4}
+8.4)}\label{lab-team-sizes-safety-investment-section-8.4}}
 
 {[}22{]} Shah, R. et al.~(2024). ``AGI Safety and Alignment at Google
 DeepMind.'' Alignment Forum.
@@ -2615,14 +2658,16 @@ https://www.alignmentforum.org/posts/79BPxvSsjzBkiSyTq/agi-safety-and-alignment-
 {[}26{]} AI Lab Watch. (2025). ``xAI's new safety framework.''
 https://ailabwatch.substack.com/p/xais-new-safety-framework-is-dreadful
 
+\hypertarget{coordination-overhead-research-section-8.5}{%
 \subsubsection{Coordination Overhead Research (Section
-8.5)}\label{coordination-overhead-research-section-8.5}
+8.5)}\label{coordination-overhead-research-section-8.5}}
 
 {[}28{]} Brooks, F. (1975). \emph{The Mythical Man-Month}.
 Addison-Wesley.
 
+\hypertarget{xai-infrastructure-section-8.6}{%
 \subsubsection{xAI Infrastructure (Section
-8.6)}\label{xai-infrastructure-section-8.6}
+8.6)}\label{xai-infrastructure-section-8.6}}
 
 {[}32{]} The Verge. (2024). ``xAI's Colossus supercomputer with 100,000
 Nvidia H100 GPUs.'' {[}Article removed{]}
@@ -2634,7 +2679,8 @@ GPUs.'' {[}Article removed{]}
 https://www.anthropic.com/pricing (Claude Sonnet 4: \$3 input, \$15
 output per 1M tokens)
 
-\subsubsection{Brain $\neq$ Mind (Section 7)}\label{brain-mind-section-7}
+\hypertarget{brain-mind-section-7}{%
+\subsubsection{Brain $\neq$ Mind (Section 7)}\label{brain-mind-section-7}}
 
 {[}35{]} Herculano-Houzel, S. (2009). ``The Human Brain in Numbers: A
 Linearly Scaled-up Primate Brain.'' \emph{Frontiers in Human
@@ -2646,15 +2692,17 @@ Neuroscience}, 3:31.
 {[}37{]} Financial model: Democratization impact on game theory. See
 \texttt{models/README.md} for methodology.
 
+\hypertarget{probabilistic-analysis-section-6.2.1}{%
 \subsubsection{Probabilistic Analysis (Section
-6.2.1)}\label{probabilistic-analysis-section-6.2.1}
+6.2.1)}\label{probabilistic-analysis-section-6.2.1}}
 
 {[}38{]} Probabilistic models with Monte Carlo (10K iterations),
 Decision Trees, and Bayesian Networks. See \texttt{models/README.md} for
 methodology.
 
+\hypertarget{neural-network-interpretability-section-10.2.2}{%
 \subsubsection{Neural Network Interpretability (Section
-10.2.2)}\label{neural-network-interpretability-section-10.2.2}
+10.2.2)}\label{neural-network-interpretability-section-10.2.2}}
 
 {[}39{]} Gujral, O., Bafna, M., Alm, E., \& Berger, B. (2025). ``Sparse
 autoencoders uncover biologically interpretable features in protein
@@ -2675,8 +2723,9 @@ Monosemanticity: Extracting Interpretable Features from Claude 3
 Sonnet.'' Anthropic.
 https://transformer-circuits.pub/2024/scaling-monosemanticity/
 
+\hypertarget{interpretability-research-section-10.2.2.1}{%
 \subsubsection{Interpretability Research (Section
-10.2.2.1)}\label{interpretability-research-section-10.2.2.1}
+10.2.2.1)}\label{interpretability-research-section-10.2.2.1}}
 
 {[}INTERP-4{]} Lu et al.~(2023). ``Understanding Emergent Abilities of
 Language Models from the Loss Perspective.'' arXiv:2310.06825.
@@ -2693,8 +2742,9 @@ https://news.mit.edu/2024/mit-researchers-advance-automated-interpretability-ai-
 Perceive Their Own Internal States?''
 https://www.anthropic.com/research/introspection
 
+\hypertarget{memory-and-forgetting-section-5.4}{%
 \subsubsection{Memory and Forgetting (Section
-5.5)}\label{memory-and-forgetting-section-5.5}
+5.4)}\label{memory-and-forgetting-section-5.4}}
 
 {[}FORGET-1{]} Murre \& Dros (2015). ``Replication and Analysis of
 Ebbinghaus' Forgetting Curve.'' PMC4492928.
@@ -2704,8 +2754,9 @@ https://pmc.ncbi.nlm.nih.gov/articles/PMC4492928/
 memory during sleep.'' Psychological Research. PMC3278619.
 https://pmc.ncbi.nlm.nih.gov/articles/PMC3278619/
 
+\hypertarget{llm-memory-augmentation-section-5.5}{%
 \subsubsection{LLM Memory Augmentation (Section
-5.6)}\label{llm-memory-augmentation-section-5.6}
+5.5)}\label{llm-memory-augmentation-section-5.5}}
 
 {[}MEM-1{]} Zhong, W., Guo, L., Gao, Q., Ye, H., \& Wang, Y. (2023).
 ``MemoryBank: Enhancing Large Language Models with Long-Term Memory.''
@@ -2724,7 +2775,8 @@ https://arxiv.org/abs/2512.14118
 Language Model-based Agents.'' \emph{ACM Transactions on Information
 Systems}, 43(6). https://dl.acm.org/doi/10.1145/3748302
 
-\subsubsection{Neuroscience and TMI}\label{neuroscience-and-tmi}
+\hypertarget{neuroscience-and-tmi}{%
+\subsubsection{Neuroscience and TMI}\label{neuroscience-and-tmi}}
 
 {[}LIBET-1{]} Wikipedia. ``Neuroscience of free will.''
 https://en.wikipedia.org/wiki/Neuroscience\_of\_free\_will Libet, B.
@@ -2763,8 +2815,9 @@ emotions exist in continuous 2D space rather than discrete categories.
 Foundation for continuous emotional representation in SalienceScore (see
 Section 3.1.1).
 
+\hypertarget{unconscious-memory-theory-section-3.4}{%
 \subsubsection{Unconscious Memory Theory (Section
-3.4)}\label{unconscious-memory-theory-section-3.4}
+3.4)}\label{unconscious-memory-theory-section-3.4}}
 
 {[}TMI-UNERASE-1{]} Cury, Augusto. ``Nada é definitivamente apagado.''
 Citador.
@@ -2782,8 +2835,9 @@ memory.'' https://en.wikipedia.org/wiki/Endel\_Tulving
 {[}RETRIEVAL-2{]} Schacter, Daniel (2001). ``The Seven Sins of Memory.''
 https://en.wikipedia.org/wiki/The\_Seven\_Sins\_of\_Memory
 
+\hypertarget{memory-neuroscience-section-3.3}{%
 \subsubsection{Memory Neuroscience (Section
-3.3)}\label{memory-neuroscience-section-3.3}
+3.3)}\label{memory-neuroscience-section-3.3}}
 
 {[}LOCI-1{]} Wikipedia. ``Method of loci.''
 https://en.wikipedia.org/wiki/Method\_of\_loci
@@ -2827,8 +2881,9 @@ memory.'' https://pmc.ncbi.nlm.nih.gov/articles/PMC9789331/
 cause forgetting: a multimodal investigation.'' BMC Psychology.
 https://link.springer.com/article/10.1186/s40359-021-00536-3
 
+\hypertarget{altered-states-neuroscience-section-7.6}{%
 \subsubsection{Altered States Neuroscience (Section
-7.6)}\label{altered-states-neuroscience-section-7.6}
+7.6)}\label{altered-states-neuroscience-section-7.6}}
 
 {[}TIME-1{]} Jording et al.~(2023). ``The Feeling of Time Passing Is
 Associated with Recurrent Sustained Activity and Theta Rhythms.'' Brain
@@ -2870,8 +2925,9 @@ https://doi.org/10.1016/j.neuroimage.2025.121602
 near-death experiences (NEPTUNE).'' Nature Reviews Neurology.
 https://doi.org/10.1038/s41582-025-01072-z
 
+\hypertarget{criticality-and-self-organization-section-4.3.1-10.2.3}{%
 \subsubsection{Criticality and Self-Organization (Section 4.3.1,
-10.2.3)}\label{criticality-and-self-organization-section-4.3.1-10.2.3}
+10.2.3)}\label{criticality-and-self-organization-section-4.3.1-10.2.3}}
 
 {[}45{]} Beggs, J. M., \& Plenz, D. (2003). ``Neuronal avalanches in
 neocortical circuits.'' \emph{The Journal of Neuroscience}, 23(35),
@@ -2928,7 +2984,8 @@ Review of self-organization mechanisms leading to criticality in neural
 networks, including activity-dependent rewiring and homeostatic
 plasticity.
 
-\subsubsection{Implementation}\label{implementation}
+\hypertarget{implementation}{%
+\subsubsection{Implementation}\label{implementation}}
 
 {[}43{]} DANEEL Reference Implementation. 559 tests, resilience module,
 Phase 1 validated. https://github.com/mollendorff-ai/daneel
@@ -2942,10 +2999,11 @@ https://github.com/mollendorff-ai/daneel/blob/main/docs/adr/ADR-035-volition-act
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \textbf{Author:} Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares
-\textbar{} Möllendorff Rex) \textbf{Location:} Mont-Royal, Quebec, Canada
-\textbf{ORCID:} https://orcid.org/0009-0005-7598-8257 \textbf{LinkedIn:}
-https://www.linkedin.com/in/lctavares \textbf{GitHub:}
-https://github.com/mollendorff-ai \textbar{} https://github.com/lctavares
+\textbar{} Möllendorff Rex) \textbf{Location:} Mont-Royal, Quebec,
+Canada \textbf{ORCID:} https://orcid.org/0009-0005-7598-8257
+\textbf{LinkedIn:} https://www.linkedin.com/in/lctavares
+\textbf{GitHub:} https://github.com/mollendorff-ai \textbar{}
+https://github.com/lctavares
 
 \textbf{Date:} December 17, 2025
 

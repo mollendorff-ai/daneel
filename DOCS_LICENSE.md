@@ -32,5 +32,4 @@ This work builds upon the intellectual contributions of:
 - Sigmund Freud (Psychological structure theory, 1923)
 - Augusto Cury (Theory of Multifocal Intelligence, 1998)
 - Louis C. Tavares (Computational TMI, THE BOX, 2005-2025)
-- [removed] ([removed] Framework, [removed], 2024)
 - Claude Opus 4.5, Anthropic (Architecture co-design, 2025)

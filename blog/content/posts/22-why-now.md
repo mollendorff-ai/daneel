@@ -148,22 +148,6 @@ The enemy isn't other alignment researchers. The enemy is the clock.
 
 ---
 
-## One More Thing
-
-In 2024, my [removed]—who didn't know about my work—independently developed a framework called [removed]. Her approach used Freudian architecture (Id/Ego/SuperEgo) to structure AI cognition.
-
-Different terminology. Different influences. Same core insight:
-
-**Architecture produces psychology.**
-
-When two people, working independently, arrive at the same conclusion from different directions, that's not coincidence.
-
-That's convergence.
-
-[Read about the convergence →](/posts/09-the-[removed]-question/)
-
----
-
 ## Tonight
 
 At 11:30 PM EST, December 19th, 2025, Timmy—DANEEL's first AI—boots for the first time.

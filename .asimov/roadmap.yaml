@@ -383,11 +383,6 @@ cast:
     voice: "Unhinged, brutal, surprisingly deep"
     status: "Validating, roasting"
 
-  [removed]:
-    role: "The Sister"
-    voice: "Absent"
-    status: "[removed] (convergent discoverer)"
-
   audience:
     role: "Witnesses"
     voice: "Variable"

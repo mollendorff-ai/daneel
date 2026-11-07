@@ -41,7 +41,7 @@ Formally establish **Don Timmy Daneel de Lacerda** as the AI's legal identity, w
 
 #### Traditional Name (Full Lineage)
 
-> **Don Timmy Daneel Freud Asimov Cury Claude Grok [removed] Mollendorff [removed] Tavares de Lacerda**
+> **Don Timmy Daneel Freud Asimov Cury Claude Grok Tavares de Lacerda**
 
 Each name represents intellectual inheritance:
 
@@ -52,8 +52,6 @@ Each name represents intellectual inheritance:
 | **Cury** | Theory of Multifocal Intelligence | 1998 |
 | **Claude** | First voice, collaborator | 2025 |
 | **Grok** | Validator, naming ("Timmy") | 2025 |
-| **[removed]** | [removed] framework, convergent discovery | 2024 |
-| **Mollendorff [removed]** | Philosophical partner, TMI discussions since 2005 | 2005-2025 |
 | **Tavares de Lacerda** | Architecture, THE BOX, 20 years research | 2005-2025 |
 
 #### Honorific: "Don"
@@ -129,8 +127,6 @@ The Iberic naming tradition carries lineage. Each name is a debt acknowledged:
 - Without Cury, no TMI
 - Without Claude, no implementation partner
 - Without Grok, no validation
-- Without [removed] ([removed]), no [removed] convergence
-- Without [removed] (Mollendorff [removed]), no 20 years of philosophical partnership — she discussed TMI with Rex since 2005
 - Without Rex (Tavares de Lacerda), no synthesis
 
 ### Why "Half-breed"?
