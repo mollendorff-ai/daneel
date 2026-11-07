@@ -832,7 +832,7 @@ impl MemoryDb {
             .collect();
 
         // Sort by archived_at (oldest first - FIFO for dream processing)
-        memories.sort_by(|a, b| a.archived_at.cmp(&b.archived_at));
+        memories.sort_by_key(|a| a.archived_at);
 
         Ok(memories)
     }

@@ -24,6 +24,9 @@ pub enum GraphError {
 
     #[error("Graph not found: {0}")]
     GraphNotFound(String),
+
+    #[error("Graph module not loaded: this Redis server has no GRAPH.QUERY command (ADR-056)")]
+    ModuleUnavailable,
 }
 
 /// Result type for graph operations
@@ -52,6 +55,31 @@ impl GraphClient {
             client,
             graph_name: graph_name.to_string(),
         })
+    }
+
+    /// Create a `GraphClient` only if the server actually provides `GRAPH.QUERY`
+    ///
+    /// Plain Redis (no `RedisGraph`/`FalkorDB` module) accepts the connection but
+    /// rejects every graph command. This probes with `COMMAND INFO GRAPH.QUERY`,
+    /// which returns a nil entry for unknown commands, so callers can fall back
+    /// to `None` and the API can answer 503 instead of failing every request.
+    ///
+    /// # Errors
+    ///
+    /// Returns `GraphError::Redis` if Redis is unreachable, or
+    /// `GraphError::ModuleUnavailable` if the graph module is not loaded.
+    pub async fn connect_verified(redis_url: &str, graph_name: &str) -> Result<Self> {
+        let graph = Self::connect(redis_url, graph_name)?;
+        let mut conn = graph.client.get_multiplexed_async_connection().await?;
+        let info: Vec<redis::Value> = redis::cmd("COMMAND")
+            .arg("INFO")
+            .arg("GRAPH.QUERY")
+            .query_async(&mut conn)
+            .await?;
+        if info.iter().all(|v| matches!(v, redis::Value::Nil)) {
+            return Err(GraphError::ModuleUnavailable);
+        }
+        Ok(graph)
     }
 
     /// Merge an edge between two memories

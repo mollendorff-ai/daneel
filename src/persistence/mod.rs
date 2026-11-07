@@ -346,7 +346,7 @@ impl MemoryStore {
         }
 
         // Sort by occurred_at
-        milestones.sort_by(|a, b| a.occurred_at.cmp(&b.occurred_at));
+        milestones.sort_by_key(|a| a.occurred_at);
 
         debug!("Loaded {} milestones", milestones.len());
         Ok(milestones)

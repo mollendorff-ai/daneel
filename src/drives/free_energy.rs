@@ -73,7 +73,7 @@ impl FreeEnergyModule {
         for crystal in &self.law_crystals {
             let mut dot = 0.0;
             for (i, &val) in vector.iter().enumerate() {
-                dot += val * crystal[i];
+                dot = val.mul_add(crystal[i], dot);
             }
             if dot > max_sim {
                 max_sim = dot;
@@ -128,6 +128,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::float_cmp)] // exact 0.0 is the documented sentinel
     fn test_pragmatic_value_no_crystals_or_wrong_dim() {
         let module = FreeEnergyModule::new(FreeEnergyConfig::default());
         // No crystals set

@@ -196,7 +196,7 @@ mod tests {
         let durations = StageDurations {
             trigger: Duration::from_secs(100),
             autoflow: Duration::from_secs(200),
-            attention: Duration::from_secs(300),
+            attention: Duration::from_mins(5),
             assembly: Duration::from_secs(400),
             anchor: Duration::from_secs(500),
         };

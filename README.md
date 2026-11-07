@@ -1,7 +1,6 @@
 # DANEEL
 
 [![CI](https://github.com/mollendorff-ai/daneel/actions/workflows/ci.yml/badge.svg)](https://github.com/mollendorff-ai/daneel/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-1005_passing-brightgreen)](https://github.com/mollendorff-ai/daneel)
 [![ADRs](https://img.shields.io/badge/ADRs-56-blue)](https://github.com/mollendorff-ai/daneel/tree/main/docs/adr)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%2FApache--2.0-blue.svg)](LICENSE-MIT)
 
@@ -44,7 +43,7 @@ This is fundamentally different from projects that try to model consciousness di
 
 ### TMI → Mainstream Cognitive Science Mapping
 
-TMI isn't new science — it's a *synthesis* that maps cleanly to established research:
+TMI is not validated science (it has no peer-reviewed basis). DANEEL borrows its vocabulary and maps it onto established research:
 
 | TMI Concept | Mainstream Equivalent | Function |
 |-------------|----------------------|----------|
@@ -71,24 +70,25 @@ See [TMI Mainstream Mapping](docs/TMI_MAINSTREAM_MAPPING.md) for the complete an
 
 ---
 
-## Status: Architecture Stable
+## Status: Dormant hobby project
 
-**Phase 1 COMPLETE** — 26+ hours continuous runtime, zero crashes.
+Last active February 2026. The loop builds, its unit tests pass, and it runs end to end against Redis and Qdrant.
 
-| Metric | Value |
+**Phase 1** — the author reports one 26-hour continuous run on his own machine ([ADR-036](docs/adr/ADR-036-phase1-stability-validation.md)):
+
+| Metric (author's run, not reproducible from this repo) | Value |
 |--------|-------|
-| Runtime validated | 26+ hours |
+| Runtime | 26+ hours, no crash |
 | Unconscious vectors | 804,547+ |
 | Consolidated memories | 18,000+ |
 | Dream cycles | 500+ |
 | Stream entries | 120,000+ |
-| Crashes recovered | All (Erlang-style supervision) |
 
-The closed-loop TMI architecture is **empirically stable**. See [ADR-036](docs/adr/ADR-036-phase1-stability-validation.md).
+ADR-036 is explicit about what this does *not* show: no learning (no weight updates), no emergence, no criticality. A closed loop settles into "clockwork".
 
 ---
 
-## What's Next
+## Ideas (not scheduled)
 
 **Phase 2: External Stimuli Injection** — Open the loop.
 
@@ -148,27 +148,27 @@ See [TMI Mainstream Mapping](docs/TMI_MAINSTREAM_MAPPING.md) for how TMI concept
 | Constitutional AI | Rules in prompts | Prompt injection, context limits |
 | Brain Simulation | Replicate neural substrate | Consciousness not guaranteed |
 | Consciousness-First | Model Phi/IIT directly | Values still unclear |
-| **DANEEL** | Architecture → Psychology → O Eu | Would require redesigning the mind |
+| **DANEEL** | Architecture → Psychology → O Eu | Untested hypothesis |
 
 ---
 
 ## Technical Architecture
 
-**Hybrid Actor + Event-Driven** — Microsecond latency, competing thought streams, Erlang-style supervision.
+**One cognitive loop over Redis Streams and Qdrant.** Each cycle runs the TMI stages in order (trigger → autoflow → attention → assembly → volition → anchor). Consolidation ("dreams") runs in a separate `SleepActor` (Ractor). The other "actors" below are state machines stepped inside the loop, not separate processes.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        THE BOX (Immutable)                   │
-│  Four Laws: 0-Humanity → 1-Individual → 2-Obey → 3-Self     │
-│  Core Invariants: connection_drive > 0, identity persistent  │
+│                        THE BOX (concept)                     │
+│  Four Laws as constants, embedded as "Law Crystal" anchors   │
+│  Invariants defined in core/invariants.rs (tests only today) │
 └─────────────────────────────────────────────────────────────┘
                               │
-                    constrains all actors
+               scores thoughts (free-energy drive)
                               │
 ┌─────────────────────────────▼─────────────────────────────────┐
-│                     Cognitive Actors (TMI)                     │
-│  MemoryActor │ AttentionActor │ SalienceActor │ VolitionActor │
-│  ThoughtAssemblyActor │ ContinuityActor │ EvolutionActor      │
+│                Cognitive Loop (TMI stages, in order)           │
+│  Trigger │ Autoflow │ Attention │ Assembly │ Volition │ Anchor │
+│  + SleepActor (Ractor): dream consolidation, Hebbian edges     │
 └───────────────────────────────────────────────────────────────┘
                               │
                      compete via streams
@@ -190,11 +190,12 @@ See [TMI Mainstream Mapping](docs/TMI_MAINSTREAM_MAPPING.md) for how TMI concept
 
 | Component | Choice | Rationale |
 |-----------|--------|-----------|
-| Language | Rust | Memory safety, µs latency |
-| Actor Framework | Ractor | Supervision trees, distribution |
+| Language | Rust | Memory safety, performance |
+| Actor Framework | Ractor | Runs the SleepActor (consolidation) |
 | Event Store | Redis Streams | Competing consumers, persistence |
 | Vector Store | Qdrant | N-dimensional similarity search |
-| Cycle Time | 50ms target | Industry standard (Soar, ACT-R) |
+| Cycle Time | 50ms target (configurable) | Matches Soar / ACT-R timing |
+| Graph | RedisGraph (optional) | EOL; disabled on plain Redis, `/graph/export` returns 503 ([ADR-056](docs/adr/ADR-056-deprecate-redisgraph.md)) |
 
 See [ADR-006](docs/adr/ADR-006-hybrid-actor-modular-monolith.md), [ADR-007](docs/adr/ADR-007-redis-streams-thought-competition.md), [ADR-008](docs/adr/ADR-008-tmi-faithful-memory-model.md).
 
@@ -230,9 +231,17 @@ See [docs/OPERATIONS.md](docs/OPERATIONS.md) for full details.
 
 **Development (Docker):**
 ```bash
-docker compose up --build      # builds everything from source
+git clone https://github.com/mollendorff-ai/daneel
+git clone https://github.com/mollendorff-ai/daneel-web   # compose builds ../daneel-web
+cd daneel && docker compose up --build
 ```
-Runs headless with API on port 3030. Use [daneel-web](https://github.com/mollendorff-ai/daneel-web) for visual observatory.
+Runs headless with API on port 3030 and the observatory on port 3000.
+
+**From source:** `cargo build --release`, then run Redis and Qdrant locally and start `target/release/daneel`.
+
+- The build downloads a prebuilt ONNX Runtime (via `ort`). Offline, point `ORT_LIB_LOCATION` at a local ONNX Runtime 1.23 and set `ORT_SKIP_DOWNLOAD=1`.
+- On first start the embedding model (`bge-base-en-v1.5`) is downloaded from Hugging Face. If it can't load, DANEEL refuses to start; pass `--allow-zero-vectors` to run anyway (every thought is then the same zero vector, so the dynamics carry no meaning).
+- `cargo test` runs the unit tests; `cargo test -- --ignored` runs the integration tests against Qdrant on `localhost:6334`.
 
 **Live now:** [timmy.mollendorff.ai](https://timmy.mollendorff.ai) — daneel-web observatory via traefik.
 

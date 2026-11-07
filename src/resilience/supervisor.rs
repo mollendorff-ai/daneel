@@ -431,7 +431,7 @@ mod tests {
     fn test_escalation_after_threshold() {
         let config = SupervisorConfig {
             max_restarts: 2,
-            restart_window: Duration::from_secs(60),
+            restart_window: Duration::from_mins(1),
             ..Default::default()
         };
         let mut supervisor = Supervisor::new(config).unwrap();
@@ -696,7 +696,7 @@ mod tests {
     #[test]
     fn test_restart_history_count_within_window() {
         let mut history = RestartHistory::new();
-        let window = Duration::from_secs(60);
+        let window = Duration::from_mins(1);
 
         // Initially empty
         assert_eq!(history.count_within_window(window), 0);

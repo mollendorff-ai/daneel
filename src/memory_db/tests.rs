@@ -212,13 +212,26 @@ fn episode_serialization() {
     assert_eq!(deserialized.boundary_type, BoundaryType::PredictionError);
 }
 
+/// Serialize the Qdrant integration tests.
+///
+/// They share the real collections, so running them in parallel races on
+/// `init_collections()` and lets one test's vectors show up in another's
+/// search. The guard is taken outside `block_on`, never held across an await.
+#[cfg_attr(coverage_nightly, coverage(off))]
+fn integration_lock() -> std::sync::MutexGuard<'static, ()> {
+    static LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+    LOCK.lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner)
+}
+
 /// Integration test marker - requires running Qdrant
-/// Run with: cargo test --features integration -- --ignored
+/// Run with: cargo test -- --ignored (Qdrant on localhost:6334)
 #[test]
 #[ignore = "Requires running Qdrant instance"]
 #[cfg_attr(coverage_nightly, coverage(off))]
 fn integration_qdrant_connection() {
     // This test requires: docker compose up -d
+    let _guard = integration_lock();
     tokio_test::block_on(async {
         let db = MemoryDb::connect("http://localhost:6334").await.unwrap();
         assert!(db.health_check().await.unwrap());
@@ -229,6 +242,7 @@ fn integration_qdrant_connection() {
 #[ignore = "Requires running Qdrant instance"]
 #[cfg_attr(coverage_nightly, coverage(off))]
 fn integration_store_and_retrieve() {
+    let _guard = integration_lock();
     tokio_test::block_on(async {
         let db = MemoryDb::connect("http://localhost:6334").await.unwrap();
         db.init_collections().await.unwrap();
@@ -243,16 +257,22 @@ fn integration_store_and_retrieve() {
         .with_emotion(0.8, 0.7)
         .tag_for_consolidation();
 
-        let vector = vec![0.1; VECTOR_DIMENSION];
+        // A random vector: constant vectors like [0.1; N] all have cosine
+        // similarity 1.0 with each other, so any earlier test's memory could
+        // rank first and this test would read someone else's result.
+        let vector: Vec<f32> = (0..VECTOR_DIMENSION)
+            .map(|_| rand::random::<f32>() - 0.5)
+            .collect();
         db.store_memory(&memory, &vector).await.unwrap();
 
-        // Retrieve by context
+        // Retrieve by context: our memory must be among the results, near-identical
         let results = db.find_by_context(&vector, None, 10).await.unwrap();
-        assert!(!results.is_empty());
-
-        let (found, score) = &results[0];
+        let (found, score) = results
+            .iter()
+            .find(|(m, _)| m.id == memory.id)
+            .expect("stored memory should be retrievable by its own vector");
         assert_eq!(found.content, "Integration test memory");
-        assert!(*score > 0.9); // Should be very similar
+        assert!(*score > 0.99, "self-similarity should be ~1.0, got {score}");
     });
 }
 
@@ -267,6 +287,7 @@ fn integration_store_and_retrieve() {
 #[ignore = "Requires running Qdrant instance"]
 #[cfg_attr(coverage_nightly, coverage(off))]
 fn integration_dream_consolidation_cycle() {
+    let _guard = integration_lock();
     tokio_test::block_on(async {
         let db = MemoryDb::connect("http://localhost:6334").await.unwrap();
         db.init_collections().await.unwrap();
@@ -348,6 +369,7 @@ fn integration_dream_consolidation_cycle() {
 fn integration_unconscious_retrieval() {
     use super::ArchiveReason;
 
+    let _guard = integration_lock();
     tokio_test::block_on(async {
         let db = MemoryDb::connect("http://localhost:6334").await.unwrap();
         db.init_collections().await.unwrap();
@@ -405,6 +427,7 @@ fn integration_unconscious_retrieval() {
 #[ignore = "Requires running Qdrant instance"]
 #[cfg_attr(coverage_nightly, coverage(off))]
 fn integration_hebbian_learning() {
+    let _guard = integration_lock();
     tokio_test::block_on(async {
         // Connect to Qdrant (env var support handled in main, here we assume default or localhost)
         // If testing against remote kveldulf, ensure tunnel or direct access
@@ -477,6 +500,6 @@ fn integration_hebbian_learning() {
             assoc_2.weight > assoc.weight,
             "Weight should increase further"
         );
-        assert!(assoc_2.coactivation_count == 2);
+        assert_eq!(assoc_2.coactivation_count, 2);
     });
 }

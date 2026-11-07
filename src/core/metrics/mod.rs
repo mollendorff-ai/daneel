@@ -14,7 +14,7 @@
 //!
 //! ```rust,ignore
 //! use daneel::core::metrics::{
-//!     calculate_entropy, calculate_fractality, CognitiveState, SalienceComponents,
+//!     calculate_entropy, calculate_fractality_from_timestamps, CognitiveState,
 //! };
 //!
 //! // Calculate entropy from salience values

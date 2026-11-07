@@ -98,7 +98,7 @@ pub fn calculate_entropy(composites: &[f32]) -> EntropyResult {
     for &count in &bins {
         if count > 0 {
             let p = count as f32 / total;
-            entropy -= p * p.log2();
+            entropy = p.mul_add(-p.log2(), entropy);
         }
     }
 

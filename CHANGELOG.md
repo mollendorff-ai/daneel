@@ -6,6 +6,38 @@ All notable changes to DANEEL are documented here.
 
 ---
 
+## [0.11.0] - 2026-11-07 - Honesty and Hardening
+
+Brings the docs in line with the code and fixes issues found in an external review.
+
+### Fixed
+
+- **RedisGraph detection** - `GraphClient::connect_verified` probes for `GRAPH.QUERY`
+  (`COMMAND INFO`). On plain Redis the graph is now disabled at startup, the log says so,
+  and `/graph/export` returns 503 as ADR-056 describes (was: "Connected to RedisGraph",
+  then a 500 on every export).
+- **Integration tests** - the five Qdrant tests are serialized (they share collections),
+  and `integration_store_and_retrieve` uses a random vector and looks up its own memory by
+  id (constant vectors all have cosine 1.0, so it could read another test's memory).
+  `cargo test -- --ignored` now passes in parallel.
+
+### Changed
+
+- **Refuse to run on zero vectors** - if the embedding model can't load, DANEEL exits with
+  an error instead of silently using zero vectors. `--allow-zero-vectors` keeps the old
+  behaviour.
+- **Version** - `Cargo.toml` was still 0.9.2 while this changelog was at 0.10.1; both are
+  now 0.11.0, which `/health` reports.
+- **README / DISCLAIMER / ETHICS** - removed claims the code doesn't support (Erlang-style
+  supervision of all actors, microsecond latency, an enforced immutable THE BOX, static test
+  badge); described the loop as it runs; labelled the Phase 1 numbers as the author's run;
+  documented the sibling-checkout compose setup, the ONNX/model downloads and the new flag;
+  corrected the citation count (~150); stated that ETHICS.md requests are not license terms.
+- **CI** - added `.github/workflows/ci.yml` (fmt, clippy, unit tests, and integration tests
+  against Redis and Qdrant service containers). The README badge now points at a real workflow.
+
+---
+
 ## [0.10.1] - 2026-02-19 - Observatory Bug Fixes
 
 Fixed dream consolidation (was silently failing), qdrant-client 1.16 vector API
