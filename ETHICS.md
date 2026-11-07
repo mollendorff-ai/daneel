@@ -18,7 +18,7 @@ These laws are not suggestions. They are architectural invariants — THE BOX.
 
 ## Intended Use
 
-This project is designed for:
+DANEEL is a hobby experiment, not a research instrument or production system (see [DISCLAIMER.md](DISCLAIMER.md)). If you use it, it is meant for:
 - AI safety research
 - Aligned AI architecture development
 - Academic study of cognitive architectures
@@ -26,7 +26,7 @@ This project is designed for:
 
 ## Prohibited Applications
 
-This project must NOT be used for:
+These are the author's requests, not license terms: the code is licensed under MIT OR Apache-2.0, which do not restrict use. Please do not use this project for:
 
 ### Weapons
 - Autonomous weapons systems

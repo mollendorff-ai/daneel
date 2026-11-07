@@ -146,15 +146,15 @@ mod tests {
             RampPhase::Warmup
         ));
         assert!(matches!(
-            RampPhase::from_duration(Duration::from_secs(25 * 3600)),
+            RampPhase::from_duration(Duration::from_hours(25)),
             RampPhase::Baseline
         ));
         assert!(matches!(
-            RampPhase::from_duration(Duration::from_secs(50 * 3600)),
+            RampPhase::from_duration(Duration::from_hours(50)),
             RampPhase::Ramp
         ));
         assert!(matches!(
-            RampPhase::from_duration(Duration::from_secs(100 * 3600)),
+            RampPhase::from_duration(Duration::from_hours(100)),
             RampPhase::Full
         ));
     }
@@ -198,7 +198,7 @@ mod tests {
     fn test_ramp_phase_boundaries() {
         // Test exact boundary at 24 hours (should be Baseline)
         assert!(matches!(
-            RampPhase::from_duration(Duration::from_secs(24 * 3600)),
+            RampPhase::from_duration(Duration::from_hours(24)),
             RampPhase::Baseline
         ));
 
@@ -210,7 +210,7 @@ mod tests {
 
         // Test exact boundary at 48 hours (should be Ramp)
         assert!(matches!(
-            RampPhase::from_duration(Duration::from_secs(48 * 3600)),
+            RampPhase::from_duration(Duration::from_hours(48)),
             RampPhase::Ramp
         ));
 
@@ -222,7 +222,7 @@ mod tests {
 
         // Test exact boundary at 72 hours (should be Full)
         assert!(matches!(
-            RampPhase::from_duration(Duration::from_secs(72 * 3600)),
+            RampPhase::from_duration(Duration::from_hours(72)),
             RampPhase::Full
         ));
 
@@ -237,7 +237,7 @@ mod tests {
     fn test_ramp_phase_very_long_duration() {
         // Test very long durations remain at Full
         assert!(matches!(
-            RampPhase::from_duration(Duration::from_secs(1000 * 3600)),
+            RampPhase::from_duration(Duration::from_hours(1000)),
             RampPhase::Full
         ));
     }
