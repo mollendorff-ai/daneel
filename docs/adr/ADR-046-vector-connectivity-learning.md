@@ -439,7 +439,6 @@ After implementation:
 **DANEEL Research:**
 - `/research/TMI_Memory_Model_Research.md`
 - `/research/SLEEP_MEMORY_CONSOLIDATION.md`
-- `/research/[removed]_DANEEL_ANALYSIS.md`
 
 ## Timeline
 

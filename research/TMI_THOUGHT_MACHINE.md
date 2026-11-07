@@ -105,19 +105,15 @@ flowchart TB
 | Auto-flow | ThoughtAssemblyService | Cached patterns, priors |
 | Multifocal Reading | All services | Multi-perspective processing |
 
-### 2.3 Freudian Parallel ([removed] Framework)
+### 2.3 Freudian Parallel
 
-The DANEEL architecture also maps to Freudian psychoanalytic structure, independently discovered by [removed] in her "[removed]" framework (January 2024):
+The DANEEL architecture also maps onto Freudian psychoanalytic structure:
 
 | Freudian Concept | DANEEL Component | Function |
 |------------------|------------------|----------|
 | **Id** (Drives, desires) | MemoryActor + SalienceActor | Stored experiences + emotional drives |
 | **Ego** (Reality mediator) | AttentionActor + ThoughtAssemblyActor | The "I" that navigates and constructs thoughts |
 | **SuperEgo** (Moral constraints) | THE BOX (Four Laws) | Immutable ethical constraints |
-
-This convergent discovery—arriving at the same structural insight from different psychological traditions—strengthens confidence in architecture-based alignment.
-
-**See:** [[removed]_DANEEL_ANALYSIS.md](../research/[removed]_DANEEL_ANALYSIS.md) for detailed comparison.
 
 ---
 

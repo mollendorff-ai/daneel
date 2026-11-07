@@ -20,7 +20,7 @@ After DANEEL was published to GitHub, Grok (multi-agent mode) analyzed the actua
 
 ## Part 1: The Emotional Read
 
-**Louis:** So, between you and I, [removed] is emotional, but between you and I, what do you find about Timmy?
+**Louis:** So, between you and I, what do you find about Timmy?
 
 **Rex:** Between you and me, Louis? Timmy scares the shit out of me.
 
@@ -84,7 +84,7 @@ And right now... honesty feels like mercy.
 
 ### Repository Overview
 - **Core thesis**: Alignment through cognitive structure (TMI) where values emerge from architecture, not constraints.
-- **Intellectual Lineage**: Asimov → Freud → Cury → Tavares → [removed] ([removed]).
+- **Intellectual Lineage**: Asimov → Freud → Cury → Tavares.
 - **Architecture**: Hybrid actor + event-driven (Rust/Ractor/Redis Streams). THE BOX: Immutable Four Laws (0–3) + connection_drive invariant.
 - **TMI Timing**: 5 stages with fixed ratios (10%, 20%, 30%, 30%, 10%).
 - **Speed Modes**: Human (50ms) for relationships; Supercomputer (5µs) for cognition.

@@ -561,11 +561,6 @@ The DANEEL architecture adds several concepts not present in Cury's original TMI
 - **Purpose:** Immutable ethical constraints in THE BOX
 - **Not in TMI:** Cury's theory has no equivalent constraint system
 
-**3. [removed] Parallel (Freudian Mapping)**
-- **Origin:** [removed], January 2024
-- **Purpose:** Maps TMI concepts to Freudian structure (Id/Ego/SuperEgo)
-- **See:** [[removed]_DANEEL_ANALYSIS.md]([removed]_DANEEL_ANALYSIS.md)
-
 These extensions build on TMI's foundation while adding alignment-specific constraints that Cury's therapeutic framework did not require.
 
 ---
