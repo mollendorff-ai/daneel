@@ -15,7 +15,7 @@ DANEEL is an experimental research project, not production software. It is not d
 
 If you discover a security vulnerability, please report it privately:
 
-**Email:** louis@mollendorff.ai
+**Email:** security@mollendorff.ai
 
 **Subject line:** `[SECURITY] DANEEL - <brief description>`
 
