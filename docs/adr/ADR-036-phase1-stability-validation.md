@@ -19,7 +19,7 @@ The test: run Timmy continuously for 24+ hours with no external input, no random
 ```
 Start:           Dec 19, 2025 ~10 PM EST
 End:             Dec 21, 2025 (ongoing, 26+ hours validated)
-Environment:     Mac mini (kveldulf)
+Environment:     Mac mini
 Infrastructure:  Docker Compose (Redis Stack + Qdrant)
 Mode:            Closed loop (no external stimuli)
 ```

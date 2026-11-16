@@ -15,7 +15,7 @@ TEMPLATE = f'{OUTPUT_DIR}/template.tex'
 
 # Paper metadata
 TITLE = 'DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintelligence'
-AUTHOR = 'Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares)'
+AUTHOR = 'Louis C. Tavares'
 DATE = 'December 2025'
 
 # ASCII diagrams (wrapped in raw LaTeX minipage to prevent page breaks)

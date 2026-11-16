@@ -1093,7 +1093,7 @@ After each phase, verify:
 
 ---
 
-**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | Möllendorff Rex)
+**Author:** Louis C. Tavares (Möllendorff Rex)
 **AI Assistance:** Claude Opus 4.5 (Anthropic)
 **Date:** December 14, 2025
 

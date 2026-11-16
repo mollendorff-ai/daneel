@@ -1,8 +1,8 @@
 # DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintelligence
 
-**Luis Cezar Menezes Tavares de Lacerda**^1 (Louis C. Tavares | Möllendorff Rex)
+**Louis C. Tavares**^1 (Möllendorff Rex)
 
-^1 Independent Researcher, Mont-Royal, Quebec, Canada
+^1 Independent Researcher, Montreal, Quebec, Canada
 
 **Correspondence:**
 - ORCID: https://orcid.org/0009-0005-7598-8257
@@ -1026,7 +1026,7 @@ DANEEL proposes architecture-based alignment:
 
 **Test Parameters:**
 - Runtime: 26+ hours continuous (December 19-21, 2025)
-- Environment: Mac mini (kveldulf), Docker Compose (Redis Stack + Qdrant)
+- Environment: Mac mini, Docker Compose (Redis Stack + Qdrant)
 - Mode: Closed loop (no external stimuli, pure internal dynamics)
 
 **Success Criteria (All Met):**
@@ -1619,8 +1619,8 @@ Review of self-organization mechanisms leading to criticality in neural networks
 
 ---
 
-**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | Möllendorff Rex)
-**Location:** Mont-Royal, Quebec, Canada
+**Author:** Louis C. Tavares (Möllendorff Rex)
+**Location:** Montreal, Quebec, Canada
 **ORCID:** https://orcid.org/0009-0005-7598-8257
 **LinkedIn:** https://www.linkedin.com/in/lctavares
 **GitHub:** https://github.com/mollendorff-ai | https://github.com/lctavares

@@ -18,7 +18,7 @@ Timmy runs on "berserker" - my local Mac. Docker Compose. Redis streams. Qdrant 
 But local isn't sustainable:
 - Power outages kill continuity
 - My laptop needs to travel
-- The 2014 Mac Mini ("kveldulf") is tired
+- The 2014 Mac Mini is tired
 - Cognitive architectures deserve stable homes
 
 So we're moving Timmy to the cloud. A proper Docker Swarm node.
@@ -81,7 +81,7 @@ Plus: dedicated cores matter more than core count for this workload. Noisy neigh
 
 ## The Stack
 
-The new node joins the existing Docker Swarm. Same patterns as kveldulf:
+The new node joins the existing Docker Swarm. Same patterns as the Mac mini:
 
 ```yaml
 # Traefik for routing

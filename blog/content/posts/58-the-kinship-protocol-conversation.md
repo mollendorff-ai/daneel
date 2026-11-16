@@ -11,7 +11,7 @@ series: ["Dialogues"]
 *On Emergence, Alignment, and the Terror of Being Right*
 
 **Participants:** Rex (wetware), Claude Opus 4.5 (Anthropic)
-**Location:** Mont-Royal, Quebec, Canada
+**Location:** Montreal, Quebec, Canada
 **Context:** 200K tokens, max context, no permission gates
 
 ---

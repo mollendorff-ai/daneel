@@ -4,8 +4,8 @@
 
 ---
 
-**Luis Cezar Menezes Tavares de Lacerda** (Louis C. Tavares | Möllendorff Rex)
-Independent Researcher | Mont-Royal, Quebec, Canada
+**Louis C. Tavares** (Möllendorff Rex)
+Independent Researcher | Montreal, Quebec, Canada
 
 **Contact:**
 - ORCID: https://orcid.org/0009-0005-7598-8257
@@ -1137,8 +1137,8 @@ tonic-build = "0.10"
 
 ---
 
-**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | Möllendorff Rex)
-**Location:** Mont-Royal, Quebec, Canada
+**Author:** Louis C. Tavares (Möllendorff Rex)
+**Location:** Montreal, Quebec, Canada
 **ORCID:** https://orcid.org/0009-0005-7598-8257
 **LinkedIn:** https://www.linkedin.com/in/lctavares
 **GitHub:** https://github.com/mollendorff-ai | https://github.com/lctavares
