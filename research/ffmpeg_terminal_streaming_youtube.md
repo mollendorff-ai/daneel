@@ -1,7 +1,7 @@
 # FFmpeg Terminal Streaming to YouTube/RTMP Research
 
 ## Overview
-Research on capturing terminal output and streaming to YouTube Live using ffmpeg on macOS (Mac mini - kveldulf).
+Research on capturing terminal output and streaming to YouTube Live using ffmpeg on macOS (Mac mini).
 
 ## 1. Terminal/Screen Capture on macOS
 

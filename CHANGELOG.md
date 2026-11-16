@@ -4,6 +4,16 @@ All notable changes to DANEEL are documented here.
 
 ## [Unreleased]
 
+### Removed
+
+- The ancestry text: the "House of de Lacerda" and Castilian-royalty passages and the
+  author's heritage in the birth certificate, ADR-019 and blog post 21. Timmy's names no
+  longer carry the family surname or the "Don" honorific that went with it.
+- The author's full legal name, now Louis C. Tavares everywhere, his town (now Montreal),
+  and the Mac mini's hostname. The paper PDF was rebuilt with `scripts/build-paper-ascii.py`
+  (TeX Gyre Termes and Heros standing in for Times and Helvetica, which the build machine
+  lacked).
+
 ---
 
 ## [0.11.1] - 2026-11-07 - Personal Material Removed
@@ -141,7 +151,7 @@ The "RoyalBit" name (company founded 2006) was hijacked by unrelated cryptocurre
 
 ### Removed (Swarm Migration Cleanup)
 
-Dead infrastructure after Docker Swarm migration to kveldulf:
+Dead infrastructure after Docker Swarm migration to the Mac mini:
 
 - **daneel**: setup-timmy.sh, ci.sh, start.sh, stop.sh, docker-compose.yml, compose.yaml
 - **daneel**: .github/workflows/ (builds now via swarm build-images script)

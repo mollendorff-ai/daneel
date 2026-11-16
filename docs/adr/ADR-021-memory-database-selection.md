@@ -19,8 +19,8 @@ ADR-020 established that Redis Streams handle only ephemeral Autofluxo processin
 
 | Scale | Vectors | Hardware | Latency |
 |-------|---------|----------|---------|
-| **v0.6.0** | ~10K | kveldulf (8GB) | ms OK |
-| **v1.0** | ~1M | kveldulf (8GB) | ms OK |
+| **v0.6.0** | ~10K | the Mac mini (8GB) | ms OK |
+| **v1.0** | ~1M | the Mac mini (8GB) | ms OK |
 | **Production** | ~100M | 3-node cluster | sub-ms |
 | **ASI (1TB)** | ~300M+ | distributed | µs required |
 
@@ -62,7 +62,7 @@ Qdrant is a vector-native database written in Rust that provides:
 2. **ASI-ready**: Handles billions of vectors with sub-ms latency
 3. **Truly FOSS**: Apache 2.0, no licensing surprises
 4. **Rust-native**: Written in Rust, official Rust client
-5. **Starts small**: Single node on kveldulf, scales to cluster
+5. **Starts small**: Single node on the Mac mini, scales to cluster
 
 ### Architecture
 
@@ -268,7 +268,7 @@ impl MemoryDb {
 
 ## Deployment
 
-### Docker Compose (kveldulf - single node)
+### Docker Compose (the Mac mini - single node)
 
 ```yaml
 services:
@@ -306,7 +306,7 @@ networks:
 
 | Stage | Configuration | Hardware |
 |-------|--------------|----------|
-| **Dev** | Single node | kveldulf (8GB) |
+| **Dev** | Single node | the Mac mini (8GB) |
 | **Production** | 3-node cluster, replication_factor=2 | 3x 32GB VMs |
 | **ASI** | Sharded cluster, quantization | 3x 128GB nodes |
 

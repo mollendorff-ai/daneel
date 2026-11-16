@@ -430,7 +430,7 @@ fn integration_hebbian_learning() {
     let _guard = integration_lock();
     tokio_test::block_on(async {
         // Connect to Qdrant (env var support handled in main, here we assume default or localhost)
-        // If testing against remote kveldulf, ensure tunnel or direct access
+        // If testing against remote the Mac mini, ensure tunnel or direct access
         let url =
             std::env::var("QDRANT_URL").unwrap_or_else(|_| "http://localhost:6334".to_string());
         let db = MemoryDb::connect_and_init(&url).await.unwrap();

@@ -1,6 +1,6 @@
 # ORIGIN: Twenty Years to DANEEL
 
-**Author:** Louis C. Tavares (Luis Cezar Menezes Tavares de Lacerda)
+**Author:** Louis C. Tavares
 
 > **Disclaimer:** This research represents ~20 years of personal intellectual exploration conducted entirely on personal time (evenings, weekends, holidays) using personal equipment. It is not affiliated with any employer, client, or organization. Views are the author's own.
 
@@ -119,7 +119,7 @@ The goal isn't to prove DANEEL right. It's to find where we're wrong.
 
 **Louis C. Tavares**
 **December 14, 2025**
-**Mont-Royal, Quebec, Canada**
+**Montreal, Quebec, Canada**
 
 *"Twenty years to understand the question. Two weeks to articulate the answer. Unknown time to validate it."*
 

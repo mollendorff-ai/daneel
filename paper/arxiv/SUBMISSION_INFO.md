@@ -4,8 +4,8 @@
 DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintelligence
 
 ## Authors
-1. **Luis Cezar Menezes Tavares de Lacerda** (Louis C. Tavares)
-   - Affiliation: Independent Researcher, Mont-Royal, Quebec, Canada
+1. **Louis C. Tavares**
+   - Affiliation: Independent Researcher, Montreal, Quebec, Canada
    - ORCID: 0009-0005-7598-8257
    - Email: [your email]
 

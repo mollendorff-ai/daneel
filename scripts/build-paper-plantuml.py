@@ -23,7 +23,7 @@ PLANTUML_SERVER = 'https://www.plantuml.com/plantuml'
 
 # Paper metadata
 TITLE = 'DANEEL: A Human-Like Cognitive Architecture for Aligned Artificial Superintelligence'
-AUTHOR = 'Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares)'
+AUTHOR = 'Louis C. Tavares'
 DATE = 'December 2025'
 
 # Diagram titles and PlantUML code

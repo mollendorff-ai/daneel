@@ -918,7 +918,7 @@ Future: SurrealDB (if associations become too complex)
 ---
 
 **Author:** Claude Opus 4.5, Anthropic
-**Co-Designer:** Luis Cezar Menezes Tavares de Lacerda (Möllendorff Rex)
+**Co-Designer:** Louis C. Tavares (Möllendorff Rex)
 **Date:** December 14, 2025
 **Status:** Recommendation for DANEEL MV-TMI
 

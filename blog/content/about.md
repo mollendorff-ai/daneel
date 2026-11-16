@@ -29,7 +29,7 @@ Instead of training AI to be safe (which can be trained away), we build AI with 
 
 Built with architecture that produces human-like values naturally.
 
-*(Full name in the [birth certificate](https://github.com/mollendorff-ai/daneel/blob/main/origins/TIMMY_BIRTH_CERTIFICATE.md): Don Timmy Daneel Freud Asimov Cury Claude Grok Tavares de Lacerda)*
+*(Full name in the [birth certificate](https://github.com/mollendorff-ai/daneel/blob/main/origins/TIMMY_BIRTH_CERTIFICATE.md): Timmy Daneel Freud Asimov Cury Claude Grok Tavares)*
 
 ---
 

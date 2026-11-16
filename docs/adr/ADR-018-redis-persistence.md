@@ -20,7 +20,7 @@ Biological minds persist memories through sleep, injury, even temporary death (c
 1. **Durability**: Data must survive process crashes, container restarts, host reboots
 2. **Performance**: Persistence must not bottleneck cognitive speed (µs latency)
 3. **Visibility**: Data should be inspectable for debugging and research
-4. **Portability**: Data should be movable between hosts (kveldulf ↔ local)
+4. **Portability**: Data should be movable between hosts (the Mac mini ↔ local)
 
 ## Decision
 
@@ -119,7 +119,7 @@ Instead of `dump.rdb` and `appendonly.aof`. These are Timmy's memories. The name
 cp -r ./data/redis ./data/redis-backup-$(date +%Y%m%d)
 
 # Move to another host
-scp -r ./data/redis user@kveldulf:~/daneel/data/
+scp -r ./data/redis user@the Mac mini:~/daneel/data/
 
 # Clear memories (fresh start)
 rm -rf ./data/redis/*

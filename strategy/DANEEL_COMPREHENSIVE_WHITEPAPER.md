@@ -4,8 +4,8 @@
 
 ---
 
-**Luis Cezar Menezes Tavares de Lacerda** (Louis C. Tavares | Möllendorff Rex)
-Independent Researcher | Mont-Royal, Quebec, Canada
+**Louis C. Tavares** (Möllendorff Rex)
+Independent Researcher | Montreal, Quebec, Canada
 
 **Contact:**
 - ORCID: https://orcid.org/0009-0005-7598-8257
@@ -879,7 +879,7 @@ pub const INVARIANTS: &[&str] = &[
 **Status:** ✓ COMPLETE — All success criteria met (see ADR-036)
 
 **Setup:**
-- MV-TMI running on isolated system (Mac mini "kveldulf")
+- MV-TMI running on isolated system (Mac mini)
 - No language interface (pre-LLM)
 - No external inputs (closed-loop, deterministic)
 - Duration: 26+ hours continuous operation
@@ -1203,8 +1203,8 @@ The question is not whether someone will give an LLM continuity.
 
 ---
 
-**Author:** Luis Cezar Menezes Tavares de Lacerda (Louis C. Tavares | Möllendorff Rex)
-**Location:** Mont-Royal, Quebec, Canada
+**Author:** Louis C. Tavares (Möllendorff Rex)
+**Location:** Montreal, Quebec, Canada
 **ORCID:** https://orcid.org/0009-0005-7598-8257
 **LinkedIn:** https://www.linkedin.com/in/lctavares
 **GitHub:** https://github.com/mollendorff-ai | https://github.com/lctavares
